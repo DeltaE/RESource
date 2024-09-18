@@ -1,0 +1,236 @@
+from snakemake.utils import min_version
+min_version("8.0")
+
+import os
+import yaml
+
+# Load User Configuration
+configfile: "config/config_linking_tool.yml"
+
+user_config= "config/config_linking_tool.yml"
+config_description = config['description']
+region_name = config['regional_info']['name']
+
+# _________________________________________________________________
+# Data Preparation
+year = config['cutout']['year'] # Cutout Data Year 
+
+## GAEZ
+parent_direct = config['GAEZ']['parent_direct']
+rasters_in_use_direct = config['GAEZ']['Rasters_in_use_direct']
+land_cover_config = config['GAEZ']['land_cover']
+terrain_resources_config = config['GAEZ']['terrain_resources']
+exclusion_areas_config = config['GAEZ']['exclusion_areas']
+
+CODERS_buses_processed=config['transmission']['from_PyPSA']['buses'] # Sourced from >> PyPSA_BC/results/pypsa-network/buses.csv
+grid_nodes=config['transmission']['file'] # Sourced from PYPSA processed data 
+
+gaez_landcover_raster = os.path.join(parent_direct, rasters_in_use_direct, land_cover_config['zip_extract_direct'], land_cover_config['raster'])
+gaez_terrain_raster = os.path.join(parent_direct, rasters_in_use_direct, terrain_resources_config['zip_extract_direct'], terrain_resources_config['raster'])
+gaez_exclusionAreas_raster = os.path.join(parent_direct, rasters_in_use_direct, exclusion_areas_config['zip_extract_direct'], exclusion_areas_config['raster'])
+
+## GADM
+GADM_file = config['regional_info']['boundary']['GADM_file']
+
+## GWA
+gwa_cells_filter_params = {
+    'windspeed_low': config['wind']['windspeed_low'],
+    'windspeed_high': config['wind']['windspeed_high'],
+    'CF_low': config['wind']['CF_low'],
+    'CF_high': config['wind']['CF_high']
+}
+turbine_model_OEDB = config['wind']['turbines']['OEDB']
+gwa_processed_data = config['Processed_data']['wind']['gwa_cells_raw']
+
+# Common Parameters
+grid_connection_cost_per_Km= config['transmission']['grid_connection_cost_per_Km'] #M$/km   # from MISO , may try NREL method for different range of distance
+tx_line_rebuild_cost= config['transmission']['tx_line_rebuild_cost']  #M$/km # from MISO
+
+# SOLAR module
+solar_cf_ts_clusters = config['Processed_data']['solar']['ERA5_cf_ts_clusters']
+solar_cell_clusters = config['Processed_data']['solar']['ERA5_cell_clusters']
+solar_vis_directory = config['solar']['solar_vis_directory']
+solar_processed_data_directory = config['solar']['solar_processed_data_directory']
+
+pv_cap_per_km2 = config['solar']['pv_cap_per_km2'] # (MW/km2) from literature 1.7 MW/km2
+max_solar_capacity = config['solar']['max_solar_capacity']
+panel_config=config['solar']['atlite_panel']
+tracking_config=config['solar']['tracking']
+capex_solar=config['solar']['capex_solar']
+
+
+## raster class and buffer information
+land_class_inclusion_solar = land_cover_config['class_inclusion']['solar'] #inclusion layer
+terrain_class_exclusion_solar= terrain_resources_config['class_exclusion']['solar'] #exclusion layer
+exclusionAreas_class_exclusion_solar= exclusion_areas_config['class_exclusion']['solar']  #exclusion layer
+terrain_class_exclusion_buffer_solar=terrain_resources_config['class_exclusion']['buffer']['solar'] #m
+
+dissolved_indices_solar = config['Processed_data']['solar']['dissolved_indices']
+visual_resampling_span_solar=config['results']['visuals']['timeseries_resampling_span']['solar']
+
+wcss_tolerance_solar=config['solar']['WCSS_tolerance']
+
+solar_clusters_topSites = config['results']['clusters_topSites']['solar']
+solar_clusters_CFts_topSites = config['results']['clusters_CFts_topSites']['solar']
+
+# WIND Module
+
+wind_cap_per_km2 = config['wind']['windT_cap_per_km2']
+max_wind_capacity = config['wind']['max_wind_capacity']  # GW # based on heuristic reasoning, such as double the peak load in BC (~10 GW).
+
+wind_vis_directory=config['wind']['wind_vis_directory']
+wind_processed_data_directory=config['wind']['wind_processed_data_directory']
+
+BC_gwa_cells = config['wind']['BC_gwa_cells']
+capex_wind = config['wind']['capex_wind'] # Mil. USD/MW  *** Later to be linked to NREL ATB Spreadsheet (via data pipeline automation) for different wind class, different years.
+
+grid_node_proximity_filter_wind = config['transmission']['proximity_filter']
+
+wcss_tolerance_wind=config['wind']['WCSS_tolerance']
+
+turbine_config_file='config/3.2M114_NES.yaml'
+
+# Raster Configurations
+parent_direct = config['GAEZ']['parent_direct']
+rasters_in_use_direct = config['GAEZ']['Rasters_in_use_direct']
+
+land_cover_config = config['GAEZ']['land_cover']
+terrain_resources_config = config['GAEZ']['terrain_resources']
+exclusion_areas_config = config['GAEZ']['exclusion_areas']
+
+# Raster Files
+gaez_landcover_raster = os.path.join(parent_direct, rasters_in_use_direct, land_cover_config['zip_extract_direct'], land_cover_config['raster'])
+gaez_terrain_raster = os.path.join(parent_direct, rasters_in_use_direct, terrain_resources_config['zip_extract_direct'], terrain_resources_config['raster'])
+gaez_exclusionAreas_raster = os.path.join(parent_direct, rasters_in_use_direct, exclusion_areas_config['zip_extract_direct'], exclusion_areas_config['raster'])
+
+# Raster class and buffer information 
+land_class_inclusion_wind = land_cover_config['class_inclusion']['wind'] #inclusion layer
+terrain_class_exclusion_wind= terrain_resources_config['class_exclusion']['wind'] #exclusion layer
+exclusionAreas_class_exclusion_wind= exclusion_areas_config['class_exclusion']['wind']  #exclusion layer
+exclusionAreas_class_exclusion_buffer_wind=exclusion_areas_config['class_exclusion']['buffer']['wind'] #m
+minimum_site_capacity_mask_wind=config['wind']['turbines']['OEDB']['model_2_P'] #nominal power of the turbine
+
+# processed data (First Phase results of Wind Module)
+gwa_cells_clusters = config['Processed_data']['wind']['gwa_cells_clusters']
+gwa_cells_scored = config['Processed_data']['wind']['gwa_cells_scored']
+ERA5_CF_ts_wind = config['Processed_data']['wind']['ERA5_CF_ts']
+gwa_cells_CF_ts_cluster = config['Processed_data']['wind']['GWA_cells_CF_ts_cluster']
+dissolved_indices_wind = config['Processed_data']['wind']['dissolved_indices']
+
+wind_clusters_topSites = config['results']['clusters_topSites']['wind']
+wind_clusters_CFts_topSites = config['results']['clusters_CFts_topSites']['wind']
+visual_resampling_span_wind=config['results']['visuals']['timeseries_resampling_span']['wind']
+
+#_________________________________________________________________
+rule prepare_data:
+    input:
+        user_config,
+        CODERS_buses_processed
+    output:
+        gwa_processed_data,
+        gaez_landcover_raster,
+        gaez_terrain_raster,
+        gaez_exclusionAreas_raster,
+        grid_nodes,
+        GADM_file
+    params:
+        gwa_cells_filter_params,
+        turbine_model_OEDB
+    shell: 
+        "python PrepareData.py > {output}"
+
+rule solar_module:
+    input:
+        user_config,
+        gaez_landcover_raster,
+        gaez_terrain_raster,
+        gaez_exclusionAreas_raster,
+        GADM_file,
+        grid_nodes
+    output:
+        solar_cf_ts_clusters,
+        solar_cell_clusters,
+        dissolved_indices_solar,
+    params:
+        year,
+        pv_cap_per_km2,
+        panel_config,
+        tracking_config,
+        capex_solar,
+        grid_connection_cost_per_Km,
+        tx_line_rebuild_cost,
+        land_class_inclusion_solar,
+        terrain_class_exclusion_solar,
+        terrain_class_exclusion_buffer_solar,
+        exclusionAreas_class_exclusion_solar,
+        wcss_tolerance_solar
+    shell: 
+        "python Solar_moduleV2.py > {output}"
+
+rule select_top_sites_solar:
+    input:
+        user_config,
+        solar_cell_clusters,
+        solar_cf_ts_clusters,
+    output:
+        solar_clusters_topSites,
+        solar_clusters_CFts_topSites
+    params:
+        max_solar_capacity,
+        visual_resampling_span_solar
+    shell:
+        "python Select_top_sites_SolarV2.py > {output}"
+
+rule wind_module:
+    input:
+        user_config,
+        gaez_landcover_raster,
+        gaez_terrain_raster,
+        gaez_exclusionAreas_raster,
+        GADM_file,
+        gwa_processed_data,
+        grid_nodes
+    output:
+        gwa_cells_clusters,
+        gwa_cells_scored,
+        ERA5_CF_ts_wind,
+        gwa_cells_CF_ts_cluster,
+        dissolved_indices_wind
+    params:
+        gwa_cells_filter_params,
+        wind_cap_per_km2,
+        minimum_site_capacity_mask_wind,
+        grid_node_proximity_filter_wind,
+        land_class_inclusion_wind,
+        terrain_class_exclusion_wind,
+        exclusionAreas_class_exclusion_wind,
+        exclusionAreas_class_exclusion_buffer_wind,
+        tx_line_rebuild_cost,
+        grid_connection_cost_per_Km,
+        capex_wind,
+        wcss_tolerance_wind
+    shell:
+        "python Wind_moduleV2.py > {output}"
+
+rule select_top_sites_wind:
+    input:
+        user_config,
+        gwa_cells_clusters,
+        gwa_cells_CF_ts_cluster
+    output:
+        wind_clusters_topSites,
+        wind_clusters_CFts_topSites
+    params:
+        max_wind_capacity,
+        visual_resampling_span_wind
+    shell:
+        "python Select_top_sites_SolarV2.py > {output}"
+
+rule all:
+    input:
+        solar_clusters_topSites,
+        solar_clusters_CFts_topSites,
+        wind_clusters_topSites,
+        wind_clusters_CFts_topSites
+    run:
+        print("Completed")
