@@ -538,7 +538,7 @@ def create_CF_timeseries_df(cutout,start_date,end_date,geodataframe_sites,turbin
     # start_date = configs['cutout']['start_date']
     # end_date = configs['cutout']['end_date']
 
-    datetime_index = pd.date_range(start=start_date , end=end_date, freq='H')
+    datetime_index = pd.date_range(start=start_date , end=end_date, freq='h')
     CF_ts_df = pd.DataFrame(index=datetime_index)
 
     # List to store DataFrames for each site
