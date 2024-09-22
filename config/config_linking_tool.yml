@@ -22,10 +22,10 @@ regional_info:
     name: 'British Columbia' # Case Sensitive, and needs to be exact same as supported by GADM
     area: 944735 #sqkm
     boundary:
-      GADM_directory : data/GADM
-      GADM_file: data/GADM/BC/BC_gadm_regions.geojson
-    OSM_datafile: data/OSM/BC/BC.osm.pbf
-    OSM_aeroway_datafile : data/OSM/aeroway/BC/aeroway_OSM_BC.geojson
+      GADM_directory : data/downloaded_data/GADM
+      GADM_file: data/downloaded_data/GADM/BC/BC_gadm_regions.geojson
+    OSM_datafile: data/downloaded_data/OSM/BC/BC.osm.pbf
+    OSM_aeroway_datafile : data/downloaded_data/OSM/aeroway/BC/aeroway_OSM_BC.geojson
     cutout_datafile: 'data/downloaded_data/cutout/BC_2021_2022.nc'
     cutout_bounding_box:
       automated: TRUE
@@ -35,7 +35,7 @@ regional_info:
         miny : 45.25
         maxy : 60.25
     conservation_lands_provincial_id: 2 # CPACD data, col : LOC, for more info check https://data-donnees.az.ec.gc.ca/api/file?path=/species%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FProtectedConservedAreaUserManual.pdf
-    conservation_lands_datafile: data/Gov/Conservation_Lands/BC/CPCAD_BC_union.pkl
+    conservation_lands_datafile: data/downloaded_data/Gov/Conservation_Lands/BC/CPCAD_BC_union.pkl
     region_mapping:
         'Northern Rockies': 1
         'Stikine': 2
@@ -65,7 +65,7 @@ regional_info:
         'Nanaimo': 26
         'Cowichan Valley': 27
         'Capital': 28
-    grid_nodes_data: data/Processed_data/Transmission/BC/Transmission.pkl
+    grid_nodes_data: data/processed_data/Transmission/BC/Transmission.pkl
         # grid_nodes_data: BC_Transmission.pkl
     snapshots_tz_BC: #Alternate measures of 'timezone_convert'
       start: 
@@ -154,7 +154,7 @@ CODERS:
     Elias: w0OksqQKMFMtKPbO  # please collect your personal API !!!
   api_documentation: https://sesit.dev/api/docs
   data_pull:
-    root: data/downloaded_data/CODERS/data-pull
+    root: data/downloaded_data/CODERS
     generation_generic: supply/generation_generic.csv
     hydro_existing: supply/hydro_existing.csv
     generators: supply/generators.csv
@@ -164,7 +164,7 @@ CODERS:
     forecasted_peak_demand: demand/forecasted_peak_demand.csv
     forecasted_annual_demand: demand/forecasted_annual_demand.csv
     end_use_demand: demand/end_use_demand.csv
-    transmission_generic : supply/transmission_generic.csv
+    transmission_generic : network/transmission_generic.csv
 
 GAEZ:
   root: 'data/downloaded_data/GAEZ'
@@ -203,7 +203,7 @@ GAEZ:
         wind: 0 #m
 
 cutout:
-  root: data/downloaded_data/cutout
+  root: data/downloaded_data/cutout/
   module:
     - era5
     # - sarah

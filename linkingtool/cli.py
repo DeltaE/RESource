@@ -1,45 +1,71 @@
 import argparse
 import subprocess
 
-def create_resources(config_path, resource_type):
-    normalized_resource_type = resource_type.lower()
+class ResourceCreator:
+    def __init__(self, config_path, resource_type):
+        self.config_path = config_path
+        self.resource_type = resource_type.lower()
     
-    if normalized_resource_type == 'solar':
-        script_path = 'workflow/scripts/create_resource_options_solar.py'
-    elif normalized_resource_type == 'bess':
-        script_path = 'workflow/scripts/create_resource_options_bess.py'
-    elif normalized_resource_type == 'wind':
-        script_path = 'workflow/scripts/create_resource_options_wind.py'
-    else:
-        print("Unknown resource type. Linking tool currently supports only one of the following resources: Solar, Wind, BESS")
-        return
-    
-    try:
-        subprocess.run(['python', script_path, config_path, normalized_resource_type], check=True)
-        print(f">>>> Successfully executed {script_path} for resource type {normalized_resource_type} with config: {config_path}")
-    except subprocess.CalledProcessError as e:
-        print(f"An error occurred while executing {script_path}: {e}")
+    def create(self):
+        script_map = {
+            'solar': 'workflow/scripts/solar_module_v2.py',
+            'bess': 'workflow/scripts/bess_module_v1.py',
+            'wind': 'workflow/scripts/wind_module_v2.py'
+        }
 
-def prepare_data(config_path):
-    script_path = 'workflow/scripts/prepare_data.py'
-    try:
-        subprocess.run(['python', script_path, config_path], check=True)
-        print(f">>> Successfully executed !!!! {script_path} with config: {config_path}")
-    except subprocess.CalledProcessError as e:
-        print(f"An error occurred while executing {script_path}: {e}")
-        
-def select_top_sites(config_path, normalized_resource_type, resource_max_total_capacity=None):
-    script_path = 'workflow/scripts/resource_options_select_top_sites.py'
+        if self.resource_type == 'all':
+            # Run all scripts one after the other
+            for resource, script in script_map.items():
+                try:
+                    subprocess.run(['python', script, self.config_path, resource], check=True)
+                    print(f">>>> Successfully executed {script} for resource type {resource} with config: {self.config_path}")
+                except subprocess.CalledProcessError as e:
+                    print(f"An error occurred while executing {script} for resource type {resource}: {e}")
+        else:
+            # Run a single script based on resource_type
+            script_path = script_map.get(self.resource_type)
+            if not script_path:
+                print("Unknown resource type. Supported resources: Solar, Wind, BESS, All")
+                return
+            
+            try:
+                subprocess.run(['python', script_path, self.config_path, self.resource_type], check=True)
+                print(f">>>> Successfully executed {script_path} for resource type {self.resource_type} with config: {self.config_path}")
+            except subprocess.CalledProcessError as e:
+                print(f"An error occurred while executing {script_path}: {e}")
+
+class DataPreparer:
+    def __init__(self, config_path):
+        self.config_path = config_path
     
-    # Construct the command, including the optional capacity if provided
-    cmd = ['python', script_path, config_path, normalized_resource_type]
-    if resource_max_total_capacity is not None:
-        cmd.append(str(resource_max_total_capacity))
-    try:
-        subprocess.run(cmd, check=True)
-        print(f">>> Successfully executed {script_path} for resource type {normalized_resource_type} with config: {config_path}")
-    except subprocess.CalledProcessError as e:
-        print(f"An error occurred while executing {script_path}: {e}")
+    def prepare(self):
+        script_path = 'workflow/scripts/prepare_data_v2.py'
+        # script_path = 'workflow/scripts/prepare_data_v1.py'
+
+        try:
+            subprocess.run(['python', script_path, self.config_path], check=True)
+            print(f">>> Successfully executed {script_path} with config: {self.config_path}")
+        except subprocess.CalledProcessError as e:
+            print(f"An error occurred while executing {script_path}: {e}")
+
+class TopSitesSelector:
+    def __init__(self, config_path, resource_type, max_capacity=None):
+        self.config_path = config_path
+        self.resource_type = resource_type.lower()
+        self.max_capacity = max_capacity
+
+    def select(self):
+        script_path = 'workflow/scripts/top_sites_v2.py'
+        
+        cmd = ['python', script_path, self.config_path, self.resource_type]
+        if self.max_capacity is not None:
+            cmd.append(str(self.max_capacity))
+        
+        try:
+            subprocess.run(cmd, check=True)
+            print(f">>> Successfully executed {script_path} for resource type {self.resource_type} with config: {self.config_path}")
+        except subprocess.CalledProcessError as e:
+            print(f"An error occurred while executing {script_path}: {e}")
 
 def main():
     parser = argparse.ArgumentParser(
@@ -65,8 +91,8 @@ def main():
     create_resources_parser.add_argument(
         'resource_type',
         type=str,
-        choices=['solar', 'bess', 'wind'],
-        help='Type of resource to create (solar, bess, wind)'
+        choices=['solar', 'bess', 'wind', 'all'],
+        help='Type of resource to create (solar, bess, wind, all)'
     )
     
     # Subparser for 'prepare_data' command
@@ -93,10 +119,9 @@ def main():
     top_sites_parser.add_argument(
         'resource_type',
         type=str,
-        choices=['solar', 'bess', 'wind'],
-        help='Type of resource to create (solar, bess, wind)'
+        choices=['solar', 'bess', 'wind', 'all'],
+        help='Type of resource to create (solar, bess, wind, all)'
     )
-    # Adding the optional 'resource_max_total_capacity' argument
     top_sites_parser.add_argument(
         '--resource_max_total_capacity',
         type=float,
@@ -108,11 +133,14 @@ def main():
     args = parser.parse_args()
     
     if args.command == 'create_resources':
-        create_resources(args.config_path, args.resource_type)
+        creator = ResourceCreator(args.config_path, args.resource_type)
+        creator.create()
     elif args.command == 'prepare_data':
-        prepare_data(args.config_path)
+        preparer = DataPreparer(args.config_path)
+        preparer.prepare()
     elif args.command == 'top_sites':
-        select_top_sites(args.config_path, args.resource_type, args.resource_max_total_capacity)
+        selector = TopSitesSelector(args.config_path, args.resource_type, args.resource_max_total_capacity)
+        selector.select()
     else:
         parser.print_help()
 

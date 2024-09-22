@@ -313,23 +313,6 @@ def create_bus_df(df_lines,
 
     return df_buses
 
-# def prepare_cutout(module,start_date, end_date,bounding_box,save_to_path):
-
-#     min_x,max_x,min_y,max_y=bounding_box.values()
-
-#     cutout = atlite.Cutout(
-#         path=save_to_path,
-#         module=module,
-#         x=slice(min_x,max_x), # Longitude
-#         y=slice(min_y,max_y), # Latitude
-#         time=slice(start_date,end_date)
-#     )
-
-#     cutout.prepare()
-#     return True
-
-# %% [markdown]
-# * Visualize Grid Nodes (cleaned data)
 
 # %%
 def get_cutout_path(region_code:str,
@@ -543,8 +526,6 @@ def plot_n_save_bounding_box(
 
 # %% [markdown]
 # * Pull raster files' ZIP
-
-
 # %%
 def download_resources_zip_file_from_GAEZ(parent_direct,zip_file):
     url = "https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip"

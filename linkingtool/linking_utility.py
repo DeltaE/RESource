@@ -119,22 +119,6 @@ def check_LocalCopy_and_run_function(
             # log.info(f"Directory '{directory_path}' found locally.")
             return log.info(f"Directory '{directory_path}' found locally.")
 
-# >>>> replaced by advanced func
-# def create_directories_alt(path):
-#     """
-#     Takes in the path string and creates the directories if non-existent.
-#     """
-
-#     if not os.path.exists(path):
-#         os.mkdir(path)
-#         log.info(f"Directory created: {path}")
-#         return True
-#     else:
-#         #do nothing
-#         log.info(f"Directory existis locally: {path}")
-#         return False
-    
-
 # Function to Load User Configuration File
 def load_config(file_path):
 
@@ -288,7 +272,8 @@ def calculate_cell_score(
 def find_grid_nodes_ERA5_cells(
         current_region:dict,
         buses_gdf:gpd.GeoDataFrame,
-        cells_gdf:gpd.GeoDataFrame)->gpd.GeoDataFrame:
+        cells_gdf:gpd.GeoDataFrame,
+        grid_node_proximity_filter:float)->gpd.GeoDataFrame:
     
     """
     takes in the provincial grid nodes, a proximity filter ( <= km) and the ERA5 cells dataframe. Calcuates the nearest nodde and distance to that node, imputes the 
@@ -301,7 +286,12 @@ def find_grid_nodes_ERA5_cells(
     log.info(f"> Calculating Nearest Grid Nodes for Grid Cells of {current_region['code']}")
     cells_gdf[['nearest_station', 'nearest_station_distance_km']] = cells_gdf['geometry'].apply(find_nearest_station, buses_gdf=buses_gdf,bus_tree=bus_tree).apply(pd.Series)
     cells_gdf_with_station_data=cells_gdf.copy()
-    return cells_gdf_with_station_data
+    proximity_to_nodes_mask=cells_gdf_with_station_data['nearest_station_distance_km']<=grid_node_proximity_filter 
+    cells_within_proximity_gdf=cells_gdf_with_station_data[proximity_to_nodes_mask]
+
+    log.info(f"ERA5 Cells Filtered based on Proximity to Tx Nodes \n\
+    Size: {len(cells_within_proximity_gdf)}\n")
+    return cells_within_proximity_gdf
 
 # Function to Extract BC Grid Cells from ERA5 Cutout and GADM Regional Boundary
 # >>>>>>>>>>>>>>>>>>>>> NOT IN USE , provides wrong data
