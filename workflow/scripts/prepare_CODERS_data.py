@@ -14,14 +14,13 @@ import plotly.io as pio
 from plotly.subplots import make_subplots
 
 # %%
-import bc_combined_modelling.linking_utility as utils
+import linkingtool.linking_utility as utils
 
 # %%
 import geopandas as gpd
 from shapely.geometry import Point
 
 # %%
-# gen_generic: "data/downloaded_data/CODERS/data-pull/supply/generation_generic.csv"
 
 
 # %%
@@ -41,7 +40,7 @@ def convert_coders_df_to_gdf(df):
 # - Load CONFIG
 
 # %%
-config_path:str='config/config_master.yml'
+config_path:str='config/config_linking_tool.yml'
 config:dict=utils.load_config(config_path)
 current_region=config['regional_info']['region_1']
 _CRC_=current_region['code'] # Current Region Code (CRC), later to be configured with the user config file.
@@ -346,8 +345,8 @@ df=province_demand_profile_yr
 hourly_df = df['demand_MWh']
 daily_df = df['demand_MWh'].resample('D').mean()
 weekly_df = df['demand_MWh'].resample('W').mean()
-monthly_df = df['demand_MWh'].resample('M').mean()
-quarterly_df = df['demand_MWh'].resample('Q').mean()
+monthly_df = df['demand_MWh'].resample('ME').mean()
+quarterly_df = df['demand_MWh'].resample('QE').mean()
 
 # Create a figure
 fig = make_subplots(rows=1, cols=1)

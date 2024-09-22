@@ -113,32 +113,57 @@ def visualize_GWA_data(gwa_dataframe, data, color, xlabel):
     return log.info(f"{data} Distribution of All GWA Cells - Created and saved in Visualization directory")
 
 
-def calculate_common_parameters_GWA_cells (GWA_dataframe,wind_cap_per_km2,cell_resolution_arc_deg=0.002499):
+import geopandas as gpd
+from shapely.geometry import box
+import logging
+
+log = logging.getLogger(__name__)
+
+def calculate_common_parameters_GWA_cells(GWA_dataframe, wind_cap_per_km2, cell_resolution_arc_deg=0.002499):
+    """
+    Calculate common parameters for GWA cells including land area and potential wind capacity.
+
+    Parameters:
+    - GWA_dataframe (pd.DataFrame): DataFrame containing GWA cell coordinates ('x', 'y').
+    - wind_cap_per_km2 (float): Wind capacity per square kilometer.
+    - cell_resolution_arc_deg (float): Resolution of the cell in degrees (default 0.002499).
+
+    Returns:
+    - pd.DataFrame: Updated GWA_dataframe with land area and potential capacity.
+    - gpd.GeoDataFrame: GeoDataFrame for a single GWA cell geometry.
+    """
     res = cell_resolution_arc_deg
     log.info("Creating Polygon Geometry for GWA Cells for a Single Cell")
+
+    # Check for required columns
+    if not {'x', 'y'}.issubset(GWA_dataframe.columns):
+        log.error("GWA_dataframe must contain 'x' and 'y' columns.")
+        raise ValueError("GWA_dataframe must contain 'x' and 'y' columns.")
 
     # Extract centroid coordinates for the first row
     x, y = GWA_dataframe[['x', 'y']].iloc[0]
 
     # Generate the geometry for a single cell
-    geom_single_cell = box(x - res/2, y - res/2, x + res/2, y + res/2)
+    geom_single_cell = box(x - res / 2, y - res / 2, x + res / 2, y + res / 2)
 
     # Create the GeoDataFrame for a single cell
     GWA_single_cell_gdf = gpd.GeoDataFrame(geometry=[geom_single_cell], crs="EPSG:4326")
 
     # Change the CRS for area calculation
-    GWA_single_cell_gdf = GWA_single_cell_gdf.to_crs(epsg=2163)  # availability values [0-1]
+    GWA_single_cell_gdf = GWA_single_cell_gdf.to_crs(epsg=2163)
 
     # Calculate the land area for the cell and add it as a new column
-    GWA_single_cell_gdf['land_area_sq_km'] = GWA_single_cell_gdf['geometry'].area / 1e6  # Converts to square kilometers
+    GWA_single_cell_gdf['land_area_sq_km'] = GWA_single_cell_gdf['geometry'].area / 1e6
 
     # Restore the projection for other usage
     GWA_single_cell_gdf = GWA_single_cell_gdf.to_crs(epsg=4326)
-    log.info(f"Imputing Land Area, Potential Capacity for all GWA Cells")
+
+    log.info("Imputing Land Area, Potential Capacity for all GWA Cells")
     GWA_dataframe['land_area_sq_km'] = GWA_single_cell_gdf['land_area_sq_km'].iloc[0]
     GWA_dataframe['potential_capacity'] = wind_cap_per_km2 * GWA_single_cell_gdf['land_area_sq_km'].iloc[0]
 
-    return GWA_dataframe,GWA_single_cell_gdf
+    return GWA_dataframe, GWA_single_cell_gdf
+
 
 def update_ERA5_params_from_mapped_GWA_cells(era5_cells_gdf,mapped_GWA_cells_gdf):
 
