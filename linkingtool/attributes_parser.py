@@ -7,9 +7,18 @@ from atlite.gis import shape_availability
 import argparse
 
 # Local Packages
-import linkingtool.linking_utility as utils
-import linkingtool.linking_vis as vis
-import linkingtool.linking_solar as solar
+
+try:
+    # Try importing from the submodule context
+    import linkingtool.linking_utility as utils
+    import linkingtool.linking_vis as vis
+    import linkingtool.linking_solar as solar
+except ImportError:
+    # Fallback for when running as a standalone script or outside the submodule
+    import Linking_tool.linkingtool.linking_utility as utils
+    import Linking_tool.linkingtool.linking_vis as vis
+    import Linking_tool.linkingtool.linking_solar as solar
+
 
 # Logging Configuration
 log.basicConfig(level=log.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

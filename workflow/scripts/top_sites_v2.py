@@ -5,11 +5,22 @@ import os
 import pandas as pd
 import geopandas as gpd
 
-# local packages
-import linkingtool.linking_utility as utils
-import linkingtool.linking_wind as wind
-import linkingtool.linking_vis as vis
-import linkingtool.linking_solar as solar
+
+# Local Packages
+try:
+    # Try importing from the submodule context
+    import linkingtool.linking_utility as utils
+    import linkingtool.linking_vis as vis
+    import linkingtool.linking_solar as solar
+    from linkingtool.attributes_parser import AttributesParser
+    from linkingtool.cell_capacity_processor import cell_capacity_processor
+except ImportError:
+    # Fallback for when running as a standalone script or outside the submodule
+    import Linking_tool.linkingtool.linking_utility as utils
+    import Linking_tool.linkingtool.linking_vis as vis
+    import Linking_tool.linkingtool.linking_solar as solar
+    from Linking_tool.linkingtool.attributes_parser import AttributesParser
+    from Linking_tool.linkingtool.cell_capacity_processor import cell_capacity_processor
 
 class TopSiteSelection:
     def __init__(self, config_file_path: str, resource_type: str, resource_max_total_capacity: float = None):
