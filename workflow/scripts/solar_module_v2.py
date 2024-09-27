@@ -27,7 +27,7 @@ class SolarModuleProcessor:
         self.resource_type = resource_type.lower()
         
         # Initialize Attributes Parser Class
-        self.attributes_parser: attributes_parser = AttributesParser(config_file_path, self.resource_type)
+        self.attributes_parser: attributes_parser = AttributesParser(config_file_path, self.resource_type) # type: ignore
         
         # Initialize era5_cell_capacity_processor
         self.cell_processor:cell_capacity_processor = cell_capacity_processor(config_file_path, self.resource_type)
