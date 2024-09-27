@@ -2,9 +2,21 @@ import logging as log
 import os,sys
 from atlite.gis import shape_availability
 
+
 # Local Packages
-import linkingtool.linking_utility as utils
-from linkingtool.attributes_parser import AttributesParser
+
+try:
+    # Try importing from the submodule context
+    import linkingtool.linking_utility as utils
+    import linkingtool.linking_vis as vis
+    import linkingtool.linking_solar as solar
+    from linkingtool.attributes_parser import AttributesParser
+except ImportError:
+    # Fallback for when running as a standalone script or outside the submodule
+    import Linking_tool.linkingtool.linking_utility as utils
+    import Linking_tool.linkingtool.linking_vis as vis
+    import Linking_tool.linkingtool.linking_solar as solar
+    from Linking_tool.linkingtool.attributes_parser import AttributesParser
 
 # Logging Configuration
 log.basicConfig(level=log.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
