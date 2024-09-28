@@ -34,6 +34,10 @@
             border: 1px solid #ccc;
             border-top: none;
         }
+        img {
+            max-width: 100%; /* Makes the image responsive */
+            height: auto; /* Maintains the aspect ratio */
+        }
     </style>
 </head>
 <body>
@@ -44,6 +48,7 @@
     <button class="tablinks" onclick="openTab(event, 'Page2')">Wind Timeseries</button>
     <button class="tablinks" onclick="openTab(event, 'Page3')">Demand Profile BC</button>
     <button class="tablinks" onclick="openTab(event, 'Page4')">BC Sectoral Demand Projection</button>
+    <button class="tablinks" onclick="openTab(event, 'Page5')">BC Resources (prelim)</button> <!-- New tab button -->
 </div>
 
 <!-- Tab content -->
@@ -64,7 +69,13 @@
 
 <div id="Page4" class="tabcontent">
     <h3>BC Sectoral Demand Projection (Current Measures)</h3>
-    <iframe src="BC_sectoral_elec_end_use_demand_Current Measures.html" width="100%" height="600px"></iframe>
+    <iframe src="BC_sectoral_elec_end_use_demand_Current_Measures.html" width="100%" height="600px"></iframe>
+</div>
+
+<!-- New Page 5 content for the static image -->
+<div id="Page5" class="tabcontent">
+    <h3>BC Resources (prelim results)</h3>
+    <img src="BC_ExistingVSTool_sites.png" alt="Description of the image"> <!-- Update path accordingly -->
 </div>
 
 <script>
