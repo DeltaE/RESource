@@ -57,6 +57,7 @@
             max-width: 100%; /* Adjusted to fit responsive design */
             height: auto;
             border-radius: 5px;
+            border: none; /* Removed borders */
         }
         .subtab {
             display: flex;
@@ -81,7 +82,13 @@
             margin-top: 20px;
         }
         .side-by-side img {
-            max-width: 45%; /* Allow for side-by-side layout */
+            max-width: 50%; /* Allow for side-by-side layout */
+        }
+        .gaez-raster img {
+            max-width: 50%; /* GAEZ Raster Plots images size */
+        }
+        .conservation-lands img {
+            max-width: 70%; /* Conservation Protected Lands image size */
         }
     </style>
 </head>
@@ -132,16 +139,16 @@
     <div id="SolarAssessments" class="subtabcontent">
         <h4>Assessments for Solar</h4>
         <div class="side-by-side">
-            <img src="Assessments/CF_mean of Potential solar Plants.png" alt="CF Mean of Potential Solar Plants">
-            <img src="Assessments/Land Availability for Potential solar Plants.png" alt="Land Availability for Potential Solar Plants">
+            <img src="Assessments/CF_mean_of_Potential_solar_Plants.png" alt="CF Mean of Potential Solar Plants">
+            <img src="Assessments/Land_Availability_for_Potential_solar_Plants.png" alt="Land Availability for Potential Solar Plants">
         </div>
     </div>
 
     <div id="WindAssessments" class="subtabcontent">
         <h4>Assessments for Wind</h4>
         <div class="side-by-side">
-            <img src="Assessments/CF_mean of Potential wind Plants.png" alt="CF Mean of Potential Wind Plants">
-            <img src="Assessments/Land Availability for Potential wind Plants.png" alt="Land Availability for Potential Wind Plants">
+            <img src="Assessments/CF_mean_of_Potential_wind_Plants.png" alt="CF Mean of Potential Wind Plants">
+            <img src="Assessments/Land_Availability_for_Potential_wind_Plants.png" alt="Land Availability for Potential Wind Plants">
         </div>
     </div>
 </div>
@@ -173,16 +180,17 @@
         <button class="subtablinks" onclick="openSubTab(event, 'GAEZ')">GAEZ Raster Plots</button>
     </div>
     
-    <div id="Exclusion_Lands" class="subtabcontent">
+    <div id="Exclusion_Lands" class="subtabcontent conservation-lands">
         <h4>Conservation Protected Lands</h4>
         <img src="Conservation_Protected_Lands.png" alt="Conservation Protected Lands">
     </div>
     
-    <div id="GAEZ" class="subtabcontent">
+    <div id="GAEZ" class="subtabcontent gaez-raster">
         <h4>GAEZ Raster Plots</h4>
-        <img src="GAEZ_raster_plots/BC/BC_exclusion_2017_raster.png" alt="BC Exclusion 2017 Raster">
-        <img src="GAEZ_raster_plots/BC/BC_faocmb_2010_raster.png" alt="BC FAOCMB 2010 Raster">
-        <img src="GAEZ_raster_plots/BC/BC_slpmed05_raster.png" alt="BC SLP Med 05 Raster">
+        <div class="side-by-side">
+            <img src="GAEZ_Raster_Plot_1.png" alt="GAEZ Raster Plot 1">
+            <img src="GAEZ_Raster_Plot_2.png" alt="GAEZ Raster Plot 2">
+        </div>
     </div>
 </div>
 
@@ -205,6 +213,9 @@
         // Show the current tab and add "active" class to the button
         document.getElementById(tabName).style.display = "block";
         evt.currentTarget.className += " active";
+
+        // Automatically open the first sub-tab of the selected tab
+        openSubTab(evt, document.getElementsByClassName("subtablinks")[0].id);
     }
 
     function openSubTab(evt, subTabName) {
@@ -226,6 +237,11 @@
         document.getElementById(subTabName).style.display = "block";
         evt.currentTarget.className += " active";
     }
+
+    // Automatically load the first main tab and sub-tab on page load
+    window.onload = function() {
+        document.getElementsByClassName("tablinks")[0].click();
+    };
 </script>
 
 </body>
