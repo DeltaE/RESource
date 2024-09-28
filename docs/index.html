@@ -10,18 +10,19 @@
             font-family: 'Nunito Sans', Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f9f9f9;
+            background-color: #f0f4f8; /* Lighter background color */
+            color: #333; /* Text color */
         }
         h2 {
             text-align: center;
-            color: #333;
+            color: #007bff; /* Primary color for headings */
         }
         .tab {
             display: flex;
             justify-content: center;
             background-color: #d0e7f9; /* Light blue background */
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
             margin-bottom: 20px;
         }
         .tab button {
@@ -29,29 +30,31 @@
             border: none;
             outline: none;
             cursor: pointer;
-            padding: 14px 20px;
-            font-size: 17px;
-            transition: background-color 0.3s;
+            padding: 16px 24px;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.2s;
             border-radius: 5px;
             margin: 0 5px;
             color: #333; /* Dark text color */
         }
         .tab button:hover {
             background-color: #a4d4f4; /* Lighter blue on hover */
+            transform: translateY(-2px); /* Lift effect on hover */
         }
         .tab button.active {
             background-color: #007bff; /* Darker blue for active tab */
             color: #ffffff; /* White text for active tab */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
         .tabcontent {
             display: none;
             padding: 20px;
             background-color: #ffffff;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         img {
-            max-width: 90%; /* Adjusted to reduce image sizes */
+            max-width: 100%; /* Adjusted to fit responsive design */
             height: auto;
             border-radius: 5px;
         }
@@ -66,9 +69,19 @@
             border-radius: 5px;
             margin: 0 5px;
             background-color: #e0e0e0; /* Light gray for subtab buttons */
+            transition: background-color 0.3s, transform 0.2s;
         }
         .subtab button:hover {
             background-color: #d5d5d5; /* Darker gray on hover */
+            transform: translateY(-2px); /* Lift effect on hover */
+        }
+        .side-by-side {
+            display: flex;
+            justify-content: space-around; /* Space between images */
+            margin-top: 20px;
+        }
+        .side-by-side img {
+            max-width: 45%; /* Allow for side-by-side layout */
         }
     </style>
 </head>
@@ -80,6 +93,7 @@
     <button class="tablinks" onclick="openTab(event, 'ResourceTimeseries')">Resource Timeseries</button>
     <button class="tablinks" onclick="openTab(event, 'AboutRegion')">About the Region</button>
     <button class="tablinks" onclick="openTab(event, 'ExclusionInclusion')">Exclusion/Inclusion(s)</button>
+    <button class="tablinks" onclick="openTab(event, 'Assessments')">Assessments</button> <!-- New Tab -->
 </div>
 
 <!-- Resources Tab -->
@@ -104,6 +118,24 @@
     <div id="WindTimeseries" class="subtabcontent">
         <h4>Top Sites' Timeseries - Wind</h4>
         <iframe src="Timeseries_top_sites_wind.html" width="90%" height="360px" style="border: none;"></iframe> <!-- Adjusted scale -->
+    </div>
+
+    <!-- Assessment Subtab for Solar -->
+    <div id="Assessments" class="tabcontent">
+        <h3>Assessments for Solar</h3>
+        <div class="side-by-side">
+            <img src="Assessments/CF_mean of Potential solar Plants.png" alt="CF Mean of Potential Solar Plants">
+            <img src="Assessments/Land Availability for Potential solar Plants.png" alt="Land Availability for Potential Solar Plants">
+        </div>
+    </div>
+    
+    <!-- Assessment Subtab for Wind -->
+    <div id="WindAssessments" class="subtabcontent">
+        <h3>Assessments for Wind</h3>
+        <div class="side-by-side">
+            <img src="Assessments/CF_mean of Potential wind Plants.png" alt="CF Mean of Potential Wind Plants">
+            <img src="Assessments/Land Availability for Potential wind Plants.png" alt="Land Availability for Potential Wind Plants">
+        </div>
     </div>
 </div>
 
@@ -154,49 +186,4 @@
         // Hide all tab contents
         tabcontent = document.getElementsByClassName("tabcontent");
         for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-
-        // Remove the "active" class from all buttons
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-
-        // Show the selected tab content and mark the button as active
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
-
-        // Automatically open the first subtab
-        var firstSubTab = document.querySelector(`#${tabName} .subtabcontent`);
-        if (firstSubTab) {
-            openSubTab({ currentTarget: document.querySelector(`#${tabName} .subtablinks`) }, firstSubTab.id);
-        }
-    }
-
-    function openSubTab(evt, subTabName) {
-        var i, subtabcontent, subtablinks;
-
-        // Hide all subtab contents
-        subtabcontent = document.getElementsByClassName("subtabcontent");
-        for (i = 0; i < subtabcontent.length; i++) {
-            subtabcontent[i].style.display = "none";
-        }
-
-        // Remove the "active" class from all subtab buttons
-        subtablinks = document.getElementsByClassName("subtablinks");
-        for (i = 0; i < subtablinks.length; i++) {
-            subtablinks[i].className = subtablinks[i].className.replace(" active", "");
-        }
-
-        // Show the selected subtab content and mark the button as active
-        document.getElementById(subTabName).style.display = "block";
-        evt.currentTarget.className += " active";
-    }
-
-    // Set default tab and subtab
-    document.querySelector('.tab button').click();
-</script>
-
-</body>
-</html>
+            tabcontent[i].style.display 
