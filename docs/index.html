@@ -98,12 +98,12 @@
     
     <div id="SolarTimeseries" class="subtabcontent">
         <h4>Top Sites' Timeseries - Solar</h4>
-        <iframe src="Timeseries_top_sites_solar.html" width="90%" height="400px" style="border: none;"></iframe> <!-- Reduced height -->
+        <iframe src="Timeseries_top_sites_solar.html" width="90%" height="360px" style="border: none;"></iframe> <!-- Adjusted scale -->
     </div>
 
     <div id="WindTimeseries" class="subtabcontent">
         <h4>Top Sites' Timeseries - Wind</h4>
-        <iframe src="Timeseries_top_sites_wind.html" width="90%" height="400px" style="border: none;"></iframe> <!-- Reduced height -->
+        <iframe src="Timeseries_top_sites_wind.html" width="90%" height="360px" style="border: none;"></iframe> <!-- Adjusted scale -->
     </div>
 </div>
 
@@ -166,6 +166,12 @@
         // Show the selected tab content and mark the button as active
         document.getElementById(tabName).style.display = "block";
         evt.currentTarget.className += " active";
+
+        // Automatically open the first subtab
+        var firstSubTab = document.querySelector(`#${tabName} .subtabcontent`);
+        if (firstSubTab) {
+            openSubTab({ currentTarget: document.querySelector(`#${tabName} .subtablinks`) }, firstSubTab.id);
+        }
     }
 
     function openSubTab(evt, subTabName) {
@@ -188,7 +194,7 @@
         evt.currentTarget.className += " active";
     }
 
-    // Set default tab
+    // Set default tab and subtab
     document.querySelector('.tab button').click();
 </script>
 
