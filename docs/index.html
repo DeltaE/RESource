@@ -54,7 +54,7 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         img {
-            max-width: 100%; /* Adjusted to fit responsive design */
+            max-width: 70%; /* Adjusted all images to 70% width */
             height: auto;
             border-radius: 5px;
             border: none; /* Removed borders */
@@ -82,13 +82,7 @@
             margin-top: 20px;
         }
         .side-by-side img {
-            max-width: 50%; /* Allow for side-by-side layout */
-        }
-        .gaez-raster img {
-            max-width: 50%; /* GAEZ Raster Plots images size */
-        }
-        .conservation-lands img {
-            max-width: 70%; /* Conservation Protected Lands image size */
+            max-width: 70%; /* Maintain 70% width for side-by-side images */
         }
     </style>
 </head>
@@ -180,68 +174,50 @@
         <button class="subtablinks" onclick="openSubTab(event, 'GAEZ')">GAEZ Raster Plots</button>
     </div>
     
-    <div id="Exclusion_Lands" class="subtabcontent conservation-lands">
+    <div id="Exclusion_Lands" class="subtabcontent">
         <h4>Conservation Protected Lands</h4>
         <img src="Conservation_Protected_Lands.png" alt="Conservation Protected Lands">
     </div>
     
-    <div id="GAEZ" class="subtabcontent gaez-raster">
+    <div id="GAEZ" class="subtabcontent">
         <h4>GAEZ Raster Plots</h4>
         <div class="side-by-side">
-            <img src="GAEZ_Raster_Plot_1.png" alt="GAEZ Raster Plot 1">
-            <img src="GAEZ_Raster_Plot_2.png" alt="GAEZ Raster Plot 2">
+            <img src="GAEZ_Raster_Plots_1.png" alt="GAEZ Raster Plot 1">
+            <img src="GAEZ_Raster_Plots_2.png" alt="GAEZ Raster Plot 2">
         </div>
     </div>
 </div>
 
 <script>
+    // Function to open the main tab
     function openTab(evt, tabName) {
         var i, tabcontent, tablinks;
-
-        // Hide all tab contents
         tabcontent = document.getElementsByClassName("tabcontent");
         for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
+            tabcontent[i].style.display = "none";  
         }
-
-        // Remove the "active" class from all buttons
         tablinks = document.getElementsByClassName("tablinks");
         for (i = 0; i < tablinks.length; i++) {
             tablinks[i].className = tablinks[i].className.replace(" active", "");
         }
-
-        // Show the current tab and add "active" class to the button
-        document.getElementById(tabName).style.display = "block";
+        document.getElementById(tabName).style.display = "block";  
         evt.currentTarget.className += " active";
-
-        // Automatically open the first sub-tab of the selected tab
-        openSubTab(evt, document.getElementsByClassName("subtablinks")[0].id);
     }
 
+    // Function to open the sub tab
     function openSubTab(evt, subTabName) {
         var i, subtabcontent, subtablinks;
-
-        // Hide all subtab contents
         subtabcontent = document.getElementsByClassName("subtabcontent");
         for (i = 0; i < subtabcontent.length; i++) {
-            subtabcontent[i].style.display = "none";
+            subtabcontent[i].style.display = "none";  
         }
-
-        // Remove the "active" class from all buttons
         subtablinks = document.getElementsByClassName("subtablinks");
         for (i = 0; i < subtablinks.length; i++) {
             subtablinks[i].className = subtablinks[i].className.replace(" active", "");
         }
-
-        // Show the current subtab and add "active" class to the button
-        document.getElementById(subTabName).style.display = "block";
+        document.getElementById(subTabName).style.display = "block";  
         evt.currentTarget.className += " active";
     }
-
-    // Automatically load the first main tab and sub-tab on page load
-    window.onload = function() {
-        document.getElementsByClassName("tablinks")[0].click();
-    };
 </script>
 
 </body>
