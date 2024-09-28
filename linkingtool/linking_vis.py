@@ -294,21 +294,39 @@ def create_sites_ts_plots_all_sites_2(
     fig.add_trace(go.Scatter(x=quarterly_df.index, y=quarterly_df[quarterly_df.columns[0]], mode='lines', name='Quarterly', visible='legendonly',
                              line=dict(dash='dot')))
 
-    # Update the layout to move the legend to the top, center it, and shrink the font size
+    # Update the layout to move the legend to the right, make it scrollable, and shrink the font size
     fig.update_layout(
         legend=dict(
-            orientation="v",  # Horizontal legend
-            yanchor="bottom",  # Aligns the legend at the bottom of the top position
-            y=0.5,            # Moves the legend up (outside the plot area)
-            xanchor="center",   # Centers the legend horizontally
-            x=0.9,              # Sets the x position of the legend to be centered
+            orientation="v",   # Vertical legend
+            yanchor="top",      # Aligns the legend at the top
+            y=1,                # Moves the legend up (inside the plot area)
+            xanchor="left",     # Aligns the legend on the right
+            x=1.02,             # Slightly outside the plot area
             font=dict(size=10),  # Make the font size smaller
-            itemwidth=30  # Reduce the width of legend items to avoid overlap
+            itemwidth=30        # Reduce the width of legend items
         ),
         xaxis_title='DateTime',
         yaxis_title='CF',
-        hovermode='x unified'  # Unified hover info across traces
+        hovermode='x unified',  # Unified hover info across traces
+        autosize=False,  # Allow custom sizing
+        width=800,       # Adjust plot width
+        height=500,      # Adjust plot height
     )
+
+    # Add scrollable legend using CSS styling
+    fig.update_layout(
+        legend_title=dict(text=f'{resource_type} sites'),
+        legend=dict(
+            title=dict(font=dict(size=12)),  # Title size
+            traceorder='normal',
+            itemclick='toggleothers',
+            itemdoubleclick='toggle',
+            bordercolor="grey",
+            borderwidth=1,
+        ),
+    )
+
+    fig.update_traces(hoverinfo='name+x+y')  # Improve hover info
 
     # Add range selector and range slider
     fig.update_layout(
@@ -329,5 +347,7 @@ def create_sites_ts_plots_all_sites_2(
 
     # Save the plot to an HTML file
     fig.write_html(f'{save_to_dir}/Timeseries_top_sites_{resource_type}.html')
-    # fig.show()
 
+    # Optionally display the plot
+    # fig.show()
+# 
