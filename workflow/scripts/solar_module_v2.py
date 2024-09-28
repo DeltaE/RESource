@@ -1,12 +1,23 @@
 import logging as log
 import os,sys,time,argparse
 import geopandas as gpd
-from linkingtool.cell_capacity_processor import cell_capacity_processor
-from linkingtool.attributes_parser import attributes_parser
+
 
 # Local Packages
-import linkingtool.linking_utility as utils
-import linkingtool.linking_solar as solar
+try:
+    # Try importing from the submodule context
+    import linkingtool.linking_utility as utils
+    import linkingtool.linking_vis as vis
+    import linkingtool.linking_solar as solar
+    from linkingtool.attributes_parser import AttributesParser
+    from linkingtool.cell_capacity_processor import cell_capacity_processor
+except ImportError:
+    # Fallback for when running as a standalone script or outside the submodule
+    import Linking_tool.linkingtool.linking_utility as utils
+    import Linking_tool.linkingtool.linking_vis as vis
+    import Linking_tool.linkingtool.linking_solar as solar
+    from Linking_tool.linkingtool.attributes_parser import AttributesParser
+    from Linking_tool.linkingtool.cell_capacity_processor import cell_capacity_processor
 
 class SolarModuleProcessor:
     def __init__(self, 
@@ -16,7 +27,7 @@ class SolarModuleProcessor:
         self.resource_type = resource_type.lower()
         
         # Initialize Attributes Parser Class
-        self.attributes_parser: attributes_parser = attributes_parser(config_file_path, self.resource_type)
+        self.attributes_parser: attributes_parser = AttributesParser(config_file_path, self.resource_type) # type: ignore
         
         # Initialize era5_cell_capacity_processor
         self.cell_processor:cell_capacity_processor = cell_capacity_processor(config_file_path, self.resource_type)
