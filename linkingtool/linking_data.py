@@ -39,7 +39,6 @@ from typing import Dict, List,Union
 import atlite
 from pyrosm import OSM, get_data
 from pyrosm.data import sources
-from pyrosm import OSM
 from pyrosm.config import Conf
 
 
