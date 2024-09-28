@@ -254,7 +254,76 @@ def create_sites_ts_plots_all_sites(
     # Create a plot using plotly.express
     fig = px.line(CF_ts_df, x=CF_ts_df.index, y=CF_ts_df.columns[0:], title=f'Hourly timeseries for {resource_type} sites',
                 labels={'value': 'CF', 'datetime': 'DateTime'}, template='plotly_dark')
-
+    # Update the layout to move the legend to the top
+    fig.update_layout(
+        legend=dict(
+            orientation="h",  # Horizontal legend
+            yanchor="bottom",  # Aligns the legend at the bottom of the top position
+            y=1.02,           # Moves the legend up (outside the plot area)
+            xanchor="center",  # Centers the legend horizontally
+            x=0.5             # Sets the x position of the legend to be centered
+        )
+    )
     # Display the plot
     fig.write_html(f'{save_to_dir}/Timeseries_top_sites_{resource_type}.html')
     # fig.write_html(f'results/linking/Timeseries_top_sites_{resource_type}.html')
+
+import plotly.express as px
+import plotly.graph_objects as go
+import pandas as pd
+
+def create_sites_ts_plots_all_sites_2(
+    resource_type: str,
+    CF_ts_df: pd.DataFrame,
+    save_to_dir: str):
+    
+    # Resample data for different time intervals
+    hourly_df = CF_ts_df
+    daily_df = CF_ts_df.resample('D').mean()
+    weekly_df = CF_ts_df.resample('W').mean()
+    monthly_df = CF_ts_df.resample('M').mean()
+    quarterly_df = CF_ts_df.resample('QE').mean()
+
+    # Create the plot using plotly express for the hourly data
+    fig = px.line(hourly_df, x=hourly_df.index, y=hourly_df.columns[0:], title=f'Hourly timeseries for {resource_type} sites',
+                  labels={'value': 'CF', 'datetime': 'DateTime'}, template='ggplot2')
+
+    # Add traces for other time intervals (daily, weekly, etc.)
+    fig.add_trace(go.Scatter(x=daily_df.index, y=daily_df[daily_df.columns[0]], mode='lines', name='Daily', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=weekly_df.index, y=weekly_df[weekly_df.columns[0]], mode='lines', name='Weekly', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=monthly_df.index, y=monthly_df[monthly_df.columns[0]], mode='lines', name='Monthly', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=quarterly_df.index, y=quarterly_df[quarterly_df.columns[0]], mode='lines', name='Quarterly', visible='legendonly'))
+
+    # Update the layout to move the legend to the top and center it
+    fig.update_layout(
+        legend=dict(
+            orientation="h",  # Horizontal legend
+            yanchor="bottom",  # Aligns the legend at the bottom of the top position
+            y=1.02,            # Moves the legend up (outside the plot area)
+            xanchor="center",   # Centers the legend horizontally
+            x=0.5              # Sets the x position of the legend to be centered
+        ),
+        xaxis_title='DateTime',
+        yaxis_title='CF',
+        hovermode='x unified'  # Unified hover info across traces
+    )
+
+    # Add range selector and range slider
+    fig.update_layout(
+        xaxis=dict(
+            rangeselector=dict(
+                buttons=[
+                    dict(count=1, label="1d", step="day", stepmode="backward"),
+                    dict(count=7, label="1w", step="day", stepmode="backward"),
+                    dict(count=1, label="1m", step="month", stepmode="backward"),
+                    dict(count=3, label="3m", step="month", stepmode="backward"),
+                    dict(step="all")
+                ]
+            ),
+            rangeslider=dict(visible=True),  # Add a range slider
+            type="date"
+        )
+    )
+
+    # Save the plot to an HTML file
+    fig.write_html(f'{save_to_dir}/Timeseries_top_sites_{resource_type}.html')

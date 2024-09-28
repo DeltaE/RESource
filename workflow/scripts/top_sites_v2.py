@@ -12,6 +12,7 @@ try:
     import linkingtool.linking_utility as utils
     import linkingtool.linking_vis as vis
     import linkingtool.linking_solar as solar
+    import linkingtool.linking_wind as wind
     from linkingtool.attributes_parser import AttributesParser
     from linkingtool.cell_capacity_processor import cell_capacity_processor
 except ImportError:
@@ -90,7 +91,7 @@ class TopSiteSelection:
     def visualize_timeseries(self, CF_ts_df_Top_sites):
         plots_save_to = os.path.join(self.vis_dir, 'Site_timeseries')
         vis.create_timeseries_interactive_plots(CF_ts_df_Top_sites, plots_save_to)
-        vis.create_sites_ts_plots_all_sites(self.resource_type, CF_ts_df_Top_sites, plots_save_to)
+        vis.create_sites_ts_plots_all_sites_2(self.resource_type, CF_ts_df_Top_sites, 'results/linking')
 
     def save_results(self, selected_sites, CF_ts_df_Top_sites):
         selected_sites['CF_mean'] = selected_sites.index.map(CF_ts_df_Top_sites.mean())
@@ -122,3 +123,4 @@ if __name__ == "__main__":
     # Run the main function with arguments
     top_site_selection = TopSiteSelection(args.config, args.resource_type, args.resource_max_total_capacity)
     top_site_selection.run()
+
