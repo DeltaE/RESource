@@ -1,63 +1,130 @@
 import argparse
 import subprocess
+from pathlib import Path
 
 class ResourceCreator:
     def __init__(self, config_path, resource_type):
-        self.config_path = config_path
+        self.config_path = Path(config_path).resolve()
         self.resource_type = resource_type.lower()
     
     def create(self):
+        # Base directories where scripts may exist
+        base_dirs = [
+            Path('workflow/scripts'),
+            Path('Linking_tool/workflow/scripts')
+        ]
+        
+        # Map resource types to script file names (without hardcoding full paths)
         script_map = {
-            'solar': 'workflow/scripts/solar_module_v2.py',
-            'bess': 'workflow/scripts/bess_module_v1.py',
-            'wind': 'workflow/scripts/wind_module_v2.py'
+            'solar': 'solar_module_v2.py',
+            'bess': 'bess_module_v1.py',
+            'wind': 'wind_module_v2.py'
         }
 
         if self.resource_type == 'all':
-            # Run all scripts one after the other
-            for resource, script in script_map.items():
-                try:
-                    subprocess.run(['python', script, self.config_path, resource], check=True)
-                    print(f">>>> Successfully executed {script} for resource type {resource} with config: {self.config_path}")
-                except subprocess.CalledProcessError as e:
-                    print(f"An error occurred while executing {script} for resource type {resource}: {e}")
+            # Run all scripts for all resource types
+            for resource, script_name in script_map.items():
+                script_path = self.find_script(base_dirs, script_name)
+                if script_path:
+                    self.run_script(script_path, resource)
+                else:
+                    print(f"Could not find a valid script for {resource}")
         else:
             # Run a single script based on resource_type
-            script_path = script_map.get(self.resource_type)
-            if not script_path:
+            script_name = script_map.get(self.resource_type)
+            if not script_name:
                 print("Unknown resource type. Supported resources: Solar, Wind, BESS, All")
                 return
             
-            try:
-                subprocess.run(['python', script_path, self.config_path, self.resource_type], check=True)
-                print(f">>>> Successfully executed {script_path} for resource type {self.resource_type} with config: {self.config_path}")
-            except subprocess.CalledProcessError as e:
-                print(f"An error occurred while executing {script_path}: {e}")
+            script_path = self.find_script(base_dirs, script_name)
+            if script_path:
+                self.run_script(script_path, self.resource_type)
+            else:
+                print(f"Could not find a valid script for resource type {self.resource_type}")
+
+    def find_script(self, base_dirs, script_name):
+        """ Search for the script in the base directories and return the first valid path. """
+        for base_dir in base_dirs:
+            script_path = base_dir / script_name
+            if script_path.exists():
+                return script_path.resolve()
+        return None
+
+    def run_script(self, script_path, resource_type):
+        """ Run the script with the provided resource type. """
+        try:
+            subprocess.run(['python', str(script_path), str(self.config_path), resource_type], check=True)
+            print(f">>>> Successfully executed {script_path} for resource type {resource_type} with config: {self.config_path}")
+        except subprocess.CalledProcessError as e:
+            print(f"An error occurred while executing {script_path} for resource type {resource_type}: {e}")
+
 
 class DataPreparer:
     def __init__(self, config_path):
-        self.config_path = config_path
+        self.config_path = Path(config_path).resolve()
     
     def prepare(self):
-        script_path = 'workflow/scripts/prepare_data_v2.py'
-        # script_path = 'workflow/scripts/prepare_data_v1.py'
+        # Base directories where scripts may exist
+        base_dirs = [
+            Path('workflow/scripts'),
+            Path('Linking_tool/workflow/alternative')
+        ]
+        
+        script_name = 'prepare_data_v2.py'
+        script_path = self.find_script(base_dirs, script_name)
+        if script_path:
+            self.run_script(script_path)
+        else:
+            print(f"Could not find a valid script for data preparation")
 
+    def find_script(self, base_dirs, script_name):
+        """ Search for the script in the base directories and return the first valid path. """
+        for base_dir in base_dirs:
+            script_path = base_dir / script_name
+            if script_path.exists():
+                return script_path.resolve()
+        return None
+
+    def run_script(self, script_path):
+        """ Run the script. """
         try:
-            subprocess.run(['python', script_path, self.config_path], check=True)
+            subprocess.run(['python', str(script_path), str(self.config_path)], check=True)
             print(f">>> Successfully executed {script_path} with config: {self.config_path}")
         except subprocess.CalledProcessError as e:
             print(f"An error occurred while executing {script_path}: {e}")
 
+
 class TopSitesSelector:
     def __init__(self, config_path, resource_type, max_capacity=None):
-        self.config_path = config_path
+        self.config_path = Path(config_path).resolve()
         self.resource_type = resource_type.lower()
         self.max_capacity = max_capacity
 
     def select(self):
-        script_path = 'workflow/scripts/top_sites_v2.py'
+        # Base directories where scripts may exist
+        base_dirs = [
+            Path('workflow/scripts'),
+            Path('Linking_tool/workflow/alternative')
+        ]
         
-        cmd = ['python', script_path, self.config_path, self.resource_type]
+        script_name = 'top_sites_v2.py'
+        script_path = self.find_script(base_dirs, script_name)
+        if script_path:
+            self.run_script(script_path)
+        else:
+            print(f"Could not find a valid script for top sites selection")
+
+    def find_script(self, base_dirs, script_name):
+        """ Search for the script in the base directories and return the first valid path. """
+        for base_dir in base_dirs:
+            script_path = base_dir / script_name
+            if script_path.exists():
+                return script_path.resolve()
+        return None
+
+    def run_script(self, script_path):
+        """ Run the script with the provided resource type and max capacity. """
+        cmd = ['python', str(script_path), str(self.config_path), self.resource_type]
         if self.max_capacity is not None:
             cmd.append(str(self.max_capacity))
         
@@ -66,6 +133,7 @@ class TopSitesSelector:
             print(f">>> Successfully executed {script_path} for resource type {self.resource_type} with config: {self.config_path}")
         except subprocess.CalledProcessError as e:
             print(f"An error occurred while executing {script_path}: {e}")
+
 
 def main():
     parser = argparse.ArgumentParser(

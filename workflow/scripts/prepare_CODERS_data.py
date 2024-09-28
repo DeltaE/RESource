@@ -14,7 +14,21 @@ import plotly.io as pio
 from plotly.subplots import make_subplots
 
 # %%
-import linkingtool.linking_utility as utils
+
+# Local Packages
+
+try:
+    # Try importing from the submodule context
+    import linkingtool.linking_utility as utils
+    import linkingtool.linking_vis as vis
+    import linkingtool.linking_solar as solar
+    from linkingtool.attributes_parser import AttributesParser
+except ImportError:
+    # Fallback for when running as a standalone script or outside the submodule
+    import Linking_tool.linkingtool.linking_utility as utils
+    import Linking_tool.linkingtool.linking_vis as vis
+    import Linking_tool.linkingtool.linking_solar as solar
+    from Linking_tool.linkingtool.attributes_parser import AttributesParser
 
 # %%
 import geopandas as gpd

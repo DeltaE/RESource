@@ -3,11 +3,24 @@ import logging as log
 import atlite
 import geopandas as gpd
 import pandas as pd
-from linkingtool import linking_utility as utils
-from linkingtool import linking_vis as vis
-from linkingtool import linking_wind as wind
-from linkingtool.cell_capacity_processor import cell_capacity_processor
-from linkingtool.attributes_parser import AttributesParser
+
+# Local Packages
+try:
+    # Try importing from the submodule context
+    import linkingtool.linking_utility as utils
+    import linkingtool.linking_vis as vis
+    import linkingtool.linking_solar as solar
+    import linkingtool.linking_wind as wind
+    from linkingtool.attributes_parser import AttributesParser
+    from linkingtool.cell_capacity_processor import cell_capacity_processor
+except ImportError:
+    # Fallback for when running as a standalone script or outside the submodule
+    import Linking_tool.linkingtool.linking_utility as utils
+    import Linking_tool.linkingtool.linking_vis as vis
+    import Linking_tool.linkingtool.linking_solar as solar
+    import Linking_tool.linkingtool.linking_wind as wind 
+    from Linking_tool.linkingtool.attributes_parser import AttributesParser
+    from Linking_tool.linkingtool.cell_capacity_processor import cell_capacity_processor
 
 class WindModuleProcessor:
     def __init__(self, 
@@ -17,7 +30,7 @@ class WindModuleProcessor:
         self.resource_type = resource_type.lower()
         
         # Initialize Attributes Parser Class
-        self.attributes_parser: AttributesParser = AttributesParser(config_file_path, self.resource_type)
+        self.attributes_parser: attributes_parser = AttributesParser(config_file_path, self.resource_type)
         
         # Initialize era5_cell_capacity_processor
         self.cell_processor:cell_capacity_processor = cell_capacity_processor(config_file_path, self.resource_type)
