@@ -40,8 +40,10 @@
 
 <h2>Dashboard</h2>
 <div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'Page1')">Page 1</button>
-    <button class="tablinks" onclick="openTab(event, 'Page2')">Page 2</button>
+    <button class="tablinks" onclick="openTab(event, 'Page1')">Solar Timeseries</button>
+    <button class="tablinks" onclick="openTab(event, 'Page2')">Wind Timeseries</button>
+    <button class="tablinks" onclick="openTab(event, 'Page3')">Demand Profile BC</button>
+    <button class="tablinks" onclick="openTab(event, 'Page4')">BC Sectoral Demand Projection</button>
 </div>
 
 <!-- Tab content -->
@@ -55,10 +57,20 @@
     <iframe src="Timeseries_top_sites_wind.html" width="100%" height="600px"></iframe>
 </div>
 
+<div id="Page3" class="tabcontent">
+    <h3>Demand Profile BC (2021)</h3>
+    <iframe src="Demand_profile_BC_2021.html" width="100%" height="600px"></iframe>
+</div>
+
+<div id="Page4" class="tabcontent">
+    <h3>BC Sectoral Demand Projection (Current Measures)</h3>
+    <iframe src="BC_sectoral_elec_end_use_demand_Current_Measures.html" width="100%" height="600px"></iframe>
+</div>
+
 <script>
     function openTab(evt, tabName) {
         var i, tabcontent, tablinks;
-        
+
         // Hide all tab contents
         tabcontent = document.getElementsByClassName("tabcontent");
         for (i = 0; i < tabcontent.length; i++) {
