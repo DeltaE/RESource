@@ -12,7 +12,6 @@ import geopandas as gpd
 import folium
 
 
-
 # local scripts
 
 import linkingtool.linking_utility as utility
@@ -268,9 +267,6 @@ def create_sites_ts_plots_all_sites(
     fig.write_html(f'{save_to_dir}/Timeseries_top_sites_{resource_type}.html')
     # fig.write_html(f'results/linking/Timeseries_top_sites_{resource_type}.html')
 
-import plotly.express as px
-import plotly.graph_objects as go
-import pandas as pd
 
 def create_sites_ts_plots_all_sites_2(
     resource_type: str,
@@ -281,27 +277,33 @@ def create_sites_ts_plots_all_sites_2(
     hourly_df = CF_ts_df
     daily_df = CF_ts_df.resample('D').mean()
     weekly_df = CF_ts_df.resample('W').mean()
-    monthly_df = CF_ts_df.resample('M').mean()
+    monthly_df = CF_ts_df.resample('ME').mean()
     quarterly_df = CF_ts_df.resample('QE').mean()
 
     # Create the plot using plotly express for the hourly data
     fig = px.line(hourly_df, x=hourly_df.index, y=hourly_df.columns[0:], title=f'Hourly timeseries for {resource_type} sites',
                   labels={'value': 'CF', 'datetime': 'DateTime'}, template='ggplot2')
 
-    # Add traces for other time intervals (daily, weekly, etc.)
-    fig.add_trace(go.Scatter(x=daily_df.index, y=daily_df[daily_df.columns[0]], mode='lines', name='Daily', visible='legendonly'))
-    fig.add_trace(go.Scatter(x=weekly_df.index, y=weekly_df[weekly_df.columns[0]], mode='lines', name='Weekly', visible='legendonly'))
-    fig.add_trace(go.Scatter(x=monthly_df.index, y=monthly_df[monthly_df.columns[0]], mode='lines', name='Monthly', visible='legendonly'))
-    fig.add_trace(go.Scatter(x=quarterly_df.index, y=quarterly_df[quarterly_df.columns[0]], mode='lines', name='Quarterly', visible='legendonly'))
+    # Add traces for other time intervals (daily, weekly, etc.) with dotted lines
+    fig.add_trace(go.Scatter(x=daily_df.index, y=daily_df[daily_df.columns[0]], mode='lines', name='Daily', visible='legendonly',
+                             line=dict(dash='dot')))
+    fig.add_trace(go.Scatter(x=weekly_df.index, y=weekly_df[weekly_df.columns[0]], mode='lines', name='Weekly', visible='legendonly',
+                             line=dict(dash='dot')))
+    fig.add_trace(go.Scatter(x=monthly_df.index, y=monthly_df[monthly_df.columns[0]], mode='lines', name='Monthly', visible='legendonly',
+                             line=dict(dash='dot')))
+    fig.add_trace(go.Scatter(x=quarterly_df.index, y=quarterly_df[quarterly_df.columns[0]], mode='lines', name='Quarterly', visible='legendonly',
+                             line=dict(dash='dot')))
 
-    # Update the layout to move the legend to the top and center it
+    # Update the layout to move the legend to the top, center it, and shrink the font size
     fig.update_layout(
         legend=dict(
-            orientation="h",  # Horizontal legend
+            orientation="v",  # Horizontal legend
             yanchor="bottom",  # Aligns the legend at the bottom of the top position
-            y=1.02,            # Moves the legend up (outside the plot area)
+            y=0.5,            # Moves the legend up (outside the plot area)
             xanchor="center",   # Centers the legend horizontally
-            x=0.5              # Sets the x position of the legend to be centered
+            x=0.9,              # Sets the x position of the legend to be centered
+            font=dict(size=10),  # Make the font size smaller
+            itemwidth=30  # Reduce the width of legend items to avoid overlap
         ),
         xaxis_title='DateTime',
         yaxis_title='CF',
@@ -327,3 +329,5 @@ def create_sites_ts_plots_all_sites_2(
 
     # Save the plot to an HTML file
     fig.write_html(f'{save_to_dir}/Timeseries_top_sites_{resource_type}.html')
+    # fig.show()
+
