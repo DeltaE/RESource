@@ -1,0 +1,35 @@
+import dash
+from dash import dcc, html
+from dash.dependencies import Input, Output
+
+app = dash.Dash(__name__)
+
+app.layout = html.Div([
+    dcc.Tabs([
+        dcc.Tab(label='Resources', children=[
+            dcc.Tabs([
+                dcc.Tab(label='Timeseries', children=[
+                    html.Div([
+                        html.H3('Timeseries Data'),
+                        html.P('Content related to timeseries data.')
+                    ])
+                ]),
+                dcc.Tab(label='Solar', children=[
+                    html.Div([
+                        html.H3('Solar Resources'),
+                        html.P('Information and data related to solar energy.')
+                    ])
+                ]),
+                dcc.Tab(label='Wind', children=[
+                    html.Div([
+                        html.H3('Wind Resources'),
+                        html.P('Information and data related to wind energy.')
+                    ])
+                ])
+            ])
+        ])
+    ])
+])
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
