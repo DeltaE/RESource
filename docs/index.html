@@ -186,4 +186,40 @@
         // Hide all tab contents
         tabcontent = document.getElementsByClassName("tabcontent");
         for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display 
+            tabcontent[i].style.display = "none";
+        }
+
+        // Remove the "active" class from all buttons
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        // Show the current tab and add "active" class to the button
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    function openSubTab(evt, subTabName) {
+        var i, subtabcontent, subtablinks;
+
+        // Hide all subtab contents
+        subtabcontent = document.getElementsByClassName("subtabcontent");
+        for (i = 0; i < subtabcontent.length; i++) {
+            subtabcontent[i].style.display = "none";
+        }
+
+        // Remove the "active" class from all buttons
+        subtablinks = document.getElementsByClassName("subtablinks");
+        for (i = 0; i < subtablinks.length; i++) {
+            subtablinks[i].className = subtablinks[i].className.replace(" active", "");
+        }
+
+        // Show the current subtab and add "active" class to the button
+        document.getElementById(subTabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+</body>
+</html>
