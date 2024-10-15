@@ -12,7 +12,7 @@ import geopandas as gpd
 import os
 
 import pandas as pd
-import linkingtool.linking_vis as vis
+import linkingtool.visuals as vis
 
 # Local Package
 import linkingtool.linking_utility as utils
