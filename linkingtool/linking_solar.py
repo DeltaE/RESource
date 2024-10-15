@@ -1,21 +1,23 @@
 import pandas as pd
 import geopandas as gpd
 import linkingtool.linking_utility as utils
+import atlite
 
-def create_CF_timeseries_df(cutout,start_date,end_date,geodataframe_sites,panel_config,tracking_config,Site_index='cell_id'):
+def create_CF_timeseries_df(cutout,start_date,end_date,geodataframe_sites,layout_matrix,panel_config,tracking_config,Site_index='cell'):
 
-    _layout_MW=utils.create_layout_for_generation(cutout,geodataframe_sites,'potential_capacity')
-
-
+    # _layout_MW=utils.create_layout_for_generation(cutout,geodataframe_sites,'potential_capacity')
+    # cutout=atlite.Cutout(cutout_file)
     pv = cutout.pv(
         panel=panel_config,
         show_progress=True,
         orientation="latitude_optimal",
         tracking=tracking_config,
-        layout=_layout_MW,
+        # layout=_layout_MW,
+        # matrix=layout_matrix,
         shapes=geodataframe_sites.geometry,
         capacity_factor=True,
         per_unit=True,
+        return_capacity=True,
     )  # Xarray
 
     # Convert Xarray to Dataframe

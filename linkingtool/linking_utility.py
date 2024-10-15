@@ -29,6 +29,77 @@ import datetime
 now = datetime.datetime.now()
 date_time_str = now.strftime("%Y-%m-%d %H:%M:%S")
 
+
+
+
+# Function to generate a unique index from region name and coordinates
+def assign_cell_id(cells: gpd.GeoDataFrame, 
+                  source_column: str = 'Region', 
+                  index_name: str = 'cell') -> gpd.GeoDataFrame:
+    """
+    Assigns unique cell IDs to each region in the specified GeoDataFrame.
+
+    Parameters:
+    cells (gpd.GeoDataFrame): Input GeoDataFrame containing spatial data with 'x' and 'y' coordinates.
+    source_column (str): Column name in the GeoDataFrame that contains regional names.
+    index_name (str): Name for the new index column to be created.
+
+    Returns:
+    gpd.GeoDataFrame: GeoDataFrame with a new column of unique cell IDs for each region.
+    """
+    # Ensure the source column exists
+    if source_column not in cells.columns:
+        raise ValueError(f"'{source_column}' does not exist in the GeoDataFrame.")
+
+    # Remove spaces in the region names for consistency
+    cells[source_column] = cells[source_column].str.replace(" ", "", regex=False)
+
+    # Check if 'x' and 'y' coordinates exist
+    if 'x' not in cells.columns or 'y' not in cells.columns:
+        raise ValueError("Columns 'x' and 'y' must exist in the GeoDataFrame.")
+
+    # Generate unique cell IDs using a combination of the region name and coordinates
+    cells[index_name] = (
+        cells.apply(
+            lambda row: f"{row[source_column]}_{row['x']}_{row['y']}",
+            axis=1
+        )
+    )
+
+    # Set the index to the newly created column
+    cells.set_index(index_name, inplace=True)
+
+    return cells
+
+
+# Function to Generate Cell Index from Region name
+def assign_regional_cell_ids(cells_dataframe, Source_Column, index_name):
+    unique_values = cells_dataframe[Source_Column].unique()
+
+    # If there's only one unique value, return the original DataFrame
+    if len(unique_values) == 1:
+        return cells_dataframe
+
+    region_dfs = []
+
+    for x in unique_values:
+        _mask = cells_dataframe[Source_Column] == x
+        _x_df_ = cells_dataframe[_mask].reset_index(drop=True)
+
+        # Create a new column with given index name, for each region
+        _x_df_[index_name] = [f'{x}_{index + 1}' for index in range(len(_x_df_))]
+
+        region_dfs.append(_x_df_)
+
+    # Concatenate all site-specific DataFrames into one DataFrame
+    dataframe_with_cell_ids = pd.concat(region_dfs, ignore_index=True)
+
+    # Set the index to the newly created column if it exists
+    if index_name in dataframe_with_cell_ids.columns:
+        dataframe_with_cell_ids.set_index(index_name, inplace=True)
+
+    return dataframe_with_cell_ids
+
 def create_log(log_path):
     if not os.path.exists('workflow/log'):
         # If it doesn't exist, create it
@@ -119,6 +190,9 @@ def check_LocalCopy_and_run_function(
             # log.info(f"Directory '{directory_path}' found locally.")
             return log.info(f"Directory '{directory_path}' found locally.")
 
+""" 
+>>> replaced with [AttributesParser] Class
+
 # Function to Load User Configuration File
 def load_config(file_path):
 
@@ -126,7 +200,9 @@ def load_config(file_path):
         data = yaml.safe_load(file)
 
     return data
+"""
 
+# this is a damn good function that downloads any datafile ! 
 def download_data(
     source_URL:str,
     file_path:str):
@@ -150,13 +226,15 @@ def download_data(
         log.info(f"Please Download the data from {source_URL} and extract the files to {file_path}")
             # return file_path
 
+""" 
+>>> not in use 
 
 def update_population_data(
     config_population: dict, 
     gadm_regions:  gpd.GeoDataFrame,
     population_csv_data_path: str, 
-) -> gpd.GeoDataFrame:
-    """
+    ) -> gpd.GeoDataFrame:
+    ''' 
     Updates gadm_regions DataFrame with population data based on the mapping provided in the config.
 
     Parameters:
@@ -167,9 +245,10 @@ def update_population_data(
 
     Returns:
     - pd.DataFrame: Updated gadm_regions DataFrame with population data.
-    """
+    '''
     
-    
+
+ 
     # Preprocess the population data
     df = pd.read_csv(population_csv_data_path,skiprows=config_population['skiprows']) # Work on a copy to avoid modifying the original DataFrame
     # df.columns = df.columns.str.strip()  # Remove any extra spaces from column names
@@ -192,14 +271,19 @@ def update_population_data(
     gadm_regions['population'] = gadm_regions['Region'].map(pop_map)
     gadm_regions_with_pop_data=gadm_regions.copy()
     return gadm_regions_with_pop_data
+    
+"""
+
+""" 
+>>> replaced with [cell_capacity_processor] class
 
 def calculate_potential_capacity(
         ERA5_cells_gdf:gpd.GeoDataFrame,
         tech_cap_per_km2:float,
         index_name:str)->gpd.GeoDataFrame:
-    """
+    ''' 
     Calculates the potential capacity(MW) for each ERA5 grid cells from the available land area(km2) and the landuse intensity (MW/km2) of the technology.
-    """
+    '''
     
     log.info(f"Calculating Potential Capacity for BC Grid Cells based on eligible land area")
 
@@ -221,6 +305,7 @@ def calculate_potential_capacity(
     log.info(f"Potential Capacity for Provincial Grid Cells based on available Land calculated")
     
     return ERA5_cells_gdf_new
+"""
 
 def distance_cost(
         distance:float,
@@ -270,7 +355,7 @@ def calculate_cell_score(
     return scored_dataframe
 
 def find_grid_nodes_ERA5_cells(
-        current_region:dict,
+        province_code:str,
         buses_gdf:gpd.GeoDataFrame,
         cells_gdf:gpd.GeoDataFrame,
         grid_node_proximity_filter:float)->gpd.GeoDataFrame:
@@ -283,8 +368,13 @@ def find_grid_nodes_ERA5_cells(
     buses_gdf.sindex
     # Create a KDTree for bus station geometries
     bus_tree = cKDTree(buses_gdf['geometry'].apply(lambda x: (x.x, x.y)).tolist())
-    log.info(f"> Calculating Nearest Grid Nodes for Grid Cells of {current_region['code']}")
-    cells_gdf[['nearest_station', 'nearest_station_distance_km']] = cells_gdf['geometry'].apply(find_nearest_station, buses_gdf=buses_gdf,bus_tree=bus_tree).apply(pd.Series)
+    log.info(f"> Calculating Nearest Grid Nodes for Grid Cells of {province_code}")
+    # cells_gdf[['nearest_station', 'nearest_station_distance_km']] = cells_gdf['geometry'].apply(find_nearest_station, buses_gdf=buses_gdf,bus_tree=bus_tree).apply(pd.Series)
+    # Apply the find_nearest_station function and unpack the result into two columns
+    cells_gdf['nearest_station'], cells_gdf['nearest_station_distance_km'] = zip(
+        *cells_gdf['geometry'].apply(find_nearest_station, buses_gdf=buses_gdf, bus_tree=bus_tree)
+    )
+
     cells_gdf_with_station_data=cells_gdf.copy()
     proximity_to_nodes_mask=cells_gdf_with_station_data['nearest_station_distance_km']<=grid_node_proximity_filter 
     cells_within_proximity_gdf=cells_gdf_with_station_data[proximity_to_nodes_mask]
@@ -347,7 +437,7 @@ def calculate_land_availability_vector_data(
         exclusion_gdf:gpd.GeoDataFrame,
         msg:str,
         column_name:str,
-        current_region:dict)-> gpd.GeoDataFrame:
+        province_code:str)-> gpd.GeoDataFrame:
     
     """
     Calculates land availability (%) for given Geodataframe Cells and a vector filter.nEReturns a GeoDataFrame with land availability (%)
@@ -379,7 +469,7 @@ def calculate_land_availability_vector_data(
         cells_gdf_with_availability=merge_LandData_xarray_with_geodataframe(land_availability_xr,cells_gdf,column_name)
         # log.info(f"Calculated Land Availability data loaded for  {len(province_ERA5_cells_with_land_availability)} Cells in Col.:{'eligible_land_area'}.\n")
 
-        cells_gdf_with_availability=calculate_cell_area(cells_gdf_with_availability,column_name,current_region)
+        cells_gdf_with_availability=calculate_cell_area(cells_gdf_with_availability,column_name,province_code)
     
     return cells_gdf_with_availability
 
@@ -390,7 +480,7 @@ def calculate_land_availability_raster(
         gaez_raster:str,
         column_name:str,
         land_class_selection:list,
-        current_region:dict,
+        province_code:str,
         buffer:float,
         exclusion=True)->gpd.GeoDataFrame:
 
@@ -436,7 +526,7 @@ def calculate_land_availability_raster(
 
     log.info(f"Calculated Land Availability data loaded for  {len(province_ERA5_cells_with_land_availability)} Cells in Col.:{column_name}.\n")
 
-    province_ERA5_cells_with_eligible_land_area = calculate_cell_area(province_ERA5_cells_with_land_availability,column_name,current_region)
+    province_ERA5_cells_with_eligible_land_area = calculate_cell_area(province_ERA5_cells_with_land_availability,column_name,province_code)
 
     return province_ERA5_cells_with_eligible_land_area
 
@@ -444,7 +534,7 @@ def calculate_land_availability_raster(
 def calculate_cell_area(
         gdf:gpd.GeoDataFrame,
         availability_column:str,
-        current_region:dict)->gpd.GeoDataFrame:
+        province_code:str)->gpd.GeoDataFrame:
 
     """
     Takes the ERA5 Grid geodataframe,land availability column name and information for the selected region and calculates area for individual grid (ERA5) cells. 
@@ -464,9 +554,9 @@ def calculate_cell_area(
     _total_eligible_land_area = int(gdf_with_area_column['eligible_land_area'].sum()) #sq.km
 
     print(
-        f"\nRegion of Interest : {current_region['code']}\n",
+        f"\nRegion of Interest : {province_code}\n",
         f"> Eligible Land Area of the  Grid Cells = {{:,}} Km²\n".format(_total_eligible_land_area),
-        f"> Actual Land Area : {{:,}} km²\n".format(current_region['area'])
+        # f"> Actual Land Area : {{:,}} km²\n".format(current_region['area'])  >> source this fro provincial mapping
     )
 
     #Restore the projection for other usage
@@ -475,33 +565,7 @@ def calculate_cell_area(
     return gdf_with_area_column
 
 
-# Function to Generate Cell Index from Region name
-def assign_regional_cell_ids(cells_dataframe, Source_Column, index_name):
-    unique_values = cells_dataframe[Source_Column].unique()
 
-    # If there's only one unique value, return the original DataFrame
-    if len(unique_values) == 1:
-        return cells_dataframe
-
-    region_dfs = []
-
-    for x in unique_values:
-        _mask = cells_dataframe[Source_Column] == x
-        _x_df_ = cells_dataframe[_mask].reset_index(drop=True)
-
-        # Create a new column with given index name, for each region
-        _x_df_[index_name] = [f'{x}_{index + 1}' for index in range(len(_x_df_))]
-
-        region_dfs.append(_x_df_)
-
-    # Concatenate all site-specific DataFrames into one DataFrame
-    dataframe_with_cell_ids = pd.concat(region_dfs, ignore_index=True)
-
-    # Set the index to the newly created column if it exists
-    if index_name in dataframe_with_cell_ids.columns:
-        dataframe_with_cell_ids.set_index(index_name, inplace=True)
-
-    return dataframe_with_cell_ids
 
 def create_layout_for_generation(cutout,cells_gdf,capacity_column):
     log.info(f"Creating Layout for PV generation from BC Grid Cells...")
@@ -516,8 +580,8 @@ def find_nearest_station(cell_geometry, buses_gdf, bus_tree):
     _, index = bus_tree.query((cell_geometry.centroid.x, cell_geometry.centroid.y))
     nearest_bus_row = buses_gdf.iloc[index]
     distance_km = cell_geometry.distance(nearest_bus_row['geometry']) * 111.32  # Degrees to km conversion
-    nearest_station_name = nearest_bus_row['name']
-    return nearest_station_name, distance_km
+    nearest_station_code = nearest_bus_row['node_code']
+    return nearest_station_code, distance_km
 
 
 
@@ -892,35 +956,41 @@ def print_module_title(text,Length_Char_inLine=60):
         f"{5*' ' }{text}\n"
         f"{Length_Char_inLine*'_'}")
     
-def fix_df_ts_index(
-    df:pd.DataFrame, 
-    snapshot_timezone_region:dict[list],
-    snapshot_serial:int)->pd.DataFrame:
-    '''
-    This function resets the timeseries index with timezone conversion.<br>
-    <b>!! Caution </b>: The converted timeseries is an index reset only, with a naive timestamp without timezone info. 
-    '''
+# def fix_df_ts_index(
+#     df:pd.DataFrame, 
+#     snapshot_timezone_region:dict[list],
+#     snapshot_serial:int)->pd.DataFrame:
+#     '''
+#     This function resets the timeseries index with timezone conversion.<br>
+#     <b>!! Caution </b>: The converted timeseries is an index reset only, with a naive timestamp without timezone info. 
+#     '''
     
-    new_indices = pd.date_range(start = snapshot_timezone_region['start'][snapshot_serial], end = snapshot_timezone_region['end'][snapshot_serial], freq='h')
+#     new_indices = pd.date_range(start = snapshot_timezone_region['start'][snapshot_serial], end = snapshot_timezone_region['end'][snapshot_serial], freq='h')
     
-    df.index = new_indices
+#     df.index = new_indices
     
-    return df
+#     return df
 
-def tz_convert_ts_index(
-    ts_df:pd.DataFrame,
-    timezone:str
-    )->pd.DataFrame:
-    '''
-    This function converts the timeseries index with timezone information imputed conversion.<br>
-    <b> Recommended timeseries index conversion method</b> in contrast to naive timestamp index reset method. 
-    '''
-    # Localize to UTC (assuming your times are currently in UTC)
-    ts_df_index_utc = ts_df.tz_localize('UTC')
-
-    # Convert to defined timezone (in Pandas time zones)
-    ts_df_index_converted = ts_df_index_utc.tz_convert(timezone)
-
-    # ts_df.index=ts_df_index_converted.index
+# def tz_convert_ts_index(
+#     ts_df: pd.DataFrame,
+#     timezone: str
+# ) -> pd.DataFrame:
+#     '''
+#     This function converts the timeseries index with timezone information imputed conversion.
+#     Recommended timeseries index conversion method in contrast to naive timestamp index reset method.
     
-    return ts_df_index_converted
+#     Args:
+#     - ts_df (pd.DataFrame): The DataFrame containing a timezone-naive index.
+#     - timezone (str): The target timezone for conversion (e.g., 'Asia/Singapore', 'America/Vancouver').
+
+#     Returns:
+#     - pd.DataFrame: The DataFrame with the converted timezone-aware index.
+#     '''
+
+#     # Localize to UTC (assuming the timestamps are naive and in UTC)
+#     ts_df.index = ts_df.index.tz_localize('UTC')
+
+#     # Convert to defined timezone (in Pandas time zones)
+#     ts_df.index = ts_df.index.tz_convert(timezone)
+
+#     return ts_df

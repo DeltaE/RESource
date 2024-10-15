@@ -44,7 +44,7 @@ class CellCapacityProcessor(AttributesParser):
         self.resource_landuse_intensity = self.resource_disaggregation_config['landuse_intensity']
         
         ## Initiate the Store and Datahandler (interfacing with the Store)
-        self.datahandler=DataHandler(store=f"data/store/{self.resource_type}_resources.h5")
+        self.datahandler=DataHandler(store=self.store)
 
 
         ## Load geospatial data (geodataframes)
@@ -163,13 +163,13 @@ class CellCapacityProcessor(AttributesParser):
         # Define a namedtuple
         capacity_data = namedtuple('capacity_data', ['data','matrix','cutout'])
         
-        self.solar_resourced_nt=capacity_data(self.store_grid_cells,capacity_matrix,self.cutout)
+        self.solar_resources_nt=capacity_data(self.store_grid_cells,capacity_matrix,self.cutout)
         
         print(f"Total ERA5 cells loaded : {len(self.store_grid_cells)} [each with .025 deg. (~30km) resolution ]")
         self.log.info(f"Saving to the local store (as HDF5 file)")
         # self.datahandler.save_to_hdf(era5_cell_capacity,'cells')
         
-        return self.solar_resourced_nt
+        return self.solar_resources_nt
 
 ## Visuals
     def show_capacity_map(self):

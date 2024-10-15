@@ -31,9 +31,8 @@ class Timeseries(ERA5Cutout,
         # Fetch the disaggregation configuration based on the resource type
         self.resource_disaggregation_config=self.get_resource_disaggregation_config()
         self.cell_static_CF_tolerance=self.resource_disaggregation_config.get('cell_static_CF_tolerance',0)
-        # self.site_index='cell'
         
-        self.datahandler=DataHandler(store=f"data/store/{self.resource_type}_resources.h5")
+        self.datahandler=DataHandler(store=self.store)
         
     def __process_PV_timeseries__(self):
         """ 
@@ -135,7 +134,8 @@ class Timeseries(ERA5Cutout,
         # Step 9: Convert the timeseries data to the appropriate province timezone
         self.province_timezone=self.get_province_timezone()
         self.CF_ts_df = self.__fix_timezone__(_CF_ts_df)
-        self.CF_ts_df.tz_localize(None) 
+        self.CF_ts_df.tz_localize(None)
+        
         # Step 10: Save the grid cells and timeseries to the local HDF5 store
         self.datahandler.to_store(self.province_grid_cells, 'cells')
         self.datahandler.to_store(self.CF_ts_df, 'timeseries')

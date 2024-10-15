@@ -42,7 +42,6 @@ class AttributesParser:
     
     province_mapping: Dict[str,dict]=field(init=False)
     disaggregation_config: Dict[str,dict] = field(init=False)
-    vis_dir: Path = field(init=False)
     linking_data: Dict[str,dict] = field(init=False) # Dict of Directories for Processed data dumping
     gaez_data: Dict[str,dict] = field(init=False) # Raster associated configurations/directories
     ATB: Dict[str,dict] = field(init=False) # Annual Technology Baseline , cost parameters (Currently sourced from NREL)
@@ -51,7 +50,7 @@ class AttributesParser:
     
     def __post_init__(self):
         self.site_index='cell'
-        self.store = f'data/store/{self.resource_type}_resources.h5'
+        self.store = f'data/store/{self.resource_type}_resources_{self.province_short_code}.h5'
         # self.datahandler=DataHandler(self.store)
         
         # Convert province_short_code to uppercase to handle user types regarding case-sensitive letter inputs.
@@ -144,7 +143,7 @@ class AttributesParser:
         return self.config.get('capacity_disaggregation', {}).get(self.resource_type, {})
 
     def get_vis_dir(self) -> Path:
-        return Path(self.config.get('visualization', {}).get('linking', '')) / (self.resource_type if self.resource_type else 'vis/misc')
+        return (self.config.get('visualization', {}).get('linking', '')) +"/"+ (self.resource_type if self.resource_type else 'vis/misc')
 
     def get_linking_data_config(self) -> Dict[str, dict]:
         return self.config.get('processed_data', {}).get('linking', {})

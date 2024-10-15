@@ -60,14 +60,15 @@ class ResourceCreator:
 
 
 class DataPreparer:
-    def __init__(self, config_path):
+    def __init__(self, config_path,province_short_code):
         self.config_path = Path(config_path).resolve()
+        self.province_short_code = province_short_code
     
     def prepare(self):
         # Base directories where scripts may exist
         base_dirs = [
             Path('workflow/scripts'),
-            Path('Linking_tool/workflow/alternative')
+            Path('workflow/scripts')
         ]
         
         script_name = 'prepare_data_v2.py'
@@ -88,7 +89,7 @@ class DataPreparer:
     def run_script(self, script_path):
         """ Run the script. """
         try:
-            subprocess.run(['python', str(script_path), str(self.config_path)], check=True)
+            subprocess.run(['python', str(script_path), str(self.config_path),str(self.province_short_code)], check=True)
             print(f">>> Successfully executed {script_path} with config: {self.config_path}")
         except subprocess.CalledProcessError as e:
             print(f"An error occurred while executing {script_path}: {e}")
@@ -174,6 +175,12 @@ def main():
         help="Path to the configuration file '*.yml'"
     )
     
+    prepare_data_parser.add_argument(
+        "province_short_code",
+        type=str,
+        help="Short code to the Province e.g. 'BC' for British Columbia "
+    )
+    
     # Subparser for 'top_sites' command
     top_sites_parser = subparsers.add_parser(
         'top_sites',
@@ -204,7 +211,7 @@ def main():
         creator = ResourceCreator(args.config_path, args.resource_type)
         creator.create()
     elif args.command == 'prepare_data':
-        preparer = DataPreparer(args.config_path)
+        preparer = DataPreparer(args.config_path,args.province_short_code)
         preparer.prepare()
     elif args.command == 'top_sites':
         selector = TopSitesSelector(args.config_path, args.resource_type, args.resource_max_total_capacity)
