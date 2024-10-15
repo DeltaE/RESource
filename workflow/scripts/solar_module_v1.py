@@ -27,7 +27,7 @@ import argparse
 
 # %%
 import linkingtool.linking_utility as utils
-import linkingtool.linking_vis as vis
+import linkingtool.visuals as vis
 import linkingtool.linking_solar as solar
 
 # %%

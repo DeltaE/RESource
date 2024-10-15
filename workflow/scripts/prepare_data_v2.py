@@ -1,102 +1,127 @@
-import time
 import argparse
-import os
-import pandas as pd
+from pathlib import Path
 import geopandas as gpd
 from requests import get
-from pyrosm import OSM, get_data
+from dataclasses import dataclass
 
 # Local Packages
+import linkingtool.linking_utility as utils
+import linkingtool.visuals as vis
+import linkingtool.linking_solar as solar
+import linkingtool.dataprep as dataprep
 
-try:
-    # Try importing from the submodule context
-    import linkingtool.linking_utility as utils
-    import linkingtool.linking_vis as vis
-    import linkingtool.linking_solar as solar
-    from linkingtool.attributes_parser import AttributesParser
-except ImportError:
-    # Fallback for when running as a standalone script or outside the submodule
-    import Linking_tool.linkingtool.linking_utility as utils
-    import Linking_tool.linkingtool.linking_vis as vis
-    import Linking_tool.linkingtool.linking_solar as solar
-    from Linking_tool.linkingtool.attributes_parser import AttributesParser
+from linkingtool.coders import CODERSData
+from linkingtool.AttributesParser import AttributesParser
+from linkingtool.boundaries import GADMBoundaries
+from linkingtool.era5_cutout import ERA5Cutout
+from linkingtool.osm import OSMData
+from linkingtool.lands import ConservationLands
 
-class data_preparator:
-    def __init__(self, config_file_path):
+@dataclass
+
+class LinkingToolData:
+    def __init__(self, 
+                 config_file_path: Path, 
+                 province_short_code:str,
+                 resource_type=None):
+        
+        # Set default attributes
+        self.base_path = Path.cwd()
+        
+        # Set attributes from >> args
         self.config_file_path = config_file_path
+        self.province_short_code=province_short_code.upper()
+        
+        # Set some more attributes >> initially NONE, later to be updated from AttributesParser methods
         self.log = None
         self.config = None
-        self.base_path = os.getcwd()
         self.country = None
-        self.current_region = None
-        self._CRC_ = None
+        self.current_region_config = None # Dictionary related to current region
+        self.province_mapping =None
+        self.resource_type=None
+        self.cutout_config=None
         
-        # Initialize Attributes Parser Class
-        self.AttributesParser:AttributesParser = AttributesParser(config_file_path)
-    
+        # This dictionary will be used to pass arguments to external classes
+        self.required_args = {   #order doesn't matter
+            "config_file_path" : config_file_path,
+            "province_short_code": province_short_code.upper(),
+        }
+        
+        # Initialize Attributes Parser Class to use it's methods that updates the None parameters.
+        self.attributes_parser: AttributesParser = AttributesParser(**self.required_args)
+        
+        # Initialize Lands data loader class
+        self.lands:ConservationLands =ConservationLands(**self.required_args)
+        
+        # default methods to run to update >> required_args. These methods has dependency on the AttributesParser class.
+        self.setup_logging()
+        self.load_config()
+        self.get_units_dictionary()
+        
+        self.country = self.config['country']
+        self.province_mapping = self.config['province_mapping']
+        self.cutout_config = self.config['cutout']
+
+        # Initiate external classes to pull/update data
+
+        ## Initiate class to pull GADM data
+        self.gadm: GADMBoundaries = GADMBoundaries(**self.required_args)
+        self.province_gadm_gdf:gpd.GeoDataFrame=self.gadm.get_province_boundary()
+        
+        ## Initialise Initiate class to pull ERA5 Cutout
+        self.era5_cutout:ERA5Cutout=ERA5Cutout(**self.required_args)
+        
+        ## Initiate class to pull CODERS data
+        self.coders:CODERSData= CODERSData(**self.required_args)
+        
+        ## Initiate class to pull OSM data 
+        self.osm:OSMData=OSMData(**self.required_args)
+        
     def setup_logging(self):
-        log_path = f'workflow/log/data_preparation_log.txt'
+        log_path = Path('workflow/log/data_preparation_log.txt')
         self.log = utils.create_log(log_path)
 
     def load_config(self):
-        self.config = self.AttributesParser.config
-        self.country = self.config['country']
-        self.current_region = self.AttributesParser.current_region
-        self._CRC_ = self.AttributesParser.region_code
-        self.log.info(f"Processing data files for {self.current_region['name']}[{self._CRC_}]")
-
-    def create_directories(self):
-        utils.create_directories(self.base_path, self.config['required_directories'])
-        self.log.info("All directories have been created successfully.")
-
-    def prepare_units_dictionary(self):
-        units_file_path = self.config['units_dictionary']
+        self.province_code_validity=self.attributes_parser.province_code_validator
+        
+        if self.province_code_validity :
+            self.config = self.attributes_parser.config
+        else:
+            self.province_code_validity
+            
+    def get_units_dictionary(self):
+        units_file_path = Path(self.config['units_dictionary'])
         dataprep.create_units_dictionary(units_file_path)
 
-    def prepare_and_update_gadm_data(self):
-        # Step 1: Prepare GADM data
-        GADM_file_save_to = os.path.join(self.config.get('GADM', {}).get('root', ''), self.config.get('GADM', {}).get('datafile', ''))
-        admin_level = 2
-        plot_save_to = os.path.join("vis/misc", f"{self._CRC_}_gadm_regions.png")
-
-        utils.check_LocalCopy_and_run_function(
-            GADM_file_save_to,
-            lambda: dataprep.prepare_GADM_data(self.country, self.current_region, GADM_file_save_to, plot_save_to, admin_level),
-            force_update=True)
-
-        # Load the GADM data into a GeoDataFrame
-        self.province_gadm_regions_gdf = gpd.read_file(GADM_file_save_to)
-        self.log.info("GADM data prepared and saved.")
-
-        # Step 2: Update GADM data with population data
-        config_population = self.config['Gov']['Population']
-        population_csv_data_path = os.path.join(config_population['root'], config_population['datafile'])
-        self.log.info(f"Updating population data")
-
-        # Update the GADM GeoDataFrame with population data
-        self.province_gadm_regions_gdf = utils.update_population_data(config_population, self.province_gadm_regions_gdf, population_csv_data_path)
+    # def create_directories(self, base_path=None, structure=None):
+    #     """Recursively create directories based on the structure."""
+    #     if base_path is None:
+    #         base_path = self.base_path
+    #     if structure is None:
+    #         # self.load_config()
+    #         structure = self.config['required_directories']
         
-        # Save the updated GADM data with population information
-        self.province_gadm_regions_gdf.to_file(GADM_file_save_to, driver='GeoJSON')
-        self.log.info("Population data imputed to GADM datafile.")
+    #     for key, value in structure.items():
+    #         # Create the main directory
+    #         dir_path = base_path / key
+    #         if dir_path.exists():
+    #             print(f" >> !! '{key}' already exists")
+    #         else:
+    #             dir_path.mkdir(parents=True, exist_ok=True)
+    #             print(f"- '{key}' created")
+            
+    #         # Recursively create subdirectories
+    #         if isinstance(value, dict):
+    #             self.create_directories(dir_path, value)
+    #         elif value is None:
+    #             print(f"'{key}' has no subdirectories")
 
-    def process_coders_data(self):
-        CODERS_data = self.config['CODERS']
-        CODERS_url = CODERS_data['url_1']
-        api_key_elias = '?key=' + CODERS_data['api_key']['Elias']
-        
-        provincial_bus_csv_file_path = self.config['capacity_disaggregation']['transmission']['buses']
-        provincial_lines_csv_file_path = self.config['capacity_disaggregation']['transmission']['lines']
 
-        if os.path.exists(provincial_bus_csv_file_path):
-            self.log.info(f"Bus data for {self._CRC_} found locally.")
-        else:
-            tx_lines_df = dataprep.create_dataframe_from_CODERS('transmission_lines', CODERS_url, api_key_elias)
-            province_tx_lines = tx_lines_df[tx_lines_df['province'] == self._CRC_]
-            province_tx_lines.to_csv(provincial_lines_csv_file_path)
-            self.log.info(f"Lines data created for {self._CRC_} and saved to {provincial_lines_csv_file_path}")
+    def get_grid_ss(self, force_update=False):
+        # self.province_ss_gdf=self.coders.get_table_provincial('substations', force_update)
+        return self.coders.get_table_provincial('substations', force_update)
 
-    def prepare_turbine_data(self):
+    def get_turbine_data(self):
         OEDB_config = self.config['capacity_disaggregation']['wind']['turbines']['OEDB']
         ids_to_search = [OEDB_config['model_1']['ID'], OEDB_config['model_2']['ID']]
         OEDB_source = OEDB_config['source']
@@ -105,46 +130,45 @@ class data_preparator:
         for turbine_id in ids_to_search:
             turbine_data = dataprep.get_OEDB_dict(OEDB_data, 'id', turbine_id)
             if turbine_data:
-                dataprep.format_and_save_turbine_config(turbine_data, os.path.join('data/downloaded_data', "OEDB"))
+                dataprep.format_and_save_turbine_config(turbine_data, Path('data/downloaded_data') / "OEDB")
             else:
                 self.log.info(f"No data found for turbine ID {turbine_id}")
+                
+    def get_era5_cutout(self):
+        # bounding_box_save_to = Path(self.config['cutout']['root']) / f"{self.current_region}_MBR.geojson"
+        # bounding_box = dataprep.plot_n_save_bounding_box(self.province_gadm_gdf, self.current_region, bounding_box_save_to)
+        # self.log.info(f"Minimum Bounding Rectangle (MBR) created and visuals saved to {bounding_box_save_to}")
+        return self.era5_cutout.get_era5_cutout(bounding_box=self.gadm.get_bounding_box())
 
-    def prepare_era5_cutout(self):
-        bounding_box_save_to = os.path.join(self.config['cutout']['root'], f"{self._CRC_}_MBR.geojson")
-        bounding_box = dataprep.plot_n_save_bounding_box(self.province_gadm_regions_gdf, self.current_region, bounding_box_save_to)
-        self.log.info(f"Minimum Bounding Rectangle (MBR) created and visuals saved to {bounding_box_save_to}")
-        dataprep.create_era5_cutout(self._CRC_, bounding_box, self.config['cutout'])
-
-    def prepare_gaez_rasters(self):
+    def get_gaez_rasters(self):
+        province_gadm_gdf=self.gadm.get_province_boundary()
         self.log.info(f"Preparing GAEZ raster files")
-        dataprep.prepare_GAEZ_raster_files(self.config, self.province_gadm_regions_gdf)
-
-    def prepare_osm_data(self):
-        OSM_data = self.config['OSM_data']
-        province_osm_data_file_userdefined_name = OSM_data['province_datafile']
-        file_path = os.path.join(OSM_data['root'], province_osm_data_file_userdefined_name)
-
-        utils.check_LocalCopy_and_run_function(file_path, lambda: dataprep.prepare_province_OSM_datafile(OSM_data['root'], province_osm_data_file_userdefined_name), force_update=False)
+        dataprep.prepare_GAEZ_raster_files(self.config, province_gadm_gdf,self.province_short_code)
+    
+    def get_conservation_lands_data(self)->gpd.GeoDataFrame:
+        return self.lands.get_provincial_conserved_lands()
 
     def run(self):
         # Call all the necessary methods to execute the full workflow
-        self.setup_logging()
-        self.load_config()
-        self.create_directories()
-        self.prepare_units_dictionary()
-        self.prepare_and_update_gadm_data()
-        self.process_coders_data()
-        self.prepare_turbine_data()
-        self.prepare_era5_cutout()
-        self.prepare_gaez_rasters()
-        self.prepare_osm_data()
 
+        self.gadm.run()
+        self.get_grid_ss(force_update=False)
+        self.get_turbine_data()
+        self.get_era5_cutout()
+        self.get_gaez_rasters()
+        self.get_conservation_lands_data()
+        self.osm.run()
+
+        print(f"{100*"_"}\nData preparation module completed !!!")
+        
 if __name__ == "__main__":
     # Argument parsing
     parser = argparse.ArgumentParser(description="Run the linking tool with specified configuration file.")
     parser.add_argument('config_file_path', type=str, help='Path to the configuration file')
+    # parser.add_argument('province_name', type=str, help='Province name (e.g., British Columbia)')
+    parser.add_argument('province_short_code', type=str, help='Province Short Code (2 letter)')
     args = parser.parse_args()
 
-    # Create an instance of LinkingTool and run the main workflow
-    _module = data_preparator(args.config_file_path)
-    _module.run()
+    # Create an instance of DataPreparator and run the main workflow
+    module = LinkingToolData(Path(args.config_file_path), args.province_short_code)
+    module.run()

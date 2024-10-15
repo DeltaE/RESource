@@ -8,11 +8,11 @@ import pandas as pd
 try:
     # Try importing from the submodule context
     import linkingtool.linking_utility as utils
-    import linkingtool.linking_vis as vis
+    import linkingtool.visuals as vis
     import linkingtool.linking_solar as solar
     import linkingtool.linking_wind as wind
-    from linkingtool.attributes_parser import AttributesParser
-    from linkingtool.cell_capacity_processor import cell_capacity_processor
+    from Archive.attributes_parser_old import AttributesParser
+    from linkingtool.CellCapacityProcessor import cell_capacity_processor
 except ImportError:
     # Fallback for when running as a standalone script or outside the submodule
     import Linking_tool.linkingtool.linking_utility as utils
