@@ -24,10 +24,10 @@ from pyrosm import OSM
 
 # %%
 from linkingtool import linking_utility as utils
-from linkingtool import linking_vis as vis
+from linkingtool import visuals as vis
 from linkingtool import linking_solar as solar
 from linkingtool import linking_wind as wind
-from linkingtool import linking_data as dataprep
+from linkingtool import dataprep as dataprep
 
 # %%
 """

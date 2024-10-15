@@ -15,7 +15,7 @@ import geopandas as gpd
 # local packages
 import linkingtool.linking_utility as utils
 import linkingtool.linking_wind as wind
-import linkingtool.linking_vis as vis
+import linkingtool.visuals as vis
 import linkingtool.linking_solar as solar
 
 # %%

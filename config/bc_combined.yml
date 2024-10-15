@@ -1,0 +1,522 @@
+Title: User Configuration for BC Combined Modelling V2.0
+Developer : Delta E+ Researchers (Elias, Pierre , Dr. Bruno)
+Background: V1.0 was developed by Dr. Nastaran Arianpoo.
+Affiliation : Sustainable Energy Engineering, Simon Fraser University, BC, Canada
+# -------------------------------------------------------------------------------------
+version: 1.0
+Release_Year: 2024
+description: |+
+    Master configuration file for the BC Combined Modelling project.
+# ----------------------------------------------------------------------------------------------------
+# >>>>>>>>>>>> Future Scope
+# Scenario: 
+#   REF :
+#     Name: Reference
+#     Description: A base scenario with reasonable assumptions.
+
+units_dictionary: 'data/Data_Units.xlsx'
+
+country: Canada
+
+regional_info:
+  region_1:
+    code: 'BC'
+    name: 'British Columbia' # Case Sensitive, and needs to be exact same as supported by GADM
+    area: 944735 #sqkm
+    cutout_bounding_box:
+      automated: TRUE
+      user_defined: #for manual definition that may include additional boundaries outside of BC.
+        minx: -139.25
+        maxx : -112.25
+        miny : 45.25
+        maxy : 60.25
+    conservation_lands_provincial_id: 2 # CPACD data, col : LOC, for more info check https://data-donnees.az.ec.gc.ca/api/file?path=/species%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FProtectedConservedAreaUserManual.pdf
+    region_mapping:
+        'Northern Rockies': 1
+        'Stikine': 2
+        'Peace River': 3
+        'Kitimat-Stikine': 4
+        'Bulkley-Nechako': 5
+        'Fraser-Fort George': 6
+        'Skeena-Queen Charlotte': 7
+        'Cariboo': 8
+        'Central Coast': 9
+        'Columbia-Shuswap': 10
+        'Mount Waddington': 11
+        'Thompson-Nicola': 12
+        'Squamish-Lillooet': 13
+        'North Okanagan': 14
+        'Powell River': 15
+        'East Kootenay': 16
+        'Central Okanagan': 17
+        'Comox-Strathcona': 18
+        'Sunshine Coast': 19
+        'Central Kootenay': 20
+        'Fraser Valley': 21
+        'Okanagan-Similkameen': 22
+        'Greater Vancouver': 23
+        'Kootenay Boundary': 24
+        'Alberni-Clayoquot': 25
+        'Nanaimo': 26
+        'Cowichan Valley': 27
+        'Capital': 28
+    # grid_nodes_data: BC_Transmission.pkl
+    snapshots_tz_BC: #Alternate measures of 'timezone_convert'
+      start: 
+      - '2023-01-01 00:00:00' # YYYY-MM-DD "2021-01-01 07:00:00"
+      end: 
+      - '2024-12-31 23:00:00' # YYYY-MM-DD "2022-01-01 06:00:00"
+    timezone_convert: 'Etc/GMT-8'  # Recommended, Alternate measures of 'snapshots_tz_BC'
+
+cutout:
+  root: data/downloaded_data/cutout
+  source: "era5" #as defined in PyPSA 
+  # weather_year: 2021 #sync with PypSA, by-default assumes 1 calendar year
+    # year1: 2021
+    # start_date1: '2021-01-01'  #yyyy-mm-dd
+    # end_date1: '2021-12-31' #yyyy-mm-dd
+    # year2: 2022
+    # start_date2: '2022-01-01'  #yyyy-mm-dd
+    # end_date2: '2022-12-31' #yyyy-mm-dd
+
+  dx: 0.25 # Arc Length for cutout grids cells in Degrees
+  dy: 0.25 # Arc Length for cutout grids cells in Degrees
+
+  # the snapshots are given as a 'list', not 'values'. 
+  snapshots: 
+    start: # Must be formatted as 'YYYY-MM-DD' (ERA5 returns data in UTC)
+      - '2023-01-01 07:00:00' # YYYY-MM-DD "2021-01-01 07:00:00"
+    end:
+      - '2024-01-01 06:00:00' # YYYY-MM-DD "2022-01-01 06:00:00"
+  snapshots_tz_BC: #Alternate measures of 'timezone_convert'
+    start: 
+    - '2023-01-01 00:00:00' # YYYY-MM-DD / PST equiv. of "2021-01-01 07:00:00"
+    end: 
+    - '2024-12-31 23:00:00' # YYYY-MM-DD / PST equiv. of "2022-01-01 06:00:00"
+  timezone_convert: 'Etc/GMT+7'  # Recommended, Alternate measures of 'snapshots_tz_BC'
+
+GADM:
+  root: data/downloaded_data/GADM
+  datafile: BC_gadm_regions.geojson
+  country_file_L1: "data/downloaded_data/GADM/gadm41_CAN_1.json" # Provincial level maps..
+  country_file_L2:  "data/downloaded_data/GADM/gadm41_CAN_2.json" # Administrative regions within provincial..
+
+Gov:
+  conservation_lands:
+    source_url: https://data-donnees.az.ec.gc.ca/api/file?path=%2Fspecies%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FDatabases%2FProtectedConservedArea_2022.gdb.zip
+    # consideration:
+    #   solar: 'yes'
+    #   wind: 'yes'
+    data_root: 'data/downloaded_data/Gov/Conservation_Lands'
+    zip_expand: 'data/downloaded_data/Gov/Conservation_Lands/ProtectedConservedArea_2022'
+    geodatabase_file: ProtectedConservedArea_2022.gdb
+    IUCN_CAT: #  Source: https://data-donnees.az.ec.gc.ca/api/file?path=/species%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FProtectedConservedAreaUserManual.pdf
+      1: 'Strict  Nature Reserve'
+      2: 'Wilderness Area'
+      3: 'National Park'
+      4: 'Natural Monument or Feature'
+      5: 'Habitat/Species Management Area'
+      6: 'Protected Landscape/Seascape'
+      7: 'Protected Area with Sustainable Use of Natural Resources'
+      8: 'Interim Sites (unknown specifics)'
+      9 : 'OECM areas'
+    data_license: https://catalogue.ec.gc.ca/geonetwork/oilsands/api/records/6c343726-1e92-451a-876a-76e17d398a1c
+  Population:
+    root: 'data/downloaded_data/Gov/Population'
+    datafile: 'Population_Projections.csv'
+    skiprows: 6 # top 6 rows are data descriptions
+    different_name_mapping: # these names differs with GADM naming
+      Columbia Shuswap: Columbia-Shuswap
+      Strathcona: Comox-Strathcona
+      Metro Vancouver: Greater Vancouver
+      Metro-Vancouver : Greater Vancouver
+      qathet: Powell River
+      North Coast: Skeena-Queen Charlotte
+      Stikine (Census Division): Stikine
+      Northern Rockies (Census Division): Northern Rockies
+  CEEI: #Community Energy and Emissions Inventory
+    root: 'data/downloaded_data/Gov/CEEI'
+    datafile:
+      buildings: bc_utilities_energy_and_emissions_data_at_the_community_level.xlsx
+      transportation: bc_on_road_transportation_data_at_the_community_level.xlsx
+      waste: bc_municipal_solid_waste_data_at_the_community_level.xlsx
+    source:
+      buildings: https://www2.gov.bc.ca/assets/gov/environment/climate-change/data/ceei/bc_utilities_energy_and_emissions_data_at_the_community_level.xlsx
+      transportation: https://www2.gov.bc.ca/assets/gov/environment/climate-change/data/ceei/bc_on_road_transportation_data_at_the_community_level.xlsx
+      waste: https://www2.gov.bc.ca/assets/gov/environment/climate-change/data/ceei/bc_municipal_solid_waste_data_at_the_community_level.xlsx
+
+NREL: 
+  ATB: # Annual technology Baseline (ATB) - 2024\
+    root : 'data/downloaded_data/NREL/ATB'
+    source: # parquet file recommended for less memory usage
+      # excel: https://data.openei.org/files/6006/2024%20v2%20Annual%20Technology%20Baseline%20Workbook%20Errata%207-19-2024.xlsx
+      csv: https://oedi-data-lake.s3.amazonaws.com/ATB/electricity/csv/2024/ATBe.csv
+      parquet: https://oedi-data-lake.s3.amazonaws.com/ATB/electricity/parquet/2024/ATBe.parquet
+    datafile:
+      # excel: https://data.openei.org/files/6006/2024%20v2%20Annual%20Technology%20Baseline%20Workbook%20Errata%207-19-2024.xlsx
+      csv: ATBe.csv #96 MB
+      parquet: ATBe.parquet #5 MB
+    about: https://atb.nrel.gov/electricity/2024/technologies
+    
+OSM_data: # OpenStreet Map
+  root: data/downloaded_data/OSM
+  province_datafile: BC_osm.pbf
+  aeroway : data/downloaded_data/OSM/aeroway
+  aeroway_datafile: aeroway_OSM_BC.geojson
+  aeroway_buffer:
+    solar: 100 # m
+    wind: 500 #m
+
+CODERS:
+  url_1: https://sesit.dev/
+  url_2: http://206.12.95.102/
+  api_key:
+    contact_for_request: mailto:modellingteam.sesit@uvic.ca
+    Elias: w0OksqQKMFMtKPbO  # please collect your personal API !!!
+  api_documentation: https://sesit.dev/api/docs
+  data_pull:
+    root: data/downloaded_data/CODERS/data-pull
+    generation_generic: supply/generation_generic.csv
+    hydro_existing: supply/hydro_existing.csv
+    generators: supply/generators.csv
+    hydro_cascade: supply/hydro_cascade.csv
+    lines: network/transmission_lines.csv
+    substations: network/substations.csv
+    forecasted_peak_demand: demand/forecasted_peak_demand.csv
+    forecasted_annual_demand: demand/forecasted_annual_demand.csv
+    end_use_demand: demand/end_use_demand.csv
+    transmission_generic : supply/transmission_generic.csv
+
+GAEZ:
+  root: 'data/downloaded_data/GAEZ'
+  zip_file: 'LR.zip'
+  Rasters_in_use_direct: 'Rasters_in_use'
+  raster_types: ['land_cover', 'terrain_resources'] #, 'exclusion_areas'
+
+  land_cover: 
+    raster: "faocmb_2010.tif"  # faocmb_2010 ; Dominant land cover/use ; 11 classes; (5 arc-minute)
+    zip_extract_direct: 'LR/lco'
+    color_map: 'YlGn'
+    class_inclusion:
+      solar : [2,3,5,8,9]
+      wind : [2,3,5,8,9]
+
+  terrain_resources:
+    raster: "slpmed05.tif" # slpmed05m;  ; Median terrain slope classes; 8 classes ; (5 arc-minute)
+    zip_extract_direct: 'LR/ter'
+    color_map: 'terrain'
+    class_exclusion:
+      solar : [9]
+      wind : [7,8,9]
+      buffer:
+       solar: 0 #m
+       wind: 500 #m
+  
+pypsa:
+  wind:
+    root: data/downloaded_data/wind
+    can_turbines: canada_turbines.xlsx
+    turbine_dict: turbine_dict.json
+    gwa_speed: british_columbia_wspd_100m.tif
+    gwa_geojson: british_columbia.geojson
+
+  load:
+    root: data/downloaded_data/load
+    ceei: CEEI_2020.xlsx
+    bch: bc_hydro_load/BalancingAuthorityLoad # 2021.xls
+
+  custom:
+    root: data/downloaded_data/custom
+    gen_wup: hydro_gen_wup_features.csv
+    res_wup: hydro_res_wup_features.csv
+    inflow_tables: inflow_stats # Has standardized names inside which are assumed
+    line_table: electric_power_generation_table_13_3a.xlsx # Custom table for infering line parameters
+
+  basin_files:
+    root: data/downloaded_data
+    na_file: HydroBASINS/hybas_na_lev12_v1c.shp
+    artic_file: HydroBASINS_artic/hybas_ar_lev12_v1c.shp
+
+  data_output:
+    prepare_base_network:
+      folder: "data/processed_data/network"
+      regions: # list of all regions to include in the model build
+        - "BC"
+    create_hydro_assets:
+      hydro_generation: "data/processed_data/hydro/hydro_generation.csv"
+      hydro_reservoir: "data/processed_data/hydro/hydro_reservoirs.csv"
+    create_cutout:
+      cutout: "data/cutout/AB_2021.nc" # Modifications needed to how the year is added
+    reservoir_inflows:
+      fname: "results/interim/reservoir_inflows.csv" # path + name
+      inflow_method: "mean_inflow_calibrate"
+      height: True
+      flowspeed: 1
+    ror_ps:
+      fname: "results/interim/bc_ror_power_series.csv"
+      height: True
+      flowspeed: 1
+    create_ext_wind_assets:
+      fname: "data/processed_data/wind/existing/bc_ext_wind_assets.csv"
+    create_ext_wind_ts:
+      calibration: 1 # Used to select whether to calibrate with annual gen average or not
+      fname: "data/processed_data/wind/existing/bc_ext_wind_ts.csv" # for storing the timeseries for wind
+    create_ext_solar_assets:
+      fname: "data/processed_data/solar/existing/bc_ext_solar_assets.csv"
+    create_ext_solar_ts:
+      calibration: 0 # Used to select whether to calibrate with annual gen average or not
+      fname: "data/processed_data/solar/existing/bc_ext_solar_ts.csv" # for storing the timeseries for wind
+    pypsa_dict: # for all enrichment scripts
+      folder: "results/pypsa-components/" # Modified 2023-11-29
+      res: "hydro_reservoirs_ab.pickle"
+      ror: "hydro_ror_ab.pickle"
+      ror_water: "hydro_ror_water_ab.pickle"
+      wind: "wind_ab.pickle"
+      solar: "solar_ab.pickle" # Change to solar
+      tpp: "tpp_ab.pickle"
+      ff_infrastructure: "ff_infra_ab.pickle"
+      cogen: "cogen.pickle"
+    enrich_format_wind:
+      vre_sel: "wind"
+    enrich_format_solar:
+      vre_sel: "solar"
+    enrich_format_tpp:
+      gas_grid: False # True means the thermal generators will have unique gas bus at each of their nodes.
+      UC: False # unit commitment for thermal PPs
+      cogen_history: "/home/pmcwhannel/repos/PyPSA_BC/data/generation/AESO-2022-hourly-generation.csv"
+    disaggregate_load:
+      res_path: "results/hourly_res.csv" # output path
+      csmi_path: "results/hourly_csmi.csv" # output path
+    build_model:
+      fname: "results/multi_prov.nc"
+      scenario: "0" # 50 or 100 depending on EV penetration
+      charge_strat: "uncoordinated" #[uncoordinated, coordinated, v2g]
+      region_res: "multiple"
+      load_data: "data/load/Hourly-load-by-area-and-region-May-2020-to-Oct-2023.xlsx"
+      hist_gen: "data/generation/AESO-2021-hourly-generation.csv"
+      ng_prices: "data/Alberta/2021_ab_ng_prices.csv"
+
+capacity_disaggregation:
+  solar:
+    max_capacity: 5  # GW
+    landuse_intensity : 1.45  # (.01*145 MW/km2) ; Source: PyPSA-EUR paper, 
+    # capex : 1161.269 # USD/kW  *** Later to be linked to NREL ATB Spreadsheet (via data pipeline automation) for different wind class, different years.
+    cost_data: 'data/linking_tool/solar/utility_PV_Class5_cost_moderate_NREL_ATB2024.csv'
+    NREL_ATB_type : 'Class5' # for more : https://atb.nrel.gov/electricity/2023/utility-scale_pv
+    atlite_panel: 'CSi' # CSi , CdTe
+    tracking : 'dual' # None, horizontal,tilted_horizontal,vertical,dual
+    WCSS_tolerance: 0.08 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
+    
+  wind:
+    max_capacity: 10  # GW
+    landuse_intensity : 3  # (0.3 * 10 MW/km2); Source: PyPSA-EUR paper,
+    # capex : 1323.4 # USD/kW  *** Later to be linked to NREL ATB Spreadsheet (via data pipeline automation) for different wind class, different years
+    cost_data: 'data/linking_tool/wind/land_based_wind_T3_cost_moderate_NREL_ATB2024.csv'
+    WCSS_tolerance: 0.1 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
+    windspeed_low: 7 # meter/s
+    windspeed_high: 20 # meter/s
+    CF_low: 0.20
+    CF_high: 1
+    turbines: #From  existing system at BC (> 3MW turbines)
+      NREL_ATB_type : 'Wind Turbine Technology 3' # Turbine Type 3 (of NREL method), size : ~ 3.3 MW, 148 m Rotor Dia, HubHeight 100m, wind plant ~ 200MW
+      atlite:
+        model_1: 'Enercon_E82_3000kW' #rotor_dia 82m
+        model_1_P: 3 #Nominal Power
+        model_2': 'Vestas_V90_3MW' #rotor_dia 90m
+        model_2_P: 3 #Nominal Power
+      OEDB:
+        source: 'https://openenergy-platform.org/api/v0/schema/supply/tables/wind_turbine_library/rows'
+        model_1:
+          name: 'GE2.75_120' #rotor_dia 120m
+          ID: 116
+          P: 2.75 #Nominal Power
+          manufacturer: 'GE Wind'
+          # config: xxx
+        model_2: 
+          name: '3.2M114_NES' #rotor_dia 114m
+          ID: 93
+          P: 3.2 #Nominal Power
+          manufacturer: 'Senvion/REpower'
+          config: 'data/downloaded_data/OEDB/3.2M114_NES.yaml'
+    GWA_resources:
+      datafields: ['windspeed', 'CF_IEC2','CF_IEC3','IEC_Class_ExLoads']
+      url_sources:
+        windspeed: 'https://globalwindatlas.info/api/gis/country/CAN/wind-speed/100'
+        # CF_IEC1: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/'  #rotor dia 112m
+        CF_IEC2: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/' #rotor dia 126m
+        CF_IEC3: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/'   #rotor dia 136m
+        # IEC_Class_fatugue_loads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-fatigue-loads-incl-wake/'
+        IEC_Class_ExLoads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-extreme-loads/' #IEC_Class_ExtremeLoads
+      rasters:
+        windspeed: 'Canada_wspd_100m.tif'
+        # CF_IEC1: 'CAN_capacity-factor_IEC1.tif'
+        CF_IEC2: 'CAN_capacity-factor_IEC2.tif'
+        CF_IEC3: 'CAN_capacity-factor_IEC3.tif'
+        IEC_Class_ExLoads: 'CAN.IEC-class-extreme-loads.tif'
+  bess:
+    max_capacity : 10 #GW
+    cost_data: 'data/linking_tool/bess/bess_LI_6hr_cost_moderate_NREL_ATB2024.csv'
+    NREL_ATB_type: '6Hr Battery Storage' # storage_discharge_duration should be in-line with this. Other options are
+    vom: 0 # not found in NREL,ATB
+    unit_size: 60 #MW; default in NREL is 50 MW
+    residential_energy_consumption_year: 2021 # BESS cluster size calculation is associated to this year' data
+    Based on general industry data and the needs of a region with a balanced energy mix like BC, you might consider the following approximate range:
+    capacity_estimate_per_energy_unit:    # MW per GWh of energy consumption.
+      Conservative: 0.01 
+      Moderate : 0.05 
+      Optimistic : 0.1 
+    storage_discharge_duration : 5.5 # hr  ; the battery cost should be inline with this data.
+
+  transmission:
+    grid_connection_cost_per_Km : 2.6 #M$/km   # from MISO , may try NREL method for different range of distance
+    tx_line_rebuild_cost : 0.56   #M$/km # from MISO
+    proximity_filter: 100 #km
+    buses: 'data/processed_data/buses_BC.csv'
+    lines: 'data/processed_data/lines_BC.csv'  #future scope usage
+
+BCNexus:
+  results: 
+    root: data/BC_NEXUS_results
+    CapacityInvestments: NewCapacity.csv
+    TotalCapacity: TotalCapacityAnnual.csv
+
+  inputs:
+    root: data/BC_NEXUS_inputs
+    ExistingCapacity: ResidualCapacity.csv
+    PlannedCapacity: TotalAnnualMinCapacityInvestment.csv
+    AvailabilityFactor : AvailabilityFactor.csv
+    CapacityFactor: CapacityFactor.csv
+
+processed_data:
+  linking:
+    root: data/linking_tool
+    CPCAD: CPCAD_BC_union.parquet
+    CPCAD_org: CPCAD_BC.parquet
+    GADM:
+    transmission: #to be sourced from PyPSA
+      nodes_datafile: 'BC_Transmission.pkl'
+      # lines: xxx   #future scope
+    solar:
+      osm_aeroway_datafile: aeroway_OSM_BC_with_buffer_solar.parquet
+      ERA5_CF_ts : ERA5_grid_CF_ts_df.pkl
+      scored_cells: ERA5_cells_scored.pkl
+      cell_clusters : ERA5_cell_cluster_filtered_all_sites.pkl
+      cell_cluster_ts : ERA5_cells_CF_ts_clusters.pkl
+      dissolved_indices: dissolved_indices.pkl
+
+    wind:
+      osm_aeroway_datafile: aeroway_OSM_BC_with_buffer_wind.parquet
+      gwa_cells_raw : GWA_cells.pkl
+      ERA5_CF_ts : ERA5_grid_CF_ts_df.pkl
+
+      scored_cells: GWA_cells_scored.pkl
+      cell_clusters : GWA_cell_cluster_filtered_all_sites.pkl
+      cell_cluster_ts :  GWA_cells_CF_ts_cluster.pkl
+      dissolved_indices : dissolved_indices.pkl
+    
+    bess:
+      cell_clusters : bess_regional_potential_for_res_elec_Conservative.pkl
+
+
+results:
+  linking:
+    root: results/linking
+    clusters_topSites:
+      solar : "Solar_Top_Sites_Clustered.pkl"
+      wind : "Wind_Top_Sites_Clustered.pkl"
+      bess: "bess_regional_potential_for_res_elec_" # this is a file name keyword only. The file name is variable with the scaling consumption of BESS (20%)
+    clusters_CFts_topSites:
+      solar : "Solar_Top_Sites_Clustered_CF_timeseries.pkl"
+      wind : "Wind_Top_Sites_Clustered_CF_timeseries.pkl"
+    # visual_resampling: # only for static plots
+    #   solar: 'd'  # h,d,w,m
+    #   wind: 'd'  # h,d,w,m
+
+visualization:
+  linking: vis/linking
+  nexus: vis/nexus
+  pypsa: vis/pypsa
+  misc: vis/misc
+
+interactive_dashboard:
+  headline: "Bi-directional Linking Tool [in progress...]"
+  font_size_h1 : "32px"
+  font_color_h1 : "#00008B"
+  
+  subheadline : "Module : Capacity Disaggregation [Preliminary Results]"
+  font_size_h2 : "26px"
+  font_color_h2 : "red"
+  
+  plot_width: '100%'
+  plot_height: 'auto'
+
+
+# ------------------
+required_directories:
+  data:
+    clews_data: {}
+    downloaded_data:
+      CODERS:
+        data-pull:
+          network: {}
+          supply: {}
+          demand: {}
+          reserve: {}
+          fuel_price: {}
+          emission: {}
+          macro_indicators: {}
+      custom: 
+        inflow_stats: {}
+      cutout: {}
+      GADM: {}
+      GAEZ: {}
+      GWA: {}
+      Gov:
+        Conservation_Lands: {}
+        Population: {}
+        CEEI: {}
+      HydroBASINS:
+      HydroBASINS_artic:
+      load:
+      OEDB: {}
+      OSM:
+        aeroway: {}
+      regions: # will be merged with GADM
+      wind:
+      NREL:
+        ATB: {}
+        
+    processed_data:
+      hydro: {}
+      network:
+      wind:
+        existing: {}
+        potential: {}
+      solar:
+        existing: {}
+        potential: {}
+      
+    linking_tool:
+      solar: {}
+      wind: {}
+      bess: {}
+    pypsa_data: {}
+  vis:
+    pypsa: {}
+    nexus: {}
+    linking:
+      solar:
+        Regional_cluster_Elbow_Plots: {}
+        Site_timeseries: {}
+      wind:
+        Regional_cluster_Elbow_Plots: {}
+        Site_timeseries: {}
+    misc: {}
+  results:
+    clews:
+      Model_Kotzur : {}
+      Model_Niet : {}
+    linking: {}
+    pypsa : {}
+  workflow:
+    log: {}
