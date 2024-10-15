@@ -30,51 +30,13 @@ log_name=f'workflow/log/linking_vis.txt'
 # file_handler = log.FileHandler(log_name)
 # log.getLogger().addHandler(file_handler)
 
-import matplotlib.pyplot as plt
-import geopandas as gpd
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-
-def plot_with_matched_cells(ax, cells: gpd.GeoDataFrame, matched_cells: gpd.GeoDataFrame, column: str, cmap: str,
-                            background_cell_linewidth: float, selected_cells_linewidth: float):
-    """Helper function to plot cells with matched cells overlay."""
-    # Plot the main cells layer
-    vmin = cells[column].min()  # Minimum value for color mapping
-    vmax = cells[column].max()  # Maximum value for color mapping
-
-    # Create the main plot
-    cells.plot(
-        column=column,
-        cmap=cmap,
-        edgecolor='white',
-        linewidth=background_cell_linewidth,
-        ax=ax,
-        alpha=1,
-        vmin=vmin,  # Set vmin for color normalization
-        vmax=vmax   # Set vmax for color normalization
-    )
-
-    # Overlay matched_cells with edge highlight
-    matched_cells.plot(
-        ax=ax,
-        edgecolor='black',
-        color='None',
-        linewidth=selected_cells_linewidth,
-        alpha=1
-    )
-
-    # Create a colorbar for the plot
-    sm = mpl.cm.ScalarMappable(cmap=cmap, norm=mpl.colors.Normalize(vmin=vmin, vmax=vmax))
-    sm.set_array([])  # Only needed for older Matplotlib versions
-    cbar = plt.colorbar(sm, ax=ax, orientation='vertical', fraction=0.025, pad=0.01)
-    cbar.set_label(column, fontsize=12)  # Label for the colorbar
 
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
 def plot_with_matched_cells(ax, cells: gpd.GeoDataFrame, filtered_cells: gpd.GeoDataFrame, column: str, cmap: str,
-                            background_cell_linewidth: float, selected_cells_linewidth: float):
+                            background_cell_linewidth: float, selected_cells_linewidth: float,font_size:int=9):
     """Helper function to plot cells with matched cells overlay."""
     # Plot the main cells layer
     vmin = cells[column].min()  # Minimum value for color mapping
@@ -104,68 +66,78 @@ def plot_with_matched_cells(ax, cells: gpd.GeoDataFrame, filtered_cells: gpd.Geo
     # Create a colorbar for the plot
     sm = mpl.cm.ScalarMappable(cmap=cmap, norm=mpl.colors.Normalize(vmin=vmin, vmax=vmax))
     sm.set_array([])  # Only needed for older Matplotlib versions
-    cbar = plt.colorbar(sm, ax=ax, orientation='vertical', fraction=0.025, pad=0.01)
-    cbar.set_label(column, fontsize=12)  # Label for the colorbar
+    cbar = plt.colorbar(sm, ax=ax, orientation='vertical', fraction=0.02, pad=0.01)
+    cbar.set_label(column, fontsize=font_size)  # Label for the colorbar
+    cbar.ax.tick_params(labelsize=font_size) 
 
-def get_matched_vs_missed_visuals(cells: gpd.GeoDataFrame,
+def get_selected_vs_missed_visuals(cells: gpd.GeoDataFrame,
                                   province_short_code,
                                    lcoe_threshold: float,
                                    CF_threshold: float,
                                    capacity_threshold: float,
+                                   text_box_x=.4,
+                                   text_box_y=.95,
+                                   title_y=1,
+                                   title_x=0.6,
                                    font_size=10,
-                                   dpi=1000):
+                                   dpi=1000,
+                                   figsize=(12, 7),
+                                   save=False):
     
     mask=(cells['CF_mean']>=CF_threshold)&(cells['potential_capacity']>=capacity_threshold)&(cells['lcoe']<=lcoe_threshold)
     filtered_cells=cells[mask]
     
     # Create a high-resolution side-by-side plot in a 2x2 grid
-    fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12, 7), dpi=dpi)
+    fig, axs = plt.subplots(nrows=2, ncols=2, figsize=figsize, dpi=dpi)
 
     # Define the message
     msg = (f"Cell thresholds @ lcoe >= {lcoe_threshold} $/kWH, "
            f"CF >={CF_threshold}, MW >={capacity_threshold}")
 
-    # Add a text box with grey background for the message
-    fig.text(0.5, 0.95, msg, ha='center', va='top', fontsize=font_size-3,
-             bbox=dict(facecolor='lightgrey', edgecolor='black', boxstyle='round,pad=0.5'))
+
 
     # First plot: CF_mean Visualization (top left)
     plot_with_matched_cells(axs[0, 0], cells, filtered_cells, 'CF_mean', 'YlOrRd', 
-                            background_cell_linewidth=0.2, selected_cells_linewidth=0.5)
+                            background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
     axs[0, 0].set_title('CF_mean Overview', fontsize=font_size)
-    axs[0, 0].set_xlabel('Longitude', fontsize=font_size-1)
-    axs[0, 0].set_ylabel('Latitude', fontsize=font_size-1)
+    axs[0, 0].set_xlabel('Longitude', fontsize=font_size-3)
+    axs[0, 0].set_ylabel('Latitude', fontsize=font_size-3)
     axs[0, 0].set_axis_off()
 
     # Second plot: Potential Capacity Visualization (top right)
     plot_with_matched_cells(axs[0, 1], cells, filtered_cells, 'potential_capacity', 'Blues',
-                            background_cell_linewidth=0.2, selected_cells_linewidth=0.5)
+                            background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
     axs[0, 1].set_title('Potential Capacity Overview', fontsize=font_size)
-    axs[0, 1].set_xlabel('Longitude', fontsize=font_size-1)
-    axs[0, 1].set_ylabel('Latitude', fontsize=font_size-1)
+    axs[0, 1].set_xlabel('Longitude', fontsize=font_size-3)
+    axs[0, 1].set_ylabel('Latitude', fontsize=font_size-3)
     axs[0, 1].set_axis_off()
 
     # Third plot: Nearest Station Distance Visualization (bottom left)
     plot_with_matched_cells(axs[1, 0], cells, filtered_cells, 'nearest_station_distance_km', 'coolwarm',
-                            background_cell_linewidth=0.2, selected_cells_linewidth=0.5)
+                            background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
     axs[1, 0].set_title('Nearest Station Distance Overview', fontsize=font_size)
-    axs[1, 0].set_xlabel('Longitude', fontsize=font_size-1)
-    axs[1, 0].set_ylabel('Latitude', fontsize=font_size-1)
+    axs[1, 0].set_xlabel('Longitude', fontsize=font_size-3)
+    axs[1, 0].set_ylabel('Latitude', fontsize=font_size-3)
     axs[1, 0].set_axis_off()
 
     # Fourth plot: LCOE Visualization (bottom right)
     plot_with_matched_cells(axs[1, 1], cells, filtered_cells, 'lcoe', 'summer',
-                            background_cell_linewidth=0.2, selected_cells_linewidth=0.5)
+                            background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
     axs[1, 1].set_title('LCOE Overview', fontsize=font_size)
-    axs[1, 1].set_xlabel('Longitude', fontsize=font_size-1)
-    axs[1, 1].set_ylabel('Latitude', fontsize=font_size-1)
+    axs[1, 1].set_xlabel('Longitude', fontsize=font_size-3)
+    axs[1, 1].set_ylabel('Latitude', fontsize=font_size-3)
     axs[1, 1].set_axis_off()
 
     # Add a super title for the figure
-    fig.suptitle('Selected Cells Overview', fontsize=font_size+3)
-
+    fig.suptitle(f'Selected Cells Overview - {province_short_code}', fontsize=font_size+2,fontweight='bold', x=title_x,y=title_y)
+    # Add a text box with grey background for the message
+    fig.text(text_box_x, text_box_y, msg, ha='center', va='top', fontsize=font_size-3,
+             bbox=dict(facecolor='lightgrey', edgecolor='grey', boxstyle='round,pad=0.2'))
+    plt.tight_layout()
     # Save the plot
-    plt.savefig(f"vis/Solar/Selected_cells_solar_{province_short_code}.png", bbox_inches='tight')
+    if save:
+        plt.savefig(f"vis/Solar/Selected_cells_solar_{province_short_code}.png", bbox_inches='tight')
+    plt.tight_layout()
     plt.show()  # Optional: Show the plot if desired
 
 

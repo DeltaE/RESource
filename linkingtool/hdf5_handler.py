@@ -2,6 +2,7 @@ import pandas as pd
 import geopandas as gpd
 import h5py
 from shapely.wkt import loads, dumps
+from shapely.geometry.base import BaseGeometry
 from linkingtool.AttributesParser import AttributesParser
 
 class DataHandler(AttributesParser):
@@ -39,17 +40,17 @@ class DataHandler(AttributesParser):
         """
         self.data = data
         try:
-            if key=='cells' or 'substations':
-                # Convert the geometry to WKT format before saving
-                self.data['geometry'] = self.data['geometry'].apply(dumps)
-
+            if 'geometry' in self.data.columns:
+                
+                if isinstance(self.data['geometry'].iloc[0], BaseGeometry):
+                    # Convert the geometry to WKT format before saving
+                    self.data['geometry'] = self.data['geometry'].apply(dumps)
+                else:
+                    pass
                 # Save to HDF5
                 self.data.to_hdf(self.store, key=key) # mode='w', format='table', index=False
                 self.log.info(f"Data (GeoDataFrame) saved to {self.store} with key '{key}'")
                 
-            elif key=='timeseries':
-                self.data.to_hdf(self.store, key=key) # , mode='w', format='table', index=False
-                self.log.info(f"Data (DataFrame) saved to {self.store} with key '{key}'")
             else :
                 self.data.to_hdf(self.store, key=key) # , mode='w', format='table', index=False
                 self.log.info(f"Data (DataFrame) saved to {self.store} with key '{key}'")
@@ -63,14 +64,19 @@ class DataHandler(AttributesParser):
             if key not in store:
                 self.log.error(f"Key '{key}' not found in {self.store}")
                 return None
-            elif key in ['cells', 'substations']:  # Corrected condition
+            
+            self.data= pd.read_hdf(self.store, key)
+            
+            if 'geometry' in self.data.columns:
+
                 data = store[key]
                 data['geometry'] = data['geometry'].apply(loads)
                 return gpd.GeoDataFrame(data, geometry='geometry', crs=self.get_default_crs())
+            
+            elif isinstance(self.data.index, pd.DatetimeIndex):
+                return self.data.tz_localize(None)
+            
             else:
-                return pd.read_hdf(self.store, key)
-
-        # except (KeyError, FileNotFoundError, TypeError) as e:
-        #     self.log.error(f"Error loading data: {e}")
-        #     return None
+                
+                return self.data
 

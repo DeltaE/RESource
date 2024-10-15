@@ -9,6 +9,7 @@ from collections import namedtuple
 from linkingtool.era5_cutout import ERA5Cutout
 import linkingtool.linking_utility as utils
 import linkingtool.visuals as vis
+import linkingtool.cluster as cluster
 # import linkingtool.linking_solar as solar
 
 from linkingtool.CellCapacityProcessor import CellCapacityProcessor
@@ -56,6 +57,7 @@ class SolarResources(AttributesParser
     
     def get_CF_timeseries(self,
                           force_update=False)->tuple:
+        "returns cells geodataframe and timeseries dataframes"
         
         self.cells_with_ts_nt:tuple= self.timeseries.get_cells_timeseries()
         
@@ -63,6 +65,7 @@ class SolarResources(AttributesParser
     
     def get_cell_capacity(self, 
                           force_update=False):
+        "returns cells geodataframe, capacity matrix data array and cutout "
         
         self.cells_with_cap_nt:tuple=self.cell_processor.get_capacity()
         
@@ -93,27 +96,8 @@ class SolarResources(AttributesParser
         
         self.store_grid_cells=self.datahandler.from_store('cells')
         return self.store_grid_cells
-    
-    # def filter_sites(self):
-    #     cells=self.province_grid_cells_cap_with_nodes
         
-    #     CF_mask=cells['CF_mean']>=cells['cell_static_CF_tolerance']
-    #     land_mask=cells['potential_capacity']> cells['cell_capacity_tolerance']#MW
-        
-    #     CF_filter_df=cells[CF_mask]
-    #     land_filter_df=cells[land_mask]
-        
-    #     matching_indices = CF_filter_df.index.intersection(land_filter_df.index)
-    #     matched_cells = cells.loc[matching_indices].combine_first(cells.loc[matching_indices])
-    #     self.matched_cells=matched_cells.set_crs(CF_filter_df.crs, inplace=True)
-        
-    #     vis.get_matched_vs_missed_visuals(cells,
-    #                                       self.matched_cells)
-    #     return self.matched_cells
-        
-    def score_cells(self,
-                    # cells:pd.DataFrame
-                    ):
+    def score_cells(self ):
                 
         self.not_scored_cells=self.datahandler.from_store('cells')
         self.scored_cells = self.scorer.get_cell_score(self.not_scored_cells,'CF_mean')
@@ -127,12 +111,33 @@ class SolarResources(AttributesParser
         
         return self.scored_cells
     
-#     def cluster_cells(self):
-#         self.wcss_tolerance:float= self.resource_disaggregation_config['WCSS_tolerance']
-#         self.ERA5_cells_cluster_map, self.region_solar_optimal_k_df = utils.cells_to_cluster_mapping(self.province_grid_cells_scored, self.vis_dir, self.wcss_tolerance)
-#         self.cell_cluster_gdf, self.dissolved_indices = utils.create_cells_Union_in_clusters(self.ERA5_cells_cluster_map, self.region_solar_optimal_k_df)
-#         dissolved_indices_save_to = os.path.join(self.linking_data['root'], self.resource_type, self.linking_data[f'{self.resource_type}']['dissolved_indices'])
-#         utils.dict_to_pickle(self.dissolved_indices, dissolved_indices_save_to)
+    def get_clusters(self,
+                     wcss_tolerance=0.05):
+        """
+        ### Args:
+         -Within-cluster Sum of Square. Higher tolerance gives , more simplification and less number of clusters. Default set to 0.05.
+        """
+        self.resource_disaggregation_config=self.get_resource_disaggregation_config()
+        self.wcss_tolerance=wcss_tolerance
+        
+        # self.wcss_tolerance:float= self.resource_disaggregation_config['WCSS_tolerance']
+            
+        self.scored_cells=self.score_cells()
+        self.vis_dir=self.get_vis_dir()
+        
+        self.ERA5_cells_cluster_map, self.region_solar_optimal_k_df = cluster.cells_to_cluster_mapping(self.scored_cells, self.vis_dir, self.wcss_tolerance)
+        self.cell_cluster_gdf, self.dissolved_indices = cluster.create_cells_Union_in_clusters(self.ERA5_cells_cluster_map, self.region_solar_optimal_k_df)
+        
+        # dissolved_indices_save_to = os.path.join(self.linking_data['root'], self.resource_type, self.linking_data[f'{self.resource_type}']['dissolved_indices'])
+        # utils.dict_to_pickle(self.dissolved_indices, dissolved_indices_save_to)
+        
+        # Define a namedtuple
+        cluster_data = namedtuple('cluster_data', ['clusters','dissolved_indices'])
+        
+        self.solar_clusters_nt:tuple=cluster_data(self.cell_cluster_gdf,self.dissolved_indices)
+        
+        return self.solar_clusters_nt
+        
 
         
 #     def progress_bar(self, iteration, total, bar_length=40):
