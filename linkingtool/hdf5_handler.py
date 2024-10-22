@@ -38,6 +38,7 @@ class DataHandler(AttributesParser):
         store = pd.HDFStore(self.store, mode='a')  # Open store in append mode ('a')
 
         try:
+<<<<<<< HEAD
             if key not in store or force_update:
                 # Handle GeoDataFrame geometry if present
                 if 'geometry' in self.data_new.columns:
@@ -55,6 +56,22 @@ class DataHandler(AttributesParser):
                 for column in self.data_new.columns:
                     if column not in self.data_ext.columns:
                         self.data_ext[column] = self.data_new[column]
+=======
+            if 'geometry' in self.data.columns:
+                
+                if isinstance(self.data['geometry'].iloc[0], BaseGeometry):
+                    # Convert the geometry to WKT format before saving
+                    self.data['geometry'] = self.data['geometry'].apply(dumps)
+                else:
+                    pass
+                # Save to HDF5
+                self.data.to_hdf(self.store, key=key) # mode='w', format='table', index=False
+                self.log.info(f"Data (GeoDataFrame) saved to {self.store} with key '{key}'")
+                
+            else :
+                self.data.to_hdf(self.store, key=key) # , mode='w', format='table', index=False
+                self.log.info(f"Data (DataFrame) saved to {self.store} with key '{key}'")
+>>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
 
                 # Update the existing DataFrame in HDF5
                 self.updated_data = self.data_ext
@@ -76,6 +93,7 @@ class DataHandler(AttributesParser):
             if key not in store:
                 self.log.error(f"Key '{key}' not found in {self.store}")
                 return None
+<<<<<<< HEAD
 
             # Load the data
             self.data = pd.read_hdf(self.store, key)
@@ -93,4 +111,21 @@ class DataHandler(AttributesParser):
 
         # finally:
         #     store.close()
+=======
+            
+            self.data= pd.read_hdf(self.store, key)
+            
+            if 'geometry' in self.data.columns:
+
+                data = store[key]
+                data['geometry'] = data['geometry'].apply(loads)
+                return gpd.GeoDataFrame(data, geometry='geometry', crs=self.get_default_crs())
+            
+            elif isinstance(self.data.index, pd.DatetimeIndex):
+                return self.data.tz_localize(None)
+            
+            else:
+                
+                return self.data
+>>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
 

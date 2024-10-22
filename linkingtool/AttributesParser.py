@@ -32,6 +32,7 @@ class AttributesParser:
     # Attributes that are required as Args.
     config_file_path: Path =field(default='config/test_config.yml')
     province_short_code: str=field(default= 'BC')
+<<<<<<< HEAD
     resource_type: str = field(default='None')
     
     def __post_init__(self):
@@ -39,6 +40,25 @@ class AttributesParser:
         # self.resource_type= self.resource_type.lower()
         self.store = f'data/store/resources_{self.province_short_code}.h5'
 
+=======
+    resource_type: str = field(default=None)
+    
+    # Attributes that will be initialized in __post_init__
+    
+    province_mapping: Dict[str,dict]=field(init=False)
+    disaggregation_config: Dict[str,dict] = field(init=False)
+    linking_data: Dict[str,dict] = field(init=False) # Dict of Directories for Processed data dumping
+    gaez_data: Dict[str,dict] = field(init=False) # Raster associated configurations/directories
+    ATB: Dict[str,dict] = field(init=False) # Annual Technology Baseline , cost parameters (Currently sourced from NREL)
+
+
+    
+    def __post_init__(self):
+        self.site_index='cell'
+        self.store = f'data/store/{self.resource_type}_resources_{self.province_short_code}.h5'
+        # self.datahandler=DataHandler(self.store)
+        
+>>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
         # Convert province_short_code to uppercase to handle user types regarding case-sensitive letter inputs.
         self.province_short_code = self.province_short_code.upper()
         
