@@ -49,19 +49,12 @@ def assign_cluster_id(cells: gpd.GeoDataFrame,
     return cells
 
 def find_optimal_K(
-<<<<<<< HEAD
         resource_type:str,
         data_for_clustering:pd.DataFrame, 
         region:str, 
         wcss_tolerance:float, 
         max_k  :int
         )->pd.DataFrame:
-=======
-        data_for_clustering:pd.DataFrame, 
-        region:str, 
-        wcss_tolerance:float, 
-        max_k  :int)->pd.DataFrame:
->>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
     
     """
     takes the scored grid cells and gives the optimal number of k-means cluster from the elbow chart approach. 
@@ -96,20 +89,12 @@ def find_optimal_K(
     optimal_k_data = next((k for k, wcss_value in enumerate(wcss_data, start=1) if wcss_value <= tolerance_data), None)
 
 # Plot and save the elbow charts
-<<<<<<< HEAD
     plt.plot(range(1, min(max_k, len(data_for_clustering))), wcss_data, marker='o', linestyle='-', label=f'lcoe_{resource_type}')
-=======
-    plt.plot(range(1, min(max_k, len(data_for_clustering))), wcss_data, marker='o', linestyle='-', label='p_lcoe')
->>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
     if optimal_k_data is not None:
         plt.axvline(x=optimal_k_data, color='r', linestyle='--',
                     label=f"Optimal k = {optimal_k_data}; K-means with {round(wcss_tolerance*100)}% of WCSS")
 
-<<<<<<< HEAD
     plt.title(f"Elbow plot of K-means Clustering with 'lcoe_{resource_type}' for Region-{region}")
-=======
-    plt.title(f"Elbow plot of K-means Clustering with 'p_lcoe' for Region-{region}")
->>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
     plt.xlabel('Number of Clusters (k)')
     plt.ylabel('Within-Cluster Sum of Squares (WCSS)')
     plt.grid(True)
@@ -121,23 +106,15 @@ def find_optimal_K(
     plt.tight_layout()
 
     # Print the optimal k
-<<<<<<< HEAD
     print(f"Zone {region} - Optimal k for lcoe_{resource_type} based clustering: {optimal_k_data}\n")
-=======
-    print(f"Zone {region} - Optimal k for p_lcoe based clustering: {optimal_k_data}\n")
->>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
 
     return optimal_k_data
 
 def pre_process_cluster_mapping(
         cells_scored:pd.DataFrame,
         vis_directory:str,
-<<<<<<< HEAD
         wcss_tolerance:float,
         resource_type:str)->tuple[pd.DataFrame, pd.DataFrame]:
-=======
-        wcss_tolerance:float)->tuple[pd.DataFrame, pd.DataFrame]:
->>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
     
     """
     xxx 
@@ -151,17 +128,10 @@ def pre_process_cluster_mapping(
     # Loop over unique regions
     for region in unique_regions:
         # Select data for the current region
-<<<<<<< HEAD
         data_for_clustering = cells_scored[cells_scored['Region'] == region][[f'lcoe_{resource_type}']]
         
         # Call the function for K-means clustering and elbow plot
         optimal_k = find_optimal_K(resource_type,data_for_clustering, region, wcss_tolerance, max_k=15)
-=======
-        data_for_clustering = cells_scored[cells_scored['Region'] == region][['lcoe']]
-        
-        # Call the function for K-means clustering and elbow plot
-        optimal_k = find_optimal_K(data_for_clustering, region, wcss_tolerance, max_k=15)
->>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
         
         # Append values to the list
         region_optimal_k_list.append({'Region': region, 'Optimal_k': optimal_k})
@@ -193,14 +163,9 @@ def pre_process_cluster_mapping(
 def cells_to_cluster_mapping(
         cells_scored:pd.DataFrame,
         vis_directory:str,
-<<<<<<< HEAD
         wcss_tolerance:float,
         resource_type:str,
         sort_columns:list)-> tuple[pd.DataFrame,pd.DataFrame]:
-=======
-        wcss_tolerance:float, 
-        sort_columns:list=['lcoe', 'potential_capacity'])-> tuple[pd.DataFrame,pd.DataFrame]:
->>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
     """
     Clustering requires a base prior to perform the aggregation/clustering similar data. Here, we are doing spatial clustering which aggregates the spatial regions
     based on some common features. As a common feature, the modellers can design tailored metric find/calculate a feature which performs as a good proxy of the suitablity of the cells as a
@@ -212,11 +177,7 @@ def cells_to_cluster_mapping(
   Processess the GWA cells beofe we approach for clustering . An output of this function is a region vs optimal cluster for the region and another output denotes cell vs mapped region vs cluster no. (in which the cells will be merged into).
     
     """
-<<<<<<< HEAD
     dataframe,optimal_k_df=pre_process_cluster_mapping(cells_scored,vis_directory,wcss_tolerance,resource_type)
-=======
-    dataframe,optimal_k_df=pre_process_cluster_mapping(cells_scored,vis_directory,wcss_tolerance)
->>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
 
     print(f">>> Mapping the Optimal Number of Clusters for Each region ...")
 
@@ -245,12 +206,8 @@ def cells_to_cluster_mapping(
 
 def create_cells_Union_in_clusters(
         cluster_map_gdf:gpd.GeoDataFrame, 
-<<<<<<< HEAD
         region_optimal_k_df:pd.DataFrame,
         resource_type:str
-=======
-        region_optimal_k_df:pd.DataFrame
->>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
             )->tuple[pd.DataFrame,dict]:
 
     """
@@ -267,7 +224,6 @@ def create_cells_Union_in_clusters(
     log.info(f" Preparing Clusters...")
     
     # Initialize an aggregation dictionary
-<<<<<<< HEAD
     agg_dict = {f'lcoe_{resource_type}': lambda x: x.iloc[len(x) // 2], 
                 f'capex_{resource_type}':'first',
                 'Cluster_No':'first',
@@ -275,17 +231,6 @@ def create_cells_Union_in_clusters(
                 f'Region': 'first',
                 f'nearest_station':'first',
                 f'nearest_station_distance_km':'first'}
-=======
-    # agg_dict = {'lcoe': lambda x: x.iloc[len(x) // 2], 'capex':'first','Cluster_No':'first','potential_capacity': 'sum','Region': 'first', 'Region': 'first', 'CF_mean': 'mean',}
-    agg_dict = {'lcoe': lambda x: x.iloc[len(x) // 2], 
-                'capex':'first',
-                'Cluster_No':'first',
-                'potential_capacity': 'sum',
-                'Region': 'first',
-                # 'CF_mean': 'mean',
-                'nearest_station':'first',
-                'nearest_station_distance_km':'first'}
->>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
 
     # Initialize an empty list to store the dissolved results
     dissolved_gdf_list = []
@@ -318,42 +263,25 @@ def create_cells_Union_in_clusters(
         dissolved_gdf = pd.concat(dissolved_gdf_list, ignore_index=True)
         
         # Keep only the specified columns
-<<<<<<< HEAD
         # columns_to_keep = ['Region','Region','Cluster_No', 'capex', 'potential_capacity','lcoe','nearest_station','nearest_station_distance_km','geometry' ]
-=======
-        # columns_to_keep = ['Region','Region','Cluster_No', 'capex', 'potential_capacity','lcoe','nearest_station','nearest_station_distance_km','geometry' ] #'CF_mean',
->>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
         # dissolved_gdf = dissolved_gdf[columns_to_keep]
 
         dissolved_gdf=utils.assign_regional_cell_ids(dissolved_gdf,'Region','cluster_id')
 
         dissolved_gdf['Cluster_No'] = dissolved_gdf['Cluster_No'].astype(int)
-<<<<<<< HEAD
         dissolved_gdf.sort_values(by=f'lcoe_{resource_type}', ascending=True, inplace=True)
         dissolved_gdf['Rank'] = range(1, len(dissolved_gdf)+1)
-=======
-        dissolved_gdf.sort_values(by='lcoe', ascending=True, inplace=True)
-        dissolved_gdf['Site_ID'] = range(1, len(dissolved_gdf)+1)
->>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
     log.info(f" Culsters Created and a list generated to map the Cells inside each Cluster...")
     return dissolved_gdf, dissolved_indices
 
 def clip_cluster_boundaries_upto_regions(
         cell_cluster_gdf:gpd.GeoDataFrame,
-<<<<<<< HEAD
         gadm_regions_gdf:gpd.GeoDataFrame,
         resource_type)->gpd.GeoDataFrame:
-=======
-        gadm_regions_gdf:gpd.GeoDataFrame)->gpd.GeoDataFrame:
->>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
     """
     xxx 
     """
     cell_cluster_gdf_clipped=cell_cluster_gdf.clip(gadm_regions_gdf,keep_geom_type=False)
-<<<<<<< HEAD
     cell_cluster_gdf_clipped.sort_values(by=[f'lcoe_{resource_type}'], ascending=True, inplace=True) 
-=======
-    cell_cluster_gdf_clipped.sort_values(by=['lcoe'], ascending=True, inplace=True) #, 'CF_mean'
->>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
 
     return cell_cluster_gdf_clipped

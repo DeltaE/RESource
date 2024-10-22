@@ -173,21 +173,14 @@ class CellCapacityProcessor(AttributesParser):
         # Define a namedtuple
         capacity_data = namedtuple('capacity_data', ['data','matrix','cutout'])
         
-<<<<<<< HEAD
         self.solar_resources_nt=capacity_data(self.provincial_cells,capacity_matrix,self.cutout)
-=======
-        self.solar_resources_nt=capacity_data(self.store_grid_cells,capacity_matrix,self.cutout)
->>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
         
         print(f">> Total ERA5 cells loaded : {len(self.provincial_cells)} [each with .025 deg. (~30km) resolution ]")
         self.log.info(f">> Saving to the local store (as HDF5 file)")
         # self.datahandler.save_to_hdf(era5_cell_capacity,'cells')
         
-<<<<<<< HEAD
         self.datahandler.to_store(self.provincial_cells,'cells')
         
-=======
->>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
         return self.solar_resources_nt
 
 ## Visuals
