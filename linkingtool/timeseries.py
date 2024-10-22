@@ -26,6 +26,7 @@ class Timeseries(ERA5Cutout,
 
         # Fetch the disaggregation configuration based on the resource type
         self.resource_disaggregation_config=self.get_resource_disaggregation_config()
+<<<<<<< HEAD
         
         # Initialize the local store
         self.datahandler=DataHandler(store=self.store)
@@ -98,6 +99,11 @@ class Timeseries(ERA5Cutout,
         '''
         Future Scope: Replacing CF_mean with high resolution data (likely from Global Solar Atlas/ Local data)
         '''
+=======
+        self.cell_static_CF_tolerance=self.resource_disaggregation_config.get('cell_static_CF_tolerance',0)
+        
+        self.datahandler=DataHandler(store=self.store)
+>>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
         
         # Step 6: Define a namedtuple to store both the grid cells and the filtered timeseries
         site_data = namedtuple('site_data', ['cells', 'timeseries'])
@@ -186,6 +192,7 @@ class Timeseries(ERA5Cutout,
         self.log.info(f">> {len(self.province_grid_cells_store)} Grid Cells from Store Cutout")
         self.wind_turbine_config=self.get_turbines_config()
         
+<<<<<<< HEAD
         if turbine_model_source=='atlite':
             atlite_turbine_model:str=self.wind_turbine_config[turbine_model_source][model]['name'] # The default is set in Attributes parser's .get_turbine_config() method.
             hub_height_turbine=atlite.resource.get_windturbineconfig(atlite_turbine_model)['hub_height']
@@ -235,6 +242,50 @@ class Timeseries(ERA5Cutout,
             'per_unit':True, # Returns the time-series in per-unit units, instead of in MW (defaults to False).
             'show_progress': False, # Progress bar
         }
+=======
+        # Create a datetime index from start to end date with hourly frequency
+        datetime_index = pd.date_range(start=self.start_date, end=self.end_date, freq='H')
+        _CF_ts_df = pd.DataFrame(index=datetime_index)  # Initialize an empty DataFrame for the timeseries
+
+        # Step 4: Build a list of DataFrames for each site
+        site_dfs = []
+        for site in sites:
+            # Create a DataFrame for each site based on its profile data and the defined datetime index
+            site_df = pd.DataFrame({
+                site: self.pv_sites_profile.sel(time=slice(self.start_date, self.end_date), 
+                                                **{self.site_index: site}).values
+            }, index=datetime_index)
+            site_dfs.append(site_df)
+
+        # Step 5: Concatenate all site-specific DataFrames into a single DataFrame
+        _CF_ts_df = pd.concat(site_dfs, axis=1)
+
+        # Step 6: Calculate the mean capacity factor (CF) for each cell and store it in 'CF_mean'
+        self.log.info(f">> Calculating CF mean from the {len(_CF_ts_df)} data points for each Cell ...")
+        self.province_grid_cells['CF_mean'] = _CF_ts_df.mean()
+
+        # Step 7: Filter the grid cells based on the CF threshold (cell_static_CF_tolerance)
+        # _CF_mask = self.province_grid_cells.CF_mean >= self.cell_static_CF_tolerance
+        # self.province_grid_cells = self.province_grid_cells[_CF_mask]
+
+        # Step 8: Filter the timeseries DataFrame to only include the selected cells after CF mask. This reduces less data offload to the store
+        _CF_ts_df = _CF_ts_df[self.province_grid_cells.index]
+
+        # Step 9: Convert the timeseries data to the appropriate province timezone
+        self.province_timezone=self.get_province_timezone()
+        self.CF_ts_df = self.__fix_timezone__(_CF_ts_df)
+        self.CF_ts_df.tz_localize(None)
+        
+        # Step 10: Save the grid cells and timeseries to the local HDF5 store
+        self.datahandler.to_store(self.province_grid_cells, 'cells')
+        self.datahandler.to_store(self.CF_ts_df, 'timeseries')
+
+        # Step 11: Define a namedtuple to store both the grid cells and the filtered timeseries
+        site_data = namedtuple('site_data', ['cells', 'timeseries'])
+        self.data = site_data(self.province_grid_cells, self.CF_ts_df)
+
+        return self.data
+>>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
 
         # Step 1.4: Generate PV timeseries profile using the atlite's cutout
         self.wind_profile: xr.DataArray = self.cutout.wind(**wind_args).rename(self.resource_type)

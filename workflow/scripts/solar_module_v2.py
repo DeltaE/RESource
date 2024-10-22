@@ -53,6 +53,7 @@ class SolarResources(AttributesParser):
             self.end_date,
         ) = self.load_snapshot()
     
+<<<<<<< HEAD
     '''
      _________________________________________________________________________________________________________________________
     *** Future Scope to give user flexibility to make their own grid resolution
@@ -66,6 +67,15 @@ class SolarResources(AttributesParser):
     #     self.log.info("Preparing Grid Cells...")
     #     return self.gridcell.grid()
     
+=======
+    def get_CF_timeseries(self,
+                          force_update=False)->tuple:
+        "returns cells geodataframe and timeseries dataframes"
+        
+        self.cells_with_ts_nt:tuple= self.timeseries.get_cells_timeseries()
+        
+        return self.cells_with_ts_nt
+>>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
     
     '''
     _______________________________________________________________________________________________
@@ -119,6 +129,7 @@ class SolarResources(AttributesParser):
         self.datahandler.to_store(self.store_grid_cells,'cells')
         self.datahandler.to_store(self.grid_ss,'substations')
         
+<<<<<<< HEAD
         return self.province_grid_cells_cap_with_nodes
     
     '''
@@ -186,6 +197,15 @@ class SolarResources(AttributesParser):
         
         self.ERA5_cells_cluster_map, self.region_solar_optimal_k_df = cluster.cells_to_cluster_mapping(self.scored_cells, self.vis_dir, self.wcss_tolerance)
         self.cell_cluster_gdf, self.dissolved_indices = cluster.create_cells_Union_in_clusters(self.ERA5_cells_cluster_map, self.region_solar_optimal_k_df)
+=======
+        self.store_grid_cells=self.datahandler.from_store('cells')
+        return self.store_grid_cells
+        
+    def score_cells(self ):
+                
+        self.not_scored_cells=self.datahandler.from_store('cells')
+        self.scored_cells = self.scorer.get_cell_score(self.not_scored_cells,'CF_mean')
+>>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
         
         # dissolved_indices_save_to = os.path.join(self.linking_data['root'], self.resource_type, self.linking_data[f'{self.resource_type}']['dissolved_indices'])
         # utils.dict_to_pickle(self.dissolved_indices, dissolved_indices_save_to)
@@ -205,11 +225,41 @@ class SolarResources(AttributesParser):
     - As a starter, we apply simplified approach by calculating stepwise mean from the associated cells and set it as a representative profile of a cluster.
     * Remarks:  Sequential Step after Step-4A.
     
+<<<<<<< HEAD
     * Future Scope(s): 
         1. Apply temporal clustering methods for representative profile. 
         2. Collect hybrid RE profile (solar + wind) for regions/clusters show comparative analysis.
         2. Use ML approaches for comparative results with aforementioned classical/heuristics based approach.
     '''
+=======
+    def get_clusters(self,
+                     wcss_tolerance=0.05):
+        """
+        ### Args:
+         -Within-cluster Sum of Square. Higher tolerance gives , more simplification and less number of clusters. Default set to 0.05.
+        """
+        self.resource_disaggregation_config=self.get_resource_disaggregation_config()
+        self.wcss_tolerance=wcss_tolerance
+        
+        # self.wcss_tolerance:float= self.resource_disaggregation_config['WCSS_tolerance']
+            
+        self.scored_cells=self.score_cells()
+        self.vis_dir=self.get_vis_dir()
+        
+        self.ERA5_cells_cluster_map, self.region_solar_optimal_k_df = cluster.cells_to_cluster_mapping(self.scored_cells, self.vis_dir, self.wcss_tolerance)
+        self.cell_cluster_gdf, self.dissolved_indices = cluster.create_cells_Union_in_clusters(self.ERA5_cells_cluster_map, self.region_solar_optimal_k_df)
+        
+        # dissolved_indices_save_to = os.path.join(self.linking_data['root'], self.resource_type, self.linking_data[f'{self.resource_type}']['dissolved_indices'])
+        # utils.dict_to_pickle(self.dissolved_indices, dissolved_indices_save_to)
+        
+        # Define a namedtuple
+        cluster_data = namedtuple('cluster_data', ['clusters','dissolved_indices'])
+        
+        self.solar_clusters_nt:tuple=cluster_data(self.cell_cluster_gdf,self.dissolved_indices)
+        
+        return self.solar_clusters_nt
+        
+>>>>>>> beb6b426000d0e551bb15eab82f64341cb038acf
 
     def get_cluster_timeseries(self):
         self.log.info(f">> Preparing representative profiles for {len(self.cell_cluster_gdf)} clusters")
