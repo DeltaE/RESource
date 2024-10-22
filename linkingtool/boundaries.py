@@ -2,11 +2,13 @@
 from pathlib import Path
 import geopandas as gpd
 import pygadm
+from shapely.geometry import box,Point,Polygon
 from typing import List, Dict, Tuple, Optional, Union, Any, Callable
 # import logging
 
 # Import local scripts
 from linkingtool.AttributesParser import AttributesParser
+
 
 from dataclasses import dataclass
 @dataclass
@@ -42,7 +44,9 @@ class GADMBoundaries(AttributesParser):
         self.crs=self.get_default_crs()
         self.country_file:Path=Path (self.gadm_root) /  f'gadm41_{self.country}_L{self.admin_level}.geojson'
         self.province_file:Path = Path(self.gadm_processed) / f'gadm41_{self.country}_L{self.admin_level}_{self.province_short_code}.geojson'
-
+        
+    # Define a function to create bounding boxes (of cell) directly from coordinates (x, y) and resolution
+    
     def get_country_boundary(self, 
                              force_update: bool = False) -> gpd.GeoDataFrame:
         """
@@ -62,24 +66,24 @@ class GADMBoundaries(AttributesParser):
 
             # Load or fetch data
             if self.country_file.exists() and not force_update: # load the country gdf from local file
-                self.log.info(f"Loading GADM data for {self.country} from local datafile {self.country_file}.")
+                self.log.info(f">> Loading GADM data for {self.country} from local datafile {self.country_file}.")
                 self.boundary_country=gpd.read_file(self.country_file)
 
             else:
                 # Fetch and save data if file does not exist or force_update is True
-                self.log.info(f"Fetching GADM data for {self.country} at Administrative Level {self.admin_level}....from source: https://gadm.org/data.html")
+                self.log.info(f">> Fetching GADM data for {self.country} at Administrative Level {self.admin_level}....from source: https://gadm.org/data.html")
                 
                 _country_gdf_:gpd.GeoDataFrame = pygadm.AdmItems(name=self.country, content_level=self.admin_level)
                 _country_gdf_.set_crs(self.crs)
                 self.boundary_country=_country_gdf_
                 # save to local file
                 self.boundary_country.to_file(self.country_file, driver='GeoJSON')
-                self.log.info(f"GADM data saved to {self.country_file}.")
+                self.log.info(f">> GADM data saved to {self.country_file}.")
                 
             return self.boundary_country
 
         except Exception as e:
-            self.log.error(f"Error fetching or loading GADM data: {e}")
+            self.log.error(f">> Error fetching or loading GADM data: {e}")
             raise
 
     def get_province_boundary(self,
@@ -99,7 +103,7 @@ class GADMBoundaries(AttributesParser):
             # It should be saved in processed because the column names have been modified from source.
             
             if self.province_file.exists() and not force_update: # There is a local file and no update required
-                self.log.info(f"Loading GADM boundaries (Sub-provincial | level =2) for {self.province_name}  from local file {self.province_file}.")
+                self.log.info(f">> Loading GADM boundaries (Sub-provincial | level =2) for {self.province_name}  from local file {self.province_file}.")
                 self.boundary_province:gpd.GeoDataFrame=gpd.read_file(self.province_file)
             
             else: # When the local file for province doesn't exist, Filter province data from country file and save locally
@@ -108,7 +112,7 @@ class GADMBoundaries(AttributesParser):
                 _boundary_province_ = _boundary_country.loc[self.boundary_country['NAME_1'] == self.province_name]
 
                 if _boundary_province_.empty : 
-                    self.log.error(f"No data found for province '{self.province_name}'.")
+                    self.log.error(f">> No data found for province '{self.province_name}'.")
                     exit
                 else:
                     _boundary_province_ = _boundary_province_[['NAME_0', 'NAME_1', 'NAME_2', 'geometry']].rename(columns={
@@ -121,7 +125,7 @@ class GADMBoundaries(AttributesParser):
                 self.log.info(f"GADM data for {self.province_name} saved to {self.province_file}.")
             return self.boundary_province
         else:
-            self.log.error(f"Invalid province code: {self.province_short_code}.")
+            self.log.error(f">> Invalid province code: {self.province_short_code}.")
             exit
     
     def get_bounding_box(self)->tuple:
@@ -176,9 +180,9 @@ class GADMBoundaries(AttributesParser):
                 file_path = Path(save_path) / f"{self.province_short_code}.html"
                 file_path.parent.mkdir(parents=True, exist_ok=True)
                 m.save(file_path)
-                self.log.info(f"Interactive map for '{self.province_short_code}' saved to {file_path}.")
+                self.log.info(f">> Interactive map for '{self.province_short_code}' saved to {file_path}.")
             else:
-                self.log.info(f"Skipping the save to local directories as 'save' is set to False.")
+                self.log.info(f">> Skipping the save to local directories as 'save' is set to False.")
         
         return m
 
@@ -192,6 +196,6 @@ class GADMBoundaries(AttributesParser):
             self.create_interactive_map()
             return province_gadm_gdf
         else:
-            self.log.error("Province code is not valid.")
+            self.log.error(">> Province code is not valid.")
             self.province_code_validity
             return None

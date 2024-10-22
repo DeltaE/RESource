@@ -11,6 +11,7 @@ import linkingtool.linking_utility as utils
 import linkingtool.visuals as vis
 import linkingtool.cluster as cluster
 # import linkingtool.linking_solar as solar
+import linkingtool.linking_wind as wind
 
 from linkingtool.CellCapacityProcessor import CellCapacityProcessor
 
@@ -22,9 +23,9 @@ from linkingtool.hdf5_handler import DataHandler
 from linkingtool.AttributesParser import AttributesParser
 from linkingtool.score import CellScorer
 from linkingtool.cell import GridCells
+from linkingtool.gwa import GWACells
 
-class SolarResources(AttributesParser):
-    
+class WindResources(AttributesParser):
     def __post_init__(self):
         
         # Call the parent class __post_init__ to initialize inherited attributes
@@ -34,25 +35,25 @@ class SolarResources(AttributesParser):
         self.required_args = {   #order doesn't matter
             "config_file_path" : self.config_file_path,
             "province_short_code": self.province_short_code,
-            "resource_type": 'solar'
+            "resource_type": 'wind'
         }
         
         # Initiate Class
+        self.resource_type
         self.timeseries=Timeseries(**self.required_args)
         self.datahandler=DataHandler(self.store)
         self.cell_processor=CellCapacityProcessor(**self.required_args)
         self.coders=CODERSData(**self.required_args)
         self.era5_cutout=ERA5Cutout(**self.required_args)
-        self.gridcell=GridCells(**self.required_args)
-        self.scorer=CellScorer()
-
-
+        self.scorer=CellScorer(**self.required_args)
+        self.gwa_cells=GWACells(**self.required_args)
+        
         # Snapshot (range of of the temporal data)
         (
             self.start_date,
             self.end_date,
         ) = self.load_snapshot()
-    
+        
     '''
      _________________________________________________________________________________________________________________________
     *** Future Scope to give user flexibility to make their own grid resolution
@@ -65,11 +66,10 @@ class SolarResources(AttributesParser):
     # def get_grid_cells(self):
     #     self.log.info("Preparing Grid Cells...")
     #     return self.gridcell.grid()
-    
-    
     '''
     _______________________________________________________________________________________________
-    Step 1: Get Potential Capacity (MW), %CF (static/dynamic), and Grid Node information for Cells 
+    Step 1: 
+    - Get Potential Capacity (MW), %CF (static/dynamic), and Grid Node information for Cells 
     _______________________________________________________________________________________________
     
     - Step 1A: 
@@ -82,15 +82,35 @@ class SolarResources(AttributesParser):
         "returns cells geodataframe, capacity matrix data array and cutout "
         
         self.cells_with_cap_nt:tuple=self.cell_processor.get_capacity()
-        
         return self.cells_with_cap_nt
     
     '''
-    - Step 1B: 
+    ______________________
+    Step 1B: Collect weather data for Cells (e.g. windspeed, solar influx). 
+    * Note: Currently active for windspeed only due to significant contrast with high resolution data.
+    ______________________
+    
+    '''
+    def extract_weather_data(self):
+        self.store_grid_cells=self.datahandler.from_store('cells')
+        self.cutout,_=self.era5_cutout.get_era5_cutout()
+        
+        if self.resource_type=='wind': 
+            self.store_grid_cells_updated:gpd.GeoDataFrame=wind.impute_ERA5_windspeed_to_Cells(self.cutout, self.store_grid_cells)
+        elif self.resource_type=='solar': 
+            # self.store_grid_cells_updated:gpd.GeoDataFrame= xxx
+            pass
+            
+        self.datahandler.to_store(self.store_grid_cells_updated,'cells')
+        return self.store_grid_cells_updated
+    
+    '''
+    ______________________
+    Step 1C: 
     - Extract timeseries information for the Cells' e.g. static CF (yearly mean) and timeseries (hourly). 
     * Remarks:  Could be parallelized with Step 2B/2C
+    ______________________
     '''
-    
     def get_CF_timeseries(self,
                           force_update=False)->tuple:
         "returns cells geodataframe and timeseries dataframes"
@@ -98,11 +118,13 @@ class SolarResources(AttributesParser):
         self.cells_with_ts_nt:tuple= self.timeseries.get_timeseries()
         
         return self.cells_with_ts_nt
-    
+        
     '''
-    - Step 1C: 
+    ______________________
+    Step 1D: 
     - Extract Substation information for the Cells e.g. Nearest Node Id and distance to the Node.
-    * Remarks:  Could be parallelized with Step 1B.
+    * Remarks:  Could be parallelized with Step 1B/C.
+    ______________________
     '''
     def find_grid_nodes(self):
 
@@ -120,13 +142,27 @@ class SolarResources(AttributesParser):
         self.datahandler.to_store(self.grid_ss,'substations')
         
         return self.province_grid_cells_cap_with_nodes
-    
+    '''
+    ______________________
+    Step 1E:
+    - Maps high resolution cells (e.g. GWA cells for wind) to ERA5 cells and calculates aggregated mean for each ERA5 cell.
+    - Currently active for Wind resources parameters only. High resolution dataset (~0.0025 arc deg | 100m) from Global Wind Atlas (GWA) has static values (annual mean) only.
+    ______________________ 
+    '''
+    def update_gwa_scaled_params(self):
+        if self.resource_type=='wind': 
+            self.gwa_cells.map_GWA_cells_to_ERA5()
+        elif self.resource_type=='solar': 
+            # Not activated for solar resources yet as the high resolution data processing is computationally expensive and the data contrast for solar doesn't provide satisfactory incentive for that.
+            pass 
     '''
     ____________________________________________________________________________________________________________________________________________
-    Step 2: Set Scoring Matrix for the Cells. Typical metric includes but not limited to LCOE (Levelized Cost of Electricity in $/MWh) of cells.
+    Step 2: Set Scoring Matrix for the Cells. 
     ____________________________________________________________________________________________________________________________________________
-    - Calculate Total Cost ($) and Total Energy Yield (MWh) and for each Cell and calculate LCOE ($/MWh).
-    * Remarks:  Sequential Step after Step-2 (A+B+C).
+    - We populated necessary parameters to evaluate the cells. We can set the scoring metric using the parameters.
+    - Typical metric includes but not limited to LCOE (Levelized Cost of Electricity in $/MWh) of cells.
+    - As a starter and simplified metric, we calculate Total Cost ($) and Total Energy Yield (MWh) and for each Cell and calculate LCOE ($/MWh).
+    * Remarks:  Sequential Step after Step-1
     
     * Future Scope(s): 
         1. Apply MCDA (Multi Criteria Decision Analysis) as Scoring Metric of the Cells.
@@ -149,7 +185,10 @@ class SolarResources(AttributesParser):
         # self.store_grid_cells=self.datahandler.from_store('cells')
         
         return self.scored_cells
-    
+
+    # def rescale_cutout_windspeed(self, cutout, era5_cells_gdf_updated):
+    #     return wind.rescale_ERA5_cutout_windspeed_with_mapped_GWA_cells(cutout, era5_cells_gdf_updated)
+
     '''
     ____________________________________________________________________________________________________________________________________________
     Step 3: Clusterize the Cells to minimize the representative technologies in downstream models.
@@ -163,9 +202,11 @@ class SolarResources(AttributesParser):
     '''
     
     '''
+    ___________________
     - Step 3A: 
     - As a starter, we apply simplified spatial clustering by using k-means  based on LCOE of the cells.
-    * Remarks:  Sequential Step after Step-3.
+    * Remarks:  Sequential Step after Step-2.
+    ___________________
     '''
     def get_clusters(self,
                      wcss_tolerance=0.05):
@@ -184,8 +225,8 @@ class SolarResources(AttributesParser):
         
         self.vis_dir=self.get_vis_dir()
         
-        self.ERA5_cells_cluster_map, self.region_solar_optimal_k_df = cluster.cells_to_cluster_mapping(self.scored_cells, self.vis_dir, self.wcss_tolerance)
-        self.cell_cluster_gdf, self.dissolved_indices = cluster.create_cells_Union_in_clusters(self.ERA5_cells_cluster_map, self.region_solar_optimal_k_df)
+        self.ERA5_cells_cluster_map, self.region_solar_optimal_k_df = cluster.cells_to_cluster_mapping(self.scored_cells, self.vis_dir, self.wcss_tolerance,[f'lcoe_{self.resource_type}', 'potential_capacity'])
+        self.cell_cluster_gdf, self.dissolved_indices = cluster.create_cells_Union_in_clusters(self.ERA5_cells_cluster_map, self.region_solar_optimal_k_df,self.resource_type)
         
         # dissolved_indices_save_to = os.path.join(self.linking_data['root'], self.resource_type, self.linking_data[f'{self.resource_type}']['dissolved_indices'])
         # utils.dict_to_pickle(self.dissolved_indices, dissolved_indices_save_to)
@@ -201,9 +242,11 @@ class SolarResources(AttributesParser):
         return self.solar_clusters_nt
     
     '''
+    ___________________
     - Step 3B: 
     - As a starter, we apply simplified approach by calculating stepwise mean from the associated cells and set it as a representative profile of a cluster.
     * Remarks:  Sequential Step after Step-4A.
+    ___________________
     
     * Future Scope(s): 
         1. Apply temporal clustering methods for representative profile. 
@@ -215,18 +258,22 @@ class SolarResources(AttributesParser):
         self.log.info(f">> Preparing representative profiles for {len(self.cell_cluster_gdf)} clusters")
         self.cells_timeseries=self.datahandler.from_store('timeseries')
         self.cluster_df=self.timeseries.get_cluster_timeseries(self.cell_cluster_gdf,
-                                self.cells_timeseries.PV,
+                                self.cells_timeseries[self.resource_type],
                                self.dissolved_cell_indices_df)
         return self.cluster_df
 
+    # _________________________________________________________________________________
+
     def run(self):
             log.info(f"{self.resource_type} module initiated")
-            # self.get_grid_cells()
-            self.get_cell_capacity(),
-            self.get_CF_timeseries(),
-            self.find_grid_nodes(),
-            self.score_cells(),
-            self.get_clusters(),
+            # self.get_grid_cells() # not active yet, future scope
+            self.get_cell_capacity()
+            self.get_CF_timeseries()
+            self.extract_weather_data()
+            self.update_gwa_scaled_params()
+            self.find_grid_nodes()
+            self.score_cells()
+            self.get_clusters()
             self.get_cluster_timeseries()
 
 

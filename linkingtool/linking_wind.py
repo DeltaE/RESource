@@ -241,79 +241,6 @@ def map_GWAcells_to_ERA5cells(
 
     return gwa_cells_mapped_gdf, era5_cells_gdf_filtered
 
-'''
-////replaced by new func////
-
-def map_GWAcells_to_ERA5cells(
-        gwa_cells_gdf: gpd.GeoDataFrame,
-        era5_cells_gdf: gpd.GeoDataFrame,
-        tech_cap_per_km2: float,
-        batch_process_size: int = 1000):
-    """
-    Finds the associated GWA cells under each ERA5 cell and manages computation memory resources by batching.
-    """
-    batch_size = batch_process_size  # Adjust the batch size based on your system's capacity
-    
-    gwa_batches = [gwa_cells_gdf.iloc[i:i + batch_size] for i in range(0, len(gwa_cells_gdf), batch_size)]
-
-    log.info(f"Mapping {len(gwa_cells_gdf)} GWA Cells to {len(era5_cells_gdf)} ERA5 Cells")
-    log.warning("!! Memory intensive process initiated !!")
-    
-    gwa_cells_mapped_dfs = []
-    
-    # for gwa_batch in gwa_batches:
-    #     gwa_cells_mapped_df_batch = gpd.sjoin(gwa_batch, era5_cells_gdf[['Region', 'geometry', 'Region_ID']], how='inner', predicate='intersects')
-    #     gwa_cells_mapped_dfs.append(gwa_cells_mapped_df_batch)
-    #     gwa_batch = None  # Clear the memory
-
-    # gwa_cells_mapped_gdf = gpd.GeoDataFrame(pd.concat(gwa_cells_mapped_dfs), crs=gwa_cells_gdf.crs)
-    # gwa_cells_mapped_gdf = gwa_cells_mapped_gdf.rename(columns={'cell': 'ERA5_cell_index'})
-    
-    for i, gwa_batch in enumerate(gwa_batches):
-        gwa_batch = gwa_batch.reset_index(drop=True)  # Reset index in each batch
-        gwa_batch['batch_id'] = i  # Add a batch_id
-        gwa_cells_mapped_df_batch = gpd.sjoin(gwa_batch, era5_cells_gdf[['Region', 'geometry', 'Region_ID']], how='inner', predicate='intersects')
-        gwa_cells_mapped_df_batch['unique_index'] = gwa_cells_mapped_df_batch.index.astype(str) + '_' + gwa_batch['batch_id'].astype(str)
-        gwa_cells_mapped_df_batch = gwa_cells_mapped_df_batch.set_index('unique_index')
-        gwa_cells_mapped_dfs.append(gwa_cells_mapped_df_batch)
-        gwa_batch = None  # Clear the memory
-
-        gwa_cells_mapped_gdf = gpd.GeoDataFrame(pd.concat(gwa_cells_mapped_dfs), crs=gwa_cells_gdf.crs)
-
-    log.info("Filtering the ERA5 Cells which contain at least one GWA Cell")
-    GWA_unique_era5_cells = gwa_cells_mapped_gdf['ERA5_cell_index'].unique().tolist()
-
-    era5_cells_gdf_filtered = era5_cells_gdf[era5_cells_gdf.index.isin(GWA_unique_era5_cells)]
-
-    log.info(f'{len(era5_cells_gdf_filtered)} out of {len(era5_cells_gdf)} ERA5 Cells Kept for further processing. \
-             {len(era5_cells_gdf) - len(era5_cells_gdf_filtered)} Cells filtered out due to non-availability of at least 1 GWA Cell within')
-
-    gwa_cells_mapped_gdf, GWA_single_cell_gdf = calculate_common_parameters_GWA_cells(gwa_cells_mapped_gdf, tech_cap_per_km2)
-
-    GWA_single_cell_gdf['potential_capacity'] = tech_cap_per_km2 * GWA_single_cell_gdf['land_area_sq_km']
-    max_cap_GWA_cell = GWA_single_cell_gdf['potential_capacity'].iloc[0]
-
-    for province_index in era5_cells_gdf_filtered.index:
-        cell_mask = gwa_cells_mapped_gdf.ERA5_cell_index == province_index
-        calculated_cap_series  = era5_cells_gdf_filtered.loc[province_index, 'potential_capacity'] / len(gwa_cells_mapped_gdf[cell_mask])
-
-        # if calculated_cap > max_cap_GWA_cell:
-        #     gwa_cells_mapped_gdf.loc[cell_mask, 'potential_capacity'] = max_cap_GWA_cell
-        # else:
-        #     gwa_cells_mapped_gdf.loc[cell_mask, 'potential_capacity'] = calculated_cap
-            
-        # Compare the Series with max_cap_GWA_cell and update gwa_cells_mapped_gdf accordingly
-        updated_cap = calculated_cap_series.clip(upper=max_cap_GWA_cell)
-        single_updated_cap = updated_cap.values[0] if len(updated_cap) > 0 else updated_cap
-        gwa_cells_mapped_gdf.loc[cell_mask, 'potential_capacity'] = single_updated_cap
-
-    print(f'Filtered Sites: Total Wind Potential (ERA5 Cells): {round(era5_cells_gdf_filtered.potential_capacity.sum() / 1000, 2)} GW')
-    print(f'Filtered Site: Total Wind Potential (GWA Cells): {round(gwa_cells_mapped_gdf.potential_capacity.sum() / 1000, 2)} GW')
-
-    gwa_cells_mapped_gdf = create_GWA_all_cells_polygon(gwa_cells_mapped_gdf)
-
-    return gwa_cells_mapped_gdf, era5_cells_gdf_filtered
-'''
 def impute_ERA5_windspeed_to_Cells(
         cutout:atlite.Cutout, 
         province_grid_cells:gpd.GeoDataFrame)->gpd.GeoDataFrame:
@@ -333,15 +260,14 @@ def impute_ERA5_windspeed_to_Cells(
     # Perform spatial join and drop unnecessary columns
     province_grid_cells = (
         gpd.sjoin(province_grid_cells.rename(columns={'x': 'x_bc', 'y': 'y_bc'}), wnd_ymean_gdf, predicate='intersects')
-        .drop(columns=['x_bc', 'y_bc', 'lon', 'lat'])
+        .drop(columns=['x_bc', 'y_bc', 'lon', 'lat','index_right','year'])
     )
     
     # Handle potential duplicate indices
     # Resetting index to ensure unique index after join
     province_grid_cells = province_grid_cells.reset_index(drop=True)
-    
     province_grid_cells = province_grid_cells.drop_duplicates(subset=['geometry'])
-    province_grid_cells=utility.assign_regional_cell_ids(province_grid_cells,'Region','cell')
+    province_grid_cells=utility.assign_cell_id(province_grid_cells)
 
     return province_grid_cells
 

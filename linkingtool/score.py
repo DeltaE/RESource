@@ -1,9 +1,13 @@
 import pandas as pd
+from linkingtool.AttributesParser import AttributesParser
+from dataclasses import dataclass, field
 
-class CellScorer:
-    def __init__(self):
-        pass  # No need to initialize with constants since values are in the DataFrame
-
+@dataclass
+class CellScorer(AttributesParser):
+    
+    def __post_init__(self):
+        super().__post_init__()
+        
     def calculate_total_cost(self, 
                              distance_to_grid_km: float, 
                              grid_connection_cost_per_km: float, 
@@ -21,8 +25,8 @@ class CellScorer:
         return total_cost
 
     def get_cell_score(self, 
-                             cells: pd.DataFrame, 
-                             CF_column: str = 'CF_mean') -> pd.DataFrame:
+                        cells: pd.DataFrame,
+                        CF_column:str) -> pd.DataFrame:
             """
             Calculate the potential LCOE score for each cell in the dataframe,
             reading cost parameters directly from the DataFrame.
@@ -30,17 +34,17 @@ class CellScorer:
             dataframe = cells.copy()  # Use the input DataFrame for calculations
             print(">> Calculating Score for each Cell...")
 
-            dataframe['lcoe'] = dataframe.apply(
+            dataframe[f'lcoe_{self.resource_type}'] = dataframe.apply(
                 lambda x: self.calculate_total_cost(
                     x['nearest_station_distance_km'], 
-                    x['grid_connection_cost_per_km'], 
-                    x['tx_line_rebuild_cost'], 
-                    x['capex']
+                    x[f'grid_connection_cost_per_km_{self.resource_type}'], 
+                    x[f'tx_line_rebuild_cost_{self.resource_type}'], 
+                    x[f'capex_{self.resource_type}']
                 ) / (8760 * x[CF_column]),  # LCOE = Total Cost / Total Energy Produced
                 axis=1 # LCOE in M$/MWh;
             )  
-            dataframe['lcoe']=dataframe['lcoe']*1E3 # LCOE in $/kWh; lower lcoe indicates better cells
+            dataframe[f'lcoe_{self.resource_type}']=dataframe[f'lcoe_{self.resource_type}']*1E3 # LCOE in $/kWh; lower lcoe indicates better cells
 
-            scored_dataframe = dataframe.sort_values(by='lcoe', ascending=False).copy()  # Lower LCOE is better
+            scored_dataframe = dataframe.sort_values(by=f'lcoe_{self.resource_type}', ascending=False).copy()  # Lower LCOE is better
             
             return scored_dataframe

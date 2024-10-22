@@ -20,10 +20,6 @@ from dataclasses import dataclass, field
 import pathlib as Path
 from typing import List, Dict, Tuple, Optional, Union, Any, Callable
 import logging as log
-# from linkingtool.hdf5_handler import DataHandler
-
-# Local Packages
-# import linkingtool.linking_utility as utils
 
 # Logging Configuration
 log.basicConfig(level=log.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -36,23 +32,13 @@ class AttributesParser:
     # Attributes that are required as Args.
     config_file_path: Path =field(default='config/test_config.yml')
     province_short_code: str=field(default= 'BC')
-    resource_type: str = field(default=None)
-    
-    # Attributes that will be initialized in __post_init__
-    
-    province_mapping: Dict[str,dict]=field(init=False)
-    disaggregation_config: Dict[str,dict] = field(init=False)
-    linking_data: Dict[str,dict] = field(init=False) # Dict of Directories for Processed data dumping
-    gaez_data: Dict[str,dict] = field(init=False) # Raster associated configurations/directories
-    ATB: Dict[str,dict] = field(init=False) # Annual Technology Baseline , cost parameters (Currently sourced from NREL)
-
-
+    resource_type: str = field(default='None')
     
     def __post_init__(self):
         self.site_index='cell'
-        self.store = f'data/store/{self.resource_type}_resources_{self.province_short_code}.h5'
-        # self.datahandler=DataHandler(self.store)
-        
+        # self.resource_type= self.resource_type.lower()
+        self.store = f'data/store/resources_{self.province_short_code}.h5'
+
         # Convert province_short_code to uppercase to handle user types regarding case-sensitive letter inputs.
         self.province_short_code = self.province_short_code.upper()
         
@@ -78,7 +64,7 @@ class AttributesParser:
         Description: 
             Checks of the province code is correct. If not, then suggests the available list of codes that are liked to data supply-chain.
         """
-        self.province_mapping=self.config.get('province_mapping','')
+        self.province_mapping=self.get_province_mapping()
         
         if self.province_short_code not in self.province_mapping:
             print(f"!!! ERROR !!! \nRecheck the province code.\n{60 * '_'}")
@@ -133,7 +119,7 @@ class AttributesParser:
         return self.config.get('province_mapping', {}).get(self.province_short_code,{}).get('name',{})
 
     def get_resource_disaggregation_config(self) -> Dict[str, dict]:
-    
+
         """
         Returns the capacity disaggregation configuration for the given resource type.
         If the resource type is None or not found, returns an empty dictionary.
@@ -174,4 +160,17 @@ class AttributesParser:
     
     def get_province_timezone(self):
         return self.config['province_mapping'][self.province_short_code]['timezone_convert']
-        
+    
+    def get_cell_resolution(self):
+        return self.config.get('grid_cell_resolution',{})
+    
+    def get_turbines_config(self):
+        self.resource_disaggregation_config=self.get_resource_disaggregation_config()
+        return self.resource_disaggregation_config['turbines']
+    
+    def get_gwa_config(self):
+        return self.config.get('GWA',{})
+    
+    def get_resource_landuse_intensity(self):
+        self.resource_disaggregation_config:dict=self.get_resource_disaggregation_config()
+        return self.resource_disaggregation_config['landuse_intensity']

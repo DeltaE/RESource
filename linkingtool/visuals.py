@@ -72,6 +72,7 @@ def plot_with_matched_cells(ax, cells: gpd.GeoDataFrame, filtered_cells: gpd.Geo
 
 def get_selected_vs_missed_visuals(cells: gpd.GeoDataFrame,
                                   province_short_code,
+                                  resource_type,
                                    lcoe_threshold: float,
                                    CF_threshold: float,
                                    capacity_threshold: float,
@@ -84,7 +85,7 @@ def get_selected_vs_missed_visuals(cells: gpd.GeoDataFrame,
                                    figsize=(12, 7),
                                    save=False):
     
-    mask=(cells['CF_mean']>=CF_threshold)&(cells['potential_capacity']>=capacity_threshold)&(cells['lcoe']<=lcoe_threshold)
+    mask=(cells[f'{resource_type}_CF_mean']>=CF_threshold)&(cells[f'potential_capacity_{resource_type}']>=capacity_threshold)&(cells[f'lcoe_{resource_type}']<=lcoe_threshold)
     filtered_cells=cells[mask]
     
     # Create a high-resolution side-by-side plot in a 2x2 grid
@@ -97,7 +98,7 @@ def get_selected_vs_missed_visuals(cells: gpd.GeoDataFrame,
 
 
     # First plot: CF_mean Visualization (top left)
-    plot_with_matched_cells(axs[0, 0], cells, filtered_cells, 'CF_mean', 'YlOrRd', 
+    plot_with_matched_cells(axs[0, 0], cells, filtered_cells, f'{resource_type}_CF_mean', 'YlOrRd', 
                             background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
     axs[0, 0].set_title('CF_mean Overview', fontsize=font_size)
     axs[0, 0].set_xlabel('Longitude', fontsize=font_size-3)
@@ -105,7 +106,7 @@ def get_selected_vs_missed_visuals(cells: gpd.GeoDataFrame,
     axs[0, 0].set_axis_off()
 
     # Second plot: Potential Capacity Visualization (top right)
-    plot_with_matched_cells(axs[0, 1], cells, filtered_cells, 'potential_capacity', 'Blues',
+    plot_with_matched_cells(axs[0, 1], cells, filtered_cells, f'potential_capacity_{resource_type}', 'Blues',
                             background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
     axs[0, 1].set_title('Potential Capacity Overview', fontsize=font_size)
     axs[0, 1].set_xlabel('Longitude', fontsize=font_size-3)
@@ -113,7 +114,7 @@ def get_selected_vs_missed_visuals(cells: gpd.GeoDataFrame,
     axs[0, 1].set_axis_off()
 
     # Third plot: Nearest Station Distance Visualization (bottom left)
-    plot_with_matched_cells(axs[1, 0], cells, filtered_cells, 'nearest_station_distance_km', 'coolwarm',
+    plot_with_matched_cells(axs[1, 0], cells, filtered_cells, f'nearest_station_distance_km', 'coolwarm',
                             background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
     axs[1, 0].set_title('Nearest Station Distance Overview', fontsize=font_size)
     axs[1, 0].set_xlabel('Longitude', fontsize=font_size-3)
@@ -121,7 +122,7 @@ def get_selected_vs_missed_visuals(cells: gpd.GeoDataFrame,
     axs[1, 0].set_axis_off()
 
     # Fourth plot: LCOE Visualization (bottom right)
-    plot_with_matched_cells(axs[1, 1], cells, filtered_cells, 'lcoe', 'summer',
+    plot_with_matched_cells(axs[1, 1], cells, filtered_cells, f'lcoe_{resource_type}', 'summer',
                             background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
     axs[1, 1].set_title('LCOE Overview', fontsize=font_size)
     axs[1, 1].set_xlabel('Longitude', fontsize=font_size-3)
@@ -129,7 +130,7 @@ def get_selected_vs_missed_visuals(cells: gpd.GeoDataFrame,
     axs[1, 1].set_axis_off()
 
     # Add a super title for the figure
-    fig.suptitle(f'Selected Cells Overview - {province_short_code}', fontsize=font_size+2,fontweight='bold', x=title_x,y=title_y)
+    fig.suptitle(f'{resource_type}- Selected Cells Overview - {province_short_code}', fontsize=font_size+2,fontweight='bold', x=title_x,y=title_y)
     # Add a text box with grey background for the message
     fig.text(text_box_x, text_box_y, msg, ha='center', va='top', fontsize=font_size-3,
              bbox=dict(facecolor='lightgrey', edgecolor='grey', boxstyle='round,pad=0.2'))

@@ -1,4 +1,5 @@
 import logging as log
+import resource
 import os,sys
 from collections import namedtuple
 import atlite
@@ -102,29 +103,29 @@ class CellCapacityProcessor(AttributesParser):
         ) = self.load_cost()
         
     ## 1. Calculate shape availability after adding the composite exclusion layer (excluder)
-        masked, transform = composite_excluder.compute_shape_availability(_province_shape_geom)
-        
+        # masked, transform = composite_excluder.compute_shape_availability(_province_shape_geom)
+        # cell_processor.land_container.excluder.plot_shape_availability(cell_processor.province_boundary)
         # The masked object is a numpy array. Eligible raster cells have a 1 and excluded cells a 0. 
         # Note that this data still lives in the projection of excluder. For calculating the eligible share we can use the following routine.
-        eligible_share = masked.sum() * composite_excluder.res**2 / _province_shape_geom.area.sum()
+        # eligible_share = masked.sum() * composite_excluder.res**2 / _province_shape_geom.area.sum()
         
-        print(f"The land eligibility share is: {eligible_share:.2%}")
+        # print(f"The land eligibility share is: {eligible_share:.2%}")
         
         # Visuals
         # fig, ax = plt.subplots()
         # excluder.plot_shape_availability(test.geometry)
         
     ## 2.1 Compute availability Matrix
-        Availability_matrix:xr = self.cutout.availabilitymatrix(self.province_shape, composite_excluder)
+        self.Availability_matrix:xr = self.cutout.availabilitymatrix(self.province_shape, composite_excluder)
         
         area = self.cutout.grid.set_index(["y", "x"]).to_crs(3035).area / 1e6 # This crs is fit for area calculation
         area = xr.DataArray(area, dims=("spatial"))
 
-        capacity_matrix:xr.DataArray = Availability_matrix.stack(spatial=["y", "x"]) * area * self.resource_landuse_intensity
-        capacity_matrix.rename('potential_capacity')
+        capacity_matrix:xr.DataArray = self.Availability_matrix.stack(spatial=["y", "x"]) * area * self.resource_landuse_intensity
+        self.capacity_matrix=capacity_matrix.rename(f'potential_capacity_{self.resource_type}')
 
     ## 2.1 convert the Availability Matrix to dataframe.
-        _provincial_cell_capacity_df:pd.DataFrame=capacity_matrix.to_dataframe('potential_capacity')
+        _provincial_cell_capacity_df:pd.DataFrame=self.capacity_matrix.to_dataframe()
         
         # filter the cells that has no lands (i.e. no potential capacity)
         # _provincial_cell_capacity_df = _provincial_cell_capacity[_provincial_cell_capacity["potential_capacity"] != 0]
@@ -138,24 +139,33 @@ class CellCapacityProcessor(AttributesParser):
         )
         
     ## 3 Assign Static exogenous Costs after potential capacity calculation
-        _provincial_cell_capacity_gdf = _provincial_cell_capacity_gdf.assign(
-            capex=self.resource_capex,
-            fom=self.resource_fom,
-            vom = round(self.resource_vom, 4),
-            grid_connection_cost_per_km=self.grid_connection_cost_per_km,
-            tx_line_rebuild_cost=self.tx_line_rebuild_cost
-        )
-        
+        parameters_to_add = {
+            'capex': self.resource_capex,
+            'fom': self.resource_fom,
+            'vom': round(self.resource_vom, 4),
+            'grid_connection_cost_per_km': self.grid_connection_cost_per_km,
+            'tx_line_rebuild_cost': self.tx_line_rebuild_cost
+        }
+
+        # Create a new dictionary with stylized keys
+        stylized_columns = {f'{key}_{self.resource_type}': value for key, value in parameters_to_add.items()}
+
+        # Assign the new stylized columns to the DataFrame
+        _provincial_cell_capacity_gdf = _provincial_cell_capacity_gdf.assign(**stylized_columns)
+
     ## 4 Trim the cells to sub-provincial boundaries instead of overlapping cell (boxes) in the regional boundaries.
         _provincial_cell_capacity_gdf=_provincial_cell_capacity_gdf.overlay(self.province_boundary)
-        _updated_provincial_cells_=utils.assign_cell_id(_provincial_cell_capacity_gdf)
+        self.provincial_cells=utils.assign_cell_id(_provincial_cell_capacity_gdf)
+
+        ''' 
+        >>> here, self.provincial_cells = our default  grid cells
+        ## Future Scope, while we will have user defined grid cells 
         
-        self.store_grid_cells=self.datahandler.from_store('cells')
+        # self.store_grid_cells=self.datahandler.from_store('cells')
         # Add new columns to the existing DataFrame
-        for column in _updated_provincial_cells_.columns:
-            self.store_grid_cells[column] = _updated_provincial_cells_[column]
-        
-        self.datahandler.to_store(self.store_grid_cells,'cells')
+        # for column in self._updated_provincial_cells_.columns:
+        #     self.store_grid_cells[column] = self._updated_provincial_cells_[column]
+        '''
         
         # era5_cell_capacity=utils.assign_cell_id(_provincial_cell_capacity_gdf,'Region',self.site_index)
         # era5_cell_capacity=_provincial_cell_capacity_gdf
@@ -163,22 +173,24 @@ class CellCapacityProcessor(AttributesParser):
         # Define a namedtuple
         capacity_data = namedtuple('capacity_data', ['data','matrix','cutout'])
         
-        self.solar_resources_nt=capacity_data(self.store_grid_cells,capacity_matrix,self.cutout)
+        self.solar_resources_nt=capacity_data(self.provincial_cells,capacity_matrix,self.cutout)
         
-        print(f"Total ERA5 cells loaded : {len(self.store_grid_cells)} [each with .025 deg. (~30km) resolution ]")
-        self.log.info(f"Saving to the local store (as HDF5 file)")
+        print(f">> Total ERA5 cells loaded : {len(self.provincial_cells)} [each with .025 deg. (~30km) resolution ]")
+        self.log.info(f">> Saving to the local store (as HDF5 file)")
         # self.datahandler.save_to_hdf(era5_cell_capacity,'cells')
+        
+        self.datahandler.to_store(self.provincial_cells,'cells')
         
         return self.solar_resources_nt
 
 ## Visuals
     def show_capacity_map(self):
         
-        gdf=self.solar_resourced_nt.data
+        gdf=self.solar_resources_nt.data
         
         m = gdf.explore(
-                    column='potential_capacity',  # Use potential_capacity for marker size
-                    markersize='potential_capacity',  # Adjust marker size based on capacity
+                    column=f'potential_capacity_{self.resource_type}',  # Use potential_capacity for marker size
+                    markersize=f'potential_capacity_{self.resource_type}',  # Adjust marker size based on capacity
                     legend=True,
                     tiles='CartoDB dark_matter',
                     marker_type='circle',

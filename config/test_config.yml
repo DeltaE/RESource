@@ -17,6 +17,10 @@ Scenario:
 
 country: Canada
 
+# grid_cell_resolution:  ### hardcoded for now. Future scope
+#   dx: 0.025
+#   dy: 0.025
+
     
 province_mapping:
   'AB': 
@@ -39,34 +43,6 @@ province_mapping:
       - '2021-12-31 23:00:00' # YYYY-MM-DD "2022-01-01 06:00:00"
     timezone_convert: 'Etc/GMT+7' # Pacific Time Zone
     region_mapping: {}
-    #     'Northern Rockies': 1
-    #     'Stikine': 2
-    #     'Peace River': 3
-    #     'Kitimat-Stikine': 4
-    #     'Bulkley-Nechako': 5
-    #     'Fraser-Fort George': 6
-    #     'Skeena-Queen Charlotte': 7
-    #     'Cariboo': 8
-    #     'Central Coast': 9
-    #     'Columbia-Shuswap': 10
-    #     'Mount Waddington': 11
-    #     'Thompson-Nicola': 12
-    #     'Squamish-Lillooet': 13
-    #     'North Okanagan': 14
-    #     'Powell River': 15
-    #     'East Kootenay': 16
-    #     'Central Okanagan': 17
-    #     'Comox-Strathcona': 18
-    #     'Sunshine Coast': 19
-    #     'Central Kootenay': 20
-    #     'Fraser Valley': 21
-    #     'Okanagan-Similkameen': 22
-    #     'Greater Vancouver': 23
-    #     'Kootenay Boundary': 24
-    #     'Alberni-Clayoquot': 25
-    #     'Nanaimo': 26
-    #     'Cowichan Valley': 27
-    #     'Capital': 28
     
   'MB': 
     name: "Manitoba"
@@ -131,7 +107,6 @@ province_mapping:
     timezone_convert: 'Etc/GMT-6' # Central Time Zone (no DST in most areas)
     percentage_national_land_area: "6.5%"
     region_mapping: {}
-
 
 GADM:
   root: data/downloaded_data/GADM
@@ -332,7 +307,6 @@ WorldPop:
     weighted_population_density_EARTH: 'https://data.worldpop.org/GIS/Population_Weighted_Density/Unconstrained_Subnational/1km/PWD_1km_sub_national_geojson.zip'
     # more_data : https://www.worldpop.org/datacatalog/
         
-
 cutout:
   root: data/downloaded_data/cutout/
   module:
@@ -350,6 +324,26 @@ cutout:
       - '2023-01-01 07:00:00' # YYYY-MM-DD "2021-01-01 07:00:00"
     end:
       - '2024-01-01 06:00:00' # 6 # YYYY-MM-DD "2022-01-01 06:00:00"
+
+GWA:
+  root: 'data/downloaded_data/GWA'
+  datafields: ['windspeed_gwa', 'CF_IEC2','CF_IEC3' ] #,'IEC_Class_ExLoads'
+  sources:
+    windspeed_gwa: 'https://globalwindatlas.info/api/gis/country/CAN/wind-speed/100'
+    # CF_IEC1: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/'  #rotor dia 112m
+    CF_IEC2: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/' #rotor dia 126m
+    CF_IEC3: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/'   #rotor dia 136m
+    # IEC_Class_fatugue_loads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-fatigue-loads-incl-wake/'
+    # IEC_Class_ExLoads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-extreme-loads/' #IEC_Class_ExtremeLoads
+  rasters:
+    windspeed_gwa: 'Canada_wspd_100m.tif'
+    # CF_IEC1: 'CAN_capacity-factor_IEC1.tif'
+    CF_IEC2: 'CAN_capacity-factor_IEC2.tif'
+    CF_IEC3: 'CAN_capacity-factor_IEC3.tif'
+    # IEC_Class_ExLoads: 'CAN.IEC-class-extreme-loads.tif'
+  filter:
+    windspeed_low: 7 # meter/s
+    windspeed_high: 20 # meter/s
 
 capacity_disaggregation:
   solar:
@@ -373,46 +367,34 @@ capacity_disaggregation:
     # capex : 1323.4 # USD/kW  *** Later to be linked to NREL ATB Spreadsheet (via data pipeline automation) for different wind class, different years
     cost_data: 'data/linking_tool/wind/land_based_wind_T3_cost_moderate_NREL_ATB2024.csv'
     WCSS_tolerance: 0.1 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
-    windspeed_low: 7 # meter/s
-    windspeed_high: 20 # meter/s
     CF_low: 0.20
     CF_high: 1
     turbines: #From  existing system at BC (> 3MW turbines)
       NREL_ATB_type : 'Wind Turbine Technology 3' # Turbine Type 3 (of NREL method), size : ~ 3.3 MW, 148 m Rotor Dia, HubHeight 100m, wind plant ~ 200MW
       atlite:
-        model_1: 'Enercon_E82_3000kW' #rotor_dia 82m
-        model_1_P: 3 #Nominal Power
-        model_2': 'Vestas_V90_3MW' #rotor_dia 90m
-        model_2_P: 3 #Nominal Power
+        1: 
+          name: 'Enercon_E82_3000kW' #rotor_dia 82m
+          ID: {} # N/A
+          P: 3 #Nominal Power
+        2': 
+          name: 'Vestas_V90_3MW' #rotor_dia 90m
+          ID: {} # N/A
+          P: 3 #Nominal Power
       OEDB:
         source: 'https://openenergy-platform.org/api/v0/schema/supply/tables/wind_turbine_library/rows'
-        model_1:
-          name: 'GE2.75_120' #rotor_dia 120m
-          ID: 116
-          P: 2.75 #Nominal Power
-          manufacturer: 'GE Wind'
-          # config: xxx
-        model_2: 
-          name: '3.2M114_NES' #rotor_dia 114m
-          ID: 93
-          P: 3.2 #Nominal Power
-          manufacturer: 'Senvion/REpower'
-          config: 'data/downloaded_data/OEDB/3.2M114_NES.yaml'
-    GWA_resources:
-      datafields: ['windspeed', 'CF_IEC2','CF_IEC3','IEC_Class_ExLoads']
-      url_sources:
-        windspeed: 'https://globalwindatlas.info/api/gis/country/CAN/wind-speed/100'
-        # CF_IEC1: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/'  #rotor dia 112m
-        CF_IEC2: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/' #rotor dia 126m
-        CF_IEC3: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/'   #rotor dia 136m
-        # IEC_Class_fatugue_loads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-fatigue-loads-incl-wake/'
-        IEC_Class_ExLoads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-extreme-loads/' #IEC_Class_ExtremeLoads
-      rasters:
-        windspeed: 'Canada_wspd_100m.tif'
-        # CF_IEC1: 'CAN_capacity-factor_IEC1.tif'
-        CF_IEC2: 'CAN_capacity-factor_IEC2.tif'
-        CF_IEC3: 'CAN_capacity-factor_IEC3.tif'
-        IEC_Class_ExLoads: 'CAN.IEC-class-extreme-loads.tif'
+        models:
+          1:
+            name: 'GE2.75_120' #rotor_dia 120m
+            ID: 116
+            P: 2.75 #Nominal Power
+            manufacturer: 'GE Wind'
+            # config: xxx
+          2:
+            name: '3.2M114_NES' #rotor_dia 114m
+            ID: 93
+            P: 3.2 #Nominal Power
+            manufacturer: 'Senvion/REpower'
+            config: 'data/downloaded_data/OEDB/3.2M114_NES.yaml'
     buffer:
       aeroway: 100 # m
       conserved_lands: 100 #m
