@@ -10,13 +10,6 @@ import plotly.io as pio
 from plotly.subplots import make_subplots
 import geopandas as gpd
 import folium
-import rasterio
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import colormaps
-import matplotlib.patches as mpatches
-import matplotlib.colors as mcolors
-import seaborn as sns
 
 
 # local scripts
@@ -25,213 +18,14 @@ import linkingtool.linking_utility as utility
 
 log.basicConfig(level=log.INFO, format='%(asctime)s - %(levelname)s - %(message)s' , datefmt='%Y-%m-%d %H:%M:%S')
 log_name=f'workflow/log/linking_vis.txt'
-# with open(log_name, 'w') as file:
-#     pass
-# file_handler = log.FileHandler(log_name)
-# log.getLogger().addHandler(file_handler)
-
-
-import geopandas as gpd
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-
-def plot_with_matched_cells(ax, cells: gpd.GeoDataFrame, filtered_cells: gpd.GeoDataFrame, column: str, cmap: str,
-                            background_cell_linewidth: float, selected_cells_linewidth: float,font_size:int=9):
-    """Helper function to plot cells with matched cells overlay."""
-    # Plot the main cells layer
-    vmin = cells[column].min()  # Minimum value for color mapping
-    vmax = cells[column].max()  # Maximum value for color mapping
-
-    # Create the main plot
-    cells.plot(
-        column=column,
-        cmap=cmap,
-        edgecolor='white',
-        linewidth=background_cell_linewidth,
-        ax=ax,
-        alpha=1,
-        vmin=vmin,  # Set vmin for color normalization
-        vmax=vmax   # Set vmax for color normalization
-    )
-
-    # Overlay matched_cells with edge highlight
-    filtered_cells.plot(
-        ax=ax,
-        edgecolor='black',
-        color='None',
-        linewidth=selected_cells_linewidth,
-        alpha=1
-    )
-
-    # Create a colorbar for the plot
-    sm = mpl.cm.ScalarMappable(cmap=cmap, norm=mpl.colors.Normalize(vmin=vmin, vmax=vmax))
-    sm.set_array([])  # Only needed for older Matplotlib versions
-    cbar = plt.colorbar(sm, ax=ax, orientation='vertical', fraction=0.02, pad=0.01)
-    cbar.set_label(column, fontsize=font_size)  # Label for the colorbar
-    cbar.ax.tick_params(labelsize=font_size) 
-
-def get_selected_vs_missed_visuals(cells: gpd.GeoDataFrame,
-                                  province_short_code,
-                                  resource_type,
-                                   lcoe_threshold: float,
-                                   CF_threshold: float,
-                                   capacity_threshold: float,
-                                   text_box_x=.4,
-                                   text_box_y=.95,
-                                   title_y=1,
-                                   title_x=0.6,
-                                   font_size=10,
-                                   dpi=1000,
-                                   figsize=(12, 7),
-                                   save=False):
-    
-    mask=(cells[f'{resource_type}_CF_mean']>=CF_threshold)&(cells[f'potential_capacity_{resource_type}']>=capacity_threshold)&(cells[f'lcoe_{resource_type}']<=lcoe_threshold)
-    filtered_cells=cells[mask]
-    
-    # Create a high-resolution side-by-side plot in a 2x2 grid
-    fig, axs = plt.subplots(nrows=2, ncols=2, figsize=figsize, dpi=dpi)
-
-    # Define the message
-    msg = (f"Cell thresholds @ lcoe >= {lcoe_threshold} $/kWH, "
-           f"CF >={CF_threshold}, MW >={capacity_threshold}")
-
-
-
-    # First plot: CF_mean Visualization (top left)
-    plot_with_matched_cells(axs[0, 0], cells, filtered_cells, f'{resource_type}_CF_mean', 'YlOrRd', 
-                            background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
-    axs[0, 0].set_title('CF_mean Overview', fontsize=font_size)
-    axs[0, 0].set_xlabel('Longitude', fontsize=font_size-3)
-    axs[0, 0].set_ylabel('Latitude', fontsize=font_size-3)
-    axs[0, 0].set_axis_off()
-
-    # Second plot: Potential Capacity Visualization (top right)
-    plot_with_matched_cells(axs[0, 1], cells, filtered_cells, f'potential_capacity_{resource_type}', 'Blues',
-                            background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
-    axs[0, 1].set_title('Potential Capacity Overview', fontsize=font_size)
-    axs[0, 1].set_xlabel('Longitude', fontsize=font_size-3)
-    axs[0, 1].set_ylabel('Latitude', fontsize=font_size-3)
-    axs[0, 1].set_axis_off()
-
-    # Third plot: Nearest Station Distance Visualization (bottom left)
-    plot_with_matched_cells(axs[1, 0], cells, filtered_cells, f'nearest_station_distance_km', 'coolwarm',
-                            background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
-    axs[1, 0].set_title('Nearest Station Distance Overview', fontsize=font_size)
-    axs[1, 0].set_xlabel('Longitude', fontsize=font_size-3)
-    axs[1, 0].set_ylabel('Latitude', fontsize=font_size-3)
-    axs[1, 0].set_axis_off()
-
-    # Fourth plot: LCOE Visualization (bottom right)
-    plot_with_matched_cells(axs[1, 1], cells, filtered_cells, f'lcoe_{resource_type}', 'summer',
-                            background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
-    axs[1, 1].set_title('LCOE Overview', fontsize=font_size)
-    axs[1, 1].set_xlabel('Longitude', fontsize=font_size-3)
-    axs[1, 1].set_ylabel('Latitude', fontsize=font_size-3)
-    axs[1, 1].set_axis_off()
-
-    # Add a super title for the figure
-    fig.suptitle(f'{resource_type}- Selected Cells Overview - {province_short_code}', fontsize=font_size+2,fontweight='bold', x=title_x,y=title_y)
-    # Add a text box with grey background for the message
-    fig.text(text_box_x, text_box_y, msg, ha='center', va='top', fontsize=font_size-3,
-             bbox=dict(facecolor='lightgrey', edgecolor='grey', boxstyle='round,pad=0.2'))
-    plt.tight_layout()
-    # Save the plot
-    if save:
-        plt.savefig(f"vis/Solar/Selected_cells_solar_{province_short_code}.png", bbox_inches='tight')
-    plt.tight_layout()
-    plt.show()  # Optional: Show the plot if desired
-
-
-def create_raster_image_with_legend(
-        raster:str, 
-        cmap:str, 
-        title:str, 
-        plot_save_to:str):
-    with rasterio.open(raster) as src:
-        # Read the raster data
-        raster_data = src.read(1)
-
-        # Get the spatial information
-        transform = src.transform
-        min_x = transform[2]
-        max_y = transform[5]
-        max_x = min_x + transform[0] * src.width
-        min_y = max_y + transform[4] * src.height
-
-        # Get unique values (classes) in the raster
-        unique_classes = np.unique(raster_data)
-
-        # Create a colormap with a unique color for each class
-        cmap = plt.get_cmap(cmap)
-        norm = mcolors.Normalize(vmin=unique_classes.min(), vmax=unique_classes.max())
-        colormap = plt.cm.ScalarMappable(norm=norm, cmap=cmap)
-
-        # Display the raster using imshow
-        fig, ax = plt.subplots()
-        im = ax.imshow(colormap.to_rgba(raster_data), extent=[min_x, max_x, min_y, max_y], interpolation='none')
-
-        # Create legend patches
-        legend_patches = [mpatches.Patch(color=colormap.to_rgba(cls), label=f'Class {cls}') for cls in unique_classes]
-
-        # Add legend
-        ax.legend(handles=legend_patches, title='Land Classes', loc='upper left', bbox_to_anchor=(1.05, 1))
-
-        # Set labels for x and y axes
-        ax.set_xlabel('Longitude')
-        ax.set_ylabel('Latitude')
-
-        # Show the plot
-        plt.title(title)
-        plt.tight_layout()
-
-        # Save the plot
-        plt.savefig(plot_save_to, dpi=300)
-        plt.close()  # Close the plot to avoid superimposing
-
-        return log.info(f"Raster images created for {title}. Please check GAEZ model documentation for raster class descriptions")
+with open(log_name, 'w') as file:
+    pass
+file_handler = log.FileHandler(log_name)
+log.getLogger().addHandler(file_handler)
 
 # Load data from YAML file
 # configs=utility.load_config('config/config_linking_tool.yml')
 # solar_vis_directory=configs['solar']['solar_vis_directory']
-#  %%
-# def visualize_GADM_regions(
-#         gadm_regions_gdf:gpd.GeoDataFrame,
-#         color_palette:list,
-#         plot_save_to:str):
-#     """
-#     Takes in the GADM  regions (with given admin level) and plots with given color coded regions, saving the plot to given path.
-#     """
-#     palette = sns.color_palette(color_palette, n_colors=len(gadm_regions_gdf))
-
-#     # Create a dictionary to map Map_IDs to colors
-#     color_map = {map_id: color for map_id, color in zip(gadm_regions_gdf['Region_ID'], palette)}
-
-#     # Sort gadm_regions_gdf by Map_ID
-#     gadm_regions_gdf = gadm_regions_gdf.sort_values(by='Region_ID')
-
-#     # Plot the GeoDataFrame with Map_ID numbers
-#     fig, ax = plt.subplots(figsize=(12, 12))
-#     gadm_regions_gdf.plot(ax=ax, color=[color_map[region] for region in gadm_regions_gdf['Region_ID']])
-
-#     # Annotate each region with its Map_ID
-#     for idx, row in gadm_regions_gdf.iterrows():
-#         plt.annotate(text=str(row['Region_ID']), xy=row['geometry'].centroid.coords[0], ha='center', color='black')
-
-#     # Create legend with region names and Map_IDs
-#     handles = [plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=color, markersize=10) for color in palette]
-#     labels = [f"{row['Region']} ({row['Region_ID']})" for idx, row in gadm_regions_gdf.iterrows()]
-#     plt.legend(handles, labels, title='Regions', loc='upper left', bbox_to_anchor=(1, 1))
-
-#     # Set plot title
-#     plt.title('Map of Regions with Map_ID Numbers')
-#     plt.tight_layout()
-
-#     # Show the plot or save it to a file
-#     plt.savefig(plot_save_to)
-    
-#     fig = plt.gcf()
-#     plt.close(fig)
-#     log.info(f"GADM Regions visualization reated and saved locally.\n")
 
 def plot_data_in_GADM_regions(
         dataframe,
@@ -252,36 +46,7 @@ def plot_data_in_GADM_regions(
     plt.close
     return log.info(f"Plot Created for {plt_title} for Potential Plants and Save to {plt_save_to}")
 
-def visualize_ss_nodes(substations_gdf,
-                       provincem_gadm_regions_gdf:gpd.GeoDataFrame, 
-                           plot_name):
-        """
-        Visualizes transmission nodes (buses) on a map with different colors based on substation types.
 
-        Parameters:
-        - gadm_regions_gdf (GeoDataFrame): GeoDataFrame containing base regions to plot.
-        - buses_gdf (GeoDataFrame): GeoDataFrame containing buses with 'substation_type' column.
-        - plot_name (str): File path to save the plot image.
-
-        Returns:
-        - None
-        """
-        
-        fig, ax = plt.subplots(figsize=(10, 8))
-        provincem_gadm_regions_gdf.plot(ax=ax, color="lightgrey", edgecolor="black", linewidth=0.8,alpha=0.2)
-        substations_gdf.plot('substation_type',ax=ax,legend=True,cmap='viridis',marker='x',markersize=10,linewidth=1,alpha=0.6)
-
-        # Finalize plot details
-        plt.title('Buses with Colormap of Substation Types')
-        plt.tight_layout()
-        
-        # Save and close the plot
-        plt.savefig(plot_name)
-        plt.close()
-        
-        # Logging success message
-        log.info(f"Plot for Grid Nodes Generated and saved as {plot_name}")
-        
 def create_timeseries_plots(cells_df, CF_timeseries_df, max_resource_capacity, dissolved_indices, resampling, representative_color_palette, std_deviation_gradient, vis_directory):
     print(f">>> Generating CF timeseries PLOTs for TOP Sites for {max_resource_capacity} GW Capacity investment in province...")
 

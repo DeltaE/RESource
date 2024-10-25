@@ -17,7 +17,7 @@ import pandas as pd
 import geopandas as gpd
 import yaml
 from dataclasses import dataclass, field
-import pathlib as Path
+from pathlib import Path
 from typing import List, Dict, Tuple, Optional, Union, Any, Callable
 import logging as log
 
@@ -30,14 +30,16 @@ class AttributesParser:
     This is the parent class that will extract the core attributes from the User Config file.
     """
     # Attributes that are required as Args.
-    config_file_path: Path =field(default='config/test_config.yml')
+    config_file_path: Path =field(default='config/config.yml')
     province_short_code: str=field(default= 'BC')
     resource_type: str = field(default='None')
     
     def __post_init__(self):
         self.site_index='cell'
-        # self.resource_type= self.resource_type.lower()
-        self.store = f'data/store/resources_{self.province_short_code}.h5'
+
+        # Define the path and filename
+        self.store = Path(f"data/store/resources_{self.province_short_code}.h5")
+        self.store.parent.mkdir(parents=True, exist_ok=True)
 
         # Convert province_short_code to uppercase to handle user types regarding case-sensitive letter inputs.
         self.province_short_code = self.province_short_code.upper()
@@ -64,7 +66,6 @@ class AttributesParser:
         Description: 
             Checks of the province code is correct. If not, then suggests the available list of codes that are liked to data supply-chain.
         """
-        self.province_mapping=self.get_province_mapping()
         self.province_mapping=self.get_province_mapping()
         
         if self.province_short_code not in self.province_mapping:
@@ -121,7 +122,6 @@ class AttributesParser:
 
     def get_resource_disaggregation_config(self) -> Dict[str, dict]:
 
-
         """
         Returns the capacity disaggregation configuration for the given resource type.
         If the resource type is None or not found, returns an empty dictionary.
@@ -162,20 +162,6 @@ class AttributesParser:
     
     def get_province_timezone(self):
         return self.config['province_mapping'][self.province_short_code]['timezone_convert']
-    
-    def get_cell_resolution(self):
-        return self.config.get('grid_cell_resolution',{})
-    
-    def get_turbines_config(self):
-        self.resource_disaggregation_config=self.get_resource_disaggregation_config()
-        return self.resource_disaggregation_config['turbines']
-    
-    def get_gwa_config(self):
-        return self.config.get('GWA',{})
-    
-    def get_resource_landuse_intensity(self):
-        self.resource_disaggregation_config:dict=self.get_resource_disaggregation_config()
-        return self.resource_disaggregation_config['landuse_intensity']
     
     def get_cell_resolution(self):
         return self.config.get('grid_cell_resolution',{})
