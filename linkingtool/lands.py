@@ -37,6 +37,7 @@ class ConservationLands(GADMBoundaries):
         self.zip_file_name = f"{self.conserved_lands_cfg['data_name']}.zip"
         self.zip_file_path = Path(self.data_root) / self.zip_file_name
         self.extraction_dir = Path (self.data_root) / self.zip_file_path.stem
+        self.extraction_dir.parent.mkdir(parents=True, exist_ok=True)
         
     def get_provincial_conserved_lands(self,
                                        geom_simplification_tolerance=0.005) -> gpd.GeoDataFrame:
@@ -53,8 +54,6 @@ class ConservationLands(GADMBoundaries):
         
         file_name_prefix = self.conserved_lands_cfg['data_name']
         provincial_file_path = Path('data/downloaded_data/lands') / f"{file_name_prefix}.pickle"
-        
-        # Ensure the parent directory exists and save as pickle
         provincial_file_path.parent.mkdir(parents=True, exist_ok=True)
         
         if provincial_file_path.exists():
@@ -93,13 +92,13 @@ class ConservationLands(GADMBoundaries):
         """Download the source ZIP file, extract contents, and return the .gdb file path."""
         # Check if the extraction directory exists
         if self.extraction_dir.exists():
-           print(f"Extraction directory {self.extraction_dir} already exists, skipping download and extraction.")
+           print(f">> Extraction directory {self.extraction_dir} already exists, skipping download and extraction.")
         else:
             if self.zip_file_path.exists():
-                print(f"ZIP file {self.zip_file_path} already exists, skipping download.")
+                print(f">> ZIP file {self.zip_file_path} already exists, skipping download.")
             else:
                 # Download the ZIP file
-                self.log.info(f"Downloading Canadian Protected and Conserved Areas Database (CPCAD)")
+                self.log.info(f">> Downloading Canadian Protected and Conserved Areas Database (CPCAD)")
                 utils.download_data(self.source_url, self.zip_file_path)
                 # print(f"Downloaded ZIP file to {self.zip_file_path}")
 
@@ -112,7 +111,7 @@ class ConservationLands(GADMBoundaries):
         # Load the first .gdb file found in the extraction directory
         gdb_file_path = next(self.extraction_dir.rglob("*.gdb"), None)
         if gdb_file_path is None:
-            raise FileNotFoundError("No .gdb file found in the extracted contents.")
+            raise FileNotFoundError(">> !! No .gdb file found in the extracted contents.")
         
         return gdb_file_path
     
@@ -150,9 +149,9 @@ class ConservationLands(GADMBoundaries):
 
                 # Save the map as an HTML file
                 m.save(save_path)
-                self.log.info(f"Interactive map for '{self.province_short_code}' saved to {save_path}.")
+                self.log.info(f">> Interactive map for '{self.province_short_code}' saved to {save_path}.")
             else:
-                self.log.info(f"Skipping save, 'save' is set to False.")
+                self.log.info(f">> Skipping save, 'save' is set to False.")
         
         return m
     
@@ -193,7 +192,7 @@ class LandContainer(ERA5Cutout,
         # Set raster directories and exclusion layer config
         raster_configs = {}
         custom_land_config=self.get_custom_land_layers() # user can provide additional raster here
-        self.log.info(f"Loading global filters' rasters from GAEZ, trimmed to {self.province_name}")
+        self.log.info(f">> Loading global filters' rasters from GAEZ, trimmed to {self.province_name}")
         # Land cover configuration
         land_cover_config = self.gaez_config['land_cover']
         raster_configs['gaez_landcover'] = {

@@ -14,9 +14,6 @@ from linkingtool.hdf5_handler import DataHandler
 from linkingtool.tech import OEDBTurbines
 import yaml
 from requests import get
-from linkingtool.tech import OEDBTurbines
-import yaml
-from requests import get
 
 @dataclass
 class Timeseries(ERA5Cutout,
@@ -128,9 +125,6 @@ class Timeseries(ERA5Cutout,
         
         # Step 1.1: Get the Atlite's Cutout Object loaded
         self.log.info(f">> Loading ERA5 Cutout")
-        
-        # Step 1.1: Get the Atlite's Cutout Object loaded
-        self.log.info(f">> Loading ERA5 Cutout")
         self.cutout,self.province_boundary=self.get_era5_cutout()
         self.province_grid_cells = self.cutout.grid.overlay(self.province_boundary, how='intersection',keep_geom_type=True)
         self.province_grid_cells = utils.assign_cell_id(self.province_grid_cells,'Region',self.site_index)
@@ -140,12 +134,6 @@ class Timeseries(ERA5Cutout,
         self.province_grid_cells_store=self.datahandler.from_store('cells')
         self.log.info(f">> {len(self.province_grid_cells_store)} Grid Cells from Store Cutout")
         
-        # Step 1.2: Get the Province Grid Cells from Store. Ideally these cells should have same resolution as the Cutout (the indices are prepared from x,y coords and Region names)
-        
-        self.province_grid_cells_store=self.datahandler.from_store('cells')
-        self.log.info(f">> {len(self.province_grid_cells_store)} Grid Cells from Store Cutout")
-        
-        # Step 1.3: Set arguments for the atlite cutout's pv method
         # Step 1.3: Set arguments for the atlite cutout's pv method
         pv_args = {
             'panel': self.resource_disaggregation_config['atlite_panel'],
@@ -163,21 +151,16 @@ class Timeseries(ERA5Cutout,
             
             'shapes': self.province_grid_cells_store.geometry,
             #  (list or pd.Series of shapely.geometry.Polygon) – If given, matrix is constructed as indicator-matrix of the polygons, 
-            'shapes': self.province_grid_cells_store.geometry,
-            #  (list or pd.Series of shapely.geometry.Polygon) – If given, matrix is constructed as indicator-matrix of the polygons, 
             # its index determines the bus index on the time-series.
             
             # 'capacity_factor_timeseries':True, # If True, the capacity factor time series of the chosen resource for each grid cell is computed.
             # 'return_capacity': False, # Additionally returns the installed capacity at each bus corresponding to layout (defaults to False).
             # 'capacity_factor':True, # If True, the static capacity factor of the chosen resource for each grid cell is computed.
             'index':self.province_grid_cells_store.index,
-            'index':self.province_grid_cells_store.index,
             'per_unit':True, # Returns the time-series in per-unit units, instead of in MW (defaults to False).
             'show_progress': False, # Progress bar
         }
 
-        # Step 1.4: Generate PV timeseries profile using the atlite's cutout
-        self.pv_profile: xr.DataArray = self.cutout.pv(**pv_args).rename(self.resource_type)
         # Step 1.4: Generate PV timeseries profile using the atlite's cutout
         self.pv_profile: xr.DataArray = self.cutout.pv(**pv_args).rename(self.resource_type)
         
@@ -273,38 +256,6 @@ class Timeseries(ERA5Cutout,
         df_index_converted.tz_localize(None) # without timezone conversion metadata
         
         return df_index_converted
-    
-    def get_cluster_timeseries(self,
-                               all_clusters:pd.DataFrame,
-                               cells_timeseries:pd.DataFrame,
-                               dissolved_indices:pd.DataFrame):
-
-        # Initialize an empty list to store the results
-        results = []
-
-        # Iterate through each cluster
-        for cluster, row in all_clusters.iterrows():
-            # Extract the cluster's region and cluster number
-            region = row['Region']
-            cluster_no = row['Cluster_No']  # Dynamically fetch the cluster number from the row
-            
-            # Get the cell indices for the cluster based on the region and cluster number
-            cluster_cell_indices = dissolved_indices.loc[region][cluster_no]
-            
-            # Calculate the mean for the timeseries data corresponding to the cluster
-            cluster_ts = cells_timeseries[cluster_cell_indices].mean(axis=1)
-            
-            # Store the mean as a DataFrame with the cluster name as the column name
-            results.append(pd.DataFrame(cluster_ts, columns=[cluster]))
-
-        # Concatenate all results into a single DataFrame
-        self.cluster_df = pd.concat(results, axis=1)
-        # self.cluster_df.columns = pd.MultiIndex.from_arrays([[self.resource_type] * len(self.cluster_df.columns), self.cluster_df.columns])
-        self.datahandler.to_store(self.cluster_df, f'timeseries_clusters_{self.resource_type}',force_update=True)
-
-        # Display the final DataFrame
-        return self.cluster_df
-
     
     def get_cluster_timeseries(self,
                                all_clusters:pd.DataFrame,

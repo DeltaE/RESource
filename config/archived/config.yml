@@ -9,7 +9,6 @@ description: |+
     These  have been given as 'parameters' in the RULES
 root_directory: '/localhome/mei3/eliasinul/repositories/Bidirectional_Linking_Tool'  #have to change manually by each user. Required for DASH upload to public page of github
 units_dictionary: 'data/Data_Units.xlsx'
-
 Scenario: 
   REF :
     Name: Reference
@@ -17,114 +16,80 @@ Scenario:
 
 country: Canada
 
-# grid_cell_resolution:  ### hardcoded for now. Future scope
-#   dx: 0.025
-#   dy: 0.025
-
-    
-province_mapping:
-  'AB': 
-    name: "Alberta"
-    land_area_km2: 642,317
-    land_area_mi2: 275,000
-    percentage_national_land_area: "7.1%"
-    timezone_convert: 'Etc/GMT-7' # Mountain Time Zone
-    region_mapping: {}
-    
-  'BC': 
-    name: "British Columbia"
-    land_area_km2: 925,186
-    land_area_mi2: 357,216
-    percentage_national_land_area: "10.4%"
-    snapshots_tz_BC: # Hardcoded alternate measures of 'timezone_convert', supported by Pypsa
+regional_info:
+  region_1:
+    code: 'BC'
+    name: 'British Columbia' # Case Sensitive, and needs to be exact same as supported by GADM
+    area: 944735 #sqkm
+    boundary:
+      GADM_directory : data/downloaded_data/GADM
+      GADM_file: data/downloaded_data/GADM/BC/BC_gadm_regions.geojson
+    OSM_datafile: data/downloaded_data/OSM/BC/BC.osm.pbf
+    OSM_aeroway_datafile : data/downloaded_data/OSM/aeroway/BC/aeroway_OSM_BC.geojson
+    cutout_datafile: 'data/downloaded_data/cutout/BC_2021_2022.nc'
+    cutout_bounding_box:
+      automated: TRUE
+      user_defined: #for manual definition.
+        minx: -139.25
+        maxx : -112.25
+        miny : 45.25
+        maxy : 60.25
+    conservation_lands_provincial_id: 2 # CPACD data, col : LOC, for more info check https://data-donnees.az.ec.gc.ca/api/file?path=/species%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FProtectedConservedAreaUserManual.pdf
+    conservation_lands_datafile: data/downloaded_data/Gov/Conservation_Lands/BC/CPCAD_BC_union.pkl
+    region_mapping:
+        'Northern Rockies': 1
+        'Stikine': 2
+        'Peace River': 3
+        'Kitimat-Stikine': 4
+        'Bulkley-Nechako': 5
+        'Fraser-Fort George': 6
+        'Skeena-Queen Charlotte': 7
+        'Cariboo': 8
+        'Central Coast': 9
+        'Columbia-Shuswap': 10
+        'Mount Waddington': 11
+        'Thompson-Nicola': 12
+        'Squamish-Lillooet': 13
+        'North Okanagan': 14
+        'Powell River': 15
+        'East Kootenay': 16
+        'Central Okanagan': 17
+        'Comox-Strathcona': 18
+        'Sunshine Coast': 19
+        'Central Kootenay': 20
+        'Fraser Valley': 21
+        'Okanagan-Similkameen': 22
+        'Greater Vancouver': 23
+        'Kootenay Boundary': 24
+        'Alberni-Clayoquot': 25
+        'Nanaimo': 26
+        'Cowichan Valley': 27
+        'Capital': 28
+    grid_nodes_data: data/processed_data/Transmission/BC/Transmission.pkl
+        # grid_nodes_data: BC_Transmission.pkl
+    snapshots_tz_BC: #Alternate measures of 'timezone_convert'
       start: 
       - '2021-01-01 00:00:00' # YYYY-MM-DD "2021-01-01 07:00:00"
       end: 
       - '2021-12-31 23:00:00' # YYYY-MM-DD "2022-01-01 06:00:00"
-    timezone_convert: 'Etc/GMT+7' # Pacific Time Zone
-    region_mapping: {}
-    
-  'MB': 
-    name: "Manitoba"
-    land_area_km2: 553,556
-    land_area_mi2: 213,733
-    percentage_national_land_area: "6.1%"
-    timezone_convert: 'Etc/GMT-6' # Central Time Zone
-    region_mapping: {}
-
-  'NB': 
-    name: "New Brunswick"
-    land_area_km2: 71,450
-    land_area_mi2: 27,587
-    percentage_national_land_area: "0.8%"
-    timezone_convert: 'Etc/GMT-4' # Atlantic Time Zone
-    region_mapping: {}
-
-  'NL': 
-    name: "Newfoundland and Labrador"
-    land_area_km2: 373,872
-    land_area_mi2: 144,355
-    percentage_national_land_area: "4.1%"
-    timezone_convert: 'Etc/GMT-3.5' # Newfoundland Time Zone
-    region_mapping: {}
-
-  'NS': 
-    name: "Nova Scotia"
-    land_area_km2: 53,338
-    land_area_mi2: 20,594
-    percentage_national_land_area: "0.6%"
-    timezone_convert: 'Etc/GMT-4' # Atlantic Time Zone
-    region_mapping: {}
-
-  'ON': 
-    name: "Ontario"
-    land_area_km2: 917,741
-    land_area_mi2: 354,348
-    timezone_convert: 'Etc/GMT-5' # Eastern Time Zone
-    percentage_national_land_area: "10.1%"
-    region_mapping: {}
-
-  'PE': 
-    name: "Prince Edward Island"
-    land_area_km2: 5,660
-    land_area_mi2: 2,185
-    timezone_convert: 'Etc/GMT-4' # Atlantic Time Zone
-    percentage_national_land_area: "0.1%"
-    region_mapping: {}
-
-  'QC': 
-    name: "Quebec"
-    land_area_km2: 1,365,128
-    land_area_mi2: 527,088
-    timezone_convert: 'Etc/GMT-5' # Eastern Time Zone
-    percentage_national_land_area: "15.0%"
-    region_mapping: {}
-
-  'SK': 
-    name: "Saskatchewan"
-    land_area_km2: 591,670
-    land_area_mi2: 228,449
-    timezone_convert: 'Etc/GMT-6' # Central Time Zone (no DST in most areas)
-    percentage_national_land_area: "6.5%"
-    region_mapping: {}
+    timezone_convert: 'Etc/GMT-8'  # Recommended, Alternate measures of 'snapshots_tz_BC'
 
 GADM:
   root: data/downloaded_data/GADM
-  processed: data/processed_data/regions
-  # admin_level: 2 # for sub-provincial (regional districts) level
-  # datafile: BC_gadm_regions.geojson
-  # country_file_L1: "data/downloaded_data/GADM/gadm41_CAN_1.json" # Provincial level maps..
-  # country_file_L2:  "data/downloaded_data/GADM/gadm41_CAN_2.json" # Administrative regions within provincial..
+  datafile: BC_gadm_regions.geojson
+  country_file_L1: "data/downloaded_data/GADM/gadm41_CAN_1.json" # Provincial level maps..
+  country_file_L2:  "data/downloaded_data/GADM/gadm41_CAN_2.json" # Administrative regions within provincial..
 
 Gov:
   conservation_lands:
-    url: https://data-donnees.az.ec.gc.ca/api/file?path=%2Fspecies%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FDatabases%2FProtectedConservedArea_2023.zip
+    source_url: https://data-donnees.az.ec.gc.ca/api/file?path=%2Fspecies%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FDatabases%2FProtectedConservedArea_2022.gdb.zip
     # consideration:
     #   solar: 'yes'
     #   wind: 'yes'
-    root: 'data/downloaded_data/Gov/Conservation_Lands'
-    data_name: 'ProtectedConservedArea'  # Zip and the processed data will be saved with this prefix
-    IUCN_CAT_mapping: # Check TABLE 10 of user manual from the source_url.
+    data_root: 'data/downloaded_data/Gov/Conservation_Lands'
+    zip_expand: 'data/downloaded_data/Gov/Conservation_Lands/ProtectedConservedArea_2022'
+    geodatabase_file: ProtectedConservedArea_2022.gdb
+    IUCN_CAT: #  Source: https://data-donnees.az.ec.gc.ca/api/file?path=/species%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FProtectedConservedAreaUserManual.pdf
       1: 'Strict  Nature Reserve'
       2: 'Wilderness Area'
       3: 'National Park'
@@ -134,45 +99,6 @@ Gov:
       7: 'Protected Area with Sustainable Use of Natural Resources'
       8: 'Interim Sites (unknown specifics)'
       9 : 'OECM areas'
-    LOCATION_mapping: # Check TABLE 13 of user manual from the source_url.
-      "Alberta": 1
-      "British Columbia": 2
-      "Manitoba": 3
-      "New Brunswick": 4
-      "Newfoundland and Labrador": 5
-      "Northwest Territories": 6
-      "Nova Scotia": 7
-      "Nunavut": 8
-      "Ontario": 9
-      "Prince Edward Island": 10
-      "Quebec": 11
-      "Saskatchewan": 12
-      "Yukon": 13
-      
-      # not in use
-      "Coastal Arctic Marine": 14
-      "Coastal Atlantic Marine": 15
-      "Coastal Pacific Marine": 16
-      "Offshore Arctic Marine": 17
-      "Offshore Atlantic Marine": 18
-      "Offshore Pacific Marine": 19
-      "Arctic Marine Coastal/Offshore": 20
-      "Offshore Arctic/Atlantic Marine": 21
-
-    LAND_OWNER_mapping:
-      1: "Federal Govt."
-      2: "Provincial / territorial Govt"
-      3: "Municipal government"
-      4: "Indigenous Community/People"
-      5: "Communal ownership"
-      6: "Individual landowners"
-      7: "For-profit organizations" # (private companies or corporations – crown corporations should be reported as federal or provincial/territory)"
-      8: "Non-profit organizations"
-      9: "Joint ownership" #Under the joint ownership of more than one actor, representing more than one accepted value (e.g. non-profit organizations and for-profit organizations)"
-      10: "Multiple ownership" # Different parts of the land and/or waters are owned by different actors, representing more than one accepted value"
-      11: "Contested Ownership" # is contested
-      12: "not known or reported" # by the data provider
-
     data_license: https://catalogue.ec.gc.ca/geonetwork/oilsands/api/records/6c343726-1e92-451a-876a-76e17d398a1c
   Population:
     root: 'data/downloaded_data/Gov/Population'
@@ -210,24 +136,15 @@ NREL:
       csv: ATBe.csv #96 MB
       parquet: ATBe.parquet #5 MB
     about: https://atb.nrel.gov/electricity/2024/technologies
-    column: 'core_metric_parameter'
-    cost_params:
-      capex: 'CAPEX' # mill. $/ MW
-      fom: 'Fixed O&M' # mill. $/ MW
-      vom: 'None' # Not found for solar,wind,bess
-
-        
 
 OSM_data: # OpenStreet Map
-  root: 'data/downloaded_data/OSM'
-  data_keys: # has to be inline with OSM tags
-    aeroway:
-      tags: ['aerodrome', 'runway', 'taxiway', 'helipad', 'apron', 'gate']
-    power:
-      tags: ['line', 'cable', 'minor_line', 'substation', 'tower', 'pole', 'generator', 'plant', 'terminal']
-    substation:
-      tags: ['transmission', 'distribution', 'minor_distribution', 'industrial']          
-
+  root: data/downloaded_data/OSM
+  province_datafile: BC_osm.pbf
+  aeroway : data/downloaded_data/OSM/aeroway
+  aeroway_datafile: aeroway_OSM_BC.geojson
+  aeroway_buffer:
+    solar: 100 # m
+    wind: 500 #m
 
 CODERS:
   url_1: https://sesit.dev/
@@ -238,33 +155,29 @@ CODERS:
   api_documentation: https://sesit.dev/api/docs
   data_pull:
     root: data/downloaded_data/CODERS
-    # the following mapping directs where to dump the datafile (.csvs)
-    substations: network
-    transmission_lines: network
-  # >>>> Not required fro linking (at this stage)
-    # generation_generic: supply
-    # hydro_existing: supply
-    # generators: supply
-    # hydro_cascade: supply
-    # forecasted_peak_demand: demand
-    # forecasted_annual_demand: demand
-    # end_use_demand: demand
-    # transmission_generic : network
+    generation_generic: supply/generation_generic.csv
+    hydro_existing: supply/hydro_existing.csv
+    generators: supply/generators.csv
+    hydro_cascade: supply/hydro_cascade.csv
+    lines: network/transmission_lines.csv
+    substations: network/substations.csv
+    forecasted_peak_demand: demand/forecasted_peak_demand.csv
+    forecasted_annual_demand: demand/forecasted_annual_demand.csv
+    end_use_demand: demand/end_use_demand.csv
+    transmission_generic : network/transmission_generic.csv
+  province_mapping:  # must be inline with CODERS
+    'AB': "Alberta"
+    'BC': "British Columbia"
+    'MB': "Manitoba"
+    'NB': "New Brunswick"
+    'NL': "Newfoundland and Labrador"
+    'NS': "Nova Scotia"
+    'ON': "Ontario"
+    'PE': "Prince Edward Island"
+    'QC': "Quebec"
+    'SK': "Saskatchewan"
 
-custom_land_layers:
-  rasters:
-    raster_1: # You can define any name here
-      'raster': {} #Raster or path to raster which to exclude.
-      'class_exclusion' : {} #Raster Classes
-      'buffer': {}
-      'invert': 'False' # TRUE = inclusion. FALSE = Exclusion
-  vectors:
-    vector_1: # You can define any name here
-      'geometry': {} #Raster path
-      'buffer':
-      'invert': 'False'
-
-GAEZ:
+  GAEZ:
   root: 'data/downloaded_data/GAEZ'
   zip_file: 'LR.zip'
   Rasters_in_use_direct: 'Rasters_in_use'
@@ -299,14 +212,7 @@ GAEZ:
       buffer: 
         solar: 0 #m
         wind: 0 #m
-WorldPop:
-  root: 'data/downloaded_data/WorldPop'
-  source : 
-    population_density_CAN: 'https://data.worldpop.org/GIS/Population_Density/Global_2000_2020_1km_UNadj/2020/CAN/can_pd_2020_1km_UNadj_ASCII_XYZ.zip'
-    population_count_CAN: 'https://data.worldpop.org/GIS/Population/Global_2000_2020_1km_UNadj/2020/CAN/can_ppp_2020_1km_UNadj_ASCII_XYZ.zip'
-    weighted_population_density_EARTH: 'https://data.worldpop.org/GIS/Population_Weighted_Density/Unconstrained_Subnational/1km/PWD_1km_sub_national_geojson.zip'
-    # more_data : https://www.worldpop.org/datacatalog/
-        
+
 cutout:
   root: data/downloaded_data/cutout/
   module:
@@ -321,29 +227,9 @@ cutout:
   # the snapshots are given as a 'list', not 'values'. 
   snapshots: 
     start: # Must be formatted as 'YYYY-MM-DD' (ERA5 returns data in UTC)
-      - '2023-01-01 07:00:00' # YYYY-MM-DD "2021-01-01 07:00:00"
+      - '2021-01-01 07:00:00' # YYYY-MM-DD "2021-01-01 07:00:00"
     end:
-      - '2024-01-01 06:00:00' # 6 # YYYY-MM-DD "2022-01-01 06:00:00"
-
-GWA:
-  root: 'data/downloaded_data/GWA'
-  datafields: ['windspeed_gwa', 'CF_IEC2','CF_IEC3' ] #,'IEC_Class_ExLoads'
-  sources:
-    windspeed_gwa: 'https://globalwindatlas.info/api/gis/country/CAN/wind-speed/100'
-    # CF_IEC1: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/'  #rotor dia 112m
-    CF_IEC2: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/' #rotor dia 126m
-    CF_IEC3: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/'   #rotor dia 136m
-    # IEC_Class_fatugue_loads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-fatigue-loads-incl-wake/'
-    # IEC_Class_ExLoads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-extreme-loads/' #IEC_Class_ExtremeLoads
-  rasters:
-    windspeed_gwa: 'Canada_wspd_100m.tif'
-    # CF_IEC1: 'CAN_capacity-factor_IEC1.tif'
-    CF_IEC2: 'CAN_capacity-factor_IEC2.tif'
-    CF_IEC3: 'CAN_capacity-factor_IEC3.tif'
-    # IEC_Class_ExLoads: 'CAN.IEC-class-extreme-loads.tif'
-  filter:
-    windspeed_low: 7 # meter/s
-    windspeed_high: 20 # meter/s
+      - '2022-01-01 06:00:00' # YYYY-MM-DD "2022-01-01 06:00:00"
 
 capacity_disaggregation:
   solar:
@@ -354,12 +240,7 @@ capacity_disaggregation:
     NREL_ATB_type : 'Class5' # for more : https://atb.nrel.gov/electricity/2023/utility-scale_pv
     atlite_panel: 'CSi' # CSi , CdTe
     tracking : 'dual' # None, horizontal,tilted_horizontal,vertical,dual
-    cell_static_CF_tolerance: 0.16
-    cell_capacity_tolerance: 1 #MW
     WCSS_tolerance: 0.08 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
-    buffer:
-      aeroway: 100 # m
-      conserved_lands: 100 #m
     
   wind:
     max_capacity: 15  # GW
@@ -382,22 +263,33 @@ capacity_disaggregation:
           P: 3 #Nominal Power
       OEDB:
         source: 'https://openenergy-platform.org/api/v0/schema/supply/tables/wind_turbine_library/rows'
-        models:
-          1:
-            name: 'GE2.75_120' #rotor_dia 120m
-            ID: 116
-            P: 2.75 #Nominal Power
-            manufacturer: 'GE Wind'
-            # config: xxx
-          2:
-            name: '3.2M114_NES' #rotor_dia 114m
-            ID: 93
-            P: 3.2 #Nominal Power
-            manufacturer: 'Senvion/REpower'
-            config: 'data/downloaded_data/OEDB/3.2M114_NES.yaml'
-    buffer:
-      aeroway: 100 # m
-      conserved_lands: 100 #m
+        model_1:
+          name: 'GE2.75_120' #rotor_dia 120m
+          ID: 116
+          P: 2.75 #Nominal Power
+          manufacturer: 'GE Wind'
+          # config: xxx
+        model_2: 
+          name: '3.2M114_NES' #rotor_dia 114m
+          ID: 93
+          P: 3.2 #Nominal Power
+          manufacturer: 'Senvion/REpower'
+          config: 'data/downloaded_data/OEDB/3.2M114_NES.yaml'
+    GWA_resources:
+      datafields: ['windspeed', 'CF_IEC2','CF_IEC3','IEC_Class_ExLoads']
+      url_sources:
+        windspeed: 'https://globalwindatlas.info/api/gis/country/CAN/wind-speed/100'
+        # CF_IEC1: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/'  #rotor dia 112m
+        CF_IEC2: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/' #rotor dia 126m
+        CF_IEC3: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/'   #rotor dia 136m
+        # IEC_Class_fatugue_loads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-fatigue-loads-incl-wake/'
+        IEC_Class_ExLoads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-extreme-loads/' #IEC_Class_ExtremeLoads
+      rasters:
+        windspeed: 'Canada_wspd_100m.tif'
+        # CF_IEC1: 'CAN_capacity-factor_IEC1.tif'
+        CF_IEC2: 'CAN_capacity-factor_IEC2.tif'
+        CF_IEC3: 'CAN_capacity-factor_IEC3.tif'
+        IEC_Class_ExLoads: 'CAN.IEC-class-extreme-loads.tif'
   bess:
     max_capacity : 10 #GW
     cost_data: 'data/linking_tool/bess/bess_LI_6hr_cost_moderate_NREL_ATB2024.csv'
@@ -533,8 +425,6 @@ required_directories:
       solar:
         existing: {}
         potential: {}
-      hydro:
-      region:
       
     linking_tool:
       solar: {}

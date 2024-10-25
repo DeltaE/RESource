@@ -220,10 +220,10 @@ def download_data(
         # Write the content of the response to a file
         with open(file_path, 'wb') as file:
             file.write(response.content)
-        log.info(f"File downloaded successfully and saved as {file_path}")
+        log.info(f">> File downloaded successfully and saved as {file_path}")
     else:
         # log.info(f"Failed to download the Resources zip file. Status code: {response.status_code}")
-        log.info(f"Please Download the data from {source_URL} and extract the files to {file_path}")
+        log.info(f">> Please Download the data from {source_URL} and extract the files to {file_path}")
             # return file_path
 
 """ 

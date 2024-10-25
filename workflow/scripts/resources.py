@@ -1,5 +1,5 @@
-import logging as log
-import resource
+# import logging as log
+# import resource
 # import os,sys,time,argparse
 import geopandas as gpd
 import pandas as pd
@@ -63,7 +63,7 @@ class Resources(AttributesParser):
     def get_grid_cells(self):
         self.log.info("Preparing Grid Cells...")
         self.province_grid_cells=self.gridcells.get_default_grid()
-        return 
+        return self.province_grid_cells
     '''
     _______________________________________________________________________________________________
     Step 1: 

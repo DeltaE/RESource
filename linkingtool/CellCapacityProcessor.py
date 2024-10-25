@@ -1,6 +1,5 @@
 import logging as log
 import resource
-import resource
 import os,sys
 from collections import namedtuple
 import atlite
@@ -106,14 +105,10 @@ class CellCapacityProcessor(AttributesParser):
     ## 1. Calculate shape availability after adding the composite exclusion layer (excluder)
         # masked, transform = composite_excluder.compute_shape_availability(_province_shape_geom)
         # cell_processor.land_container.excluder.plot_shape_availability(cell_processor.province_boundary)
-        # masked, transform = composite_excluder.compute_shape_availability(_province_shape_geom)
-        # cell_processor.land_container.excluder.plot_shape_availability(cell_processor.province_boundary)
         # The masked object is a numpy array. Eligible raster cells have a 1 and excluded cells a 0. 
         # Note that this data still lives in the projection of excluder. For calculating the eligible share we can use the following routine.
         # eligible_share = masked.sum() * composite_excluder.res**2 / _province_shape_geom.area.sum()
-        # eligible_share = masked.sum() * composite_excluder.res**2 / _province_shape_geom.area.sum()
         
-        # print(f"The land eligibility share is: {eligible_share:.2%}")
         # print(f"The land eligibility share is: {eligible_share:.2%}")
         
         # Visuals
@@ -122,18 +117,14 @@ class CellCapacityProcessor(AttributesParser):
         
     ## 2.1 Compute availability Matrix
         self.Availability_matrix:xr = self.cutout.availabilitymatrix(self.province_shape, composite_excluder)
-        self.Availability_matrix:xr = self.cutout.availabilitymatrix(self.province_shape, composite_excluder)
         
         area = self.cutout.grid.set_index(["y", "x"]).to_crs(3035).area / 1e6 # This crs is fit for area calculation
         area = xr.DataArray(area, dims=("spatial"))
 
         capacity_matrix:xr.DataArray = self.Availability_matrix.stack(spatial=["y", "x"]) * area * self.resource_landuse_intensity
         self.capacity_matrix=capacity_matrix.rename(f'potential_capacity_{self.resource_type}')
-        capacity_matrix:xr.DataArray = self.Availability_matrix.stack(spatial=["y", "x"]) * area * self.resource_landuse_intensity
-        self.capacity_matrix=capacity_matrix.rename(f'potential_capacity_{self.resource_type}')
 
     ## 2.1 convert the Availability Matrix to dataframe.
-        _provincial_cell_capacity_df:pd.DataFrame=self.capacity_matrix.to_dataframe()
         _provincial_cell_capacity_df:pd.DataFrame=self.capacity_matrix.to_dataframe()
         
         # filter the cells that has no lands (i.e. no potential capacity)
@@ -162,20 +153,6 @@ class CellCapacityProcessor(AttributesParser):
         # Assign the new stylized columns to the DataFrame
         _provincial_cell_capacity_gdf = _provincial_cell_capacity_gdf.assign(**stylized_columns)
 
-        parameters_to_add = {
-            'capex': self.resource_capex,
-            'fom': self.resource_fom,
-            'vom': round(self.resource_vom, 4),
-            'grid_connection_cost_per_km': self.grid_connection_cost_per_km,
-            'tx_line_rebuild_cost': self.tx_line_rebuild_cost
-        }
-
-        # Create a new dictionary with stylized keys
-        stylized_columns = {f'{key}_{self.resource_type}': value for key, value in parameters_to_add.items()}
-
-        # Assign the new stylized columns to the DataFrame
-        _provincial_cell_capacity_gdf = _provincial_cell_capacity_gdf.assign(**stylized_columns)
-
     ## 4 Trim the cells to sub-provincial boundaries instead of overlapping cell (boxes) in the regional boundaries.
         _provincial_cell_capacity_gdf=_provincial_cell_capacity_gdf.overlay(self.province_boundary)
         self.provincial_cells=utils.assign_cell_id(_provincial_cell_capacity_gdf)
@@ -183,18 +160,9 @@ class CellCapacityProcessor(AttributesParser):
         ''' 
         >>> here, self.provincial_cells = our default  grid cells
         ## Future Scope, while we will have user defined grid cells 
-        self.provincial_cells=utils.assign_cell_id(_provincial_cell_capacity_gdf)
-
-  
-        >>> here, self.provincial_cells = our default  grid cells
-        ## Future Scope, while we will have user defined grid cells 
         
         # self.store_grid_cells=self.datahandler.from_store('cells')
-        # self.store_grid_cells=self.datahandler.from_store('cells')
         # Add new columns to the existing DataFrame
-        # for column in self._updated_provincial_cells_.columns:
-        #     self.store_grid_cells[column] = self._updated_provincial_cells_[column]
-        '''
         # for column in self._updated_provincial_cells_.columns:
         #     self.store_grid_cells[column] = self._updated_provincial_cells_[column]
         '''
@@ -209,8 +177,6 @@ class CellCapacityProcessor(AttributesParser):
         
         print(f">> Total ERA5 cells loaded : {len(self.provincial_cells)} [each with .025 deg. (~30km) resolution ]")
         self.log.info(f">> Saving to the local store (as HDF5 file)")
-        print(f">> Total ERA5 cells loaded : {len(self.provincial_cells)} [each with .025 deg. (~30km) resolution ]")
-        self.log.info(f">> Saving to the local store (as HDF5 file)")
         # self.datahandler.save_to_hdf(era5_cell_capacity,'cells')
         
         self.datahandler.to_store(self.provincial_cells,'cells')
@@ -221,11 +187,8 @@ class CellCapacityProcessor(AttributesParser):
     def show_capacity_map(self):
         
         gdf=self.solar_resources_nt.data
-        gdf=self.solar_resources_nt.data
         
         m = gdf.explore(
-                    column=f'potential_capacity_{self.resource_type}',  # Use potential_capacity for marker size
-                    markersize=f'potential_capacity_{self.resource_type}',  # Adjust marker size based on capacity
                     column=f'potential_capacity_{self.resource_type}',  # Use potential_capacity for marker size
                     markersize=f'potential_capacity_{self.resource_type}',  # Adjust marker size based on capacity
                     legend=True,

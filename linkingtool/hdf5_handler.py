@@ -7,7 +7,6 @@ from linkingtool.AttributesParser import AttributesParser
 
 class DataHandler(AttributesParser):
     def __init__(self, store: str):
-    def __init__(self, store: str):
         """
         Initialize the DataHandler with the file path.
 
@@ -15,22 +14,8 @@ class DataHandler(AttributesParser):
         """
         super().__init__()
         self.store = store
-        super().__init__()
-        self.store = store
     
     def show(self):
-        """
-        Display all keys (groups) in the HDF5 store.
-        """
-        try:
-            with h5py.File(self.store, 'r') as f:
-                print(f"Data 'keys' found in store {self.store}:")
-                for key in f.keys():
-                    print(f"- {key}")
-        except Exception as e:
-            self.log.error(f"Error opening the store: {e}")
-
-    def to_store(self, data: pd.DataFrame | gpd.GeoDataFrame, key: str, force_update: bool = False):
         """
         Display all keys (groups) in the HDF5 store.
         """
@@ -80,13 +65,6 @@ class DataHandler(AttributesParser):
             store.close()
 
     def from_store(self, key: str):
-        """
-        Load data from the HDF5 store and handle geometry conversion.
-        
-        :param key: Key for loading the DataFrame or GeoDataFrame.
-        :return: DataFrame or GeoDataFrame based on the data loaded.
-        """
-        # try:
         """
         Load data from the HDF5 store and handle geometry conversion.
         
