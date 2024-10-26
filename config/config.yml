@@ -266,39 +266,40 @@ custom_land_layers:
 
 GAEZ:
   root: 'data/downloaded_data/GAEZ'
+  self.: 'https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip'
   zip_file: 'LR.zip'
   Rasters_in_use_direct: 'Rasters_in_use'
-  raster_types: ['land_cover', 'terrain_resources', 'exclusion_areas']
+  raster_types:
+    - name: 'land_cover'
+      raster: "faocmb_2010.tif"  # Dominant land cover/use ; 11 classes; (5 arc-minute)
+      zip_extract_direct: 'LR/lco'
+      color_map: 'YlGn'
+      class_inclusion:
+        solar: [2, 3, 5, 8, 9]
+        wind: [2, 3, 5, 8, 9]
+        
+    - name: 'terrain_resources'
+      raster: "slpmed05.tif" # Median terrain slope classes; 8 classes ; (5 arc-minute)
+      zip_extract_direct: 'LR/ter'
+      color_map: 'terrain'
+      class_exclusion:
+        solar: [9]
+        wind: [7, 8, 9]
+        buffer:
+          solar: 0 #m
+          wind: 500 #m
 
-  land_cover: 
-    raster: "faocmb_2010.tif"  # faocmb_2010 ; Dominant land cover/use ; 11 classes; (5 arc-minute)
-    zip_extract_direct: 'LR/lco'
-    color_map: 'YlGn'
-    class_inclusion:
-      solar : [2,3,5,8,9]
-      wind : [2,3,5,8,9]
-
-  terrain_resources:
-    raster: "slpmed05.tif" # slpmed05m;  ; Median terrain slope classes; 8 classes ; (5 arc-minute)
-    zip_extract_direct: 'LR/ter'
-    color_map: 'terrain'
-    class_exclusion:
-      solar : [9]
-      wind : [7,8,9]
-      buffer:
-       solar: 0 #m
-       wind: 500 #m
-  
-  exclusion_areas:
-    raster: "exclusion_2017.tif" #exclusion_2017 ; Exclusion areas defined by Int'l orgs ; 7 classes;
-    zip_extract_direct: 'LR/excl'
-    color_map: 'OrRd'
-    class_exclusion:
-      solar : [2,3,4,5,6,7]
-      wind : [2,3,4,5,6,7]
-      buffer: 
-        solar: 0 #m
-        wind: 0 #m
+    - name: 'exclusion_areas'
+      raster: "exclusion_2017.tif" # Exclusion areas defined by Int'l orgs ; 7 classes;
+      zip_extract_direct: 'LR/excl'
+      color_map: 'OrRd'
+      class_exclusion:
+        solar: [2, 3, 4, 5, 6, 7]
+        wind: [2, 3, 4, 5, 6, 7]
+        buffer: 
+          solar: 0 #m
+          wind: 0 #m
+          
 WorldPop:
   root: 'data/downloaded_data/WorldPop'
   source : 

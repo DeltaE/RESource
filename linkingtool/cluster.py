@@ -122,6 +122,8 @@ def pre_process_cluster_mapping(
 
     unique_regions = cells_scored['Region'].unique()
     elbow_plot_directory=os.path.join(vis_directory,'Regional_cluster_Elbow_Plots')
+    if not os.path.exists(elbow_plot_directory):
+        os.makedirs(elbow_plot_directory)
 
     region_optimal_k_list = []
 

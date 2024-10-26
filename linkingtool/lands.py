@@ -8,17 +8,8 @@ from atlite.gis import ExclusionContainer,shape_availability
 import linkingtool.linking_utility as utils  # Custom module for handling data operations
 from linkingtool.boundaries import GADMBoundaries
 from linkingtool.era5_cutout import ERA5Cutout
+from linkingtool.gaez import GAEZRasterProcessor
 from linkingtool.osm import OSMData
-
-# from shapely.geometry import box, Point
-# from shapely.ops import unary_union
-# import matplotlib.pyplot as plt
-# import matplotlib.patches as mpatches
-# import cartopy.feature as cfeature
-# import cartopy.crs as ccrs
-# import requests  # For downloading the source URL
-from linkingtool.AttributesParser import AttributesParser
-
 class ConservationLands(GADMBoundaries):
             
     """
@@ -57,7 +48,7 @@ class ConservationLands(GADMBoundaries):
         provincial_file_path.parent.mkdir(parents=True, exist_ok=True)
         
         if provincial_file_path.exists():
-            self.log.info(f"Loading Canadian Protected and Conserved Areas Database (CPCAD) from locally stored datafile - {provincial_file_path}")
+            self.log.info(f"> Loading Canadian Protected and Conserved Areas Database (CPCAD) from locally stored datafile - {provincial_file_path}")
             gdf=gpd.GeoDataFrame(pd.read_pickle(provincial_file_path))
         else:
             gdb_file_path = self.__get_conserved_lands__()
@@ -156,6 +147,7 @@ class ConservationLands(GADMBoundaries):
         return m
     
 class LandContainer(ERA5Cutout,
+                    GAEZRasterProcessor,
                     ConservationLands,
                     OSMData
                     ):
@@ -167,102 +159,83 @@ class LandContainer(ERA5Cutout,
     def __post_init__(self):
     # Call the parent class __post_init__ to initialize inherited attributes
         super().__post_init__()
+
         self.excluder_crs=3347
         # Initiate Exclusion Container
         self.excluder = ExclusionContainer(crs=self.excluder_crs)  # CRS 3347 fit for Canada
-
-        
-    def __get_raster_path__(self, 
-                         raster_config, 
-                         root,
-                         rasters_dir):
-        # Create a Path object for the root directory
-        root_path = Path(root)
-
-        # Construct the raster path using Path.joinpath()
-        raster_path = root_path / rasters_dir / raster_config['zip_extract_direct'] / raster_config['raster']
-
-        return raster_path
-        
+    
     def set_excluder(self):
-                
         # GAEZ configs
-        self.gaez_config=self.get_gaez_data_config()
+        self.gaez_config = self.get_gaez_data_config()
         
-        # Set raster directories and exclusion layer config
+        # Initialize raster configurations
         raster_configs = {}
-        custom_land_config=self.get_custom_land_layers() # user can provide additional raster here
+        
+        # Retrieve custom land configuration if available
+        custom_land_config = self.get_custom_land_layers()
         self.log.info(f">> Loading global filters' rasters from GAEZ, trimmed to {self.province_name}")
-        # Land cover configuration
-        land_cover_config = self.gaez_config['land_cover']
-        raster_configs['gaez_landcover'] = {
-            'raster': self.__get_raster_path__(land_cover_config, self.gaez_config['root'], self.gaez_config['Rasters_in_use_direct']),
-            'class_inclusion': land_cover_config['class_inclusion'][self.resource_type],
-            'buffer': 0,
-            'invert': True
-        }
-        self.log.info(f" >>> Loading Landcover inclusion layers from {raster_configs['gaez_landcover']['raster']}")
-
-        # Terrain resources configuration
-        terrain_resources_config = self.gaez_config['terrain_resources']
-        raster_configs['gaez_terrain'] = {
-            'raster': self.__get_raster_path__(terrain_resources_config, self.gaez_config['root'], self.gaez_config['Rasters_in_use_direct']),
-            'class_exclusion': terrain_resources_config['class_exclusion'][self.resource_type],
-            'buffer': terrain_resources_config['class_exclusion']['buffer'][self.resource_type],
-            'invert': False
-        }
-        self.log.info(f" >>> Loading Terrain slope exclusion layers from {raster_configs['gaez_terrain']['raster']}")
+        self.process_all_rasters(show=False) # Donwloads and processes all GAEZ rasters
+        # Loop over each raster type in GAEZ config and set up each raster
+        for raster_type in self.gaez_config['raster_types']:
+            raster_name = raster_type['name']
+            raster_file = str(self.province_short_code+"_"+raster_type['raster'])
+            zip_direct = raster_type['zip_extract_direct']
+            
+            # Determine the class inclusion/exclusion based on resource type
+            inclusion_key = 'class_inclusion' if 'class_inclusion' in raster_type else 'class_exclusion'
+            
+            raster_configs[f"gaez_{raster_name}"] = {
+                # 'raster': self.__get_raster_path__(raster_type, self.gaez_root, self.Rasters_in_use_direct),
+                'raster': self.gaez_root/ self.Rasters_in_use_direct/raster_type['zip_extract_direct']/raster_file,
+                inclusion_key: raster_type[inclusion_key][self.resource_type],
+                'buffer': raster_type.get('buffer', {}).get(self.resource_type, 0),
+                'invert': inclusion_key == 'class_inclusion'  # invert if it's an inclusion class
+            }
+            
+            self.log.info(f" >>> Loading {raster_name.capitalize()} layers from {raster_configs[f'gaez_{raster_name}']['raster']}")
         
-        # Global exclusion configuration
-        global_exclusion_config = self.gaez_config['exclusion_areas']
-        raster_configs['gaez_exclusion'] = {
-            'raster': self.__get_raster_path__(global_exclusion_config, self.gaez_config['root'], self.gaez_config['Rasters_in_use_direct']),
-            'class_exclusion': global_exclusion_config['class_exclusion'][self.resource_type],
-            'buffer': global_exclusion_config['class_exclusion']['buffer'][self.resource_type],
-            'invert': False
-        }
-        self.log.info(f" >>> Loading Globally protected areas' exclusion layers from {raster_configs['gaez_exclusion']['raster']}")
-        
-       # Load additional custom raster configurations from YAML
-        # for raster_name, config in custom_land_config['rasters'].items():
-        #     raster_path = config['raster']  # Assume this is the path to the raster
-
-        #     # Check if the raster path exists and is not empty
+        # Load additional custom raster configurations from YAML if specified
+        # for raster_name, config in custom_land_config.get('rasters', {}).items():
+        #     raster_path = config['raster']
+            
+        #     # Skip if raster path is missing or empty
         #     if raster_path is None:
-        #         print(f"Skipping {raster_name}: Raster file does not exist or is empty.")
-        #         continue  # Skip this iteration if the raster is invalid
-
-        #     # Process and add the raster configuration
+        #         self.log.warning(f"Skipping {raster_name}: Raster file does not exist or is empty.")
+        #         continue
+            
         #     raster_configs[raster_name] = {
-        #         'raster': raster_path,  # Use the path or raster object
-        #         'class_exclusion': config.get('class_exclusion', []),  # Default to empty list if not provided
-        #         'buffer': config.get('buffer', 0),  # Default to 0 if not provided
-        #         'invert': config.get('invert', False)  # Default to False if not provided
+        #         'raster': raster_path,
+        #         'class_exclusion': config.get('class_exclusion', []),
+        #         'buffer': config.get('buffer', 0),
+        #         'invert': config.get('invert', False)
         #     }
 
-
-
-        # Add global rasters
+        # Add all raster configurations to the excluder
         for key, config in raster_configs.items():
+            inclusion_or_exclusion = config.get('class_inclusion', config.get('class_exclusion'))
             self.excluder.add_raster(
                 config['raster'], 
-                config.get('class_inclusion', 'class_exclusion'), 
+                inclusion_or_exclusion, 
                 buffer=config['buffer'], 
                 invert=config['invert']
             )
 
-        # Inherited Methods
-        self.conservation_lands_province_gdf=self.get_provincial_conserved_lands()
-        self.aeroway_gdf=self.get_osm_layer('aeroway')
+        # Load additional layers
+        self.conservation_lands_province_gdf = self.get_provincial_conserved_lands()
+        self.aeroway_gdf = self.get_osm_layer('aeroway')
         
-        self.resource_disaggregation_config=self.get_resource_disaggregation_config()
-        
-        # Local (Canadian) Vectors
-        self.excluder.add_geometry(self.conservation_lands_province_gdf.geometry, 
-                                    buffer=self.resource_disaggregation_config['buffer']['conserved_lands'])  # exclusion
-        
-        self.excluder.add_geometry(self.aeroway_gdf.geometry, 
-                                    buffer=self.resource_disaggregation_config['buffer']['aeroway'])  # exclusion
+        # Set up resource disaggregation configurations
+        self.resource_disaggregation_config = self.get_resource_disaggregation_config()
+
+        # Add local (Canadian) vector geometries to excluder
+        self.excluder.add_geometry(
+            self.conservation_lands_province_gdf.geometry, 
+            buffer=self.resource_disaggregation_config['buffer']['conserved_lands']
+        )
+        self.excluder.add_geometry(
+            self.aeroway_gdf.geometry, 
+            buffer=self.resource_disaggregation_config['buffer']['aeroway']
+        )
         
         self.log.info(f"{self.excluder}")
         
