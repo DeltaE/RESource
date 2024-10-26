@@ -137,7 +137,7 @@ def get_selected_vs_missed_visuals(cells: gpd.GeoDataFrame,
     plt.tight_layout()
     # Save the plot
     if save:
-        plt.savefig(f"vis/Solar/Selected_cells_solar_{province_short_code}.png", bbox_inches='tight')
+        plt.savefig(f"vis/linking/solar/Selected_cells_solar_{province_short_code}.png", bbox_inches='tight')
     plt.tight_layout()
     plt.show()  # Optional: Show the plot if desired
 

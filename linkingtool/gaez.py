@@ -31,7 +31,7 @@ class GAEZRasterProcessor(GADMBoundaries):
         # self.log = logging.getLogger("GAEZRasterProcessor")
 
     def process_all_rasters(self,
-                            show:False):
+                            show:bool=False):
         """Main pipeline to download, extract, clip, and plot rasters based on configuration."""
         if not (self.gaez_root / self.zip_file).exists():
             self.__download_resources_zip_file__()
@@ -122,5 +122,5 @@ class GAEZRasterProcessor(GADMBoundaries):
         plt.grid(visible=False)
         plt.tight_layout()
         plt.savefig(save_to)
-        if show:
-            plt.show()
+        # if show:
+            # plt.show()

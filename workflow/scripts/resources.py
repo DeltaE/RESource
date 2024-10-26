@@ -296,6 +296,7 @@ class Resources(AttributesParser):
         """
         Execute the specific module logic for the given resource type ('solar' or 'wind').
         """
+        print(f"{50*'_'}\n Initiating {self.resource_type} module for {self.get_province_name()}...")
 
         # Placeholder for future grid cell retrieval
         self.get_grid_cells()
@@ -307,6 +308,7 @@ class Resources(AttributesParser):
         self.score_cells()
         self.get_clusters()
         self.get_cluster_timeseries()
+        print(f"{50*'_'}\n Results from {self.resource_type} module saved store  for {self.get_province_name()}...")")
 
 # def main(config_file_path: str, 
 #          resource_type: str='solar'):
