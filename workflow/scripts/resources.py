@@ -151,6 +151,7 @@ class Resources(AttributesParser):
             self.gwa_cells.map_GWA_cells_to_ERA5()
         elif self.resource_type=='solar': 
             # Not activated for solar resources yet as the high resolution data processing is computationally expensive and the data contrast for solar doesn't provide satisfactory incentive for that.
+            self.log.info(f"GWA Cells not configured for solar.")
             pass 
     '''
     ____________________________________________________________________________________________________________________________________________
@@ -291,11 +292,10 @@ class Resources(AttributesParser):
         else:
             self.log.info(f"Invalid resource type. Please select one of these: 'solar', 'wind', 'all'")
 
-    def execute_module(self, resource_type: str):
+    def execute_module(self):
         """
         Execute the specific module logic for the given resource type ('solar' or 'wind').
         """
-        self.resource_type = resource_type
 
         # Placeholder for future grid cell retrieval
         self.get_grid_cells()

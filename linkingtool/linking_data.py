@@ -196,16 +196,16 @@ def prepare_GADM_data(
 # * Pull dataframes
 
 # %%
-def create_dataframe_from_CODERS(
-    table_name:str,
-    CODERS_url:str,
-    user_api_key:str    
-    ):
-    log.warning(f"If you are using limited time access key from the developer. Please contact CODERS' team to request your own access keys.")
-    df=pd.DataFrame.from_dict(requests.get(CODERS_url+f"/{table_name}"+user_api_key).json())
-    log.info(f"Data loaded from Table: {table_name}. Source: CODERS (via {CODERS_url} )")
-    print(f">> Data loaded from Table: {table_name}. Source: CODERS (via {CODERS_url} )")
-    return df
+# def create_dataframe_from_CODERS(
+#     table_name:str,
+#     CODERS_url:str,
+#     user_api_key:str    
+#     ):
+#     log.warning(f"If you are using limited time access key from the developer. Please contact CODERS' team to request your own access keys.")
+#     df=pd.DataFrame.from_dict(requests.get(CODERS_url+f"/{table_name}"+user_api_key).json())
+#     log.info(f"Data loaded from Table: {table_name}. Source: CODERS (via {CODERS_url} )")
+#     print(f">> Data loaded from Table: {table_name}. Source: CODERS (via {CODERS_url} )")
+#     return df
 
 
 # %% [markdown]
@@ -213,7 +213,7 @@ def create_dataframe_from_CODERS(
 # > Pierre's Code
 
 # %%
-def get_bus_name_x_y(line, node_code, df_substations):
+# def get_bus_name_x_y(line, node_code, df_substations):
     '''
     This function finds the correct name for a bus from the node dataset
     line: Line row from CODERS lines dataframe.
@@ -270,143 +270,143 @@ def get_bus_name_x_y(line, node_code, df_substations):
 
     return None,None,None
 
-def create_bus_df(df_lines, 
-                  df_substations,
-                  save_to_file_path):
-    '''
-    This function will create an initial DataFrame of buses from a DataFrame of lines.
-    When creating the buses it
-    The lines DF contains the node names for the buses, nominal voltage, and the carrier is implicitly added.
-    '''
-    # name = []
-    # x = []
-    # y = []
-    # type = []
-    # v_nom = []
-    data_dict = {}
+# def create_bus_df(df_lines, 
+#                   df_substations,
+#                   save_to_file_path):
+#     '''
+#     This function will create an initial DataFrame of buses from a DataFrame of lines.
+#     When creating the buses it
+#     The lines DF contains the node names for the buses, nominal voltage, and the carrier is implicitly added.
+#     '''
+#     # name = []
+#     # x = []
+#     # y = []
+#     # type = []
+#     # v_nom = []
+#     data_dict = {}
 
-    # (1) Add buses based on line nodes
-    for idx,line in df_lines.iterrows():
-        # Search for match between line and substation
-        for node_code in [line["starting_node_code"], line["ending_node_code"]]:
-            bus_name, bus_x, bus_y = get_bus_name_x_y(line, node_code, df_substations)
-            if bus_name not in data_dict: # Avoid duplication (Change to dictionary)
-                data_dict[bus_name] = {'x':bus_x, 'y':bus_y, 'type':line['current_type'], 'v_nom':line['voltage']}
-                # name.append(bus_name) # i.e. 230_AAL
-                # x.append(bus_x)
-                # y.append(bus_y)
-                # type.append(line['type'])
-                # v_nom.append(line['v_nom'])
+#     # (1) Add buses based on line nodes
+#     for idx,line in df_lines.iterrows():
+#         # Search for match between line and substation
+#         for node_code in [line["starting_node_code"], line["ending_node_code"]]:
+#             bus_name, bus_x, bus_y = get_bus_name_x_y(line, node_code, df_substations)
+#             if bus_name not in data_dict: # Avoid duplication (Change to dictionary)
+#                 data_dict[bus_name] = {'x':bus_x, 'y':bus_y, 'type':line['current_type'], 'v_nom':line['voltage']}
+#                 # name.append(bus_name) # i.e. 230_AAL
+#                 # x.append(bus_x)
+#                 # y.append(bus_y)
+#                 # type.append(line['type'])
+#                 # v_nom.append(line['v_nom'])
     
-    df_buses = pd.DataFrame.from_dict(data_dict,orient='index').reset_index().rename(columns={'index':'name'})
-    df_buses['substation_type'] = df_buses['name'].str.split('_').str[2].str[:3]
-    # df_buses = pd.DataFrame()
-    # df_buses = pd.DataFrame()
-    # df_buses['name'] = name
-    # df_buses['x'] = x
-    # df_buses['y'] = y
-    # df_buses['type'] = type
-    # df_buses['v_nom'] = v_nom
-    print(f"{50*'_'}")
-    df_buses.to_csv(save_to_file_path)
+#     df_buses = pd.DataFrame.from_dict(data_dict,orient='index').reset_index().rename(columns={'index':'name'})
+#     df_buses['substation_type'] = df_buses['name'].str.split('_').str[2].str[:3]
+#     # df_buses = pd.DataFrame()
+#     # df_buses = pd.DataFrame()
+#     # df_buses['name'] = name
+#     # df_buses['x'] = x
+#     # df_buses['y'] = y
+#     # df_buses['type'] = type
+#     # df_buses['v_nom'] = v_nom
+#     print(f"{50*'_'}")
+#     df_buses.to_csv(save_to_file_path)
 
-    return df_buses
+#     return df_buses
 
 
-# %%
-def get_cutout_path(region_code:str,
-                    cutout_config:dict):
-    '''
-    This function return the unique name based on the region and start/end year
-    for a cutout. 
-    return: file path + name for the cutout described by selections in the
-    cutout configuration.
-    '''
-    # Create file_path name with custom year_+date
-    start_year = cutout_config["snapshots"]["start"][0][:4]
-    end_year = cutout_config["snapshots"]["end"][0][:4]
-    prefix = cutout_config['root'] + region_code
-    if start_year == end_year:
-        suffix = start_year
-        file_path = "_".join([prefix, suffix + ".nc"])
-    else: # multi_year_file
-        suffix = "_".join([start_year, end_year])
-        file_path = "_".join([prefix, suffix + ".nc"])
+# # %%
+# def get_cutout_path(region_code:str,
+#                     cutout_config:dict):
+#     '''
+#     This function return the unique name based on the region and start/end year
+#     for a cutout. 
+#     return: file path + name for the cutout described by selections in the
+#     cutout configuration.
+#     '''
+#     # Create file_path name with custom year_+date
+#     start_year = cutout_config["snapshots"]["start"][0][:4]
+#     end_year = cutout_config["snapshots"]["end"][0][:4]
+#     prefix = cutout_config['root'] + region_code
+#     if start_year == end_year:
+#         suffix = start_year
+#         file_path = "_".join([prefix, suffix + ".nc"])
+#     else: # multi_year_file
+#         suffix = "_".join([start_year, end_year])
+#         file_path = "_".join([prefix, suffix + ".nc"])
 
-    return file_path
+#     return file_path
 
-def create_era5_cutout(
-    region_code:str,
-    bounding_box:dict, 
-    cutout_config:dict):
-    '''
-    This function creates a cutout based on data for era5.
-    '''
-    # Extract parameters from configuration file
-    dx,dy = cutout_config["dx"], cutout_config['dy']
-    time_horizon = slice(cutout_config["snapshots"]['start'][0], cutout_config["snapshots"]['end'][0])
+# def create_era5_cutout(
+#     region_code:str,
+#     bounding_box:dict, 
+#     cutout_config:dict):
+#     '''
+#     This function creates a cutout based on data for era5.
+#     '''
+#     # Extract parameters from configuration file
+#     dx,dy = cutout_config["dx"], cutout_config['dy']
+#     time_horizon = slice(cutout_config["snapshots"]['start'][0], cutout_config["snapshots"]['end'][0])
 
-    # get path + filename for the cutout
-    file_path = get_cutout_path(region_code,cutout_config)
-    min_x,max_x,min_y,max_y=bounding_box.values()
-    # Create the cutout based on bounds found from above
-    cutout = atlite.Cutout(path=file_path,
-                    module=cutout_config["module"],
-                    # x=slice(bounds['west_lon'] - dx, bounds['east_lon'] + dx),
-                    # y=slice(bounds['south_lat'] - dy, bounds['north_lat'] + dy ),
-                    x=slice(min_x-dx,max_x+dx), # Longitude
-                    y=slice(min_y-dy,max_y+dy), # Latitude
-                    dx=dx,
-                    dy=dy,
-                    time=time_horizon)
+#     # get path + filename for the cutout
+#     file_path = get_cutout_path(region_code,cutout_config)
+#     min_x,max_x,min_y,max_y=bounding_box.values()
+#     # Create the cutout based on bounds found from above
+#     cutout = atlite.Cutout(path=file_path,
+#                     module=cutout_config["module"],
+#                     # x=slice(bounds['west_lon'] - dx, bounds['east_lon'] + dx),
+#                     # y=slice(bounds['south_lat'] - dy, bounds['north_lat'] + dy ),
+#                     x=slice(min_x-dx,max_x+dx), # Longitude
+#                     y=slice(min_y-dy,max_y+dy), # Latitude
+#                     dx=dx,
+#                     dy=dy,
+#                     time=time_horizon)
 
-    cutout.prepare()
-    return True
+#     cutout.prepare()
+#     return True
 
-def visualize_transmission_nodes(gadm_regions_gdf, buses_gdf, plot_name):
-    """
-    Visualizes transmission nodes (buses) on a map with different colors based on substation types.
+# def visualize_transmission_nodes(gadm_regions_gdf, buses_gdf, plot_name):
+#     """
+#     Visualizes transmission nodes (buses) on a map with different colors based on substation types.
 
-    Parameters:
-    - gadm_regions_gdf (GeoDataFrame): GeoDataFrame containing base regions to plot.
-    - buses_gdf (GeoDataFrame): GeoDataFrame containing buses with 'substation_type' column.
-    - plot_name (str): File path to save the plot image.
+#     Parameters:
+#     - gadm_regions_gdf (GeoDataFrame): GeoDataFrame containing base regions to plot.
+#     - buses_gdf (GeoDataFrame): GeoDataFrame containing buses with 'substation_type' column.
+#     - plot_name (str): File path to save the plot image.
 
-    Returns:
-    - None
-    """
+#     Returns:
+#     - None
+#     """
     
-    fig, ax = plt.subplots(figsize=(10, 8))
-    gadm_regions_gdf.plot(ax=ax, color="lightgrey", edgecolor="black", linewidth=0.8,alpha=0.2)
-    buses_gdf.plot('substation_type',ax=ax,legend=True,cmap='viridis',marker='x',markersize=10,linewidth=1,alpha=0.6)
+#     fig, ax = plt.subplots(figsize=(10, 8))
+#     gadm_regions_gdf.plot(ax=ax, color="lightgrey", edgecolor="black", linewidth=0.8,alpha=0.2)
+#     buses_gdf.plot('substation_type',ax=ax,legend=True,cmap='viridis',marker='x',markersize=10,linewidth=1,alpha=0.6)
 
-    # Finalize plot details
-    plt.title('Buses with Colormap of Substation Types')
-    plt.tight_layout()
+#     # Finalize plot details
+#     plt.title('Buses with Colormap of Substation Types')
+#     plt.tight_layout()
     
-    # Save and close the plot
-    plt.savefig(plot_name)
-    plt.close()
+#     # Save and close the plot
+#     plt.savefig(plot_name)
+#     plt.close()
     
-    # Logging success message
-    log.info(f"Plot for Grid Nodes Generated and saved as {plot_name}")
+#     # Logging success message
+#     log.info(f"Plot for Grid Nodes Generated and saved as {plot_name}")
 # %% [markdown]
 # * Create Grid Nodes GeoDataFrame from Cleaned Data
 # %%
-def create_grid_nodes(
-        buses_df:pd.DataFrame,
-        gadm_regions_gdf:gpd.GeoDataFrame,
-        nodes_datafile_save_to:str,
-        plot_save_to:str)->gpd.GeoDataFrame:
+# def create_grid_nodes(
+#         buses_df:pd.DataFrame,
+#         gadm_regions_gdf:gpd.GeoDataFrame,
+#         nodes_datafile_save_to:str,
+#         plot_save_to:str)->gpd.GeoDataFrame:
     
-    buses_gdf = gpd.GeoDataFrame(buses_df, geometry=gpd.points_from_xy(buses_df['x'], buses_df['y']))
-    buses_gdf.crs=gadm_regions_gdf.crs
-    buses_gdf = buses_gdf[~buses_gdf['geometry'].is_empty] # removes empty geoms
-    buses_gdf=buses_gdf.loc[:,['x', 'y', 'type', 'v_nom','name', 'substation_type', 'geometry']] # trims the required columns
-    buses_gdf.to_pickle(nodes_datafile_save_to)
+#     buses_gdf = gpd.GeoDataFrame(buses_df, geometry=gpd.points_from_xy(buses_df['x'], buses_df['y']))
+#     buses_gdf.crs=gadm_regions_gdf.crs
+#     buses_gdf = buses_gdf[~buses_gdf['geometry'].is_empty] # removes empty geoms
+#     buses_gdf=buses_gdf.loc[:,['x', 'y', 'type', 'v_nom','name', 'substation_type', 'geometry']] # trims the required columns
+#     buses_gdf.to_pickle(nodes_datafile_save_to)
     
-    visualize_transmission_nodes(gadm_regions_gdf, buses_gdf, plot_save_to)
-    return buses_gdf
+#     visualize_transmission_nodes(gadm_regions_gdf, buses_gdf, plot_save_to)
+#     return buses_gdf
 
 
 # %% [markdown]

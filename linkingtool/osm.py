@@ -2,91 +2,81 @@ import osmnx as ox
 import geopandas as gpd
 from pathlib import Path
 from linkingtool.AttributesParser import AttributesParser
+import osmnx as ox
+ox.settings.max_query_area_size =10_000 * 1E6  # 10,000 sq km
 
 class OSMData(AttributesParser):
     def __post_init__(self):
-        
-        # Call the parent class __post_init__ to initialize inherited attributes
+        """
+        Initialize inherited attributes and OSM data-specific configuration.
+        """
         super().__post_init__()
         
-        
-        # OSM data specific attributes from user config (e.g., root path and data keys)
+        # Load OSM-specific configurations
         self.osm_data_config = self.get_osm_config()
         
-        # Accessing the data_keys
+        # Extract data keys and root path from configuration
         self.data_keys = {key: value['tags'] for key, value in self.osm_data_config['data_keys'].items()}
-        self.root_path = Path(self.osm_data_config['root'])  # Define the root path
-        
-        # Format the area name for OSM queries (e.g., "British Columbia, Canada")
-        self.area_name = self.get_province_name()+ ", " + self.get_country()
+        self.root_path = Path(self.osm_data_config['root'])
 
-        # Dictionary to store GeoDataFrames by their corresponding data_key, while all data is loaded
+        # Create the directory (and any necessary parent directories) if it doesn't exist
+        self.root_path.mkdir(parents=True, exist_ok=True)
+        # Format area name for OSM queries
+        self.area_name = f"{self.get_province_name()}, {self.get_country()}"
+        
+        # Dictionary to store GeoDataFrames by data_key
         self.gdfs = {}
         
     def get_osm_layer(self, data_key: str) -> gpd.GeoDataFrame:
         """
-        Access the GeoDataFrame for a specific data key (table names of coders) e.g. 'aeroway','power','substation'
+        Access or load the GeoDataFrame for a specific data key.
         """
         if data_key in self.gdfs:
             self.log.info(f"GeoDataFrame for '{data_key}' already exists, returning it.")
             return self.gdfs[data_key]
         
-        # If it doesn't exist, load it using the tags from the configuration
+        # Load the data if it doesn't exist in memory
         if data_key in self.data_keys:
-            return self.__load_tagged_data_from_OSM__(self.data_keys[data_key], data_key)
+            gdf = self.__load_tagged_data_from_OSM__(self.data_keys[data_key], data_key)
+            self.gdfs[data_key] = gdf  # Cache for future use
+            return gdf
         else:
             self.log.warning(f"'{data_key}' is not a valid key in the configuration.")
-            return None  # Return None or raise an exception as per your error handling preference
+            return None
         
-    def run(self):
+    def run(self) -> dict:
         """
-        Run the OSM data retrieval process for all data keys.
+        Run the OSM data retrieval process for all data keys and store results in self.gdfs.
         """
         for data_key in self.data_keys.keys():
-            # Check if the data_key matches keys defined in the YAML configuration
-            if data_key in self.data_keys:
-                print(f"Processing OSM data for key: {data_key}")
-                gdf = self.__load_tagged_data_from_OSM__(self.data_keys[data_key], data_key)
-                self.gdfs[data_key] = gdf  # Store the GeoDataFrame in the dictionary
-            else:
-                print(f"Warning: '{data_key}' is not a valid key in the configuration.")
+            print(f"Processing OSM data for key: {data_key}")
+            self.get_osm_layer(data_key)
         return self.gdfs
 
-    def __load_tagged_data_from_OSM__(self, 
-                                  tags: dict, 
-                                  data_key: str) -> gpd.GeoDataFrame:
+    def __load_tagged_data_from_OSM__(self, tags: dict, data_key: str) -> gpd.GeoDataFrame:
         """
-        Retrieve infrastructure-related data from OSM for the specified area and tags.
+        Retrieve and cache OSM data for the specified area and tags.
         """
-        # Path to save the data as GeoJSON
         geojson_path = self.root_path / f"{self.province_short_code}_{data_key}.geojson"
         tags_dict = {data_key: tags}
         
-        # Check if the file already exists locally
+        # Check if data is already stored locally
         if geojson_path.exists():
-            # Load the data from the GeoJSON file if it exists
-            self.log.info(f"Loading OSM data for '{data_key}' locally stored data from {geojson_path}")
-            self.loaded_data = gpd.read_file(geojson_path)
+            self.log.info(f"Loading locally stored OSM data for '{data_key}' from {geojson_path}")
+            return gpd.read_file(geojson_path)
         else:
-            # Download data from OSM if the file doesn't exist
             print(f"Downloading data for {self.area_name} with tags {tags} and saving to {geojson_path}")
-            self.loaded_data = ox.features_from_place(self.area_name, tags_dict)
-            self.__save_local_file__(self.loaded_data, geojson_path)
-        
-        return self.loaded_data
-    
-    def __save_local_file__(self, 
-                        gdf: gpd.GeoDataFrame, 
-                        geojson_path: Path):
+            gdf = ox.features_from_place(self.area_name, tags_dict)
+            self.__save_local_file__(gdf, geojson_path)
+            return gdf
+
+    def __save_local_file__(self, gdf: gpd.GeoDataFrame, geojson_path: Path):
         """
-        Save the retrieved data to a local GeoJSON file, if it does not exist.
+        Save the GeoDataFrame to a local GeoJSON file if it doesn't already exist.
         """
-        # Create the parent directories if they do not exist
-        geojson_path.parent.mkdir(parents=True, exist_ok=True)
         
         if not geojson_path.exists():
-            # Save the GeoDataFrame to a file
-            print(f"Saving data to {geojson_path}")
+            print(f"Saving OSM data to {geojson_path}")
             gdf.to_file(geojson_path, driver='GeoJSON')
         else:
             print(f"File {geojson_path} already exists, skipping save.")
