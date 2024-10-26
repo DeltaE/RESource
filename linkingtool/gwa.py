@@ -9,6 +9,7 @@ import xarray as xr
 from linkingtool.hdf5_handler import DataHandler
 from shapely.geometry import box
 from shapely.geometry import Point
+import requests
 
 
 @dataclass
@@ -21,38 +22,48 @@ class GWACells(GADMBoundaries):
         self.bounding_box, _ = self.get_bounding_box()
         self.datahandler = DataHandler(store=self.store)
 
-    def prepare_GWA_data(self) -> pd.DataFrame:
+    def prepare_GWA_data(self) -> xr.DataArray:
         """
         Prepares the Global Wind Atlas (GWA) data by loading and merging raster files.
-        Returns a cleaned DataFrame with relevant data.
+        Downloads files from sources if they do not exist.
+        Returns a cleaned DataArray with relevant data.
         """
         data_list = []
 
         # Load configuration parameters
         self.gwa_datafields = self.gwa_config.get('datafields', {})
         self.gwa_rasters = self.gwa_config.get('rasters', {})
+        self.gwa_sources = self.gwa_config.get('sources', {})
         self.gwa_root = Path(self.gwa_config.get('root', 'data/downloaded_data/GWA'))
 
-        # Using a single try-except block to handle errors more effectively
+        # Create the root directory if it doesn't exist
+        self.gwa_root.mkdir(parents=True, exist_ok=True)
+
+        # Check for existence and download if necessary
         for key, raster_name in self.gwa_rasters.items():
             raster_path = self.gwa_root / raster_name
-            if raster_path.exists():
-                try:
-                    # Process each raster using a streamlined approach
-                    data = (
-                        rxr.open_rasterio(raster_path)
-                        .rio.clip_box(**self.bounding_box)
-                        .rename(key)
-                        .drop_vars(['band', 'spatial_ref'])
-                        .isel(band = 1 if '*Class*' in key else 0) # 'IEC_Class_ExLoads' data is in band 1
-                        )
-              
-                    data_list.append(data)
-                except Exception as e:
-                    print(f"Error processing {key}: {e}")
+            if not raster_path.exists():
+                source_url = self.gwa_sources[key]
+                self.log.info(f">> Downloading {self.gwa_sources[key]} from {source_url}")
+                self.download_file(source_url, raster_path)
+
+            try:
+                # Process each raster using a streamlined approach
+                data = (
+                    rxr.open_rasterio(raster_path)
+                    .rio.clip_box(**self.bounding_box)
+                    .rename(key)
+                    .drop_vars(['band', 'spatial_ref'])
+                    .isel(band=1 if '*Class*' in key else 0)  # 'IEC_Class_ExLoads' data is in band 1
+                )
+
+                data_list.append(data)
+            except Exception as e:
+                print(f"Error processing {key}: {e}")
 
         # Merge and clean the data in a more efficient way
-        self.merged_data = xr.merge(data_list) if data_list else xr.DataArray()
+        self.merged_data = xr.merge(data_list) if data_list else xr.DataArray() #.rename('gwa_data')
+
         self.merged_df = self.merged_data.to_dataframe().dropna(how='all')
         self.merged_df.reset_index(inplace=True)
         
@@ -64,8 +75,21 @@ class GWACells(GADMBoundaries):
         # class_mapping = {0: 'III', 1: 'II', 2: 'I', 3: 'T', 4: 'S'}
         # # Correctly modifying only one column
         # self.merged_df_f['IEC_Class_ExLoads'] = self.merged_df_f['IEC_Class_ExLoads'].map(class_mapping).fillna(0)
-        
+
         return self.merged_df_f
+    
+    def download_file(self,
+                      url: str, 
+                      destination: Path) -> None:
+        """Downloads a file from a given URL to a specified destination."""
+        try:
+            response = requests.get(url)
+            response.raise_for_status()  # Raise an error for bad responses
+            with destination.open('wb') as f:
+                f.write(response.content)
+        except requests.RequestException as e:
+            self.log.error(f">> Failed to download {destination} from {url}. Error: {e}")
+
 
     def load_gwa_cells(self):
         self.province_gwa_cells_df = self.prepare_GWA_data()
@@ -108,39 +132,3 @@ class GWACells(GADMBoundaries):
         
         self.datahandler.to_store(self.mapped_gwa_cells_aggr,'cells')
     
-
-    # def map_GWAcells_to_ERA5cells(self):
-    #     """
-    #     Maps GWA cells to ERA5 cells and calculates potential capacity.
-    #     Returns the mapped GeoDataFrame.
-    #     """
-    #     era5_cells_gdf = self.datahandler.from_store('cells').reset_index()
-    #     gwa_cells_mapped_gdf = gpd.sjoin(
-    #         self.gwa_cells_gdf,
-    #         era5_cells_gdf[['cell', 'Region', 'geometry']],
-    #         how='inner',
-    #         predicate='intersects'
-    #     )
-
-    #     # Efficient index handling
-    #     era5_cells_gdf.set_index('cell', inplace=True)
-    #     gwa_cells_mapped_gdf = gwa_cells_mapped_gdf.rename(columns={'cell': 'ERA5_cell_index'}).reset_index(drop=True)
-
-    #     # Filter and calculate capacities
-    #     GWA_unique_era5_cells = gwa_cells_mapped_gdf['ERA5_cell_index'].unique()
-    #     era5_cells_gdf_filtered = era5_cells_gdf.loc[GWA_unique_era5_cells]
-
-    #     max_cap_GWA_cell = gwa_cells_mapped_gdf['potential_capacity'].max()
-        
-    #     # Vectorized calculation of distributed potential capacity
-    #     cell_counts = gwa_cells_mapped_gdf['ERA5_cell_index'].value_counts()
-    #     for province_index in cell_counts.index:
-    #         if province_index in era5_cells_gdf_filtered.index:
-    #             calculated_cap = era5_cells_gdf_filtered.loc[province_index, 'potential_capacity'] / cell_counts[province_index]
-    #             gwa_cells_mapped_gdf.loc[gwa_cells_mapped_gdf['ERA5_cell_index'] == province_index, 'potential_capacity'] = calculated_cap
-
-    #     # Summary output
-    #     print(f'Filtered Sites: Total Wind Potential (ERA5 Cells): {round(era5_cells_gdf_filtered.potential_capacity.sum() / 1000, 2)} GW')
-    #     print(f'Filtered Sites: Total Wind Potential (GWA Cells): {round(gwa_cells_mapped_gdf.potential_capacity.sum() / 1000, 2)} GW')
-
-    #     return gwa_cells_mapped_gdf
