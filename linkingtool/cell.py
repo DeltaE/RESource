@@ -2,12 +2,10 @@
 import numpy as np
 import geopandas as gpd
 from shapely.geometry import box
-from linkingtool.boundaries import GADMBoundaries
 import warnings
 from linkingtool.hdf5_handler import DataHandler
-from linkingtool import linking_utility as utils
+from linkingtool import utility as utils
 from linkingtool.era5_cutout import ERA5Cutout
-import atlite
 
 class GridCells(ERA5Cutout):
     
@@ -20,20 +18,18 @@ class GridCells(ERA5Cutout):
         super().__post_init__()
         ## Initiate the Store and Datahandler (interfacing with the Store)
         self.datahandler=DataHandler(store=self.store)
-        
-        # Get bounding box and actual boundary from parent class method
-        self.bounding_box, self.actual_boundary = self.get_bounding_box()
-        self.resolution=self.get_cell_resolution()
         self.crs=self.get_default_crs()
         
-        # Default resolution if none provided
-        # if self.resolution is None:
-        self.resolution = {'dx': 0.25, 'dy': 0.25}
-
-        self._check_resolution()
 
     def _check_resolution(self): # not is use for now, future scope when user up/down scales the resolution
         """Check if the resolution meets the conditions and issue warnings."""
+
+        self.resolution=self.get_cell_resolution()
+        self._check_resolution()
+        # Default resolution if none provided
+        if self.resolution is None:
+            self.resolution = {'dx': 0.25, 'dy': 0.25}
+
         dx = self.resolution.get('dx', 0.25)
         dy = self.resolution.get('dy', 0.25)
         
@@ -47,6 +43,9 @@ class GridCells(ERA5Cutout):
        
 
     def generate_coords(self):
+        # Get bounding box and actual boundary from parent class method
+        self.bounding_box, self.actual_boundary = self.get_bounding_box()
+        
         """Generate the coordinates for the grid points (centroids)."""
         minx, maxx = self.bounding_box['minx'], self.bounding_box['maxx']
         miny, maxy = self.bounding_box['miny'], self.bounding_box['maxy']
@@ -109,9 +108,7 @@ class GridCells(ERA5Cutout):
         _resource_grid_cells_gdf_=_era5_grid_cells_gdf_.overlay(self.province_boundary)
         self.resource_grid_cells=utils.assign_cell_id(_resource_grid_cells_gdf_)
         self.datahandler.to_store(self.resource_grid_cells,'cells')
-
+        self.datahandler.to_store(self.province_boundary,'boundary')
         return self.resource_grid_cells
-    
-    
     
    

@@ -1,8 +1,9 @@
 import osmnx as ox
 import geopandas as gpd
 from pathlib import Path
+
 from linkingtool.AttributesParser import AttributesParser
-import osmnx as ox
+
 ox.settings.max_query_area_size =10_000 * 1E6  # 10,000 sq km
 
 class OSMData(AttributesParser):
@@ -62,10 +63,10 @@ class OSMData(AttributesParser):
         
         # Check if data is already stored locally
         if geojson_path.exists():
-            self.log.info(f"Loading locally stored OSM data for '{data_key}' from {geojson_path}")
+            self.log.info(f">> Loading locally stored OSM data for '{data_key}' from {geojson_path}")
             return gpd.read_file(geojson_path)
         else:
-            print(f"Downloading data for {self.area_name} with tags {tags} and saving to {geojson_path}")
+            print(f">> Downloading data for {self.area_name} with tags {tags} and saving to {geojson_path}")
             gdf = ox.features_from_place(self.area_name, tags_dict)
             self.__save_local_file__(gdf, geojson_path)
             return gdf
@@ -76,7 +77,7 @@ class OSMData(AttributesParser):
         """
         
         if not geojson_path.exists():
-            print(f"Saving OSM data to {geojson_path}")
+            self.log.info(f">> Saving OSM data to {geojson_path}")
             gdf.to_file(geojson_path, driver='GeoJSON')
         else:
-            print(f"File {geojson_path} already exists, skipping save.")
+            self.log.info(f">> File {geojson_path} already exists, skipping save.")

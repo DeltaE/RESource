@@ -15,7 +15,7 @@ import pandas as pd
 import linkingtool.visuals as vis
 
 # Local Package
-import linkingtool.linking_utility as utils
+import linkingtool.utility as utils
 import linkingtool.linking_wind as wind
 
 import plotly.express as px

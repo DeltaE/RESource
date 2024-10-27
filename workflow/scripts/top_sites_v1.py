@@ -13,7 +13,7 @@ import pandas as pd
 import geopandas as gpd
 
 # local packages
-import linkingtool.linking_utility as utils
+import linkingtool.utility as utils
 import linkingtool.linking_wind as wind
 import linkingtool.visuals as vis
 import linkingtool.linking_solar as solar

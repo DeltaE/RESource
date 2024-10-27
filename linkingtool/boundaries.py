@@ -2,15 +2,11 @@
 from pathlib import Path
 import geopandas as gpd
 import pygadm
-from shapely.geometry import box,Point,Polygon
-from typing import List, Dict, Tuple, Optional, Union, Any, Callable
-# import logging
+from dataclasses import dataclass
 
-# Import local scripts
+# Import local packages
 from linkingtool.AttributesParser import AttributesParser
 
-
-from dataclasses import dataclass
 @dataclass
 
 class GADMBoundaries(AttributesParser):
@@ -193,7 +189,7 @@ class GADMBoundaries(AttributesParser):
         if self.province_code_validity:
             province_gadm_gdf=self.get_province_boundary()
             self.get_bounding_box()
-            self.create_interactive_map()
+            self.show_regions()
             return province_gadm_gdf
         else:
             self.log.error(">> Province code is not valid.")

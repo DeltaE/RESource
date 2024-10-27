@@ -1,18 +1,11 @@
-# import logging as log
-# import resource
-# import os,sys,time,argparse
 import geopandas as gpd
 import pandas as pd
-# import atlite
 from collections import namedtuple
-# Local Packages
-# import linkingtool.linking_utility as utils
-# import linkingtool.visuals as vis
-# from workflow.scripts.prepare_data_v2 import LinkingToolData
 
+# Linking Tool's Local Packages
 from linkingtool.era5_cutout import ERA5Cutout
 import linkingtool.cluster as cluster
-import linkingtool.linking_wind as wind
+import linkingtool.windspeed as wind
 from linkingtool.CellCapacityProcessor import CellCapacityProcessor
 from linkingtool.coders import CODERSData
 from linkingtool.find import GridNodeLocator
@@ -22,13 +15,15 @@ from linkingtool.AttributesParser import AttributesParser
 from linkingtool.score import CellScorer
 from linkingtool.cell import GridCells
 from linkingtool.gwa import GWACells
+from linkingtool.units import Units
+from linkingtool import utility as utils
 
 class Resources(AttributesParser):
     def __post_init__(self):
         
         # Call the parent class __post_init__ to initialize inherited attributes
         super().__post_init__()
-        
+  
         # This dictionary will be used to pass arguments to external classes
         self.required_args = {   #order doesn't matter
             "config_file_path" : self.config_file_path,
@@ -37,6 +32,7 @@ class Resources(AttributesParser):
         }
         
         # Initiate Classes
+        self.units=Units(**self.required_args)
         self.gridcells=GridCells(**self.required_args)
         self.timeseries=Timeseries(**self.required_args)
         self.datahandler=DataHandler(self.store)
@@ -308,7 +304,8 @@ class Resources(AttributesParser):
         self.score_cells()
         self.get_clusters()
         self.get_cluster_timeseries()
-        print(f"{50*'_'}\n Results from {self.resource_type} module saved store  for {self.get_province_name()}...")")
+        self.units.create_units_dictionary()
+        utils.print_module_title(f"Results from {self.resource_type} module saved to {self.store} for {self.get_province_name()}...")
 
 # def main(config_file_path: str, 
 #          resource_type: str='solar'):

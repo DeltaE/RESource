@@ -1,10 +1,8 @@
-import logging
-from typing import List, Dict, Tuple, Optional, Union, Any, Callable
 from pathlib import Path
 import atlite
-from linkingtool.AttributesParser import AttributesParser
+
 from linkingtool.boundaries import GADMBoundaries
-from collections import namedtuple
+
 
 class ERA5Cutout(GADMBoundaries):
     def __post_init__(self):

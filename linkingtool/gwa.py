@@ -1,16 +1,13 @@
-import pandas as pd
+
 import geopandas as gpd
-from linkingtool.boundaries import GADMBoundaries
 from dataclasses import dataclass, field
 from pathlib import Path
-import linkingtool.linking_utility as utils
 import rioxarray as rxr
 import xarray as xr
 from linkingtool.hdf5_handler import DataHandler
-from shapely.geometry import box
-from shapely.geometry import Point
 import requests
-
+# -----------------------------------------
+from linkingtool.boundaries import GADMBoundaries
 
 @dataclass
 class GWACells(GADMBoundaries):
@@ -19,7 +16,6 @@ class GWACells(GADMBoundaries):
     def __post_init__(self):
         super().__post_init__()
         self.gwa_config = self.get_gwa_config()
-        self.bounding_box, _ = self.get_bounding_box()
         self.datahandler = DataHandler(store=self.store)
 
     def prepare_GWA_data(self) -> xr.DataArray:
@@ -35,7 +31,7 @@ class GWACells(GADMBoundaries):
         self.gwa_rasters = self.gwa_config.get('rasters', {})
         self.gwa_sources = self.gwa_config.get('sources', {})
         self.gwa_root = Path(self.gwa_config.get('root', 'data/downloaded_data/GWA'))
-
+        self.bounding_box, _ = self.get_bounding_box()
         # Create the root directory if it doesn't exist
         self.gwa_root.mkdir(parents=True, exist_ok=True)
 

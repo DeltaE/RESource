@@ -46,7 +46,7 @@ class DataHandler(AttributesParser):
 
                 # Save the modified data to HDF5
                 self.data_new.to_hdf(self.store, key=key)
-                self.log.info(f"Data (GeoDataFrame/DataFrame) saved to {self.store} with key '{key}'")
+                self.log.info(f">> Data (GeoDataFrame/DataFrame) saved to {self.store} with key '{key}'")
             else:
                 # Read existing data from HDF5
                 self.data_ext = store.get(key)
@@ -59,7 +59,7 @@ class DataHandler(AttributesParser):
                 # Update the existing DataFrame in HDF5
                 self.updated_data = self.data_ext
                 self.updated_data.to_hdf(self.store, key=key)
-                self.log.info(f"Updated data saved to {self.store} with key '{key}'")
+                self.log.info(f">> Updated '{key}' saved to {self.store} with key '{key}'")
         
         finally:
             store.close()

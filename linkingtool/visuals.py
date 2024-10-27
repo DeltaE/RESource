@@ -6,22 +6,16 @@ import pandas as pd
 import seaborn as sns
 import plotly.express as px
 import plotly.graph_objects as go
-import plotly.io as pio
 from plotly.subplots import make_subplots
 import geopandas as gpd
 import folium
 import rasterio
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import colormaps
 import matplotlib.patches as mpatches
 import matplotlib.colors as mcolors
 import seaborn as sns
-
-
-# local scripts
-
-import linkingtool.linking_utility as utility
+import matplotlib as mpl
 
 log.basicConfig(level=log.INFO, format='%(asctime)s - %(levelname)s - %(message)s' , datefmt='%Y-%m-%d %H:%M:%S')
 log_name=f'workflow/log/linking_vis.txt'
@@ -30,10 +24,6 @@ log_name=f'workflow/log/linking_vis.txt'
 # file_handler = log.FileHandler(log_name)
 # log.getLogger().addHandler(file_handler)
 
-
-import geopandas as gpd
-import matplotlib.pyplot as plt
-import matplotlib as mpl
 
 def plot_with_matched_cells(ax, cells: gpd.GeoDataFrame, filtered_cells: gpd.GeoDataFrame, column: str, cmap: str,
                             background_cell_linewidth: float, selected_cells_linewidth: float,font_size:int=9):
