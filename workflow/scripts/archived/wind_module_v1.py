@@ -17,7 +17,7 @@ import pandas as pd
 
 # %%
 # import Local Packages
-from linkingtool import linking_utility as utils
+from linkingtool import utility as utils
 from linkingtool import visuals as vis
 from linkingtool import linking_wind as wind
 

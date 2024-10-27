@@ -1,6 +1,6 @@
 import pandas as pd
 import geopandas as gpd
-import linkingtool.linking_utility as utils
+import linkingtool.utility as utils
 import atlite
 
 def create_CF_timeseries_df(cutout,start_date,end_date,geodataframe_sites,layout_matrix,panel_config,tracking_config,Site_index='cell'):

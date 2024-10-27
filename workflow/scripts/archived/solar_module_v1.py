@@ -26,7 +26,7 @@ import argparse
 # ### Local Packages
 
 # %%
-import linkingtool.linking_utility as utils
+import linkingtool.utility as utils
 import linkingtool.visuals as vis
 import linkingtool.linking_solar as solar
 

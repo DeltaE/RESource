@@ -35,8 +35,6 @@ from rasterio.mask import mask
 import cartopy.feature as cfeature
 import cartopy.crs as ccrs
 
-from typing import Dict, List,Union
-import atlite
 from pyrosm import OSM, get_data
 from pyrosm.data import sources
 from pyrosm.config import Conf
@@ -46,8 +44,8 @@ from pyrosm.config import Conf
 # ## ii. import local packages
 
 # %%
-import linkingtool.linking_utility as utils
-import linkingtool.linking_wind as wind
+import linkingtool.utility as utils
+import linkingtool.windspeed as wind
 import linkingtool.visuals as vis
 
 # %% [markdown]

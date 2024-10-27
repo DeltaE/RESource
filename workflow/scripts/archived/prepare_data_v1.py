@@ -23,11 +23,11 @@ from pyrosm import OSM
 # ## ii. import local packages
 
 # %%
-from linkingtool import linking_utility as utils
+from linkingtool import utility as utils
 from linkingtool import visuals as vis
 from linkingtool import linking_solar as solar
 from linkingtool import linking_wind as wind
-from linkingtool import dataprep as dataprep
+from workflow.scripts.archived import dataprep as dataprep
 
 # %%
 """

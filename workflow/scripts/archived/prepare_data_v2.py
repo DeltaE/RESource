@@ -5,10 +5,10 @@ from requests import get
 from dataclasses import dataclass
 
 # Local Packages
-import linkingtool.linking_utility as utils
+import linkingtool.utility as utils
 import linkingtool.visuals as vis
 import linkingtool.linking_solar as solar
-import linkingtool.dataprep as dataprep
+import workflow.scripts.archived.dataprep as dataprep
 
 from linkingtool.coders import CODERSData
 from linkingtool.AttributesParser import AttributesParser

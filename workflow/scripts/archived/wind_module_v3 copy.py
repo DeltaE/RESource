@@ -7,7 +7,7 @@ from collections import namedtuple
 # Local Packages
 
 from linkingtool.era5_cutout import ERA5Cutout
-import linkingtool.linking_utility as utils
+import linkingtool.utility as utils
 import linkingtool.visuals as vis
 import linkingtool.cluster as cluster
 # import linkingtool.linking_solar as solar

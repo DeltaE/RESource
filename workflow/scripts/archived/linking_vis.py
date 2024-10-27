@@ -14,7 +14,7 @@ import folium
 
 # local scripts
 
-import linkingtool.linking_utility as utility
+import linkingtool.utility as utility
 
 log.basicConfig(level=log.INFO, format='%(asctime)s - %(levelname)s - %(message)s' , datefmt='%Y-%m-%d %H:%M:%S')
 log_name=f'workflow/log/linking_vis.txt'

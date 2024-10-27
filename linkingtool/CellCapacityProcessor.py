@@ -1,33 +1,20 @@
-import logging as log
-import resource
-import os,sys
 from collections import namedtuple
-import atlite
-from atlite.gis import ExclusionContainer,shape_availability
-import pathlib as Path
 import geopandas as gpd
 import xarray as xr
 import pandas as pd
-from shapely.geometry import box,Point,Polygon
+from shapely.geometry import Polygon
 
 # Local Packages
-import linkingtool.linking_utility as utils
-# import linkingtool.visuals as vis
-# import linkingtool.linking_solar as solar
-from linkingtool.AttributesParser import AttributesParser
-from linkingtool.boundaries import GADMBoundaries
-from linkingtool.osm import OSMData
-from linkingtool.lands import ConservationLands,LandContainer
-from linkingtool.coders import CODERSData
+import linkingtool.utility as utils
+# from linkingtool.AttributesParser import AttributesParser
+from linkingtool.lands import LandContainer
 from linkingtool.era5_cutout import ERA5Cutout
-from linkingtool.find import GridNodeLocator
 from linkingtool.hdf5_handler import DataHandler
 
-# Logging Configuration
-log.basicConfig(level=log.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# %%
-class CellCapacityProcessor(AttributesParser):
+class CellCapacityProcessor(LandContainer,
+                            ERA5Cutout,
+                            ):
     
     def __post_init__(self):
         
@@ -47,19 +34,18 @@ class CellCapacityProcessor(AttributesParser):
         ## Initiate the Store and Datahandler (interfacing with the Store)
         self.datahandler=DataHandler(store=self.store)
 
-
         ## Load geospatial data (geodataframes)
         # self.gadm=GADMBoundaries(**self.required_args)
         
         ### Exclusion Layer Container
-        self.land_container=LandContainer(**self.required_args)
+        # self.land_container=LandContainer(**self.required_args)
     
         ### ERA5 Cutout
-        self.era5_cutout=ERA5Cutout(**self.required_args)
-        self.cell_resolution=self.era5_cutout.cutout_config['dx']
+        # self.era5_cutout=ERA5Cutout(**self.required_args)
+        self.cell_resolution=self.cutout_config['dx']
     
     def set_composite_excluder(self):
-        return self.land_container.set_excluder()
+        return self.set_excluder()
     
     # def __get_raster_path__(self, config, root, rasters_dir):
     #     return os.path.join(root, rasters_dir , config['zip_extract_direct'], config['raster'])
@@ -81,18 +67,13 @@ class CellCapacityProcessor(AttributesParser):
         
     def get_capacity(self):
     #a. load cutout and province boundary for which the cutout has been created.
-        self.cutout,self.province_boundary=self.era5_cutout.get_era5_cutout()
+        self.cutout,self.province_boundary=self.get_era5_cutout()
         # self.cutout,_=self.era5_cutout.get_era5_cutout()
         # loads complete boundary of regions.
         
     #b. load excluder
-        composite_excluder=self.land_container.set_excluder()
+        composite_excluder=self.set_excluder()
         
-    #c. create a province boundary (union of all regions) to pass it onto excluder.
-        # Because passing regional geoms will increase the calculation time.
-        _province_shape_gdf=self.__get_unified_province_shape__()
-        _province_shape_geom=_province_shape_gdf.geometry.to_crs(composite_excluder.crs)
-                
     #d. Load costs (float)
         (
             self.resource_capex, 
@@ -102,9 +83,14 @@ class CellCapacityProcessor(AttributesParser):
             self.tx_line_rebuild_cost
         ) = self.load_cost()
         
-    ## 1. Calculate shape availability after adding the composite exclusion layer (excluder)
+    # OPTIONAL step (skipping to save memory+processing time)
+        ## 1. Calculate shape availability after adding the composite exclusion layer (excluder)
+        # c. create a province boundary (union of all regions) to pass it onto excluder.
+        # Because passing regional geoms will increase the calculation time.
+        # _province_shape_gdf=self.__get_unified_province_shape__()
+        # _province_shape_geom=_province_shape_gdf.geometry.to_crs(composite_excluder.crs)
         # masked, transform = composite_excluder.compute_shape_availability(_province_shape_geom)
-        # cell_processor.land_container.excluder.plot_shape_availability(cell_processor.province_boundary)
+        # cell_processor.excluder.plot_shape_availability(cell_processor.province_boundary)
         # The masked object is a numpy array. Eligible raster cells have a 1 and excluded cells a 0. 
         # Note that this data still lives in the projection of excluder. For calculating the eligible share we can use the following routine.
         # eligible_share = masked.sum() * composite_excluder.res**2 / _province_shape_geom.area.sum()
@@ -116,6 +102,7 @@ class CellCapacityProcessor(AttributesParser):
         # excluder.plot_shape_availability(test.geometry)
         
     ## 2.1 Compute availability Matrix
+        self.province_shape= self.__get_unified_province_shape__()
         self.Availability_matrix:xr = self.cutout.availabilitymatrix(self.province_shape, composite_excluder)
         
         area = self.cutout.grid.set_index(["y", "x"]).to_crs(3035).area / 1e6 # This crs is fit for area calculation

@@ -13,17 +13,8 @@ from pathlib import Path
 import logging
 
 
-# %% [markdown]
-# * Local packages
-
-# %%
 from linkingtool.AttributesParser import AttributesParser
 
-# %%
-# config_file_path='config/config.yml'
-
-# %%
-log = logging.getLogger(__name__)
 
 @dataclass
 class CODERSData(AttributesParser):
@@ -53,7 +44,7 @@ class CODERSData(AttributesParser):
         if response.status_code == 200:
             return pd.DataFrame.from_dict(response.json())
         else:
-            raise RuntimeError(f"Error fetching data for {table_name}: {response.status_code}")
+            raise RuntimeError(f">> Error fetching data for {table_name}: {response.status_code}")
 
     def load_local_data(self, 
                         table_name: str, 
@@ -71,10 +62,10 @@ class CODERSData(AttributesParser):
         file_path.mkdir(parents=True, exist_ok=True)  # Creates parent directories if not exists.
 
         if file_path.is_file():
-            log.info(f"Loading data from local file: {file_path}")
+            self.log.info(f">> Loading data from local file: {file_path}")
             return pd.read_pickle(file_path)
         else:
-            log.warning(f"No local file found at: {file_path}")
+            self.log.warning(f">> No local file found at: {file_path}")
             return None  # Return None if the file does not exist
 
     def save_data(self, 
@@ -87,7 +78,7 @@ class CODERSData(AttributesParser):
         file_path = Path(self.data_pull['root']) / self.data_pull.get(table_name)/file_name
         
         data.to_pickle(file_path)
-        log.info(f"{table_name} data saved to:\n {file_path}")
+        self.log.info(f"{table_name} data saved to:\n {file_path}")
 
     def create_gdf(self, df: pd.DataFrame) -> gpd.GeoDataFrame:
         """Create a GeoDataFrame from the given DataFrame."""
@@ -116,11 +107,11 @@ class CODERSData(AttributesParser):
         # Check if the data file exists locally and if force_update is not set
         if file_path.is_file() and not force_update:
             data = pd.read_pickle(file_path)  # Load from local CSV
-            log.info(f"Loaded {table_name} data from local file: {file_path}")
+            self.log.info(f"Loaded {table_name} data from local file: {file_path}")
         else:
             # Fetch data from API if not found locally or if force_update is set
             data = self.fetch_data(table_name)
-            log.info(f"Data pulled {table_name} from [source checked: CODERS(https://sesit.dev/api/docs)]")
+            self.log.info(f">> Data pulled {table_name} from [source checked: CODERS(https://sesit.dev/api/docs)]")
             self.save_data(data, table_name)
             
         df=data
@@ -167,12 +158,4 @@ class CODERSData(AttributesParser):
         else:
                 self.log.warning(f"Table: '{table_name}' is not required for this tool and is not configured to work properly.\n Configured/required tables >>>> {self.table_list[1:]}")
                 
-# %%
-#example usage
-""" 
-coders_data_instance = PullCODERSData(config_file_path)
-data=coders_data_instance.get_table_provincial('BC','substations',force_update=False)
-data.explore('node_type',legend=True)
-"""
-
 

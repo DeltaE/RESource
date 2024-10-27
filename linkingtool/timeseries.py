@@ -1,27 +1,19 @@
-from altair import Data
-from linkingtool import era5_cutout
-from linkingtool.AttributesParser import AttributesParser
-from linkingtool.CellCapacityProcessor import CellCapacityProcessor
 import atlite
-from linkingtool.era5_cutout import ERA5Cutout
-import linkingtool.linking_utility as utils
 import xarray as xr
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import pandas as pd
-import geopandas as gpd
 from collections import namedtuple
+
+# Linking Tool - Local Packages
 from linkingtool.hdf5_handler import DataHandler
 from linkingtool.tech import OEDBTurbines
-import yaml
-from requests import get
+from linkingtool.era5_cutout import ERA5Cutout
+import linkingtool.utility as utils
 
 @dataclass
-class Timeseries(ERA5Cutout,
-                 AttributesParser,
-                 ):
+class Timeseries(ERA5Cutout):
     
     def __post_init__(self):
-        
         super().__post_init__()
 
         # Fetch the disaggregation configuration based on the resource type

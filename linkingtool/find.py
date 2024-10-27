@@ -2,10 +2,10 @@ import geopandas as gpd
 from scipy.spatial import cKDTree
 import pandas as pd
 import logging as log
-import pathlib as Path
+from dataclasses import dataclass
 
 from linkingtool.AttributesParser import AttributesParser
-from dataclasses import dataclass
+
 @dataclass
 class GridNodeLocator(AttributesParser):
     
@@ -56,13 +56,12 @@ class GridNodeLocator(AttributesParser):
         return cells_gdf_with_station_data # cells_within_proximity_gdf
 
 
-
 # Example of a specialized class using inheritance
-class AdvancedGridNodeLocator(GridNodeLocator):
-    def __init__(self, province_code: str, grid_node_proximity_filter: float, extra_param: str):
-        super().__init__(province_code, grid_node_proximity_filter)
-        self.extra_param = extra_param
+# class AdvancedGridNodeLocator(GridNodeLocator):
+#     def __init__(self, province_code: str, grid_node_proximity_filter: float, extra_param: str):
+#         super().__init__(province_code, grid_node_proximity_filter)
+#         self.extra_param = extra_param
     
-    def some_advanced_method(self):
-        # Extend with more advanced functionalities here
-        pass
+#     def some_advanced_method(self):
+#         # Extend with more advanced functionalities here
+#         pass

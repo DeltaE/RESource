@@ -1,12 +1,11 @@
-import os
-import logging
 import requests
 import rasterio
 from rasterio.mask import mask
 from zipfile import ZipFile
-from linkingtool.boundaries import GADMBoundaries
 from pathlib import Path
 import matplotlib.pyplot as plt
+
+from linkingtool.boundaries import GADMBoundaries
 
 # Define the GAEZRasterProcessor class
 class GAEZRasterProcessor(GADMBoundaries):
@@ -16,7 +15,6 @@ class GAEZRasterProcessor(GADMBoundaries):
         """
         super().__post_init__()
 
-        self.province_boundary = self.get_province_boundary()
         self.gaez_config: dict = self.get_gaez_data_config()
         
         self.gaez_root = Path(self.gaez_config.get('root', 'data/downloaded_data/GAEZ'))
@@ -37,7 +35,8 @@ class GAEZRasterProcessor(GADMBoundaries):
             self.__download_resources_zip_file__()
         
         self.__extract_rasters__()
-
+        self.province_boundary = self.get_province_boundary()
+        
         # Loop over raster types and process each
         for raster_type in self.raster_types:
             self.__clip_to_boundary_n_plot__(raster_type, self.province_boundary.geometry,show)
@@ -122,5 +121,6 @@ class GAEZRasterProcessor(GADMBoundaries):
         plt.grid(visible=False)
         plt.tight_layout()
         plt.savefig(save_to)
-        # if show:
-            # plt.show()
+        if show:
+            plt.show()
+        plt.close() 

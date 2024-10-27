@@ -1,6 +1,6 @@
 import pandas as pd
 from linkingtool.AttributesParser import AttributesParser
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 @dataclass
 class CellScorer(AttributesParser):

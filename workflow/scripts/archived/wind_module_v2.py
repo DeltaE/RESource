@@ -7,7 +7,7 @@ import pandas as pd
 # Local Packages
 try:
     # Try importing from the submodule context
-    import linkingtool.linking_utility as utils
+    import linkingtool.utility as utils
     import linkingtool.visuals as vis
     import linkingtool.linking_solar as solar
     import linkingtool.linking_wind as wind

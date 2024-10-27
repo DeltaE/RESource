@@ -46,7 +46,7 @@ from pyrosm.config import Conf
 # ## ii. import local packages
 
 # %%
-import linkingtool.linking_utility as utils
+import linkingtool.utility as utils
 import linkingtool.linking_wind as wind
 
 

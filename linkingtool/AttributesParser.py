@@ -12,13 +12,11 @@
     Type hints enhance code readability and help with type checking tools.
 """
 
-import os
 import pandas as pd
-import geopandas as gpd
 import yaml
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import List, Dict, Tuple, Optional, Union, Any, Callable
+from typing import Dict
 import logging as log
 
 # Logging Configuration
@@ -90,8 +88,8 @@ class AttributesParser:
         tx_line_rebuild_cost = self.disaggregation_config.get('transmission', {}).get('tx_line_rebuild_cost', 0)
 
         self.ATB:Dict[str,dict]=self.get_atb_config()
-        atb_file = os.path.join(self.ATB.get('root', ''), self.ATB.get('datafile', {}).get('parquet', ''))
-        utility_scale_cost = pd.read_parquet(atb_file) if os.path.exists(atb_file) else pd.DataFrame()
+        atb_file = Path(self.ATB.get('root', ''), self.ATB.get('datafile', {}).get('parquet', ''))
+        utility_scale_cost = utility_scale_cost = pd.read_parquet(atb_file) if atb_file.exists() else pd.DataFrame()
         source_column:str= self.ATB.get('column',{})
         cost_params_mapping:Dict[str,str]=self.ATB.get('cost_params',{})
         

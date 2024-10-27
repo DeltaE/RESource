@@ -16,7 +16,7 @@ import logging as log
 import requests
 import matplotlib.pyplot as plt
 import seaborn as sns
-import linkingtool.linking_utility as utility
+import linkingtool.utility as utility
 from tqdm import tqdm
 import numpy as np
 

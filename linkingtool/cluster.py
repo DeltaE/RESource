@@ -1,14 +1,12 @@
 
 import os
 import pandas as pd
-from scipy.spatial import cKDTree
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 import geopandas as gpd
 import logging as log
-from typing import Dict, List,Union
 import matplotlib.pyplot as plt
-import linkingtool.linking_utility as utils
+import linkingtool.utility as utils
 
 def assign_cluster_id(cells: gpd.GeoDataFrame, 
                   source_column: str = 'Region', 

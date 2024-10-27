@@ -1,13 +1,12 @@
 # Downloads population data from WorldPop
 
-import linkingtool.linking_utility as utils
+import linkingtool.utility as utils
 import pandas as pd
 from shapely.geometry import box
 import geopandas as gpd
 from linkingtool.AttributesParser import AttributesParser
-from linkingtool.boundaries import GADMData
+from linkingtool.boundaries import GADMBoundaries
 from pathlib import Path
-from linkingtool.
 
 
 class WorldPop():
@@ -17,7 +16,7 @@ class WorldPop():
         self.province_short_code=province_short_code
         
         self.attributes_parser:AttributesParser=AttributesParser(self.config_file_path,None)
-        self.gadm=GADMData(self.config_file_path,self.province_short_code)
+        self.gadm=GADMBoundaries(self.config_file_path,self.province_short_code)
         
         self.config=self.attributes_parser.config
         self.worldpop_config=self.config['WorldPop']
@@ -51,7 +50,6 @@ class WorldPop():
         
             province_gadm_gdf=self.gadm.get_province_boundary()
             
-            if Path 
             pop_grid= self.pop_data.overlay(province_gadm_gdf, how='intersection', keep_geom_type=True)
             
             pop_grid.to_pickle(f'data/downloaded_data/WorldPop/pop_{self.province_short_code}.pkl')
