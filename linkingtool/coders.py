@@ -1,18 +1,10 @@
 
-# %% [markdown]
-# * GLobal
-
-# %%
 from dataclasses import dataclass, field
-import os
 import pandas as pd
 import requests
 import geopandas as gpd
 from shapely.geometry import Point
 from pathlib import Path
-import logging
-
-
 from linkingtool.AttributesParser import AttributesParser
 
 
@@ -33,7 +25,31 @@ class CODERSData(AttributesParser):
     def is_table_name_required(self, table_name: str):
         if table_name in self.table_list:
             return True
+    
+    def show_list(self, source: str = "cef") -> list:
+        """
+        Fetch and print the available tables from the CODERS API for a specified data source.
         
+        Args:
+            source (str): Data source type, either 'cef' or 'coders'.
+        
+        Returns:
+            List of available tables.
+        """
+        print(f">> Fetching the list of data tables from {source}")
+        try:
+            response = requests.get(f"{self.url}/tables/{source}{self.query}")
+            if response.status_code == 200:
+                tables_list = response.json()
+                print(f"{source.upper()} data available:\n {tables_list}")
+                return tables_list
+            else:
+                raise RuntimeError(f">> Error fetching tables list for {source}: {response.status_code}")
+        except requests.exceptions.RequestException as e:
+            print(f">> Connection error while fetching tables list: {e}")
+            return []
+    
+    
     def fetch_data(self, 
                    table_name: str) -> pd.DataFrame:
         """
