@@ -1,0 +1,61 @@
+capacity_disaggregation:
+  solar:
+    max_capacity: 5  # GW
+    landuse_intensity : 1.45  # (.01*145 MW/km2) ; Source: PyPSA-EUR paper, 
+    atlite_panel: 'CSi' # CSi , CdTe
+    tracking : 'dual' # None, horizontal,tilted_horizontal,vertical,dual
+    cell_static_CF_tolerance: 0.16
+    cell_capacity_tolerance: 1 #MW
+    WCSS_tolerance: 0.08 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
+    buffer:
+      aeroway: 100 # m
+      conserved_lands: 100 #m
+    
+  wind:
+    max_capacity: 15  # GW
+    landuse_intensity : 3  # (0.3 * 10 MW/km2); Source: PyPSA-EUR paper,
+    WCSS_tolerance: 0.1 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
+    CF_low: 0.20
+    CF_high: 1
+    turbines: #From  existing system at BC (> 3MW turbines)
+      NREL_ATB_type : 'Wind Turbine Technology 3' # Turbine Type 3 (of NREL method), size : ~ 3.3 MW, 148 m Rotor Dia, HubHeight 100m, wind plant ~ 200MW
+      atlite:
+        1: 
+          name: 'Enercon_E82_3000kW' #rotor_dia 82m
+          ID: {} # N/A
+          P: 3 #Nominal Power
+        2: 
+          name: 'Vestas_V90_3MW' #rotor_dia 90m
+          ID: {} # N/A
+          P: 3 #Nominal Power
+      OEDB:
+        source: 'https://openenergy-platform.org/api/v0/schema/supply/tables/wind_turbine_library/rows'
+        models:
+          1:
+            name: 'GE2.75_120' #rotor_dia 120m
+            ID: 116
+            P: 2.75 #Nominal Power
+            manufacturer: 'GE Wind'
+            # config: xxx
+          2:
+            name: '3.2M114_NES' #rotor_dia 114m
+            ID: 93
+            P: 3.2 #Nominal Power
+            manufacturer: 'Senvion/REpower'
+            config: 'data/downloaded_data/OEDB/3.2M114_NES.yaml'
+    buffer:
+      aeroway: 100 # m
+      conserved_lands: 100 #m
+  bess:
+    max_capacity : 10 #GW
+    unit_size: 60 #MW; default in NREL is 50 MW
+    residential_energy_consumption_year: 2021 # BESS cluster size calculation is associated to this year' data
+    # Based on general industry data and the needs of a region with a balanced energy mix like BC, you might consider the following approximate range:
+    capacity_estimate_per_energy_unit:    # MW per GWh of energy consumption.
+      Conservative: 0.01 
+      Moderate : 0.05 
+      Optimistic : 0.1 
+    storage_discharge_duration : 5.5 # hr  ; the battery cost should be inline with this data.
+
+  transmission:
+    proximity_filter: 100 #km
