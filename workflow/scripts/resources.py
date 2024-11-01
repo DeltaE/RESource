@@ -87,10 +87,14 @@ class Resources(AttributesParser):
     def extract_weather_data(self):
         self.store_grid_cells=self.datahandler.from_store('cells')
         self.cutout,_=self.era5_cutout.get_era5_cutout()
-        
+            
         if self.resource_type=='wind': 
-            self.store_grid_cells_updated:gpd.GeoDataFrame=wind.impute_ERA5_windspeed_to_Cells(self.cutout, self.store_grid_cells)
-            self.datahandler.to_store(self.store_grid_cells_updated,'cells')
+            if all(column in self.store_grid_cells.columns for column in ['CF_IEC2', 'CF_IEC3', 'windspeed_gwa']):
+                self.log.info(f"'CF_IEC2', 'CF_IEC3', 'windspeed_gwa' are already present in the store information.")
+                pass
+            else:
+                self.store_grid_cells_updated:gpd.GeoDataFrame=wind.impute_ERA5_windspeed_to_Cells(self.cutout, self.store_grid_cells)
+                self.datahandler.to_store(self.store_grid_cells_updated,'cells')
             return self.store_grid_cells_updated
         elif self.resource_type=='solar': 
             # self.store_grid_cells_updated:gpd.GeoDataFrame= xxx

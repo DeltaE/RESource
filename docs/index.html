@@ -90,6 +90,7 @@
 
 <h2>Linking Tool</h2>
 <div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'GridPlots')">Grid Plots</button> <!-- New tab for landing page -->
     <button class="tablinks" onclick="openTab(event, 'Resources')">Resources</button>
     <button class="tablinks" onclick="openTab(event, 'ResourceTimeseries')">Resource Timeseries</button>
     <button class="tablinks" onclick="openTab(event, 'AboutRegion')">About the Region</button>
@@ -97,15 +98,19 @@
     <button class="tablinks" onclick="openTab(event, 'Assessments')">Assessments</button> <!-- New Tab -->
 </div>
 
+<!-- Grid Plots Tab (Landing Page) -->
+<div id="GridPlots" class="tabcontent">
+    <h4>Grid Plots</h4>
+    <iframe src="grid_plots.html" width="100%" height="500px" style="border: none;"></iframe>
+</div>
+
 <!-- Resources Tab -->
 <div id="Resources" class="tabcontent">
-    <!-- <h3>Resources</h3> -->
     <img src="BC_ExistingVSTool_sites.png" alt="BC Resources">
 </div>
 
 <!-- Resource Timeseries Tab -->
 <div id="ResourceTimeseries" class="tabcontent">
-    <!-- <h3>Resource Timeseries</h3> -->
     <div class="subtab">
         <button class="subtablinks" onclick="openSubTab(event, 'SolarTimeseries')">Solar Timeseries</button>
         <button class="subtablinks" onclick="openSubTab(event, 'WindTimeseries')">Wind Timeseries</button>
@@ -124,7 +129,6 @@
 
 <!-- Assessments Tab -->
 <div id="Assessments" class="tabcontent">
-    <!-- <h3>Assessments</h3> -->
     <div class="subtab">
         <button class="subtablinks" onclick="openSubTab(event, 'SolarAssessments')">Solar Assessments</button>
         <button class="subtablinks" onclick="openSubTab(event, 'WindAssessments')">Wind Assessments</button>
@@ -149,7 +153,6 @@
 
 <!-- About Region Tab -->
 <div id="AboutRegion" class="tabcontent">
-    <!-- <h3>About the Region</h3> -->
     <div class="subtab">
         <button class="subtablinks" onclick="openSubTab(event, 'BC_Boundaries')">BC Boundaries</button>
         <button class="subtablinks" onclick="openSubTab(event, 'Grid_Nodes')">Grid Nodes</button>
@@ -168,7 +171,6 @@
 
 <!-- Exclusion/Inclusion Tab -->
 <div id="ExclusionInclusion" class="tabcontent">
-    <!-- <h3>Exclusion/Inclusion(s)</h3> -->
     <div class="subtab">
         <button class="subtablinks" onclick="openSubTab(event, 'Exclusion_Lands')">Conservation Protected Lands</button>
         <button class="subtablinks" onclick="openSubTab(event, 'GAEZ')">GAEZ Raster Plots</button>
@@ -182,15 +184,13 @@
     <div id="GAEZ" class="subtabcontent">
         <h4>GAEZ Raster Plots</h4>
         <div class="side-by-side">
-            <img src="GAEZ_raster_plots/BC/BC_exclusion_2017_raster.png" alt="GAEZ Raster Plot 1" style="max-width: 45%; height: auto;">
-            <img src="GAEZ_raster_plots/BC/BC_faocmb_2010_raster.png" alt="GAEZ Raster Plot 2" style="max-width: 45%; height: auto;">
-            <img src="GAEZ_raster_plots/BC/BC_slpmed05_raster.png" alt="GAEZ Raster Plot 3" style="max-width: 45%; height: auto;">
+            <img src="GAEZ_Potential_solar.png" alt="GAEZ Potential Solar" style="max-width: 45%; height: auto;">
+            <img src="GAEZ_Potential_wind.png" alt="GAEZ Potential Wind" style="max-width: 45%; height: auto;">
         </div>
     </div>
 </div>
 
 <script>
-    // Function to open the main tab
     function openTab(evt, tabName) {
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tabcontent");
@@ -202,10 +202,9 @@
             tablinks[i].className = tablinks[i].className.replace(" active", "");
         }
         document.getElementById(tabName).style.display = "block";  
-        evt.currentTarget.className += " active";
+        evt.currentTarget.className += " active";  
     }
 
-    // Function to open the sub tab
     function openSubTab(evt, subTabName) {
         var i, subtabcontent, subtablinks;
         subtabcontent = document.getElementsByClassName("subtabcontent");
@@ -217,8 +216,13 @@
             subtablinks[i].className = subtablinks[i].className.replace(" active", "");
         }
         document.getElementById(subTabName).style.display = "block";  
-        evt.currentTarget.className += " active";
+        evt.currentTarget.className += " active";  
     }
+
+    // Set default tab to be open
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelector(".tablinks").click();
+    });
 </script>
 
 </body>
