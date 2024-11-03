@@ -17,7 +17,7 @@ class GridCells(ERA5Cutout):
         # Call the parent class __post_init__ to initialize inherited attributes
         super().__post_init__()
         ## Initiate the Store and Datahandler (interfacing with the Store)
-        self.datahandler=DataHandler(store=self.store)
+        self.datahandler=DataHandler(self.store)
         self.crs=self.get_default_crs()
         
 

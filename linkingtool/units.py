@@ -15,7 +15,7 @@ class Units(AttributesParser):
         after the parent class initialization.
         """
         super().__post_init__()
-        self.datahandler = DataHandler(store=self.store)
+        self.datahandler = DataHandler(self.store)
 
     def create_units_dictionary(self):
         """

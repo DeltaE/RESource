@@ -20,7 +20,9 @@ def impute_ERA5_windspeed_to_Cells(
 
         # Perform spatial join and drop unnecessary columns
         province_grid_cells = (
-            gpd.sjoin(province_grid_cells.rename(columns={'x': 'x_bc', 'y': 'y_bc'}), wnd_ymean_gdf, predicate='intersects')
+            gpd.sjoin(province_grid_cells.rename(columns={'x': 'x_bc', 'y': 'y_bc'}), 
+                      wnd_ymean_gdf, 
+                      predicate='intersects')
             .drop(columns=['x_bc', 'y_bc', 'lon', 'lat','index_right','year'])
         )
         

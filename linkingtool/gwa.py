@@ -1,12 +1,15 @@
 
 import geopandas as gpd
+import pandas as pd
 from dataclasses import dataclass, field
 from pathlib import Path
 import rioxarray as rxr
 import xarray as xr
 from linkingtool.hdf5_handler import DataHandler
 import requests
-# -----------------------------------------
+import dask_geopandas as dgpd
+
+# ---------
 from linkingtool.boundaries import GADMBoundaries
 
 @dataclass
@@ -16,9 +19,12 @@ class GWACells(GADMBoundaries):
     def __post_init__(self):
         super().__post_init__()
         self.gwa_config = self.get_gwa_config()
-        self.datahandler = DataHandler(store=self.store)
+        self.datahandler = DataHandler(self.store)
 
-    def prepare_GWA_data(self) -> xr.DataArray:
+    def prepare_GWA_data(self,
+                         windpseed_min=8,
+                         windpseed_max=26,
+                         memory_resource_limitation:bool=False) -> xr.DataArray:
         """
         Prepares the Global Wind Atlas (GWA) data by loading and merging raster files.
         Downloads files from sources if they do not exist.
@@ -63,10 +69,15 @@ class GWACells(GADMBoundaries):
         self.merged_df = self.merged_data.to_dataframe().dropna(how='all')
         self.merged_df.reset_index(inplace=True)
         
-        
-        mask=self.merged_df['windspeed_gwa']>0
+        if memory_resource_limitation:
+            self.log.info(f"Memory resource limitations enabled. Filtering GWA cells witn windspeed mask to limit the data offload processing...")
+        else:
+            windpseed_min:float=0 #m/s
+            windpseed_max:float=50 #m/s
+ 
+        mask=(self.merged_df['windspeed_gwa'] >= windpseed_min) & (self.merged_df['windspeed_gwa'] <= windpseed_max)
         self.merged_df_f=self.merged_df[mask]
-        self.log.info(f">> {abs(len(self.merged_df_f) - self.merged_df.shape[0])} cells have no Windspeed values.\n>>> Cleaned data loaded for {len(self.merged_df_f)} GWA cells")
+        self.log.info(f">> {abs(len(self.merged_df_f) - self.merged_df.shape[0])} cells have been filtered due to Windspeed filter [{windpseed_min}-{windpseed_max} m/s].\n>>> Cleaned data loaded for {len(self.merged_df_f)} GWA cells")
         
         # class_mapping = {0: 'III', 1: 'II', 2: 'I', 3: 'T', 4: 'S'}
         # # Correctly modifying only one column
@@ -86,9 +97,10 @@ class GWACells(GADMBoundaries):
         except requests.RequestException as e:
             self.log.error(f">> Failed to download {destination} from {url}. Error: {e}")
 
-
-    def load_gwa_cells(self):
-        self.province_gwa_cells_df = self.prepare_GWA_data()
+    
+    def load_gwa_cells(self,
+                       memory_resource_limitation:bool=False):
+        self.province_gwa_cells_df = self.prepare_GWA_data(memory_resource_limitation)
 
         self.log.info(f">> Global Wind Atlas (GWA) Cells loaded. Size: {len(self.province_gwa_cells_df)}")
 
@@ -102,29 +114,44 @@ class GWACells(GADMBoundaries):
         # self.gwa_cells_gdf = self.calculate_common_parameters_GWA_cells()
         # self.gwa_cells_gdf = self.map_GWAcells_to_ERA5cells()
         return self.gwa_cells_gdf
-
-    def map_GWA_cells_to_ERA5(self):
-        self.store_grid_cells=self.datahandler.from_store('cells')
-        _store_grid_cells_=self.store_grid_cells.reset_index()
-        
-        self.gwa_cells_gdf=self.load_gwa_cells()
-        
-        self.log.info(f">> Mapping {len(self.gwa_cells_gdf)} GWA Cells to {len(_store_grid_cells_)} ERA5 Cells...")
-        
-        _data_=gpd.overlay(self.gwa_cells_gdf,_store_grid_cells_,how='intersection',keep_geom_type=False)
-        _data_ = _data_.rename(columns={'x_1': 'x', 'y_1': 'y'})
-        selected_columns = list(_data_.columns) + [f'{self.resource_type}_CF_mean']
-        
-        self.mapped_gwa_cells=_data_.loc[:,selected_columns]
-        self.log.info(f">> Calculating aggregated values for ERA5 Cell's...")
-        
-        self.mapped_gwa_cells=self.mapped_gwa_cells.loc[:, ~self.mapped_gwa_cells.columns.duplicated()]
-        self.mapped_gwa_cells_aggr=self.mapped_gwa_cells.groupby('cell').agg({
-                                                                    'windspeed_gwa': 'mean', 
-                                                                    'CF_IEC2': 'mean', 
-                                                                    'CF_IEC3': 'mean', 
-                                                                    'wind_CF_mean': 'mean'
-                                                                }, numeric_only=True)
-        
-        self.datahandler.to_store(self.mapped_gwa_cells_aggr,'cells')
     
+
+    def map_GWA_cells_to_ERA5(self,memory_resource_limitation):
+        # Load the grid cells and GWA cells as GeoDataFrames
+        self.store_grid_cells = self.datahandler.from_store('cells')
+        self.gwa_cells_gdf = self.load_gwa_cells(memory_resource_limitation)
+
+
+        self.log.info(f">> Mapping {len(self.gwa_cells_gdf)} GWA Cells to {len(self.store_grid_cells)} ERA5 Cells...")
+
+        results = []  # List to store results for each region
+
+        for region in self.store_grid_cells['Region'].unique():
+            _store_grid_cells_region = self.store_grid_cells[self.store_grid_cells['Region'] == region]
+            
+            # Perform overlay operation
+            _data_ = gpd.overlay(self.gwa_cells_gdf, _store_grid_cells_region, how='intersection', keep_geom_type=False)
+            
+            # Rename columns and select relevant data
+            _data_ = _data_.rename(columns={'x_1': 'x', 'y_1': 'y'})
+            selected_columns = list(_data_.columns) + [f'{self.resource_type}_CF_mean']
+            
+            # Store mapped GWA cells in results list
+            results.append(_data_.loc[:, selected_columns])
+
+        # Concatenate all results into a single GeoDataFrame
+        if results:
+            self.mapped_gwa_cells = pd.concat(results, axis=0).drop_duplicates()
+            
+            self.log.info(f">> Calculating aggregated values for ERA5 Cell's...")
+            
+            # Aggregate values
+            self.mapped_gwa_cells_aggr = self.mapped_gwa_cells.groupby('cell').agg({
+                'windspeed_gwa': 'mean',
+                'CF_IEC2': 'mean',
+                'CF_IEC3': 'mean',
+                'wind_CF_mean': 'mean'
+            }, numeric_only=True)
+            
+            # Store the aggregated data
+            self.datahandler.to_store(self.mapped_gwa_cells_aggr, 'cells')  # Compute and store results
