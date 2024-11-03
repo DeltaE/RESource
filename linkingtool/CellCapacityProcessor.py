@@ -32,7 +32,7 @@ class CellCapacityProcessor(LandContainer,
         self.resource_landuse_intensity = self.resource_disaggregation_config['landuse_intensity']
         
         ## Initiate the Store and Datahandler (interfacing with the Store)
-        self.datahandler=DataHandler(store=self.store)
+        self.datahandler=DataHandler(self.store)
 
         ## Load geospatial data (geodataframes)
         # self.gadm=GADMBoundaries(**self.required_args)

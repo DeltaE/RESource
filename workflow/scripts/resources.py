@@ -1,6 +1,9 @@
 import geopandas as gpd
 import pandas as pd
 from collections import namedtuple
+import warnings
+
+warnings.filterwarnings("ignore")
 
 # Linking Tool's Local Packages
 from linkingtool.era5_cutout import ERA5Cutout
@@ -18,12 +21,11 @@ from linkingtool.gwa import GWACells
 from linkingtool.units import Units
 from linkingtool import utility as utils
 
-class Resources(AttributesParser):
+class Resources(AttributesParser):  
     def __post_init__(self):
-        
         # Call the parent class __post_init__ to initialize inherited attributes
         super().__post_init__()
-  
+        
         # This dictionary will be used to pass arguments to external classes
         self.required_args = {   #order doesn't matter
             "config_file_path" : self.config_file_path,
@@ -89,13 +91,13 @@ class Resources(AttributesParser):
         self.cutout,_=self.era5_cutout.get_era5_cutout()
             
         if self.resource_type=='wind': 
-            if all(column in self.store_grid_cells.columns for column in ['CF_IEC2', 'CF_IEC3', 'windspeed_gwa']):
-                self.log.info(f"'CF_IEC2', 'CF_IEC3', 'windspeed_gwa' are already present in the store information.")
+            if all(column in self.store_grid_cells.columns for column in ['windspeed_ERA5']):
+                self.log.info(f"'windspeed_ERA5' already present in the store information.")
                 pass
             else:
                 self.store_grid_cells_updated:gpd.GeoDataFrame=wind.impute_ERA5_windspeed_to_Cells(self.cutout, self.store_grid_cells)
                 self.datahandler.to_store(self.store_grid_cells_updated,'cells')
-            return self.store_grid_cells_updated
+                return self.store_grid_cells_updated
         elif self.resource_type=='solar': 
             # self.store_grid_cells_updated:gpd.GeoDataFrame= xxx
             pass
@@ -146,13 +148,20 @@ class Resources(AttributesParser):
     - Currently active for Wind resources parameters only. High resolution dataset (~0.0025 arc deg | 100m) from Global Wind Atlas (GWA) has static values (annual mean) only.
     ______________________ 
     '''
-    def update_gwa_scaled_params(self):
+    def update_gwa_scaled_params(self,
+                                 memory_resource_limitation:bool=True):
         if self.resource_type=='wind': 
-            self.gwa_cells.map_GWA_cells_to_ERA5()
+            if all(column in self.store_grid_cells.columns for column in ['CF_IEC2', 'CF_IEC3', 'windspeed_gwa','windspeed_ERA5']):
+                self.log.info(f"'CF_IEC2', 'CF_IEC3', 'windspeed_gwa' are already present in the store information.")
+                pass
+            else:
+                self.gwa_cells.map_GWA_cells_to_ERA5(memory_resource_limitation)
+            
         elif self.resource_type=='solar': 
             # Not activated for solar resources yet as the high resolution data processing is computationally expensive and the data contrast for solar doesn't provide satisfactory incentive for that.
             self.log.info(f"GWA Cells not configured for solar.")
             pass 
+
     '''
     ____________________________________________________________________________________________________________________________________________
     Step 2: Set Scoring Matrix for the Cells. 
@@ -292,18 +301,19 @@ class Resources(AttributesParser):
         else:
             self.log.info(f"Invalid resource type. Please select one of these: 'solar', 'wind', 'all'")
 
-    def execute_module(self):
+    def execute_module(self,
+                       memory_resource_limitation:bool=False):
         """
         Execute the specific module logic for the given resource type ('solar' or 'wind').
         """
         print(f"{50*'_'}\n Initiating {self.resource_type} module for {self.get_province_name()}...")
-
+        self.memory_resource_limitation=memory_resource_limitation
         # Placeholder for future grid cell retrieval
         self.get_grid_cells()
         self.get_cell_capacity()
         self.get_CF_timeseries()
         self.extract_weather_data()
-        self.update_gwa_scaled_params()
+        self.update_gwa_scaled_params(self.memory_resource_limitation)
         self.find_grid_nodes()
         self.score_cells()
         self.get_clusters()

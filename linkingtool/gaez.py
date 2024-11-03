@@ -111,6 +111,7 @@ class GAEZRasterProcessor(GADMBoundaries):
         with rasterio.open(tif_path) as src:
             data = src.read(1, masked=True)
             extent = src.bounds
+        save_to.parent.mkdir(parents=True, exist_ok=True)
 
         plt.figure(figsize=(12, 8))
         plt.imshow(data, cmap=color_map, extent=[extent.left, extent.right, extent.bottom, extent.top])

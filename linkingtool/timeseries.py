@@ -20,7 +20,7 @@ class Timeseries(ERA5Cutout):
         self.resource_disaggregation_config=self.get_resource_disaggregation_config()
         
         # Initialize the local store
-        self.datahandler=DataHandler(store=self.store)
+        self.datahandler=DataHandler(self.store)
     
     def get_timeseries(self)-> tuple:
         """
