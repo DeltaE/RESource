@@ -22,8 +22,8 @@ class GWACells(GADMBoundaries):
         self.datahandler = DataHandler(self.store)
 
     def prepare_GWA_data(self,
-                         windpseed_min=8,
-                         windpseed_max=26,
+                         windpseed_min=10,
+                         windpseed_max=20,
                          memory_resource_limitation:bool=False) -> xr.DataArray:
         """
         Prepares the Global Wind Atlas (GWA) data by loading and merging raster files.
@@ -102,8 +102,6 @@ class GWACells(GADMBoundaries):
                        memory_resource_limitation:bool=False):
         self.province_gwa_cells_df = self.prepare_GWA_data(memory_resource_limitation)
 
-        self.log.info(f">> Global Wind Atlas (GWA) Cells loaded. Size: {len(self.province_gwa_cells_df)}")
-
         # Vectorized creation of geometries
         self.gwa_cells_gdf = gpd.GeoDataFrame(
             self.province_gwa_cells_df,
@@ -113,10 +111,13 @@ class GWACells(GADMBoundaries):
 
         # self.gwa_cells_gdf = self.calculate_common_parameters_GWA_cells()
         # self.gwa_cells_gdf = self.map_GWAcells_to_ERA5cells()
+        self.log.info(f">> Global Wind Atlas (GWA) Cells loaded. Size: {len(self.province_gwa_cells_df)}")
+        
         return self.gwa_cells_gdf
     
 
-    def map_GWA_cells_to_ERA5(self,memory_resource_limitation):
+    def map_GWA_cells_to_ERA5(self,
+                              memory_resource_limitation):
         # Load the grid cells and GWA cells as GeoDataFrames
         self.store_grid_cells = self.datahandler.from_store('cells')
         self.gwa_cells_gdf = self.load_gwa_cells(memory_resource_limitation)
