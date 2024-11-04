@@ -149,7 +149,7 @@ class Resources(AttributesParser):
     ______________________ 
     '''
     def update_gwa_scaled_params(self,
-                                 memory_resource_limitation:bool=True):
+                                 memory_resource_limitation:bool=False):
         if self.resource_type=='wind': 
             if all(column in self.store_grid_cells.columns for column in ['CF_IEC2', 'CF_IEC3', 'windspeed_gwa','windspeed_ERA5']):
                 self.log.info(f"'CF_IEC2', 'CF_IEC3', 'windspeed_gwa' are already present in the store information.")
@@ -302,7 +302,7 @@ class Resources(AttributesParser):
             self.log.info(f"Invalid resource type. Please select one of these: 'solar', 'wind', 'all'")
 
     def execute_module(self,
-                       memory_resource_limitation:bool=False):
+                       memory_resource_limitation:bool=True):
         """
         Execute the specific module logic for the given resource type ('solar' or 'wind').
         """

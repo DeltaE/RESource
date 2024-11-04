@@ -9,7 +9,7 @@ from workflow.scripts.resources import Resources
 
 # %%
 # Iterate over provinces for both solar and wind resources
-resource_types = ['solar','wind']
+resource_types = ['wind']
 provinces=['BC']  #'AB','SK','ON','NS'
 for province_code in provinces:
     for resource_type in resource_types:
