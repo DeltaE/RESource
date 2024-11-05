@@ -1,15 +1,9 @@
-# %% [markdown]
-# # Set Required Args to Activate Modules
-
-# %%
 from workflow.scripts.resources import Resources
 
-# %% [markdown]
-# # single resource
+## single resource
 
-# %%
 # Iterate over provinces for both solar and wind resources
-resource_types = ['wind']
+resource_types = ['solar','wind']
 provinces=['BC']  #'AB','SK','ON','NS'
 for province_code in provinces:
     for resource_type in resource_types:
@@ -21,10 +15,6 @@ for province_code in provinces:
         
         # Create an instance of Resources and execute the module
         resource_module = Resources(**required_args)
-        resource_module.execute_module(memory_resource_limitation=True)
+        resource_module.execute_module(memory_resource_limitation=False)
         
-
-# %% [markdown]
-# 
-
 

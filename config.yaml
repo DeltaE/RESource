@@ -1,0 +1,24 @@
+capacity_disaggregation:
+  BESS:
+    max_capacity: 10
+    storage_discharge_duration: 5.5
+  solar:
+    atlite_panel: CSi
+    landuse_intensity: 1.45
+    max_capacity: 5
+    tracking: dual
+  transmission:
+    grid_connection_cost: 2.6
+    line_rebuild_cost: 2.6
+    proximity_filter: 10
+  wind:
+    capacity_factor_high: 0.4
+    capacity_factor_low: 0.2
+    landuse_intensity: 3
+    max_capacity: 15
+    wind-turbine-model:
+    - label: 'GE2.75 120 - Rotor Dia: 120m'
+      value: GE2.75_120
+    - label: 'Senvion/REpower 3.2M114 - Rotor Dia: 114m'
+      value: 3.2M114_NES
+    wind-turbine-source: OEDB
