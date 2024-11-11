@@ -54,7 +54,7 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         img {
-            max-width: 80%; /* Adjusted all images to 70% width */
+            max-width: 80%; /* Adjusted all images to 80% width */
             height: auto;
             border-radius: 5px;
             border: none; /* Removed borders */
@@ -77,13 +77,21 @@
             background-color: #555555; /* Darker gray on hover */
             transform: translateY(-2px); /* Lift effect on hover */
         }
+        .subtab button.active {
+            background-color: #6200ee; /* Purple for active subtab */
+            color: #ffffff;
+        }
+        .subtabcontent {
+            display: none;
+            padding-top: 10px;
+        }
         .side-by-side {
             display: flex;
             justify-content: space-around; /* Space between images */
             margin-top: 20px;
         }
         .side-by-side img {
-            max-width: 60%; /* Maintain 70% width for side-by-side images */
+            max-width: 45%; /* Maintain 45% width for side-by-side images */
         }
     </style>
 </head>
@@ -91,27 +99,23 @@
 
 <h2>Linking Tool</h2>
 <div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'GridPlots')">Grid Plots</button> <!-- New tab for landing page -->
-    <!-- <button class="tablinks" onclick="openTab(event, 'Resources')">Resources</button> -->
+    <button class="tablinks" onclick="openTab(event, 'GridPlots')">Grid Plots</button>
     <button class="tablinks" onclick="openTab(event, 'ResourceTimeseries')">Resource Timeseries</button>
     <button class="tablinks" onclick="openTab(event, 'AboutRegion')">About the Region</button>
     <button class="tablinks" onclick="openTab(event, 'ExclusionInclusion')">Exclusion/Inclusion(s)</button>
-    <button class="tablinks" onclick="openTab(event, 'Demand')">Demand</button> <!-- New Tab -->
+    <button class="tablinks" onclick="openTab(event, 'Demand')">Demand</button>
 </div>
 
-<!-- Grid Plots Tab (Landing Page) -->
 <div id="GridPlots" class="tabcontent">
     <h4>Grid Plots</h4>
     <iframe src="grid_plots.html" width="100%" height="1000px" style="border: none;"></iframe>
 </div>
 
-<!-- Resource Timeseries Tab -->
 <div id="ResourceTimeseries" class="tabcontent">
     <h4>Resource Timeseries</h4>
     <iframe src="time_series_plots.html" width="100%" height="1000px" style="border: none;"></iframe>
 </div>
 
-<!-- Demand Tab -->
 <div id="Demand" class="tabcontent">
     <div class="file-embeds" style="display: flex; flex-direction: column; gap: 10px;">
         <iframe src="BC_sectoral_elec_end_use_demand_Canada Net-zero.html" width="1000" height="600" style="border: 1px solid #ccc;"></iframe>
@@ -120,45 +124,35 @@
     </div>
 </div>
 
-
-
-
-
-<!-- About Region Tab -->
 <div id="AboutRegion" class="tabcontent">
     <div class="subtab">
         <button class="subtablinks" onclick="openSubTab(event, 'BC_Boundaries')">BC Boundaries</button>
         <button class="subtablinks" onclick="openSubTab(event, 'Grid_Nodes')">Grid Nodes</button>
     </div>
-    
     <div id="BC_Boundaries" class="subtabcontent">
         <h4>BC Boundaries</h4>
-        <img src="BC_gadm_regions.png" alt="BC Boundaries" style="max-width: 60%; height: auto;">
+        <img src="BC_gadm_regions.png" alt="BC Boundaries">
     </div>
-    
     <div id="Grid_Nodes" class="subtabcontent">
         <h4>Grid Nodes</h4>
-        <img src="BC_Transmission.png" alt="BC Transmission" style="max-width: 60%; height: auto;">
+        <img src="BC_Transmission.png" alt="BC Transmission">
     </div>
 </div>
 
-<!-- Exclusion/Inclusion Tab -->
 <div id="ExclusionInclusion" class="tabcontent">
     <div class="subtab">
         <button class="subtablinks" onclick="openSubTab(event, 'Exclusion_Lands')">Conservation Protected Lands</button>
         <button class="subtablinks" onclick="openSubTab(event, 'GAEZ')">GAEZ Raster Plots</button>
     </div>
-    
     <div id="Exclusion_Lands" class="subtabcontent">
         <h4>Conservation Protected Lands</h4>
-        <img src="Conservation_Protected_Lands.png" alt="Conservation Protected Lands" style="max-width: 60%; height: auto;">
+        <img src="Conservation_Protected_Lands.png" alt="Conservation Protected Lands">
     </div>
-    
     <div id="GAEZ" class="subtabcontent">
         <h4>GAEZ Raster Plots</h4>
         <div class="side-by-side">
-            <img src="GAEZ_Potential_solar.png" alt="GAEZ Potential Solar" style="max-width: 45%; height: auto;">
-            <img src="GAEZ_Potential_wind.png" alt="GAEZ Potential Wind" style="max-width: 45%; height: auto;">
+            <img src="GAEZ_Potential_solar.png" alt="GAEZ Potential Solar">
+            <img src="GAEZ_Potential_wind.png" alt="GAEZ Potential Wind">
         </div>
     </div>
 </div>
@@ -176,6 +170,10 @@
         }
         document.getElementById(tabName).style.display = "block";  
         evt.currentTarget.className += " active";
+        
+        // Open first subtab by default if present
+        const subtabs = document.getElementById(tabName).querySelectorAll(".subtab button");
+        if (subtabs.length) subtabs[0].click();
     }
 
     function openSubTab(evt, subTabName) {
@@ -191,10 +189,9 @@
         document.getElementById(subTabName).style.display = "block";  
         evt.currentTarget.className += " active";
     }
-
-    // By default, open the "GridPlots" tab
-    document.getElementsByClassName("tablinks")[0].click();
+    
+    // Open the first main tab by default
+    document.querySelector(".tab button").click();
 </script>
-
 </body>
 </html>
