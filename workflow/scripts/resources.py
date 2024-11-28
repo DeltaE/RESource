@@ -250,9 +250,9 @@ class Resources(AttributesParser):
         
         self.clusters_nt:tuple=cluster_data(self.cell_cluster_gdf,self.dissolved_indices)
         # Corrected version of the code
-        self.datahandler.to_store(self.cell_cluster_gdf,f'clusters_{self.resource_type}',force_update=True)
+        self.datahandler.to_store(self.cell_cluster_gdf,f'clusters/{self.resource_type}',force_update=True)
         self.dissolved_cell_indices_df=pd.DataFrame(self.dissolved_indices).T
-        self.datahandler.to_store(self.dissolved_cell_indices_df,f'dissolved_indices_{self.resource_type}',force_update=True)
+        self.datahandler.to_store(self.dissolved_cell_indices_df,f'dissolved_indices/{self.resource_type}',force_update=True)
         
         return self.clusters_nt
     
@@ -271,9 +271,10 @@ class Resources(AttributesParser):
 
     def get_cluster_timeseries(self):
         self.log.info(f">> Preparing representative profiles for {len(self.cell_cluster_gdf)} clusters")
-        self.cells_timeseries=self.datahandler.from_store('timeseries')
+        self.cells_timeseries=self.datahandler.from_store(F'timeseries/{self.resource_type}')
         self.cluster_df=self.timeseries.get_cluster_timeseries(self.cell_cluster_gdf,
-                                self.cells_timeseries[self.resource_type],
+                                # self.cells_timeseries[self.resource_type],
+                                self.cells_timeseries,
                                self.dissolved_cell_indices_df)
         return self.cluster_df
 
