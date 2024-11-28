@@ -274,6 +274,9 @@ def create_cells_Union_in_clusters(
         dissolved_gdf['Cluster_No'] = dissolved_gdf['Cluster_No'].astype(int)
         dissolved_gdf.sort_values(by=f'lcoe_{resource_type}', ascending=True, inplace=True)
         dissolved_gdf['Rank'] = range(1, len(dissolved_gdf)+1)
+        
+        dissolved_gdf.columns=dissolved_gdf.columns.str.replace(fr"(?i)(_{resource_type}|{resource_type}_)", "", regex=True)
+        
     log.info(f" Culsters Created and a list generated to map the Cells inside each Cluster...")
     return dissolved_gdf, dissolved_indices
 

@@ -2,6 +2,8 @@ import geopandas as gpd
 import pandas as pd
 from collections import namedtuple
 import warnings
+from typing import List,Dict,Optional
+from pathlib import Path
 
 warnings.filterwarnings("ignore")
 
@@ -321,6 +323,50 @@ class Resources(AttributesParser):
         self.get_cluster_timeseries()
         self.units.create_units_dictionary()
         utils.print_module_title(f"Results from {self.resource_type} module saved to {self.store} for {self.get_province_name()}...")
+        export_results(self.resource_type,
+                    self.get_clusters().clusters,
+                    self.get_cluster_timeseries())
+
+@staticmethod
+def export_results(resource_type:str,
+                   resource_clusters:pd.DataFrame,
+                   cluster_timeseries:pd.DataFrame,
+                   save_to : Optional[Path]=None):
+    """
+    Export processed resource cluster results (geodataframe) to standard datafield csvs as input for downstream models.
+    ### Args
+     - **resource_type**: The type of resource ('solar' or 'wind').
+     - **resource_clusters**: A DataFrame containing resource cluster information.
+     - **output_dir** [optional]: The directory to save the output files. Default to : 'results/Resource_options_{resource_type}.csv'
+     
+     > Currently supports: CLEWs, PyPSA
+    """
+    # Check if resource_clusters is a DataFrame or GeoDataFrame
+    if not isinstance(resource_clusters, (pd.DataFrame, gpd.GeoDataFrame)):
+        raise TypeError(
+            f"Invalid input: resource_clusters must be a Pandas DataFrame or GeoDataFrame, "
+            f"but got {type(resource_clusters).__name__}."
+        )
+    
+    if not isinstance(cluster_timeseries, (pd.DataFrame, gpd.GeoDataFrame)):
+        raise TypeError(
+            f"Invalid input: resource_clusters must be a Pandas DataFrame or GeoDataFrame, "
+            f"but got {type(resource_clusters).__name__}."
+        )
+    # Exclude all columns containing geometry-related data as these are not required for downstream models in consideration i.e. CLEWs, PyPSA
+    resource_clusters_excld_geom = resource_clusters[[col for col in resource_clusters.columns if col != 'geometry']]
+
+    # Save to CSV
+    if save_to is None:
+        save_to=Path(f'results')
+        save_to.parent.mkdir(parents=True,exist_ok=True)
+        
+        resource_clusters_excld_geom.to_csv(save_to/f'resource_options_{resource_type}.csv', index=True)
+        cluster_timeseries.to_csv(save_to/f'resource_options_{resource_type}_timeseries.csv', index=True)
+        
+        print(f"{resource_type} clusters exported to :{save_to}")
+        
+
 
 # def main(config_file_path: str, 
 #          resource_type: str='solar'):
