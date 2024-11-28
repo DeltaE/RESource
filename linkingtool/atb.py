@@ -3,6 +3,7 @@ import logging
 from pathlib import Path
 from linkingtool import utility as utils
 from linkingtool.AttributesParser import AttributesParser
+from linkingtool.hdf5_handler import DataHandler
 
 class NREL_ATBProcessor(AttributesParser):
     
@@ -14,7 +15,10 @@ class NREL_ATBProcessor(AttributesParser):
         self.atb_data_save_to = Path(self.atb_config['root'])
         self.atb_parquet_source = self.atb_config['source']['parquet']
         self.atb_datafile = self.atb_config['datafile']['parquet']
-        self.atb_file_path = self.atb_data_save_to / self.atb_datafile
+        self.atb_file_path = Path (self.atb_data_save_to) / self.atb_datafile
+        # Create the parent directories if they do not exist
+        self.atb_file_path.parent.mkdir(parents=True, exist_ok=True)
+        self.datahandler=DataHandler(self.store)
         
     def pull_data(self):
         self.log.info("Processing Annual Technology Baseline (ATB) data sourced from NREL...")
@@ -31,7 +35,7 @@ class NREL_ATBProcessor(AttributesParser):
     def _check_and_download_data(self):
         utils.check_LocalCopy_and_run_function(
             self.atb_file_path,
-            lambda: utils.download_data(self.atb_parquet_source),
+            lambda: utils.download_data(self.atb_parquet_source,self.atb_file_path),
             force_update=False
         )
 
@@ -47,7 +51,11 @@ class NREL_ATBProcessor(AttributesParser):
         )
 
         utility_pv_cost = atb_cost[pv_cost_mask].sort_values('core_metric_variable')
-        utility_pv_cost.to_csv(self.config['capacity_disaggregation']['solar']['cost_data'], index=False)
+
+        save_to=Path(self.config['capacity_disaggregation']['solar']['cost_data'])
+        save_to.parent.mkdir(parents=True, exist_ok=True)
+        utility_pv_cost.to_csv(save_to, index=False)
+        self.datahandler.to_store(utility_pv_cost,'cost/atb/wind')
 
     def _process_wind_cost(self, atb_cost):
         land_based_wind_cost_mask = (
@@ -61,7 +69,11 @@ class NREL_ATBProcessor(AttributesParser):
         )
 
         land_based_wind_cost = atb_cost[land_based_wind_cost_mask].sort_values('core_metric_variable')
-        land_based_wind_cost.to_csv(self.config['capacity_disaggregation']['wind']['cost_data'], index=False)
+        
+        save_to=Path(self.config['capacity_disaggregation']['wind']['cost_data'])
+        save_to.parent.mkdir(parents=True, exist_ok=True)
+        land_based_wind_cost.to_csv(save_to, index=False)
+        self.datahandler.to_store(land_based_wind_cost,'cost/atb/wind')
 
     def _process_bess_cost(self, atb_cost):
         bess_cost_mask = (
@@ -75,4 +87,8 @@ class NREL_ATBProcessor(AttributesParser):
         )
 
         bess_cost = atb_cost[bess_cost_mask].sort_values('core_metric_variable')
-        bess_cost.to_csv(self.config['capacity_disaggregation']['bess']['cost_data'], index=False)
+        save_to=Path(self.config['capacity_disaggregation']['bess']['cost_data'])
+        save_to.parent.mkdir(parents=True, exist_ok=True)
+        bess_cost.to_csv(save_to, index=False)
+        self.datahandler.to_store(bess_cost,'cost/atb/bess')
+

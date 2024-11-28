@@ -89,7 +89,8 @@ class AttributesParser:
 
         self.ATB:Dict[str,dict]=self.get_atb_config()
         atb_file = Path(self.ATB.get('root', ''), self.ATB.get('datafile', {}).get('parquet', ''))
-        utility_scale_cost = utility_scale_cost = pd.read_parquet(atb_file) if atb_file.exists() else pd.DataFrame()
+        utility_scale_cost = pd.read_parquet(atb_file) if atb_file.exists() else pd.DataFrame()
+        self.utility_scale_cost=utility_scale_cost
         source_column:str= self.ATB.get('column',{})
         cost_params_mapping:Dict[str,str]=self.ATB.get('cost_params',{})
         
