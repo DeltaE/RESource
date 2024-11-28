@@ -122,7 +122,6 @@ class GWACells(GADMBoundaries):
         self.store_grid_cells = self.datahandler.from_store('cells')
         self.gwa_cells_gdf = self.load_gwa_cells(memory_resource_limitation)
 
-
         self.log.info(f">> Mapping {len(self.gwa_cells_gdf)} GWA Cells to {len(self.store_grid_cells)} ERA5 Cells...")
 
         results = []  # List to store results for each region
@@ -145,7 +144,6 @@ class GWACells(GADMBoundaries):
             self.mapped_gwa_cells = pd.concat(results, axis=0).drop_duplicates()
             
             self.log.info(f">> Calculating aggregated values for ERA5 Cell's...")
-            
             # Aggregate values
             self.mapped_gwa_cells_aggr = self.mapped_gwa_cells.groupby('cell').agg({
                 'windspeed_gwa': 'mean',
@@ -155,4 +153,4 @@ class GWACells(GADMBoundaries):
             }, numeric_only=True)
             
             # Store the aggregated data
-            self.datahandler.to_store(self.mapped_gwa_cells_aggr, 'cells')  # Compute and store results
+            self.datahandler.to_store(self.mapped_gwa_cells_aggr, 'cells')  

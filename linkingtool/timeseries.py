@@ -60,14 +60,17 @@ class Timeseries(ERA5Cutout):
         - self.pv_sites_profile.to_pandas() # We convert the Xarray to pandas df for easier access to data by using cell_indices. 
         - The array index order is (time, cell) hence in pandas 'time' will be default index and 'cell' default header.
         '''
-        self._CF_ts_df_ :pd.DataFrame=self.sites_profile.to_dataframe().unstack('cell') 
+        self._CF_ts_df_org :pd.DataFrame=self.sites_profile.to_dataframe().unstack('cell') # Multi-index dataframe with Y_L1 index (array name i.e. "solar" or "wind")
+        self._CF_ts_df_=self._CF_ts_df_org.loc[:,self.resource_type] # Multi-index dataframe with Y_L1 index (array name i.e. "solar" or "wind")
+        
+        
         ''' 
         We already rename the Xarray to 'self.resource_type' i.e solar/wind at the end of "__process_PV_timeseries__()" method. Hence now the Xarray could be transformed to wide-format DataFrame.
         - using the to_dataframe() method in xarray.DataArray, the behavior is different from to_pandas().
         - The array index order is (time, cell) hence in pandas 'time' will be default index and 'cell' default header. But now it will have an additional "Y" index "PV" adopted from xarray name.
         - WIND profile will be stored under same index to generate a synthetic hybrid availability (correlational) profile.
         '''
-        # here, "_CF_ts_df_" will provide same data formate alike .to_pandas() method, just have to use "_CF_ts_df_.PV"  ("PV" is the xarray name)
+        # here, "_CF_ts_df_" will provide same data formate alike .to_pandas() method, just have to use "_CF_ts_df_.PV"  ("solar" or "wind" is the xarray name)
         
         # Step 3: Convert the timeseries data to the appropriate province timezone
         self.province_timezone=self.get_province_timezone()
@@ -82,10 +85,12 @@ class Timeseries(ERA5Cutout):
         self.log.info(f">> Calculating CF mean from the {len(self.CF_ts_df)} data points for each Cell ...")
         self.log.info(f">> Total Grid Cells: {len(self.province_grid_cells_store)}, "
                       f">> Timeseries Generated for: {len(self.CF_ts_df.columns)}, "
-                      f">> Matched Sites: {self.CF_ts_df[self.resource_type][self.province_grid_cells_store.index].shape}")
+                    #   f">> Matched Sites: {self.CF_ts_df[self.resource_type][self.province_grid_cells_store.index].shape}")
+                      f">> Matched Sites: {self.CF_ts_df[self.province_grid_cells_store.index].shape}")
         
         self.log.info(f">> Calculating '{self.resource_type}_CF_mean' for {len(self.province_grid_cells_store)} Cells...")
-        self.province_grid_cells_store[f'{self.resource_type}_CF_mean'] = self.CF_ts_df[self.resource_type].mean(axis=0) # Mean of all rows (Hours)
+        # self.province_grid_cells_store[f'{self.resource_type}_CF_mean'] = self.CF_ts_df[self.resource_type].mean(axis=0) # Mean of all rows (Hours)
+        self.province_grid_cells_store[f'{self.resource_type}_CF_mean'] = self.CF_ts_df.mean(axis=0) # Mean of all rows (Hours)
         # Updates the 'CF_mean' field to stored dataframe with key 'cells. The grid cells must have matched "X(grid cell's)-Y(timeseries header)" index to do this step.
         '''
         Future Scope: Replacing CF_mean with high resolution data (likely from Global Solar Atlas/ Local data)
@@ -96,12 +101,12 @@ class Timeseries(ERA5Cutout):
         self.data : tuple= site_data(self.province_grid_cells_store, self.CF_ts_df)
         '''
         @ to access return data
-        Both PV and WIND are gonna go under same 'name' 
+        Both PV and WIND are gonna go under same 'key' 
         # To access the PV timeseries, user has to use the "Y" index to access PV timeseries e.g. pv_timeseries_dataframe = data.timeseries.solar ('timeseries' is name of the tuple, 'solar' is the first level column name of the dataframe.)
         '''
             # Step 5: Save the grid cells and timeseries to the local HDF5 store
         self.datahandler.to_store(self.province_grid_cells_store, 'cells') # We don't want 'force-update' here, just need to append 'CF_mean' datafields to cells.
-        self.datahandler.to_store(self.CF_ts_df, 'timeseries') 
+        self.datahandler.to_store(self.CF_ts_df, f'timeseries/{self.resource_type}') # Hierarchical data of resources under kley 'timeseries' 
         '''
         @ store data
         Both PV and WIND are gonna go under same 'key' 
@@ -274,8 +279,7 @@ class Timeseries(ERA5Cutout):
 
         # Concatenate all results into a single DataFrame
         self.cluster_df = pd.concat(results, axis=1)
-        # self.cluster_df.columns = pd.MultiIndex.from_arrays([[self.resource_type] * len(self.cluster_df.columns), self.cluster_df.columns])
-        self.datahandler.to_store(self.cluster_df, f'timeseries_clusters_{self.resource_type}',force_update=True)
+        self.datahandler.to_store(self.cluster_df, f'timeseries/clusters/{self.resource_type}',force_update=True)# Hierarchical data of resources under kley 'timeseries' 
 
         # Display the final DataFrame
         return self.cluster_df
