@@ -118,39 +118,45 @@ class GWACells(GADMBoundaries):
 
     def map_GWA_cells_to_ERA5(self,
                               memory_resource_limitation):
+        
         # Load the grid cells and GWA cells as GeoDataFrames
         self.store_grid_cells = self.datahandler.from_store('cells')
+        
+        _era5_cells_=self.store_grid_cells.reset_index()
+ 
         self.gwa_cells_gdf = self.load_gwa_cells(memory_resource_limitation)
 
-        self.log.info(f">> Mapping {len(self.gwa_cells_gdf)} GWA Cells to {len(self.store_grid_cells)} ERA5 Cells...")
+        self.log.info(f">> Mapping {len(self.gwa_cells_gdf)} GWA Cells to {len(_era5_cells_)} ERA5 Cells...")
 
         results = []  # List to store results for each region
-
-        for region in self.store_grid_cells['Region'].unique():
-            _store_grid_cells_region = self.store_grid_cells[self.store_grid_cells['Region'] == region]
+        
+        for region in _era5_cells_['Region'].unique():
+            _era5_cells_region = _era5_cells_[_era5_cells_['Region'] == region]
             
             # Perform overlay operation
-            _data_ = gpd.overlay(self.gwa_cells_gdf, _store_grid_cells_region, how='intersection', keep_geom_type=False)
+            _data_ = self.gwa_cells_gdf.overlay(_era5_cells_region, how='intersection', keep_geom_type=False)
             
             # Rename columns and select relevant data
             _data_ = _data_.rename(columns={'x_1': 'x', 'y_1': 'y'})
             selected_columns = list(_data_.columns) + [f'{self.resource_type}_CF_mean']
-            
-            # Store mapped GWA cells in results list
-            results.append(_data_.loc[:, selected_columns])
 
-        # Concatenate all results into a single GeoDataFrame
-        if results:
-            self.mapped_gwa_cells = pd.concat(results, axis=0).drop_duplicates()
+            regional_df=_data_.loc[:, selected_columns]
             
             self.log.info(f">> Calculating aggregated values for ERA5 Cell's...")
-            # Aggregate values
-            self.mapped_gwa_cells_aggr = self.mapped_gwa_cells.groupby('cell').agg({
-                'windspeed_gwa': 'mean',
-                'CF_IEC2': 'mean',
-                'CF_IEC3': 'mean',
-                'wind_CF_mean': 'mean'
-            }, numeric_only=True)
+            # regional_mapped_gwa_cells_aggr = regional_df.groupby('cell').agg({
+            #         'windspeed_gwa': 'mean',
+            #         'CF_IEC2': 'mean',
+            #         'CF_IEC3': 'mean',
+            #         'wind_CF_mean': 'mean'
+            #     }, numeric_only=True)
+            numeric_cols = regional_df.select_dtypes(include='number')
+            regional_mapped_gwa_cells_aggr = numeric_cols.groupby(regional_df['cell']).mean()
             
-            # Store the aggregated data
-            self.datahandler.to_store(self.mapped_gwa_cells_aggr, 'cells')  
+            # Store mapped GWA cells in results list
+            results.append(regional_mapped_gwa_cells_aggr)
+        
+        # Concatenate all results into a single GeoDataFrame
+        self.mapped_gwa_cells_aggr_df = pd.concat(results, axis=0)
+            
+        # Store the aggregated data
+        self.datahandler.to_store(self.mapped_gwa_cells_aggr_df, 'cells')  

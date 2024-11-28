@@ -226,7 +226,10 @@ def create_cells_Union_in_clusters(
     # Initialize an aggregation dictionary
     agg_dict = {f'lcoe_{resource_type}': lambda x: x.iloc[len(x) // 2], 
                 f'capex_{resource_type}':'first',
-                'Cluster_No':'first',
+                f'fom_{resource_type}':'first',
+                f'vom_{resource_type}':'first',
+                f'{resource_type}_CF_mean':'mean',
+                f'Cluster_No':'first',
                 f'potential_capacity_{resource_type}': 'sum',
                 f'Region': 'first',
                 f'nearest_station':'first',

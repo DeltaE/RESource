@@ -3,7 +3,7 @@ from workflow.scripts.resources import Resources
 ## single resource
 
 # Iterate over provinces for both solar and wind resources
-resource_types = ['wind'] #'solar'clear
+resource_types = ['solar','wind'] 
 
 provinces=[ 'BC']# 'AB','SK','ON','NS' ]  #''BC',
 for province_code in provinces:
@@ -17,5 +17,3 @@ for province_code in provinces:
         # Create an instance of Resources and execute the module
         resource_module = Resources(**required_args)
         resource_module.execute_module(memory_resource_limitation=False)
-        
-
