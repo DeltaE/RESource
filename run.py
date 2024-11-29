@@ -9,7 +9,7 @@ provinces=[ 'BC']# 'AB','SK','ON','NS' ]  #''BC',
 for province_code in provinces:
     for resource_type in resource_types:
         required_args = {
-            "config_file_path": 'config/config.yml',
+            "config_file_path": 'config/config.yaml',
             "province_short_code": province_code,
             "resource_type": resource_type
         }
