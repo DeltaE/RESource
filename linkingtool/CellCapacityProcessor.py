@@ -45,7 +45,7 @@ class CellCapacityProcessor(LandContainer,
         self.cell_resolution=self.cutout_config['dx']
     
     def set_composite_excluder(self):
-        return self.set_excluder()
+        return LandContainer.set_excluder()
     
     # def __get_raster_path__(self, config, root, rasters_dir):
     #     return os.path.join(root, rasters_dir , config['zip_extract_direct'], config['raster'])

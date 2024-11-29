@@ -190,28 +190,45 @@ def load_config(file_path):
 """
 
 # this is a damn good function that downloads any datafile ! 
-def download_data(
-    source_URL:str,
-    file_path:str):
+import requests
+import logging
 
-    # Headers (modify these if required)
+# Initialize logging
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)
+
+def download_data(source_URL: str, file_path: str) -> str:
+    """
+    Downloads a file from a given URL and saves it to the specified file path.
+    
+    Parameters:
+        source_URL (str): URL of the file to download.
+        file_path (str): Path where the downloaded file will be saved.
+    
+    Returns:
+        str: The file path if download is successful; otherwise, an instruction message.
+    """
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
 
-    # Send HTTP GET request to the URL
-    response = requests.get(source_URL, headers=headers)
+    try:
+        # Send HTTP GET request
+        response = requests.get(source_URL, headers=headers, timeout=30)
+        
+        # Check if the request was successful
+        if response.status_code == 200:
+            with open(file_path, 'wb') as file:
+                file.write(response.content)
+            log.info(f">> File downloaded successfully and saved as {file_path}")
+            return file_path
+        else:
+            log.warning(f">> Failed to download the file. Status code: {response.status_code}")
+            return f">> Please download the data manually from {source_URL} and save it to {file_path}"
+    except requests.RequestException as e:
+        log.error(f">> An error occurred while downloading the file: {e}")
+        return f">> Please download the data manually from {source_URL} and save it to {file_path}"
 
-    # Check if the request was successful
-    if response.status_code == 200:
-        # Write the content of the response to a file
-        with open(file_path, 'wb') as file:
-            file.write(response.content)
-        log.info(f">> File downloaded successfully and saved as {file_path}")
-    else:
-        # log.info(f"Failed to download the Resources zip file. Status code: {response.status_code}")
-        log.info(f">> Please Download the data from {source_URL} and extract the files to {file_path}")
-            # return file_path
 
 
 """ >>> not in use

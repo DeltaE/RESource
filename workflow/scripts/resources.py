@@ -127,11 +127,21 @@ class Resources(AttributesParser):
     * Remarks:  Could be parallelized with Step 1B/C.
     ______________________
     '''
-    def find_grid_nodes(self):
+    def find_grid_nodes(self,
+                        use_pypsa_buses:bool=True):
 
         self.grid=GridNodeLocator(**self.required_args)
-        self.grid_ss=self.coders.get_table_provincial('substations')
         
+        if use_pypsa_buses:
+            buses_data_path=Path (self.config['pypsa']['output']['prepare_base_network']['folder'])/'buses.csv'
+            grid_ss_df=pd.read_csv(buses_data_path)
+            self.grid_ss = gpd.GeoDataFrame(
+                grid_ss_df,
+                geometry=gpd.points_from_xy(grid_ss_df['x'], grid_ss_df['y']),
+                crs=self.get_default_crs(),  # Set the coordinate reference system (e.g., WGS84)
+                ) 
+        else:
+            self.grid_ss:gpd.GeoDataFrame=self.coders.get_table_provincial('substations')
         
         self.cutout,self.province_boundary=self.era5_cutout.get_era5_cutout()
         self.store_grid_cells=self.datahandler.from_store('cells')
@@ -317,7 +327,7 @@ class Resources(AttributesParser):
         self.get_CF_timeseries()
         self.extract_weather_data()
         self.update_gwa_scaled_params(self.memory_resource_limitation)
-        self.find_grid_nodes()
+        self.find_grid_nodes(use_pypsa_buses=True)
         self.score_cells()
         self.get_clusters()
         self.get_cluster_timeseries()
@@ -383,7 +393,7 @@ def export_results(resource_type:str,
 
 # if __name__ == "__main__":
 #     parser = argparse.ArgumentParser(description='Run solar module script')
-#     parser.add_argument('config', type=str, help=f"Path to the configuration file '*.yml'")
+#     parser.add_argument('config', type=str, help=f"Path to the configuration file '*.yaml'")
 #     parser.add_argument('resource_type', type=str, help='Specify resource type e.g. solar')
 #     args = parser.parse_args()
 #     main(args.config, args.resource_type)
