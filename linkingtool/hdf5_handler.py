@@ -63,7 +63,7 @@ class DataHandler:
 
                 # Add new columns to the existing DataFrame if not present
                 for column in self.data_new.columns:
-                    if column not in self.data_ext.columns:
+                    if not data.empty and column not in self.data_ext.columns:
                         self.data_ext[column] = self.data_new[column]
 
                 # Update the existing DataFrame in HDF5
