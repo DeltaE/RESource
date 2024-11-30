@@ -19,7 +19,7 @@ class DataHandler:
                 warnings.warn(f">> Store has not been set during initialization. Please define the store path during applying DataHandler methods")
             else:
                 self.store = Path(hdf_file_path)
-                print(f">> Store initialized with the given path: {hdf_file_path}")
+                # print(f">> Store initialized with the given path: {hdf_file_path}")
                 
         except Exception as e:
             warnings.warn(f"Error reading file: {e}")
