@@ -136,6 +136,7 @@ class GWACells(GADMBoundaries):
         self.log.info(f">> Mapping {len(self.gwa_cells_gdf)} GWA Cells to {len(_era5_cells_)} ERA5 Cells...")
 
         results = []  # List to store results for each region
+        self.log.info(f">> Calculating aggregated values for ERA5 Cell's...")
         
         for region in _era5_cells_['Region'].unique():
             _era5_cells_region = _era5_cells_[_era5_cells_['Region'] == region]
@@ -148,8 +149,6 @@ class GWACells(GADMBoundaries):
             selected_columns = list(_data_.columns) + [f'{self.resource_type}_CF_mean']
 
             regional_df=_data_.loc[:, selected_columns]
-            
-            self.log.info(f">> Calculating aggregated values for ERA5 Cell's...")
             
             numeric_cols = regional_df.select_dtypes(include='number') 
             regional_mapped_gwa_cells_aggr = numeric_cols.groupby(regional_df['cell']).mean() # Aggregateds he numeric columns data via mean
