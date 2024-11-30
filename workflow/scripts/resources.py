@@ -284,11 +284,11 @@ class Resources(AttributesParser):
     def get_cluster_timeseries(self):
         self.log.info(f">> Preparing representative profiles for {len(self.cell_cluster_gdf)} clusters")
         self.cells_timeseries=self.datahandler.from_store(F'timeseries/{self.resource_type}')
-        self.cluster_df=self.timeseries.get_cluster_timeseries(self.cell_cluster_gdf,
+        self.cluster_ts_df=self.timeseries.get_cluster_timeseries(self.cell_cluster_gdf,
                                 # self.cells_timeseries[self.resource_type],
                                 self.cells_timeseries,
                                self.dissolved_cell_indices_df)
-        return self.cluster_df
+        return self.cluster_ts_df
 
     # _________________________________________________________________________________
 
@@ -315,7 +315,8 @@ class Resources(AttributesParser):
             self.log.info(f"Invalid resource type. Please select one of these: 'solar', 'wind', 'all'")
 
     def execute_module(self,
-                       memory_resource_limitation:bool=True):
+                       select_top_sites:Optional[bool]=True,
+                       memory_resource_limitation:Optional[bool]=True):
         """
         Execute the specific module logic for the given resource type ('solar' or 'wind').
         """
@@ -333,50 +334,132 @@ class Resources(AttributesParser):
         self.get_cluster_timeseries()
         self.units.create_units_dictionary()
         utils.print_module_title(f"Results from {self.resource_type} module saved to {self.store} for {self.get_province_name()}...")
-        export_results(self.resource_type,
-                    self.get_clusters().clusters,
-                    self.get_cluster_timeseries())
+        self.export_results(self.resource_type,
+                    resource_clusters=self.get_clusters().clusters,
+                    cluster_timeseries=self.get_cluster_timeseries(),
+                    save_to=Path('results/linking'))
+        if select_top_sites:
+            resource_max_capacity=self.resource_disaggregation_config.get('max_capacity',10)
+            top_sites,top_sites_ts=self.select_top_sites(self.get_clusters().clusters,
+                                self.get_cluster_timeseries(),
+                                resource_max_capacity=resource_max_capacity)
+            self.export_results(self.resource_type,
+                        resource_clusters=top_sites,
+                        cluster_timeseries=top_sites_ts,
+                        save_to=Path('results/linking'))
+        else:
+            pass
 
-@staticmethod
-def export_results(resource_type:str,
-                   resource_clusters:pd.DataFrame,
-                   cluster_timeseries:pd.DataFrame,
-                   save_to : Optional[Path]=None):
-    """
-    Export processed resource cluster results (geodataframe) to standard datafield csvs as input for downstream models.
-    ### Args
-     - **resource_type**: The type of resource ('solar' or 'wind').
-     - **resource_clusters**: A DataFrame containing resource cluster information.
-     - **output_dir** [optional]: The directory to save the output files. Default to : 'results/Resource_options_{resource_type}.csv'
-     
-     > Currently supports: CLEWs, PyPSA
-    """
-    # Check if resource_clusters is a DataFrame or GeoDataFrame
-    if not isinstance(resource_clusters, (pd.DataFrame, gpd.GeoDataFrame)):
-        raise TypeError(
-            f"Invalid input: resource_clusters must be a Pandas DataFrame or GeoDataFrame, "
-            f"but got {type(resource_clusters).__name__}."
-        )
+    @staticmethod
+    def export_results(resource_type:str,
+                    resource_clusters:pd.DataFrame,
+                    cluster_timeseries:pd.DataFrame,
+                    save_to : Optional[Path]=None):
+        """
+        Export processed resource cluster results (geodataframe) to standard datafield csvs as input for downstream models.
+        ### Args
+        - **resource_type**: The type of resource ('solar' or 'wind').
+        - **resource_clusters**: A DataFrame containing resource cluster information.
+        - **output_dir** [optional]: The directory to save the output files. Default to : 'results/Resource_options_{resource_type}.csv'
+        
+        > Currently supports: CLEWs, PyPSA
+        """
+        # Check if resource_clusters is a DataFrame or GeoDataFrame
+        if not isinstance(resource_clusters, (pd.DataFrame, gpd.GeoDataFrame)):
+            raise TypeError(
+                f"Invalid input: resource_clusters must be a Pandas DataFrame or GeoDataFrame, "
+                f"but got {type(resource_clusters).__name__}."
+            )
+        
+        if not isinstance(cluster_timeseries, (pd.DataFrame, gpd.GeoDataFrame)):
+            raise TypeError(
+                f"Invalid input: resource_clusters must be a Pandas DataFrame or GeoDataFrame, "
+                f"but got {type(resource_clusters).__name__}."
+            )
+        # Exclude all columns containing geometry-related data as these are not required for downstream models in consideration i.e. CLEWs, PyPSA
+        resource_clusters_excld_geom = resource_clusters[[col for col in resource_clusters.columns if col != 'geometry']]
+
+        # Save to CSV
+        if save_to is None:
+            save_to=Path(f'results')
+            save_to.parent.mkdir(parents=True,exist_ok=True)
+            
+            resource_clusters_excld_geom.to_csv(save_to/f'resource_options_{resource_type}.csv', index=True)
+            cluster_timeseries.to_csv(save_to/f'resource_options_{resource_type}_timeseries.csv', index=True)
+            
+            print(f"{resource_type} clusters exported to :{save_to}")
     
-    if not isinstance(cluster_timeseries, (pd.DataFrame, gpd.GeoDataFrame)):
-        raise TypeError(
-            f"Invalid input: resource_clusters must be a Pandas DataFrame or GeoDataFrame, "
-            f"but got {type(resource_clusters).__name__}."
-        )
-    # Exclude all columns containing geometry-related data as these are not required for downstream models in consideration i.e. CLEWs, PyPSA
-    resource_clusters_excld_geom = resource_clusters[[col for col in resource_clusters.columns if col != 'geometry']]
+    @staticmethod    
+    def select_top_sites(
+        sites:gpd.GeoDataFrame|pd.DataFrame,
+        sites_timeseries:pd.DataFrame,
+        resource_max_capacity:float)-> gpd.GeoDataFrame:
+        print(f">>> Selecting TOP Sites to for {resource_max_capacity} GW Capacity Investment in BC...")
+        """
+        Select the top sites based on potential capacity and a maximum resource capacity limit.
 
-    # Save to CSV
-    if save_to is None:
-        save_to=Path(f'results')
-        save_to.parent.mkdir(parents=True,exist_ok=True)
-        
-        resource_clusters_excld_geom.to_csv(save_to/f'resource_options_{resource_type}.csv', index=True)
-        cluster_timeseries.to_csv(save_to/f'resource_options_{resource_type}_timeseries.csv', index=True)
-        
-        print(f"{resource_type} clusters exported to :{save_to}")
-        
+        Parameters:
+        - sites_gdf: GeoDataFrame containing  cell and bucket information.
+        - resource_max_capacity : Maximum allowable  capacity in GW.
 
+        Returns:
+        - selected_sites: GeoDataFrame with the selected top sites.
+        """
+        print(f"{'_'*100}")
+        print(f"Selecting the Top Ranked Sites to invest in {resource_max_capacity} GW PV in BC")
+        print(f"{'_'*100}")
+     
+        # Initialize variables
+        selected_rows:list = []
+        total_capacity:float = 0.0
+
+        top_sites:gpd.GeoDataFrame = sites.copy()
+
+        if top_sites['potential_capacity'].iloc[0] < resource_max_capacity * 1000:
+            # Iterate through the sorted GeoDataFrame
+            for index, row in top_sites.iterrows():
+                # Check if adding the current row's capacity exceeds resource capacity
+                if total_capacity + row['potential_capacity'] <= resource_max_capacity * 1000:
+                    selected_rows.append(index)  # Add the row to the selection
+                    # Update the total capacity
+                    total_capacity += row['potential_capacity']
+                # If adding the current row's capacity would exceed max resource capacity, stop the loop
+                else:
+                    break
+
+            # Create a new GeoDataFrame with the selected rows
+            top_sites:gpd.GeoDataFrame = top_sites.loc[selected_rows]
+
+            # Apply the additional logic
+            # mask = sites['cluster_id'] > top_sites['cluster_id'].max()
+            mask = sites.index > top_sites.index.max()
+            selected_additional_sites:gpd.GeoDataFrame = sites[mask].head(1)
+            
+            remaining_capacity:float = resource_max_capacity * 1000 - top_sites['potential_capacity'].sum()
+
+            if remaining_capacity > 0:
+                
+                # selected_additional_sites['capex'] = capex* remaining_capacity
+                print(f"\n!! Note: The Last cluster ({selected_additional_sites.index[-1]}) originally had {round(selected_additional_sites['potential_capacity'].iloc[0] / 1000,2)} GW potential capacity."
+                    f"To fit the maximum capacity investment of {resource_max_capacity} GW, it has been adjusted to {round(remaining_capacity / 1000,2)} GW\n")
+                
+                selected_additional_sites['potential_capacity'] = remaining_capacity
+            # Concatenate the DataFrames
+            top_sites = pd.concat([top_sites, selected_additional_sites])
+        else:
+            original_capacity = sites['potential_capacity'].iloc[0]
+
+            print(f"!!Note: The first cluster originally had {round(original_capacity / 1000,2)} GW potential capacity.\n"
+                f"To fit the maximum capacity investment of {resource_max_capacity} GW, it has been adjusted. \n")
+
+            top_sites = top_sites.iloc[:1]  # Keep only the first row
+            # Adjust the potential_capacity of the first row
+            top_sites.at[top_sites.index[0], 'potential_capacity'] = resource_max_capacity * 1000
+
+        top_sites
+        top_sites_ts = sites_timeseries.loc[top_sites.index]
+        
+        return top_sites,top_sites_ts  # gdf
 
 # def main(config_file_path: str, 
 #          resource_type: str='solar'):
