@@ -2,8 +2,12 @@ import geopandas as gpd
 import pandas as pd
 from collections import namedtuple
 import warnings
-from typing import List,Dict,Optional
+from typing import List,Dict,Optional,Union, Tuple
 from pathlib import Path
+from datetime import datetime
+
+# Get the current local time
+current_local_time = datetime.now()
 
 warnings.filterwarnings("ignore")
 
@@ -45,6 +49,7 @@ class Resources(AttributesParser):
         self.era5_cutout=ERA5Cutout(**self.required_args)
         self.scorer=CellScorer(**self.required_args)
         self.gwa_cells=GWACells(**self.required_args)
+        self.reults_save_to=Path('results/linking')
         
         # Snapshot (range of of the temporal data)
         (
@@ -97,7 +102,8 @@ class Resources(AttributesParser):
                 self.log.info(f"'windspeed_ERA5' already present in the store information.")
                 pass
             else:
-                self.store_grid_cells_updated:gpd.GeoDataFrame=wind.impute_ERA5_windspeed_to_Cells(self.cutout, self.store_grid_cells)
+                self.store_grid_cells_updated:gpd.GeoDataFrame=wind.impute_ERA5_windspeed_to_Cells(self.cutout, 
+                                                                                                   self.store_grid_cells)
                 self.datahandler.to_store(self.store_grid_cells_updated,'cells')
                 return self.store_grid_cells_updated
         elif self.resource_type=='solar': 
@@ -161,7 +167,7 @@ class Resources(AttributesParser):
     ______________________ 
     '''
     def update_gwa_scaled_params(self,
-                                 memory_resource_limitation:bool=False):
+                                 memory_resource_limitation:Optional[bool]=False):
         if self.resource_type=='wind': 
             if all(column in self.store_grid_cells.columns for column in ['CF_IEC2', 'CF_IEC3', 'windspeed_gwa','windspeed_ERA5']):
                 self.log.info(f"'CF_IEC2', 'CF_IEC3', 'windspeed_gwa' are already present in the store information.")
@@ -191,7 +197,11 @@ class Resources(AttributesParser):
             e.g. i. [standardized energy indices in future climate scenarios](https://www.sciencedirect.com/science/article/pii/S0960148123011217?via%3Dihub)
                  ii. [Compound energy droughts](https://www.sciencedirect.com/science/article/pii/S0960148123014659?via%3Dihub#d1e724)
     '''
-    def score_cells(self ):
+    def score_cells(self):
+        """
+        Scores the Cells based on calculated LCOE ($/MWh). </br>
+        Wrapper of the _.get_cell_score()_ method of **_CellScorer_** object.
+        """
                 
         self.not_scored_cells=self.datahandler.from_store('cells')
         self.scored_cells = self.scorer.get_cell_score(self.not_scored_cells,f'{self.resource_type}_CF_mean')
@@ -231,7 +241,8 @@ class Resources(AttributesParser):
                      wcss_tolerance=0.05):
         """
         ### Args:
-         -Within-cluster Sum of Square. Higher tolerance gives , more simplification and less number of clusters. Default set to 0.05.
+         - **WCSS (Within-cluster Sum of Square) tolerance**. Higher tolerance gives , more simplification and less number of clusters. 
+         - **Default set to 0.05**.
         """
         
         self.resource_disaggregation_config=self.get_resource_disaggregation_config()
@@ -254,8 +265,6 @@ class Resources(AttributesParser):
                                                                                                self.region_optimal_k_df,
                                                                                                self.resource_type)
         
-        # dissolved_indices_save_to = os.path.join(self.linking_data['root'], self.resource_type, self.linking_data[f'{self.resource_type}']['dissolved_indices'])
-        # utils.dict_to_pickle(self.dissolved_indices, dissolved_indices_save_to)
         
         # Define a namedtuple
         cluster_data = namedtuple('cluster_data', ['clusters','dissolved_indices'])
@@ -264,6 +273,7 @@ class Resources(AttributesParser):
         # Corrected version of the code
         self.datahandler.to_store(self.cell_cluster_gdf,f'clusters/{self.resource_type}',force_update=True)
         self.dissolved_cell_indices_df=pd.DataFrame(self.dissolved_indices).T
+        self.dissolved_cell_indices_df.index.name='Region'
         self.datahandler.to_store(self.dissolved_cell_indices_df,f'dissolved_indices/{self.resource_type}',force_update=True)
         
         return self.clusters_nt
@@ -333,34 +343,45 @@ class Resources(AttributesParser):
         self.get_clusters()
         self.get_cluster_timeseries()
         self.units.create_units_dictionary()
-        utils.print_module_title(f"Results from {self.resource_type} module saved to {self.store} for {self.get_province_name()}...")
-        self.export_results(self.resource_type,
-                    resource_clusters=self.get_clusters().clusters,
-                    cluster_timeseries=self.get_cluster_timeseries(),
-                    save_to=Path('results/linking'))
+        
         if select_top_sites:
-            resource_max_capacity=self.resource_disaggregation_config.get('max_capacity',10)
-            top_sites,top_sites_ts=self.select_top_sites(self.get_clusters().clusters,
-                                self.get_cluster_timeseries(),
-                                resource_max_capacity=resource_max_capacity)
-            self.export_results(self.resource_type,
-                        resource_clusters=top_sites,
-                        cluster_timeseries=top_sites_ts,
-                        save_to=Path('results/linking'))
-        else:
-            pass
+            resource_max_capacity=self.resource_disaggregation_config.get('max_capacity',10) # Collects max_capacity from resource_disaggregation_config (if set), otherwise defaults to 10 GW
+            
+            resource_clusters,cluster_timeseries=self.select_top_sites(self.get_clusters().clusters,
+                                                                        self.get_cluster_timeseries(),
+                                                                        resource_max_capacity=resource_max_capacity)
+               
+            utils.print_module_title(f"Top Sites(clusters) from {self.resource_type} module saved to {self.store} for {self.get_province_name()}...")
+            
+        else: # When user wants all of the sites
+            resource_clusters=self.get_clusters().clusters,
+            cluster_timeseries=self.get_cluster_timeseries(),
+    
+            utils.print_module_title(f"All Sites (clusters) from {self.resource_type} module saved to {self.store} for {self.get_province_name()}...")
+   
+        
+        self.export_results(self.resource_type,
+                            resource_clusters,
+                            cluster_timeseries,
+                            self.reults_save_to)
+        
+        sites_summary:str=self.create_summary_info(self.resource_type,
+                                                   resource_clusters,
+                                                   cluster_timeseries)
+        self.dump_export_metadata(sites_summary,
+                                  self.reults_save_to)
 
     @staticmethod
     def export_results(resource_type:str,
                     resource_clusters:pd.DataFrame,
                     cluster_timeseries:pd.DataFrame,
-                    save_to : Optional[Path]=None):
+                    save_to : Optional[Path]=Path('results')):
         """
         Export processed resource cluster results (geodataframe) to standard datafield csvs as input for downstream models.
         ### Args
         - **resource_type**: The type of resource ('solar' or 'wind').
         - **resource_clusters**: A DataFrame containing resource cluster information.
-        - **output_dir** [optional]: The directory to save the output files. Default to : 'results/Resource_options_{resource_type}.csv'
+        - **output_dir** [optional]: The directory to save the output files. Default to : 'results/*.csv'
         
         > Currently supports: CLEWs, PyPSA
         """
@@ -371,7 +392,7 @@ class Resources(AttributesParser):
                 f"but got {type(resource_clusters).__name__}."
             )
         
-        if not isinstance(cluster_timeseries, (pd.DataFrame, gpd.GeoDataFrame)):
+        if not isinstance(cluster_timeseries, (pd.DataFrame)):
             raise TypeError(
                 f"Invalid input: resource_clusters must be a Pandas DataFrame or GeoDataFrame, "
                 f"but got {type(resource_clusters).__name__}."
@@ -379,21 +400,69 @@ class Resources(AttributesParser):
         # Exclude all columns containing geometry-related data as these are not required for downstream models in consideration i.e. CLEWs, PyPSA
         resource_clusters_excld_geom = resource_clusters[[col for col in resource_clusters.columns if col != 'geometry']]
 
-        # Save to CSV
-        if save_to is None:
-            save_to=Path(f'results')
-            save_to.parent.mkdir(parents=True,exist_ok=True)
-            
-            resource_clusters_excld_geom.to_csv(save_to/f'resource_options_{resource_type}.csv', index=True)
-            cluster_timeseries.to_csv(save_to/f'resource_options_{resource_type}_timeseries.csv', index=True)
-            
-            print(f"{resource_type} clusters exported to :{save_to}")
+        # CSV -> Save to 
+        save_to=utils.ensure_path(save_to)
+        save_to.parent.mkdir(parents=True,exist_ok=True)
+        
+        resource_clusters_excld_geom.to_csv(save_to/f'resource_options_{resource_type}.csv', index=True)
+        cluster_timeseries.to_csv(save_to/f'resource_options_{resource_type}_timeseries.csv', index=True)
     
+        print(f"{resource_type} clusters exported to :{save_to}")
+        
+    @staticmethod
+    def create_summary_info(resource_type:str,
+                            sites:pd.DataFrame,
+                            timeseries:pd.DataFrame)->str:
+        
+        """
+        Creates summary information to be exported alongside results data.
+        """
+        
+        formatted_time = current_local_time.strftime("%H:%M:%S")
+        
+        info = (
+            f"{'_'*25} Top Block Represents the latest results' summary <{'_'*25}\n"
+            f"{'-'*100}\n"
+            f"* {resource_type.upper()} *\n"
+            f"Total Capacity of the Sites: {sites['potential_capacity'].sum() / 1e3} GW\n"
+            f">> No. of Sites (Clusters): {len(sites)}\n"
+            f" >> Snapshot Points: {len(timeseries)}"
+            f"\n Results Generated on Local Time (hh:mm:ss): {formatted_time}\n"
+            f"{'-'*100}\n"
+        )
+        return info
+    
+    @staticmethod
+    def dump_export_metadata(info: str, save_to: Optional[Path] = 'results/linking'):
+        """
+        Dumps the metadata summary information to a file. If the file already exists,
+        it prepends the new info at the top of the file.
+        """
+        save_to = utils.ensure_path(save_to)  # Ensures that the provided save path is a Path object
+        file_name = "Resource_options_summary.txt"
+        # File path
+        file_path = save_to / file_name
+
+        # Check if the file exists and read the existing content
+        if file_path.exists():
+            with open(file_path, "r") as file:
+                existing_content = file.read()
+        else:
+            existing_content = ""
+
+        # Prepend the new info to the existing content
+        updated_content = info + "\n" + existing_content
+
+        # Save the updated content to the file
+        with open(file_path, "w") as file:
+            file.write(updated_content)
+
     @staticmethod    
     def select_top_sites(
-        sites:gpd.GeoDataFrame|pd.DataFrame,
+        sites:Union[gpd.GeoDataFrame, pd.DataFrame],
         sites_timeseries:pd.DataFrame,
-        resource_max_capacity:float)-> gpd.GeoDataFrame:
+        resource_max_capacity:float,
+        )-> Tuple[Union[gpd.GeoDataFrame, pd.DataFrame], pd.DataFrame]:
         print(f">>> Selecting TOP Sites to for {resource_max_capacity} GW Capacity Investment in BC...")
         """
         Select the top sites based on potential capacity and a maximum resource capacity limit.
@@ -456,10 +525,11 @@ class Resources(AttributesParser):
             # Adjust the potential_capacity of the first row
             top_sites.at[top_sites.index[0], 'potential_capacity'] = resource_max_capacity * 1000
 
-        top_sites
-        top_sites_ts = sites_timeseries.loc[top_sites.index]
+
+        top_sites_ts = sites_timeseries[top_sites.index]
         
-        return top_sites,top_sites_ts  # gdf
+        return top_sites ,top_sites_ts  # gdf
+
 
 # def main(config_file_path: str, 
 #          resource_type: str='solar'):

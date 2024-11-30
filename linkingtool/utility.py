@@ -15,6 +15,7 @@ import json
 import matplotlib.pyplot as plt
 import pickle
 import datetime
+from pathlib import Path
 
 now = datetime.datetime.now()
 date_time_str = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -57,6 +58,22 @@ def assign_cell_id(cells: gpd.GeoDataFrame,
     cells.set_index(index_name, inplace=True)
 
     return cells
+
+def ensure_path(save_to: str | Path) -> Path:
+    """
+    Ensures that the given argument is a Path object. If the user provides a string,
+    it converts it to a Path object to facilitate operations like directory creation.
+    
+    ## Args:
+    - save_to (str | Path): The path input, either as a string or a Path object.
+
+    ## Returns:
+    - Path: The input converted (if necessary) to a Path object.
+    """
+    if not isinstance(save_to, Path):
+        Warning(f">> Given instance for 'destination (save_to)' is of type: {type(save_to)}. Converting it to a Path")
+        save_to = Path(save_to)
+    return save_to
 
 
 # Function to Generate Cell Index from Region name

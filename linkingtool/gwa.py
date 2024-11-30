@@ -7,7 +7,8 @@ import rioxarray as rxr
 import xarray as xr
 from linkingtool.hdf5_handler import DataHandler
 import requests
-import dask_geopandas as dgpd
+from typing import List, Dict, Optional
+import linkingtool.utility as utils
 
 # ---------
 from linkingtool.boundaries import GADMBoundaries
@@ -89,6 +90,9 @@ class GWACells(GADMBoundaries):
                       url: str, 
                       destination: Path) -> None:
         """Downloads a file from a given URL to a specified destination."""
+        
+        destination=utils.ensure_path(destination)
+        
         try:
             response = requests.get(url)
             response.raise_for_status()  # Raise an error for bad responses
@@ -99,7 +103,7 @@ class GWACells(GADMBoundaries):
 
     
     def load_gwa_cells(self,
-                       memory_resource_limitation:bool=False):
+                       memory_resource_limitation:Optional[bool]=False):
         self.province_gwa_cells_df = self.prepare_GWA_data(memory_resource_limitation)
 
         # Vectorized creation of geometries
@@ -117,7 +121,10 @@ class GWACells(GADMBoundaries):
     
 
     def map_GWA_cells_to_ERA5(self,
-                              memory_resource_limitation):
+                              memory_resource_limitation:Optional[bool]):
+        """
+        Maps the GWA high resolution cells to comparatively low resolution ERA5 Cells.
+        """
         
         # Load the grid cells and GWA cells as GeoDataFrames
         self.store_grid_cells = self.datahandler.from_store('cells')
@@ -143,14 +150,9 @@ class GWACells(GADMBoundaries):
             regional_df=_data_.loc[:, selected_columns]
             
             self.log.info(f">> Calculating aggregated values for ERA5 Cell's...")
-            # regional_mapped_gwa_cells_aggr = regional_df.groupby('cell').agg({
-            #         'windspeed_gwa': 'mean',
-            #         'CF_IEC2': 'mean',
-            #         'CF_IEC3': 'mean',
-            #         'wind_CF_mean': 'mean'
-            #     }, numeric_only=True)
-            numeric_cols = regional_df.select_dtypes(include='number')
-            regional_mapped_gwa_cells_aggr = numeric_cols.groupby(regional_df['cell']).mean()
+            
+            numeric_cols = regional_df.select_dtypes(include='number') 
+            regional_mapped_gwa_cells_aggr = numeric_cols.groupby(regional_df['cell']).mean() # Aggregateds he numeric columns data via mean
             
             # Store mapped GWA cells in results list
             results.append(regional_mapped_gwa_cells_aggr)
