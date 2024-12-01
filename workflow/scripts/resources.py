@@ -265,6 +265,7 @@ class Resources(AttributesParser):
                                                                                                self.region_optimal_k_df,
                                                                                                self.resource_type)
         
+        self.cell_cluster_gdf['Operational_life'] = self.resource_disaggregation_config.get('Operational_life', 20)
         
         # Define a namedtuple
         cluster_data = namedtuple('cluster_data', ['clusters','dissolved_indices'])
