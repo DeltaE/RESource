@@ -131,7 +131,8 @@ class CellCapacityProcessor(LandContainer,
             'fom': self.resource_fom,
             'vom': round(self.resource_vom, 4),
             'grid_connection_cost_per_km': self.grid_connection_cost_per_km,
-            'tx_line_rebuild_cost': self.tx_line_rebuild_cost
+            'tx_line_rebuild_cost': self.tx_line_rebuild_cost,
+            'Operational_life': int(25) if self.resource_type == 'solar' else int(20) if self.resource_type == 'wind' else 0
         }
 
         # Create a new dictionary with stylized keys
