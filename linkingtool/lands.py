@@ -45,7 +45,7 @@ class ConservationLands(GADMBoundaries):
 
         
         file_name_prefix = self.conserved_lands_cfg['data_name']
-        provincial_file_path = Path('data/downloaded_data/lands') / f"{file_name_prefix}.pickle"
+        provincial_file_path = Path('data/downloaded_data/lands') / f"{file_name_prefix}_{self.province_short_code}.pickle"
         provincial_file_path.parent.mkdir(parents=True, exist_ok=True)
         
         if provincial_file_path.exists():
