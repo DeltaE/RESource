@@ -140,9 +140,9 @@ def main():
     parser = argparse.ArgumentParser(
         description='Linking Tool CLI: A tool for managing resources and configurations.',
         epilog='Examples:\n'
-               '  linkingtool create_resources /path/to/config.yml solar\n'
-               '  linkingtool prepare_data /path/to/config.yml\n'
-               '  linkingtool top_sites /path/to/config.yml solar 1000\n'
+               '  linkingtool create_resources /path/to/config.yaml solar\n'
+               '  linkingtool prepare_data /path/to/config.yaml\n'
+               '  linkingtool top_sites /path/to/config.yaml solar 1000\n'
     )
     
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
@@ -155,7 +155,7 @@ def main():
     create_resources_parser.add_argument(
         'config_path',
         type=str,
-        help="Path to the configuration file '*.yml'"
+        help="Path to the configuration file '*.yaml'"
     )
     create_resources_parser.add_argument(
         'resource_type',
@@ -172,7 +172,7 @@ def main():
     prepare_data_parser.add_argument(
         'config_path',
         type=str,
-        help="Path to the configuration file '*.yml'"
+        help="Path to the configuration file '*.yaml'"
     )
     
     prepare_data_parser.add_argument(
@@ -189,7 +189,7 @@ def main():
     top_sites_parser.add_argument(
         'config_path',
         type=str,
-        help="Path to the configuration file '*.yml'"
+        help="Path to the configuration file '*.yaml'"
     )
     top_sites_parser.add_argument(
         'resource_type',

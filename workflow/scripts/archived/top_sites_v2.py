@@ -57,7 +57,7 @@ class TopSiteSelection:
             print("No sites selected.")
         return selected_sites
 
-    def collect_timeseries(self, selected_sites):
+    def create_timeseries(self, selected_sites):
         if self.resource_type == "bess":
             log.info(f"Time-slice creation and visuals not required for BESS.")
         else:
