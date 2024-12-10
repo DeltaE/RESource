@@ -16,12 +16,36 @@ class GridNodeLocator(AttributesParser):
         self.grid_node_proximity_filter = self.disaggregation_config['transmission']['proximity_filter']
 
     def __find_nearest_station__(self, cell_geometry, buses_gdf, bus_tree):
-        """Find the nearest grid station for a given geometry."""
+        """
+        Find the nearest grid station for a given geometry.
+
+        Parameters:
+            cell_geometry (shapely.geometry): The geometry of the cell (e.g., a polygon or point).
+            buses_gdf (GeoDataFrame): GeoDataFrame containing bus stations with geometry and attributes.
+            bus_tree (scipy.spatial.KDTree): A spatial index of the bus station geometries.
+
+        Returns:
+            tuple: (nearest_station_code, distance_km) where
+                nearest_station_code is the name or node code of the nearest station.
+                distance_km is the distance to the nearest station in kilometers.
+        """
+        # Query the KDTree with the centroid of the cell geometry
         _, index = bus_tree.query((cell_geometry.centroid.x, cell_geometry.centroid.y))
+
+        # Retrieve the nearest bus row
         nearest_bus_row = buses_gdf.iloc[index]
-        distance_km = cell_geometry.distance(nearest_bus_row['geometry']) * 111.32  # Degrees to km conversion
-        nearest_station_code = nearest_bus_row['node_code']
+
+        # Compute the distance (convert degrees to kilometers using approximate conversion factor)
+        distance_km = cell_geometry.centroid.distance(nearest_bus_row['geometry']) * 111.32
+
+        # Determine the station code based on available columns
+        if 'name' in buses_gdf.columns:
+            nearest_station_code = nearest_bus_row['name']
+        else:
+            nearest_station_code = nearest_bus_row['node_code']
+
         return nearest_station_code, distance_km
+
 
     def find_grid_nodes_ERA5_cells(
         self, 

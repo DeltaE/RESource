@@ -28,7 +28,7 @@ class AttributesParser:
     This is the parent class that will extract the core attributes from the User Config file.
     """
     # Attributes that are required as Args.
-    config_file_path: Path =field(default='config/config.yml')
+    config_file_path: Path =field(default='config/config.yaml')
     province_short_code: str=field(default= 'BC')
     resource_type: str = field(default='None')
     

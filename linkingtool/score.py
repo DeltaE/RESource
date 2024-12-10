@@ -30,6 +30,11 @@ class CellScorer(AttributesParser):
             """
             Calculate the potential LCOE score for each cell in the dataframe,
             reading cost parameters directly from the DataFrame.
+            
+            ## Args:
+            - **Cells** : Pandas DataFrame of grid cells.
+            - **CF_column**: Column name from which Capacity Factor (CF) will be used to calculated Annual. Avg. Energy (MWh). User can have multiple CF_mean columns sourced from different data sources.
+           
             """
             dataframe = cells.copy()  # Use the input DataFrame for calculations
             print(">> Calculating Score for each Cell...")

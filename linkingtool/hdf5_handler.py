@@ -19,7 +19,7 @@ class DataHandler:
                 warnings.warn(f">> Store has not been set during initialization. Please define the store path during applying DataHandler methods")
             else:
                 self.store = Path(hdf_file_path)
-                print(f">> Store initialized with the given path: {hdf_file_path}")
+                # print(f">> Store initialized with the given path: {hdf_file_path}")
                 
         except Exception as e:
             warnings.warn(f"Error reading file: {e}")
@@ -63,7 +63,7 @@ class DataHandler:
 
                 # Add new columns to the existing DataFrame if not present
                 for column in self.data_new.columns:
-                    if column not in self.data_ext.columns:
+                    if not data.empty and column not in self.data_ext.columns:
                         self.data_ext[column] = self.data_new[column]
 
                 # Update the existing DataFrame in HDF5

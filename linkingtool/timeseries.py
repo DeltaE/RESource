@@ -75,6 +75,7 @@ class Timeseries(ERA5Cutout):
         # Step 3: Convert the timeseries data to the appropriate province timezone
         self.province_timezone=self.get_province_timezone()
         self.CF_ts_df = self.__fix_timezone__(self._CF_ts_df_).tz_localize(None)
+
         '''
         - We localize the datetime-stamp (i.e. removing the timezone information) to sync the requirements for downstream models.
         - The naive timestamps (without timezone info) found better harmonized with the other data sources.
