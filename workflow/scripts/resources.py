@@ -259,7 +259,9 @@ class Resources(AttributesParser):
                                                                                                  self.vis_dir, 
                                                                                                  self.wcss_tolerance,
                                                                                                  self.resource_type,
-                                                                                                 [f'lcoe_{self.resource_type}', f'potential_capacity_{self.resource_type}'])
+                                                                                                 [f'LCOE_{self.resource_type}', f'potential_capacity_{self.resource_type}']
+                                                                                                #  [f'lcoe_{self.resource_type}', f'potential_capacity_{self.resource_type}']
+                                                                                                 )
         
         self.cell_cluster_gdf, self.dissolved_indices = cluster.create_cells_Union_in_clusters(self.ERA5_cells_cluster_map, 
                                                                                                self.region_optimal_k_df,
@@ -327,6 +329,7 @@ class Resources(AttributesParser):
 
     def execute_module(self,
                        select_top_sites:Optional[bool]=True,
+                       use_pypsa_buses:Optional[bool]=True,
                        memory_resource_limitation:Optional[bool]=True):
         """
         Execute the specific module logic for the given resource type ('solar' or 'wind').
@@ -339,7 +342,7 @@ class Resources(AttributesParser):
         self.get_CF_timeseries()
         self.extract_weather_data()
         self.update_gwa_scaled_params(self.memory_resource_limitation)
-        self.find_grid_nodes(use_pypsa_buses=True)
+        self.find_grid_nodes(use_pypsa_buses)
         self.score_cells()
         self.get_clusters()
         self.get_cluster_timeseries()
@@ -403,7 +406,7 @@ class Resources(AttributesParser):
 
         # CSV -> Save to 
         save_to=utils.ensure_path(save_to)
-        save_to.parent.mkdir(parents=True,exist_ok=True)
+        save_to.mkdir(parents=True,exist_ok=True)
         
         resource_clusters_excld_geom.to_csv(save_to/f'resource_options_{resource_type}.csv', index=True)
         cluster_timeseries.to_csv(save_to/f'resource_options_{resource_type}_timeseries.csv', index=True)
