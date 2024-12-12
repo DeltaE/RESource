@@ -87,12 +87,12 @@ def find_optimal_K(
     optimal_k_data = next((k for k, wcss_value in enumerate(wcss_data, start=1) if wcss_value <= tolerance_data), None)
 
 # Plot and save the elbow charts
-    plt.plot(range(1, min(max_k, len(data_for_clustering))), wcss_data, marker='o', linestyle='-', label=f'lcoe_{resource_type}')
+    plt.plot(range(1, min(max_k, len(data_for_clustering))), wcss_data, marker='o', linestyle='-', label=f'LCOE_{resource_type}')
     if optimal_k_data is not None:
         plt.axvline(x=optimal_k_data, color='r', linestyle='--',
                     label=f"Optimal k = {optimal_k_data}; K-means with {round(wcss_tolerance*100)}% of WCSS")
 
-    plt.title(f"Elbow plot of K-means Clustering with 'lcoe_{resource_type}' for Region-{region}")
+    plt.title(f"Elbow plot of K-means Clustering with 'LCOE_{resource_type}' for Region-{region}")
     plt.xlabel('Number of Clusters (k)')
     plt.ylabel('Within-Cluster Sum of Squares (WCSS)')
     plt.grid(True)
@@ -104,7 +104,7 @@ def find_optimal_K(
     plt.tight_layout()
 
     # Print the optimal k
-    print(f"Zone {region} - Optimal k for lcoe_{resource_type} based clustering: {optimal_k_data}\n")
+    print(f"Zone {region} - Optimal k for LCOE_{resource_type} based clustering: {optimal_k_data}\n")
 
     return optimal_k_data
 
@@ -128,7 +128,7 @@ def pre_process_cluster_mapping(
     # Loop over unique regions
     for region in unique_regions:
         # Select data for the current region
-        data_for_clustering = cells_scored[cells_scored['Region'] == region][[f'lcoe_{resource_type}']]
+        data_for_clustering = cells_scored[cells_scored['Region'] == region][[f'LCOE_{resource_type}']]
         
         # Call the function for K-means clustering and elbow plot
         optimal_k = find_optimal_K(resource_type,data_for_clustering, region, wcss_tolerance, max_k=15)
@@ -155,7 +155,7 @@ def pre_process_cluster_mapping(
     cells_scored = assign_cluster_id(_x,'Region', 'cell')#.set_index('cell')
     
 
-    print(f"Optimal-k based on 'lcoe' clustering calculated for {len(unique_regions)} zones and saved to cell dataframe.\n")
+    print(f"Optimal-k based on 'LCOE' clustering calculated for {len(unique_regions)} zones and saved to cell dataframe.\n")
     cells_scored_cluster_mapped=cells_scored.copy()
 
     return cells_scored_cluster_mapped,region_optimal_k_df
@@ -224,7 +224,8 @@ def create_cells_Union_in_clusters(
     log.info(f" Preparing Clusters...")
     
     # Initialize an aggregation dictionary
-    agg_dict = {f'lcoe_{resource_type}': lambda x: x.iloc[len(x) // 2], 
+    agg_dict = {f'LCOE_{resource_type}': lambda x: x.iloc[len(x) // 2], 
+                f'lcoe_{resource_type}': lambda x: x.iloc[len(x) // 2], 
                 f'capex_{resource_type}':'first',
                 f'fom_{resource_type}':'first',
                 f'vom_{resource_type}':'first',
@@ -272,7 +273,8 @@ def create_cells_Union_in_clusters(
         dissolved_gdf=utils.assign_regional_cell_ids(dissolved_gdf,'Region','cluster_id')
 
         dissolved_gdf['Cluster_No'] = dissolved_gdf['Cluster_No'].astype(int)
-        dissolved_gdf.sort_values(by=f'lcoe_{resource_type}', ascending=True, inplace=True)
+        # dissolved_gdf.sort_values(by=f'lcoe_{resource_type}', ascending=True, inplace=True)
+        dissolved_gdf.sort_values(by=f'LCOE_{resource_type}', ascending=True, inplace=True)
         dissolved_gdf['Rank'] = range(1, len(dissolved_gdf)+1)
         
         dissolved_gdf.columns=dissolved_gdf.columns.str.replace(fr"(?i)(_{resource_type}|{resource_type}_)", "", regex=True)
@@ -288,6 +290,7 @@ def clip_cluster_boundaries_upto_regions(
     xxx 
     """
     cell_cluster_gdf_clipped=cell_cluster_gdf.clip(gadm_regions_gdf,keep_geom_type=False)
-    cell_cluster_gdf_clipped.sort_values(by=[f'lcoe_{resource_type}'], ascending=True, inplace=True) 
+    cell_cluster_gdf_clipped.sort_values(by=[f'LCOE_{resource_type}'], ascending=True, inplace=True) 
+    # cell_cluster_gdf_clipped.sort_values(by=[f'lcoe_{resource_type}'], ascending=True, inplace=True) 
 
     return cell_cluster_gdf_clipped
