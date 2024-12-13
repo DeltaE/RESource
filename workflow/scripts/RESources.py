@@ -27,7 +27,7 @@ from linkingtool.gwa import GWACells
 from linkingtool.units import Units
 from linkingtool import utility as utils
 
-class Resources(AttributesParser):  
+class RESources_builder(AttributesParser):  
     def __post_init__(self):
         # Call the parent class __post_init__ to initialize inherited attributes
         super().__post_init__()
@@ -327,7 +327,7 @@ class Resources(AttributesParser):
         else:
             self.log.info(f"Invalid resource type. Please select one of these: 'solar', 'wind', 'all'")
 
-    def execute_module(self,
+    def build(self,
                        select_top_sites:Optional[bool]=True,
                        use_pypsa_buses:Optional[bool]=True,
                        memory_resource_limitation:Optional[bool]=True):
