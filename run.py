@@ -1,11 +1,11 @@
-from workflow.scripts.resources import Resources
+from workflow.scripts.RESources import Resources
 
 ## single resource
 
 # Iterate over provinces for both solar and wind resources
 resource_types = ['solar','wind'] 
 
-provinces=[ 'BC']# 'AB','SK','ON','NS' ]  #''BC',
+provinces=['BC']# 'AB','SK','ON','NS' ]  #''BC',
 for province_code in provinces:
     for resource_type in resource_types:
         required_args = {

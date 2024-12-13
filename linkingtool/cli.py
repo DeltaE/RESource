@@ -1,223 +1,117 @@
+#!/usr/bin/env python3
+import os
+import sys
 import argparse
-import subprocess
 from pathlib import Path
+from . import RESources as RES
 
-class ResourceCreator:
-    def __init__(self, config_path, resource_type):
-        self.config_path = Path(config_path).resolve()
-        self.resource_type = resource_type.lower()
+@staticmethod
+def find_project_root(marker="linkingtool"):
+    """
+    Traverse upwards to find the root directory containing the specified marker.
+    """
+    current_dir = Path.cwd()
+    while current_dir != current_dir.parent:  # Stop at the filesystem root
+        if (current_dir / marker).exists():  # Check for the marker
+            return current_dir
+        current_dir = current_dir.parent
+    raise FileNotFoundError(f"Project root with marker '{marker}' not found.")
+
+
+def run_RESources(config_file_path, province_code, resource_type):
+    """
+    This function runs the RESources builder for the specified configuration, province, and resource type.
+    """
+    required_args = {
+        "config_file_path": config_file_path,
+        "province_short_code": province_code,
+        "resource_type": resource_type
+    }
     
-    def create(self):
-        # Base directories where scripts may exist
-        base_dirs = [
-            Path('workflow/scripts'),
-            Path('Linking_tool/workflow/scripts')
-        ]
-        
-        # Map resource types to script file names (without hardcoding full paths)
-        script_map = {
-            'solar': 'solar_module_v2.py',
-            'bess': 'bess_module_v1.py',
-            'wind': 'wind_module_v2.py'
-        }
+    # Create an instance of Resources and execute the module
+    RES_module = RES.RESources_builder(**required_args)
+    RES_module.build(use_pypsa_buses=False)
 
-        if self.resource_type == 'all':
-            # Run all scripts for all resource types
-            for resource, script_name in script_map.items():
-                script_path = self.find_script(base_dirs, script_name)
-                if script_path:
-                    self.run_script(script_path, resource)
-                else:
-                    print(f"Could not find a valid script for {resource}")
-        else:
-            # Run a single script based on resource_type
-            script_name = script_map.get(self.resource_type)
-            if not script_name:
-                print("Unknown resource type. Supported resources: Solar, Wind, BESS, All")
-                return
-            
-            script_path = self.find_script(base_dirs, script_name)
-            if script_path:
-                self.run_script(script_path, self.resource_type)
-            else:
-                print(f"Could not find a valid script for resource type {self.resource_type}")
+def display_help():
+    """
+    Display the custom help message for RES CLI.
+    """
+    print("""
+    RES - Resource Builder CLI Tool. 
+        - Currently supports : 'wind' (land-based-wind), 'solar'
 
-    def find_script(self, base_dirs, script_name):
-        """ Search for the script in the base directories and return the first valid path. """
-        for base_dir in base_dirs:
-            script_path = base_dir / script_name
-            if script_path.exists():
-                return script_path.resolve()
-        return None
+    Usage:
+    RES [options]
 
-    def run_script(self, script_path, resource_type):
-        """ Run the script with the provided resource type. """
-        try:
-            subprocess.run(['python', str(script_path), str(self.config_path), resource_type], check=True)
-            print(f">>>> Successfully executed {script_path} for resource type {resource_type} with config: {self.config_path}")
-        except subprocess.CalledProcessError as e:
-            print(f"An error occurred while executing {script_path} for resource type {resource_type}: {e}")
+    Options:
+    --config           Path to the configuration YAML file (default: config/config.yaml)
+    --provinces       List of provinces to process (default: BC, Supports all provinces)
+    --resources       List of resource types to generate (default: wind solar)
 
+    Examples:
+    RES --config=config.yaml --provinces BC AB --resources wind solar
+    RES --help-resources
 
-class DataPreparer:
-    def __init__(self, config_path,province_short_code):
-        self.config_path = Path(config_path).resolve()
-        self.province_short_code = province_short_code
+    Use '--help-resources' for more detailed information about the RESources module.
+    """)
+
+def display_resources_help():
+    """
+    Display help information for the RESources module.
+    """
+    print("""
+    RESources Module Help:
+
+    This module contains the RESources_builder class used to generate resources for provinces and resource types.
     
-    def prepare(self):
-        # Base directories where scripts may exist
-        base_dirs = [
-            Path('workflow/scripts'),
-            Path('workflow/scripts')
-        ]
-        
-        script_name = 'prepare_data_v2.py'
-        script_path = self.find_script(base_dirs, script_name)
-        if script_path:
-            self.run_script(script_path)
-        else:
-            print(f"Could not find a valid script for data preparation")
+    Usage:
+    RESources_builder(config_file_path, province_short_code, resource_type)
 
-    def find_script(self, base_dirs, script_name):
-        """ Search for the script in the base directories and return the first valid path. """
-        for base_dir in base_dirs:
-            script_path = base_dir / script_name
-            if script_path.exists():
-                return script_path.resolve()
-        return None
+    Arguments:
+    - config_file_path: Path to the configuration file (e.g., 'config/config.yaml')
+    - province_short_code: Province short code (e.g., 'BC')
+    - resource_type: Type of resource to generate (e.g., 'wind', 'solar')
 
-    def run_script(self, script_path):
-        """ Run the script. """
-        try:
-            subprocess.run(['python', str(script_path), str(self.config_path),str(self.province_short_code)], check=True)
-            print(f">>> Successfully executed {script_path} with config: {self.config_path}")
-        except subprocess.CalledProcessError as e:
-            print(f"An error occurred while executing {script_path}: {e}")
-
-
-class TopSitesSelector:
-    def __init__(self, config_path, resource_type, max_capacity=None):
-        self.config_path = Path(config_path).resolve()
-        self.resource_type = resource_type.lower()
-        self.max_capacity = max_capacity
-
-    def select(self):
-        # Base directories where scripts may exist
-        base_dirs = [
-            Path('workflow/scripts'),
-            Path('Linking_tool/workflow/alternative')
-        ]
-        
-        script_name = 'top_sites_v2.py'
-        script_path = self.find_script(base_dirs, script_name)
-        if script_path:
-            self.run_script(script_path)
-        else:
-            print(f"Could not find a valid script for top sites selection")
-
-    def find_script(self, base_dirs, script_name):
-        """ Search for the script in the base directories and return the first valid path. """
-        for base_dir in base_dirs:
-            script_path = base_dir / script_name
-            if script_path.exists():
-                return script_path.resolve()
-        return None
-
-    def run_script(self, script_path):
-        """ Run the script with the provided resource type and max capacity. """
-        cmd = ['python', str(script_path), str(self.config_path), self.resource_type]
-        if self.max_capacity is not None:
-            cmd.append(str(self.max_capacity))
-        
-        try:
-            subprocess.run(cmd, check=True)
-            print(f">>> Successfully executed {script_path} for resource type {self.resource_type} with config: {self.config_path}")
-        except subprocess.CalledProcessError as e:
-            print(f"An error occurred while executing {script_path}: {e}")
-
+    Example:
+    RESources_builder(config_file_path='config.yaml', province_short_code='BC', resource_type='wind')
+    """)
 
 def main():
-    parser = argparse.ArgumentParser(
-        description='Linking Tool CLI: A tool for managing resources and configurations.',
-        epilog='Examples:\n'
-               '  linkingtool create_resources /path/to/config.yaml solar\n'
-               '  linkingtool prepare_data /path/to/config.yaml\n'
-               '  linkingtool top_sites /path/to/config.yaml solar 1000\n'
-    )
-    
-    subparsers = parser.add_subparsers(dest='command', help='Available commands')
-    
-    # Subparser for 'create_resources' command
-    create_resources_parser = subparsers.add_parser(
-        'create_resources',
-        help='Create resources based on the provided configuration file and resource type'
-    )
-    create_resources_parser.add_argument(
-        'config_path',
-        type=str,
-        help="Path to the configuration file '*.yaml'"
-    )
-    create_resources_parser.add_argument(
-        'resource_type',
-        type=str,
-        choices=['solar', 'bess', 'wind', 'all'],
-        help='Type of resource to create (solar, bess, wind, all)'
-    )
-    
-    # Subparser for 'prepare_data' command
-    prepare_data_parser = subparsers.add_parser(
-        'prepare_data',
-        help='Prepare data based on the provided configuration file'
-    )
-    prepare_data_parser.add_argument(
-        'config_path',
-        type=str,
-        help="Path to the configuration file '*.yaml'"
-    )
-    
-    prepare_data_parser.add_argument(
-        "province_short_code",
-        type=str,
-        help="Short code to the Province e.g. 'BC' for British Columbia "
-    )
-    
-    # Subparser for 'top_sites' command
-    top_sites_parser = subparsers.add_parser(
-        'top_sites',
-        help='Select TOP SITES based on the provided configuration file'
-    )
-    top_sites_parser.add_argument(
-        'config_path',
-        type=str,
-        help="Path to the configuration file '*.yaml'"
-    )
-    top_sites_parser.add_argument(
-        'resource_type',
-        type=str,
-        choices=['solar', 'bess', 'wind', 'all'],
-        help='Type of resource to create (solar, bess, wind, all)'
-    )
-    top_sites_parser.add_argument(
-        '--resource_max_total_capacity',
-        type=float,
-        default=None,
-        help="<Optional> Maximum total capacity for the resource (e.g., 10 for 10 GW). If none given, value will be absorbed from the user config"
-    )
-    
-    # Parse the arguments
+    # Set up argument parsing
+    parser = argparse.ArgumentParser(prog='RES', description='Run resource generation for provinces and resource types')
+    parser.add_argument('--config', type=str, default='config/config.yaml', help='Path to the config file')
+    parser.add_argument('--provinces', type=str, nargs='+', default=['BC'], help='List of provinces')
+    parser.add_argument('--resources', type=str, nargs='+', default=['wind', 'solar'], help='List of resource types')
+    parser.add_argument('--help-resources', action='store_true', help='Display help for RESources module')
+
+    # Parse arguments
     args = parser.parse_args()
-    
-    if args.command == 'create_resources':
-        creator = ResourceCreator(args.config_path, args.resource_type)
-        creator.create()
-    elif args.command == 'prepare_data':
-        preparer = DataPreparer(args.config_path,args.province_short_code)
-        preparer.prepare()
-    elif args.command == 'top_sites':
-        selector = TopSitesSelector(args.config_path, args.resource_type, args.resource_max_total_capacity)
-        selector.select()
-    else:
-        parser.print_help()
+
+    # If --help-resources flag is passed, display RESources help
+    if args.help_resources:
+        display_resources_help()
+        sys.exit(0)
+
+    # If no arguments are passed or just '--help', show custom help message
+    if len(sys.argv) == 1 or '--help' in sys.argv:
+        display_help()
+        sys.exit(0)
+
+    # Detect the root directory
+    try:
+        project_root = find_project_root("linkingtool")
+        print(f"Project root detected at: {project_root}")
+        # Set the working directory to the root
+        os.chdir(project_root)
+    except FileNotFoundError as e:
+        print(e)
+        sys.exit(1)
+
+    # Iterate over provinces and resource types
+    for province_code in args.provinces:
+        for resource_type in args.resources:
+            print(f"Running for {province_code} and {resource_type}")
+            run_RESources(args.config, province_code, resource_type)
 
 if __name__ == "__main__":
     main()

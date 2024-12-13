@@ -13,7 +13,7 @@ setup(
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-            'linkingtool=linkingtool.cli:main',
+            'RES=linkingtool.cli:main',
         ],
     },
     install_requires= required,  # Use requirements from requirements.txt
