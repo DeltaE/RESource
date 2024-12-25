@@ -305,28 +305,6 @@ class RESources_builder(AttributesParser):
 
     # _________________________________________________________________________________
 
-    def run(self):
-        """
-        Execute the module based on resource type ('solar', 'wind', or 'all').
-        If 'all' is selected, both 'solar' and 'wind' will run sequentially.
-        """
-        # Check if resource_type is 'solar' or 'wind' or 'all'
-        if self.resource_type == 'solar' or self.resource_type == 'wind':
-            self.log.info(f"{self.resource_type} module initiated")
-            self.execute_module(self.resource_type)
-
-        elif self.resource_type == 'all':
-            # Run solar first
-            self.log.info(f"Running 'solar' module")
-            self.execute_module('solar')
-
-            # Run wind next
-            self.log.info(f"Running 'wind' module")
-            self.execute_module('wind')
-
-        else:
-            self.log.info(f"Invalid resource type. Please select one of these: 'solar', 'wind', 'all'")
-
     def build(self,
                        select_top_sites:Optional[bool]=True,
                        use_pypsa_buses:Optional[bool]=True,

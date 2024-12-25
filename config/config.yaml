@@ -350,6 +350,7 @@ capacity_disaggregation:
     landuse_intensity : 1.45  # (.01*145 MW/km2) ; Source: PyPSA-EUR paper, 
     # capex : 1161.269 # USD/kW  *** Later to be linked to NREL ATB Spreadsheet (via data pipeline automation) for different wind class, different years.
     cost_data: 'data/linking_tool/solar/utility_PV_Class5_cost_moderate_NREL_ATB2024.csv'
+    NREL_ATB_technology: 'LandbasedWind'
     NREL_ATB_type : 'Class5' # for more : https://atb.nrel.gov/electricity/2023/utility-scale_pv
     atlite_panel: 'CSi' # CSi , CdTe
     tracking : 'dual' # None, horizontal,tilted_horizontal,vertical,dual
@@ -368,6 +369,7 @@ capacity_disaggregation:
     WCSS_tolerance: 0.1 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
     CF_low: 0.20
     CF_high: 1
+    NREL_ATB_technology: 'LandbasedWind'
     turbines: #From  existing system at BC (> 3MW turbines)
       NREL_ATB_type : 'Wind Turbine Technology 3' # Turbine Type 3 (of NREL method), size : ~ 3.3 MW, 148 m Rotor Dia, HubHeight 100m, wind plant ~ 200MW
       atlite:
