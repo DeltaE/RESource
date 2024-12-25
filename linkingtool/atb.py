@@ -26,11 +26,13 @@ class NREL_ATBProcessor(AttributesParser):
         atb_cost = pd.read_parquet(self.atb_file_path)
         self.log.info(f"ATB cost datafile: {self.atb_file_path.name} loaded")
         
-        self._process_solar_cost(atb_cost)
-        self._process_wind_cost(atb_cost)
-        self._process_bess_cost(atb_cost)
+        self.utility_pv_cost=self._process_solar_cost(atb_cost)
+        self.land_based_wind_cost=self._process_wind_cost(atb_cost)
+        self.bess_cost=self._process_bess_cost(atb_cost)
         
-        return atb_cost
+        return (self.utility_pv_cost, 
+                self.land_based_wind_cost, 
+                self.bess_cost)
 
     def _check_and_download_data(self):
         utils.check_LocalCopy_and_run_function(
@@ -55,7 +57,8 @@ class NREL_ATBProcessor(AttributesParser):
         save_to=Path(self.config['capacity_disaggregation']['solar']['cost_data'])
         save_to.parent.mkdir(parents=True, exist_ok=True)
         utility_pv_cost.to_csv(save_to, index=False)
-        self.datahandler.to_store(utility_pv_cost,'cost/atb/wind')
+        self.datahandler.to_store(utility_pv_cost,'cost/atb/solar',force_update = True)
+        return utility_pv_cost
 
     def _process_wind_cost(self, atb_cost):
         land_based_wind_cost_mask = (
@@ -65,7 +68,7 @@ class NREL_ATBProcessor(AttributesParser):
             (atb_cost['core_metric_case'] == 'Market') &
             (atb_cost['techdetail2'] == self.config['capacity_disaggregation']['wind']['turbines']['NREL_ATB_type']) &
             (atb_cost['crpyears'] == '20') &
-            (atb_cost['core_metric_variable'] == 2022)
+            (atb_cost['core_metric_variable'] == 2024)
         )
 
         land_based_wind_cost = atb_cost[land_based_wind_cost_mask].sort_values('core_metric_variable')
@@ -73,7 +76,8 @@ class NREL_ATBProcessor(AttributesParser):
         save_to=Path(self.config['capacity_disaggregation']['wind']['cost_data'])
         save_to.parent.mkdir(parents=True, exist_ok=True)
         land_based_wind_cost.to_csv(save_to, index=False)
-        self.datahandler.to_store(land_based_wind_cost,'cost/atb/wind')
+        self.datahandler.to_store(land_based_wind_cost,'cost/atb/wind',force_update = True)
+        return land_based_wind_cost
 
     def _process_bess_cost(self, atb_cost):
         bess_cost_mask = (
@@ -83,12 +87,13 @@ class NREL_ATBProcessor(AttributesParser):
             (atb_cost['core_metric_case'] == 'Market') &
             (atb_cost['techdetail'] == self.config['capacity_disaggregation']['bess']['NREL_ATB_type']) &
             (atb_cost['crpyears'] == '20') &
-            (atb_cost['core_metric_variable'] == 2022)
+            (atb_cost['core_metric_variable'] == 2024)
         )
 
         bess_cost = atb_cost[bess_cost_mask].sort_values('core_metric_variable')
         save_to=Path(self.config['capacity_disaggregation']['bess']['cost_data'])
         save_to.parent.mkdir(parents=True, exist_ok=True)
         bess_cost.to_csv(save_to, index=False)
-        self.datahandler.to_store(bess_cost,'cost/atb/bess')
+        self.datahandler.to_store(bess_cost,'cost/atb/bess',force_update = True)
+        return bess_cost
 

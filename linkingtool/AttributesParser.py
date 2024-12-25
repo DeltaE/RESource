@@ -83,33 +83,8 @@ class AttributesParser:
         end_date = self.config.get('cutout', {}).get('snapshots', {}).get('end', [[]])[0]
         return start_date, end_date
 
-    def load_cost(self):
-        grid_connection_cost_per_km = self.disaggregation_config.get('transmission', {}).get('grid_connection_cost_per_Km', 0)
-        tx_line_rebuild_cost = self.disaggregation_config.get('transmission', {}).get('tx_line_rebuild_cost', 0)
-
-        self.ATB:Dict[str,dict]=self.get_atb_config()
-        atb_file = Path(self.ATB.get('root', ''), self.ATB.get('datafile', {}).get('parquet', ''))
-        utility_scale_cost = pd.read_parquet(atb_file) if atb_file.exists() else pd.DataFrame()
-        self.utility_scale_cost=utility_scale_cost
-        source_column:str= self.ATB.get('column',{})
-        cost_params_mapping:Dict[str,str]=self.ATB.get('cost_params',{})
-        
-        resource_capex:float = (utility_scale_cost[utility_scale_cost[source_column] == cost_params_mapping.get('capex',{})].value.iloc[0] / 1E3 
-                          if not utility_scale_cost.empty else 0) # mill. $/ MW
-        
-        resource_fom : float = (utility_scale_cost[utility_scale_cost[source_column] == cost_params_mapping.get('fom',{})].value.iloc[0] / 1E3 
-                        if not utility_scale_cost.empty else 0) # mill. $/ MW
-        # Initialize resource_vom based on the availability of 'vom' in cost_params_mapping
-        resource_vom: float = 0  # Default value if 'vom' is not found
-
-        if cost_params_mapping.get('vom') is not None:
-            # Check if the DataFrame 'utility_scale_cost' is not empty and get the value for 'vom'
-            if not utility_scale_cost.empty:
-                vom_row = utility_scale_cost[utility_scale_cost[source_column] == cost_params_mapping['vom']]
-                if not vom_row.empty:
-                    resource_vom = vom_row['value'].iloc[0] / 1E3  # Convert to million $/MW
-
-        return resource_capex, resource_fom, resource_vom, grid_connection_cost_per_km, tx_line_rebuild_cost
+    
+    
 
 # Methods for dynamically fetching data from the config
 

@@ -3,6 +3,7 @@ import geopandas as gpd
 import xarray as xr
 import pandas as pd
 from shapely.geometry import Polygon
+from typing import Dict
 
 # Local Packages
 import linkingtool.utility as utils
@@ -10,6 +11,7 @@ import linkingtool.utility as utils
 from linkingtool.lands import LandContainer
 from linkingtool.era5_cutout import ERA5Cutout
 from linkingtool.hdf5_handler import DataHandler
+from linkingtool.atb import NREL_ATBProcessor
 
 
 class CellCapacityProcessor(LandContainer,
@@ -30,6 +32,11 @@ class CellCapacityProcessor(LandContainer,
         
         self.resource_disaggregation_config=self.get_resource_disaggregation_config()
         self.resource_landuse_intensity = self.resource_disaggregation_config['landuse_intensity']
+        self.atb=NREL_ATBProcessor(**self.required_args)
+        
+        (self.utility_pv_cost, 
+        self.land_based_wind_cost, 
+        self.bess_cost)= self.atb.pull_data()
         
         ## Initiate the Store and Datahandler (interfacing with the Store)
         self.datahandler=DataHandler(self.store)
@@ -55,6 +62,38 @@ class CellCapacityProcessor(LandContainer,
         # self.province_shape=self.store_grid_cells.dissolve(by='Province').drop(columns =['Region'])
         return self.province_shape
     
+    def load_cost(self,
+                  resource_atb:pd.DataFrame):
+        
+        grid_connection_cost_per_km = self.disaggregation_config.get('transmission', {}).get('grid_connection_cost_per_Km', 0)
+        tx_line_rebuild_cost = self.disaggregation_config.get('transmission', {}).get('tx_line_rebuild_cost', 0)
+        
+        self.ATB:Dict[str,dict]=super().get_atb_config()
+        source_column:str= self.ATB.get('column',{})
+        cost_params_mapping:Dict[str,str]=self.ATB.get('cost_params',{})
+        
+        
+        # capex,fom,vom in NREL is given in US$/kw and we need to convert it to million $/MW
+        resource_capex:float=resource_atb[resource_atb[source_column]==cost_params_mapping.get('capex',{})].value.iloc[0]/ 1E3  # Convert to million $/MW
+        resource_fom:float=resource_atb[resource_atb[source_column]==cost_params_mapping.get('fom',{})].value.iloc[0] /1E3  # Convert to million $/MW
+        
+        # Initialize resource_vom based on the availability of 'vom' in cost_params_mapping
+        resource_vom: float = 0  # Default value if 'vom' is not found
+        
+
+        if cost_params_mapping.get('vom') is not None:
+            # Check if the DataFrame 'utility_scale_cost' is not empty and get the value for 'vom'
+            if not resource_atb.empty:
+                vom_row = resource_atb[resource_atb[source_column] == cost_params_mapping['vom']]
+                if not vom_row.empty:
+                    resource_vom = vom_row['value'].iloc[0] / 1E3  # Convert to million $/MW
+
+        return (resource_capex, # in million $/MW
+                resource_vom,   # in million $/MW
+                resource_fom,  # in million $/MW
+                grid_connection_cost_per_km,  # in million $
+                tx_line_rebuild_cost) # in million $
+    
     # Define a function to create bounding boxes (of cell) directly from coordinates (x, y) and resolution
     def __create_cell_geom__(self,x, y):
         half_res = self.cell_resolution / 2
@@ -76,12 +115,19 @@ class CellCapacityProcessor(LandContainer,
         
     #d. Load costs (float)
         (
-            self.resource_capex, 
-            self.resource_fom, 
-            self.resource_vom,
-            self.grid_connection_cost_per_km,
-            self.tx_line_rebuild_cost
-        ) = self.load_cost()
+        self.resource_capex, 
+        self.resource_fom, 
+        self.resource_vom,
+        self.grid_connection_cost_per_km,
+        self.tx_line_rebuild_cost
+        ) = self.load_cost(
+                resource_atb=(
+                    self.utility_pv_cost if self.resource_type == 'solar' else
+                    self.land_based_wind_cost if self.resource_type == 'wind' else
+                    self.bess_cost if self.resource_type == 'bess' else
+                    None
+                    )
+                )
         
     # OPTIONAL step (skipping to save memory+processing time)
         ## 1. Calculate shape availability after adding the composite exclusion layer (excluder)
@@ -127,12 +173,12 @@ class CellCapacityProcessor(LandContainer,
         
     ## 3 Assign Static exogenous Costs after potential capacity calculation
         parameters_to_add = {
-            'capex': self.resource_capex,
-            'fom': self.resource_fom,
-            'vom': round(self.resource_vom, 4),
-            'grid_connection_cost_per_km': self.grid_connection_cost_per_km,
-            'tx_line_rebuild_cost': self.tx_line_rebuild_cost,
-            'Operational_life': int(25) if self.resource_type == 'solar' else int(20) if self.resource_type == 'wind' else 0
+            'capex': self.resource_capex, # m$/MW
+            'fom': self.resource_fom, # m$/MW
+            'vom': round(self.resource_vom, 4), # m$/MW
+            'grid_connection_cost_per_km': self.grid_connection_cost_per_km, # m$/km
+            'tx_line_rebuild_cost': self.tx_line_rebuild_cost,  # m$/km
+            'Operational_life': int(25) if self.resource_type == 'solar' else int(20) if self.resource_type == 'wind' else 0   # years
         }
 
         # Create a new dictionary with stylized keys
