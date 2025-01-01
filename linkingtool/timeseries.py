@@ -3,6 +3,9 @@ import xarray as xr
 from dataclasses import dataclass
 import pandas as pd
 from collections import namedtuple
+from pathlib import Path
+import geopandas as gpd
+import plotly.graph_objects as go
 
 # Linking Tool - Local Packages
 from linkingtool.hdf5_handler import DataHandler
@@ -284,4 +287,123 @@ class Timeseries(ERA5Cutout):
 
         # Display the final DataFrame
         return self.cluster_df
+
+
+@staticmethod
+def get_timeseries_for_project_points(
+    resources_store: Path,
+    projects: gpd.GeoDataFrame,
+    save_to: str | Path,
+    show: bool = True
+):
+    """
+    Extracts time series data for solar and wind resources for given projects.
+
+    Parameters:
+    ----------
+    resources_store : Path
+        Path to the directory containing the resources store (HDF5 format) that includes 
+        the data for 'cells', 'timeseries/solar', and 'timeseries/wind'.
+
+    projects : gpd.GeoDataFrame
+        A GeoDataFrame containing the project points with the following structure:
+        
+        - CRS: Must be in 'EPSG:4326' (WGS84), i.e., latitude and longitude coordinates.
+        - Columns:
+          - 'geometry': Point geometries representing project locations.
+          - 'resource_type': A column specifying the type of resource for each project, 
+            expected values are 'solar' or 'wind'.
+          - Other project-specific columns may be present but are not directly used in this function.
+
+    save_to : str | Path
+        Directory path where the output CSVs and HTML plots will be saved.
+
+    show : bool, optional, default=True
+        Whether to display the plots interactively using Plotly.
+
+    Returns:
+    -------
+    None
+        The function outputs two CSV files and two interactive HTML plots:
+        - 'projects_solar_ts.csv': Time series for solar projects.
+        - 'projects_wind_ts.csv': Time series for wind projects.
+        - 'projects_solar_ts.html': Interactive plot for solar projects.
+        - 'projects_wind_ts.html': Interactive plot for wind projects.
+    """
+
+    # Initialize DataHandler for loading data
+    datahandler = DataHandler(resources_store)
+    save_to = Path(save_to)
+    save_to.mkdir(parents=True, exist_ok=True)
+
+    # Ensure the CRS of the projects GeoDataFrame is 'EPSG:4326'
+    projects.crs = 'EPSG:4326'
+
+    # Load data from resources store
+
+    tss = datahandler.from_store('timeseries/solar')
+    tsw = datahandler.from_store('timeseries/wind')
+    
+
+    # Perform a spatial join to assign the polygon index to the points
+    if 'ERA5_cell' not in projects.columns:
+        cells = datahandler.from_store('cells')
+        _joined_gdf_ = gpd.sjoin(projects, cells, how="left", op="intersects")
+        projects['ERA5_cell'] = _joined_gdf_.index_right 
+
+    projects.index=projects['ERA5_cell']
+    projects.drop(columns=['ERA5_cell'],inplace=True)
+    
+    # Filter projects based on resource type
+    solar_projects = projects[projects['resource_type'] == 'solar']
+    wind_projects = projects[projects['resource_type'] == 'wind']
+    
+    # Extract time series data for solar and wind projects
+    solar_ts = tss[solar_projects.index]
+    solar_ts_save_to=save_to / 'projects_solar_ts.csv'
+    
+    wind_ts = tsw[wind_projects.index]
+    wind_ts_save_to=save_to / 'projects_wind_ts.csv'
+    
+    # Save the time series data as CSV files
+    solar_ts.to_csv(solar_ts_save_to)
+    print(f"Saved solar time series data to {solar_ts_save_to}")
+    
+    wind_ts.to_csv(wind_ts_save_to)
+    print(f"Saved wind time series data to {wind_ts_save_to}")
+
+    # Plotting the time series for Solar Projects
+    fig_s = go.Figure()
+    for col in solar_ts.columns:
+        fig_s.add_trace(go.Scatter(x=solar_ts.index, y=solar_ts[col], mode='lines', name=col))
+    
+    fig_s.update_layout(
+        title="Time Series for Solar Projects",
+        xaxis_title="Date",
+        yaxis_title="Value",
+        legend_title="Sites"
+    )
+    fig_s.write_html(save_to / 'projects_solar_ts.html')
+    print(f"Saved solar time series data to {save_to / 'projects_solar_ts.html'}")
+
+
+    
+    # Plotting the time series for Wind Projects
+    fig_w = go.Figure()
+    for col in wind_ts.columns:
+        fig_w.add_trace(go.Scatter(x=wind_ts.index, y=wind_ts[col], mode='lines', name=col))
+    
+    fig_w.update_layout(
+        title="Time Series for Wind Projects",
+        xaxis_title="Date",
+        yaxis_title="Value",
+        legend_title="Sites"
+    )
+    fig_w.write_html(save_to / 'projects_wind_ts.html')
+    print(f"Saved wind time series data to {save_to / 'projects_wind_ts.html'}")
+    
+    
+    if show:
+        fig_s.show()
+        fig_w.show()
 
