@@ -210,12 +210,11 @@ NREL:
     about: https://atb.nrel.gov/electricity/2024/technologies
     column: 'core_metric_parameter'
     cost_params:
-      capex: 'CAPEX' # mill. $/ MW
+      # capex: 'CAPEX' # $/ kW
+      capex: 'OCC' # $/ kW
       fom: 'Fixed O&M' # mill. $/ MW
       vom: 'None' # Not found for solar,wind,bess
-
-        
-
+ 
 OSM_data: # OpenStreet Map
   root: 'data/downloaded_data/OSM'
   data_keys: # has to be inline with OSM tags
@@ -295,8 +294,8 @@ GAEZ:
         solar: [2, 3, 4, 5, 6, 7]
         wind: [2, 3, 4, 5, 6, 7]
         buffer: 
-          solar: 0 #m
-          wind: 0 #m
+          solar: 500 #m
+          wind: 500 #m
           
 WorldPop:
   root: 'data/downloaded_data/WorldPop'
@@ -358,8 +357,8 @@ capacity_disaggregation:
     cell_capacity_tolerance: 1 #MW
     WCSS_tolerance: 0.08 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
     buffer:
-      aeroway: 100 # m
-      conserved_lands: 100 #m
+      aeroway: 1000 # m
+      conserved_lands: 2000 #m
     
   wind:
     max_capacity: 15  # GW
@@ -397,8 +396,8 @@ capacity_disaggregation:
             manufacturer: 'Senvion/REpower'
             config: 'data/downloaded_data/OEDB/3.2M114_NES.yaml'
     buffer:
-      aeroway: 100 # m
-      conserved_lands: 100 #m
+      aeroway: 5000 # m
+      conserved_lands: 10000 #m
   bess:
     max_capacity : 10 #GW
     cost_data: 'data/linking_tool/bess/bess_LI_6hr_cost_moderate_NREL_ATB2024.csv'
@@ -416,156 +415,12 @@ capacity_disaggregation:
   transmission:
     grid_connection_cost_per_Km : 2.6 #M$/km   # from MISO , may try NREL method for different range of distance
     tx_line_rebuild_cost : 0.56   #M$/km # from MISO
-    proximity_filter: 100 #km
+    proximity_filter: 20 #km
     buses: 'data/processed_data/buses_BC.csv'
     lines: 'data/processed_data/lines_BC.csv'  #future scope usage
-
-BCNexus:
-  results: 
-    root: data/BC_NEXUS_results
-    CapacityInvestments: NewCapacity.csv
-    TotalCapacity: TotalCapacityAnnual.csv
-
-  inputs:
-    root: data/BC_NEXUS_inputs
-    ExistingCapacity: ResidualCapacity.csv
-    PlannedCapacity: TotalAnnualMinCapacityInvestment.csv
-    AvailabilityFactor : AvailabilityFactor.csv
-    CapacityFactor: CapacityFactor.csv
-
-processed_data:
-  linking:
-    root: data/linking_tool
-    CPCAD: CPCAD_BC_union.parquet
-    CPCAD_org: CPCAD_BC.parquet
-    GADM:
-    transmission: #to be sourced from PyPSA
-      nodes_datafile: 'BC_Transmission.pkl'
-      # lines: xxx   #future scope
-    solar:
-      osm_aeroway_datafile: aeroway_OSM_BC_with_buffer_solar.parquet
-      ERA5_CF_ts : ERA5_grid_CF_ts_df.pkl
-      scored_cells: ERA5_cells_scored.pkl
-      cell_clusters : ERA5_cell_cluster_filtered_all_sites.pkl
-      cell_cluster_ts : ERA5_cells_CF_ts_clusters.pkl
-      dissolved_indices: dissolved_indices.pkl
-
-    wind:
-      osm_aeroway_datafile: aeroway_OSM_BC_with_buffer_wind.parquet
-      gwa_cells_raw : GWA_cells.pkl
-      ERA5_CF_ts : ERA5_grid_CF_ts_df.pkl
-
-      scored_cells: GWA_cells_scored.pkl
-      cell_clusters : GWA_cell_cluster_filtered_all_sites.pkl
-      cell_cluster_ts :  GWA_cells_CF_ts_cluster.pkl
-      dissolved_indices : dissolved_indices.pkl
-    
-    bess:
-      cell_clusters : bess_regional_potential_for_res_elec_Conservative.pkl
-
-
-results:
-  linking:
-    root: results/linking
-    clusters_topSites:
-      solar : "Solar_Top_Sites_Clustered.pkl"
-      wind : "Wind_Top_Sites_Clustered.pkl"
-      bess: "bess_regional_potential_for_res_elec_" # this is a file name keyword only. The file name is variable with the scaling consumption of BESS (20%)
-    clusters_CFts_topSites:
-      solar : "Solar_Top_Sites_Clustered_CF_timeseries.pkl"
-      wind : "Wind_Top_Sites_Clustered_CF_timeseries.pkl"
-    # visual_resampling: # only for static plots
-    #   solar: 'd'  # h,d,w,m
-    #   wind: 'd'  # h,d,w,m
 
 visualization:
   linking: vis/linking
   nexus: vis/nexus
   pypsa: vis/pypsa
   misc: vis/misc
-
-interactive_dashboard:
-  headline: "Bi-directional Linking Tool [in progress...]"
-  font_size_h1 : "32px"
-  font_color_h1 : "#00008B"
-  
-  subheadline : "Module : Capacity Disaggregation [Preliminary Results]"
-  font_size_h2 : "26px"
-  font_color_h2 : "red"
-  
-  plot_width: '100%'
-  plot_height: 'auto'
-
-
-# ------------------
-required_directories:
-  data:
-    clews_data: {}
-    downloaded_data:
-      CODERS:
-        network: {}
-        supply: {}
-        demand: {}
-        reserve: {}
-        fuel_price: {}
-        emission: {}
-        macro_indicators: {}
-      cutout: {}
-      GADM: {}
-      GAEZ: {}
-      GWA: {}
-      Gov:
-        Conservation_Lands: {}
-        Population: {}
-        CEEI: {}
-      load:
-      OEDB: {}
-      OSM:
-        aeroway: {}
-      wind:
-      NREL:
-        ATB: {}
-        
-    processed_data:
-      network:
-      wind:
-        existing: {}
-        potential: {}
-      solar:
-        existing: {}
-        potential: {}
-      hydro:
-      region:
-      
-    linking_tool:
-      solar: {}
-      wind: {}
-      bess: {}
-    pypsa_data: {}
-  vis:
-    pypsa: {}
-    nexus: {}
-    linking:
-      solar:
-        Regional_cluster_Elbow_Plots: {}
-        Site_timeseries: {}
-      wind:
-        Regional_cluster_Elbow_Plots: {}
-        Site_timeseries: {}
-    misc: {}
-  results:
-    linking: {}
-  workflow:
-    log: {}
-
-interactive_dashboard:
-  headline: "Bi-directional Linking Tool [in progress...]"
-  font_size_h1 : "32px"
-  font_color_h1 : "#00008B"
-  
-  subheadline : "Module : Capacity Disaggregation [Preliminary Results]"
-  font_size_h2 : "26px"
-  font_color_h2 : "red"
-  
-  plot_width: '100%'
-  plot_height: 'auto'

@@ -1,11 +1,8 @@
-from workflow.scripts.RESources import Resources
-
-## single resource
+from workflow.scripts import RESources as RES
 
 # Iterate over provinces for both solar and wind resources
-resource_types = ['solar','wind'] 
-
-provinces=['BC']# 'AB','SK','ON','NS' ]  #''BC',
+resource_types = ['wind','solar']  #
+provinces=['BC'] # ,'AB','SK','ON','NS','MB'
 for province_code in provinces:
     for resource_type in resource_types:
         required_args = {
@@ -15,5 +12,7 @@ for province_code in provinces:
         }
         
         # Create an instance of Resources and execute the module
-        resource_module = Resources(**required_args)
-        resource_module.execute_module(memory_resource_limitation=False)
+        RES_module = RES.RESources_builder(**required_args)
+        RES_module.build(select_top_sites=True,
+                         use_pypsa_buses=False)
+        

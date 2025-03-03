@@ -259,8 +259,8 @@ class RESources_builder(AttributesParser):
                                                                                                  self.vis_dir, 
                                                                                                  self.wcss_tolerance,
                                                                                                  self.resource_type,
-                                                                                                 [f'LCOE_{self.resource_type}', f'potential_capacity_{self.resource_type}']
-                                                                                                #  [f'lcoe_{self.resource_type}', f'potential_capacity_{self.resource_type}']
+                                                                                                #  [f'LCOE_{self.resource_type}', f'potential_capacity_{self.resource_type}']
+                                                                                                 [f'lcoe_{self.resource_type}', f'potential_capacity_{self.resource_type}']
                                                                                                  )
         
         self.cell_cluster_gdf, self.dissolved_indices = cluster.create_cells_Union_in_clusters(self.ERA5_cells_cluster_map, 
@@ -457,14 +457,14 @@ class RESources_builder(AttributesParser):
         - selected_sites: GeoDataFrame with the selected top sites.
         """
         print(f"{'_'*100}")
-        print(f"Selecting the Top Ranked Sites to invest in {resource_max_capacity} GW PV in BC")
+        print(f"Selecting the Top Ranked Sites to invest in {resource_max_capacity} GW resource in BC")
         print(f"{'_'*100}")
      
         # Initialize variables
         selected_rows:list = []
         total_capacity:float = 0.0
 
-        top_sites:gpd.GeoDataFrame = sites.copy()
+        top_sites:gpd.GeoDataFrame = sites[sites['potential_capacity'] > 0].copy()
 
         if top_sites['potential_capacity'].iloc[0] < resource_max_capacity * 1000:
             # Iterate through the sorted GeoDataFrame

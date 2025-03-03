@@ -8,6 +8,11 @@ class CellScorer(AttributesParser):
     def __post_init__(self):
         super().__post_init__()
         
+    def get_CRF(self,
+                r, 
+                N):
+        return (r * (1 + r) ** N) / ((1 + r) ** N - 1) if N > 0 else 0
+        
     def calculate_total_cost(self, 
                              distance_to_grid_km: float, 
                              grid_connection_cost_per_km: float, 
@@ -15,18 +20,20 @@ class CellScorer(AttributesParser):
                              capex_tech: float) -> float:
         """
         Calculate the total cost, which includes the CAPEX and distance-based grid connection costs.
+        Method: Simple Levelized Cost of Energy Calculation (https://www.nrel.gov/analysis/tech-lcoe-documentation.html)
         """
         # Calculate distance-based cost
         add_to_grid_cost = (distance_to_grid_km * grid_connection_cost_per_km / 1.60934) * (tx_line_rebuild_cost / 1.60934)  # Convert to miles as our costs are given in $/miles (USA study)
-        
+
         # Total cost is CAPEX plus distance cost
         total_cost = capex_tech + add_to_grid_cost  # in M$
         
         return total_cost
 
     def get_cell_score(self, 
-                        cells: pd.DataFrame,
-                        CF_column:str) -> pd.DataFrame:
+                    cells: pd.DataFrame,
+                    CF_column:str,
+                    interest_rate=0.03) -> pd.DataFrame:
             """
             Calculate the potential LCOE score for each cell in the dataframe,
             reading cost parameters directly from the DataFrame.
@@ -38,22 +45,23 @@ class CellScorer(AttributesParser):
             """
             dataframe = cells.copy()  # Use the input DataFrame for calculations
             print(">> Calculating Score for each Cell...")
-
+            # Calculate the LCOE for each cell
+            N=cells[f'Operational_life_{self.resource_type}'].iloc[0]
+            CRF=self.get_CRF(interest_rate,N)
             dataframe[f'lcoe_{self.resource_type}'] = dataframe.apply(
                 lambda x: self.calculate_total_cost(
                     x['nearest_station_distance_km'], # km
                     x[f'grid_connection_cost_per_km_{self.resource_type}'],  # m$/km
                     x[f'tx_line_rebuild_cost_{self.resource_type}'],  # m$/km
                     x[f'capex_{self.resource_type}'] # m$/MW
-                ) / (8760 * x[CF_column]),  # LCOE = Total Cost / Total Energy Produced
+                )*CRF / (8760 * x[CF_column]),  # LCOE = Total Cost / Total Energy Produced
                 axis=1 # LCOE in M$/MWh;
             )  
             dataframe[f'lcoe_{self.resource_type}']=dataframe[f'lcoe_{self.resource_type}']*1E3 # LCOE in $/kWh; lower lcoe indicates better cells
-
-            dataframe[f'LCOE_{self.resource_type}'] = dataframe.apply(lambda row: self.calc_LCOE_lambda_m2(row), axis=1) # LCOE in $/MWh  # adopting NREL's method + some added costs
+            scored_dataframe = dataframe.sort_values(by=f'lcoe_{self.resource_type}', ascending=False).copy()  # Lower LCOE is better
             
-            # scored_dataframe = dataframe.sort_values(by=f'lcoe_{self.resource_type}', ascending=False).copy()  # Lower LCOE is better
-            scored_dataframe = dataframe.sort_values(by=f'LCOE_{self.resource_type}', ascending=False).copy()  # Lower LCOE is better
+            # dataframe[f'LCOE_{self.resource_type}'] = dataframe.apply(lambda row: self.calc_LCOE_lambda_m2(row), axis=1) # LCOE in $/MWh  # adopting NREL's method + some added costs
+            # scored_dataframe = dataframe.sort_values(by=f'LCOE_{self.resource_type}', ascending=False).copy()  # Lower LCOE is better
             
             return scored_dataframe
 
@@ -150,20 +158,23 @@ class CellScorer(AttributesParser):
         """
 
         dtg = row['nearest_station_distance_km'] # km
+        
         gcc_pu = row[f'grid_connection_cost_per_km_{self.resource_type}'] # m$/km
         gcc=dtg*gcc_pu/1.60934  # Convert to miles as our costs are given in m$/miles (USA study)
-        trc=row[f'tx_line_rebuild_cost_{self.resource_type}']/ 1.60934 # m$/km
-        tcc = row[f'capex_{self.resource_type}'] # m$/km
+        
+        trc=dtg*row[f'tx_line_rebuild_cost_{self.resource_type}']/ 1.60934 # m$=m$/km*km
+        
+        tcc = row[f'capex_{self.resource_type}'] * row[f'potential_capacity_{self.resource_type}'] # m$=m$/MW * MW
         
         foc = row[f'fom_{self.resource_type}'] * row[f'potential_capacity_{self.resource_type}'] # m$/ MW * MW
-        voc = row[f'vom_{self.resource_type}'] * row[f'potential_capacity_{self.resource_type}'] # m$/ MW * MW
+        voc = row[f'vom_{self.resource_type}']  # m$/ MW 
         
         fcr = row.get('FCR', 0.098) 
         aep = 8760 * row[f'{self.resource_type}_CF_mean'] * row[f'potential_capacity_{self.resource_type}'] # MWh
         
         if aep == 0: # some cells have no potentials
-            return float(99999)  # handle the error 
+            return float('99999')  # handle the error 
         else:
-            lcoe = ((fcr * tcc + gcc + trc + foc) / aep + voc)  # m$/MWh
+            lcoe = ((fcr * (tcc + gcc + trc ) + foc) / aep + voc)  # m$/MWh
             return lcoe  * 1E6 # LCOE in $/MWh      
         

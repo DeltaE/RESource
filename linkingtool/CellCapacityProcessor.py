@@ -4,6 +4,8 @@ import xarray as xr
 import pandas as pd
 from shapely.geometry import Polygon
 from typing import Dict
+import matplotlib.pyplot as plt
+import xarray as xr
 
 # Local Packages
 import linkingtool.utility as utils
@@ -150,6 +152,8 @@ class CellCapacityProcessor(LandContainer,
     ## 2.1 Compute availability Matrix
         self.province_shape= self.__get_unified_province_shape__()
         self.Availability_matrix:xr = self.cutout.availabilitymatrix(self.province_shape, composite_excluder)
+        self.plot_ERAF5_grid_land_availability()
+        self.plot_excluder_land_availability()
         
         area = self.cutout.grid.set_index(["y", "x"]).to_crs(3035).area / 1e6 # This crs is fit for area calculation
         area = xr.DataArray(area, dims=("spatial"))
@@ -210,11 +214,11 @@ class CellCapacityProcessor(LandContainer,
         self.solar_resources_nt=capacity_data(self.provincial_cells,capacity_matrix,self.cutout)
         
         print(f">> Total ERA5 cells loaded : {len(self.provincial_cells)} [each with .025 deg. (~30km) resolution ]")
-        self.log.info(f">> Saving to the local store (as HDF5 file)")
+        self.log.info(">> Saving to the local store (as HDF5 file)")
         # self.datahandler.save_to_hdf(era5_cell_capacity,'cells')
         
         self.datahandler.to_store(self.provincial_cells,'cells')
-        
+     
         return self.solar_resources_nt
 
 ## Visuals
@@ -231,3 +235,71 @@ class CellCapacityProcessor(LandContainer,
                     icon='power'
                 )
         return m
+    
+    def plot_ERAF5_grid_land_availability(self):
+        
+        province_boundary = self.province_boundary
+        
+        # Load availability data
+        _AM_=self.Availability_matrix
+        A_df=_AM_.to_dataframe(name="availability").reset_index()
+        
+        
+        # Define bins and labels
+        bins = [x / 100 for x in [0, 10, 30, 60, 90, 100]]  # Define bin edges
+        labels = ["0-10%", "10-30%", "30-60%", "60-90%", ">90%"]
+        
+        
+        # Categorize availability into bins
+        A_df["availability_category"] = pd.cut(A_df["availability"], bins=bins, labels=labels, include_lowest=True)
+        
+        # Convert to GeoDataFrame
+        A_gdf:gpd.GeoDataFrame = gpd.GeoDataFrame(
+                    A_df,
+                    geometry=[self.__create_cell_geom__(x, y) for x, y in zip(A_df['x'], A_df['y'])],
+                    crs='EPSG:4326'
+                )
+                
+        A_gdf=A_gdf.overlay(province_boundary)
+
+        # Categorize availability into bins
+        A_gdf["availability_category"] = pd.cut(A_gdf["availability"], bins=bins, labels=labels, include_lowest=True)
+        # Create figure and axes for side-by-side plotting
+        fig, ax = plt.subplots(figsize=(12, 8),constrained_layout=True)
+
+        # Set axis off for both subplots
+        ax.set_axis_off()
+
+        # Shadow effect offset
+        shadow_offset = 0.008
+
+        # Plot solar map on ax1
+        # Add shadow effect for solar map
+        province_boundary.geometry = province_boundary.geometry.translate(xoff=shadow_offset, yoff=-shadow_offset)
+        province_boundary.plot(ax=ax, facecolor='none', edgecolor='gray', linewidth=2, alpha=0.3)  # Shadow layer
+
+        # Plot solar cells
+        if self.province_short_code in ['AB', 'SK']:
+            bbox_anchor_offset=(1.25, 1) # AB and SK has skewed map, custom tweak
+        else:
+            bbox_anchor_offset=(1.1, 1)
+        A_gdf.plot(column='availability_category', ax=ax, cmap='Greens', legend=True, 
+                legend_kwds={'title': "Land Availability", 'loc': 'upper right', 'bbox_to_anchor': bbox_anchor_offset,'borderpad': 1,'frameon': False})
+
+        # Plot actual boundary for solar map
+        province_boundary.plot(ax=ax, facecolor='none', edgecolor='black', linewidth=0.7, alpha=0.9)
+        plt.subplots_adjust(right=0.85)  # Increase space on the right
+        # Adjust layout for cleaner appearance
+        plt.tight_layout()
+        plt.savefig(f'vis/misc/land_availability_ERA5grid_{self.province_name}.png')
+        print(f"Land availability (grid cells) map saved at vis/misc/land_availability_ERA5grid_{self.province_name}.png")
+
+    def plot_excluder_land_availability(self):
+
+        fig, ax = plt.subplots()
+        self.excluder.plot_shape_availability(self.province_shape,
+                                              plot_kwargs={'facecolor':'none','edgecolor':'black'},
+                                              ax=ax)
+        ax.axis("off")
+        plt.savefig(f'vis/misc/land_availability_excluderResolution_{self.province_name}.png')
+        print(f"Land availability map (excluder resolution) saved at vis/misc/land_availability_excluderResolution_{self.province_name}.png")
