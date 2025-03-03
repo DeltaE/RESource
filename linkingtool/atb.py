@@ -44,7 +44,7 @@ class NREL_ATBProcessor(AttributesParser):
     def _process_solar_cost(self, atb_cost):
         pv_cost_mask = (
             (atb_cost['technology_alias'] == 'Utility PV') &
-            (atb_cost['core_metric_parameter'].isin(['CAPEX', 'Fixed O&M', 'Variable O&M'])) &
+            (atb_cost['core_metric_parameter'].isin(['CAPEX', 'Fixed O&M', 'Variable O&M','OCC'])) &
             (atb_cost['scenario'] == 'Moderate') &
             (atb_cost['core_metric_case'] == 'Market') &
             (atb_cost['techdetail'] == self.config['capacity_disaggregation']['solar']['NREL_ATB_type']) &
@@ -63,7 +63,7 @@ class NREL_ATBProcessor(AttributesParser):
     def _process_wind_cost(self, atb_cost):
         land_based_wind_cost_mask = (
             (atb_cost['technology_alias'] == 'Land-Based Wind') &
-            (atb_cost['core_metric_parameter'].isin(['CAPEX', 'Fixed O&M', 'Variable O&M'])) &
+            (atb_cost['core_metric_parameter'].isin(['CAPEX', 'Fixed O&M', 'Variable O&M','OCC'])) &
             (atb_cost['scenario'] == 'Moderate') &
             (atb_cost['core_metric_case'] == 'Market') &
             (atb_cost['techdetail2'] == self.config['capacity_disaggregation']['wind']['turbines']['NREL_ATB_type']) &
@@ -82,7 +82,7 @@ class NREL_ATBProcessor(AttributesParser):
     def _process_bess_cost(self, atb_cost):
         bess_cost_mask = (
             (atb_cost['technology_alias'] == 'Utility-Scale Battery Storage') &
-            (atb_cost['core_metric_parameter'].isin(['CAPEX', 'Fixed O&M', 'Variable O&M'])) &
+            (atb_cost['core_metric_parameter'].isin(['CAPEX', 'Fixed O&M', 'Variable O&M','OCC'])) &
             (atb_cost['scenario'] == 'Moderate') &
             (atb_cost['core_metric_case'] == 'Market') &
             (atb_cost['techdetail'] == self.config['capacity_disaggregation']['bess']['NREL_ATB_type']) &

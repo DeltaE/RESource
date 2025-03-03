@@ -2,31 +2,31 @@ import geopandas as gpd
 import pandas as pd
 from collections import namedtuple
 import warnings
-warnings.filterwarnings("ignore")
+
 
 from typing import List,Dict,Optional,Union, Tuple
 from pathlib import Path
 from datetime import datetime
 
+# Linking Tool's Local Packages
+from linkingtool.era5_cutout import ERA5Cutout
+from linkingtool import cluster
+from linkingtool import windspeed as wind
+from linkingtool.CellCapacityProcessor import CellCapacityProcessor
+from linkingtool.coders import CODERSData
+from linkingtool.find import GridNodeLocator
+from linkingtool.timeseries import Timeseries
+from linkingtool.hdf5_handler import DataHandler
+from linkingtool.AttributesParser import AttributesParser
+from linkingtool.score import CellScorer
+from linkingtool.cell import GridCells
+from linkingtool.gwa import GWACells
+from linkingtool.units import Units
+from linkingtool import utility as utils
+
 # Get the current local time
 current_local_time = datetime.now()
-
-
-# Linking Tool's Local Packages
-from .era5_cutout import ERA5Cutout
-from . import cluster
-from . import windspeed as wind
-from .CellCapacityProcessor import CellCapacityProcessor
-from .coders import CODERSData
-from .find import GridNodeLocator
-from .timeseries import Timeseries
-from .hdf5_handler import DataHandler
-from .AttributesParser import AttributesParser
-from .score import CellScorer
-from .cell import GridCells
-from .gwa import GWACells
-from .units import Units
-from . import utility as utils
+warnings.filterwarnings("ignore")
 
 class RESources_builder(AttributesParser):  
     def __post_init__(self):
@@ -211,7 +211,7 @@ class RESources_builder(AttributesParser):
         # for column in self.scored_cells.columns:
         #         self.not_scored_cells[column] = self.scored_cells[column].reindex(self.not_scored_cells.index)
         
-        self.datahandler.to_store(self.scored_cells,'cells')
+        self.datahandler.to_store(self.scored_cells,'cells',force_update=True)
         # self.store_grid_cells=self.datahandler.from_store('cells')
         
         return self.scored_cells

@@ -7,6 +7,11 @@ import geopandas as gpd
 import logging as log
 import matplotlib.pyplot as plt
 import linkingtool.utility as utils
+from sklearn.impute import SimpleImputer
+
+imputer = SimpleImputer(strategy="mean")  # Other strategies: "median", "most_frequent"
+
+
 
 def assign_cluster_id(cells: gpd.GeoDataFrame, 
                   source_column: str = 'Region', 
@@ -62,18 +67,15 @@ def find_optimal_K(
     
     print(f">> Estimating optimal number of Clusters for each region based on the Score for each Cell ...")
 
-    # Remove duplicate points
-    data_for_clustering = data_for_clustering.drop_duplicates()
-
-    scaler = StandardScaler()
-    data = scaler.fit_transform(data_for_clustering)
-
     # Initialize empty list to store the within-cluster sum of squares (WCSS)
     wcss_data = []
 
     # Try different values of k (number of clusters)
     for k in range(1, min(max_k, len(data_for_clustering))):
-        kmeans_data = KMeans(n_clusters=k, random_state=0, n_init=10).fit(data)
+        # Handle NaN values by filling them with the mean of the column
+
+
+        kmeans_data = KMeans(n_clusters=k, random_state=0, n_init=10).fit(data_for_clustering)
         # Inertia is the within-cluster sum of squares
         wcss_data.append(kmeans_data.inertia_)
 
@@ -87,7 +89,7 @@ def find_optimal_K(
     optimal_k_data = next((k for k, wcss_value in enumerate(wcss_data, start=1) if wcss_value <= tolerance_data), None)
 
 # Plot and save the elbow charts
-    plt.plot(range(1, min(max_k, len(data_for_clustering))), wcss_data, marker='o', linestyle='-', label=f'LCOE_{resource_type}')
+    plt.plot(range(1, min(max_k, len(data_for_clustering))), wcss_data, marker='o', linestyle='-', label=f'lcoe_{resource_type}')
     if optimal_k_data is not None:
         plt.axvline(x=optimal_k_data, color='r', linestyle='--',
                     label=f"Optimal k = {optimal_k_data}; K-means with {round(wcss_tolerance*100)}% of WCSS")
@@ -120,18 +122,16 @@ def pre_process_cluster_mapping(
 
     unique_regions = cells_scored['Region'].unique()
     elbow_plot_directory=os.path.join(vis_directory,'Regional_cluster_Elbow_Plots')
-    if not os.path.exists(elbow_plot_directory):
-        os.makedirs(elbow_plot_directory)
-
     region_optimal_k_list = []
 
     # Loop over unique regions
     for region in unique_regions:
         # Select data for the current region
-        data_for_clustering = cells_scored[cells_scored['Region'] == region][[f'LCOE_{resource_type}']]
+        data_for_clustering = cells_scored[cells_scored['Region'] == region][[f'lcoe_{resource_type}']]
+        data_for_clustering_cleaned = pd.DataFrame(imputer.fit_transform(data_for_clustering), columns=data_for_clustering.columns)
         
         # Call the function for K-means clustering and elbow plot
-        optimal_k = find_optimal_K(resource_type,data_for_clustering, region, wcss_tolerance, max_k=15)
+        optimal_k = find_optimal_K(resource_type,data_for_clustering_cleaned, region, wcss_tolerance, max_k=15)
         
         # Append values to the list
         region_optimal_k_list.append({'Region': region, 'Optimal_k': optimal_k})
@@ -224,7 +224,7 @@ def create_cells_Union_in_clusters(
     log.info(f" Preparing Clusters...")
     
     # Initialize an aggregation dictionary
-    agg_dict = {f'LCOE_{resource_type}': lambda x: x.iloc[len(x) // 2], 
+    agg_dict = {#f'LCOE_{resource_type}': lambda x: x.iloc[len(x) // 2], 
                 f'lcoe_{resource_type}': lambda x: x.iloc[len(x) // 2], 
                 f'capex_{resource_type}':'first',
                 f'fom_{resource_type}':'first',
@@ -273,8 +273,8 @@ def create_cells_Union_in_clusters(
         dissolved_gdf=utils.assign_regional_cell_ids(dissolved_gdf,'Region','cluster_id')
 
         dissolved_gdf['Cluster_No'] = dissolved_gdf['Cluster_No'].astype(int)
-        # dissolved_gdf.sort_values(by=f'lcoe_{resource_type}', ascending=True, inplace=True)
-        dissolved_gdf.sort_values(by=f'LCOE_{resource_type}', ascending=True, inplace=True)
+        dissolved_gdf.sort_values(by=f'lcoe_{resource_type}', ascending=True, inplace=True)
+        # dissolved_gdf.sort_values(by=f'LCOE_{resource_type}', ascending=True, inplace=True)
         dissolved_gdf['Rank'] = range(1, len(dissolved_gdf)+1)
         
         dissolved_gdf.columns=dissolved_gdf.columns.str.replace(fr"(?i)(_{resource_type}|{resource_type}_)", "", regex=True)
@@ -290,7 +290,7 @@ def clip_cluster_boundaries_upto_regions(
     xxx 
     """
     cell_cluster_gdf_clipped=cell_cluster_gdf.clip(gadm_regions_gdf,keep_geom_type=False)
-    cell_cluster_gdf_clipped.sort_values(by=[f'LCOE_{resource_type}'], ascending=True, inplace=True) 
-    # cell_cluster_gdf_clipped.sort_values(by=[f'lcoe_{resource_type}'], ascending=True, inplace=True) 
+    # cell_cluster_gdf_clipped.sort_values(by=[f'LCOE_{resource_type}'], ascending=True, inplace=True) 
+    cell_cluster_gdf_clipped.sort_values(by=[f'lcoe_{resource_type}'], ascending=True, inplace=True) 
 
     return cell_cluster_gdf_clipped
