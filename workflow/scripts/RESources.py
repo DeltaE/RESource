@@ -12,20 +12,20 @@ current_local_time = datetime.now()
 warnings.filterwarnings("ignore")
 
 # Linking Tool's Local Packages
-from linkingtool.era5_cutout import ERA5Cutout
-import linkingtool.cluster as cluster
-import linkingtool.windspeed as wind
-from linkingtool.CellCapacityProcessor import CellCapacityProcessor
-from linkingtool.coders import CODERSData
-from linkingtool.find import GridNodeLocator
-from linkingtool.timeseries import Timeseries
-from linkingtool.hdf5_handler import DataHandler
-from linkingtool.AttributesParser import AttributesParser
-from linkingtool.score import CellScorer
-from linkingtool.cell import GridCells
-from linkingtool.gwa import GWACells
-from linkingtool.units import Units
-from linkingtool import utility as utils
+from RES.era5_cutout import ERA5Cutout
+import RES.cluster as cluster
+import RES.windspeed as wind
+from RES.CellCapacityProcessor import CellCapacityProcessor
+from RES.coders import CODERSData
+from RES.find import GridNodeLocator
+from RES.timeseries import Timeseries
+from RES.hdf5_handler import DataHandler
+from RES.AttributesParser import AttributesParser
+from RES.score import CellScorer
+from RES.cell import GridCells
+from RES.gwa import GWACells
+from RES.units import Units
+from RES import utility as utils
 
 class RESources_builder(AttributesParser):  
     def __post_init__(self):
