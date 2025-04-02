@@ -5,19 +5,19 @@ with open('requirements.txt') as f:
     required = f.read().splitlines()
 
 setup(
-    name='linkingtool',
-    version='2.0',
+    name='RES',
+    version='1.0',
     author='Md Eliasinul Islam',
     author_email='eliasinul@gmail.com',
-    description='This tool translates and connects the results from BC-NEXUS to BC-PyPSA models. Developed by Delta E+ Research Lab, Simon Fraser University, BC, CA',
+    description='This tool standardizes the resource assessment framework for Renewable Energy resources. Currently support Solar and On-shore Wind resource assessments. Developed by Delta E+ Research Lab, Simon Fraser University, BC, CA',
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-            'RES=linkingtool.cli:main',
+            'RES=RES.cli:main',
         ],
     },
     install_requires= required,  # Use requirements from requirements.txt
-    python_requires='>=3.6',
+    python_requires='>=3.11',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     classifiers=[
