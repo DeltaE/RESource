@@ -35,11 +35,11 @@ class GAEZRasterProcessor(GADMBoundaries):
             self.__download_resources_zip_file__()
         
         self.__extract_rasters__()
-        self.province_boundary = self.get_province_boundary()
+        self.region_boundary = self.get_region_boundary()
         
         # Loop over raster types and process each
         for raster_type in self.raster_types:
-            self.__clip_to_boundary_n_plot__(raster_type, self.province_boundary.geometry,show)
+            self.__clip_to_boundary_n_plot__(raster_type, self.region_boundary.geometry,show)
         
         self.log.info("All required rasters for GAEZ processed and plotted successfully.")
 
@@ -77,7 +77,7 @@ class GAEZRasterProcessor(GADMBoundaries):
 
 
     def __clip_to_boundary_n_plot__(self, raster_type, boundary_geom,show):
-        """Clip the raster to province boundaries and generate a plot."""
+        """Clip the raster to region boundaries and generate a plot."""
         zip_direct = raster_type['zip_extract_direct']
         raster_file = raster_type['raster']
         plot_title = raster_type['name']
@@ -87,7 +87,7 @@ class GAEZRasterProcessor(GADMBoundaries):
         output_dir = self.gaez_root / self.Rasters_in_use_direct / zip_direct 
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        clipped_raster_path = output_dir / f"{self.province_short_code}_{raster_file}"
+        clipped_raster_path = output_dir / f"{self.region_short_code}_{raster_file}"
 
         with rasterio.open(input_raster) as src:
             clipped_raster, clipped_transform = mask(src, boundary_geom, crop=True, indexes=src.indexes)
@@ -102,7 +102,7 @@ class GAEZRasterProcessor(GADMBoundaries):
                 dst.write(clipped_raster)
             
             # Call visualization method
-            plot_save_to = Path('vis/misc') / raster_file.replace('.tif', f'_raster_{self.province_short_code}.png')
+            plot_save_to = Path('vis/misc') / raster_file.replace('.tif', f'_raster_{self.region_short_code}.png')
             self.plot_gaez_tif(clipped_raster_path, color_map, plot_title, plot_save_to,show)
             self.log.info(f">> Raster plot saved at: {plot_save_to}")
 

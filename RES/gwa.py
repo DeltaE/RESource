@@ -104,18 +104,18 @@ class GWACells(GADMBoundaries):
     
     def load_gwa_cells(self,
                        memory_resource_limitation:Optional[bool]=False):
-        self.province_gwa_cells_df = self.prepare_GWA_data(memory_resource_limitation)
+        self.region_gwa_cells_df = self.prepare_GWA_data(memory_resource_limitation)
 
         # Vectorized creation of geometries
         self.gwa_cells_gdf = gpd.GeoDataFrame(
-            self.province_gwa_cells_df,
-            geometry=gpd.points_from_xy(self.province_gwa_cells_df['x'], self.province_gwa_cells_df['y']),
+            self.region_gwa_cells_df,
+            geometry=gpd.points_from_xy(self.region_gwa_cells_df['x'], self.region_gwa_cells_df['y']),
             crs=self.get_default_crs()
-        ).clip(self.get_province_boundary(), keep_geom_type=False)
+        ).clip(self.get_region_boundary(), keep_geom_type=False)
 
         # self.gwa_cells_gdf = self.calculate_common_parameters_GWA_cells()
         # self.gwa_cells_gdf = self.map_GWAcells_to_ERA5cells()
-        self.log.info(f">> Global Wind Atlas (GWA) Cells loaded. Size: {len(self.province_gwa_cells_df)}")
+        self.log.info(f">> Global Wind Atlas (GWA) Cells loaded. Size: {len(self.region_gwa_cells_df)}")
         
         return self.gwa_cells_gdf
     

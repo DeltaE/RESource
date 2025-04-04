@@ -23,7 +23,6 @@ class DataHandler:
                 
         except Exception as e:
             warnings.warn(f"Error reading file: {e}")
-               
     def to_store(self,
                  data: pd.DataFrame | gpd.GeoDataFrame, 
                  key: str,
@@ -61,18 +60,24 @@ class DataHandler:
                 # Read existing data from HDF5
                 self.data_ext = store.get(key)
 
-                # Add new columns to the existing DataFrame if not present
-                for column in self.data_new.columns:
-                    if not data.empty and column not in self.data_ext.columns:
-                        self.data_ext[column] = self.data_new[column]
+                
+                # Ensure columns are unique before updating
+                self.data_new = self.data_new.loc[:, ~self.data_new.columns.duplicated()]
 
-                # Update the existing DataFrame in HDF5
-                self.updated_data = self.data_ext
-                self.updated_data.to_hdf(self.store, key=key)
-                print(f">> Updated '{key}' saved to {self.store} with key '{key}'")
+                # Align indices to ensure proper updates
+                self.data_new = self.data_new.reindex(self.data_ext.index, fill_value=None)
+
+                # Update only existing columns
+                self.data_ext.update(self.data_new)
+
+                # Save updated data
+                self.data_ext.to_hdf(self.store, key=key)
+                print(f">> Updated '{key}' saved to {self.store}")
+
         
         finally:
             store.close()
+
 
     def from_store(self, 
                    key: str):
@@ -92,13 +97,14 @@ class DataHandler:
             self.data = pd.read_hdf(self.store, key)
 
             # Rename 'geometry' back to 'geometry' and convert WKT to geometry if applicable
-            if 'geometry' in self.data.columns:
-                self.data['geometry'] = self.data['geometry'].apply(loads)
+            if 'geometry' in self.data.columns :
+                if not isinstance(self.data['geometry'].iloc[0], BaseGeometry):
+                    self.data['geometry'] = self.data['geometry'].apply(loads)
                 return gpd.GeoDataFrame(self.data, geometry='geometry', crs='EPSG:4326')
 
             # If not geometry, return the regular DataFrame
             if key == 'timeseries':
-                print(f">>> 'timeseries' key access suggestions: use '.solar' to access Solar-timeseries and '.wind' for Wind-timeseries.")
+                print(">>> 'timeseries' key access suggestions: use '.solar' to access Solar-timeseries and '.wind' for Wind-timeseries.")
             
             return self.data
 

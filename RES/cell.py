@@ -93,22 +93,22 @@ class GridCells(ERA5Cutout):
     
     def get_custom_grid(self):
         self.bounding_box_grid=self.__get_grid__()
-        _grid_cells_=self.boundary_province.overlay(self.bounding_box_grid,how='intersection',keep_geom_type=True)
+        _grid_cells_=self.boundary_region.overlay(self.bounding_box_grid,how='intersection',keep_geom_type=True)
         self.grid_cells=utils.assign_cell_id(_grid_cells_)
         
         self.datahandler.to_store(self.grid_cells,'cells',force_update_key=True)
         
-        self.log.info(f">> {len(self.grid_cells)} Grid Cells prepared for {self.province_short_code}.")
+        self.log.info(f">> {len(self.grid_cells)} Grid Cells prepared for {self.region_short_code}.")
                                   
         return self.grid_cells
     
     def get_default_grid(self):
-        self.cutout,self.province_boundary=self.get_era5_cutout()
+        self.cutout,self.region_boundary=self.get_era5_cutout()
         _era5_grid_cells_gdf_=self.cutout.grid
-        _resource_grid_cells_gdf_=_era5_grid_cells_gdf_.overlay(self.province_boundary)
+        _resource_grid_cells_gdf_=_era5_grid_cells_gdf_.overlay(self.region_boundary)
         self.resource_grid_cells=utils.assign_cell_id(_resource_grid_cells_gdf_)
         self.datahandler.to_store(self.resource_grid_cells,'cells')
-        self.datahandler.to_store(self.province_boundary,'boundary')
+        self.datahandler.to_store(self.region_boundary,'boundary')
         return self.resource_grid_cells
     
    
