@@ -14,7 +14,7 @@ from RES import cluster
 from RES import windspeed as wind
 from RES.CellCapacityProcessor import CellCapacityProcessor
 from RES.coders import CODERSData
-from RES.find import GridNodeLocator
+from RES.power_nodes import GridNodeLocator
 from RES.timeseries import Timeseries
 from RES.hdf5_handler import DataHandler
 from RES.AttributesParser import AttributesParser
@@ -36,7 +36,7 @@ class RESources_builder(AttributesParser):
         # This dictionary will be used to pass arguments to external classes
         self.required_args = {   #order doesn't matter
             "config_file_path" : self.config_file_path,
-            "province_short_code": self.province_short_code,
+            "region_short_code": self.region_short_code,
             "resource_type": self.resource_type
         }
         
@@ -68,8 +68,8 @@ class RESources_builder(AttributesParser):
     '''
     def get_grid_cells(self):
         self.log.info("Preparing Grid Cells...")
-        self.province_grid_cells=self.gridcells.get_default_grid()
-        return self.province_grid_cells
+        self.region_grid_cells=self.gridcells.get_default_grid()
+        return self.region_grid_cells
     '''
     _______________________________________________________________________________________________
     Step 1: 
@@ -150,16 +150,16 @@ class RESources_builder(AttributesParser):
         else:
             self.grid_ss:gpd.GeoDataFrame=self.coders.get_table_provincial('substations')
         
-        self.cutout,self.province_boundary=self.era5_cutout.get_era5_cutout()
+        self.cutout,self.region_boundary=self.era5_cutout.get_era5_cutout()
         self.store_grid_cells=self.datahandler.from_store('cells')
-        # _grid_cells_=self.cutout.grid.overlay(self.province_boundary, how='intersection',keep_geom_type=True)
-        self.province_grid_cells_cap_with_nodes = self.grid.find_grid_nodes_ERA5_cells(self.grid_ss,
+        # _grid_cells_=self.cutout.grid.overlay(self.region_boundary, how='intersection',keep_geom_type=True)
+        self.region_grid_cells_cap_with_nodes = self.grid.find_grid_nodes_ERA5_cells(self.grid_ss,
                                                                                        self.store_grid_cells)
         
         self.datahandler.to_store(self.store_grid_cells,'cells')
         self.datahandler.to_store(self.grid_ss,'substations')
         
-        return self.province_grid_cells_cap_with_nodes
+        return self.region_grid_cells_cap_with_nodes
     '''
     ______________________
     Step 1E:
@@ -335,7 +335,7 @@ class RESources_builder(AttributesParser):
         """
         Execute the specific module logic for the given resource type ('solar' or 'wind').
         """
-        print(f"{50*'_'}\n Initiating {self.resource_type} module for {self.get_province_name()}...")
+        print(f"{50*'_'}\n Initiating {self.resource_type} module for {self.get_region_name()}...")
         self.memory_resource_limitation=memory_resource_limitation
         # Placeholder for future grid cell retrieval
         self.get_grid_cells()
@@ -356,13 +356,13 @@ class RESources_builder(AttributesParser):
                                                                         self.get_cluster_timeseries(),
                                                                         resource_max_capacity=resource_max_capacity)
                
-            utils.print_module_title(f"Top Sites(clusters) from {self.resource_type} module saved to {self.store} for {self.get_province_name()}...")
+            utils.print_module_title(f"Top Sites(clusters) from {self.resource_type} module saved to {self.store} for {self.get_region_name()}...")
             
         else: # When user wants all of the sites
             resource_clusters=self.get_clusters().clusters,
             cluster_timeseries=self.get_cluster_timeseries(),
     
-            utils.print_module_title(f"All Sites (clusters) from {self.resource_type} module saved to {self.store} for {self.get_province_name()}...")
+            utils.print_module_title(f"All Sites (clusters) from {self.resource_type} module saved to {self.store} for {self.get_region_name()}...")
    
         
         self.export_results(self.resource_type,

@@ -28,24 +28,24 @@ class AttributesParser:
     This is the parent class that will extract the core attributes from the User Config file.
     """
     # Attributes that are required as Args.
+    region_short_code: str
     config_file_path: Path =field(default='config/config.yaml')
-    province_short_code: str=field(default= 'BC')
     resource_type: str = field(default='None')
     
     def __post_init__(self):
         self.site_index='cell'
 
         # Define the path and filename
-        self.store = Path(f"data/store/resources_{self.province_short_code}.h5")
+        self.store = Path(f"data/store/resources_{self.region_short_code}.h5")
         self.store.parent.mkdir(parents=True, exist_ok=True)
 
-        # Convert province_short_code to uppercase to handle user types regarding case-sensitive letter inputs.
-        self.province_short_code = self.province_short_code.upper()
+        # Convert region_short_code to uppercase to handle user types regarding case-sensitive letter inputs.
+        self.region_short_code = self.region_short_code.upper()
         
         # Load the user configuration master file by using the method
         self.config:Dict[str,dict] = self.load_config(self.config_file_path)
         self.disaggregation_config:Dict[str,dict] = self.config['capacity_disaggregation']
-        self.province_code_validity=self.is_province_code_valid()
+        self.region_code_validity=self.is_region_code_valid()
         self.log = log.getLogger(__name__)
         
     def load_config(self,config_file_path):
@@ -56,25 +56,25 @@ class AttributesParser:
             data = yaml.safe_load(file)
         return data
 
-    def is_province_code_valid(self)-> bool:
+    def is_region_code_valid(self)-> bool:
         """
         Args:
-            Province_short_code: 2 letter short code of the province.
+            region_short_code: 2 letter short code of the region.
             
         Description: 
-            Checks of the province code is correct. If not, then suggests the available list of codes that are liked to data supply-chain.
+            Checks of the region code is correct. If not, then suggests the available list of codes that are liked to data supply-chain.
         """
-        self.province_mapping=self.get_province_mapping()
+        self.region_mapping=self.get_region_mapping()
         
-        if self.province_short_code not in self.province_mapping:
-            print(f"!!! ERROR !!! \nRecheck the province code.\n{60 * '_'}")
-            print(f"\nPlease provide a CANADIAN province CODE (2 letters) from the following list: \n ")
-            # display(self.province_mapping.keys())
-            for key, value in self.province_mapping.items():
+        if self.region_short_code not in self.region_mapping:
+            print(f"!!! ERROR !!! \nRecheck the region code.\n{60 * '_'}")
+            print("\nPlease provide a Region CODE from the following list: \n ")
+            # display(self.region_mapping.keys())
+            for key, value in self.region_mapping.items():
                 # Assuming you want to show the first item in the value (e.g., the first name or detail)
                 name = value.get('name', 'N/A')  # Change 'name' to the actual key you want to display
                 print(f"• {key}: {name}")
-            return False  # Exit the function if the province code is invalid
+            return False  # Exit the function if the region code is invalid
         else:
             return True
 
@@ -88,11 +88,11 @@ class AttributesParser:
 
 # Methods for dynamically fetching data from the config
 
-    def get_province_mapping(self) -> Dict[str, dict]:
-        return self.config.get('province_mapping', {})
+    def get_region_mapping(self) -> Dict[str, dict]:
+        return self.config.get('region_mapping', {})
     
-    def get_province_name(self)-> str:
-        return self.config.get('province_mapping', {}).get(self.province_short_code,{}).get('name',{})
+    def get_region_name(self)-> str:
+        return self.config.get('region_mapping', {}).get(self.region_short_code,{}).get('name',{})
 
     def get_resource_disaggregation_config(self) -> Dict[str, dict]:
 
@@ -122,8 +122,9 @@ class AttributesParser:
     def get_gadm_config(self)-> Dict[str, dict]:
         return self.config.get('GADM', {})
     
-    def get_country(self)-> str:
-        return self.config.get('country', "Canada") # If NONE, default is Canada
+    # def get_country(self)-> str:
+    #     return self.config.get('country', "Canada") # If NONE, default is Canada
+    
     
     def get_default_crs(self)->str:
         return 'EPSG:4326'
@@ -134,8 +135,8 @@ class AttributesParser:
     def get_osm_config(self):
         return self.config['OSM_data']
     
-    def get_province_timezone(self):
-        return self.config['province_mapping'][self.province_short_code]['timezone_convert']
+    def get_region_timezone(self):
+        return self.config['region_mapping'][self.region_short_code]['timezone_convert']
     
     def get_cell_resolution(self):
         return self.config.get('grid_cell_resolution',{})

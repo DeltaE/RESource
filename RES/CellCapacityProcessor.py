@@ -28,7 +28,7 @@ class CellCapacityProcessor(LandContainer,
         # This dictionary will be used to pass arguments to external classes
         self.required_args = { #order doesn't matter
                 "config_file_path": self.config_file_path,
-                "province_short_code": self.province_short_code,
+                "region_short_code": self.region_short_code,
                 "resource_type": self.resource_type
             }
         
@@ -59,10 +59,10 @@ class CellCapacityProcessor(LandContainer,
     # def __get_raster_path__(self, config, root, rasters_dir):
     #     return os.path.join(root, rasters_dir , config['zip_extract_direct'], config['raster'])
     
-    def __get_unified_province_shape__(self):
-        self.province_shape=self.province_boundary.dissolve(by='Province').drop(columns =['Region'])
-        # self.province_shape=self.store_grid_cells.dissolve(by='Province').drop(columns =['Region'])
-        return self.province_shape
+    def __get_unified_region_shape__(self):
+        self.region_shape=self.region_boundary.dissolve(by='region').drop(columns =['Region'])
+        # self.region_shape=self.store_grid_cells.dissolve(by='region').drop(columns =['Region'])
+        return self.region_shape
     
     def load_cost(self,
                   resource_atb:pd.DataFrame):
@@ -107,8 +107,8 @@ class CellCapacityProcessor(LandContainer,
         ])
         
     def get_capacity(self):
-    #a. load cutout and province boundary for which the cutout has been created.
-        self.cutout,self.province_boundary=self.get_era5_cutout()
+    #a. load cutout and region boundary for which the cutout has been created.
+        self.cutout,self.region_boundary=self.get_era5_cutout()
         # self.cutout,_=self.era5_cutout.get_era5_cutout()
         # loads complete boundary of regions.
         
@@ -133,15 +133,15 @@ class CellCapacityProcessor(LandContainer,
         
     # OPTIONAL step (skipping to save memory+processing time)
         ## 1. Calculate shape availability after adding the composite exclusion layer (excluder)
-        # c. create a province boundary (union of all regions) to pass it onto excluder.
+        # c. create a region boundary (union of all regions) to pass it onto excluder.
         # Because passing regional geoms will increase the calculation time.
-        # _province_shape_gdf=self.__get_unified_province_shape__()
-        # _province_shape_geom=_province_shape_gdf.geometry.to_crs(composite_excluder.crs)
-        # masked, transform = composite_excluder.compute_shape_availability(_province_shape_geom)
-        # cell_processor.excluder.plot_shape_availability(cell_processor.province_boundary)
+        # _region_shape_gdf=self.__get_unified_region_shape__()
+        # _region_shape_geom=_region_shape_gdf.geometry.to_crs(composite_excluder.crs)
+        # masked, transform = composite_excluder.compute_shape_availability(_region_shape_geom)
+        # cell_processor.excluder.plot_shape_availability(cell_processor.region_boundary)
         # The masked object is a numpy array. Eligible raster cells have a 1 and excluded cells a 0. 
         # Note that this data still lives in the projection of excluder. For calculating the eligible share we can use the following routine.
-        # eligible_share = masked.sum() * composite_excluder.res**2 / _province_shape_geom.area.sum()
+        # eligible_share = masked.sum() * composite_excluder.res**2 / _region_shape_geom.area.sum()
         
         # print(f"The land eligibility share is: {eligible_share:.2%}")
         
@@ -150,8 +150,8 @@ class CellCapacityProcessor(LandContainer,
         # excluder.plot_shape_availability(test.geometry)
         
     ## 2.1 Compute availability Matrix
-        self.province_shape= self.__get_unified_province_shape__()
-        self.Availability_matrix:xr = self.cutout.availabilitymatrix(self.province_shape, composite_excluder)
+        self.region_shape= self.__get_unified_region_shape__()
+        self.Availability_matrix:xr = self.cutout.availabilitymatrix(self.region_shape, composite_excluder)
         self.plot_ERAF5_grid_land_availability()
         self.plot_excluder_land_availability()
         
@@ -192,7 +192,7 @@ class CellCapacityProcessor(LandContainer,
         _provincial_cell_capacity_gdf = _provincial_cell_capacity_gdf.assign(**stylized_columns)
 
     ## 4 Trim the cells to sub-provincial boundaries instead of overlapping cell (boxes) in the regional boundaries.
-        _provincial_cell_capacity_gdf=_provincial_cell_capacity_gdf.overlay(self.province_boundary)
+        _provincial_cell_capacity_gdf=_provincial_cell_capacity_gdf.overlay(self.region_boundary)
         self.provincial_cells=utils.assign_cell_id(_provincial_cell_capacity_gdf)
 
         ''' 
@@ -217,7 +217,7 @@ class CellCapacityProcessor(LandContainer,
         self.log.info(">> Saving to the local store (as HDF5 file)")
         # self.datahandler.save_to_hdf(era5_cell_capacity,'cells')
         
-        self.datahandler.to_store(self.provincial_cells,'cells')
+        # self.datahandler.to_store(self.provincial_cells,'cells')
      
         return self.solar_resources_nt
 
@@ -238,7 +238,7 @@ class CellCapacityProcessor(LandContainer,
     
     def plot_ERAF5_grid_land_availability(self):
         
-        province_boundary = self.province_boundary
+        region_boundary = self.region_boundary
         
         # Load availability data
         _AM_=self.Availability_matrix
@@ -260,7 +260,7 @@ class CellCapacityProcessor(LandContainer,
                     crs='EPSG:4326'
                 )
                 
-        A_gdf=A_gdf.overlay(province_boundary)
+        A_gdf=A_gdf.overlay(region_boundary)
 
         # Categorize availability into bins
         A_gdf["availability_category"] = pd.cut(A_gdf["availability"], bins=bins, labels=labels, include_lowest=True)
@@ -275,11 +275,11 @@ class CellCapacityProcessor(LandContainer,
 
         # Plot solar map on ax1
         # Add shadow effect for solar map
-        province_boundary.geometry = province_boundary.geometry.translate(xoff=shadow_offset, yoff=-shadow_offset)
-        province_boundary.plot(ax=ax, facecolor='none', edgecolor='gray', linewidth=2, alpha=0.3)  # Shadow layer
+        region_boundary.geometry = region_boundary.geometry.translate(xoff=shadow_offset, yoff=-shadow_offset)
+        region_boundary.plot(ax=ax, facecolor='none', edgecolor='gray', linewidth=2, alpha=0.3)  # Shadow layer
 
         # Plot solar cells
-        if self.province_short_code in ['AB', 'SK']:
+        if self.region_short_code in ['AB', 'SK']:
             bbox_anchor_offset=(1.25, 1) # AB and SK has skewed map, custom tweak
         else:
             bbox_anchor_offset=(1.1, 1)
@@ -287,19 +287,19 @@ class CellCapacityProcessor(LandContainer,
                 legend_kwds={'title': "Land Availability", 'loc': 'upper right', 'bbox_to_anchor': bbox_anchor_offset,'borderpad': 1,'frameon': False})
 
         # Plot actual boundary for solar map
-        province_boundary.plot(ax=ax, facecolor='none', edgecolor='black', linewidth=0.7, alpha=0.9)
+        region_boundary.plot(ax=ax, facecolor='none', edgecolor='black', linewidth=0.7, alpha=0.9)
         plt.subplots_adjust(right=0.85)  # Increase space on the right
         # Adjust layout for cleaner appearance
         plt.tight_layout()
-        plt.savefig(f'vis/misc/land_availability_ERA5grid_{self.province_name}.png')
-        print(f"Land availability (grid cells) map saved at vis/misc/land_availability_ERA5grid_{self.province_name}.png")
+        plt.savefig(f'vis/misc/land_availability_ERA5grid_{self.region_name}.png')
+        print(f"Land availability (grid cells) map saved at vis/misc/land_availability_ERA5grid_{self.region_name}.png")
 
     def plot_excluder_land_availability(self):
 
         fig, ax = plt.subplots()
-        self.excluder.plot_shape_availability(self.province_shape,
+        self.excluder.plot_shape_availability(self.region_shape,
                                               plot_kwargs={'facecolor':'none','edgecolor':'black'},
                                               ax=ax)
         ax.axis("off")
-        plt.savefig(f'vis/misc/land_availability_excluderResolution_{self.province_name}.png')
-        print(f"Land availability map (excluder resolution) saved at vis/misc/land_availability_excluderResolution_{self.province_name}.png")
+        plt.savefig(f'vis/misc/land_availability_excluderResolution_{self.region_name}.png')
+        print(f"Land availability map (excluder resolution) saved at vis/misc/land_availability_excluderResolution_{self.region_name}.png")

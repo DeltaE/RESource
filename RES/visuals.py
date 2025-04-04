@@ -61,7 +61,7 @@ def plot_with_matched_cells(ax, cells: gpd.GeoDataFrame, filtered_cells: gpd.Geo
     cbar.ax.tick_params(labelsize=font_size) 
 
 def get_selected_vs_missed_visuals(cells: gpd.GeoDataFrame,
-                                  province_short_code,
+                                  region_short_code,
                                   resource_type,
                                    lcoe_threshold: float,
                                    CF_threshold: float,
@@ -120,14 +120,14 @@ def get_selected_vs_missed_visuals(cells: gpd.GeoDataFrame,
     axs[1, 1].set_axis_off()
 
     # Add a super title for the figure
-    fig.suptitle(f'{resource_type}- Selected Cells Overview - {province_short_code}', fontsize=font_size+2,fontweight='bold', x=title_x,y=title_y)
+    fig.suptitle(f'{resource_type}- Selected Cells Overview - {region_short_code}', fontsize=font_size+2,fontweight='bold', x=title_x,y=title_y)
     # Add a text box with grey background for the message
     fig.text(text_box_x, text_box_y, msg, ha='center', va='top', fontsize=font_size-3,
              bbox=dict(facecolor='lightgrey', edgecolor='grey', boxstyle='round,pad=0.2'))
     plt.tight_layout()
     # Save the plot
     if save:
-        plt.savefig(f"vis/linking/solar/Selected_cells_solar_{province_short_code}.png", bbox_inches='tight')
+        plt.savefig(f"vis/linking/solar/Selected_cells_solar_{region_short_code}.png", bbox_inches='tight')
     plt.tight_layout()
     plt.show()  # Optional: Show the plot if desired
 
@@ -243,7 +243,7 @@ def plot_data_in_GADM_regions(
     return log.info(f"Plot Created for {plt_title} for Potential Plants and Save to {plt_save_to}")
 
 def visualize_ss_nodes(substations_gdf,
-                       provincem_gadm_regions_gdf:gpd.GeoDataFrame, 
+                       regionm_gadm_regions_gdf:gpd.GeoDataFrame, 
                            plot_name):
         """
         Visualizes transmission nodes (buses) on a map with different colors based on substation types.
@@ -258,7 +258,7 @@ def visualize_ss_nodes(substations_gdf,
         """
         
         fig, ax = plt.subplots(figsize=(10, 8))
-        provincem_gadm_regions_gdf.plot(ax=ax, color="lightgrey", edgecolor="black", linewidth=0.8,alpha=0.2)
+        regionm_gadm_regions_gdf.plot(ax=ax, color="lightgrey", edgecolor="black", linewidth=0.8,alpha=0.2)
         substations_gdf.plot('substation_type',ax=ax,legend=True,cmap='viridis',marker='x',markersize=10,linewidth=1,alpha=0.6)
 
         # Finalize plot details
@@ -273,7 +273,7 @@ def visualize_ss_nodes(substations_gdf,
         log.info(f"Plot for Grid Nodes Generated and saved as {plot_name}")
         
 def create_timeseries_plots(cells_df, CF_timeseries_df, max_resource_capacity, dissolved_indices, resampling, representative_color_palette, std_deviation_gradient, vis_directory):
-    print(f">>> Generating CF timeseries PLOTs for TOP Sites for {max_resource_capacity} GW Capacity investment in province...")
+    print(f">>> Generating CF timeseries PLOTs for TOP Sites for {max_resource_capacity} GW Capacity investment in region...")
 
     for index, row in cells_df.iterrows():
         region = row['Region']
@@ -315,7 +315,7 @@ def create_timeseries_plots(cells_df, CF_timeseries_df, max_resource_capacity, d
         plt.savefig(os.path.join(vis_directory,plt_name))
         plt.close()
 
-    log.info(f">>> Plots generated for CF timeseries of TOP Sites for {max_resource_capacity} GW Capacity Investment in Province...")
+    log.info(f">>> Plots generated for CF timeseries of TOP Sites for {max_resource_capacity} GW Capacity Investment in region...")
 
 
 def create_timeseries_plots_solar(cells_df,CF_timeseries_df, dissolved_indices,max_solar_capacity,resampling,solar_vis_directory):
@@ -441,7 +441,7 @@ def create_timeseries_interactive_plots(
     # pio.show(fig)
 
 def create_key_data_map_interactive(
-    province_gadm_regions_gdf:gpd.GeoDataFrame,
+    region_gadm_regions_gdf:gpd.GeoDataFrame,
     provincial_conservation_protected_lands: gpd.GeoDataFrame,
     aeroway_with_buffer_solar:gpd.GeoDataFrame,
     aeroway_with_buffer_wind:gpd.GeoDataFrame,
@@ -453,7 +453,7 @@ def create_key_data_map_interactive(
     ):
     buffer_distance_m:dict[dict]=about_OSM_data['aeroway_buffer']
     
-    m = province_gadm_regions_gdf.explore('Region', color='grey',style_kwds={'fillOpacity': 0.1}, name=f"{current_region['code']} Regions")
+    m = region_gadm_regions_gdf.explore('Region', color='grey',style_kwds={'fillOpacity': 0.1}, name=f"{current_region['code']} Regions")
     provincial_conservation_protected_lands.explore(m=m,color='red', style_kwds={'fillOpacity': 0.05}, name='Conservation and Protected lands')
     aeroway_with_buffer_solar.explore(m=m, color='orange', style_kwds={'fillOpacity': 0.5}, name=f"aeroway with {buffer_distance_m['solar']}m buffer")
     aeroway_with_buffer_wind.explore(m=m, color='skyblue', style_kwds={'fillOpacity': 0.5}, name=f"aeroway with {buffer_distance_m['wind']}m buffer")

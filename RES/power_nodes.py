@@ -5,6 +5,7 @@ import logging as log
 from dataclasses import dataclass
 
 from RES.AttributesParser import AttributesParser
+from RES.osm import OSMData
 
 @dataclass
 class GridNodeLocator(AttributesParser):
@@ -58,7 +59,7 @@ class GridNodeLocator(AttributesParser):
         buses_gdf.sindex  # Generate spatial index
         bus_tree = cKDTree(buses_gdf['geometry'].apply(lambda x: (x.x, x.y)).tolist())
         
-        log.info(f"> Calculating Nearest Grid Nodes for Grid Cells of {self.province_short_code}")
+        log.info(f"> Calculating Nearest Grid Nodes for Grid Cells of {self.region_short_code}")
         
 
         # Apply the find_nearest_station method using lambda to pass additional arguments
@@ -78,12 +79,26 @@ class GridNodeLocator(AttributesParser):
                 f"Size: {len(cells_within_proximity_gdf)}\n")
         
         return cells_gdf_with_station_data # cells_within_proximity_gdf
+    
+    def get_OSM_grid_nodes(self) -> gpd.GeoDataFrame:
+        """
+        Retrieve OSM data for grid nodes.
+        """
+        osm_data = OSMData(region_code=self.region_short_code)
+        
+        # Extract the relevant GeoDataFrame from OSM data
+        buses_gdf = osm_data.get_osm_layer('substation')
+        if buses_gdf is None:
+            log.error("No OSM data found for grid nodes.")
+            return None
+        else:
+            return buses_gdf
 
 
 # Example of a specialized class using inheritance
 # class AdvancedGridNodeLocator(GridNodeLocator):
-#     def __init__(self, province_code: str, grid_node_proximity_filter: float, extra_param: str):
-#         super().__init__(province_code, grid_node_proximity_filter)
+#     def __init__(self, region_code: str, grid_node_proximity_filter: float, extra_param: str):
+#         super().__init__(region_code, grid_node_proximity_filter)
 #         self.extra_param = extra_param
     
 #     def some_advanced_method(self):

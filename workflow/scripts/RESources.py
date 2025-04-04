@@ -6,18 +6,14 @@ from typing import List,Dict,Optional,Union, Tuple
 from pathlib import Path
 from datetime import datetime
 
-# Get the current local time
-current_local_time = datetime.now()
-
-warnings.filterwarnings("ignore")
 
 # Linking Tool's Local Packages
 from RES.era5_cutout import ERA5Cutout
 import RES.cluster as cluster
 import RES.windspeed as wind
 from RES.CellCapacityProcessor import CellCapacityProcessor
-from RES.coders import CODERSData
-from RES.find import GridNodeLocator
+# from RES.coders import CODERSData
+from RES.power_nodes import GridNodeLocator
 from RES.timeseries import Timeseries
 from RES.hdf5_handler import DataHandler
 from RES.AttributesParser import AttributesParser
@@ -25,7 +21,11 @@ from RES.score import CellScorer
 from RES.cell import GridCells
 from RES.gwa import GWACells
 from RES.units import Units
-from RES import utility as utils
+from RES import utility as util
+
+# Get the current local time
+current_local_time = datetime.now()
+warnings.filterwarnings("ignore")
 
 class RESources_builder(AttributesParser):  
     def __post_init__(self):
@@ -35,7 +35,7 @@ class RESources_builder(AttributesParser):
         # This dictionary will be used to pass arguments to external classes
         self.required_args = {   #order doesn't matter
             "config_file_path" : self.config_file_path,
-            "province_short_code": self.province_short_code,
+            "region_short_code": self.region_short_code,
             "resource_type": self.resource_type
         }
         
@@ -45,7 +45,7 @@ class RESources_builder(AttributesParser):
         self.timeseries=Timeseries(**self.required_args)
         self.datahandler=DataHandler(self.store)
         self.cell_processor=CellCapacityProcessor(**self.required_args)
-        self.coders=CODERSData(**self.required_args)
+        # self.coders=CODERSData(**self.required_args)
         self.era5_cutout=ERA5Cutout(**self.required_args)
         self.scorer=CellScorer(**self.required_args)
         self.gwa_cells=GWACells(**self.required_args)
@@ -134,7 +134,7 @@ class RESources_builder(AttributesParser):
     ______________________
     '''
     def find_grid_nodes(self,
-                        use_pypsa_buses:bool=True):
+                        use_pypsa_buses:bool=False):
 
         self.grid=GridNodeLocator(**self.required_args)
         
@@ -147,7 +147,8 @@ class RESources_builder(AttributesParser):
                 crs=self.get_default_crs(),  # Set the coordinate reference system (e.g., WGS84)
                 ) 
         else:
-            self.grid_ss:gpd.GeoDataFrame=self.coders.get_table_provincial('substations')
+            # self.grid_ss:gpd.GeoDataFrame=self.coders.get_table_provincial('substations') # for CANADIAN provinces
+            self.grid_ss:gpd.GeoDataFrame=self.grid.get_OSM_grid_nodes()
         
         self.cutout,self.province_boundary=self.era5_cutout.get_era5_cutout()
         self.store_grid_cells=self.datahandler.from_store('cells')
@@ -170,14 +171,14 @@ class RESources_builder(AttributesParser):
                                  memory_resource_limitation:Optional[bool]=False):
         if self.resource_type=='wind': 
             if all(column in self.store_grid_cells.columns for column in ['CF_IEC2', 'CF_IEC3', 'windspeed_gwa','windspeed_ERA5']):
-                self.log.info(f"'CF_IEC2', 'CF_IEC3', 'windspeed_gwa' are already present in the store information.")
+                self.log.info("'CF_IEC2', 'CF_IEC3', 'windspeed_gwa' are already present in the store information.")
                 pass
             else:
                 self.gwa_cells.map_GWA_cells_to_ERA5(memory_resource_limitation)
             
         elif self.resource_type=='solar': 
             # Not activated for solar resources yet as the high resolution data processing is computationally expensive and the data contrast for solar doesn't provide satisfactory incentive for that.
-            self.log.info(f"GWA Cells not configured for solar.")
+            self.log.info("GWA Cells not configured for solar.")
             pass 
 
     '''
@@ -307,12 +308,12 @@ class RESources_builder(AttributesParser):
 
     def build(self,
                        select_top_sites:Optional[bool]=True,
-                       use_pypsa_buses:Optional[bool]=True,
+                       use_pypsa_buses:Optional[bool]=False,
                        memory_resource_limitation:Optional[bool]=True):
         """
         Execute the specific module logic for the given resource type ('solar' or 'wind').
         """
-        print(f"{50*'_'}\n Initiating {self.resource_type} module for {self.get_province_name()}...")
+        print(f"{50*'_'}\n Initiating {self.resource_type} module for {self.get_region_name()}...")
         self.memory_resource_limitation=memory_resource_limitation
         # Placeholder for future grid cell retrieval
         self.get_grid_cells()
@@ -333,13 +334,13 @@ class RESources_builder(AttributesParser):
                                                                         self.get_cluster_timeseries(),
                                                                         resource_max_capacity=resource_max_capacity)
                
-            utils.print_module_title(f"Top Sites(clusters) from {self.resource_type} module saved to {self.store} for {self.get_province_name()}...")
+            utils.print_module_title(f"Top Sites(clusters) from {self.resource_type} module saved to {self.store} for {self.get_region_name()}...")
             
         else: # When user wants all of the sites
             resource_clusters=self.get_clusters().clusters,
             cluster_timeseries=self.get_cluster_timeseries(),
     
-            utils.print_module_title(f"All Sites (clusters) from {self.resource_type} module saved to {self.store} for {self.get_province_name()}...")
+            utils.print_module_title(f"All Sites (clusters) from {self.resource_type} module saved to {self.store} for {self.get_region_name()}...")
    
         
         self.export_results(self.resource_type,
@@ -445,7 +446,7 @@ class RESources_builder(AttributesParser):
         sites_timeseries:pd.DataFrame,
         resource_max_capacity:float,
         )-> Tuple[Union[gpd.GeoDataFrame, pd.DataFrame], pd.DataFrame]:
-        print(f">>> Selecting TOP Sites to for {resource_max_capacity} GW Capacity Investment in BC...")
+        print(f">>> Selecting TOP Sites to for {resource_max_capacity} GW Capacity Investment...")
         """
         Select the top sites based on potential capacity and a maximum resource capacity limit.
 
@@ -457,7 +458,7 @@ class RESources_builder(AttributesParser):
         - selected_sites: GeoDataFrame with the selected top sites.
         """
         print(f"{'_'*100}")
-        print(f"Selecting the Top Ranked Sites to invest in {resource_max_capacity} GW resource in BC")
+        print(f"Selecting the Top Ranked Sites to invest in {resource_max_capacity} GW resource")
         print(f"{'_'*100}")
      
         # Initialize variables

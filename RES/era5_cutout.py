@@ -2,6 +2,9 @@ from pathlib import Path
 import atlite
 
 from RES.boundaries import GADMBoundaries
+import os
+os.environ['CDSAPI_URL'] = 'https://cds.climate.copernicus.eu/api'
+
 
 
 class ERA5Cutout(GADMBoundaries):
@@ -43,7 +46,7 @@ class ERA5Cutout(GADMBoundaries):
             suffix = "_".join([self.start_year, self.end_year])
         
         # Combine region and year(s) to form the file name
-        file_name = f"{self.province_short_code}_{suffix}.nc"
+        file_name = f"{self.region_short_code}_{suffix}.nc"
         
         # Join the base directory and file name to form the full path
         file_path:Path = base_dir / file_name
@@ -69,7 +72,7 @@ class ERA5Cutout(GADMBoundaries):
         Note:
             After execution, all downloaded data is stored at cutout.path. By default, it is not loaded into memory but into Dask arrays to keep memory consumption low. The data is accessible via cutout.data, which is an xarray.Dataset.
         """
-        MBR,province_boundary=self.get_bounding_box()
+        MBR,region_boundary=self.get_bounding_box()
         
         # Extract parameters from the configuration file
         dx, dy = self.cutout_config["dx"], self.cutout_config['dy']
@@ -87,21 +90,22 @@ class ERA5Cutout(GADMBoundaries):
             time=time_horizon
         )
 
-        cutout.prepare()  # Prepare the cutout data
+        cutout.prepare(monthly_requests=True, 
+                       concurrent_requests=False )  # Prepare the cutout data
         print("""
     >>> Memory management remarks:
     * After execution, all downloaded data is stored at cutout.path. By default, it is not loaded into memory, but into dask arrays. This keeps the memory consumption extremely low.
     * The data is accessible in cutout.data, which is an xarray.Dataset. Querying the cutout gives us some basic information on which data is contained in it.
     * For more operations related to cutout, check the tool docs @ https://atlite.readthedocs.io/en/master/examples/create_cutout.html#
         """)
-        cutout,province_boundary
+        cutout,region_boundary
         
         # # Define a namedtuple
-        # data_tuple = namedtuple('capacity_data', ['cutout','province_boundary'])
+        # data_tuple = namedtuple('capacity_data', ['cutout','region_boundary'])
         
-        # self.data=data_tuple(cutout,province_boundary)
+        # self.data=data_tuple(cutout,region_boundary)
         
-        return cutout,province_boundary
+        return cutout,region_boundary
         
     
    

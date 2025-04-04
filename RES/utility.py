@@ -16,10 +16,44 @@ import matplotlib.pyplot as plt
 import pickle
 import datetime
 from pathlib import Path
+from colorama import Fore, Style
+from typing import Optional
 
 now = datetime.datetime.now()
 date_time_str = now.strftime("%Y-%m-%d %H:%M:%S")
 
+def print_banner(message: str):
+    line = "*" * len(message)
+    print(f"{Fore.GREEN}{Style.BRIGHT}{line}{Style.RESET_ALL}")
+    print(f"{Fore.GREEN}{Style.BRIGHT}{message}{Style.RESET_ALL}")
+    print(f"{Fore.GREEN}{Style.BRIGHT}{line}{Style.RESET_ALL}")
+
+def print_update(level: int=None,
+                 message: str="--",
+                 alert:Optional[bool]=False):
+    if level is not None:
+        if level == 1:
+            color = Fore.YELLOW
+            prefix="└"
+        elif level == 2:
+            color = Fore.CYAN
+            prefix=" └"
+        elif level == 3:
+            color = Fore.LIGHTBLACK_EX
+            prefix="  └"
+        elif level > 3:
+            color = Fore.LIGHTBLACK_EX + Style.DIM
+            prefix="  └─"
+        elif alert:
+            level=2
+            color = Fore.RED
+            prefix=" └ X "
+    else:
+        color = Fore.MAGENTA + Style.DIM
+        prefix=" ─"
+    
+    print(f"{color}{prefix}> {message}{Style.RESET_ALL}")
+    
 # Function to generate a unique index from region name and coordinates
 def assign_cell_id(cells: gpd.GeoDataFrame, 
                   source_column: str = 'Region', 
@@ -327,7 +361,7 @@ def create_layout_for_generation(cutout,cells_gdf,capacity_column):
 
 
 # def select_top_sites(all_scored_sites_gdf, resource_max_capacity):
-#     print(f">>> Selecting TOP Sites to for {resource_max_capacity} GW Capacity Investment in Province...")
+#     print(f">>> Selecting TOP Sites to for {resource_max_capacity} GW Capacity Investment in region...")
 #     """
 #     Select the top sites based on potential capacity and a maximum capacity limit.
 
@@ -339,7 +373,7 @@ def create_layout_for_generation(cutout,cells_gdf,capacity_column):
 #     - selected_sites: GeoDataFrame with the selected top sites.
 #     """
 #     print(f"{'_'*50}")
-#     print(f"Selecting the Top Ranked Sites to invest in {resource_max_capacity} GW resource in Province")
+#     print(f"Selecting the Top Ranked Sites to invest in {resource_max_capacity} GW resource in region")
 #     print(f"{'_'*50}\n")
 
 #     selected_rows = []
