@@ -44,6 +44,7 @@ class GADMBoundaries(AttributesParser):
     # Define a function to create bounding boxes (of cell) directly from coordinates (x, y) and resolution
     
     def get_country_boundary(self, 
+                             country_level:bool=True,
                              force_update: bool = False) -> gpd.GeoDataFrame:
         """
         Retrieves and prepares the GADM boundaries dataset for the specified country.
@@ -56,7 +57,8 @@ class GADMBoundaries(AttributesParser):
         """
         # store the user input (via method args)
         
-                      
+        self.admin_level=1 if country_level else self.admin_level
+        
         try:
             # country_gadm_regions_file_path = Path (self.gadm_root)/ f'gadm41_{self.country}_L{self.admin_level}.geojson'
 

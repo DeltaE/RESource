@@ -80,19 +80,20 @@ class GridNodeLocator(AttributesParser):
         
         return cells_gdf_with_station_data # cells_within_proximity_gdf
     
-    def get_OSM_grid_nodes(self) -> gpd.GeoDataFrame:
+    def get_OSM_grid_lines(self) -> gpd.GeoDataFrame:
         """
         Retrieve OSM data for grid nodes.
         """
-        osm_data = OSMData(region_code=self.region_short_code)
+        osm_data = OSMData(region_short_code=self.region_short_code)
         
-        # Extract the relevant GeoDataFrame from OSM data
-        buses_gdf = osm_data.get_osm_layer('substation')
-        if buses_gdf is None:
-            log.error("No OSM data found for grid nodes.")
+        osm_power_data = osm_data.get_osm_layer('power')
+        lines_gdf=osm_power_data[osm_power_data.element=='way']
+        
+        if lines_gdf is None:
+            log.error("No OSM data found for Grid Lines")
             return None
         else:
-            return buses_gdf
+            return lines_gdf
 
 
 # Example of a specialized class using inheritance
