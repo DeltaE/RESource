@@ -7,4 +7,4 @@
 •	Serbia (RS)
 
 
-https://forum.ecmwf.int/t/ecmwf-apis-faq-api-data-documentation/6880
+Note: https://forum.ecmwf.int/t/ecmwf-apis-faq-api-data-documentation/6880
