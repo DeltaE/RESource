@@ -106,7 +106,9 @@ class CellCapacityProcessor(LandContainer,
             (x - half_res, y + half_res)   # Top-left
         ])
         
-    def get_capacity(self):
+    def get_capacity(self,
+                     country_level:bool=True # Default for Wb6 analysis
+                     ):
     #a. load cutout and region boundary for which the cutout has been created.
         self.cutout,self.region_boundary=self.get_era5_cutout()
         # self.cutout,_=self.era5_cutout.get_era5_cutout()
@@ -150,7 +152,8 @@ class CellCapacityProcessor(LandContainer,
         # excluder.plot_shape_availability(test.geometry)
         
     ## 2.1 Compute availability Matrix
-        self.region_shape= self.__get_unified_region_shape__()
+    
+        self.region_shape= self.boundary_country if country_level else self.__get_unified_region_shape__()
         self.Availability_matrix:xr = self.cutout.availabilitymatrix(self.region_shape, composite_excluder)
         self.plot_ERAF5_grid_land_availability()
         self.plot_excluder_land_availability()
@@ -211,7 +214,7 @@ class CellCapacityProcessor(LandContainer,
         # Define a namedtuple
         capacity_data = namedtuple('capacity_data', ['data','matrix','cutout'])
         
-        self.solar_resources_nt=capacity_data(self.provincial_cells,capacity_matrix,self.cutout)
+        self.resources_nt=capacity_data(self.provincial_cells,capacity_matrix,self.cutout)
         
         print(f">> Total ERA5 cells loaded : {len(self.provincial_cells)} [each with .025 deg. (~30km) resolution ]")
         self.log.info(">> Saving to the local store (as HDF5 file)")
@@ -219,12 +222,12 @@ class CellCapacityProcessor(LandContainer,
         
         # self.datahandler.to_store(self.provincial_cells,'cells')
      
-        return self.solar_resources_nt
+        return self.resources_nt
 
 ## Visuals
     def show_capacity_map(self):
         
-        gdf=self.solar_resources_nt.data
+        gdf=self.resources_nt.data
         
         m = gdf.explore(
                     column=f'potential_capacity_{self.resource_type}',  # Use potential_capacity for marker size

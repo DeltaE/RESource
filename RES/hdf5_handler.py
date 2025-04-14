@@ -16,67 +16,70 @@ class DataHandler:
         """
         try:
             if hdf_file_path is None:
-                warnings.warn(f">> Store has not been set during initialization. Please define the store path during applying DataHandler methods")
+                warnings.warn(">> Store has not been set during initialization. Please define the store path during applying DataHandler methods")
             else:
                 self.store = Path(hdf_file_path)
                 # print(f">> Store initialized with the given path: {hdf_file_path}")
                 
         except Exception as e:
             warnings.warn(f"Error reading file: {e}")
+
+
     def to_store(self,
-                 data: pd.DataFrame | gpd.GeoDataFrame, 
-                 key: str,
-                 hdf_file_path:Path=None,
-                 force_update: bool = False):
+                data: pd.DataFrame | gpd.GeoDataFrame, 
+                key: str,
+                hdf_file_path: Path = None,
+                force_update: bool = False):
         """
         Save the DataFrame or GeoDataFrame to an HDF5 file.
+        Automatically converts any geometry-type columns to WKT strings.
+        Updates existing data, adds new columns if needed.
 
         :param data: The DataFrame or GeoDataFrame to save.
         :param key: Key for saving the DataFrame to the HDF5 file.
-        :param force_update: If True, force update the data even if it exists.
+        :param hdf_file_path: Optional path to the HDF5 file.
+        :param force_update: If True, overwrite the existing data at the given key.
         """
         if hdf_file_path is not None:
             self.store = Path(hdf_file_path)
-        
-        if isinstance(data, (pd.DataFrame, gpd.GeoDataFrame)):
-            self.data_new = data.copy()
-        # Proceed with saving to HDF5
-        else:
+
+        if not isinstance(data, (pd.DataFrame, gpd.GeoDataFrame)):
             raise TypeError(">> to be stored 'data' must be a DataFrame or GeoDataFrame.")
 
-        store = pd.HDFStore(self.store, mode='a')  # Open store in append mode ('a')
+        self.data_new = data.copy()
+
+        # Convert all geometry-type columns to WKT
+        for col in self.data_new.columns:
+            if self.data_new[col].apply(lambda x: isinstance(x, BaseGeometry)).any():
+                print(f">> Converting geometry column '{col}' to WKT")
+                self.data_new[col] = self.data_new[col].apply(lambda x: dumps(x) if isinstance(x, BaseGeometry) else x)
+
+        store = pd.HDFStore(self.store, mode='a')
 
         try:
             if key not in store or force_update:
-                # Handle GeoDataFrame geometry if present
-                if 'geometry' in self.data_new.columns:
-                    if isinstance(self.data_new['geometry'].iloc[0], BaseGeometry):
-                        self.data_new['geometry'] = self.data_new['geometry'].apply(dumps)
-
-                # Save the modified data to HDF5
                 self.data_new.to_hdf(self.store, key=key)
-                print(f">> Data (GeoDataFrame/DataFrame) saved to {self.store} with key '{key}'")
+                print(f">> Data saved to {self.store} with key '{key}'")
             else:
-                # Read existing data from HDF5
                 self.data_ext = store.get(key)
 
-                
-                # Ensure columns are unique before updating
-                self.data_new = self.data_new.loc[:, ~self.data_new.columns.duplicated()]
+                # Merge: update overlapping data and add new columns
+                self.data_ext.update(self.data_new)  # updates overlapping values
 
-                # Align indices to ensure proper updates
-                self.data_new = self.data_new.reindex(self.data_ext.index, fill_value=None)
+                # Add any new columns from new data
+                new_cols = self.data_new.columns.difference(self.data_ext.columns)
+                for col in new_cols:
+                    self.data_ext[col] = self.data_new[col]
 
-                # Update only existing columns
-                self.data_ext.update(self.data_new)
-
-                # Save updated data
+                # Save the updated + extended DataFrame
                 self.data_ext.to_hdf(self.store, key=key)
-                print(f">> Updated '{key}' saved to {self.store}")
+                print(f">> Updated and extended '{key}' saved to {self.store}")
 
-        
         finally:
             store.close()
+
+
+
 
 
     def from_store(self, 
