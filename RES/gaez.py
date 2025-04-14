@@ -29,14 +29,16 @@ class GAEZRasterProcessor(GADMBoundaries):
         # self.log = logging.getLogger("GAEZRasterProcessor")
 
     def process_all_rasters(self,
+                            country_level=True, #Default for WB6 analysis
                             show:bool=False):
         """Main pipeline to download, extract, clip, and plot rasters based on configuration."""
         if not (self.gaez_root / self.zip_file).exists():
             self.__download_resources_zip_file__()
         
         self.__extract_rasters__()
-        self.region_boundary = self.get_region_boundary()
         
+        self.region_boundary =  self.get_country_boundary() if country_level else self.get_region_boundary()
+
         # Loop over raster types and process each
         for raster_type in self.raster_types:
             self.__clip_to_boundary_n_plot__(raster_type, self.region_boundary.geometry,show)

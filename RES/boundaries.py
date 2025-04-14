@@ -44,7 +44,7 @@ class GADMBoundaries(AttributesParser):
     # Define a function to create bounding boxes (of cell) directly from coordinates (x, y) and resolution
     
     def get_country_boundary(self, 
-                             country_level:bool=True,
+                             country_level:bool=True,# for WB6 analysis, this is the default
                              force_update: bool = False) -> gpd.GeoDataFrame:
         """
         Retrieves and prepares the GADM boundaries dataset for the specified country.
@@ -66,7 +66,7 @@ class GADMBoundaries(AttributesParser):
             if self.country_file.exists() and not force_update: # load the country gdf from local file
                 self.log.info(f">> Loading GADM data for {self.country} from local datafile {self.country_file}.")
                 self.boundary_country=gpd.read_file(self.country_file)
-
+                
             else:
                 # Fetch and save data if file does not exist or force_update is True
                 self.log.info(f">> Fetching GADM data for {self.country} at Administrative Level {self.admin_level}....from source: https://gadm.org/data.html")
@@ -77,7 +77,16 @@ class GADMBoundaries(AttributesParser):
                 # save to local file
                 self.boundary_country.to_file(self.country_file, driver='GeoJSON')
                 self.log.info(f">> GADM data saved to {self.country_file}.")
-                
+        
+            self.boundary_country = self.boundary_country[['NAME_0', 'NAME_1', 'NAME_2', 'geometry']].rename(columns={
+                        'NAME_0': 'Country', 'NAME_1': 'region', 'NAME_2': 'Region'
+                    })
+            
+            if self.admin_level==1:
+                self.boundary_country_aggr = self.boundary_country.dissolve(by="Country")  
+                self.boundary_country_aggr.reset_index(inplace=True)
+                self.boundary_country = self.boundary_country_aggr[['Country', 'geometry']]
+            
             return self.boundary_country
 
         except Exception as e:
@@ -85,7 +94,6 @@ class GADMBoundaries(AttributesParser):
             raise
 
     def get_region_boundary(self,
-                            country_level:bool=True,
                             force_update: bool = False) -> gpd.GeoDataFrame:
         """
         Prepares the boundaries for the specified region within the country.
@@ -106,12 +114,21 @@ class GADMBoundaries(AttributesParser):
                 self.boundary_region:gpd.GeoDataFrame=gpd.read_file(self.region_file)
             
             else: # When the local file for region doesn't exist, Filter region data from country file and save locally
-    
                 _boundary_country = self.get_country_boundary(force_update)
-                if country_level:
-                    _boundary_region_=_boundary_country
-                else:
-                    _boundary_region_ = _boundary_country.loc[self.boundary_country['NAME_1'] == self.region_name]
+                # if country_level:
+                    
+                #     self.admin_level=1
+                    
+                #     self.boundary_country_aggr = _boundary_country.dissolve(by="Country")  # or "region" if that's the right column
+                #     self.boundary_country_aggr.reset_index(inplace=True)
+                    
+                #     self.region_file:Path = Path(self.gadm_processed) / f'gadm41_{self.country}_L{self.admin_level}_{self.region_short_code}.geojson'
+                #     self.boundary_country_aggr.to_file(self.region_file, driver='GeoJSON')
+                #     self.log.info(f"GADM data for {self.region_name} saved to {self.region_file}.")
+                    
+                #     return self.boundary_country_aggr
+                
+                _boundary_region_ = _boundary_country.loc[self.boundary_country['NAME_1'] == self.region_name]
 
                 if _boundary_region_.empty : 
                     self.log.error(f">> No data found for region '{self.region_name}'.")
@@ -121,21 +138,27 @@ class GADMBoundaries(AttributesParser):
                         'NAME_0': 'Country', 'NAME_1': 'region', 'NAME_2': 'Region'
                     })
                     self.boundary_region:gpd.GeoDataFrame=_boundary_region_
-      
-                
-                self.boundary_region.to_file(self.region_file, driver='GeoJSON')
-                self.log.info(f"GADM data for {self.region_name} saved to {self.region_file}.")
-            return self.boundary_region
+    
+            
+                    self.boundary_region.to_file(self.region_file, driver='GeoJSON')
+                    self.log.info(f"GADM data for {self.region_name} saved to {self.region_file}.")
+                    
+                return self.boundary_region
         else:
             self.log.error(f">> Invalid region code: {self.region_short_code}.")
             exit
     
-    def get_bounding_box(self)->tuple:
+    def get_bounding_box(self,
+                         country_level:bool=True # for WB6 analysis, this is the default
+                         )->tuple:
         
         """
         This method returns the Minimum Bounding Rectangle (MBR) to extract the 
         """
-        self.actual_boundary=self.get_region_boundary()
+        if country_level:
+             self.actual_boundary=self.get_country_boundary()
+        else:
+            self.actual_boundary=self.get_region_boundary()
         # self.log.info(f"Setting up the Minimum Bounding Region (MBR) for {self.region_short_code}...")
         min_x, min_y, max_x, max_y=self.actual_boundary.geometry.total_bounds
         

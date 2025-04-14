@@ -5,7 +5,8 @@ import warnings
 from typing import List,Dict,Optional,Union, Tuple
 from pathlib import Path
 from datetime import datetime
-
+import geopandas as gpd
+from shapely.geometry import Point, LineString
 
 # Linking Tool's Local Packages
 from RES.era5_cutout import ERA5Cutout
@@ -67,8 +68,8 @@ class RESources_builder(AttributesParser):
     '''
     def get_grid_cells(self):
         self.log.info("Preparing Grid Cells...")
-        self.province_grid_cells=self.gridcells.get_default_grid()
-        return self.province_grid_cells
+        self.grid_cells=self.gridcells.get_default_grid()
+        return self.grid_cells
     '''
     _______________________________________________________________________________________________
     Step 1: 
@@ -137,6 +138,7 @@ class RESources_builder(AttributesParser):
                         use_pypsa_buses:bool=False):
 
         self.grid=GridNodeLocator(**self.required_args)
+
         
         if use_pypsa_buses:
             buses_data_path=Path (self.config['pypsa']['output']['prepare_base_network']['folder'])/'buses.csv'
@@ -146,20 +148,44 @@ class RESources_builder(AttributesParser):
                 geometry=gpd.points_from_xy(grid_ss_df['x'], grid_ss_df['y']),
                 crs=self.get_default_crs(),  # Set the coordinate reference system (e.g., WGS84)
                 ) 
+            self.datahandler.to_store(self.grid_ss,'substations')
         else:
             # self.grid_ss:gpd.GeoDataFrame=self.coders.get_table_provincial('substations') # for CANADIAN provinces
-            self.grid_ss:gpd.GeoDataFrame=self.grid.get_OSM_grid_nodes()
-        
+            self.grid_lines:gpd.GeoDataFrame = self.grid.get_OSM_grid_lines()
+            
+            self.grid_lines_filtered = self.grid_lines[
+                ~(self.grid_lines['voltage'].isin(['400000', '400']))
+                
+            ]  # for WB6 study
+             # Filter only LineString geometries
+            self.grid_lines_filtered = self.grid_lines_filtered[self.grid_lines_filtered.geometry.type == "LineString"].copy()
+            self.grid_lines_filtered = self.grid_lines_filtered.set_geometry("geometry")
+            self.grid_lines_filtered.crs = self.get_default_crs()
+            self.datahandler.to_store(self.grid_lines_filtered,'lines')
+            
         self.cutout,self.province_boundary=self.era5_cutout.get_era5_cutout()
-        self.store_grid_cells=self.datahandler.from_store('cells')
+        
+        self.store_grid_cells = self.cells_with_cap_nt.data
+        self.store_grid_cells_with_grid_nodes=self.store_grid_cells.copy()
+        
+        if 'centroid' not in  self.store_grid_cells_with_grid_nodes.columns:
+            # Ensure centroid is prepared once
+            self.store_grid_cells_with_grid_nodes["centroid"] = self.store_grid_cells_with_grid_nodes.apply(lambda row: Point(row["x"], row["y"]), axis=1)
+
+        # Apply to each row to compute the single connection point
+        self.store_grid_cells_with_grid_nodes[["nearest_connection_point", "nearest_connection_distance"]] = self.store_grid_cells_with_grid_nodes.apply(
+            lambda row: self.grid.find_nearest_single_connection_point(row["centroid"], row["geometry"], self.store_grid_cells_with_grid_nodes, self.grid_lines_filtered),
+            axis=1, result_type="expand"
+        )
+
         # _grid_cells_=self.cutout.grid.overlay(self.province_boundary, how='intersection',keep_geom_type=True)
-        self.province_grid_cells_cap_with_nodes = self.grid.find_grid_nodes_ERA5_cells(self.grid_ss,
-                                                                                       self.store_grid_cells)
+        # self.province_grid_cells_cap_with_nodes = self.grid.find_grid_nodes_ERA5_cells(self.grid_ss,
+        #                                                                                self.store_grid_cells)
         
-        self.datahandler.to_store(self.store_grid_cells,'cells')
-        self.datahandler.to_store(self.grid_ss,'substations')
+        self.datahandler.to_store(self.store_grid_cells_with_grid_nodes,'cells')
+    
         
-        return self.province_grid_cells_cap_with_nodes
+        return self.store_grid_cells_with_grid_nodes
     '''
     ______________________
     Step 1E:
@@ -204,7 +230,7 @@ class RESources_builder(AttributesParser):
         Wrapper of the _.get_cell_score()_ method of **_CellScorer_** object.
         """
                 
-        self.not_scored_cells=self.datahandler.from_store('cells')
+        self.not_scored_cells=self.store_grid_cells_with_grid_nodes #self.datahandler.from_store('cells')
         self.scored_cells = self.scorer.get_cell_score(self.not_scored_cells,f'{self.resource_type}_CF_mean')
         
         # # Add new columns to the existing DataFrame
