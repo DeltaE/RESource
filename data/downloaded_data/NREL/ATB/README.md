@@ -1,0 +1,1 @@
+source: https://atb.nrel.gov/electricity/2024/data
