@@ -145,7 +145,8 @@ class GWACells(GADMBoundaries):
             _data_ = self.gwa_cells_gdf.overlay(_era5_cells_region, how='intersection', keep_geom_type=False)
             
             # Rename columns and select relevant data
-            _data_ = _data_.rename(columns={'x_1': 'x', 'y_1': 'y'})
+            # _data_ = _data_.rename(columns={'x_1': 'x', 'y_1': 'y'}) # x1,y1 are the GWA coords
+            _data_ = _data_.rename(columns={'x_2': 'x', 'y_2': 'y'}) #x2,y2 are the ERA5 coords
             selected_columns = list(_data_.columns) # + [f'{self.resource_type}_CF_mean']
 
             regional_df=_data_.loc[:, selected_columns]

@@ -5,8 +5,9 @@ import warnings
 from typing import Optional,Union, Tuple
 from pathlib import Path
 from datetime import datetime
-
+from itertools import product
 # RESource's Local
+
 from RES.era5_cutout import ERA5Cutout
 from RES import cluster
 from RES import windspeed as wind
@@ -139,7 +140,6 @@ class RESources_builder(AttributesParser):
             # self.store_grid_cells_updated:gpd.GeoDataFrame= xxx
             pass
     
-    
     #---------------------------
     def update_gwa_scaled_params(self,
                                 memory_resource_limitation:Optional[bool]=False):
@@ -175,13 +175,14 @@ class RESources_builder(AttributesParser):
     ______________________
     '''
     def get_CF_timeseries(self,
+                          cells:gpd.GeoDataFrame,
                           force_update=False)->tuple:
         "returns cells geodataframe and timeseries dataframes"
         
         utils.print_update(level=print_level_base+3,
                            message="Preparing Timeseries for the Cells...")
-            
-        self.cells_with_ts_nt:tuple= self.timeseries.get_timeseries()
+        
+        self.cells_with_ts_nt:tuple= self.timeseries.get_timeseries(cells=cells)
         
         return self.cells_with_ts_nt
         
@@ -193,10 +194,14 @@ class RESources_builder(AttributesParser):
     ______________________
     '''
     def find_grid_nodes(self,
+                        cells:gpd.GeoDataFrame=None,
                         use_pypsa_buses:bool=True):
 
         self.grid=GridNodeLocator(**self.required_args)
         
+        if cells is None:
+            self.store_grid_cells=self.datahandler.from_store('cells')
+            
         utils.print_update(level=print_level_base+2,
                            message="Preparing grid nodes for the Cells...")
         
@@ -216,7 +221,7 @@ class RESources_builder(AttributesParser):
             self.grid_ss:gpd.GeoDataFrame=self.coders.get_table_provincial('substations')
         
         self.cutout,self.province_boundary=self.era5_cutout.get_era5_cutout()
-        self.store_grid_cells=self.datahandler.from_store('cells')
+
         # _grid_cells_=self.cutout.grid.overlay(self.province_boundary, how='intersection',keep_geom_type=True)
         
         utils.print_update(level=print_level_base+3,
@@ -271,15 +276,20 @@ class RESources_builder(AttributesParser):
             e.g. i. [standardized energy indices in future climate scenarios](https://www.sciencedirect.com/science/article/pii/S0960148123011217?via%3Dihub)
                  ii. [Compound energy droughts](https://www.sciencedirect.com/science/article/pii/S0960148123014659?via%3Dihub#d1e724)
     '''
-    def score_cells(self):
+    def score_cells(self,
+                    cells:gpd.GeoDataFrame=None):
         """
         Scores the Cells based on calculated LCOE ($/MWh). </br>
         Wrapper of the _.get_cell_score()_ method of **_CellScorer_** object.
         """
+        self.not_scored_cells=cells
+        
         utils.print_update(level=print_level_base+2,
                            message="Calculating score for cells...") 
-                
-        self.not_scored_cells=self.datahandler.from_store('cells')
+        
+        if self.not_scored_cells is None:    
+            self.not_scored_cells=self.datahandler.from_store('cells')
+            
         self.scored_cells = self.scorer.get_cell_score(self.not_scored_cells,f'{self.resource_type}_CF_mean') # 
         
         # # Add new columns to the existing DataFrame
@@ -314,6 +324,7 @@ class RESources_builder(AttributesParser):
     ___________________
     '''
     def get_clusters(self,
+                     scored_cells:gpd.GeoDataFrame=None,
                      wcss_tolerance=0.05):
         """
         ### Args:
@@ -324,13 +335,15 @@ class RESources_builder(AttributesParser):
         
         self.resource_disaggregation_config=self.get_resource_disaggregation_config()
         self.wcss_tolerance=wcss_tolerance
+        self.scored_cells=scored_cells
         
         # self.wcss_tolerance:float= self.resource_disaggregation_config['WCSS_tolerance']
         utils.print_update(level=print_level_base+1,
                            
                            message="Preparing cluster of resources...")
         utils.print_update(level=print_level_base+2,
-                           message="Clustering requires scored cells. The default scoring method is set to 'lcoe'. Checking for 'lcoe' in datafields...") 
+                           message="Clustering requires scored cells. The default scoring method is set to 'lcoe'. Checking for 'lcoe' in datafields...")
+        
         if not hasattr(self, f'lcoe_{self.resource_type}') or self.scored_cells is None:
             utils.print_update(level=print_level_base+3,
                            message=f"'lcoe_{self.resource_type}' not found in available datafields...") 
@@ -353,7 +366,7 @@ class RESources_builder(AttributesParser):
                                                                                                self.resource_type)
         
         self.cell_cluster_gdf['Operational_life'] = self.resource_disaggregation_config.get('Operational_life', 20)
-        
+        self.cell_cluster_gdf.loc[:, 'resource_type'] = self.resource_type.lower()
         # Define a namedtuple
         cluster_data = namedtuple('cluster_data', ['clusters','dissolved_indices'])
         
@@ -379,41 +392,33 @@ class RESources_builder(AttributesParser):
         2. Use ML approaches for comparative results with aforementioned classical/heuristics based approach.
     '''
 
-    def get_cluster_timeseries(self):
+    def get_cluster_timeseries(self,
+                               clusters:gpd.GeoDataFrame=None,
+                               dissolved_indices:pd.DataFrame=None,
+                               cells_timeseries:pd.DataFrame=None,
+                               ):
+
+        self.cells_timeseries=cells_timeseries
+        self.cell_cluster_gdf=clusters
+        self.dissolved_cell_indices_df=dissolved_indices
         
-        utils.print_update(level=print_level_base+1,
+
+        if self.cells_timeseries is None:
+            self.cells_timeseries=self.datahandler.from_store(F'timeseries/{self.resource_type}')
+        if self.cell_cluster_gdf is None:
+            self.cell_cluster_gdf=self.datahandler.from_store(f'clusters/{self.resource_type}')
+            utils.print_update(level=print_level_base+1,
                            message=f" Preparing representative profiles for {len(self.cell_cluster_gdf)} clusters")
+        if self.dissolved_cell_indices_df is None:
+            self.dissolved_cell_indices_df=self.datahandler.from_store(f'dissolved_indices/{self.resource_type}')
         
-        self.cells_timeseries=self.datahandler.from_store(F'timeseries/{self.resource_type}')
+
         self.cluster_ts_df=self.timeseries.get_cluster_timeseries(self.cell_cluster_gdf,
-                                # self.cells_timeseries[self.resource_type],
-                                self.cells_timeseries,
-                               self.dissolved_cell_indices_df)
+                                                                self.cells_timeseries,
+                                                                self.dissolved_cell_indices_df)
         return self.cluster_ts_df
 
     # _________________________________________________________________________________
-
-    def run(self):
-        """
-        Execute the module based on resource type ('solar', 'wind', or 'all').
-        If 'all' is selected, both 'solar' and 'wind' will run sequentially.
-        """
-        # Check if resource_type is 'solar' or 'wind' or 'all'
-        if self.resource_type == 'solar' or self.resource_type == 'wind':
-            self.log.info(f"{self.resource_type} module initiated")
-            self.execute_module(self.resource_type)
-
-        elif self.resource_type == 'all':
-            # Run solar first
-            self.log.info(f"Running 'solar' module")
-            self.execute_module('solar')
-
-            # Run wind next
-            self.log.info(f"Running 'wind' module")
-            self.execute_module('wind')
-
-        else:
-            self.log.info(f"Invalid resource type. Please select one of these: 'solar', 'wind', 'all'")
 
     def build(self,
                        select_top_sites:Optional[bool]=True,
@@ -424,19 +429,15 @@ class RESources_builder(AttributesParser):
         """
         print(f"{50*'_'}\n Initiating {self.resource_type} module for {self.get_province_name()}...")
         self.memory_resource_limitation=memory_resource_limitation
-        # Placeholder for future grid cell retrieval
         self.get_grid_cells()
         self.get_cell_capacity()
-        self.datahandler.to_store(self.cells_with_cap_nt.data,'cells')
         self.extract_weather_data()
         self.update_gwa_scaled_params(self.memory_resource_limitation) # testing, 2025 04 21
-        self.datahandler.to_store(self.cells_with_cap_nt.data,'cells')
-        self.get_CF_timeseries()
-
-        # self.update_gwa_scaled_params(self.memory_resource_limitation)
-        self.find_grid_nodes(use_pypsa_buses)
-        self.score_cells()
-        self.get_clusters()
+        self.get_CF_timeseries(cells=self.store_grid_cells)
+        self.find_grid_nodes(cells=self.cells_with_ts_nt.cells,
+                             use_pypsa_buses=use_pypsa_buses)
+        self.score_cells(cells=self.province_grid_cells_cap_with_nodes)
+        self.get_clusters(scored_cells=self.scored_cells)
         self.get_cluster_timeseries()
         self.units.create_units_dictionary()
         
@@ -467,6 +468,9 @@ class RESources_builder(AttributesParser):
         self.dump_export_metadata(sites_summary,
                                   self.reults_save_to)
 
+
+
+       
     @staticmethod
     def export_results(resource_type:str,
                     resource_clusters:pd.DataFrame,
@@ -554,18 +558,17 @@ class RESources_builder(AttributesParser):
             file.write(updated_content)
 
     @staticmethod    
-    def select_top_sites(
-        sites:Union[gpd.GeoDataFrame, pd.DataFrame],
-        sites_timeseries:pd.DataFrame,
-        resource_max_capacity:float,
-        )-> Tuple[Union[gpd.GeoDataFrame, pd.DataFrame], pd.DataFrame]:
+    def select_top_sites(sites:Union[gpd.GeoDataFrame, pd.DataFrame],
+                        sites_timeseries:pd.DataFrame,
+                        resource_max_capacity:float,
+                        )-> Tuple[Union[gpd.GeoDataFrame, pd.DataFrame], pd.DataFrame]:
         print(f">>> Selecting TOP Sites to for {resource_max_capacity} GW Capacity Investment in BC...")
         """
         Select the top sites based on potential capacity and a maximum resource capacity limit.
 
-        Parameters:
-        - sites_gdf: GeoDataFrame containing  cell and bucket information.
-        - resource_max_capacity : Maximum allowable  capacity in GW.
+        Args:
+            sites_gdf: GeoDataFrame containing  cell and bucket information.
+            resource_max_capacity (float) : Maximum allowable  capacity in GW.
 
         Returns:
         - selected_sites: GeoDataFrame with the selected top sites.
@@ -628,7 +631,29 @@ class RESources_builder(AttributesParser):
 
         return top_sites ,top_sites_ts  # gdf
 
+def build_resources(provinces:list,
+                    resource_types: list, 
+                    config_path: str | Path = 'config/config.yaml'):
+    """
+    Builds resources for specified provinces and resource types using the RESources_builder module.
+    Args:
+        provinces (list): A list of province short codes to process.
+        resource_types (list): A list of resource types to build for each province.
+        config_path (str | Path, optional): Path to the configuration file. Defaults to 'config/config.yaml'.
+    Returns:
+        None
+    """
+    
+    for province, resource in product(provinces, resource_types):
+        RES_module = RESources_builder(
+            config_file_path=config_path,
+            province_short_code=province,
+            resource_type=resource
+        )
+        RES_module.build(select_top_sites=True, 
+                            use_pypsa_buses=False)
 
+      
 # def main(config_file_path: str, 
 #          resource_type: str='solar'):
     

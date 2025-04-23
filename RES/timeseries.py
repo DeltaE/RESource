@@ -6,11 +6,9 @@ from collections import namedtuple
 from pathlib import Path
 import geopandas as gpd
 import plotly.graph_objects as go
-import geojson as gj
 
 # Linking Tool - Local Packages
 import RES.windspeed as windspeed
-from RES.gwa import GWACells
 from RES.hdf5_handler import DataHandler
 from RES.tech import OEDBTurbines
 from RES.era5_cutout import ERA5Cutout
@@ -28,7 +26,8 @@ class Timeseries(ERA5Cutout):
         # Initialize the local store
         self.datahandler=DataHandler(self.store)
     
-    def get_timeseries(self)-> tuple:
+    def get_timeseries(self,
+                       cells:gpd.GeoDataFrame)-> tuple:
         """
         Generate the site-specific timeseries for PV sites and filter based on capacity factor (CF) thresholds.
 
@@ -49,11 +48,11 @@ class Timeseries(ERA5Cutout):
         """
         if self.resource_type=='solar':
             # Step 1: Set-up Technology parameters and extract the synthetic timeseries data for all sites
-            self.sites_profile:xr.DataArray = self.__process_PV_timeseries__()
+            self.sites_profile:xr.DataArray = self.__process_PV_timeseries__(cells)
             
         elif self.resource_type=='wind':
             # Step 1: Set-up Technology parameters and extract the synthetic timeseries data for all sites
-            self.sites_profile:xr.DataArray = self.__process_WIND_timeseries__('OEDB',2)
+            self.sites_profile:xr.DataArray = self.__process_WIND_timeseries__(cells,'OEDB',2)
         
         '''
         Here, 'sites_profile_profile' is a 2D array i.e. cell(Region_xcoord_ycoord) and timestamps. 
@@ -90,14 +89,14 @@ class Timeseries(ERA5Cutout):
         
         # Step 4: Calculate the mean capacity factor (CF) for each cell and store it in 'CF_mean'
         self.log.info(f">> Calculating CF mean from the {len(self.CF_ts_df)} data points for each Cell ...")
-        self.log.info(f">> Total Grid Cells: {len(self.province_grid_cells_store)}, "
+        self.log.info(f">> Total Grid Cells: {len(cells)}, "
                       f">> Timeseries Generated for: {len(self.CF_ts_df.columns)}, "
                     #   f">> Matched Sites: {self.CF_ts_df[self.resource_type][self.province_grid_cells_store.index].shape}")
-                      f">> Matched Sites: {self.CF_ts_df[self.province_grid_cells_store.index].shape}")
+                      f">> Matched Sites: {self.CF_ts_df[cells.index].shape}")
         
-        self.log.info(f">> Calculating '{self.resource_type}_CF_mean' for {len(self.province_grid_cells_store)} Cells...")
+        self.log.info(f">> Calculating '{self.resource_type}_CF_mean' for {len(cells)} Cells...")
         # self.province_grid_cells_store[f'{self.resource_type}_CF_mean'] = self.CF_ts_df[self.resource_type].mean(axis=0) # Mean of all rows (Hours)
-        self.province_grid_cells_store[f'{self.resource_type}_CF_mean'] = self.CF_ts_df.mean(axis=0) # Mean of all rows (Hours)
+        cells[f'{self.resource_type}_CF_mean'] = self.CF_ts_df.mean(axis=0) # Mean of all rows (Hours)
         # Updates the 'CF_mean' field to stored dataframe with key 'cells. The grid cells must have matched "X(grid cell's)-Y(timeseries header)" index to do this step.
         '''
         Future Scope: Replacing CF_mean with high resolution data (likely from Global Solar Atlas/ Local data)
@@ -105,14 +104,14 @@ class Timeseries(ERA5Cutout):
         
         # Step 6: Define a namedtuple to store both the grid cells and the filtered timeseries
         site_data = namedtuple('site_data', ['cells', 'timeseries'])
-        self.data : tuple= site_data(self.province_grid_cells_store, self.CF_ts_df)
+        self.data : tuple= site_data(cells, self.CF_ts_df)
         '''
         @ to access return data
         Both PV and WIND are gonna go under same 'key' 
         # To access the PV timeseries, user has to use the "Y" index to access PV timeseries e.g. pv_timeseries_dataframe = data.timeseries.solar ('timeseries' is name of the tuple, 'solar' is the first level column name of the dataframe.)
         '''
             # Step 5: Save the grid cells and timeseries to the local HDF5 store
-        self.datahandler.to_store(self.province_grid_cells_store, 'cells') # We don't want 'force-update' here, just need to append 'CF_mean' datafields to cells.
+        self.datahandler.to_store(cells, 'cells') # We don't want 'force-update' here, just need to append 'CF_mean' datafields to cells.
         self.datahandler.to_store(self.CF_ts_df, f'timeseries/{self.resource_type}') # Hierarchical data of resources under kley 'timeseries' 
         '''
         @ store data
@@ -122,13 +121,14 @@ class Timeseries(ERA5Cutout):
         return self.data 
 
     
-    def __process_PV_timeseries__(self):
+    def __process_PV_timeseries__(self,
+                                  cells:gpd.GeoDataFrame):
         """ 
         A wrapper that leverage Atlite's _cutout.pv_ method to convert downward-shortwave, upward-shortwave radiation flux and ambient temperature into a pv generation time-series.
         """
         
         # Step 1.1: Get the Atlite's Cutout Object loaded
-        self.log.info(f">> Loading ERA5 Cutout")
+        self.log.info(">> Loading ERA5 Cutout")
         self.cutout,self.province_boundary=self.get_era5_cutout()
         
         ## Only,if cells are not processed already
@@ -138,8 +138,8 @@ class Timeseries(ERA5Cutout):
         # Step 1.2: Get the Province Grid Cells from Store. Ideally these cells should have same resolution as the Cutout (the indices are prepared from x,y coords and Region names)
          # Initialize the local store for updated data
         self.datahandler=DataHandler(self.store)
-        self.province_grid_cells_store=self.datahandler.from_store('cells')
-        self.log.info(f">> {len(self.province_grid_cells_store)} Grid Cells from Store Cutout")
+        # self.province_grid_cells_store=self.datahandler.from_store('cells')
+        self.log.info(f">> {len(cells)} Grid Cells from Store Cutout")
         
         # Step 1.3: Set arguments for the atlite cutout's pv method
         pv_args = {
@@ -147,7 +147,6 @@ class Timeseries(ERA5Cutout):
             'orientation': "latitude_optimal",
             'clearsky_model': None ,# ambient air temperature and relative humidity data not available
             'tracking': self.resource_disaggregation_config['tracking'],
-            'layout': None,
             
             'matrix': None, 
             # (N x S - xr.DataArray or sp.sparse.csr_matrix or None) – If given, it is used to aggregate the grid cells to buses. 
@@ -156,14 +155,14 @@ class Timeseries(ERA5Cutout):
             'layout':None,
             # (X x Y - xr.DataArray) – The capacity to be build in each of the grid_cells.
             
-            'shapes': self.province_grid_cells_store.geometry,
+            'shapes': cells.geometry,
             #  (list or pd.Series of shapely.geometry.Polygon) – If given, matrix is constructed as indicator-matrix of the polygons, 
             # its index determines the bus index on the time-series.
             
             # 'capacity_factor_timeseries':True, # If True, the capacity factor time series of the chosen resource for each grid cell is computed.
             # 'return_capacity': False, # Additionally returns the installed capacity at each bus corresponding to layout (defaults to False).
             # 'capacity_factor':True, # If True, the static capacity factor of the chosen resource for each grid cell is computed.
-            'index':self.province_grid_cells_store.index,
+            'index':cells.index,
             'per_unit':True, # Returns the time-series in per-unit units, instead of in MW (defaults to False).
             'show_progress': False, # Progress bar
         }
@@ -243,6 +242,7 @@ class Timeseries(ERA5Cutout):
         return self.wind_atlas,self.wind_geojson
     
     def __process_WIND_timeseries__(self,
+                                    cells:gpd.GeoDataFrame,
                                     turbine_model_source:str='OEDB',
                                     model:int=2):
         """ 
@@ -257,10 +257,7 @@ class Timeseries(ERA5Cutout):
         #                         resource_type=self.resource_type)
         
         self.cutout,self.province_boundary=self.get_era5_cutout()
-     
-        
-        self.province_grid_cells_store=self.datahandler.from_store('cells')
-        self.log.info(f">> {len(self.province_grid_cells_store)} Grid Cells from Store Cutout")
+        self.log.info(f">> {len(cells)} Grid Cells from Store Cutout")
         
         # Only,if cells are not processed already
         # self.province_grid_cells = self.cutout.grid.overlay(self.province_boundary, how='intersection',keep_geom_type=True)
@@ -275,7 +272,7 @@ class Timeseries(ERA5Cutout):
         
         '''
         utils.print_update(level=3,message='Rescaling ERA5 windspeed with GWA windspeed')
-        self.cutout=windspeed.rescale_cutout_windspeed(self.cutout, self.province_grid_cells_store)
+        self.cutout=windspeed.rescale_cutout_windspeed(self.cutout, cells)
         # Step 1.2: Get the Province Grid Cells from Store. Ideally these cells should have same resolution as the Cutout (the indices are prepared from x,y coords and Region names)
         
         self.wind_turbine_config=self.get_turbines_config()
@@ -305,8 +302,6 @@ class Timeseries(ERA5Cutout):
                 # If False, a warning will be raised if the power curve does not have a cut-out wind speed. The default is False.
                 
         # '.convert_and_aggregate()' method parameters
-            'layout': None, 
-            # The capacity to be build in each of the grid_cells.
             
             'matrix': None, 
             # (N x S - xr.DataArray or sp.sparse.csr_matrix or None) – If given, it is used to aggregate the grid cells to buses. 
@@ -315,7 +310,7 @@ class Timeseries(ERA5Cutout):
             'layout':None,
             # (X x Y - xr.DataArray) – The capacity to be build in each of the grid_cells.
             
-            'shapes': self.province_grid_cells_store.geometry,
+            'shapes':cells.geometry,
             #  (list or pd.Series of shapely.geometry.Polygon) – If given, matrix is constructed as indicator-matrix of the polygons, 
             # If index' param is not set, shapes' index determines the bus index on the time-series.
             
@@ -323,7 +318,7 @@ class Timeseries(ERA5Cutout):
             # 'return_capacity': False, # Additionally returns the installed capacity at each bus corresponding to layout (defaults to False).
             # 'capacity_factor':True, # If True, the static capacity factor of the chosen resource for each grid cell is computed.
             
-            'index':self.province_grid_cells_store.index,
+            'index':cells.index,
             # Index of Buses. We use grid cell indices here.
             
             'per_unit':True, # Returns the time-series in per-unit units, instead of in MW (defaults to False).

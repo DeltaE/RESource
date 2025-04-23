@@ -36,19 +36,43 @@ def size_for_legend(mw):
 
 def plot_resources_scatter_metric(resource_type:str,
                                   clusters_resources:gpd.GeoDataFrame,
+                                  lcoe_threshold:float=999,
                                   color=None,
                                   save_to_root:str|Path='vis'):
     """
-    Create a scatter plot for solar clusters showing CF_mean vs LCOE.
-
+    Generate a scatter plot visualizing the relationship between Capacity Factor (CF) and Levelized Cost of Energy (LCOE) 
+    for renewable energy resources (solar or wind). The plot highlights clusters of resources based on their potential capacity.
     Args:
-    - resource_type (str); 'solar' or 'wind'
-    - clusters_solar: GeoDataFrame containing solar cluster data.
-    - output_file: File name to save the plot.
+        resource_type (str): The type of renewable resource to plot. Must be either 'solar' or 'wind'.
+        clusters_resources (gpd.GeoDataFrame): A GeoDataFrame containing resource cluster data. 
+            Expected columns include:
+                - 'CF_mean': Average capacity factor of the resource cluster.
+                - 'lcoe': Levelized Cost of Energy for the resource cluster.
+                - 'potential_capacity': Potential capacity of the resource cluster (used for bubble size).
+        lcoe_threshold (float): The maximum LCOE value to include in the plot. Clusters with LCOE above this threshold are excluded.
+        color (optional): Custom color for the scatter plot bubbles. Defaults to 'darkorange' for solar and 'navy' for wind.
+        save_to_root (str | Path, optional): Directory path where the plot image will be saved. Defaults to 'vis'.
+    Returns:
+        None: The function saves the generated plot as a PNG image in the specified directory.
+    Notes:
+        - The size of the bubbles in the scatter plot represents the potential capacity of the resource clusters.
+        - The x-axis (CF_mean) is formatted as percentages for better readability.
+        - A legend is included to indicate the bubble sizes in gigawatts (GW).
+        - The plot includes an annotation explaining the scoring methodology for LCOE.
+        - The plot is saved as a transparent PNG image with a resolution of 600 dpi.
+    Example:
+        >>> plot_resources_scatter_metric(
+        ...     resource_type='solar',
+        ...     clusters_resources=solar_clusters_gdf,
+        ...     lcoe_threshold=50,
+        ...     save_to_root='output/plots'
+        ... )
+     
     """
     
     resource_type=resource_type.lower()
     save_to_root=Path(save_to_root)
+    clusters_resources=clusters_resources[clusters_resources['lcoe']<=lcoe_threshold]
     bubble_color= 'darkorange' if resource_type=='solar' else 'navy'
     
     # Create a scatter plot
@@ -65,8 +89,8 @@ def plot_resources_scatter_metric(resource_type:str,
 
     # Set labels and title
     ax.set_xlabel(f'Average Capacity Factor for {resource_type.capitalize()} resources', fontweight='bold')
-    ax.set_ylabel('LCOE ($/MWh)', fontweight='bold')
-    ax.set_title(f'CF vs LCOE for {resource_type.capitalize()} resources')
+    ax.set_ylabel('Score ($/MWh)', fontweight='bold')
+    ax.set_title(f'CF vs Score for {resource_type.capitalize()} resources')
 
     # Customize x-axis ticks to show more levels and as percentages
     ax.xaxis.set_major_locator(MultipleLocator(0.01 if resource_type=='solar' else 0.04))
@@ -90,6 +114,11 @@ def plot_resources_scatter_metric(resource_type:str,
 
     # Remove all grids
     ax.grid(True,ls=":",linewidth=0.3)
+    # Add annotation to the figure
+    fig.text(0.5, -0.04, 
+         "Note: The Scoring is calculated to reflect Dollar investment required to get an unit of Energy yield (MWh). "
+         "\nTo reflect market competitiveness and incentives, the Score ($/MWh) needs financial adjustment factors to be considered on top of it.",
+         ha='center', va='center', fontsize=9.5, color='gray', bbox=dict(facecolor='None', linewidth=0.2,edgecolor='grey', boxstyle='round,pad=0.5'))
     
     plt.tight_layout()
     
