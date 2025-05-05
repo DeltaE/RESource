@@ -6,6 +6,40 @@ import geopandas as gpd
 from shapely.geometry import Point
 from pathlib import Path
 from RES.AttributesParser import AttributesParser
+from RES import utility as utils
+
+def load_api_key(file_path="data/downloaded_data/CODERS/coders_api.yaml"):
+    """
+    Loads an API key from a configuration file.
+    Args:
+        file_path (str): The path to the YAML configuration file containing API keys.
+                         Defaults to "data/downloaded_data/CODERS/coders_api.yaml".
+    Returns:
+        str or None: The API key for the default user if specified and available.
+                     If no default user is specified or their key is unavailable,
+                     returns the first available API key from the configuration.
+                     Returns None if no API key is found.
+    """
+    api_cfg = utils.load_config(file_path)
+    
+    default_user = api_cfg.get("Default_user")
+    api_keys = api_cfg.get("api_keys", {})
+
+    if default_user:
+        api_key = api_keys.get(default_user)
+        if api_key:
+            return api_key
+
+    # fallback: try any other API key
+    for user, key in api_keys.items():
+        if key:
+            return key
+
+    return None  # or raise an exception
+
+
+api_key = load_api_key()
+utils.print_update(level=2,message=f"Using CODERS API key: {api_key}")
 
 
 @dataclass
@@ -17,8 +51,9 @@ class CODERSData(AttributesParser):
         # Load CODERS data config
         self.coders_data_config = self.config.get('CODERS', {})
         self.url = self.coders_data_config.get('url_1', '')
-        self.api_elias = self.coders_data_config.get('api_key', {}).get('Elias', '')
-        self.query = f"?key={self.api_elias}"
+        self.api_user=api_key
+        
+        self.query = f"?key={self.api_user_default}"
         self.data_pull = self.coders_data_config.get('data_pull', {})
         self.table_list = list(self.coders_data_config['data_pull'].keys())
 
