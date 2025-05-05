@@ -2,6 +2,7 @@ import geopandas as gpd
 import pandas as pd
 from pathlib import Path
 from zipfile import ZipFile
+from RES import utility as utils
 
 from atlite.gis import ExclusionContainer,shape_availability
 
@@ -11,6 +12,7 @@ from RES.era5_cutout import ERA5Cutout
 from RES.gaez import GAEZRasterProcessor
 from RES.osm import OSMData
 
+print_base_level=2
 class ConservationLands(GADMBoundaries):
 
     """
@@ -49,10 +51,11 @@ class ConservationLands(GADMBoundaries):
         provincial_file_path.parent.mkdir(parents=True, exist_ok=True)
         
         if provincial_file_path.exists():
-            self.log.info(f"> Loading Canadian Protected and Conserved Areas Database (CPCAD) from locally stored datafile - {provincial_file_path}")
+            utils.print_update(level=print_base_level,message="Loading Canadian Protected and Conserved Areas Database (CPCAD) from locally stored datafile - {provincial_file_path}")
             gdf=gpd.GeoDataFrame(pd.read_pickle(provincial_file_path))
         else:
             gdb_file_path = self.__get_conserved_lands__()
+            
             
             # Get Region Boundaries
             self.province_boundary=self.get_province_boundary()
@@ -84,15 +87,16 @@ class ConservationLands(GADMBoundaries):
         """Download the source ZIP file, extract contents, and return the .gdb file path."""
         # Check if the extraction directory exists
         if self.extraction_dir.exists():
-           print(f">> Extraction directory {self.extraction_dir} already exists, skipping download and extraction.")
+           utils.print_update(level=print_base_level+1,message=f"Extraction directory {self.extraction_dir} already exists, skipping download and extraction.")
         else:
             if self.zip_file_path.exists():
-                print(f">> ZIP file {self.zip_file_path} already exists, skipping download.")
+                utils.print_update(level=print_base_level+1,message=f"ZIP file {self.zip_file_path} already exists, skipping download.")
             else:
                 # Download the ZIP file
-                self.log.info(f">> Downloading Canadian Protected and Conserved Areas Database (CPCAD)")
+                utils.print_update(level=print_base_level+1,message="Downloading Canadian Protected and Conserved Areas Database (CPCAD)")
+                self.zip_file_path.parent.mkdir(parents=True, exist_ok=True)
                 utils.download_data(self.source_url, self.zip_file_path)
-                # print(f"Downloaded ZIP file to {self.zip_file_path}")
+                utils.print_update(level=print_base_level+1,message=f"Downloaded ZIP file to {self.zip_file_path}")
 
             # Create the extraction directory and extract ZIP contents
             self.extraction_dir.mkdir(parents=True, exist_ok=True)
@@ -141,9 +145,9 @@ class ConservationLands(GADMBoundaries):
 
                 # Save the map as an HTML file
                 m.save(save_path)
-                self.log.info(f">> Interactive map for '{self.province_short_code}' saved to {save_path}.")
+                utils.print_update(level=print_base_level+1,message="Interactive map for '{self.province_short_code}' saved to {save_path}.")
             else:
-                self.log.info(f">> Skipping save, 'save' is set to False.")
+                utils.print_update(level=print_base_level+1,message="Skipping save, 'save' is set to False.")
         
         return m
     
@@ -174,7 +178,7 @@ class LandContainer(ERA5Cutout,
         
         # Retrieve custom land configuration if available
         custom_land_config = self.get_custom_land_layers()
-        self.log.info(f">> Loading global filters' rasters from GAEZ, trimmed to {self.province_name}")
+        utils.print_update(level=print_base_level+1,message="Loading global filters' rasters from GAEZ, trimmed to {self.province_name}")
         self.process_all_rasters(show=False) # Donwloads and processes all GAEZ rasters
         # Loop over each raster type in GAEZ config and set up each raster
         for raster_type in self.gaez_config['raster_types']:
@@ -193,7 +197,7 @@ class LandContainer(ERA5Cutout,
                 'invert': inclusion_key == 'class_inclusion'  # invert if it's an inclusion class
             }
             
-            self.log.info(f" >>> Loading {raster_name.capitalize()} layers from {raster_configs[f'gaez_{raster_name}']['raster']}")
+            utils.print_update(level=print_base_level+1,message="Loading {raster_name.capitalize()} layers from {raster_configs[f'gaez_{raster_name}']['raster']}")
         
         # Load additional custom raster configurations from YAML if specified
         # for raster_name, config in custom_land_config.get('rasters', {}).items():
