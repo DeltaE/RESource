@@ -53,7 +53,7 @@ class CODERSData(AttributesParser):
         self.url = self.coders_data_config.get('url_1', '')
         self.api_user=api_key
         
-        self.query = f"?key={self.api_user_default}"
+        self.query = f"?key={self.api_user}"
         self.data_pull = self.coders_data_config.get('data_pull', {})
         self.table_list = list(self.coders_data_config['data_pull'].keys())
 
