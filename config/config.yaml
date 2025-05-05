@@ -317,12 +317,19 @@ cutout:
   dy: 0.25 # Arc Length for cutout grids cells in Degrees
 
   # the snapshots are given as a 'list', not 'values'. 
+  
   snapshots: 
-    start: # Must be formatted as 'YYYY-MM-DD' (ERA5 returns data in UTC)
-      - '2023-01-01 07:00:00' # YYYY-MM-DD "2021-01-01 07:00:00"
-    end:
-      - '2024-01-01 06:00:00' # 6 # YYYY-MM-DD "2022-01-01 06:00:00"
+  #2024
+    # start: # Must be formatted as 'YYYY-MM-DD' (ERA5 returns data in UTC)
+    #   - '2023-01-01 07:00:00' # YYYY-MM-DD "2021-01-01 07:00:00"
+    # end:
+    #   - '2024-01-01 06:00:00' # 6 # YYYY-MM-DD "2022-01-01 06:00:00"
 
+  # The start and end dates are used to filter the data for the specified time period, to synchronize with the rest of the data.
+    start: # Must be formatted as 'YYYY-MM-DD' (ERA5 returns data in UTC)
+      - '2021-01-01 07:00:00' # YYYY-MM-DD "2021-01-01 07:00:00"
+    end:
+      - '2022-01-01 06:00:00' # 6 # YYYY-MM-DD "2022-01-01 06:00:00"
 GWA:
   root: 'data/downloaded_data/GWA'
   datafields: ['windspeed_gwa', 'CF_IEC2','CF_IEC3' ] #,'IEC_Class_ExLoads'
