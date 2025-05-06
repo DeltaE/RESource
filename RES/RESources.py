@@ -50,7 +50,7 @@ class RESources_builder(AttributesParser):
         self.era5_cutout=ERA5Cutout(**self.required_args)
         self.scorer=CellScorer(**self.required_args)
         self.gwa_cells=GWACells(**self.required_args)
-        self.reults_save_to=Path('results/linking')
+        self.reults_save_to=Path('results/RESource')
         
         # Snapshot (range of of the temporal data)
         (
