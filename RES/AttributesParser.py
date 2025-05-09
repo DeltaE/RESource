@@ -45,7 +45,7 @@ class AttributesParser:
         
         # Load the user configuration master file by using the method
         self.config:Dict[str,dict] = self.load_config(self.config_file_path)
-        self.disaggregation_config:Dict[str,dict] = self.config['capacity_disaggregation']
+        self.disaggregation_config:Dict[str,dict] = self.config.get('capacity_disaggregation','')
         self.province_code_validity=self.is_province_code_valid()
         self.log = log.getLogger(__name__)
         

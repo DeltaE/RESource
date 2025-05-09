@@ -4,7 +4,7 @@
 # Affiliation : Delta E+ lab, Simon Fraser University
 # Version : 1.0
 # Dev_year : 2024-2025
-
+import yaml
 import os
 import requests
 from typing import Optional
@@ -242,9 +242,6 @@ def check_LocalCopy_and_run_function(
             # log.info(f"Directory '{directory_path}' found locally.")
             return log.info(f"Directory '{directory_path}' found locally.")
 
-""" 
->>> replaced with [AttributesParser] Class
-
 # Function to Load User Configuration File
 def load_config(file_path):
 
@@ -252,7 +249,7 @@ def load_config(file_path):
         data = yaml.safe_load(file)
 
     return data
-"""
+
 
 # this is a damn good function that downloads any datafile ! 
 import requests

@@ -1,8 +1,5 @@
 from setuptools import setup, find_packages
 
-# Read in requirements.txt
-with open('requirements.txt') as f:
-    required = f.read().splitlines()
 
 setup(
     name='RES',
@@ -16,7 +13,7 @@ setup(
             'RES=RES.cli:main',
         ],
     },
-    install_requires= required,  # Use requirements from requirements.txt
+
     python_requires='>=3.11',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
