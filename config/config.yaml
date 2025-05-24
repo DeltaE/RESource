@@ -317,16 +317,16 @@ cutout:
   
   snapshots: 
   #2024
-    # start: # Must be formatted as 'YYYY-MM-DD' (ERA5 returns data in UTC)
-    #   - '2023-01-01 07:00:00' # YYYY-MM-DD "2021-01-01 07:00:00"
-    # end:
-    #   - '2024-01-01 06:00:00' # 6 # YYYY-MM-DD "2022-01-01 06:00:00"
+    start: # Must be formatted as 'YYYY-MM-DD' (ERA5 returns data in UTC)
+      - '2023-01-01 07:00:00' # YYYY-MM-DD "2021-01-01 07:00:00"
+    end:
+      - '2024-01-01 06:00:00' # 6 # YYYY-MM-DD "2022-01-01 06:00:00"
 
   # The start and end dates are used to filter the data for the specified time period, to synchronize with the rest of the data.
-    start: # Must be formatted as 'YYYY-MM-DD' (ERA5 returns data in UTC)
-      - '2021-01-01 07:00:00' # YYYY-MM-DD "2021-01-01 07:00:00"
-    end:
-      - '2022-01-01 06:00:00' # 6 # YYYY-MM-DD "2022-01-01 06:00:00"
+    # start: # Must be formatted as 'YYYY-MM-DD' (ERA5 returns data in UTC)
+    #   - '2021-01-01 07:00:00' # YYYY-MM-DD "2021-01-01 07:00:00"
+    # end:
+    #   - '2022-01-01 06:00:00' # 6 # YYYY-MM-DD "2022-01-01 06:00:00"
 GWA:
   root: 'data/downloaded_data/GWA'
   datafields: ['windspeed_gwa', 'CF_IEC2','CF_IEC3' ] #,'IEC_Class_ExLoads'
@@ -359,7 +359,7 @@ capacity_disaggregation:
     tracking : 'dual' # None, horizontal,tilted_horizontal,vertical,dual
     cell_static_CF_tolerance: 0.16
     cell_capacity_tolerance: 1 #MW
-    WCSS_tolerance: 0.08 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
+    WCSS_tolerance: 0.005 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
     buffer:
       aeroway: 100 # m
       conserved_lands: 1000 #m
@@ -369,7 +369,7 @@ capacity_disaggregation:
     landuse_intensity : 3  # (0.3 * 10 MW/km2); Source: PyPSA-EUR paper,
     # capex : 1323.4 # USD/kW  *** Later to be linked to NREL ATB Spreadsheet (via data pipeline automation) for different wind class, different years
     cost_data: 'data/processed_data/wind/land_based_wind_T3_cost_moderate_NREL_ATB2024.csv'
-    WCSS_tolerance: 0.1 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
+    WCSS_tolerance: 0.005 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
     CF_low: 0.20
     CF_high: 1
     NREL_ATB_technology: 'LandbasedWind'

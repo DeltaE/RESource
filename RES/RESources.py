@@ -50,7 +50,7 @@ class RESources_builder(AttributesParser):
         self.era5_cutout=ERA5Cutout(**self.required_args)
         self.scorer=CellScorer(**self.required_args)
         self.gwa_cells=GWACells(**self.required_args)
-        self.reults_save_to=Path('results/RESource')
+        self.results_save_to=Path('results/RESource')
         
         # Snapshot (range of of the temporal data)
         (
@@ -460,13 +460,13 @@ class RESources_builder(AttributesParser):
         self.export_results(self.resource_type,
                             resource_clusters,
                             cluster_timeseries,
-                            self.reults_save_to)
+                            self.results_save_to)
         
         sites_summary:str=self.create_summary_info(self.resource_type,
                                                    resource_clusters,
                                                    cluster_timeseries)
         self.dump_export_metadata(sites_summary,
-                                  self.reults_save_to)
+                                  self.results_save_to)
 
 
 
