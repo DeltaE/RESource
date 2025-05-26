@@ -369,7 +369,7 @@ capacity_disaggregation:
     landuse_intensity : 3  # (0.3 * 10 MW/km2); Source: PyPSA-EUR paper,
     # capex : 1323.4 # USD/kW  *** Later to be linked to NREL ATB Spreadsheet (via data pipeline automation) for different wind class, different years
     cost_data: 'data/processed_data/wind/land_based_wind_T3_cost_moderate_NREL_ATB2024.csv'
-    WCSS_tolerance: 0.005 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
+    WCSS_tolerance: 0.001 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
     CF_low: 0.20
     CF_high: 1
     NREL_ATB_technology: 'LandbasedWind'
