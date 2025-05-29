@@ -28,11 +28,12 @@ class NREL_ATBProcessor(AttributesParser):
         
         self.utility_pv_cost=self._process_solar_cost(atb_cost)
         self.land_based_wind_cost=self._process_wind_cost(atb_cost)
-        self.bess_cost=self._process_bess_cost(atb_cost)
+        # self.bess_cost=self._process_bess_cost(atb_cost) # not required for WB6 study
         
         return (self.utility_pv_cost, 
                 self.land_based_wind_cost, 
-                self.bess_cost)
+                #self.bess_cost
+                )
 
     def _check_and_download_data(self):
         utils.check_LocalCopy_and_run_function(

@@ -6,8 +6,9 @@ from dataclasses import dataclass
 
 from RES.AttributesParser import AttributesParser
 from RES.osm import OSMData
-
-
+from shapely.ops import nearest_points
+from shapely.geometry.base import BaseGeometry
+from shapely.geometry import LineString, MultiLineString
 @dataclass
 class GridNodeLocator(AttributesParser):
     
@@ -49,9 +50,11 @@ class GridNodeLocator(AttributesParser):
         return nearest_station_code, distance_km
 
 
-    from shapely.ops import nearest_points
-
-    def find_nearest_single_connection_point(self,cell_centroid, cell_geometry, cell_gdf, line_gdf):
+    def find_nearest_single_connection_point(self,
+                                             cell_centroid, 
+                                             cell_geometry, 
+                                             cell_gdf, 
+                                             line_gdf):
         """
         For a given cell centroid and its geometry:
         - If any lines intersect the cell, return the nearest point on them.
@@ -83,6 +86,13 @@ class GridNodeLocator(AttributesParser):
 
 
         # 3. Find the nearest point on those lines
+        # from shapely.geometry import Point
+        # if isinstance(cell_centroid, float):
+        #     cell_centroid = Point(cell_centroid, cell_centroid)
+        # Keep only valid geometries
+        lines_to_search = lines_to_search[
+            lines_to_search.geometry.apply(lambda g: isinstance(g, BaseGeometry) and g.is_valid)
+        ]
         distances = lines_to_search.geometry.apply(lambda line: cell_centroid.distance(line))
         
         nearest_geom = lines_to_search.loc[distances.idxmin(), "geometry"]
@@ -150,12 +160,15 @@ class GridNodeLocator(AttributesParser):
         
         osm_power_data = osm_data.get_osm_layer('power')
         lines_gdf=osm_power_data[osm_power_data.element=='way']
+        lines_gdf_cleaned= lines_gdf[
+            lines_gdf.geometry.apply(lambda g: isinstance(g, (LineString, MultiLineString)))
+]                                   
         
-        if lines_gdf is None:
+        if lines_gdf_cleaned is None:
             log.error("No OSM data found for Grid Lines")
             return None
         else:
-            return lines_gdf
+            return lines_gdf_cleaned
 
 
 # Example of a specialized class using inheritance

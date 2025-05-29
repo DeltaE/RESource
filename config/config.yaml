@@ -78,99 +78,18 @@ GADM:
   root: data/downloaded_data/GADM
   processed: data/processed_data/regions
   # admin_level: 2 # for sub-provincial (regional districts) level
-  # datafile: BC_gadm_regions.geojson
   # country_file_L1: "data/downloaded_data/GADM/gadm41_CAN_1.json" # Provincial level maps..
   # country_file_L2:  "data/downloaded_data/GADM/gadm41_CAN_2.json" # Administrative regions within provincial..
 
-Gov:
-  # conservation_lands:
-  #   url: https://data-donnees.az.ec.gc.ca/api/file?path=%2Fspecies%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FDatabases%2FProtectedConservedArea_2023.zip
-  #   # consideration:
-  #   #   solar: 'yes'
-  #   #   wind: 'yes'
-  #   root: 'data/downloaded_data/Gov/Conservation_Lands'
-  #   data_name: 'ProtectedConservedArea'  # Zip and the processed data will be saved with this prefix
-  #   IUCN_CAT_mapping: # Check TABLE 10 of user manual from the source_url.
-  #     1: 'Strict  Nature Reserve'
-  #     2: 'Wilderness Area'
-  #     3: 'National Park'
-  #     4: 'Natural Monument or Feature'
-  #     5: 'Habitat/Species Management Area'
-  #     6: 'Protected Landscape/Seascape'
-  #     7: 'Protected Area with Sustainable Use of Natural Resources'
-  #     8: 'Interim Sites (unknown specifics)'
-  #     9 : 'OECM areas'
-  #   LOCATION_mapping: # Check TABLE 13 of user manual from the source_url.
-  #     "Alberta": 1
-  #     "British Columbia": 2
-  #     "Manitoba": 3
-  #     "New Brunswick": 4
-  #     "Newfoundland and Labrador": 5
-  #     "Northwest Territories": 6
-  #     "Nova Scotia": 7
-  #     "Nunavut": 8
-  #     "Ontario": 9
-  #     "Prince Edward Island": 10
-  #     "Quebec": 11
-  #     "Saskatchewan": 12
-  #     "Yukon": 13
-      
-  #     # not in use
-  #     "Coastal Arctic Marine": 14
-  #     "Coastal Atlantic Marine": 15
-  #     "Coastal Pacific Marine": 16
-  #     "Offshore Arctic Marine": 17
-  #     "Offshore Atlantic Marine": 18
-  #     "Offshore Pacific Marine": 19
-  #     "Arctic Marine Coastal/Offshore": 20
-  #     "Offshore Arctic/Atlantic Marine": 21
-
-  #   LAND_OWNER_mapping:
-  #     1: "Federal Govt."
-  #     2: "Provincial / territorial Govt"
-  #     3: "Municipal government"
-  #     4: "Indigenous Community/People"
-  #     5: "Communal ownership"
-  #     6: "Individual landowners"
-  #     7: "For-profit organizations" # (private companies or corporations – crown corporations should be reported as federal or provincial/territory)"
-  #     8: "Non-profit organizations"
-  #     9: "Joint ownership" #Under the joint ownership of more than one actor, representing more than one accepted value (e.g. non-profit organizations and for-profit organizations)"
-  #     10: "Multiple ownership" # Different parts of the land and/or waters are owned by different actors, representing more than one accepted value"
-  #     11: "Contested Ownership" # is contested
-  #     12: "not known or reported" # by the data provider
-
-  #   data_license: https://catalogue.ec.gc.ca/geonetwork/oilsands/api/records/6c343726-1e92-451a-876a-76e17d398a1c
-  # Population:
-  #   root: 'data/downloaded_data/Gov/Population'
-  #   datafile: 'Population_Projections.csv'
-  #   skiprows: 6 # top 6 rows are data descriptions
-  #   different_name_mapping: # these names differs with GADM naming
-  #     Columbia Shuswap: Columbia-Shuswap
-  #     Strathcona: Comox-Strathcona
-  #     Metro Vancouver: Greater Vancouver
-  #     Metro-Vancouver : Greater Vancouver
-  #     qathet: Powell River
-  #     North Coast: Skeena-Queen Charlotte
-  #     Stikine (Census Division): Stikine
-  #     Northern Rockies (Census Division): Northern Rockies
-  # CEEI: #Community Energy and Emissions Inventory
-  #   root: 'data/downloaded_data/Gov/CEEI'
-  #   datafile:
-  #     buildings: bc_utilities_energy_and_emissions_data_at_the_community_level.xlsx
-  #     transportation: bc_on_road_transportation_data_at_the_community_level.xlsx
-  #     waste: bc_municipal_solid_waste_data_at_the_community_level.xlsx
-  #   source:
-  #     buildings: https://www2.gov.bc.ca/assets/gov/environment/climate-change/data/ceei/bc_utilities_energy_and_emissions_data_at_the_community_level.xlsx
-  #     transportation: https://www2.gov.bc.ca/assets/gov/environment/climate-change/data/ceei/bc_on_road_transportation_data_at_the_community_level.xlsx
-  #     waste: https://www2.gov.bc.ca/assets/gov/environment/climate-change/data/ceei/bc_municipal_solid_waste_data_at_the_community_level.xlsx
-
+# Gov:
+  # not configured for Wb6
 NREL: 
   ATB: # Annual technology Baseline (ATB) - 2024\
     root : 'data/downloaded_data/NREL/ATB'
     source: # parquet file recommended for less memory usage
       # excel: https://data.openei.org/files/6006/2024%20v2%20Annual%20Technology%20Baseline%20Workbook%20Errata%207-19-2024.xlsx
       csv: https://oedi-data-lake.s3.amazonaws.com/ATB/electricity/csv/2024/ATBe.csv
-      parquet: https://oedi-data-lake.s3.amazonaws.com/ATB/electricity/parquet/2024/ATBe.parquet
+      parquet: https://oedi-data-lake.s3.amazonaws.com/ATB/electricity/parquet/2024/v3.0.0/ATBe.parquet
     datafile:
       # excel: https://data.openei.org/files/6006/2024%20v2%20Annual%20Technology%20Baseline%20Workbook%20Errata%207-19-2024.xlsx
       csv: ATBe.csv #96 MB
@@ -192,29 +111,6 @@ OSM_data: # OpenStreet Map
       tags: ['line', 'cable', 'minor_line', 'substation', 'tower', 'pole', 'generator', 'plant', 'terminal']
     substation:
       tags: ['transmission', 'distribution', 'minor_distribution', 'industrial']          
-
-
-# CODERS:
-#   url_1: https://sesit.dev/
-#   url_2: http://206.12.95.102/
-#   api_key:
-#     contact_for_request: mailto:modellingteam.sesit@uvic.ca
-#     Elias: w0OksqQKMFMtKPbO  # please collect your personal API !!!
-#   api_documentation: https://sesit.dev/api/docs
-#   data_pull:
-#     root: data/downloaded_data/CODERS
-#     # the following mapping directs where to dump the datafile (.csvs)
-#     substations: network
-#     transmission_lines: network
-  # >>>> Not required fro linking (at this stage)
-    # generation_generic: supply
-    # hydro_existing: supply
-    # generators: supply
-    # hydro_cascade: supply
-    # forecasted_peak_demand: demand
-    # forecasted_annual_demand: demand
-    # end_use_demand: demand
-    # transmission_generic : network
 
 custom_land_layers:
   rasters:
@@ -278,9 +174,7 @@ cutout:
   module:
     - era5
     # - sarah
-  # year: 2022
-  # start_date: '2022-01-01'  #yyyy-mm-dd
-  # end_date: '2022-12-31' #yyyy-mm-dd
+
   dx: 0.25 # Arc Length for cutout grids cells in Degrees
   dy: 0.25 # Arc Length for cutout grids cells in Degrees
 
@@ -293,32 +187,32 @@ cutout:
 
 GWA:
   root: 'data/downloaded_data/GWA'
-  datafields: ['windspeed_gwa', 'CF_IEC2','CF_IEC3' ] #,'IEC_Class_ExLoads'
+  datafields: ['windspeed_gwa','CF_IEC3' ]
   country_code_mapping:
-    
+      AL: 'ALB'
   sources:
     windspeed_gwa: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/wind-speed/100' # replace GWA_country_code with country code
-    # CF_IEC1: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/'  #rotor dia 112m
-    CF_IEC2: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC2' #rotor dia 126m
-    CF_IEC3: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC3'   #rotor dia 136m
-    # IEC_Class_fatugue_loads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-fatigue-loads-incl-wake/'
-    # IEC_Class_ExLoads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-extreme-loads/' #IEC_Class_ExtremeLoads
+    CF_IEC1: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/'  #rotor dia 112m
+    CF_IEC2: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/capacity-factor_IEC2' #rotor dia 126m
+    CF_IEC3: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/capacity-factor_IEC3'   #rotor dia 136m
+    IEC_Class_fatugue_loads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-fatigue-loads-incl-wake/'
+    IEC_Class_ExLoads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-extreme-loads/' #IEC_Class_ExtremeLoads
   rasters:
     windspeed_gwa: 'GWA_country_code_wspd_100m.tif' # replace GWA_country_code with country code
-    # CF_IEC1: 'GWA_country_code_capacity-factor_IEC1.tif'
+    CF_IEC1: 'GWA_country_code_capacity-factor_IEC1.tif'
     CF_IEC2: 'GWA_country_code_capacity-factor_IEC2.tif'
     CF_IEC3: 'GWA_country_code_capacity-factor_IEC3.tif'
-    # IEC_Class_ExLoads: 'GWA_country_code_IEC-class-extreme-loads.tif'
+    IEC_Class_ExLoads: 'GWA_country_code_IEC-class-extreme-loads.tif'
   filter:
     windspeed_low: 7 # meter/s
-    windspeed_high: 20 # meter/s
+    windspeed_high: 60 # meter/s # The extreme wind speed above which the wind turbine is not expected to operate.
 
 capacity_disaggregation:
   solar:
-    max_capacity: 5  # GW
+    max_capacity: 10  # GW
     landuse_intensity : 1.45  # (.01*145 MW/km2) ; Source: PyPSA-EUR paper, 
-    # capex : 1161.269 # USD/kW  *** Later to be linked to NREL ATB Spreadsheet (via data pipeline automation) for different wind class, different years.
-    cost_data: 'data/linking_tool/solar/utility_PV_Class5_cost_moderate_NREL_ATB2024.csv'
+    # capex : 1161.269 # USD/kW  ***Replaced with NREL ATB Spreadsheet (via data pipeline automation) for different wind class, different years.
+    cost_data: 'data/processed_data/utility_PV_Class5_cost_moderate_NREL_ATB2024.csv'
     NREL_ATB_technology: 'LandbasedWind'
     NREL_ATB_type : 'Class5' # for more : https://atb.nrel.gov/electricity/2023/utility-scale_pv
     atlite_panel: 'CSi' # CSi , CdTe
@@ -331,10 +225,10 @@ capacity_disaggregation:
       conserved_lands: 2000 #m
     
   wind:
-    max_capacity: 15  # GW
+    max_capacity: 20  # GW
     landuse_intensity : 3  # (0.3 * 10 MW/km2); Source: PyPSA-EUR paper,
-    # capex : 1323.4 # USD/kW  *** Later to be linked to NREL ATB Spreadsheet (via data pipeline automation) for different wind class, different years
-    cost_data: 'data/linking_tool/wind/land_based_wind_T3_cost_moderate_NREL_ATB2024.csv'
+    # capex : 1323.4 # USD/kW  *** Replaced with NREL ATB Spreadsheet (via data pipeline automation) for different wind class, different years
+    cost_data: 'data/processed_data/land_based_wind_T3_cost_moderate_NREL_ATB2024.csv'
     WCSS_tolerance: 0.1 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
     CF_low: 0.20
     CF_high: 1
@@ -366,25 +260,25 @@ capacity_disaggregation:
             manufacturer: 'Senvion/REpower'
             config: 'data/downloaded_data/OEDB/3.2M114_NES.yaml'
     buffer:
-      aeroway: 5000 # m
-      conserved_lands: 10000 #m
-  bess:
-    max_capacity : 10 #GW
-    cost_data: 'data/linking_tool/bess/bess_LI_6hr_cost_moderate_NREL_ATB2024.csv'
-    NREL_ATB_type: '6Hr Battery Storage' # storage_discharge_duration should be in-line with this. Other options are
-    vom: 0 # not found in NREL,ATB
-    unit_size: 60 #MW; default in NREL is 50 MW
-    residential_energy_consumption_year: 2021 # BESS cluster size calculation is associated to this year' data
-    Based on general industry data and the needs of a region with a balanced energy mix like BC, you might consider the following approximate range:
-    capacity_estimate_per_energy_unit:    # MW per GWh of energy consumption.
-      Conservative: 0.01 
-      Moderate : 0.05 
-      Optimistic : 0.1 
-    storage_discharge_duration : 5.5 # hr  ; the battery cost should be inline with this data.
+      aeroway: 1000 # m
+      conserved_lands: 1000 #m
+  # bess:
+  #   max_capacity : 10 #GW
+  #   cost_data: 'data/NREL/bess_LI_6hr_cost_moderate_NREL_ATB2024.csv'
+  #   NREL_ATB_type: '6Hr Battery Storage' # storage_discharge_duration should be in-line with this. Other options are
+  #   vom: 0 # not found in NREL,ATB
+  #   unit_size: 60 #MW; default in NREL is 50 MW
+  #   residential_energy_consumption_year: 2021 # BESS cluster size calculation is associated to this year' data
+  #   Based on general industry data and the needs of a region with a balanced energy mix like BC, you might consider the following approximate range:
+  #   capacity_estimate_per_energy_unit:    # MW per GWh of energy consumption.
+  #     Conservative: 0.01 
+  #     Moderate : 0.05 
+  #     Optimistic : 0.1 
+  #   storage_discharge_duration : 5.5 # hr  ; the battery cost should be inline with this data.
 
   transmission:
     grid_connection_cost_per_Km : 2.6 #M$/km   # from MISO , may try NREL method for different range of distance
     tx_line_rebuild_cost : 0.56   #M$/km # from MISO
-    proximity_filter: 20 #km
+    proximity_filter: 200 #km
     buses: 'data/processed_data/buses_BC.csv'
     lines: 'data/processed_data/lines_BC.csv'  #future scope usage

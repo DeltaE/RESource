@@ -105,10 +105,10 @@ class AttributesParser:
         return self.config.get('capacity_disaggregation', {}).get(self.resource_type, {})
 
     def get_vis_dir(self) -> Path:
-        return (self.config.get('visualization', {}).get('linking', '')) +"/"+ (self.resource_type if self.resource_type else 'vis/misc')
+        return (self.config.get('visualization', {}).get('RESource', 'vis')) +"/"+ (self.resource_type if self.resource_type else 'vis/misc')
 
     def get_linking_data_config(self) -> Dict[str, dict]:
-        return self.config.get('processed_data', {}).get('linking', {})
+        return self.config.get('processed_data', {}).get('RESource', {})
 
     def get_gaez_data_config(self) -> Dict[str, dict]:
         return self.config.get('GAEZ', {})

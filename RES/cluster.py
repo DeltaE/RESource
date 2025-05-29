@@ -8,6 +8,7 @@ import logging as log
 import matplotlib.pyplot as plt
 import RES.utility as utils
 from sklearn.impute import SimpleImputer
+from pathlib import Path
 
 imputer = SimpleImputer(strategy="mean")  # Other strategies: "median", "most_frequent"
 
@@ -114,34 +115,34 @@ def pre_process_cluster_mapping(
         cells_scored:pd.DataFrame,
         vis_directory:str,
         wcss_tolerance:float,
-        resource_type:str)->tuple[pd.DataFrame, pd.DataFrame]:
+        resource_type:str,
+        region_col_name:str,
+        country_level:bool=False)->tuple[pd.DataFrame, pd.DataFrame]:
     
     """
     xxx 
     """
-
-    unique_regions = cells_scored['Region'].unique()
+    unique_regions = cells_scored[region_col_name].unique()
     elbow_plot_directory=os.path.join(vis_directory,'Regional_cluster_Elbow_Plots')
     region_optimal_k_list = []
-
-    # Loop over unique regions
     for region in unique_regions:
         # Select data for the current region
-        data_for_clustering = cells_scored[cells_scored['Region'] == region][[f'lcoe_{resource_type}']]
+        data_for_clustering = cells_scored[cells_scored[region_col_name] == region][[f'lcoe_{resource_type}']]
         data_for_clustering_cleaned = pd.DataFrame(imputer.fit_transform(data_for_clustering), columns=data_for_clustering.columns)
-        
+
         # Call the function for K-means clustering and elbow plot
         optimal_k = find_optimal_K(resource_type,data_for_clustering_cleaned, region, wcss_tolerance, max_k=15)
         
         # Append values to the list
-        region_optimal_k_list.append({'Region': region, 'Optimal_k': optimal_k})
+        region_optimal_k_list.append({region_col_name: region, 'Optimal_k': optimal_k})
 
         # Save the elbow plot
         plot_name = f'elbow_plot_region_{region}.png'
+        Path(elbow_plot_directory).mkdir(parents=True, exist_ok=True)  # Create directory if it doesn't exist
         plt.savefig(os.path.join(elbow_plot_directory, plot_name))
         plt.close()  # Close the plot to avoid overlapping
-    ##################################################################
-    print(f">>> K-means clustering Elbow plots generated for each region based on the Score for each Cell ...")
+        ##################################################################
+        print(">>> K-means clustering Elbow plots generated for each region based on the Score for each Cell ...")
 
     # Create a DataFrame from the list
     region_optimal_k_df = pd.DataFrame(region_optimal_k_list)
@@ -151,8 +152,8 @@ def pre_process_cluster_mapping(
     NonZeroClustersmask=region_optimal_k_df['Optimal_k']!=0
     region_optimal_k_df=region_optimal_k_df[NonZeroClustersmask]
 
-    _x = cells_scored.merge(region_optimal_k_df, on='Region', how='left')
-    cells_scored = assign_cluster_id(_x,'Region', 'cell')#.set_index('cell')
+    _x = cells_scored.merge(region_optimal_k_df, on=region_col_name, how='left')
+    cells_scored = assign_cluster_id(_x,region_col_name, 'cell')#.set_index('cell')
     
 
     print(f"Optimal-k based on 'LCOE' clustering calculated for {len(unique_regions)} zones and saved to cell dataframe.\n")
@@ -165,6 +166,7 @@ def cells_to_cluster_mapping(
         vis_directory:str,
         wcss_tolerance:float,
         resource_type:str,
+        region_col_name:str,
         sort_columns:list)-> tuple[pd.DataFrame,pd.DataFrame]:
     """
     Clustering requires a base prior to perform the aggregation/clustering similar data. Here, we are doing spatial clustering which aggregates the spatial regions
@@ -174,21 +176,21 @@ def cells_to_cluster_mapping(
     here with this function, this score will be acting as the common feature for the spatial clustering.
 
     Does the following sequential tasks:
-  Processess the GWA cells beofe we approach for clustering . An output of this function is a region vs optimal cluster for the region and another output denotes cell vs mapped region vs cluster no. (in which the cells will be merged into).
+  Processes the GWA cells before we approach for clustering . An output of this function is a region vs optimal cluster for the region and another output denotes cell vs mapped region vs cluster no. (in which the cells will be merged into).
     
     """
-    dataframe,optimal_k_df=pre_process_cluster_mapping(cells_scored,vis_directory,wcss_tolerance,resource_type)
+    dataframe,optimal_k_df=pre_process_cluster_mapping(cells_scored,vis_directory,wcss_tolerance,resource_type,region_col_name,country_level=True)
 
-    print(f">>> Mapping the Optimal Number of Clusters for Each region ...")
+    print(">>> Mapping the Optimal Number of Clusters for Each region ...")
 
     clusters = []
-    dataframe_filtered=dataframe[dataframe['Region'].isin(list(optimal_k_df['Region']))]
+    dataframe_filtered=dataframe[dataframe[region_col_name].isin(list(optimal_k_df[region_col_name]))]
     
-    for region, group in dataframe_filtered.groupby('Region'):
+    for region, group in dataframe_filtered.groupby(region_col_name):
         group = group.sort_values(by=sort_columns, ascending=True)
         region_rows = len(group)
         
-        optimal_k = optimal_k_df[optimal_k_df['Region'] == region]['Optimal_k'].iloc[0]
+        optimal_k = optimal_k_df[optimal_k_df[region_col_name] == region]['Optimal_k'].iloc[0]
         region_step_size = region_rows // optimal_k
         
         clusters.extend([group.iloc[i:i+region_step_size].copy() for i in range(0, region_rows, region_step_size)])
@@ -200,6 +202,7 @@ def cells_to_cluster_mapping(
         for cluster_df in clusters[-optimal_k:]:
             cluster_df['Cluster_No'] = cluster_no_counter
             cluster_no_counter += 1
+
     cells_cluster_map_df=pd.concat(clusters, ignore_index=False)
 
     return cells_cluster_map_df,optimal_k_df
@@ -207,7 +210,8 @@ def cells_to_cluster_mapping(
 def create_cells_Union_in_clusters(
         cluster_map_gdf:gpd.GeoDataFrame, 
         region_optimal_k_df:pd.DataFrame,
-        resource_type:str
+        resource_type:str,
+        region_col_name:str,
             )->tuple[pd.DataFrame,dict]:
 
     """
@@ -221,7 +225,7 @@ def create_cells_Union_in_clusters(
     - dissolved_gdf: GeoDataFrame, the dissolved and aggregated GeoDataFrame.
     - dissolved_indices: dict, a dictionary containing the indices of the dissolved rows for each region and each Cluster_No.
     """
-    log.info(f" Preparing Clusters...")
+    log.info(" Preparing Clusters...")
     
     # Initialize an aggregation dictionary
     agg_dict = {#f'LCOE_{resource_type}': lambda x: x.iloc[len(x) // 2], 
@@ -230,11 +234,14 @@ def create_cells_Union_in_clusters(
                 f'fom_{resource_type}':'first',
                 f'vom_{resource_type}':'first',
                 f'{resource_type}_CF_mean':'mean',
-                f'Cluster_No':'first',
+                'Cluster_No':'first',
                 f'potential_capacity_{resource_type}': 'sum',
-                f'Region': 'first',
-                f'nearest_station':'first',
-                f'nearest_station_distance_km':'first'}
+                f'{region_col_name}': 'first',
+                # 'nearest_station':'first',
+                'nearest_connection_point':'first',
+                'nearest_connection_distance':'first',
+                # 'nearest_station_distance_km':'first'
+                }
 
     # Initialize an empty list to store the dissolved results
     dissolved_gdf_list = []
@@ -243,10 +250,10 @@ def create_cells_Union_in_clusters(
     dissolved_indices = {}
     i=0
     # Loop through each region
-    for region in region_optimal_k_df['Region']:
+    for region in region_optimal_k_df[region_col_name]:
         i+=1
-        log.info(f" Creating cluster for {region} {i}/{len(region_optimal_k_df['Region'])}")
-        region_mask = cluster_map_gdf['Region'] == region
+        log.info(f" Creating cluster for {region} {i}/{len(region_optimal_k_df[region_col_name])}")
+        region_mask = cluster_map_gdf[region_col_name] == region
         region_cells = cluster_map_gdf[region_mask]
 
         # Initialize dictionary for the current region
@@ -270,7 +277,7 @@ def create_cells_Union_in_clusters(
         # columns_to_keep = ['Region','Region','Cluster_No', 'capex', 'potential_capacity','lcoe','nearest_station','nearest_station_distance_km','geometry' ]
         # dissolved_gdf = dissolved_gdf[columns_to_keep]
 
-        dissolved_gdf=utils.assign_regional_cell_ids(dissolved_gdf,'Region','cluster_id')
+        dissolved_gdf=utils.assign_regional_cell_ids(dissolved_gdf,region_col_name,'cluster_id')
 
         dissolved_gdf['Cluster_No'] = dissolved_gdf['Cluster_No'].astype(int)
         dissolved_gdf.sort_values(by=f'lcoe_{resource_type}', ascending=True, inplace=True)
@@ -279,7 +286,7 @@ def create_cells_Union_in_clusters(
         
         dissolved_gdf.columns=dissolved_gdf.columns.str.replace(fr"(?i)(_{resource_type}|{resource_type}_)", "", regex=True)
         
-    log.info(f" Culsters Created and a list generated to map the Cells inside each Cluster...")
+    log.info(" Culsters Created and a list generated to map the Cells inside each Cluster...")
     return dissolved_gdf, dissolved_indices
 
 def clip_cluster_boundaries_upto_regions(

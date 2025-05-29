@@ -25,6 +25,7 @@ class GWACells(GADMBoundaries):
     def prepare_GWA_data(self,
                          windpseed_min=10,
                          windpseed_max=20,
+                         region_short_code:Optional[str]=None,
                          memory_resource_limitation:bool=False) -> xr.DataArray:
         """
         Prepares the Global Wind Atlas (GWA) data by loading and merging raster files.
@@ -32,9 +33,12 @@ class GWACells(GADMBoundaries):
         Returns a cleaned DataArray with relevant data.
         """
         data_list = []
+        region_short_code = self.region_short_code.upper() if region_short_code is None else region_short_code
 
         # Load configuration parameters
         self.gwa_datafields = self.gwa_config.get('datafields', {})
+        self.gwa_country_codes:dict=self.gwa_config.get('country_code_mapping', {})
+        self.gwa_country_code = self.gwa_country_codes.get(region_short_code)
         self.gwa_rasters = self.gwa_config.get('rasters', {})
         self.gwa_sources = self.gwa_config.get('sources', {})
         self.gwa_root = Path(self.gwa_config.get('root', 'data/downloaded_data/GWA'))
@@ -44,11 +48,13 @@ class GWACells(GADMBoundaries):
 
         # Check for existence and download if necessary
         for key, raster_name in self.gwa_rasters.items():
+            raster_name=raster_name.replace("GWA_country_code",  self.gwa_country_code)
             raster_path = self.gwa_root / raster_name
             if not raster_path.exists():
-                source_url = self.gwa_sources[key]
-                self.log.info(f">> Downloading {self.gwa_sources[key]} from {source_url}")
-                self.download_file(source_url, raster_path)
+                generic_source_url = self.gwa_sources[key]
+                region_source_url = generic_source_url.replace("GWA_country_code",  self.gwa_country_code)
+                self.log.info(f">> Downloading {self.gwa_sources[key]} from {region_source_url}")
+                self.download_file(region_source_url, raster_path)
 
             try:
                 # Process each raster using a streamlined approach
@@ -110,8 +116,8 @@ class GWACells(GADMBoundaries):
         self.gwa_cells_gdf = gpd.GeoDataFrame(
             self.region_gwa_cells_df,
             geometry=gpd.points_from_xy(self.region_gwa_cells_df['x'], self.region_gwa_cells_df['y']),
-            crs=self.get_default_crs()
-        ).clip(self.get_region_boundary(), keep_geom_type=False)
+            crs=self.get_default_crs())
+            # ).clip(self.get_country_boundary(country_level=True), keep_geom_type=False)
 
         # self.gwa_cells_gdf = self.calculate_common_parameters_GWA_cells()
         # self.gwa_cells_gdf = self.map_GWAcells_to_ERA5cells()
@@ -121,7 +127,8 @@ class GWACells(GADMBoundaries):
     
 
     def map_GWA_cells_to_ERA5(self,
-                              memory_resource_limitation:Optional[bool]):
+                              region_column:Optional[str]=None,
+                              memory_resource_limitation:Optional[bool]=False):
         """
         Maps the GWA high resolution cells to comparatively low resolution ERA5 Cells.
         """
@@ -130,16 +137,17 @@ class GWACells(GADMBoundaries):
         self.store_grid_cells = self.datahandler.from_store('cells')
         
         _era5_cells_=self.store_grid_cells.reset_index()
+        _era5_cells_ = _era5_cells_.loc[:, ~_era5_cells_.columns.str.contains('_2')]
  
         self.gwa_cells_gdf = self.load_gwa_cells(memory_resource_limitation)
 
         self.log.info(f">> Mapping {len(self.gwa_cells_gdf)} GWA Cells to {len(_era5_cells_)} ERA5 Cells...")
 
         results = []  # List to store results for each region
-        self.log.info(f">> Calculating aggregated values for ERA5 Cell's...")
+        self.log.info(">> Calculating aggregated values for ERA5 Cell's...")
         
-        for region in _era5_cells_['Region'].unique():
-            _era5_cells_region = _era5_cells_[_era5_cells_['Region'] == region]
+        for region in _era5_cells_[region_column].unique():
+            _era5_cells_region = _era5_cells_[_era5_cells_[region_column] == region]
             
             # Perform overlay operation
             _data_ = self.gwa_cells_gdf.overlay(_era5_cells_region, how='intersection', keep_geom_type=False)
@@ -160,4 +168,5 @@ class GWACells(GADMBoundaries):
         self.mapped_gwa_cells_aggr_df = pd.concat(results, axis=0)
             
         # Store the aggregated data
-        self.datahandler.to_store(self.mapped_gwa_cells_aggr_df, 'cells')  
+        self.datahandler.to_store(self.mapped_gwa_cells_aggr_df, 'cells') 
+        return self.mapped_gwa_cells_aggr_df

@@ -11,20 +11,167 @@ import geopandas as gpd
 import folium
 import rasterio
 import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import matplotlib.colors as mcolors
-import seaborn as sns
 import matplotlib as mpl
+from matplotlib.ticker import MultipleLocator, FuncFormatter
+from matplotlib import lines as mlines
+
+from pathlib import Path
+import RES.utility as utils
+
 
 log.basicConfig(level=log.INFO, format='%(asctime)s - %(levelname)s - %(message)s' , datefmt='%Y-%m-%d %H:%M:%S')
 log_name=f'workflow/log/linking_vis.txt'
+
+def size_for_legend(mw):
+    return np.sqrt(mw / 100)  # since s = mw / 100 in scatter
+
 # with open(log_name, 'w') as file:
 #     pass
 # file_handler = log.FileHandler(log_name)
 # log.getLogger().addHandler(file_handler)
 
 
+import numpy as np
+import matplotlib.pyplot as plt
+
+def add_compass_4326(ax, 
+                     location=(0.9, 0.15), 
+                     size=0.05, 
+                     textsize=9, 
+                     color='gray'):
+    """
+    Adds a clean compass rose (N, E, S, W) to a plot in EPSG:4326.
+    
+    Parameters:
+    - ax: The matplotlib Axes.
+    - location: (x, y) in Axes fraction coordinates (0–1).
+    - size: Radius of the compass arms in axes fraction units.
+    - textsize: Font size for cardinal labels.
+    - color: Line and label color (default: 'gray').
+    """
+    cx, cy = location
+    r = size
+
+    # Cardinal directions with angles assuming N is up
+    directions = {'N': 90, 'E': 180, 'S': 270, 'W': 0}
+
+    for label, angle in directions.items():
+        theta = np.deg2rad(angle)
+        dx = r * np.cos(theta)
+        dy = r * np.sin(theta)
+
+        # Draw line from center to direction
+        ax.plot([cx, cx + dx], [cy, cy + dy], transform=ax.transAxes,
+                color=color, linewidth=0.8)
+
+        # Draw text slightly outside the tip
+        ax.text(cx + 1.25 * dx, cy + 1.25 * dy, label,
+                transform=ax.transAxes,
+                ha='center', va='center',
+                fontsize=textsize, fontweight='medium',
+                color=color, family='sans-serif')
+
+    # Small center dot
+    ax.plot(cx, cy, 'o', transform=ax.transAxes, color=color, markersize=2)
+
+
+def plot_resources_scatter_metric(resource_type:str,
+                                  clusters_resources:gpd.GeoDataFrame,
+                                  lcoe_threshold:float=999,
+                                  color=None,
+                                  save_to_root:str|Path='vis'):
+    """
+    Generate a scatter plot visualizing the relationship between Capacity Factor (CF) and Levelized Cost of Energy (LCOE) 
+    for renewable energy resources (solar or wind). The plot highlights clusters of resources based on their potential capacity.
+    Args:
+        resource_type (str): The type of renewable resource to plot. Must be either 'solar' or 'wind'.
+        clusters_resources (gpd.GeoDataFrame): A GeoDataFrame containing resource cluster data. 
+            Expected columns include:
+                - 'CF_mean': Average capacity factor of the resource cluster.
+                - 'lcoe': Levelized Cost of Energy for the resource cluster.
+                - 'potential_capacity': Potential capacity of the resource cluster (used for bubble size).
+        lcoe_threshold (float): The maximum LCOE value to include in the plot. Clusters with LCOE above this threshold are excluded.
+        color (optional): Custom color for the scatter plot bubbles. Defaults to 'darkorange' for solar and 'navy' for wind.
+        save_to_root (str | Path, optional): Directory path where the plot image will be saved. Defaults to 'vis'.
+    Returns:
+        None: The function saves the generated plot as a PNG image in the specified directory.
+    Notes:
+        - The size of the bubbles in the scatter plot represents the potential capacity of the resource clusters.
+        - The x-axis (CF_mean) is formatted as percentages for better readability.
+        - A legend is included to indicate the bubble sizes in gigawatts (GW).
+        - The plot includes an annotation explaining the scoring methodology for LCOE.
+        - The plot is saved as a transparent PNG image with a resolution of 600 dpi.
+    Example:
+        >>> plot_resources_scatter_metric(
+        ...     resource_type='solar',
+        ...     clusters_resources=solar_clusters_gdf,
+        ...     lcoe_threshold=50,
+        ...     save_to_root='output/plots'
+        ... )
+     
+    """
+    
+    resource_type=resource_type.lower()
+    save_to_root=Path(save_to_root)
+    clusters_resources=clusters_resources[clusters_resources['lcoe']<=lcoe_threshold]
+    bubble_color= 'darkorange' if resource_type=='solar' else 'navy'
+    
+    # Create a scatter plot
+    fig, ax = plt.subplots(figsize=(10, 6))
+    scatter = ax.scatter(  # noqa: F841
+        clusters_resources['CF_mean'],
+        clusters_resources['lcoe'],
+        s=clusters_resources['potential_capacity'] / 100,  # Adjust the size for better visualization
+        alpha=0.7,
+        c=bubble_color,
+        edgecolors='w',
+        linewidth=0.5
+    )
+
+    # Set labels and title
+    ax.set_xlabel(f'Average Capacity Factor for {resource_type.capitalize()} resources', fontweight='bold')
+    ax.set_ylabel('Score ($/MWh)', fontweight='bold')
+    ax.set_title(f'CF vs Score for {resource_type.capitalize()} resources')
+
+    # Customize x-axis ticks to show more levels and as percentages
+    ax.xaxis.set_major_locator(MultipleLocator(0.01 if resource_type=='solar' else 0.04))
+    ax.xaxis.set_minor_locator(MultipleLocator(0.01))
+
+    ax.xaxis.set_major_formatter(FuncFormatter(lambda x, _: f'{x:.0%}'))
+
+    size_labels = [1, 5, 10]  # GW
+    size_values = [s * 1000 for s in size_labels]  # Convert GW to same scale as scatter
+
+    for spine in plt.gca().spines.values():
+        spine.set_visible(False)
+
+    legend_handles = [
+        mlines.Line2D([], [], color=bubble_color, marker='o', linestyle='None',
+                      markersize=np.sqrt(size / 100), alpha=0.7,label=f'{label} GW')
+        for size, label in zip(size_values, size_labels)
+    ]
+
+    ax.legend(handles=legend_handles, loc='upper right', framealpha=0, prop={'size': 12, 'weight': 'bold'})
+
+    # Remove all grids
+    ax.grid(True,ls=":",linewidth=0.3)
+    # Add annotation to the figure
+    fig.text(0.5, -0.04, 
+         "Note: The Scoring is calculated to reflect Dollar investment required to get an unit of Energy yield (MWh). "
+         "\nTo reflect market competitiveness and incentives, the Score ($/MWh) needs financial adjustment factors to be considered on top of it.",
+         ha='center', va='center', fontsize=9.5, color='gray', bbox=dict(facecolor='None', linewidth=0.2,edgecolor='grey', boxstyle='round,pad=0.5'))
+    
+    plt.tight_layout()
+    
+    # Save the plot as a transparent image with 600 dpi
+    save_to_root.mkdir(parents=True, exist_ok=True)
+    file_path=save_to_root/f"Resources_CF_vs_LCOE_{resource_type}.png"
+    
+    plt.savefig(file_path, dpi=600, transparent=True)
+    utils.print_update(level=1,message=f"CF vs LCOE plot for {resource_type} resources created and saved to : {file_path}")
+    
 def plot_with_matched_cells(ax, cells: gpd.GeoDataFrame, filtered_cells: gpd.GeoDataFrame, column: str, cmap: str,
                             background_cell_linewidth: float, selected_cells_linewidth: float,font_size:int=9):
     """Helper function to plot cells with matched cells overlay."""
@@ -61,7 +208,7 @@ def plot_with_matched_cells(ax, cells: gpd.GeoDataFrame, filtered_cells: gpd.Geo
     cbar.ax.tick_params(labelsize=font_size) 
 
 def get_selected_vs_missed_visuals(cells: gpd.GeoDataFrame,
-                                  region_short_code,
+                                  province_short_code,
                                   resource_type,
                                    lcoe_threshold: float,
                                    CF_threshold: float,
@@ -120,14 +267,14 @@ def get_selected_vs_missed_visuals(cells: gpd.GeoDataFrame,
     axs[1, 1].set_axis_off()
 
     # Add a super title for the figure
-    fig.suptitle(f'{resource_type}- Selected Cells Overview - {region_short_code}', fontsize=font_size+2,fontweight='bold', x=title_x,y=title_y)
+    fig.suptitle(f'{resource_type}- Selected Cells Overview - {province_short_code}', fontsize=font_size+2,fontweight='bold', x=title_x,y=title_y)
     # Add a text box with grey background for the message
     fig.text(text_box_x, text_box_y, msg, ha='center', va='top', fontsize=font_size-3,
              bbox=dict(facecolor='lightgrey', edgecolor='grey', boxstyle='round,pad=0.2'))
     plt.tight_layout()
     # Save the plot
     if save:
-        plt.savefig(f"vis/linking/solar/Selected_cells_solar_{region_short_code}.png", bbox_inches='tight')
+        plt.savefig(f"vis/linking/solar/Selected_cells_solar_{province_short_code}.png", bbox_inches='tight')
     plt.tight_layout()
     plt.show()  # Optional: Show the plot if desired
 
@@ -243,7 +390,7 @@ def plot_data_in_GADM_regions(
     return log.info(f"Plot Created for {plt_title} for Potential Plants and Save to {plt_save_to}")
 
 def visualize_ss_nodes(substations_gdf,
-                       regionm_gadm_regions_gdf:gpd.GeoDataFrame, 
+                       provincem_gadm_regions_gdf:gpd.GeoDataFrame, 
                            plot_name):
         """
         Visualizes transmission nodes (buses) on a map with different colors based on substation types.
@@ -258,7 +405,7 @@ def visualize_ss_nodes(substations_gdf,
         """
         
         fig, ax = plt.subplots(figsize=(10, 8))
-        regionm_gadm_regions_gdf.plot(ax=ax, color="lightgrey", edgecolor="black", linewidth=0.8,alpha=0.2)
+        provincem_gadm_regions_gdf.plot(ax=ax, color="lightgrey", edgecolor="black", linewidth=0.8,alpha=0.2)
         substations_gdf.plot('substation_type',ax=ax,legend=True,cmap='viridis',marker='x',markersize=10,linewidth=1,alpha=0.6)
 
         # Finalize plot details
@@ -273,7 +420,7 @@ def visualize_ss_nodes(substations_gdf,
         log.info(f"Plot for Grid Nodes Generated and saved as {plot_name}")
         
 def create_timeseries_plots(cells_df, CF_timeseries_df, max_resource_capacity, dissolved_indices, resampling, representative_color_palette, std_deviation_gradient, vis_directory):
-    print(f">>> Generating CF timeseries PLOTs for TOP Sites for {max_resource_capacity} GW Capacity investment in region...")
+    print(f">>> Generating CF timeseries PLOTs for TOP Sites for {max_resource_capacity} GW Capacity investment in province...")
 
     for index, row in cells_df.iterrows():
         region = row['Region']
@@ -315,7 +462,7 @@ def create_timeseries_plots(cells_df, CF_timeseries_df, max_resource_capacity, d
         plt.savefig(os.path.join(vis_directory,plt_name))
         plt.close()
 
-    log.info(f">>> Plots generated for CF timeseries of TOP Sites for {max_resource_capacity} GW Capacity Investment in region...")
+    log.info(f">>> Plots generated for CF timeseries of TOP Sites for {max_resource_capacity} GW Capacity Investment in Province...")
 
 
 def create_timeseries_plots_solar(cells_df,CF_timeseries_df, dissolved_indices,max_solar_capacity,resampling,solar_vis_directory):
@@ -441,7 +588,7 @@ def create_timeseries_interactive_plots(
     # pio.show(fig)
 
 def create_key_data_map_interactive(
-    region_gadm_regions_gdf:gpd.GeoDataFrame,
+    province_gadm_regions_gdf:gpd.GeoDataFrame,
     provincial_conservation_protected_lands: gpd.GeoDataFrame,
     aeroway_with_buffer_solar:gpd.GeoDataFrame,
     aeroway_with_buffer_wind:gpd.GeoDataFrame,
@@ -453,7 +600,7 @@ def create_key_data_map_interactive(
     ):
     buffer_distance_m:dict[dict]=about_OSM_data['aeroway_buffer']
     
-    m = region_gadm_regions_gdf.explore('Region', color='grey',style_kwds={'fillOpacity': 0.1}, name=f"{current_region['code']} Regions")
+    m = province_gadm_regions_gdf.explore('Region', color='grey',style_kwds={'fillOpacity': 0.1}, name=f"{current_region['code']} Regions")
     provincial_conservation_protected_lands.explore(m=m,color='red', style_kwds={'fillOpacity': 0.05}, name='Conservation and Protected lands')
     aeroway_with_buffer_solar.explore(m=m, color='orange', style_kwds={'fillOpacity': 0.5}, name=f"aeroway with {buffer_distance_m['solar']}m buffer")
     aeroway_with_buffer_wind.explore(m=m, color='skyblue', style_kwds={'fillOpacity': 0.5}, name=f"aeroway with {buffer_distance_m['wind']}m buffer")
