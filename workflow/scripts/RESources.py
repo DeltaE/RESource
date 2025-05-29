@@ -22,7 +22,7 @@ from RES.score import CellScorer
 from RES.cell import GridCells
 from RES.gwa import GWACells
 from RES.units import Units
-from RES import utility as util
+from RES import utility as utils
 
 # Get the current local time
 current_local_time = datetime.now()
@@ -39,7 +39,7 @@ class RESources_builder(AttributesParser):
             "region_short_code": self.region_short_code,
             "resource_type": self.resource_type
         }
-        
+        self.region_col_name='Country'
         # Initiate Classes
         self.units=Units(**self.required_args)
         self.gridcells=GridCells(**self.required_args)
@@ -50,7 +50,8 @@ class RESources_builder(AttributesParser):
         self.era5_cutout=ERA5Cutout(**self.required_args)
         self.scorer=CellScorer(**self.required_args)
         self.gwa_cells=GWACells(**self.required_args)
-        self.reults_save_to=Path('results/linking')
+        self.reults_save_to=Path('results/RESources')
+        self.resource_disaggregation_config=self.get_resource_disaggregation_config()
         
         # Snapshot (range of of the temporal data)
         (
@@ -100,7 +101,7 @@ class RESources_builder(AttributesParser):
             
         if self.resource_type=='wind': 
             if all(column in self.store_grid_cells.columns for column in ['windspeed_ERA5']):
-                self.log.info(f"'windspeed_ERA5' already present in the store information.")
+                self.log.info("'windspeed_ERA5' already present in the store information.")
                 pass
             else:
                 self.store_grid_cells_updated:gpd.GeoDataFrame=wind.impute_ERA5_windspeed_to_Cells(self.cutout, 
@@ -165,12 +166,13 @@ class RESources_builder(AttributesParser):
             
         self.cutout,self.province_boundary=self.era5_cutout.get_era5_cutout()
         
-        self.store_grid_cells = self.cells_with_cap_nt.data
-        self.store_grid_cells_with_grid_nodes=self.store_grid_cells.copy()
+        self.datahandler.refresh()
+        self.store_grid_cells_with_grid_nodes = self.cells_with_ts_nt.cells
+        # self.store_grid_cells_with_grid_nodes = self.datahandler.from_store('cells')
         
-        if 'centroid' not in  self.store_grid_cells_with_grid_nodes.columns:
-            # Ensure centroid is prepared once
-            self.store_grid_cells_with_grid_nodes["centroid"] = self.store_grid_cells_with_grid_nodes.apply(lambda row: Point(row["x"], row["y"]), axis=1)
+        # Ensure centroid is prepared once
+        self.store_grid_cells_with_grid_nodes =  self.store_grid_cells_with_grid_nodes[ self.store_grid_cells_with_grid_nodes.geometry.is_valid]
+        self.store_grid_cells_with_grid_nodes["centroid"] = self.store_grid_cells_with_grid_nodes.apply(lambda row: Point(row["x"], row["y"]), axis=1)
 
         # Apply to each row to compute the single connection point
         self.store_grid_cells_with_grid_nodes[["nearest_connection_point", "nearest_connection_distance"]] = self.store_grid_cells_with_grid_nodes.apply(
@@ -200,7 +202,7 @@ class RESources_builder(AttributesParser):
                 self.log.info("'CF_IEC2', 'CF_IEC3', 'windspeed_gwa' are already present in the store information.")
                 pass
             else:
-                self.gwa_cells.map_GWA_cells_to_ERA5(memory_resource_limitation)
+                self.gwa_cells.map_GWA_cells_to_ERA5(self.region_col_name,memory_resource_limitation)
             
         elif self.resource_type=='solar': 
             # Not activated for solar resources yet as the high resolution data processing is computationally expensive and the data contrast for solar doesn't provide satisfactory incentive for that.
@@ -224,14 +226,15 @@ class RESources_builder(AttributesParser):
             e.g. i. [standardized energy indices in future climate scenarios](https://www.sciencedirect.com/science/article/pii/S0960148123011217?via%3Dihub)
                  ii. [Compound energy droughts](https://www.sciencedirect.com/science/article/pii/S0960148123014659?via%3Dihub#d1e724)
     '''
-    def score_cells(self):
+    def score_cells(self,
+                    unscored_cells:Optional[gpd.GeoDataFrame]=None)->gpd.GeoDataFrame:
         """
         Scores the Cells based on calculated LCOE ($/MWh). </br>
         Wrapper of the _.get_cell_score()_ method of **_CellScorer_** object.
         """
-                
-        self.not_scored_cells=self.store_grid_cells_with_grid_nodes #self.datahandler.from_store('cells')
-        self.scored_cells = self.scorer.get_cell_score(self.not_scored_cells,f'{self.resource_type}_CF_mean')
+        self.datahandler.refresh()
+        cells_to_be_scored = self.datahandler.from_store('cells') if unscored_cells is None else unscored_cells
+        self.scored_cells = self.scorer.get_cell_score(cells_to_be_scored,f'{self.resource_type}_CF_mean')
         
         # # Add new columns to the existing DataFrame
         # for column in self.scored_cells.columns:
@@ -265,6 +268,7 @@ class RESources_builder(AttributesParser):
     ___________________
     '''
     def get_clusters(self,
+                     scored_cells:gpd.GeoDataFrame=None,
                      wcss_tolerance=0.05):
         """
         ### Args:
@@ -272,12 +276,23 @@ class RESources_builder(AttributesParser):
          - **Default set to 0.05**.
         """
         
-        self.resource_disaggregation_config=self.get_resource_disaggregation_config()
+        
         self.wcss_tolerance=wcss_tolerance
         
         # self.wcss_tolerance:float= self.resource_disaggregation_config['WCSS_tolerance']
             
-        self.scored_cells=self.score_cells()
+        if scored_cells is not None:
+            self.scored_cells = scored_cells
+        else:
+            self.datahandler.refresh()
+            grid_cells = self.datahandler.from_store('cells')
+            if f'lcoe_{self.resource_type}' not in grid_cells.columns or grid_cells[f'lcoe_{self.resource_type}'].isnull().all():
+                self.scored_cells=self.score_cells(grid_cells)
+            else:
+                self.scored_cells = grid_cells
+      
+            # raise ValueError("scored_cells must be provided to avoid recursive call to score_cells().")
+        
         self.log.info(f">> Preparing spatial clusters for {len(self.scored_cells)} Cells")
         
         self.vis_dir=self.get_vis_dir()
@@ -286,13 +301,14 @@ class RESources_builder(AttributesParser):
                                                                                                  self.vis_dir, 
                                                                                                  self.wcss_tolerance,
                                                                                                  self.resource_type,
-                                                                                                #  [f'LCOE_{self.resource_type}', f'potential_capacity_{self.resource_type}']
+                                                                                                 self.region_col_name,
                                                                                                  [f'lcoe_{self.resource_type}', f'potential_capacity_{self.resource_type}']
                                                                                                  )
         
         self.cell_cluster_gdf, self.dissolved_indices = cluster.create_cells_Union_in_clusters(self.ERA5_cells_cluster_map, 
                                                                                                self.region_optimal_k_df,
-                                                                                               self.resource_type)
+                                                                                               self.resource_type,
+                                                                                               self.region_col_name)
         
         self.cell_cluster_gdf['Operational_life'] = self.resource_disaggregation_config.get('Operational_life', 20)
         
@@ -303,7 +319,7 @@ class RESources_builder(AttributesParser):
         # Corrected version of the code
         self.datahandler.to_store(self.cell_cluster_gdf,f'clusters/{self.resource_type}',force_update=True)
         self.dissolved_cell_indices_df=pd.DataFrame(self.dissolved_indices).T
-        self.dissolved_cell_indices_df.index.name='Region'
+        self.dissolved_cell_indices_df.index.name=self.region_col_name
         self.datahandler.to_store(self.dissolved_cell_indices_df,f'dissolved_indices/{self.resource_type}',force_update=True)
         
         return self.clusters_nt
@@ -327,7 +343,8 @@ class RESources_builder(AttributesParser):
         self.cluster_ts_df=self.timeseries.get_cluster_timeseries(self.cell_cluster_gdf,
                                 # self.cells_timeseries[self.resource_type],
                                 self.cells_timeseries,
-                               self.dissolved_cell_indices_df)
+                               self.dissolved_cell_indices_df,
+                               self.region_col_name)
         return self.cluster_ts_df
 
     # _________________________________________________________________________________
@@ -348,10 +365,7 @@ class RESources_builder(AttributesParser):
         self.extract_weather_data()
         self.update_gwa_scaled_params(self.memory_resource_limitation)
         self.find_grid_nodes(use_pypsa_buses)
-        self.score_cells()
-        self.get_clusters()
-        self.get_cluster_timeseries()
-        self.units.create_units_dictionary()
+
         
         if select_top_sites:
             resource_max_capacity=self.resource_disaggregation_config.get('max_capacity',10) # Collects max_capacity from resource_disaggregation_config (if set), otherwise defaults to 10 GW
@@ -516,12 +530,18 @@ class RESources_builder(AttributesParser):
             remaining_capacity:float = resource_max_capacity * 1000 - top_sites['potential_capacity'].sum()
 
             if remaining_capacity > 0:
-                
-                # selected_additional_sites['capex'] = capex* remaining_capacity
-                print(f"\n!! Note: The Last cluster ({selected_additional_sites.index[-1]}) originally had {round(selected_additional_sites['potential_capacity'].iloc[0] / 1000,2)} GW potential capacity."
-                    f"To fit the maximum capacity investment of {resource_max_capacity} GW, it has been adjusted to {round(remaining_capacity / 1000,2)} GW\n")
-                
-                selected_additional_sites['potential_capacity'] = remaining_capacity
+                if not selected_additional_sites.empty:
+                    print(
+                        f"\n!! Note: The Last cluster ({selected_additional_sites.index[-1]}) originally had "
+                        f"{round(selected_additional_sites['potential_capacity'].iloc[0] / 1000, 2)} GW potential capacity."
+                        f" To fit the maximum capacity investment of {resource_max_capacity} GW, it has been adjusted to "
+                        f"{round(remaining_capacity / 1000, 2)} GW\n"
+                    )
+
+                    selected_additional_sites['potential_capacity'] = remaining_capacity
+                else:
+                    print(">> No additional sites selected to adjust potential capacity.")
+
             # Concatenate the DataFrames
             top_sites = pd.concat([top_sites, selected_additional_sites])
         else:

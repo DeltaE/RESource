@@ -78,14 +78,14 @@ class GADMBoundaries(AttributesParser):
                 self.boundary_country.to_file(self.country_file, driver='GeoJSON')
                 self.log.info(f">> GADM data saved to {self.country_file}.")
         
-            self.boundary_country = self.boundary_country[['NAME_0', 'NAME_1', 'NAME_2', 'geometry']].rename(columns={
+                self.boundary_country = self.boundary_country[['NAME_0', 'NAME_1', 'NAME_2', 'geometry']].rename(columns={
                         'NAME_0': 'Country', 'NAME_1': 'region', 'NAME_2': 'Region'
                     })
             
-            if self.admin_level==1:
-                self.boundary_country_aggr = self.boundary_country.dissolve(by="Country")  
-                self.boundary_country_aggr.reset_index(inplace=True)
-                self.boundary_country = self.boundary_country_aggr[['Country', 'geometry']]
+            # if self.admin_level==1:
+            #     self.boundary_country_aggr = self.boundary_country.dissolve(by="Country")  
+            #     self.boundary_country_aggr.reset_index(inplace=True)
+            #     self.boundary_country = self.boundary_country_aggr[['Country', 'geometry']]
             
             return self.boundary_country
 
@@ -94,6 +94,7 @@ class GADMBoundaries(AttributesParser):
             raise
 
     def get_region_boundary(self,
+                            country_level:bool=False, # for WB6 analysis, this is the default
                             force_update: bool = False) -> gpd.GeoDataFrame:
         """
         Prepares the boundaries for the specified region within the country.
@@ -115,7 +116,7 @@ class GADMBoundaries(AttributesParser):
             
             else: # When the local file for region doesn't exist, Filter region data from country file and save locally
                 _boundary_country = self.get_country_boundary(force_update)
-                # if country_level:
+                if country_level:
                     
                 #     self.admin_level=1
                     
@@ -128,18 +129,26 @@ class GADMBoundaries(AttributesParser):
                     
                 #     return self.boundary_country_aggr
                 
-                _boundary_region_ = _boundary_country.loc[self.boundary_country['NAME_1'] == self.region_name]
+                # _boundary_region_ = _boundary_country.loc[self.boundary_country['NAME_1'] == self.region_name]
+                    _boundary_region_ = _boundary_country
 
                 if _boundary_region_.empty : 
                     self.log.error(f">> No data found for region '{self.region_name}'.")
                     exit(123)
                 else:
-                    _boundary_region_ = _boundary_region_[['NAME_0', 'NAME_1', 'NAME_2', 'geometry']].rename(columns={
-                        'NAME_0': 'Country', 'NAME_1': 'region', 'NAME_2': 'Region'
-                    })
-                    self.boundary_region:gpd.GeoDataFrame=_boundary_region_
-    
-            
+                    if not country_level:
+                        # Check which columns are present and select/rename accordingly
+                        columns_to_keep = ['NAME_0', 'geometry']
+                        rename_dict = {'NAME_0': 'Country'}
+                        if 'NAME_1' in _boundary_region_.columns:
+                            columns_to_keep.append('NAME_1')
+                            rename_dict['NAME_1'] = 'region'
+                        if 'NAME_2' in _boundary_region_.columns:
+                            columns_to_keep.append('NAME_2')
+                            rename_dict['NAME_2'] = 'Region'
+                        _boundary_region_ = _boundary_region_[columns_to_keep].rename(columns=rename_dict)
+                    
+                    self.boundary_region: gpd.GeoDataFrame = _boundary_region_
                     self.boundary_region.to_file(self.region_file, driver='GeoJSON')
                     self.log.info(f"GADM data for {self.region_name} saved to {self.region_file}.")
                     

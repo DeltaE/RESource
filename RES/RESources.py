@@ -3,7 +3,7 @@ import pandas as pd
 from collections import namedtuple
 import warnings
 
-
+from shapely import Point
 from typing import List,Dict,Optional,Union, Tuple
 from pathlib import Path
 from datetime import datetime
@@ -46,11 +46,12 @@ class RESources_builder(AttributesParser):
         self.timeseries=Timeseries(**self.required_args)
         self.datahandler=DataHandler(self.store)
         self.cell_processor=CellCapacityProcessor(**self.required_args)
-        self.coders=CODERSData(**self.required_args)
+        # self.coders=CODERSData(**self.required_args)
         self.era5_cutout=ERA5Cutout(**self.required_args)
         self.scorer=CellScorer(**self.required_args)
         self.gwa_cells=GWACells(**self.required_args)
         self.reults_save_to=Path('results/linking')
+        self.region_column='Country'
         
         # Snapshot (range of of the temporal data)
         (
@@ -135,7 +136,7 @@ class RESources_builder(AttributesParser):
     ______________________
     '''
     def find_grid_nodes(self,
-                        use_pypsa_buses:bool=True):
+                        use_pypsa_buses:bool=False):
 
         self.grid=GridNodeLocator(**self.required_args)
         
@@ -148,18 +149,29 @@ class RESources_builder(AttributesParser):
                 crs=self.get_default_crs(),  # Set the coordinate reference system (e.g., WGS84)
                 ) 
         else:
-            self.grid_ss:gpd.GeoDataFrame=self.coders.get_table_provincial('substations')
+            # self.grid_ss:gpd.GeoDataFrame=self.coders.get_table_provincial('substations') #canadian substations only
+            self.grid_lines:gpd.GeoDataFrame=self.grid.get_OSM_grid_lines()
         
         self.cutout,self.region_boundary=self.era5_cutout.get_era5_cutout()
+        self.datahandler.refresh()
         self.store_grid_cells=self.datahandler.from_store('cells')
-        # _grid_cells_=self.cutout.grid.overlay(self.region_boundary, how='intersection',keep_geom_type=True)
-        self.region_grid_cells_cap_with_nodes = self.grid.find_grid_nodes_ERA5_cells(self.grid_ss,
-                                                                                       self.store_grid_cells)
-        
+        # self.region_grid_cells_cap_with_nodes = self.grid.find_grid_nodes_ERA5_cells(self.grid_ss,
+        #                                                                                self.store_grid_cells)
+
+        # self.grid_lines=self.grid_lines[self.grid_lines['max_voltage']>=11000]
+        self.store_grid_cells["centroid"] = self.store_grid_cells.apply(lambda row: Point(row["x"], row["y"]), axis=1)
+
+        # Apply to each row to compute the single connection point
+        self.store_grid_cells[["nearest_connection_point", "nearest_distance"]] = self.store_grid_cells.apply(
+            lambda row: self.grid.find_nearest_single_connection_point(row["centroid"], row["geometry"], self.store_grid_cells, self.grid_lines),
+            axis=1, result_type="expand"
+        )
+
         self.datahandler.to_store(self.store_grid_cells,'cells')
-        self.datahandler.to_store(self.grid_ss,'substations')
+        self.datahandler.to_store(self.grid_lines,'lines')
+        # self.datahandler.to_store(self.grid_ss,'substations')
         
-        return self.region_grid_cells_cap_with_nodes
+        return self.store_grid_cells
     '''
     ______________________
     Step 1E:
@@ -174,7 +186,8 @@ class RESources_builder(AttributesParser):
                 self.log.info(f"'CF_IEC2', 'CF_IEC3', 'windspeed_gwa' are already present in the store information.")
                 pass
             else:
-                self.gwa_cells.map_GWA_cells_to_ERA5(memory_resource_limitation)
+                self.gwa_cells.map_GWA_cells_to_ERA5(region_column=self.region_column,
+                                                     memory_resource_limitation=memory_resource_limitation)
             
         elif self.resource_type=='solar': 
             # Not activated for solar resources yet as the high resolution data processing is computationally expensive and the data contrast for solar doesn't provide satisfactory incentive for that.
@@ -260,13 +273,14 @@ class RESources_builder(AttributesParser):
                                                                                                  self.vis_dir, 
                                                                                                  self.wcss_tolerance,
                                                                                                  self.resource_type,
-                                                                                                 [f'LCOE_{self.resource_type}', f'potential_capacity_{self.resource_type}']
-                                                                                                #  [f'lcoe_{self.resource_type}', f'potential_capacity_{self.resource_type}']
+                                                                                                 self.region_column,
+                                                                                                [f'lcoe_{self.resource_type}', f'potential_capacity_{self.resource_type}']
                                                                                                  )
         
         self.cell_cluster_gdf, self.dissolved_indices = cluster.create_cells_Union_in_clusters(self.ERA5_cells_cluster_map, 
                                                                                                self.region_optimal_k_df,
-                                                                                               self.resource_type)
+                                                                                               self.resource_type,
+                                                                                               self.region_column,)
         
         self.cell_cluster_gdf['Operational_life'] = self.resource_disaggregation_config.get('Operational_life', 20)
         
@@ -301,7 +315,8 @@ class RESources_builder(AttributesParser):
         self.cluster_ts_df=self.timeseries.get_cluster_timeseries(self.cell_cluster_gdf,
                                 # self.cells_timeseries[self.resource_type],
                                 self.cells_timeseries,
-                               self.dissolved_cell_indices_df)
+                               self.dissolved_cell_indices_df,
+                               self.region_column)
         return self.cluster_ts_df
 
     # _________________________________________________________________________________
@@ -330,7 +345,7 @@ class RESources_builder(AttributesParser):
 
     def build(self,
                        select_top_sites:Optional[bool]=True,
-                       use_pypsa_buses:Optional[bool]=True,
+                       use_pypsa_buses:Optional[bool]=False,
                        memory_resource_limitation:Optional[bool]=True):
         """
         Execute the specific module logic for the given resource type ('solar' or 'wind').
@@ -343,7 +358,7 @@ class RESources_builder(AttributesParser):
         self.get_CF_timeseries()
         self.extract_weather_data()
         self.update_gwa_scaled_params(self.memory_resource_limitation)
-        self.find_grid_nodes(use_pypsa_buses)
+        self.find_grid_nodes(use_pypsa_buses=False)
         self.score_cells()
         self.get_clusters()
         self.get_cluster_timeseries()
@@ -512,9 +527,9 @@ class RESources_builder(AttributesParser):
             remaining_capacity:float = resource_max_capacity * 1000 - top_sites['potential_capacity'].sum()
 
             if remaining_capacity > 0:
-                
+                if not selected_additional_sites.empty:
                 # selected_additional_sites['capex'] = capex* remaining_capacity
-                print(f"\n!! Note: The Last cluster ({selected_additional_sites.index[-1]}) originally had {round(selected_additional_sites['potential_capacity'].iloc[0] / 1000,2)} GW potential capacity."
+                    print(f"\n!! Note: The Last cluster ({selected_additional_sites.index[-1]}) originally had {round(selected_additional_sites['potential_capacity'].iloc[0] / 1000,2)} GW potential capacity."
                     f"To fit the maximum capacity investment of {resource_max_capacity} GW, it has been adjusted to {round(remaining_capacity / 1000,2)} GW\n")
                 
                 selected_additional_sites['potential_capacity'] = remaining_capacity

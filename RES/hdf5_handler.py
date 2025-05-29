@@ -6,6 +6,7 @@ from shapely.geometry.base import BaseGeometry
 from pathlib import Path
 import warnings
 
+    
 class DataHandler:
     def __init__(self,
                  hdf_file_path:Path=None):
@@ -47,13 +48,15 @@ class DataHandler:
             raise TypeError(">> to be stored 'data' must be a DataFrame or GeoDataFrame.")
 
         self.data_new = data.copy()
+        self.data_new = self.data_new.loc[:, ~self.data_new.columns.duplicated()]  # Drop dupes
+
 
         # Convert all geometry-type columns to WKT
         for col in self.data_new.columns:
             if self.data_new[col].apply(lambda x: isinstance(x, BaseGeometry)).any():
                 print(f">> Converting geometry column '{col}' to WKT")
                 self.data_new[col] = self.data_new[col].apply(lambda x: dumps(x) if isinstance(x, BaseGeometry) else x)
-
+        # """
         store = pd.HDFStore(self.store, mode='a')
 
         try:
@@ -64,7 +67,7 @@ class DataHandler:
                 self.data_ext = store.get(key)
 
                 # Merge: update overlapping data and add new columns
-                self.data_ext.update(self.data_new)  # updates overlapping values
+                # self.data_ext.update(self.data_new)  # updates overlapping values
 
                 # Add any new columns from new data
                 new_cols = self.data_new.columns.difference(self.data_ext.columns)
@@ -74,13 +77,38 @@ class DataHandler:
                 # Save the updated + extended DataFrame
                 self.data_ext.to_hdf(self.store, key=key)
                 print(f">> Updated and extended '{key}' saved to {self.store}")
-
         finally:
             store.close()
+        # """
+  
+        # with pd.HDFStore(self.store, mode='a') as store:
+        #         if key not in store or force_update:
+        #             self.data_new.to_hdf(store, key=key)
+        #             print(f">> Data saved to {self.store} with key '{key}'")
+        #         else:
+        #             self.data_ext = store.get(key)
+        #             self.data_ext = self.data_ext.loc[:, ~self.data_ext.columns.duplicated()]
 
+        #             # Align columns
+        #             all_cols = self.data_ext.columns.union(self.data_new.columns)
+        #             self.data_ext = self.data_ext.reindex(columns=all_cols)
+        #             # Drop duplicate columns in both dataframes if present
+        #             self.data_new = self.data_new.loc[:, ~self.data_new.columns.duplicated()]
+        #             self.data_new = self.data_new.reindex(columns=all_cols)
 
+        #             # Combine rows: update overlapping indices with new data
+        #             updated = self.data_ext.copy()
+        #             overlapping_indices = self.data_ext.index.intersection(self.data_new.index)
+        #             updated.loc[overlapping_indices] = self.data_new.loc[overlapping_indices]
 
+        #             # Add new rows
+        #             new_indices = self.data_new.index.difference(self.data_ext.index)
+        #             new_rows = self.data_new.loc[new_indices]
+        #             updated = pd.concat([updated, new_rows])
 
+        #             updated.to_hdf(store, key=key)
+        #             print(f">> Updated and extended '{key}' saved to {self.store}")
+        
 
     def from_store(self, 
                    key: str):
@@ -102,6 +130,13 @@ class DataHandler:
             # Rename 'geometry' back to 'geometry' and convert WKT to geometry if applicable
             if 'geometry' in self.data.columns :
                 if not isinstance(self.data['geometry'].iloc[0], BaseGeometry):
+                    def safe_wkt_load(val):
+                        if isinstance(val, str):
+                            try:
+                                return loads(val)
+                            except Exception:
+                                return None
+                        return None
                     self.data['geometry'] = self.data['geometry'].apply(loads)
                 return gpd.GeoDataFrame(self.data, geometry='geometry', crs='EPSG:4326')
 
@@ -110,8 +145,14 @@ class DataHandler:
                 print(">>> 'timeseries' key access suggestions: use '.solar' to access Solar-timeseries and '.wind' for Wind-timeseries.")
             
             return self.data
-
-
+    def refresh(self):
+        """
+        Refresh the internal store path and clear any cached data.
+        Use this if the underlying HDF5 file has changed externally.
+        """
+        # Optionally, re-initialize the store path if needed
+        self.store = Path(self.store)
+        
     @staticmethod
     def show_tree(store_path,
                   show_dataset:bool=False):

@@ -137,10 +137,11 @@ class Timeseries(ERA5Cutout):
         """
         
         # Step 1.1: Get the Atlite's Cutout Object loaded
-        self.log.info(f">> Loading ERA5 Cutout")
+        self.log.info(">> Loading ERA5 Cutout")
         self.cutout,self.region_boundary=self.get_era5_cutout()
         self.region_grid_cells = self.cutout.grid.overlay(self.region_boundary, how='intersection',keep_geom_type=True)
-        self.region_grid_cells = utils.assign_cell_id(self.region_grid_cells,'Region',self.site_index)
+        # self.region_grid_cells = utils.assign_cell_id(self.region_grid_cells,'Region',self.site_index)
+        self.region_grid_cells = utils.assign_cell_id(self.region_grid_cells,'Country',self.site_index)
         
         # Step 1.2: Get the region Grid Cells from Store. Ideally these cells should have same resolution as the Cutout (the indices are prepared from x,y coords and Region names)
         
@@ -191,7 +192,8 @@ class Timeseries(ERA5Cutout):
         self.log.info(f">> Loading ERA5 Cutout")
         self.cutout,self.region_boundary=self.get_era5_cutout()
         self.region_grid_cells = self.cutout.grid.overlay(self.region_boundary, how='intersection',keep_geom_type=True)
-        self.region_grid_cells = utils.assign_cell_id(self.region_grid_cells,'Region',self.site_index)
+        # self.region_grid_cells = utils.assign_cell_id(self.region_grid_cells,'Region',self.site_index)
+        self.region_grid_cells = utils.assign_cell_id(self.region_grid_cells,'Country',self.site_index)
         
         # Step 1.2: Get the region Grid Cells from Store. Ideally these cells should have same resolution as the Cutout (the indices are prepared from x,y coords and Region names)
         
@@ -273,7 +275,8 @@ class Timeseries(ERA5Cutout):
     def get_cluster_timeseries(self,
                                all_clusters:pd.DataFrame,
                                cells_timeseries:pd.DataFrame,
-                               dissolved_indices:pd.DataFrame):
+                               dissolved_indices:pd.DataFrame,
+                               region_col_name:str):
 
         # Initialize an empty list to store the results
         results = []
@@ -281,7 +284,7 @@ class Timeseries(ERA5Cutout):
         # Iterate through each cluster
         for cluster, row in all_clusters.iterrows():
             # Extract the cluster's region and cluster number
-            region = row['Region']
+            region = row[region_col_name]
             cluster_no = row['Cluster_No']  # Dynamically fetch the cluster number from the row
             
             # Get the cell indices for the cluster based on the region and cluster number

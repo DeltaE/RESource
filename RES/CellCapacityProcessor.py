@@ -38,7 +38,8 @@ class CellCapacityProcessor(LandContainer,
         
         (self.utility_pv_cost, 
         self.land_based_wind_cost, 
-        self.bess_cost)= self.atb.pull_data()
+        #self.bess_cost
+        )= self.atb.pull_data()
         
         ## Initiate the Store and Datahandler (interfacing with the Store)
         self.datahandler=DataHandler(self.store)
@@ -220,7 +221,7 @@ class CellCapacityProcessor(LandContainer,
         self.log.info(">> Saving to the local store (as HDF5 file)")
         # self.datahandler.save_to_hdf(era5_cell_capacity,'cells')
         
-        # self.datahandler.to_store(self.provincial_cells,'cells')
+        self.datahandler.to_store(self.provincial_cells,'cells')
      
         return self.resources_nt
 
