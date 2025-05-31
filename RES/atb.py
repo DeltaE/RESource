@@ -50,7 +50,7 @@ class NREL_ATBProcessor(AttributesParser):
             (atb_cost['core_metric_case'] == 'Market') &
             (atb_cost['techdetail'] == self.config['capacity_disaggregation']['solar']['NREL_ATB_type']) &
             (atb_cost['crpyears'] == '20') &
-            (atb_cost['core_metric_variable'] == 2022)
+            (atb_cost['core_metric_variable'] == 2024)
         )
 
         utility_pv_cost = atb_cost[pv_cost_mask].sort_values('core_metric_variable')
