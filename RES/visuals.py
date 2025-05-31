@@ -32,6 +32,90 @@ def size_for_legend(mw):
 # file_handler = log.FileHandler(log_name)
 # log.getLogger().addHandler(file_handler)
 
+import RES.utility as utils
+def plot_resources_scatter_metric_combined(
+    solar_clusters,
+    wind_clusters,
+    lcoe_threshold= 200,
+    save_to_root='vis'
+):
+    import matplotlib.pyplot as plt
+    from matplotlib.ticker import MultipleLocator, FuncFormatter
+    import matplotlib.lines as mlines
+    import numpy as np
+    from pathlib import Path
+
+    # Filter by LCOE threshold
+    solar = solar_clusters[solar_clusters['lcoe'] <= lcoe_threshold]
+    wind = wind_clusters[wind_clusters['lcoe'] <= lcoe_threshold]
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    # Solar scatter
+    solar_scatter = ax.scatter(
+        solar['CF_mean'],
+        solar['lcoe'],
+        s=solar['potential_capacity'] / 100,
+        alpha=0.7,
+        c='darkorange',
+        edgecolors='w',
+        linewidth=0.5,
+        label='Solar'
+    )
+
+    # Wind scatter
+    wind_scatter = ax.scatter(
+        wind['CF_mean'],
+        wind['lcoe'],
+        s=wind['potential_capacity'] / 100,
+        alpha=0.7,
+        c='navy',
+        edgecolors='w',
+        linewidth=0.5,
+        label='Wind'
+    )
+
+    ax.set_xlabel('Average Capacity Factor', fontweight='bold')
+    ax.set_ylabel('Score ($/MWh)', fontweight='bold')
+    ax.set_title('CF vs Score for Solar and Wind resources', fontweight='bold', fontsize=16)
+
+    ax.xaxis.set_major_locator(MultipleLocator(0.02))
+    ax.xaxis.set_minor_locator(MultipleLocator(0.01))
+    ax.xaxis.set_major_formatter(FuncFormatter(lambda x, _: f'{x:.0%}'))
+
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+
+    # Bubble size legend
+    size_labels = [1, 5, 10]  # GW
+    size_values = [s * 1000 for s in size_labels]
+    legend_handles = [
+        mlines.Line2D([], [], color='gray', marker='o', linestyle='None',
+                      markersize=np.sqrt(size / 100), alpha=0.7, label=f'{label} GW')
+        for size, label in zip(size_values, size_labels)
+    ]
+    # Resource legend
+    resource_handles = [
+        mlines.Line2D([], [], color='darkorange', marker='o', linestyle='None', label='Solar'),
+        mlines.Line2D([], [], color='navy', marker='o', linestyle='None', label='Wind')
+    ]
+
+    ax.legend(handles=legend_handles + resource_handles, loc='upper right', framealpha=0, prop={'size': 12, 'weight': 'bold'})
+
+    ax.grid(True, ls=":", linewidth=0.3)
+    fig.text(0.5, -0.04,
+         "Note: The Scoring is calculated to reflect Dollar investment required to get an unit of Energy yield (MWh). "
+         "\nTo reflect market competitiveness and incentives, the Score ($/MWh) needs financial adjustment factors to be considered on top of it.",
+         ha='center', va='center', fontsize=9.5, color='gray', bbox=dict(facecolor='None', linewidth=0.2, edgecolor='grey', boxstyle='round,pad=0.5'))
+
+    plt.tight_layout()
+    fig.patch.set_alpha(0)
+    save_to_root = Path(save_to_root)
+    save_to_root.mkdir(parents=True, exist_ok=True)
+    file_path = save_to_root / "Resources_CF_vs_LCOE_combined.png"
+    plt.savefig(file_path, dpi=600, transparent=True)
+    utils.print_update(level=1, message=f"Combined CF vs LCOE plot created and saved to: {file_path}")
+    # return fig
 
 
 def plot_resources_scatter_metric(resource_type:str,
@@ -128,6 +212,7 @@ def plot_resources_scatter_metric(resource_type:str,
     
     plt.savefig(file_path, dpi=600, transparent=True)
     utils.print_update(level=1,message=f"CF vs LCOE plot for {resource_type} resources created and saved to : {file_path}")
+    return fig
     
 def plot_with_matched_cells(ax, cells: gpd.GeoDataFrame, filtered_cells: gpd.GeoDataFrame, column: str, cmap: str,
                             background_cell_linewidth: float, selected_cells_linewidth: float,font_size:int=9):
