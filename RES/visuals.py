@@ -19,7 +19,7 @@ from matplotlib import lines as mlines
 
 from pathlib import Path
 import RES.utility as utils
-
+from matplotlib.patches import RegularPolygon
 
 log.basicConfig(level=log.INFO, format='%(asctime)s - %(levelname)s - %(message)s' , datefmt='%Y-%m-%d %H:%M:%S')
 log_name=f'workflow/log/linking_vis.txt'
@@ -32,7 +32,42 @@ def size_for_legend(mw):
 # file_handler = log.FileHandler(log_name)
 # log.getLogger().addHandler(file_handler)
 
-import RES.utility as utils
+from matplotlib.patches import RegularPolygon
+
+def add_compass_to_plot(ax, x_offset=0.76, y_offset=0.92, size=14, triangle_size=0.02):
+    """
+    Adds a simple upward-pointing triangle with an 'N' label below it as a North indicator.
+
+    Parameters:
+        ax (matplotlib.axes.Axes): The plot axes to annotate.
+        x_offset (float): X position in axes fraction coordinates.
+        y_offset (float): Y position in axes fraction coordinates.
+        size (int): Font size for the 'N' label.
+        triangle_size (float): Radius of the triangle (in axes fraction units).
+    """
+    # Add upward triangle (north arrow)
+    triangle = RegularPolygon(
+        (x_offset, y_offset),           # center of triangle
+        numVertices=3,
+        radius=triangle_size,
+        orientation=0,                  # pointing up
+        transform=ax.transAxes,
+        facecolor='grey',
+        edgecolor='k',
+        lw=0.1
+    )
+    ax.add_patch(triangle)
+
+    # Add "N" label slightly below the triangle
+    ax.text(x_offset, y_offset - triangle_size * 1.5, 'N',
+            transform=ax.transAxes,
+            ha='center', va='center',
+            fontsize=size, fontweight='bold',
+            color='grey')
+
+
+    
+
 def plot_resources_scatter_metric_combined(
     solar_clusters,
     wind_clusters,
