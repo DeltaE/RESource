@@ -20,6 +20,7 @@ class GWACells(GADMBoundaries):
     def __post_init__(self):
         super().__post_init__()
         self.gwa_config = self.get_gwa_config()
+        self.region_mapping=self.get_region_mapping()
         self.datahandler = DataHandler(self.store)
 
     def prepare_GWA_data(self,
@@ -37,8 +38,6 @@ class GWACells(GADMBoundaries):
 
         # Load configuration parameters
         self.gwa_datafields = self.gwa_config.get('datafields', {})
-        self.gwa_country_codes:dict=self.gwa_config.get('country_code_mapping', {})
-        self.gwa_country_code = self.gwa_country_codes.get(region_short_code)
         self.gwa_rasters = self.gwa_config.get('rasters', {})
         self.gwa_sources = self.gwa_config.get('sources', {})
         self.gwa_root = Path(self.gwa_config.get('root', 'data/downloaded_data/GWA'))
@@ -48,6 +47,7 @@ class GWACells(GADMBoundaries):
 
         # Check for existence and download if necessary
         for key, raster_name in self.gwa_rasters.items():
+            self.gwa_country_code=self.region_mapping[region_short_code].get('GWA_country_code')
             raster_name=raster_name.replace("GWA_country_code",  self.gwa_country_code)
             raster_path = self.gwa_root / raster_name
             if not raster_path.exists():
