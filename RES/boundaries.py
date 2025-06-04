@@ -78,15 +78,25 @@ class GADMBoundaries(AttributesParser):
                 self.boundary_country.to_file(self.country_file, driver='GeoJSON')
                 self.log.info(f">> GADM data saved to {self.country_file}.")
         
-                self.boundary_country = self.boundary_country[['NAME_0', 'NAME_1', 'NAME_2', 'geometry']].rename(columns={
-                        'NAME_0': 'Country', 'NAME_1': 'region', 'NAME_2': 'Region'
-                    })
-            
-            # if self.admin_level==1:
-            #     self.boundary_country_aggr = self.boundary_country.dissolve(by="Country")  
-            #     self.boundary_country_aggr.reset_index(inplace=True)
-            #     self.boundary_country = self.boundary_country_aggr[['Country', 'geometry']]
-            
+            # Handle column names separately for flexibility
+            columns_to_keep = ['geometry']
+            rename_dict = {}
+
+            if 'NAME_0' in self.boundary_country.columns:
+                columns_to_keep.append('NAME_0')
+                rename_dict['NAME_0'] = 'Country'
+            if 'NAME_1' in self.boundary_country.columns:
+                columns_to_keep.append('NAME_1')
+                rename_dict['NAME_1'] = 'Region'
+            if 'NAME_2' in self.boundary_country.columns:
+                columns_to_keep.append('NAME_2')
+                rename_dict['NAME_2'] = 'Districts'
+
+            # Ensure geometry is last for GeoPandas compatibility
+            columns_to_keep = [col for col in columns_to_keep if col != 'geometry'] + ['geometry']
+
+            self.boundary_country = self.boundary_country[columns_to_keep].rename(columns=rename_dict)
+                
             return self.boundary_country
 
         except Exception as e:

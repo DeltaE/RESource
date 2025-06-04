@@ -53,7 +53,6 @@ region_mapping:
     land_area_mi2: 5,333
     percentage_national_land_area: "100%"
     timezone_convert: 'Etc/GMT-1' # Central European Time (CET)
-    # region_mapping: {}
     GWA_country_code: 'MNE'
 
   'MK': 
@@ -62,7 +61,6 @@ region_mapping:
     land_area_mi2: 9,928
     percentage_national_land_area: "100%"
     timezone_convert: 'Etc/GMT-1' # Central European Time (CET)
-    # region_mapping: {}
     GWA_country_code: 'MKD'
 
   'RS': 
@@ -71,8 +69,8 @@ region_mapping:
     land_area_mi2: 34,116
     percentage_national_land_area: "100%"
     timezone_convert: 'Etc/GMT-1' # Central European Time (CET)
-    # region_mapping: {}
     GWA_country_code: 'SRB'
+
 
 GADM:
   root: data/downloaded_data/GADM
@@ -188,8 +186,6 @@ cutout:
 GWA:
   root: 'data/downloaded_data/GWA'
   datafields: ['windspeed_gwa','CF_IEC3' ]
-  country_code_mapping:
-      AL: 'ALB'
   sources:
     windspeed_gwa: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/wind-speed/100' # replace GWA_country_code with country code
     CF_IEC1: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/'  #rotor dia 112m
