@@ -9,6 +9,7 @@ from RES.osm import OSMData
 from shapely.ops import nearest_points
 from shapely.geometry.base import BaseGeometry
 from shapely.geometry import LineString, MultiLineString
+
 @dataclass
 class GridNodeLocator(AttributesParser):
     
@@ -50,61 +51,69 @@ class GridNodeLocator(AttributesParser):
         return nearest_station_code, distance_km
 
 
+
+
     def find_nearest_single_connection_point(self,
-                                             cell_centroid, 
-                                             cell_geometry, 
-                                             cell_gdf, 
-                                             line_gdf):
+        cell_centroid, 
+        cell_geometry, 
+        cell_gdf, 
+        line_gdf
+    ):
         """
         For a given cell centroid and its geometry:
         - If any lines intersect the cell, return the nearest point on them.
         - Otherwise, find the nearest cell with intersecting lines and return the nearest point on its lines.
+        
         Returns: (nearest_point, distance)
         """
-        # 1. Lines intersecting this cell
+        # 1. Try to find lines intersecting this cell
         intersecting_lines = line_gdf[line_gdf.geometry.intersects(cell_geometry)].copy()
 
         if not intersecting_lines.empty:
-            # Clip to the cell geometry
             intersecting_lines["geometry"] = intersecting_lines.geometry.intersection(cell_geometry)
             lines_to_search = intersecting_lines
         else:
-            # 2. Find nearest neighbor with intersecting lines
-            # Filter cells that have at least one intersecting line
-            candidate_cells = cell_gdf[cell_gdf.geometry.apply(lambda geom: not line_gdf[line_gdf.geometry.intersects(geom)].empty)]
+            # 2. Find nearest cell with intersecting lines
+            cell_gdf = cell_gdf.copy()
+            cell_gdf["has_intersection"] = cell_gdf.geometry.apply(
+                lambda geom: line_gdf.geometry.intersects(geom).any()
+            )
 
-            # Find the closest such cell
+            candidate_cells = cell_gdf[cell_gdf["has_intersection"]].copy()
+            if candidate_cells.empty:
+                raise RuntimeError("No candidate cells with intersecting lines found.")
+
+            # Find nearest such cell
             candidate_cells["distance"] = candidate_cells.geometry.centroid.distance(cell_centroid)
-            nearest_cell = candidate_cells.loc[candidate_cells["distance"].idxmin()]
+            nearest_geom = candidate_cells.sort_values("distance").geometry.iloc[0]
 
-            # Get intersecting lines for that cell
-            cell_geom = nearest_cell.geometry
-            intersecting_lines = line_gdf[line_gdf.geometry.intersects(cell_geom)].copy()
-            intersecting_lines["geometry"] = intersecting_lines.geometry.intersection(cell_geom)
-            lines_to_search = intersecting_lines
-            lines_to_search = lines_to_search[lines_to_search.geometry.type.isin(['LineString', 'MultiLineString'])]
+            if not isinstance(nearest_geom, BaseGeometry):
+                raise TypeError(f"Expected shapely geometry, got {type(nearest_geom)}")
 
+            # Get intersecting lines for nearest cell
+            intersecting_lines = line_gdf[line_gdf.geometry.intersects(nearest_geom)].copy()
+            intersecting_lines["geometry"] = intersecting_lines.geometry.intersection(nearest_geom)
 
-        # 3. Find the nearest point on those lines
-        # from shapely.geometry import Point
-        # if isinstance(cell_centroid, float):
-        #     cell_centroid = Point(cell_centroid, cell_centroid)
-        # Keep only valid geometries
+            # Keep only line types
+            lines_to_search = intersecting_lines[
+                intersecting_lines.geometry.type.isin(['LineString', 'MultiLineString'])
+            ]
+
+        # 3. Filter valid and non-empty geometries
         lines_to_search = lines_to_search[
-            lines_to_search.geometry.apply(lambda g: isinstance(g, BaseGeometry) and g.is_valid)
+            lines_to_search.geometry.apply(lambda g: isinstance(g, BaseGeometry) and g.is_valid and not g.is_empty)
         ]
+
+        if lines_to_search.empty:
+            raise RuntimeError("No valid geometries to search for nearest point.")
+
+        # 4. Find closest geometry
         distances = lines_to_search.geometry.apply(lambda line: cell_centroid.distance(line))
-        
         nearest_geom = lines_to_search.loc[distances.idxmin(), "geometry"]
 
-        # Check type explicitly
-        if nearest_geom.geom_type not in ["LineString", "MultiLineString"]:
-            raise ValueError(f"Expected LineString/MultiLineString, got {nearest_geom.geom_type}")
-
-        # Handle both cases
+        # 5. Find nearest point on that geometry
         if nearest_geom.geom_type == "LineString":
             nearest_point = nearest_geom.interpolate(nearest_geom.project(cell_centroid))
-
         elif nearest_geom.geom_type == "MultiLineString":
             min_dist = float("inf")
             nearest_point = None
@@ -114,9 +123,10 @@ class GridNodeLocator(AttributesParser):
                 if dist < min_dist:
                     min_dist = dist
                     nearest_point = projected
+        else:
+            raise ValueError(f"Expected LineString or MultiLineString, got {nearest_geom.geom_type}")
 
         distance = cell_centroid.distance(nearest_point)
-        
         return nearest_point, distance
 
 

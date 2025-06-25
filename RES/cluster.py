@@ -238,8 +238,8 @@ def create_cells_Union_in_clusters(
                 f'potential_capacity_{resource_type}': 'sum',
                 f'{region_col_name}': 'first',
                 # 'nearest_station':'first',
-                'nearest_connection_point':'first',
-                'nearest_connection_distance':'first',
+                # 'nearest_connection_point':'first',
+                'nearest_distance':'first',
                 # 'nearest_station_distance_km':'first'
                 }
 
