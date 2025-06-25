@@ -50,11 +50,11 @@ class CellScorer(AttributesParser):
             CRF=self.get_CRF(interest_rate,N)
             dataframe[f'lcoe_{self.resource_type}'] = dataframe.apply(
                 lambda x: self.calculate_total_cost(
-                    # x.get('nearest_station_distance_km', x.get('nearest_connection_distance', 0)),  # km
-                    x.get('nearest_connection_distance', x.get('nearest_connection_point', 0)),  # km
-                    x[f'grid_connection_cost_per_km_{self.resource_type}'],  # m$/km
-                    x[f'tx_line_rebuild_cost_{self.resource_type}'],  # m$/km
-                    x[f'capex_{self.resource_type}']  # m$/MW
+                    # float(x.get('nearest_station_distance_km'),  # km
+                    float(x.get('nearest_distance')), # km
+                    float(x[f'grid_connection_cost_per_km_{self.resource_type}']),  # m$/km
+                    float(x[f'tx_line_rebuild_cost_{self.resource_type}']),  # m$/km
+                    float(x[f'capex_{self.resource_type}'])  # m$/MW
                 ) * CRF / (8760 * x[CF_column] if x[CF_column] > 0 else 1),  # LCOE = Total Cost / Total Energy Produced
                 axis=1  # LCOE in M$/MWh;
             )

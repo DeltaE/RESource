@@ -25,7 +25,7 @@ class GWACells(GADMBoundaries):
 
     def prepare_GWA_data(self,
                          windpseed_min=10,
-                         windpseed_max=20,
+                         windpseed_max=40,
                          region_short_code:Optional[str]=None,
                          memory_resource_limitation:bool=False) -> xr.DataArray:
         """
@@ -48,18 +48,18 @@ class GWACells(GADMBoundaries):
         # Check for existence and download if necessary
         for key, raster_name in self.gwa_rasters.items():
             self.gwa_country_code=self.region_mapping[region_short_code].get('GWA_country_code')
-            raster_name=raster_name.replace("GWA_country_code",  self.gwa_country_code)
-            raster_path = self.gwa_root / raster_name
-            if not raster_path.exists():
+            self.raster_name=raster_name.replace("GWA_country_code",  self.gwa_country_code)
+            self.raster_path = self.gwa_root / raster_name
+            if not self.raster_path.exists():
                 generic_source_url = self.gwa_sources[key]
-                region_source_url = generic_source_url.replace("GWA_country_code",  self.gwa_country_code)
-                self.log.info(f">> Downloading {self.gwa_sources[key]} from {region_source_url}")
-                self.download_file(region_source_url, raster_path)
+                self.region_source_url = generic_source_url.replace("GWA_country_code",  self.gwa_country_code)
+                self.log.info(f">> Downloading {key} from {self.region_source_url}")
+                self.download_file(self.region_source_url, self.raster_path)
 
             try:
                 # Process each raster using a streamlined approach
                 data = (
-                    rxr.open_rasterio(raster_path)
+                    rxr.open_rasterio(self.raster_path)
                     .rio.clip_box(**self.bounding_box)
                     .rename(key)
                     .drop_vars(['band', 'spatial_ref'])
@@ -144,7 +144,7 @@ class GWACells(GADMBoundaries):
         self.log.info(f">> Mapping {len(self.gwa_cells_gdf)} GWA Cells to {len(_era5_cells_)} ERA5 Cells...")
 
         results = []  # List to store results for each region
-        self.log.info(">> Calculating aggregated values for ERA5 Cell's...")
+        self.log.info(">> Updating aggregated values for ERA5 Cell's...")
         
         for region in _era5_cells_[region_column].unique():
             _era5_cells_region = _era5_cells_[_era5_cells_[region_column] == region]
@@ -159,7 +159,7 @@ class GWACells(GADMBoundaries):
             regional_df=_data_.loc[:, selected_columns]
             
             numeric_cols = regional_df.select_dtypes(include='number') 
-            regional_mapped_gwa_cells_aggr = numeric_cols.groupby(regional_df['cell']).mean() # Aggregateds he numeric columns data via mean
+            regional_mapped_gwa_cells_aggr = numeric_cols.groupby(regional_df['cell']).mean() # Aggregates he numeric columns data via mean
             
             # Store mapped GWA cells in results list
             results.append(regional_mapped_gwa_cells_aggr)

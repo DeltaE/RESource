@@ -188,17 +188,17 @@ GWA:
   datafields: ['windspeed_gwa','CF_IEC3' ]
   sources:
     windspeed_gwa: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/wind-speed/100' # replace GWA_country_code with country code
-    CF_IEC1: 'https://globalwindatlas.info/api/gis/country/CAN/capacity-factor_IEC1/'  #rotor dia 112m
+    CF_IEC1: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/capacity-factor_IEC1/'  #rotor dia 112m
     CF_IEC2: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/capacity-factor_IEC2' #rotor dia 126m
     CF_IEC3: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/capacity-factor_IEC3'   #rotor dia 136m
-    IEC_Class_fatugue_loads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-fatigue-loads-incl-wake/'
-    IEC_Class_ExLoads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-extreme-loads/' #IEC_Class_ExtremeLoads
+    # IEC_Class_fatugue_loads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-fatigue-loads-incl-wake/'
+    # IEC_Class_ExLoads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-extreme-loads/' #IEC_Class_ExtremeLoads
   rasters:
     windspeed_gwa: 'GWA_country_code_wspd_100m.tif' # replace GWA_country_code with country code
     CF_IEC1: 'GWA_country_code_capacity-factor_IEC1.tif'
     CF_IEC2: 'GWA_country_code_capacity-factor_IEC2.tif'
     CF_IEC3: 'GWA_country_code_capacity-factor_IEC3.tif'
-    IEC_Class_ExLoads: 'GWA_country_code_IEC-class-extreme-loads.tif'
+    # IEC_Class_ExLoads: 'GWA_country_code_IEC-class-extreme-loads.tif'
   filter:
     windspeed_low: 7 # meter/s
     windspeed_high: 60 # meter/s # The extreme wind speed above which the wind turbine is not expected to operate.
@@ -217,8 +217,8 @@ capacity_disaggregation:
     cell_capacity_tolerance: 1 #MW
     WCSS_tolerance: 0.08 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
     buffer:
-      aeroway: 1000 # m
-      conserved_lands: 2000 #m
+      aeroway: 500 # m
+      conserved_lands: 500 #m
     
   wind:
     max_capacity: 20  # GW
@@ -256,8 +256,8 @@ capacity_disaggregation:
             manufacturer: 'Senvion/REpower'
             config: 'data/downloaded_data/OEDB/3.2M114_NES.yaml'
     buffer:
-      aeroway: 1000 # m
-      conserved_lands: 1000 #m
+      aeroway: 500 # m
+      conserved_lands: 500 #m
   # bess:
   #   max_capacity : 10 #GW
   #   cost_data: 'data/NREL/bess_LI_6hr_cost_moderate_NREL_ATB2024.csv'

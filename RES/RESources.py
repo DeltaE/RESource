@@ -51,7 +51,7 @@ class RESources_builder(AttributesParser):
         self.scorer=CellScorer(**self.required_args)
         self.gwa_cells=GWACells(**self.required_args)
         self.reults_save_to=Path('results/linking')
-        self.region_column='Country'
+        self.region_column='Region'
         
         # Snapshot (range of of the temporal data)
         (
@@ -166,7 +166,7 @@ class RESources_builder(AttributesParser):
             lambda row: self.grid.find_nearest_single_connection_point(row["centroid"], row["geometry"], self.store_grid_cells, self.grid_lines),
             axis=1, result_type="expand"
         )
-
+        self.store_grid_cells.drop(columns=["nearest_connection_point","centroid"], inplace=True) #temp
         self.datahandler.to_store(self.store_grid_cells,'cells')
         self.datahandler.to_store(self.grid_lines,'lines')
         # self.datahandler.to_store(self.grid_ss,'substations')
@@ -216,7 +216,7 @@ class RESources_builder(AttributesParser):
         Scores the Cells based on calculated LCOE ($/MWh). </br>
         Wrapper of the _.get_cell_score()_ method of **_CellScorer_** object.
         """
-                
+        self.datahandler.refresh()
         self.not_scored_cells=self.datahandler.from_store('cells')
         self.scored_cells = self.scorer.get_cell_score(self.not_scored_cells,f'{self.resource_type}_CF_mean')
         
@@ -280,7 +280,8 @@ class RESources_builder(AttributesParser):
         self.cell_cluster_gdf, self.dissolved_indices = cluster.create_cells_Union_in_clusters(self.ERA5_cells_cluster_map, 
                                                                                                self.region_optimal_k_df,
                                                                                                self.resource_type,
-                                                                                               self.region_column,)
+                                                                                               self.region_column
+                                                                                               )
         
         self.cell_cluster_gdf['Operational_life'] = self.resource_disaggregation_config.get('Operational_life', 20)
         
@@ -483,7 +484,7 @@ class RESources_builder(AttributesParser):
         sites_timeseries:pd.DataFrame,
         resource_max_capacity:float,
         )-> Tuple[Union[gpd.GeoDataFrame, pd.DataFrame], pd.DataFrame]:
-        print(f">>> Selecting TOP Sites to for {resource_max_capacity} GW Capacity Investment in BC...")
+        print(f">>> Selecting TOP Sites to for {resource_max_capacity} GW Capacity Investment...")
         """
         Select the top sites based on potential capacity and a maximum resource capacity limit.
 
@@ -495,7 +496,7 @@ class RESources_builder(AttributesParser):
         - selected_sites: GeoDataFrame with the selected top sites.
         """
         print(f"{'_'*100}")
-        print(f"Selecting the Top Ranked Sites to invest in {resource_max_capacity} GW PV in BC")
+        print(f"Selecting the Top Ranked Sites to invest in {resource_max_capacity} GW PV")
         print(f"{'_'*100}")
      
         # Initialize variables

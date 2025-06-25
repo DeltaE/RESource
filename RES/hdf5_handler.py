@@ -2,14 +2,21 @@ import pandas as pd
 import geopandas as gpd
 import h5py
 from shapely.wkt import loads, dumps
+from shapely.wkt import dumps as wkt_dumps
+from shapely.geometry import base
 from shapely.geometry.base import BaseGeometry
 from pathlib import Path
 import warnings
+from colorama import Fore, Style
+from typing import Optional
+import RES.utility as utils
+import tables
 
-    
 class DataHandler:
     def __init__(self,
-                 hdf_file_path:Path=None):
+                 hdf_file_path:Path=None,
+                 silent_initiation:Optional[bool]=True,
+                 show_structure:Optional[bool]=False):
         """
         Initialize the DataHandler with the file path.
 
@@ -17,142 +24,132 @@ class DataHandler:
         """
         try:
             if hdf_file_path is None:
-                warnings.warn(">> Store has not been set during initialization. Please define the store path during applying DataHandler methods")
+                warnings.warn(f">> Store has not been set during initialization. Please define the store path during applying DataHandler methods")
             else:
                 self.store = Path(hdf_file_path)
-                # print(f">> Store initialized with the given path: {hdf_file_path}")
+                if not silent_initiation:
+                    utils.print_update(level=1,message=f">> Store initialized with the given path: {hdf_file_path}")
+                if show_structure:
+                    self.show_tree(self.store)
                 
         except Exception as e:
             warnings.warn(f"Error reading file: {e}")
-
-
+               
     def to_store(self,
-                data: pd.DataFrame | gpd.GeoDataFrame, 
-                key: str,
-                hdf_file_path: Path = None,
-                force_update: bool = False):
+                 data: pd.DataFrame | gpd.GeoDataFrame, 
+                 key: str,
+                 hdf_file_path:Path=None,
+                 force_update: bool = False):
         """
         Save the DataFrame or GeoDataFrame to an HDF5 file.
-        Automatically converts any geometry-type columns to WKT strings.
-        Updates existing data, adds new columns if needed.
 
         :param data: The DataFrame or GeoDataFrame to save.
         :param key: Key for saving the DataFrame to the HDF5 file.
-        :param hdf_file_path: Optional path to the HDF5 file.
-        :param force_update: If True, overwrite the existing data at the given key.
+        :param force_update: If True, force update the data even if it exists.
         """
         if hdf_file_path is not None:
             self.store = Path(hdf_file_path)
-
-        if not isinstance(data, (pd.DataFrame, gpd.GeoDataFrame)):
+        
+        if isinstance(data, (pd.DataFrame, gpd.GeoDataFrame)):
+            self.data_new = data.copy()
+        # Proceed with saving to HDF5
+        else:
             raise TypeError(">> to be stored 'data' must be a DataFrame or GeoDataFrame.")
 
-        self.data_new = data.copy()
-        self.data_new = self.data_new.loc[:, ~self.data_new.columns.duplicated()]  # Drop dupes
-
-
-        # Convert all geometry-type columns to WKT
-        for col in self.data_new.columns:
-            if self.data_new[col].apply(lambda x: isinstance(x, BaseGeometry)).any():
-                print(f">> Converting geometry column '{col}' to WKT")
-                self.data_new[col] = self.data_new[col].apply(lambda x: dumps(x) if isinstance(x, BaseGeometry) else x)
-        # """
-        store = pd.HDFStore(self.store, mode='a')
+        store = pd.HDFStore(self.store, mode='a')  # Open store in append mode ('a')
 
         try:
             if key not in store or force_update:
+                # Handle GeoDataFrame geometry if present
+                # if 'geometry' in self.data_new.columns:
+                #     if isinstance(self.data_new['geometry'].iloc[0], BaseGeometry):
+                #         self.data_new['geometry'] = self.data_new['geometry'].apply(dumps)
+
+                # Convert any columns containing geometry objects to WKT strings
+                for col in self.data_new.columns:
+                    if self.data_new[col].apply(lambda x: isinstance(x, BaseGeometry)).any():
+                        self.data_new[col] = self.data_new[col].apply(lambda x: wkt_dumps(x) if isinstance(x, BaseGeometry) else str(x))
+                    elif self.data_new[col].apply(lambda x: isinstance(x, str) and x.startswith('POINT')).any():
+                        # Likely a geometry string: cast to plain string to avoid PyTables issues
+                        self.data_new[col] = self.data_new[col].astype(str)
+
+                # Save the modified data to HDF5
                 self.data_new.to_hdf(self.store, key=key)
-                print(f">> Data saved to {self.store} with key '{key}'")
+                print(f">> Data (GeoDataFrame/DataFrame) saved to {self.store} with key '{key}'")
             else:
+                # Read existing data from HDF5
                 self.data_ext = store.get(key)
 
-                # Merge: update overlapping data and add new columns
-                # self.data_ext.update(self.data_new)  # updates overlapping values
+                # Add new columns to the existing DataFrame if not present
+                for column in self.data_new.columns:
+                    if not data.empty and column not in self.data_ext.columns:
+                        self.data_ext[column] = self.data_new[column]
 
-                # Add any new columns from new data
-                new_cols = self.data_new.columns.difference(self.data_ext.columns)
-                for col in new_cols:
-                    self.data_ext[col] = self.data_new[col]
-
-                # Save the updated + extended DataFrame
-                self.data_ext.to_hdf(self.store, key=key)
-                print(f">> Updated and extended '{key}' saved to {self.store}")
+                for col in self.data_ext.columns:
+                    if self.data_ext[col].apply(lambda x: isinstance(x, BaseGeometry)).any():
+                        self.data_ext[col] = self.data_ext[col].apply(lambda x: wkt_dumps(x) if isinstance(x, BaseGeometry) else str(x))
+                    elif self.data_ext[col].apply(lambda x: isinstance(x, str) and x.startswith('POINT')).any():
+                        # Likely a geometry string: cast to plain string to avoid PyTables issues
+                        self.data_ext[col] = self.data_ext[col].astype(str)
+                
+                # Update the existing DataFrame in HDF5
+                self.updated_data = self.data_ext
+                self.updated_data.to_hdf(self.store, key=key)
+                print(f">> Updated '{key}' saved to {self.store} with key '{key}'")
+        
         finally:
             store.close()
-        # """
-  
-        # with pd.HDFStore(self.store, mode='a') as store:
-        #         if key not in store or force_update:
-        #             self.data_new.to_hdf(store, key=key)
-        #             print(f">> Data saved to {self.store} with key '{key}'")
-        #         else:
-        #             self.data_ext = store.get(key)
-        #             self.data_ext = self.data_ext.loc[:, ~self.data_ext.columns.duplicated()]
 
-        #             # Align columns
-        #             all_cols = self.data_ext.columns.union(self.data_new.columns)
-        #             self.data_ext = self.data_ext.reindex(columns=all_cols)
-        #             # Drop duplicate columns in both dataframes if present
-        #             self.data_new = self.data_new.loc[:, ~self.data_new.columns.duplicated()]
-        #             self.data_new = self.data_new.reindex(columns=all_cols)
 
-        #             # Combine rows: update overlapping indices with new data
-        #             updated = self.data_ext.copy()
-        #             overlapping_indices = self.data_ext.index.intersection(self.data_new.index)
-        #             updated.loc[overlapping_indices] = self.data_new.loc[overlapping_indices]
-
-        #             # Add new rows
-        #             new_indices = self.data_new.index.difference(self.data_ext.index)
-        #             new_rows = self.data_new.loc[new_indices]
-        #             updated = pd.concat([updated, new_rows])
-
-        #             updated.to_hdf(store, key=key)
-        #             print(f">> Updated and extended '{key}' saved to {self.store}")
-        
-
-    def from_store(self, 
-                   key: str):
+    def from_store(self, key: str):
         """
         Load data from the HDF5 store and handle geometry conversion.
-        
-        :param key: Key for loading the DataFrame or GeoDataFrame.
-        :return: DataFrame or GeoDataFrame based on the data loaded.
+        Cleans and removes corrupted keys if loading fails due to attribute errors.
         """
-        
-        with pd.HDFStore(self.store, 'r') as store:
-            if key not in store:
-                print(f"Error: Key '{key}' not found in {self.store}")
-                return None
+        import tables
 
-            # Load the data
-            self.data = pd.read_hdf(self.store, key)
+        try:
+            with pd.HDFStore(self.store, 'r') as store:
+                if key not in store:
+                    print(f"Error: Key '{key}' not found in {self.store}")
+                    return None
 
-            # Rename 'geometry' back to 'geometry' and convert WKT to geometry if applicable
-            if 'geometry' in self.data.columns :
-                if not isinstance(self.data['geometry'].iloc[0], BaseGeometry):
-                    def safe_wkt_load(val):
-                        if isinstance(val, str):
-                            try:
-                                return loads(val)
-                            except Exception:
-                                return None
-                        return None
-                    self.data['geometry'] = self.data['geometry'].apply(loads)
-                return gpd.GeoDataFrame(self.data, geometry='geometry', crs='EPSG:4326')
+                self.data = pd.read_hdf(self.store, key)
 
-            # If not geometry, return the regular DataFrame
-            if key == 'timeseries':
-                print(">>> 'timeseries' key access suggestions: use '.solar' to access Solar-timeseries and '.wind' for Wind-timeseries.")
-            
-            return self.data
+        except (AttributeError, tables.exceptions.HDF5ExtError) as e:
+            print(f">> Warning: Failed to load key '{key}' due to corruption: {e}")
+            # Attempt to delete the corrupted key
+            with pd.HDFStore(self.store, 'a') as store:
+                try:
+                    store.remove(key)
+                    print(f">> Corrupted key '{key}' removed from {self.store}")
+                except Exception as cleanup_err:
+                    print(f">> Cleanup failed: could not remove key '{key}': {cleanup_err}")
+            return None
+
+        # Convert WKT to geometry objects in any column that looks like WKT
+        for col in self.data.columns:
+            if self.data[col].dtype == object:
+                if self.data[col].apply(lambda x: isinstance(x, str) and x.strip().startswith(('POINT', 'LINESTRING', 'POLYGON', 'MULTIPOLYGON'))).any():
+                    try:
+                        self.data[col] = self.data[col].apply(lambda x: loads(x) if isinstance(x, str) else x)
+                    except Exception as geom_err:
+                        print(f">> Warning: Failed to convert '{col}' to geometry: {geom_err}")
+
+        if 'geometry' in self.data.columns and self.data['geometry'].apply(lambda x: isinstance(x, BaseGeometry)).any():
+            return gpd.GeoDataFrame(self.data, geometry='geometry', crs='EPSG:4326')
+
+        if key == 'timeseries':
+            print(f">>> 'timeseries' key access suggestions: use '.solar' to access Solar-timeseries and '.wind' for Wind-timeseries.")
+
+        return self.data
+
+
+
+
     def refresh(self):
-        """
-        Refresh the internal store path and clear any cached data.
-        Use this if the underlying HDF5 file has changed externally.
-        """
-        # Optionally, re-initialize the store path if needed
-        self.store = Path(self.store)
-        
+         return DataHandler(self.store, silent_initiation=True, show_structure=False)
+     
     @staticmethod
     def show_tree(store_path,
                   show_dataset:bool=False):
@@ -164,7 +161,7 @@ class DataHandler:
         def print_structure(name, obj, indent=""):
             """Helper function to recursively print the structure."""
             if isinstance(obj, h5py.Group):
-                print(f"{indent}[Group] {name}")
+                print(f"{indent}{Fore.LIGHTBLUE_EX}[key]{Style.RESET_ALL} {Fore.LIGHTGREEN_EX}{name}{Style.RESET_ALL}")
                 # Iterate through the group's keys and call recursively
                 for sub_key in obj.keys():
                     print_structure(f"{name}/{sub_key}", obj[sub_key], indent + "  └─ ")
@@ -173,11 +170,15 @@ class DataHandler:
 
         try:
             with h5py.File(store_path, 'r') as f:
-                print(f"Structure of HDF5 file: {store_path}")
+                utils.print_module_title(f"Structure of HDF5 file: {store_path}")
                 for key in f.keys():
                     print_structure(key, f[key])
+                print("\n")
+                utils.print_update(level=1,message="To access the data : ")
+                utils.print_update(level=2,message="<datahandler instance>.from_store('<key>')")
         except Exception as e:
-            print(f"Error reading file: {e}")
+            utils.print_update(message=f"Error reading file: {e}",alert=True)
+
             
     @staticmethod
     def del_key(store_path,
@@ -192,4 +193,3 @@ class DataHandler:
             else:
                 print(f"Key '{key_to_delete}' not found in the file. Store status:\n")
                 DataHandler(store_path).show_tree(store_path)
-
