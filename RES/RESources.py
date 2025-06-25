@@ -23,6 +23,7 @@ from RES.cell import GridCells
 from RES.gwa import GWACells
 from RES.units import Units
 from RES import utility as utils
+print_level_base=1
 
 # Get the current local time
 current_local_time = datetime.now()
@@ -120,13 +121,16 @@ class RESources_builder(AttributesParser):
     ______________________
     '''
     def get_CF_timeseries(self,
-                          force_update=False)->tuple:
-        "returns cells geodataframe and timeseries dataframes"
-        self.log.info("Preparing Timeseries for the Cells...")
+                            cells:gpd.GeoDataFrame,
+                            force_update=False)->tuple:
+            "returns cells geodataframe and timeseries dataframes"
             
-        self.cells_with_ts_nt:tuple= self.timeseries.get_timeseries()
-        
-        return self.cells_with_ts_nt
+            utils.print_update(level=print_level_base+3,
+                            message="Preparing Timeseries for the Cells...")
+            
+            self.cells_with_ts_nt:tuple= self.timeseries.get_timeseries(cells=cells)
+            
+            return self.cells_with_ts_nt
         
     '''
     ______________________
@@ -316,8 +320,7 @@ class RESources_builder(AttributesParser):
         self.cluster_ts_df=self.timeseries.get_cluster_timeseries(self.cell_cluster_gdf,
                                 # self.cells_timeseries[self.resource_type],
                                 self.cells_timeseries,
-                               self.dissolved_cell_indices_df,
-                               self.region_column)
+                               self.dissolved_cell_indices_df)
         return self.cluster_ts_df
 
     # _________________________________________________________________________________
@@ -356,9 +359,10 @@ class RESources_builder(AttributesParser):
         # Placeholder for future grid cell retrieval
         self.get_grid_cells()
         self.get_cell_capacity()
-        self.get_CF_timeseries()
         self.extract_weather_data()
         self.update_gwa_scaled_params(self.memory_resource_limitation)
+        self.get_CF_timeseries(cells=self.datahandler.from_store('cells'))
+
         self.find_grid_nodes(use_pypsa_buses=False)
         self.score_cells()
         self.get_clusters()

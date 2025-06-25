@@ -151,3 +151,6 @@ class AttributesParser:
     def get_resource_landuse_intensity(self):
         self.resource_disaggregation_config:dict=self.get_resource_disaggregation_config()
         return self.resource_disaggregation_config['landuse_intensity']
+
+    def get_region_timezone(self):
+        return self.config['region_mapping'][self.region_short_code]['timezone_convert']
