@@ -77,8 +77,8 @@ class Timeseries(ERA5Cutout):
         '''
         # here, "_CF_ts_df_" will provide same data formate alike .to_pandas() method, just have to use "_CF_ts_df_.PV"  ("solar" or "wind" is the xarray name)
         
-        # Step 3: Convert the timeseries data to the appropriate province timezone
-        self.province_timezone=self.get_province_timezone()
+        # Step 3: Convert the timeseries data to the appropriate region timezone
+        self.region_timezone=self.get_region_timezone()
         self.CF_ts_df = self.__fix_timezone__(self._CF_ts_df_).tz_localize(None)
 
         '''
@@ -91,11 +91,11 @@ class Timeseries(ERA5Cutout):
         self.log.info(f">> Calculating CF mean from the {len(self.CF_ts_df)} data points for each Cell ...")
         self.log.info(f">> Total Grid Cells: {len(cells)}, "
                       f">> Timeseries Generated for: {len(self.CF_ts_df.columns)}, "
-                    #   f">> Matched Sites: {self.CF_ts_df[self.resource_type][self.province_grid_cells_store.index].shape}")
+                    #   f">> Matched Sites: {self.CF_ts_df[self.resource_type][self.region_grid_cells_store.index].shape}")
                       f">> Matched Sites: {self.CF_ts_df[cells.index].shape}")
         
         self.log.info(f">> Calculating '{self.resource_type}_CF_mean' for {len(cells)} Cells...")
-        # self.province_grid_cells_store[f'{self.resource_type}_CF_mean'] = self.CF_ts_df[self.resource_type].mean(axis=0) # Mean of all rows (Hours)
+        # self.region_grid_cells_store[f'{self.resource_type}_CF_mean'] = self.CF_ts_df[self.resource_type].mean(axis=0) # Mean of all rows (Hours)
         cells[f'{self.resource_type}_CF_mean'] = self.CF_ts_df.mean(axis=0) # Mean of all rows (Hours)
         # Updates the 'CF_mean' field to stored dataframe with key 'cells. The grid cells must have matched "X(grid cell's)-Y(timeseries header)" index to do this step.
         '''
@@ -129,16 +129,16 @@ class Timeseries(ERA5Cutout):
         
         # Step 1.1: Get the Atlite's Cutout Object loaded
         self.log.info(">> Loading ERA5 Cutout")
-        self.cutout,self.province_boundary=self.get_era5_cutout()
+        self.cutout,self.region_boundary=self.get_era5_cutout()
         
         ## Only,if cells are not processed already
-        # self.province_grid_cells = self.cutout.grid.overlay(self.province_boundary, how='intersection',keep_geom_type=True)
-        # self.province_grid_cells = utils.assign_cell_id(self.province_grid_cells,'Region',self.site_index)
+        # self.region_grid_cells = self.cutout.grid.overlay(self.region_boundary, how='intersection',keep_geom_type=True)
+        # self.region_grid_cells = utils.assign_cell_id(self.region_grid_cells,'Region',self.site_index)
         
-        # Step 1.2: Get the Province Grid Cells from Store. Ideally these cells should have same resolution as the Cutout (the indices are prepared from x,y coords and Region names)
+        # Step 1.2: Get the region Grid Cells from Store. Ideally these cells should have same resolution as the Cutout (the indices are prepared from x,y coords and Region names)
          # Initialize the local store for updated data
         self.datahandler=DataHandler(self.store)
-        # self.province_grid_cells_store=self.datahandler.from_store('cells')
+        # self.region_grid_cells_store=self.datahandler.from_store('cells')
         self.log.info(f">> {len(cells)} Grid Cells from Store Cutout")
         
         # Step 1.3: Set arguments for the atlite cutout's pv method
@@ -253,27 +253,27 @@ class Timeseries(ERA5Cutout):
         # Step 1.1: Get the Atlite's Cutout Object loaded
         self.log.info(">> Loading ERA5 Cutout")
         
-        # self.gwa_cells=GWACells(province_short_code=self.province_short_code,
+        # self.gwa_cells=GWACells(region_short_code=self.region_short_code,
         #                         resource_type=self.resource_type)
         
-        self.cutout,self.province_boundary=self.get_era5_cutout()
+        self.cutout,self.region_boundary=self.get_era5_cutout()
         self.log.info(f">> {len(cells)} Grid Cells from Store Cutout")
         
         # Only,if cells are not processed already
-        # self.province_grid_cells = self.cutout.grid.overlay(self.province_boundary, how='intersection',keep_geom_type=True)
-        # self.province_grid_cells = utils.assign_cell_id(self.province_grid_cells,'Region',self.site_index)
+        # self.region_grid_cells = self.cutout.grid.overlay(self.region_boundary, how='intersection',keep_geom_type=True)
+        # self.region_grid_cells = utils.assign_cell_id(self.region_grid_cells,'Region',self.site_index)
 
         
         ''' preferably for project points applications
         self.wind_atlas,self.wind_geojson=self.get_windspeed_rescaling_data()
-        self.province_grid_cells['GWA_wind_speed'] = windspeed.get_wind_coords(assets=self.province_grid_cells,
+        self.region_grid_cells['GWA_wind_speed'] = windspeed.get_wind_coords(assets=self.region_grid_cells,
                                                                                wind_atlas=self.wind_atlas,
                                                                                wind_geojson=self.wind_geojson)
         
         '''
         utils.print_update(level=3,message='Rescaling ERA5 windspeed with GWA windspeed')
         self.cutout=windspeed.rescale_cutout_windspeed(self.cutout, cells)
-        # Step 1.2: Get the Province Grid Cells from Store. Ideally these cells should have same resolution as the Cutout (the indices are prepared from x,y coords and Region names)
+        # Step 1.2: Get the region Grid Cells from Store. Ideally these cells should have same resolution as the Cutout (the indices are prepared from x,y coords and Region names)
         
         self.wind_turbine_config=self.get_turbines_config()
         
@@ -340,7 +340,7 @@ class Timeseries(ERA5Cutout):
         df_index_utc = data.tz_localize('UTC')
 
         # Convert to defined timezone (in Pandas time zones)
-        df_index_converted = df_index_utc.tz_convert(self.province_timezone)
+        df_index_converted = df_index_utc.tz_convert(self.region_timezone)
         
         df_index_converted.tz_localize(None) # without timezone conversion metadata
         

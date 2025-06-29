@@ -44,16 +44,19 @@ class GWACells(GADMBoundaries):
 
         # Check for existence and download if necessary
         for key, raster_name in self.gwa_rasters.items():
-            raster_path = self.gwa_root / raster_name
-            if not raster_path.exists():
-                source_url = self.gwa_sources[key]
-                self.log.info(f">> Downloading {self.gwa_sources[key]} from {source_url}")
-                self.download_file(source_url, raster_path)
+            self.gwa_country_code=self.region_mapping[self.region_short_code].get('GWA_country_code')
+            self.raster_name=raster_name.replace("GWA_country_code",  self.gwa_country_code)
+            self.raster_path = self.gwa_root / raster_name
+            if not self.raster_path.exists():
+                generic_source_url = self.gwa_sources[key]
+                self.region_source_url = generic_source_url.replace("GWA_country_code",  self.gwa_country_code)
+                self.log.info(f">> Downloading {key} from {self.region_source_url}")
+                self.download_file(self.region_source_url, self.raster_path)
 
             try:
                 # Process each raster using a streamlined approach
                 data = (
-                    rxr.open_rasterio(raster_path)
+                    rxr.open_rasterio(self.raster_path)
                     .rio.clip_box(**self.bounding_box)
                     .rename(key)
                     .drop_vars(['band', 'spatial_ref'])
@@ -104,18 +107,18 @@ class GWACells(GADMBoundaries):
     
     def load_gwa_cells(self,
                        memory_resource_limitation:Optional[bool]=False):
-        self.province_gwa_cells_df = self.prepare_GWA_data(memory_resource_limitation)
+        self.region_gwa_cells_df = self.prepare_GWA_data(memory_resource_limitation)
 
         # Vectorized creation of geometries
         self.gwa_cells_gdf = gpd.GeoDataFrame(
-            self.province_gwa_cells_df,
-            geometry=gpd.points_from_xy(self.province_gwa_cells_df['x'], self.province_gwa_cells_df['y']),
+            self.region_gwa_cells_df,
+            geometry=gpd.points_from_xy(self.region_gwa_cells_df['x'], self.region_gwa_cells_df['y']),
             crs=self.get_default_crs()
-        ).clip(self.get_province_boundary(), keep_geom_type=False)
+        ).clip(self.get_region_boundary(), keep_geom_type=False)
 
         # self.gwa_cells_gdf = self.calculate_common_parameters_GWA_cells()
         # self.gwa_cells_gdf = self.map_GWAcells_to_ERA5cells()
-        self.log.info(f">> Global Wind Atlas (GWA) Cells loaded. Size: {len(self.province_gwa_cells_df)}")
+        self.log.info(f">> Global Wind Atlas (GWA) Cells loaded. Size: {len(self.region_gwa_cells_df)}")
         
         return self.gwa_cells_gdf
     

@@ -25,7 +25,7 @@ class GADMBoundaries(AttributesParser):
         super().__post_init__()
         
         self.country = self.get_country()
-        self.province_name =self.get_province_name()
+        self.region_name =self.get_region_name()
         self.admin_level:int= 2 # hardcoded to keep the workflow intact. The workflow has dependency on Regional District name i.e. level 2 boundaries.
 
         # Setup paths and ensure directories exist
@@ -39,7 +39,9 @@ class GADMBoundaries(AttributesParser):
         
         self.crs=self.get_default_crs()
         self.country_file:Path=Path (self.gadm_root) /  f'gadm41_{self.country}_L{self.admin_level}.geojson'
-        self.province_file:Path = Path(self.gadm_processed) / f'gadm41_{self.country}_L{self.admin_level}_{self.province_short_code}.geojson'
+        self.region_file:Path = Path(self.gadm_processed) / f'gadm41_{self.country}_L{self.admin_level}_{self.region_short_code}.geojson'
+        
+        self.boundary_datafields = self.gadm_config.get('datafield_mapping')
         
     # Define a function to create bounding boxes (of cell) directly from coordinates (x, y) and resolution
     
@@ -82,7 +84,7 @@ class GADMBoundaries(AttributesParser):
             self.log.error(f">> Error fetching or loading GADM data: {e}")
             raise
 
-    def get_province_boundary(self,
+    def get_region_boundary(self,
                               force_update: bool = False) -> gpd.GeoDataFrame:
         """
         Prepares the boundaries for the specified region within the country.
@@ -91,37 +93,37 @@ class GADMBoundaries(AttributesParser):
             force_update (bool): To force update the data and formatting.
 
         Returns:
-            gpd.GeoDataFrame: GeoDataFrame of the province boundaries.
+            gpd.GeoDataFrame: GeoDataFrame of the region boundaries.
         """
         
-        if self.province_code_validity:
+        if self.region_code_validity:
     
             # It should be saved in processed because the column names have been modified from source.
             
-            if self.province_file.exists() and not force_update: # There is a local file and no update required
-                self.log.info(f">> Loading GADM boundaries (Sub-provincial | level =2) for {self.province_name}  from local file {self.province_file}.")
-                self.boundary_province:gpd.GeoDataFrame=gpd.read_file(self.province_file)
+            if self.region_file.exists() and not force_update: # There is a local file and no update required
+                self.log.info(f">> Loading GADM boundaries (Sub-provincial | level =2) for {self.region_name}  from local file {self.region_file}.")
+                self.boundary_region:gpd.GeoDataFrame=gpd.read_file(self.region_file)
             
-            else: # When the local file for province doesn't exist, Filter province data from country file and save locally
+            else: # When the local file for region doesn't exist, Filter region data from country file and save locally
     
                 _boundary_country = self.get_country_boundary(force_update)
-                _boundary_province_ = _boundary_country.loc[self.boundary_country['NAME_1'] == self.province_name]
+                _boundary_region_ = _boundary_country.loc[self.boundary_country['NAME_1'] == self.region_name]
 
-                if _boundary_province_.empty : 
-                    self.log.error(f">> No data found for province '{self.province_name}'.")
+                if _boundary_region_.empty : 
+                    self.log.error(f">> No data found for region '{self.region_name}'.")
                     exit
                 else:
-                    _boundary_province_ = _boundary_province_[['NAME_0', 'NAME_1', 'NAME_2', 'geometry']].rename(columns={
-                        'NAME_0': 'Country', 'NAME_1': 'Province', 'NAME_2': 'Region'
+                    _boundary_region_ = _boundary_region_[['NAME_0', 'NAME_1', 'NAME_2', 'geometry']].rename(columns={
+                        'NAME_0': self.boundary_datafields['NAME_0'], 'NAME_1': self.boundary_datafields['NAME_1'], 'NAME_2': self.boundary_datafields['NAME_2']
                     })
-                    self.boundary_province:gpd.GeoDataFrame=_boundary_province_
+                    self.boundary_region:gpd.GeoDataFrame=_boundary_region_
       
                 
-                self.boundary_province.to_file(self.province_file, driver='GeoJSON')
-                self.log.info(f"GADM data for {self.province_name} saved to {self.province_file}.")
-            return self.boundary_province
+                self.boundary_region.to_file(self.region_file, driver='GeoJSON')
+                self.log.info(f"GADM data for {self.region_name} saved to {self.region_file}.")
+            return self.boundary_region
         else:
-            self.log.error(f">> Invalid province code: {self.province_short_code}.")
+            self.log.error(f">> Invalid region code: {self.region_short_code}.")
             exit
     
     def get_bounding_box(self)->tuple:
@@ -129,13 +131,13 @@ class GADMBoundaries(AttributesParser):
         """
         This method returns the Minimum Bounding Rectangle (MBR) to extract the 
         """
-        self.actual_boundary=self.get_province_boundary()
-        # self.log.info(f"Setting up the Minimum Bounding Region (MBR) for {self.province_short_code}...")
+        self.actual_boundary=self.get_region_boundary()
+        # self.log.info(f"Setting up the Minimum Bounding Region (MBR) for {self.region_short_code}...")
         min_x, min_y, max_x, max_y=self.actual_boundary.geometry.total_bounds
         
         """
         Alternate:
-        self.province_gadm_gdf.unary_union.buffer(1).bounds # 
+        self.region_gadm_gdf.unary_union.buffer(1).bounds # 
         Key Differences:
             Performance: .total_bounds is much faster because it doesn’t require merging or buffering geometries.
             Output: Both return bounding coordinates, but .unary_union.buffer(1).bounds includes a buffer, whereas .total_bounds is the simplest, direct bounding box of the original geometries.
@@ -150,7 +152,7 @@ class GADMBoundaries(AttributesParser):
             'maxy': max_y
             }
         # plot_info='(Minimum Bounding Rectangle)'
-        # bounding_box_gdf = gpd.GeoDataFrame(geometry=[box(min_x, min_y, max_x, max_y)], crs=province_gadm_regions_gdf.crs)
+        # bounding_box_gdf = gpd.GeoDataFrame(geometry=[box(min_x, min_y, max_x, max_y)], crs=region_gadm_regions_gdf.crs)
         return self.bounding_box,self.actual_boundary
         
 
@@ -167,16 +169,16 @@ class GADMBoundaries(AttributesParser):
             save(bool): If the user want's to skip saving as local file.
             
         """
-        boundary_province = self.get_province_boundary()
+        boundary_region = self.get_region_boundary()
 
-        if boundary_province is not None:
-            m = boundary_province.explore('Region', legend=True, tiles=basemap)
+        if boundary_region is not None:
+            m = boundary_region.explore('Region', legend=True, tiles=basemap)
             
             if save:
-                file_path = Path(save_path) / f"{self.province_short_code}.html"
+                file_path = Path(save_path) / f"{self.region_short_code}.html"
                 file_path.parent.mkdir(parents=True, exist_ok=True)
                 m.save(file_path)
-                self.log.info(f">> Interactive map for '{self.province_short_code}' saved to {file_path}.")
+                self.log.info(f">> Interactive map for '{self.region_short_code}' saved to {file_path}.")
             else:
                 self.log.info(f">> Skipping the save to local directories as 'save' is set to False.")
         
@@ -186,12 +188,12 @@ class GADMBoundaries(AttributesParser):
         """
         Executes the process of extracting boundaries and creating an interactive map.
         """
-        if self.province_code_validity:
-            province_gadm_gdf=self.get_province_boundary()
+        if self.region_code_validity:
+            region_gadm_gdf=self.get_region_boundary()
             self.get_bounding_box()
             self.show_regions()
-            return province_gadm_gdf
+            return region_gadm_gdf
         else:
-            self.log.error(">> Province code is not valid.")
-            self.province_code_validity
+            self.log.error(">> region code is not valid.")
+            self.region_code_validity
             return None

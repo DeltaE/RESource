@@ -23,7 +23,7 @@ class OSMData(AttributesParser):
         # Create the directory (and any necessary parent directories) if it doesn't exist
         self.root_path.mkdir(parents=True, exist_ok=True)
         # Format area name for OSM queries
-        self.area_name = f"{self.get_province_name()}, {self.get_country()}"
+        self.area_name = f"{self.get_region_name()}, {self.get_country()}"
         
         # Dictionary to store GeoDataFrames by data_key
         self.gdfs = {}
@@ -58,7 +58,7 @@ class OSMData(AttributesParser):
         """
         Retrieve and cache OSM data for the specified area and tags.
         """
-        geojson_path = self.root_path / f"{self.province_short_code}_{data_key}.geojson"
+        geojson_path = self.root_path / f"{self.region_short_code}_{data_key}.geojson"
         tags_dict = {data_key: tags}
         
         # Check if data is already stored locally

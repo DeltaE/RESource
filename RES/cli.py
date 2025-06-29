@@ -18,13 +18,13 @@ def find_project_root(marker="RES"):
     raise FileNotFoundError(f"Project root with marker '{marker}' not found.")
 
 
-def run_RESources(config_file_path, province_code, resource_type):
+def run_RESources(config_file_path, region_code, resource_type):
     """
-    This function runs the RESources builder for the specified configuration, province, and resource type.
+    This function runs the RESources builder for the specified configuration, region, and resource type.
     """
     required_args = {
         "config_file_path": config_file_path,
-        "province_short_code": province_code,
+        "region_short_code": region_code,
         "resource_type": resource_type
     }
     
@@ -45,11 +45,11 @@ def display_help():
 
     Options:
     --config           Path to the configuration YAML file (default: config/config.yaml)
-    --provinces       List of provinces to process (default: BC, Supports all provinces)
+    --regions       List of regions to process (default: BC, Supports all regions)
     --resources       List of resource types to generate (default: wind solar)
 
     Examples:
-    RES --config=config.yaml --provinces BC AB --resources wind solar
+    RES --config=config.yaml --regions BC AB --resources wind solar
     RES --help-resources
 
     Use '--help-resources' for more detailed information about the RESources module.
@@ -62,25 +62,25 @@ def display_resources_help():
     print("""
     RESources Module Help:
 
-    This module contains the RESources_builder class used to generate resources for provinces and resource types.
+    This module contains the RESources_builder class used to generate resources for regions and resource types.
     
     Usage:
-    RESources_builder(config_file_path, province_short_code, resource_type)
+    RESources_builder(config_file_path, region_short_code, resource_type)
 
     Arguments:
     - config_file_path: Path to the configuration file (e.g., 'config/config.yaml')
-    - province_short_code: Province short code (e.g., 'BC')
+    - region_short_code: region short code (e.g., 'BC')
     - resource_type: Type of resource to generate (e.g., 'wind', 'solar')
 
     Example:
-    RESources_builder(config_file_path='config.yaml', province_short_code='BC', resource_type='wind')
+    RESources_builder(config_file_path='config.yaml', region_short_code='BC', resource_type='wind')
     """)
 
 def main():
     # Set up argument parsing
-    parser = argparse.ArgumentParser(prog='RES', description='Run resource generation for provinces and resource types')
+    parser = argparse.ArgumentParser(prog='RES', description='Run resource generation for regions and resource types')
     parser.add_argument('--config', type=str, default='config/config.yaml', help='Path to the config file')
-    parser.add_argument('--provinces', type=str, nargs='+', default=['BC'], help='List of provinces')
+    parser.add_argument('--regions', type=str, nargs='+', default=['BC'], help='List of regions')
     parser.add_argument('--resources', type=str, nargs='+', default=['wind', 'solar'], help='List of resource types')
     parser.add_argument('--help-resources', action='store_true', help='Display help for RESources module')
 
@@ -107,11 +107,11 @@ def main():
         print(e)
         sys.exit(1)
 
-    # Iterate over provinces and resource types
-    for province_code in args.provinces:
+    # Iterate over regions and resource types
+    for region_code in args.regions:
         for resource_type in args.resources:
-            print(f"Running for {province_code} and {resource_type}")
-            run_RESources(args.config, province_code, resource_type)
+            print(f"Running for {region_code} and {resource_type}")
+            run_RESources(args.config, region_code, resource_type)
 
 if __name__ == "__main__":
     main()

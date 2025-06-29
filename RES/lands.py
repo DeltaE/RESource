@@ -6,7 +6,6 @@ from RES import utility as utils
 
 from atlite.gis import ExclusionContainer,shape_availability
 
-import RES.utility as utils  # Custom module for handling data operations
 from RES.boundaries import GADMBoundaries
 from RES.era5_cutout import ERA5Cutout
 from RES.gaez import GAEZRasterProcessor
@@ -47,7 +46,7 @@ class ConservationLands(GADMBoundaries):
 
         
         file_name_prefix = self.conserved_lands_cfg['data_name']
-        provincial_file_path = Path('data/downloaded_data/lands') / f"{file_name_prefix}_{self.province_short_code}.pickle"
+        provincial_file_path = Path('data/downloaded_data/lands') / f"{file_name_prefix}_{self.region_short_code}.pickle"
         provincial_file_path.parent.mkdir(parents=True, exist_ok=True)
         
         if provincial_file_path.exists():
@@ -58,11 +57,11 @@ class ConservationLands(GADMBoundaries):
             
             
             # Get Region Boundaries
-            self.province_boundary=self.get_province_boundary()
+            self.region_boundary=self.get_region_boundary()
             
             # Load the .gdb file as a GeoDataFrame
-            gdf = gpd.read_file(gdb_file_path, mask=self.province_boundary)
-            gdf.to_crs(self.province_boundary.crs, inplace=True)
+            gdf = gpd.read_file(gdb_file_path, mask=self.region_boundary)
+            gdf.to_crs(self.region_boundary.crs, inplace=True)
             
             gdf['geometry'] = gdf['geometry'].simplify(geom_simplification_tolerance)
 
@@ -128,24 +127,24 @@ class ConservationLands(GADMBoundaries):
             folium.Map: The interactive map object.
         """
         conserved_lands = self.get_provincial_conserved_lands()
-        self.province_boundary = self.get_province_boundary()
+        self.region_boundary = self.get_region_boundary()
 
-        if self.province_boundary is not None:
-            m = self.province_boundary.explore(color='grey',linecolor='grey', legend=True, tiles=basemap,alpha=0.4)
+        if self.region_boundary is not None:
+            m = self.region_boundary.explore(color='grey',linecolor='grey', legend=True, tiles=basemap,alpha=0.4)
             conserved_lands.explore('IUCN_CAT_desc', m=m, legend=True, tiles=basemap)
 
             if save:
                 if save_path is None:
-                    save_path = f'vis/lands/{self.province_short_code}.html'
+                    save_path = f'vis/lands/{self.region_short_code}.html'
                 else:
-                    save_path = Path(save_path) / f"{self.province_short_code}.html"
+                    save_path = Path(save_path) / f"{self.region_short_code}.html"
                 
                 # Ensure the directory exists
                 save_path.parent.mkdir(parents=True, exist_ok=True)
 
                 # Save the map as an HTML file
                 m.save(save_path)
-                utils.print_update(level=print_base_level+1,message="Interactive map for '{self.province_short_code}' saved to {save_path}.")
+                utils.print_update(level=print_base_level+1,message="Interactive map for '{self.region_short_code}' saved to {save_path}.")
             else:
                 utils.print_update(level=print_base_level+1,message="Skipping save, 'save' is set to False.")
         
@@ -165,7 +164,8 @@ class LandContainer(ERA5Cutout,
     # Call the parent class __post_init__ to initialize inherited attributes
         super().__post_init__()
 
-        self.excluder_crs=3347
+        self.excluder_crs= self.get_excluder_crs(country='Canada')
+        
         # Initiate Exclusion Container
         self.excluder = ExclusionContainer(crs=self.excluder_crs)  # CRS 3347 fit for Canada
     
@@ -178,12 +178,12 @@ class LandContainer(ERA5Cutout,
         
         # Retrieve custom land configuration if available
         custom_land_config = self.get_custom_land_layers()
-        utils.print_update(level=print_base_level+1,message="Loading global filters' rasters from GAEZ, trimmed to {self.province_name}")
+        utils.print_update(level=print_base_level+1,message="Loading global filters' rasters from GAEZ, trimmed to {self.region_name}")
         self.process_all_rasters(show=False) # Donwloads and processes all GAEZ rasters
         # Loop over each raster type in GAEZ config and set up each raster
         for raster_type in self.gaez_config['raster_types']:
             raster_name = raster_type['name']
-            raster_file = str(self.province_short_code+"_"+raster_type['raster'])
+            raster_file = str(self.region_short_code+"_"+raster_type['raster'])
             zip_direct = raster_type['zip_extract_direct']
             
             # Determine the class inclusion/exclusion based on resource type
@@ -197,7 +197,7 @@ class LandContainer(ERA5Cutout,
                 'invert': inclusion_key == 'class_inclusion'  # invert if it's an inclusion class
             }
             
-            utils.print_update(level=print_base_level+1,message="Loading {raster_name.capitalize()} layers from {raster_configs[f'gaez_{raster_name}']['raster']}")
+            utils.print_update(level=print_base_level+1,message=f"Loading {raster_name.capitalize()} layers from {raster_configs[f'gaez_{raster_name}']['raster']}")
         
         # Load additional custom raster configurations from YAML if specified
         # for raster_name, config in custom_land_config.get('rasters', {}).items():
@@ -226,7 +226,7 @@ class LandContainer(ERA5Cutout,
             )
 
         # Load additional layers
-        self.conservation_lands_province_gdf = self.get_provincial_conserved_lands()
+        self.conservation_lands_region_gdf = self.get_provincial_conserved_lands()
         self.aeroway_gdf = self.get_osm_layer('aeroway')
         
         # Set up resource disaggregation configurations
@@ -234,7 +234,7 @@ class LandContainer(ERA5Cutout,
 
         # Add local (Canadian) vector geometries to excluder
         self.excluder.add_geometry(
-            self.conservation_lands_province_gdf.geometry, 
+            self.conservation_lands_region_gdf.geometry, 
             buffer=self.resource_disaggregation_config['buffer']['conserved_lands']
         )
         self.excluder.add_geometry(

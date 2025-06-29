@@ -99,16 +99,16 @@ class CODERSData(AttributesParser):
 
     def load_local_data(self, 
                         table_name: str, 
-                        province_code: str = None) -> pd.DataFrame:
+                        region_code: str = None) -> pd.DataFrame:
         
         """
         Load data from a local file if it exists.
         
         ### Args:
-            If Province set to NONE, loads Country data.
+            If region set to NONE, loads Country data.
         """
 
-        file_name = f"{table_name}.pkl" if province_code is None else f"generators_{province_code}.pkl"
+        file_name = f"{table_name}.pkl" if region_code is None else f"generators_{region_code}.pkl"
         file_path = Path(self.data_pull['root']) / self.data_pull.get(table_name)/file_name
         file_path.mkdir(parents=True, exist_ok=True)  # Creates parent directories if not exists.
 
@@ -122,10 +122,10 @@ class CODERSData(AttributesParser):
     def save_data(self, 
                   data: pd.DataFrame|gpd.GeoDataFrame, 
                   table_name: str, 
-                  province_code: str = None):
+                  region_code: str = None):
         
         """Save the fetched data to a pkl file."""
-        file_name = f"{table_name}.pkl" if province_code is None else f"generators_{province_code}.pkl"
+        file_name = f"{table_name}.pkl" if region_code is None else f"generators_{region_code}.pkl"
         file_path = Path(self.data_pull['root']) / self.data_pull.get(table_name)/file_name
         
         data.to_pickle(file_path)
@@ -181,12 +181,11 @@ class CODERSData(AttributesParser):
         """Get generator data for a specific province.
         
         Args:
-            province_code (str): The province code to filter the data.
             table_name (str): The name of the table to fetch data from e.g. 'substations','transmission_lines','generators' etc.
             force_update (bool): If True, force a data fetch from the API, ignoring local data.
         """
         if self.is_table_name_required(table_name): #check if the data is required
-            if self.province_code_validity:
+            if self.region_code_validity:
             
                 # Get Canadian data first
                 df,gdf= self.get_table_canada(table_name, force_update=force_update)
@@ -198,14 +197,14 @@ class CODERSData(AttributesParser):
             else:
                 data=df
             
-            province_mask = data['province'] == self.province_short_code
-            self.province_data = data[province_mask]
+            region_mask = data['province'] == self.region_short_code
+            self.region_data = data[region_mask]
             
-            if not self.province_data.empty:
+            if not self.region_data.empty:
                 
-                return self.province_data  # Return the filtered GeoDataFrame
+                return self.region_data  # Return the filtered GeoDataFrame
             else:
-                return self.province_code_validity
+                return self.region_code_validity
         else:
                 self.log.warning(f"Table: '{table_name}' is not required for this tool and is not configured to work properly.\n Configured/required tables >>>> {self.table_list[1:]}")
                 

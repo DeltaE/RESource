@@ -6,7 +6,7 @@ import pandas as pd
 
 def impute_ERA5_windspeed_to_Cells(
         cutout:atlite.Cutout, 
-        province_grid_cells:gpd.GeoDataFrame)->gpd.GeoDataFrame:
+        region_grid_cells:gpd.GeoDataFrame)->gpd.GeoDataFrame:
         """
         For each grid cells, this function finds the yearly mean windspeed from the windspeed timeseries and imputes to the cell dataframe.
         """
@@ -18,11 +18,11 @@ def impute_ERA5_windspeed_to_Cells(
 
         # Create a GeoDataFrame for spatial join
         wnd_ymean_gdf = gpd.GeoDataFrame(wnd_ymean_df, geometry=gpd.points_from_xy(wnd_ymean_df['x'], wnd_ymean_df['y']))
-        wnd_ymean_gdf.crs = province_grid_cells.crs
+        wnd_ymean_gdf.crs = region_grid_cells.crs
 
         # Perform spatial join and drop unnecessary columns
-        province_grid_cells = (
-            gpd.sjoin(province_grid_cells.rename(columns={'x': 'x_bc', 'y': 'y_bc'}), 
+        region_grid_cells = (
+            gpd.sjoin(region_grid_cells.rename(columns={'x': 'x_bc', 'y': 'y_bc'}), 
                       wnd_ymean_gdf, 
                       predicate='intersects')
             .drop(columns=['x_bc', 'y_bc', 'lon', 'lat','index_right','year'])
@@ -30,11 +30,11 @@ def impute_ERA5_windspeed_to_Cells(
         
         # Handle potential duplicate indices
         # Resetting index to ensure unique index after join
-        province_grid_cells = province_grid_cells.reset_index(drop=True)
-        province_grid_cells = province_grid_cells.drop_duplicates(subset=['geometry'])
-        province_grid_cells=utility.assign_cell_id(province_grid_cells)
+        region_grid_cells = region_grid_cells.reset_index(drop=True)
+        region_grid_cells = region_grid_cells.drop_duplicates(subset=['geometry'])
+        region_grid_cells=utility.assign_cell_id(region_grid_cells)
 
-        return province_grid_cells
+        return region_grid_cells
 
     
 def scale_wind(row:pd.Series, 

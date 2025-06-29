@@ -372,7 +372,7 @@ def create_layout_for_generation(cutout,cells_gdf,capacity_column):
 
 
 # def select_top_sites(all_scored_sites_gdf, resource_max_capacity):
-#     print(f">>> Selecting TOP Sites to for {resource_max_capacity} GW Capacity Investment in Province...")
+#     print(f">>> Selecting TOP Sites to for {resource_max_capacity} GW Capacity Investment in region...")
 #     """
 #     Select the top sites based on potential capacity and a maximum capacity limit.
 
@@ -384,7 +384,7 @@ def create_layout_for_generation(cutout,cells_gdf,capacity_column):
 #     - selected_sites: GeoDataFrame with the selected top sites.
 #     """
 #     print(f"{'_'*50}")
-#     print(f"Selecting the Top Ranked Sites to invest in {resource_max_capacity} GW resource in Province")
+#     print(f"Selecting the Top Ranked Sites to invest in {resource_max_capacity} GW resource in region")
 #     print(f"{'_'*50}\n")
 
 #     selected_rows = []

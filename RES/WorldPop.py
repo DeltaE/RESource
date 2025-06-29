@@ -10,13 +10,13 @@ from pathlib import Path
 
 
 class WorldPop():
-    def __init__(self,config_file_path:Path,province_short_code:str):
+    def __init__(self,config_file_path:Path,region_short_code:str):
         
         self.config_file_path=config_file_path
-        self.province_short_code=province_short_code
+        self.region_short_code=region_short_code
         
         self.attributes_parser:AttributesParser=AttributesParser(self.config_file_path,None)
-        self.gadm=GADMBoundaries(self.config_file_path,self.province_short_code)
+        self.gadm=GADMBoundaries(self.config_file_path,self.region_short_code)
         
         self.config=self.attributes_parser.config
         self.worldpop_config=self.config['WorldPop']
@@ -48,8 +48,8 @@ class WorldPop():
             
     def get_provincial_data(self,data_name:str):
         
-            province_gadm_gdf=self.gadm.get_province_boundary()
+            region_gadm_gdf=self.gadm.get_region_boundary()
             
-            pop_grid= self.pop_data.overlay(province_gadm_gdf, how='intersection', keep_geom_type=True)
+            pop_grid= self.pop_data.overlay(region_gadm_gdf, how='intersection', keep_geom_type=True)
             
-            pop_grid.to_pickle(f'data/downloaded_data/WorldPop/pop_{self.province_short_code}.pkl')
+            pop_grid.to_pickle(f'data/downloaded_data/WorldPop/pop_{self.region_short_code}.pkl')

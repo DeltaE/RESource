@@ -36,7 +36,7 @@ class RESources_builder(AttributesParser):
         # This dictionary will be used to pass arguments to external classes
         self.required_args = {   #order doesn't matter
             "config_file_path" : self.config_file_path,
-            "province_short_code": self.province_short_code,
+            "region_short_code": self.region_short_code,
             "resource_type": self.resource_type
         }
         
@@ -73,12 +73,12 @@ class RESources_builder(AttributesParser):
         utils.print_update(level=print_level_base+1,
                            message="Preparing Grid Cells...")
         
-        self.province_grid_cells=self.gridcells.get_default_grid()
+        self.region_grid_cells=self.gridcells.get_default_grid()
         
         utils.print_update(level=print_level_base+2,
                            message="Grid Cells updated.")
         
-        return self.province_grid_cells
+        return self.region_grid_cells
     '''
     _______________________________________________________________________________________________
     Step 1: 
@@ -134,6 +134,7 @@ class RESources_builder(AttributesParser):
                 
                 self.store_grid_cells=self.store_grid_cells_updated
                 return self.store_grid_cells_updated
+            
         elif self.resource_type=='solar': 
             # utils.print_update(level=print_level_base+2,
             #                message="Extracting 'solar_influx'  from source.")
@@ -175,12 +176,15 @@ class RESources_builder(AttributesParser):
     ______________________
     '''
     def get_CF_timeseries(self,
-                          cells:gpd.GeoDataFrame,
+                          cells:gpd.GeoDataFrame=None,
                           force_update=False)->tuple:
         "returns cells geodataframe and timeseries dataframes"
         
         utils.print_update(level=print_level_base+3,
                            message="Preparing Timeseries for the Cells...")
+        if cells is None:
+            self.datahandler.refresh()
+            cells=self.datahandler.from_store('cells')
         
         self.cells_with_ts_nt:tuple= self.timeseries.get_timeseries(cells=cells)
         
@@ -195,7 +199,7 @@ class RESources_builder(AttributesParser):
     '''
     def find_grid_nodes(self,
                         cells:gpd.GeoDataFrame=None,
-                        use_pypsa_buses:bool=True):
+                        use_pypsa_buses:bool=False):
 
         self.grid=GridNodeLocator(**self.required_args)
         
@@ -208,7 +212,7 @@ class RESources_builder(AttributesParser):
         if use_pypsa_buses:
             utils.print_update(level=print_level_base+3,
                            message="Using PyPSA nodes as preferred nodes for resource connection.")
-            buses_data_path=Path (self.config['pypsa']['output']['prepare_base_network']['folder'])/'buses.csv'
+            buses_data_path=Path (self.config['output']['prepare_base_network']['folder'])/'buses.csv'
             grid_ss_df=pd.read_csv(buses_data_path)
             self.grid_ss = gpd.GeoDataFrame(
                 grid_ss_df,
@@ -220,13 +224,13 @@ class RESources_builder(AttributesParser):
                            message="Using Substations (sourced from CODERS) preferred nodes for resource connection.")
             self.grid_ss:gpd.GeoDataFrame=self.coders.get_table_provincial('substations')
         
-        self.cutout,self.province_boundary=self.era5_cutout.get_era5_cutout()
+        self.cutout,self.region_boundary=self.era5_cutout.get_era5_cutout()
 
-        # _grid_cells_=self.cutout.grid.overlay(self.province_boundary, how='intersection',keep_geom_type=True)
+        # _grid_cells_=self.cutout.grid.overlay(self.region_boundary, how='intersection',keep_geom_type=True)
         
         utils.print_update(level=print_level_base+3,
                            message="Searching for closest grid nodes for each cell...")
-        self.province_grid_cells_cap_with_nodes = self.grid.find_grid_nodes_ERA5_cells(self.grid_ss,
+        self.region_grid_cells_cap_with_nodes = self.grid.find_grid_nodes_ERA5_cells(self.grid_ss,
                                                                                        self.store_grid_cells)
         utils.print_update(level=print_level_base+3,
                            message="Closest grid nodes and distance to them calculated and stored for each cell...")
@@ -234,7 +238,7 @@ class RESources_builder(AttributesParser):
         self.datahandler.to_store(self.store_grid_cells,'cells')
         self.datahandler.to_store(self.grid_ss,'substations')
         
-        return self.province_grid_cells_cap_with_nodes
+        return self.region_grid_cells_cap_with_nodes
     '''
     ______________________
     Step 1E:
@@ -427,7 +431,7 @@ class RESources_builder(AttributesParser):
         """
         Execute the specific module logic for the given resource type ('solar' or 'wind').
         """
-        print(f"{50*'_'}\n Initiating {self.resource_type} module for {self.get_province_name()}...")
+        print(f"{50*'_'}\n Initiating {self.resource_type} module for {self.get_region_name()}...")
         self.memory_resource_limitation=memory_resource_limitation
         self.get_grid_cells()
         self.get_cell_capacity()
@@ -436,7 +440,7 @@ class RESources_builder(AttributesParser):
         self.get_CF_timeseries(cells=self.store_grid_cells)
         self.find_grid_nodes(cells=self.cells_with_ts_nt.cells,
                              use_pypsa_buses=use_pypsa_buses)
-        self.score_cells(cells=self.province_grid_cells_cap_with_nodes)
+        self.score_cells(cells=self.region_grid_cells_cap_with_nodes)
         self.get_clusters(scored_cells=self.scored_cells)
         self.get_cluster_timeseries()
         self.units.create_units_dictionary()
@@ -448,13 +452,13 @@ class RESources_builder(AttributesParser):
                                                                         self.get_cluster_timeseries(),
                                                                         resource_max_capacity=resource_max_capacity)
                
-            utils.print_module_title(f"Top Sites(clusters) from {self.resource_type} module saved to {self.store} for {self.get_province_name()}...")
+            utils.print_module_title(f"Top Sites(clusters) from {self.resource_type} module saved to {self.store} for {self.get_region_name()}...")
             
         else: # When user wants all of the sites
             resource_clusters=self.get_clusters().clusters,
             cluster_timeseries=self.get_cluster_timeseries(),
     
-            utils.print_module_title(f"All Sites (clusters) from {self.resource_type} module saved to {self.store} for {self.get_province_name()}...")
+            utils.print_module_title(f"All Sites (clusters) from {self.resource_type} module saved to {self.store} for {self.get_region_name()}...")
    
         
         self.export_results(self.resource_type,
@@ -631,23 +635,23 @@ class RESources_builder(AttributesParser):
 
         return top_sites ,top_sites_ts  # gdf
 
-def build_resources(provinces:list,
+def build_resources(regions:list,
                     resource_types: list, 
                     config_path: str | Path = 'config/config.yaml'):
     """
-    Builds resources for specified provinces and resource types using the RESources_builder module.
+    Builds resources for specified regions and resource types using the RESources_builder module.
     Args:
-        provinces (list): A list of province short codes to process.
-        resource_types (list): A list of resource types to build for each province.
+        regions (list): A list of region short codes to process.
+        resource_types (list): A list of resource types to build for each region.
         config_path (str | Path, optional): Path to the configuration file. Defaults to 'config/config.yaml'.
     Returns:
         None
     """
     
-    for province, resource in product(provinces, resource_types):
+    for region, resource in product(regions, resource_types):
         RES_module = RESources_builder(
             config_file_path=config_path,
-            province_short_code=province,
+            region_short_code=region,
             resource_type=resource
         )
         RES_module.build(select_top_sites=True, 

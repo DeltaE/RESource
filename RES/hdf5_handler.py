@@ -114,7 +114,11 @@ class DataHandler:
             
             return self.data
 
-
+    def refresh(self):
+        """
+        Refresh the store path to the current store.
+        """
+        return DataHandler(self.store, silent_initiation=True, show_structure=False)
     @staticmethod
     def show_tree(store_path,
                   show_dataset:bool=False):
