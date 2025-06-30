@@ -121,13 +121,15 @@ class RESources_builder(AttributesParser):
     ______________________
     '''
     def get_CF_timeseries(self,
-                            cells:gpd.GeoDataFrame,
+                            cells:gpd.GeoDataFrame=None,
                             force_update=False)->tuple:
             "returns cells geodataframe and timeseries dataframes"
             
             utils.print_update(level=print_level_base+3,
                             message="Preparing Timeseries for the Cells...")
-            
+            if cells is None:
+                self.datahandler.refresh()
+                cells=self.datahandler.from_store('cells')
             self.cells_with_ts_nt:tuple= self.timeseries.get_timeseries(cells=cells)
             
             return self.cells_with_ts_nt
@@ -185,17 +187,23 @@ class RESources_builder(AttributesParser):
     '''
     def update_gwa_scaled_params(self,
                                  memory_resource_limitation:Optional[bool]=False):
+        self.datahandler.refresh()
+        self.store_grid_cells=self.datahandler.from_store('cells')
         if self.resource_type=='wind': 
             if all(column in self.store_grid_cells.columns for column in ['CF_IEC2', 'CF_IEC3', 'windspeed_gwa','windspeed_ERA5']):
-                self.log.info(f"'CF_IEC2', 'CF_IEC3', 'windspeed_gwa' are already present in the store information.")
+                self.log.info("'CF_IEC2', 'CF_IEC3', 'windspeed_gwa' are already present in the store information.")
+                
+                return self.store_grid_cells
                 pass
             else:
                 self.gwa_cells.map_GWA_cells_to_ERA5(region_column=self.region_column,
                                                      memory_resource_limitation=memory_resource_limitation)
-            
+                self.datahandler.refresh()
+                self.store_grid_cells=self.datahandler.from_store('cells')
+                return self.store_grid_cells
         elif self.resource_type=='solar': 
             # Not activated for solar resources yet as the high resolution data processing is computationally expensive and the data contrast for solar doesn't provide satisfactory incentive for that.
-            self.log.info(f"GWA Cells not configured for solar.")
+            self.log.info("GWA Cells not configured for solar.")
             pass 
 
     '''
@@ -361,8 +369,8 @@ class RESources_builder(AttributesParser):
         self.get_cell_capacity()
         self.extract_weather_data()
         self.update_gwa_scaled_params(self.memory_resource_limitation)
-        self.get_CF_timeseries(cells=self.datahandler.from_store('cells'))
-
+        self.get_CF_timeseries()
+        self.datahandler.refresh()
         self.find_grid_nodes(use_pypsa_buses=False)
         self.score_cells()
         self.get_clusters()

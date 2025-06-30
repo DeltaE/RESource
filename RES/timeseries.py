@@ -378,7 +378,7 @@ class Timeseries(ERA5Cutout):
             print(f"⚠️ No valid clusters to process for cluster {cluster}.")
             self.cluster_df = pd.DataFrame()
             
-        self.datahandler.to_store(self.cluster_df, f'timeseries/clusters/{self.resource_type}',force_update=True)# Hierarchical data of resources under kley 'timeseries' 
+        self.datahandler.to_store(self.cluster_df, f'timeseries/clusters/{self.resource_type}')# Hierarchical data of resources under kley 'timeseries' 
 
         # Display the final DataFrame
         return self.cluster_df
