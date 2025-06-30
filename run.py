@@ -1,6 +1,6 @@
 import RES.RESources as RES
 
-def main(countries:list[str]=['AL', 'BA','XK','ME','MK','RS'], #'AL, 'BA','XK','ME','MK','RS']
+def main(countries:list[str]=['AL', 'XK','ME','MK','RS'], #'AL, 'BA','XK','ME','MK','RS'] 'BA' has GWA data issues
          resource_types:list[str] = ['wind','solar'],
          ):
     

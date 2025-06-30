@@ -49,7 +49,7 @@ class GWACells(GADMBoundaries):
         for key, raster_name in self.gwa_rasters.items():
             self.gwa_country_code=self.region_mapping[region_short_code].get('GWA_country_code')
             self.raster_name=raster_name.replace("GWA_country_code",  self.gwa_country_code)
-            self.raster_path = self.gwa_root / raster_name
+            self.raster_path = self.gwa_root / self.raster_name
             if not self.raster_path.exists():
                 generic_source_url = self.gwa_sources[key]
                 self.region_source_url = generic_source_url.replace("GWA_country_code",  self.gwa_country_code)
@@ -170,4 +170,4 @@ class GWACells(GADMBoundaries):
             
         # Store the aggregated data
         self.datahandler.to_store(self.mapped_gwa_cells_aggr_df, 'cells') 
-        return self.mapped_gwa_cells_aggr_df
+        

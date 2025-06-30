@@ -169,6 +169,8 @@ class GridNodeLocator(AttributesParser):
         osm_data = OSMData(region_short_code=self.region_short_code)
         
         osm_power_data = osm_data.get_osm_layer('power')
+        if "element" not in osm_power_data.columns:
+            osm_power_data = osm_power_data.reset_index()
         lines_gdf=osm_power_data[osm_power_data.element=='way']
         lines_gdf_cleaned= lines_gdf[
             lines_gdf.geometry.apply(lambda g: isinstance(g, (LineString, MultiLineString)))

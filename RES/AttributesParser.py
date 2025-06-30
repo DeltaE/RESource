@@ -29,7 +29,7 @@ class AttributesParser:
     """
     # Attributes that are required as Args.
     region_short_code: str
-    config_file_path: Path =field(default='config/config.yaml')
+    config_file_path: Path =field(default='config/config_WB6.yaml')
     resource_type: str = field(default='None')
     
     def __post_init__(self):
