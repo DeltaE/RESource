@@ -111,7 +111,7 @@ class GADMBoundaries(AttributesParser):
 
                 if _boundary_region_.empty : 
                     self.log.error(f">> No data found for region '{self.region_name}'.")
-                    exit
+                    raise ValueError(f">> No data found for region '{self.region_name}'.")
                 else:
                     _boundary_region_ = _boundary_region_[['NAME_0', 'NAME_1', 'NAME_2', 'geometry']].rename(columns={
                         'NAME_0': self.boundary_datafields['NAME_0'], 'NAME_1': self.boundary_datafields['NAME_1'], 'NAME_2': self.boundary_datafields['NAME_2']
@@ -124,7 +124,7 @@ class GADMBoundaries(AttributesParser):
             return self.boundary_region
         else:
             self.log.error(f">> Invalid region code: {self.region_short_code}.")
-            exit
+
     
     def get_bounding_box(self)->tuple:
         
