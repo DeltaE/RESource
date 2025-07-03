@@ -49,6 +49,13 @@ def print_update(level: int=None,
     
     print(f"{color}{prefix}> {message}{Style.RESET_ALL}")
 
+def print_banner(message: str):
+    line = "*" * len(message)
+    print(f"{Fore.GREEN}{Style.BRIGHT}{line}{Style.RESET_ALL}")
+    print(f"{Fore.GREEN}{Style.BRIGHT}{message}{Style.RESET_ALL}")
+    print(f"{Fore.GREEN}{Style.BRIGHT}{line}{Style.RESET_ALL}")
+
+
 def load_geojson_file(geojson_file_path:str|Path)->list:
     """
     Loads a GeoJSON file and extracts the coordinates from its geometry.

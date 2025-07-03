@@ -1,0 +1,280 @@
+Title: User Configuration for Bidirectional Linking Tool
+Developer : Md Eliasinul Islam
+Affiliation : Sustainable Energy Engineering, Simon Fraser University, BC, Canada
+
+version: 2.0
+Release_Year: 2025
+description: |+
+    Inside the user configuration file of the L:INKING TOOL, there are 'keys' with quantitative 'values' upon which the module results relies on.
+    These  have been given as 'parameters' in the RULES
+
+Scenario: 
+  REF :
+    Name: Reference
+    Description: A base scenario with reasonable assumptions.
+
+Region: WB6 # Western Balkan Regions
+
+# grid_cell_resolution:  ### hardcoded for now. Future scope
+#   dx: 0.025
+#   dy: 0.025
+
+region_mapping:
+  'AL': 
+    name: "Albania"
+    land_area_km2: 28,748
+    land_area_mi2: 11,100
+    percentage_national_land_area: "100%"  # Since it's a country
+    timezone_convert: 'Etc/GMT-1' # Central European Time (CET)
+    # region_mapping: {}
+    GWA_country_code: 'ALB'
+
+  'BA': 
+    name: "Bosnia and Herzegovina"
+    land_area_km2: 51,209
+    land_area_mi2: 19,772
+    percentage_national_land_area: "100%"
+    timezone_convert: 'Etc/GMT-1' # Central European Time (CET)
+    # region_mapping: {}
+    GWA_country_code: 'BIH'
+
+  'XK': 
+    name: "Kosovo"
+    land_area_km2: 10,887
+    land_area_mi2: 4,203
+    percentage_national_land_area: "100%"
+    timezone_convert: 'Etc/GMT-1' # Central European Time (CET)
+    # region_mapping: {}
+    GWA_country_code: 'XKX'
+
+  'ME': 
+    name: "Montenegro"
+    land_area_km2: 13,812
+    land_area_mi2: 5,333
+    percentage_national_land_area: "100%"
+    timezone_convert: 'Etc/GMT-1' # Central European Time (CET)
+    GWA_country_code: 'MNE'
+
+  'MK': 
+    name: "North Macedonia"
+    land_area_km2: 25,713
+    land_area_mi2: 9,928
+    percentage_national_land_area: "100%"
+    timezone_convert: 'Etc/GMT-1' # Central European Time (CET)
+    GWA_country_code: 'MKD'
+
+  'RS': 
+    name: "Serbia"
+    land_area_km2: 88,361
+    land_area_mi2: 34,116
+    percentage_national_land_area: "100%"
+    timezone_convert: 'Etc/GMT-1' # Central European Time (CET)
+    GWA_country_code: 'SRB'
+
+
+GADM:
+  root: data/downloaded_data/GADM
+  processed: data/processed_data/regions
+  datafield_mapping:
+    'NAME_0': 'Country'
+    'NAME_1': 'Region'
+
+# Gov:
+  # not configured for Wb6
+NREL: 
+  ATB: # Annual technology Baseline (ATB) - 2024\
+    root : 'data/downloaded_data/NREL/ATB'
+    source: # parquet file recommended for less memory usage
+      # excel: https://data.openei.org/files/6006/2024%20v2%20Annual%20Technology%20Baseline%20Workbook%20Errata%207-19-2024.xlsx
+      csv: https://oedi-data-lake.s3.amazonaws.com/ATB/electricity/csv/2024/ATBe.csv
+      parquet: https://oedi-data-lake.s3.amazonaws.com/ATB/electricity/parquet/2024/v3.0.0/ATBe.parquet
+    datafile:
+      # excel: https://data.openei.org/files/6006/2024%20v2%20Annual%20Technology%20Baseline%20Workbook%20Errata%207-19-2024.xlsx
+      csv: ATBe.csv #96 MB
+      parquet: ATBe.parquet #5 MB
+    about: https://atb.nrel.gov/electricity/2024/technologies
+    column: 'core_metric_parameter'
+    cost_params:
+      # capex: 'CAPEX' # $/ kW
+      capex: 'OCC' # $/ kW
+      fom: 'Fixed O&M' # mill. $/ MW
+      vom: 'None' # Not found for solar,wind,bess
+ 
+OSM_data: # OpenStreet Map
+  root: 'data/downloaded_data/OSM'
+  data_keys: # has to be inline with OSM tags
+    aeroway:
+      tags: ['aerodrome', 'runway', 'taxiway', 'helipad', 'apron', 'gate']
+    power:
+      tags: ['line', 'cable', 'minor_line', 'substation', 'tower', 'pole', 'generator', 'plant', 'terminal']
+    substation:
+      tags: ['transmission', 'distribution', 'minor_distribution', 'industrial']          
+
+custom_land_layers:
+  rasters:
+    raster_1: # You can define any name here
+      'raster': {} #Raster or path to raster which to exclude.
+      'class_exclusion' : {} #Raster Classes
+      'buffer': {}
+      'invert': 'False' # TRUE = inclusion. FALSE = Exclusion
+  vectors:
+    vector_1: # You can define any name here
+      'geometry': {} #Raster path
+      'buffer':
+      'invert': 'False'
+
+GAEZ:
+  root: 'data/downloaded_data/GAEZ'
+  self.: 'https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip'
+  zip_file: 'LR.zip'
+  Rasters_in_use_direct: 'Rasters_in_use'
+  raster_types:
+    - name: 'land_cover'
+      raster: "faocmb_2010.tif"  # Dominant land cover/use ; 11 classes; (5 arc-minute)
+      zip_extract_direct: 'LR/lco'
+      color_map: 'YlGn'
+      class_inclusion:
+        solar: [2, 3, 5, 8, 9]
+        wind: [2, 3, 5, 8, 9]
+        
+    - name: 'terrain_resources'
+      raster: "slpmed05.tif" # Median terrain slope classes; 8 classes ; (5 arc-minute)
+      zip_extract_direct: 'LR/ter'
+      color_map: 'terrain'
+      class_exclusion:
+        solar: [9]
+        wind: [7, 8, 9]
+        buffer:
+          solar: 0 #m
+          wind: 500 #m
+
+    - name: 'exclusion_areas'
+      raster: "exclusion_2017.tif" # Exclusion areas defined by Int'l orgs ; 7 classes;
+      zip_extract_direct: 'LR/excl'
+      color_map: 'OrRd'
+      class_exclusion:
+        solar: [2, 3, 4, 5, 6, 7]
+        wind: [2, 3, 4, 5, 6, 7]
+        buffer: 
+          solar: 500 #m
+          wind: 500 #m
+          
+WorldPop:
+  root: 'data/downloaded_data/WorldPop'
+  source : 
+    population_density_CAN: 'https://data.worldpop.org/GIS/Population_Density/Global_2000_2020_1km_UNadj/2020/CAN/can_pd_2020_1km_UNadj_ASCII_XYZ.zip'
+    population_count_CAN: 'https://data.worldpop.org/GIS/Population/Global_2000_2020_1km_UNadj/2020/CAN/can_ppp_2020_1km_UNadj_ASCII_XYZ.zip'
+    weighted_population_density_EARTH: 'https://data.worldpop.org/GIS/Population_Weighted_Density/Unconstrained_Subnational/1km/PWD_1km_sub_national_geojson.zip'
+    # more_data : https://www.worldpop.org/datacatalog/
+        
+cutout:
+  root: data/downloaded_data/cutout/
+  module:
+    - era5
+    # - sarah
+
+  dx: 0.25 # Arc Length for cutout grids cells in Degrees
+  dy: 0.25 # Arc Length for cutout grids cells in Degrees
+
+  # the snapshots are given as a 'list', not 'values'. 
+  snapshots: 
+    start: # Must be formatted as 'YYYY-MM-DD' (ERA5 returns data in UTC)
+      - '2023-01-01 07:00:00' # YYYY-MM-DD "2021-01-01 07:00:00"
+    end:
+      - '2024-01-01 06:00:00' # 6 # YYYY-MM-DD "2022-01-01 06:00:00"
+
+GWA:
+  root: 'data/downloaded_data/GWA'
+  datafields: ['windspeed_gwa','CF_IEC3' ]
+  sources:
+    windspeed_gwa: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/wind-speed/100' # replace GWA_country_code with country code
+    CF_IEC1: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/capacity-factor_IEC1/'  #rotor dia 112m
+    CF_IEC2: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/capacity-factor_IEC2' #rotor dia 126m
+    CF_IEC3: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/capacity-factor_IEC3'   #rotor dia 136m
+    # IEC_Class_fatugue_loads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-fatigue-loads-incl-wake/'
+    # IEC_Class_ExLoads: 'https://globalwindatlas.info/api/gis/country/CAN/IEC-class-extreme-loads/' #IEC_Class_ExtremeLoads
+  rasters:
+    windspeed_gwa: 'GWA_country_code_wspd_100m.tif' # replace GWA_country_code with country code
+    CF_IEC1: 'GWA_country_code_capacity-factor_IEC1.tif'
+    CF_IEC2: 'GWA_country_code_capacity-factor_IEC2.tif'
+    CF_IEC3: 'GWA_country_code_capacity-factor_IEC3.tif'
+    # IEC_Class_ExLoads: 'GWA_country_code_IEC-class-extreme-loads.tif'
+  filter:
+    windspeed_low: 7 # meter/s
+    windspeed_high: 60 # meter/s # The extreme wind speed above which the wind turbine is not expected to operate.
+
+capacity_disaggregation:
+  solar:
+    max_capacity: 10  # GW
+    landuse_intensity : 1.45  # (.01*145 MW/km2) ; Source: PyPSA-EUR paper, 
+    # capex : 1161.269 # USD/kW  ***Replaced with NREL ATB Spreadsheet (via data pipeline automation) for different wind class, different years.
+    cost_data: 'data/processed_data/utility_PV_Class5_cost_moderate_NREL_ATB2024.csv'
+    NREL_ATB_technology: 'LandbasedWind'
+    NREL_ATB_type : 'Class5' # for more : https://atb.nrel.gov/electricity/2023/utility-scale_pv
+    atlite_panel: 'CSi' # CSi , CdTe
+    tracking : 'dual' # None, horizontal,tilted_horizontal,vertical,dual
+    cell_static_CF_tolerance: 0.16
+    cell_capacity_tolerance: 1 #MW
+    WCSS_tolerance: 0.08 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
+    buffer:
+      aeroway: 500 # m
+      conserved_lands: 500 #m
+    
+  wind:
+    max_capacity: 20  # GW
+    landuse_intensity : 3  # (0.3 * 10 MW/km2); Source: PyPSA-EUR paper,
+    # capex : 1323.4 # USD/kW  *** Replaced with NREL ATB Spreadsheet (via data pipeline automation) for different wind class, different years
+    cost_data: 'data/processed_data/land_based_wind_T3_cost_moderate_NREL_ATB2024.csv'
+    WCSS_tolerance: 0.1 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
+    CF_low: 0.20
+    CF_high: 1
+    NREL_ATB_technology: 'LandbasedWind'
+    turbines: #From  existing system at BC (> 3MW turbines)
+      NREL_ATB_type : 'Wind Turbine Technology 3' # Turbine Type 3 (of NREL method), size : ~ 3.3 MW, 148 m Rotor Dia, HubHeight 100m, wind plant ~ 200MW
+      atlite:
+        1: 
+          name: 'Enercon_E82_3000kW' #rotor_dia 82m
+          ID: {} # N/A
+          P: 3 #Nominal Power
+        2': 
+          name: 'Vestas_V90_3MW' #rotor_dia 90m
+          ID: {} # N/A
+          P: 3 #Nominal Power
+      OEDB:
+        source: 'https://openenergy-platform.org/api/v0/schema/supply/tables/wind_turbine_library/rows'
+        models:
+          1:
+            name: 'GE2.75_120' #rotor_dia 120m
+            ID: 116
+            P: 2.75 #Nominal Power
+            manufacturer: 'GE Wind'
+            # config: xxx
+          2:
+            name: '3.2M114_NES' #rotor_dia 114m
+            ID: 93
+            P: 3.2 #Nominal Power
+            manufacturer: 'Senvion/REpower'
+            config: 'data/downloaded_data/OEDB/3.2M114_NES.yaml'
+    buffer:
+      aeroway: 500 # m
+      conserved_lands: 500 #m
+  # bess:
+  #   max_capacity : 10 #GW
+  #   cost_data: 'data/NREL/bess_LI_6hr_cost_moderate_NREL_ATB2024.csv'
+  #   NREL_ATB_type: '6Hr Battery Storage' # storage_discharge_duration should be in-line with this. Other options are
+  #   vom: 0 # not found in NREL,ATB
+  #   unit_size: 60 #MW; default in NREL is 50 MW
+  #   residential_energy_consumption_year: 2021 # BESS cluster size calculation is associated to this year' data
+  #   Based on general industry data and the needs of a region with a balanced energy mix like BC, you might consider the following approximate range:
+  #   capacity_estimate_per_energy_unit:    # MW per GWh of energy consumption.
+  #     Conservative: 0.01 
+  #     Moderate : 0.05 
+  #     Optimistic : 0.1 
+  #   storage_discharge_duration : 5.5 # hr  ; the battery cost should be inline with this data.
+
+  transmission:
+    grid_connection_cost_per_Km : 2.6 #M$/km   # from MISO , may try NREL method for different range of distance
+    tx_line_rebuild_cost : 0.56   #M$/km # from MISO
+    proximity_filter: 200 #km
+    buses: 'data/processed_data/buses_BC.csv'
+    lines: 'data/processed_data/lines_BC.csv'  #future scope usage

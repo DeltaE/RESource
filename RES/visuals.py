@@ -34,6 +34,13 @@ def size_for_legend(mw):
 
 from matplotlib.patches import RegularPolygon
 
+def add_compass_arrow(ax, x=0.9, y=0.9, length=0.05, text_offset=0.01):
+    ax.annotate('', xy=(x, y), xytext=(x, y - length),
+                xycoords='axes fraction',
+                arrowprops=dict(facecolor='black', width=1.5, headwidth=6))
+    ax.text(x, y - length - text_offset, 'N', transform=ax.transAxes,
+            ha='center', va='top', fontsize=12, fontweight='bold', color='black')
+
 def add_compass_to_plot(ax, x_offset=0.76, y_offset=0.92, size=14, triangle_size=0.02):
     """
     Adds a simple upward-pointing triangle with an 'N' label below it as a North indicator.
@@ -65,14 +72,13 @@ def add_compass_to_plot(ax, x_offset=0.76, y_offset=0.92, size=14, triangle_size
             fontsize=size, fontweight='bold',
             color='grey')
 
-
-    
-
 def plot_resources_scatter_metric_combined(
-    solar_clusters,
-    wind_clusters,
-    lcoe_threshold= 200,
-    save_to_root='vis'
+    solar_clusters:pd.DataFrame,
+    wind_clusters:pd.DataFrame,
+    bubbles_GW:list= [1, 5, 10],
+    bubbles_scale:float= 0.4,
+    lcoe_threshold:float= 200,
+    save_to_root:str='vis'
 ):
     import matplotlib.pyplot as plt
     from matplotlib.ticker import MultipleLocator, FuncFormatter
@@ -90,7 +96,7 @@ def plot_resources_scatter_metric_combined(
     solar_scatter = ax.scatter(
         solar['CF_mean'],
         solar['lcoe'],
-        s=solar['potential_capacity'] / 100,
+        s=solar['potential_capacity']*bubbles_scale,  # Scale down for better visibility
         alpha=0.7,
         c='darkorange',
         edgecolors='w',
@@ -102,7 +108,7 @@ def plot_resources_scatter_metric_combined(
     wind_scatter = ax.scatter(
         wind['CF_mean'],
         wind['lcoe'],
-        s=wind['potential_capacity'] / 100,
+        s=wind['potential_capacity']*bubbles_scale,  # Scale down for better visibility
         alpha=0.7,
         c='navy',
         edgecolors='w',
@@ -122,11 +128,11 @@ def plot_resources_scatter_metric_combined(
         spine.set_visible(False)
 
     # Bubble size legend
-    size_labels = [1, 5, 10]  # GW
+    size_labels = bubbles_GW  # GW
     size_values = [s * 1000 for s in size_labels]
     legend_handles = [
         mlines.Line2D([], [], color='gray', marker='o', linestyle='None',
-                      markersize=np.sqrt(size / 100), alpha=0.7, label=f'{label} GW')
+                      markersize=np.sqrt(size*bubbles_scale), alpha=0.7, label=f'{label} GW')
         for size, label in zip(size_values, size_labels)
     ]
     # Resource legend
@@ -663,6 +669,91 @@ def create_timeseries_interactive_plots(
 
     # # Display the plot
     # pio.show(fig)
+    
+def get_data_in_map_plot(cells, 
+                    resource_type:str=None,
+                    datafield:str=None,
+                    title:str=None,
+                    ax=None,
+                    compass_size:float=10,
+                    show=True):
+    
+    import matplotlib.pyplot as plt
+    import matplotlib as mpl
+    column_keyword=datafield.upper()
+    resource_type = resource_type.lower()
+    
+    columns={'CF':f"{resource_type}_CF_mean", 
+             'CAPACITY':f"potential_capacity_{resource_type}", 
+             'SCORE':f"lcoe_{resource_type}"}
+    
+    legend_labels = {
+        'CF': f'{resource_type.capitalize()} Capacity Factor (annual mean)',
+        'CAPACITY': f'{resource_type.capitalize()} Potential Capacity (MW)',
+        'SCORE': f'{resource_type.capitalize()} Score'
+    }
+    
+    if column_keyword is not None:
+        if column_keyword not in columns.keys():
+            raise ValueError("datafield must be one of 'CF', 'CAPACITY', or 'LCOE'.\n Given datafield need not to be case sensitive")
+
+    if resource_type is not None:
+        if resource_type not in ['solar', 'wind']:
+            raise ValueError("resource_type must be either 'solar' or 'wind'.\n Given resource_type need not to be case sensitive")
+        else:
+            if ax is None:
+                fig, ax = plt.subplots(figsize=(10, 8))  # fallback if no ax passed
+            else:
+                fig = ax.figure
+
+            cmap = 'YlOrRd' if resource_type == 'solar' else 'BuPu'
+            column = columns[column_keyword]
+            if column_keyword == 'SCORE':
+                cells=cells[cells[column]<=200]
+            
+            vmin = cells[column].min()
+            vmax = cells[column].max()
+            norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
+
+            # Shadow layer
+            shadow_offset = 0.016
+            cells_shadow = cells.copy()
+            cells_shadow['geometry'] = cells_shadow['geometry'].translate(xoff=-shadow_offset, yoff=shadow_offset)
+            cells_shadow.plot(column=column, cmap='Greys', ax=ax, edgecolor='white', alpha=1, linewidth=0.2, zorder=1)
+
+            # Main layer
+
+            
+            cells.plot(column=column, cmap=cmap, ax=ax, edgecolor='k', alpha=1, linewidth=0.15, zorder=2)
+
+            # Colorbar
+            sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
+            cbar = fig.colorbar(sm, ax=ax, orientation='vertical', fraction=0.025, pad=0.02)
+            cbar.set_label(legend_labels[column_keyword], fontsize=12)
+            cbar.ax.tick_params(labelsize=12)
+            # Set font weight for colorbar tick labels
+            for label in cbar.ax.get_yticklabels():
+                label.set_fontweight('bold')
+
+            if title is not None:
+                ax.set_title(title, fontsize=14, fontweight='bold', loc='center')
+            else:
+                ax.set_title(f'{resource_type.capitalize()} Resources', fontsize=14, fontweight='bold', loc='center')
+            ax.set_axis_off()
+            if resource_type=='solar':
+                utils.print_update(level=2,message= "Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name")
+            if column_keyword == 'SCORE':
+                ax.text(
+                    0.5, 0,
+                    "Note: The Scoring is calculated to reflect Dollar investment required to get an unit of Energy yield (MWh).\nTo reflect market competitiveness and incentives, the Score ($/MWh) needs financial adjustment factors to be considered on top of it.\nScore Higher than 200 $/MWh are assumed to be not feasible and not shown in this map.",
+                    transform=ax.transAxes, ha='center', va='top', fontsize=10, color='gray'
+                )
+            if show:
+                plt.show()
+                
+            add_compass_to_plot(ax,size=compass_size,triangle_size=0.014)
+        
+    return ax
 
 def create_key_data_map_interactive(
     province_gadm_regions_gdf:gpd.GeoDataFrame,
