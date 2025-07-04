@@ -3,6 +3,8 @@ import atlite
 from RES import utility
 import numpy as np
 import pandas as pd
+import RES.utility as utils
+print_level_base=3
 
 def impute_ERA5_windspeed_to_Cells(
         cutout:atlite.Cutout, 
@@ -11,7 +13,7 @@ def impute_ERA5_windspeed_to_Cells(
         For each grid cells, this function finds the yearly mean windspeed from the windspeed timeseries and imputes to the cell dataframe.
         """
         
-        print(f"Calculating yearly mean windspeed and imputing to provincial Grid Cells named as 'windspeed_ERA5'")
+        utils.print_update(level=print_level_base+1,message=f"{__name__}| Calculating yearly mean windspeed and imputing to provincial Grid Cells named as 'windspeed_ERA5'")
 
         # Calculate yearly mean windspeed
         wnd_ymean_df = cutout.data.wnd100m.groupby('time.year').mean('time').to_dataframe(name='windspeed_ERA5').reset_index()

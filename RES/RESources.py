@@ -23,6 +23,11 @@ from RES.gwa import GWACells
 from RES.units import Units
 from RES import utility as utils
 
+from RES.logger import setup_logger
+import logging
+import inspect
+logger = setup_logger(__name__, level=logging.DEBUG)
+    
 # Get the current local time
 current_local_time = datetime.now()
 warnings.filterwarnings("ignore")
@@ -32,7 +37,7 @@ class RESources_builder(AttributesParser):
     def __post_init__(self):
         # Call the parent class __post_init__ to initialize inherited attributes
         super().__post_init__()
-        utils.print_module_title('Initiating RESource Builder...')
+        utils.print_module_title(f'Initiating RESource Builder | {__name__}')
         # This dictionary will be used to pass arguments to external classes
         self.required_args = {   #order doesn't matter
             "config_file_path" : self.config_file_path,
@@ -71,12 +76,12 @@ class RESources_builder(AttributesParser):
     def get_grid_cells(self):
         
         utils.print_update(level=print_level_base+1,
-                           message="Preparing Grid Cells...")
+                           message=f"{__name__}| Preparing Grid Cells...")
         
         self.region_grid_cells:gpd.GeoDataFrame=self.gridcells.get_default_grid()
         
         utils.print_update(level=print_level_base+2,
-                           message="Grid Cells updated.")
+                           message=f"{__name__}| Grid Cells updated.")
         
         return self.region_grid_cells
     '''
@@ -95,13 +100,13 @@ class RESources_builder(AttributesParser):
         "returns cells geodataframe, capacity matrix data array and cutout "
                 
         utils.print_update(level=print_level_base+1,
-                           message="Preparing Cells' capacity ...")
+                           message=f"{__name__}| Preparing Cells' capacity...")
         
         self.cells_with_cap_nt:tuple=self.cell_processor.get_capacity()
         
                 
         utils.print_update(level=print_level_base+2,
-                           message="Cells' capacity updated..")
+                           message=f"{__name__}| Cells' capacity updated.")
         
         return self.cells_with_cap_nt
 
@@ -115,7 +120,7 @@ class RESources_builder(AttributesParser):
     def extract_weather_data(self):
         
         utils.print_update(level=print_level_base+1,
-                           message="Extracting ERA5 weather data...")
+                           message=f"{__name__}| Extracting ERA5 windspeed from cutout...")
         
         self.store_grid_cells=self.datahandler.from_store('cells')
         self.cutout,_=self.era5_cutout.get_era5_cutout()
@@ -123,11 +128,11 @@ class RESources_builder(AttributesParser):
         if self.resource_type=='wind': 
             if all(column in self.store_grid_cells.columns for column in ['windspeed_ERA5']):
                 utils.print_update(level=print_level_base+2,
-                           message="'windspeed_ERA5' already present in the stored dataset, skipping the data extraction from source.")
+                           message=f"{__name__}|'windspeed_ERA5' already present in the stored dataset, skipping the data extraction from source.")
                 pass
             else:
                 utils.print_update(level=print_level_base+2,
-                           message="Extracting 'windspeed_ERA5'  from source.")
+                           message=f"{__name__}| Extracting 'windspeed_ERA5' from cutout.")
                 self.store_grid_cells_updated:gpd.GeoDataFrame=wind.impute_ERA5_windspeed_to_Cells(self.cutout, 
                                                                                                    self.store_grid_cells)
                 self.datahandler.to_store(self.store_grid_cells_updated,'cells')
@@ -139,6 +144,7 @@ class RESources_builder(AttributesParser):
             # utils.print_update(level=print_level_base+2,
             #                message="Extracting 'solar_influx'  from source.")
             # self.store_grid_cells_updated:gpd.GeoDataFrame= xxx
+            utils.print_update(level=print_level_base+1,message=f"{__name__}| Global Solar Atlas data is not yet supported for Solar Resources")
             pass
     
     #---------------------------
@@ -146,21 +152,21 @@ class RESources_builder(AttributesParser):
                                 memory_resource_limitation:Optional[bool]=False):
         if self.resource_type=='wind': 
             utils.print_update(level=print_level_base+2,
-                           message="Preparing high resolution windspeed data from Global Wind Atlas from source.")
+                           message=f"{__name__}| Preparing high resolution windspeed data from Global Wind Atlas")
             
             if all(column in self.store_grid_cells.columns for column in ['CF_IEC2', 'CF_IEC3', 'windspeed_gwa','windspeed_ERA5']):
                 utils.print_update(level=print_level_base+3,
-                           message="'CF_IEC2', 'CF_IEC3', 'windspeed_gwa' are already present in the store information, skipping data extraction from source")
+                           message=f"{__name__}| 'CF_IEC2', 'CF_IEC3', 'windspeed_gwa' are already present in the store information, skipping data extraction from source")
                 pass
             else:
                 utils.print_update(level=print_level_base+3,
-                           message="Data extracting from source: 'CF_IEC2', 'CF_IEC3', 'windspeed_gwa' ")
+                           message=f"{__name__}| Data extracting from source: 'CF_IEC2', 'CF_IEC3', 'windspeed_gwa' ")
                 self.gwa_cells.map_GWA_cells_to_ERA5(memory_resource_limitation)
             
         elif self.resource_type=='solar': 
             # Not activated for solar resources yet as the high resolution data processing is computationally expensive and the data contrast for solar doesn't provide satisfactory incentive for that.
             utils.print_update(level=print_level_base+2,
-                           message="GWA Cells not configured for solar.")
+                           message=f"{__name__}| Global Solar Atlas data not yet supported for solar.")
             pass
         
         return self.store_grid_cells 
@@ -181,7 +187,7 @@ class RESources_builder(AttributesParser):
         "returns cells geodataframe and timeseries dataframes"
         
         utils.print_update(level=print_level_base+3,
-                           message="Preparing Timeseries for the Cells...")
+                           message=f"{__name__}| Preparing Timeseries for the Cells...")
         if cells is None:
             self.datahandler.refresh()
             cells=self.datahandler.from_store('cells')
@@ -206,12 +212,12 @@ class RESources_builder(AttributesParser):
         if cells is None:
             self.store_grid_cells=self.datahandler.from_store('cells')
             
-        utils.print_update(level=print_level_base+2,
-                           message="Preparing grid nodes for the Cells...")
+        utils.print_update(level=print_level_base+1,
+                           message=f"{__name__}| Grid Node Location initiated...")
         
         if use_pypsa_buses:
             utils.print_update(level=print_level_base+3,
-                           message="Using PyPSA nodes as preferred nodes for resource connection.")
+                           message=f"{__name__}| Using PyPSA nodes as preferred nodes for resource connection.")
             buses_data_path=Path (self.config['output']['prepare_base_network']['folder'])/'buses.csv'
             grid_ss_df=pd.read_csv(buses_data_path)
             self.grid_ss = gpd.GeoDataFrame(
@@ -221,7 +227,7 @@ class RESources_builder(AttributesParser):
                 ) 
         else:
             utils.print_update(level=print_level_base+3,
-                           message="Using Substations (sourced from CODERS) preferred nodes for resource connection.")
+                           message=f"{__name__}| Using Substations (sourced from CODERS) preferred nodes for resource connection.")
             self.grid_ss:gpd.GeoDataFrame=self.coders.get_table_provincial('substations')
         
         self.cutout,self.region_boundary=self.era5_cutout.get_era5_cutout()
@@ -229,39 +235,16 @@ class RESources_builder(AttributesParser):
         # _grid_cells_=self.cutout.grid.overlay(self.region_boundary, how='intersection',keep_geom_type=True)
         
         utils.print_update(level=print_level_base+3,
-                           message="Searching for closest grid nodes for each cell...")
+                           message=f"{__name__}| Searching for nearest grid nodes for each cell...")
         self.region_grid_cells_cap_with_nodes = self.grid.find_grid_nodes_ERA5_cells(self.grid_ss,
                                                                                        self.store_grid_cells)
         utils.print_update(level=print_level_base+3,
-                           message="Closest grid nodes and distance to them calculated and stored for each cell...")
+                           message=f"{__name__}| ✔ Closest grid nodes and distance calculation completed.")
         
         self.datahandler.to_store(self.store_grid_cells,'cells')
         self.datahandler.to_store(self.grid_ss,'substations')
         
         return self.region_grid_cells_cap_with_nodes
-    '''
-    ______________________
-    Step 1E:
-    - Maps high resolution cells (e.g. GWA cells for wind) to ERA5 cells and calculates aggregated mean for each ERA5 cell.
-    - Currently active for Wind resources parameters only. High resolution dataset (~0.0025 arc deg | 100m) from Global Wind Atlas (GWA) has static values (annual mean) only.
-    ______________________ 
-    '''
-    
-    ''' 
-    def update_gwa_scaled_params(self,
-                                 memory_resource_limitation:Optional[bool]=False):
-        if self.resource_type=='wind': 
-            if all(column in self.store_grid_cells.columns for column in ['CF_IEC2', 'CF_IEC3', 'windspeed_gwa','windspeed_ERA5']):
-                self.log.info(f"'CF_IEC2', 'CF_IEC3', 'windspeed_gwa' are already present in the store information.")
-                pass
-            else:
-                self.gwa_cells.map_GWA_cells_to_ERA5(memory_resource_limitation)
-            
-        elif self.resource_type=='solar': 
-            # Not activated for solar resources yet as the high resolution data processing is computationally expensive and the data contrast for solar doesn't provide satisfactory incentive for that.
-            self.log.info(f"GWA Cells not configured for solar.")
-            pass 
-    '''
     
     '''
     ____________________________________________________________________________________________________________________________________________
@@ -287,9 +270,6 @@ class RESources_builder(AttributesParser):
         Wrapper of the _.get_cell_score()_ method of **_CellScorer_** object.
         """
         self.not_scored_cells=cells
-        
-        utils.print_update(level=print_level_base+2,
-                           message="Calculating score for cells...") 
         
         if self.not_scored_cells is None:    
             self.not_scored_cells=self.datahandler.from_store('cells')
@@ -344,13 +324,13 @@ class RESources_builder(AttributesParser):
         # self.wcss_tolerance:float= self.resource_disaggregation_config['WCSS_tolerance']
         utils.print_update(level=print_level_base+1,
                            
-                           message="Preparing cluster of resources...")
+                           message=f"{__name__}| Preparing cluster of resources...")
         utils.print_update(level=print_level_base+2,
-                           message="Clustering requires scored cells. The default scoring method is set to 'lcoe'. Checking for 'lcoe' in datafields...")
+                           message=f"{__name__}| Clustering requires scored cells. The default scoring method is set to 'lcoe'. Checking for 'lcoe' in datafields...")
         
         if not hasattr(self, f'lcoe_{self.resource_type}') or self.scored_cells is None:
             utils.print_update(level=print_level_base+3,
-                           message=f"'lcoe_{self.resource_type}' not found in available datafields...") 
+                           message=f"{__name__}| 'lcoe_{self.resource_type}' not found in available datafields...") 
             self.scored_cells = self.score_cells()
             
 
@@ -412,7 +392,7 @@ class RESources_builder(AttributesParser):
         if self.cell_cluster_gdf is None:
             self.cell_cluster_gdf=self.datahandler.from_store(f'clusters/{self.resource_type}')
             utils.print_update(level=print_level_base+1,
-                           message=f" Preparing representative profiles for {len(self.cell_cluster_gdf)} clusters")
+                           message=f"{__name__}| Preparing representative profiles for {len(self.cell_cluster_gdf)} clusters")
         if self.dissolved_cell_indices_df is None:
             self.dissolved_cell_indices_df=self.datahandler.from_store(f'dissolved_indices/{self.resource_type}')
         
@@ -433,21 +413,39 @@ class RESources_builder(AttributesParser):
         """
         utils.print_module_title(f"Initiating {self.resource_type} module for {self.get_region_name()}...")
         self.memory_resource_limitation=memory_resource_limitation
-        #Step>>1
+        
+        utils.print_banner("Step 1 : Prepare Cutout and Grid Cells")
         self.get_grid_cells()
-        #Step>>2
+        
+        utils.print_banner("Step 2 : Calculate Land availability and process capacity matrix")
         self.get_cell_capacity()
+        
+        utils.print_banner("Step 3 : [if Wind Resources] Collect and rescale Global Wind Atlas Data and calibrate ERA5's windspeed. ")
+        # Store CF data for validation purposes
         self.extract_weather_data()
         self.update_gwa_scaled_params(self.memory_resource_limitation) # testing, 2025 04 21
+        
+        utils.print_banner("Step 4 : Create timeseries for Resources CF")
         self.get_CF_timeseries(cells=self.store_grid_cells)
+        
+        utils.print_banner("Step 5 : Find closed grid connection nodes")
         self.find_grid_nodes(cells=self.cells_with_ts_nt.cells,
                              use_pypsa_buses=use_pypsa_buses)
+        
+        utils.print_banner("Step 6 : Use capacity, energy yield and cost attributes to score each cell")
         self.score_cells(cells=self.region_grid_cells_cap_with_nodes)
+        
+        utils.print_banner("Step 7.1 : Use score similarities to find clusterized representation (sites) of cells")
         self.get_clusters(scored_cells=self.scored_cells)
+        
+        utils.print_banner("Step 7.2 : Prepare representative timeseries of the clusterized sites")
         self.get_cluster_timeseries()
+        
+        utils.print_info("To avoid confusion, Units dictionary method should be updated if any units are changed across modules. However, units dictionary is for documentation purposes only. It doesn't have any calculation impacts on any of the methods.")
         self.units.create_units_dictionary()
         
         if select_top_sites:
+            utils.print_banner("Step 7 : Top Site Selections for Targeted Capacity Investments/Plans")
             resource_max_capacity=self.resource_disaggregation_config.get('max_capacity',10) # Collects max_capacity from resource_disaggregation_config (if set), otherwise defaults to 10 GW
             
             resource_clusters,cluster_timeseries=self.select_top_sites(self.get_clusters().clusters,
@@ -657,7 +655,7 @@ def build_resources(regions:list,
             resource_type=resource
         )
         RES_module.build(select_top_sites=True, 
-                            use_pypsa_buses=False)
+                            use_pypsa_buses=False,)
 
       
 # def main(config_file_path: str, 

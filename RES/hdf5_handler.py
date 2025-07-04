@@ -21,16 +21,16 @@ class DataHandler:
         """
         try:
             if hdf_file_path is None:
-                warnings.warn(f">> Store has not been set during initialization. Please define the store path during applying DataHandler methods")
+                warnings.warn("⚠️  Store has not been set during initialization. Please define the store path during applying DataHandler methods")
             else:
                 self.store = Path(hdf_file_path)
                 if not silent_initiation:
-                    utils.print_update(level=1,message=f">> Store initialized with the given path: {hdf_file_path}")
+                    utils.print_update(level=2,message=f"🗄️ Store initialized with the given path: {hdf_file_path}")
                 if show_structure:
                     self.show_tree(self.store)
                 
         except Exception as e:
-            warnings.warn(f"Error reading file: {e}")
+            warnings.warn(f"❌ Error reading file: {e}")
                
     def to_store(self,
                  data: pd.DataFrame | gpd.GeoDataFrame, 
@@ -51,7 +51,7 @@ class DataHandler:
             self.data_new = data.copy()
         # Proceed with saving to HDF5
         else:
-            raise TypeError(">> to be stored 'data' must be a DataFrame or GeoDataFrame.")
+            raise TypeError(f"{__name__}| ❌ to be stored 'data' must be a DataFrame or GeoDataFrame.")
 
         store = pd.HDFStore(self.store, mode='a')  # Open store in append mode ('a')
 
@@ -64,7 +64,7 @@ class DataHandler:
 
                 # Save the modified data to HDF5
                 self.data_new.to_hdf(self.store, key=key)
-                print(f">> Data (GeoDataFrame/DataFrame) saved to {self.store} with key '{key}'")
+                utils.print_update(level=3,message=f"{__name__}|💾 Data (GeoDataFrame/DataFrame) saved to {self.store} with key '{key}'")
             else:
                 # Read existing data from HDF5
                 self.data_ext = store.get(key)
@@ -81,7 +81,7 @@ class DataHandler:
                         self.updated_data['geometry'] = self.updated_data['geometry'].apply(dumps)
 
                 self.updated_data.to_hdf(self.store, key=key)
-                print(f">> Updated '{key}' saved to {self.store} with key '{key}'")
+                utils.print_update(level=3,message=f"{__name__}| 💾 Updated '{key}' saved to {self.store} with key '{key}'")
         
         finally:
             store.close()
@@ -97,7 +97,7 @@ class DataHandler:
         
         with pd.HDFStore(self.store, 'r') as store:
             if key not in store:
-                print(f"Error: Key '{key}' not found in {self.store}")
+                utils.print_update(level=3,message=f"{__name__}| ❌ Error: Key '{key}' not found in {self.store}")
                 return None
 
             # Load the data
@@ -110,7 +110,7 @@ class DataHandler:
 
             # If not geometry, return the regular DataFrame
             if key == 'timeseries':
-                print(f">>> 'timeseries' key access suggestions: use '.solar' to access Solar-timeseries and '.wind' for Wind-timeseries.")
+                utils.print_info({__name__}|"'timeseries' key access suggestions: use '.solar' to access Solar-timeseries and '.wind' for Wind-timeseries.")
             
             return self.data
 
@@ -139,14 +139,14 @@ class DataHandler:
 
         try:
             with h5py.File(store_path, 'r') as f:
-                utils.print_module_title(f"Structure of HDF5 file: {store_path}")
+                utils.print_module_title(f"{__name__}|🗄️ Structure of HDF5 file: {store_path}")
                 for key in f.keys():
                     print_structure(key, f[key])
                 print("\n")
                 utils.print_update(level=1,message="To access the data : ")
                 utils.print_update(level=2,message="<datahandler instance>.from_store('<key>')")
         except Exception as e:
-            utils.print_update(message=f"Error reading file: {e}",alert=True)
+            utils.print_update(message=f"{__name__}|  ❌ Error reading file: {e}",alert=True)
 
             
     @staticmethod
@@ -157,9 +157,9 @@ class DataHandler:
             # Check if the key exists in the file
             if key_to_delete in hdf_file:
                 del hdf_file[key_to_delete]
-                print(f"Key '{key_to_delete}' has been deleted.Store status:\n")
+                utils.print_update(level=3,message=f"{__name__}|Key '{key_to_delete}' has been deleted.Store status:\n")
                 DataHandler(store_path).show_tree(store_path)
             else:
-                print(f"Key '{key_to_delete}' not found in the file. Store status:\n")
+                utils.print_update(level=3,message=f"{__name__}|Key '{key_to_delete}' not found in the file. Store status:\n")
                 DataHandler(store_path).show_tree(store_path)
 

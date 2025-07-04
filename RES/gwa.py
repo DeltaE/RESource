@@ -1,4 +1,3 @@
-
 import geopandas as gpd
 import pandas as pd
 from dataclasses import dataclass, field
@@ -7,11 +6,10 @@ import rioxarray as rxr
 import xarray as xr
 from RES.hdf5_handler import DataHandler
 import requests
-from typing import List, Dict, Optional
-import RES.utility as utils
-
-# ---------
+from typing import Optional
 from RES.boundaries import GADMBoundaries
+import RES.utility as utils
+print_level_base=3
 
 @dataclass
 class GWACells(GADMBoundaries):
@@ -50,7 +48,7 @@ class GWACells(GADMBoundaries):
             if not self.raster_path.exists():
                 generic_source_url = self.gwa_sources[key]
                 self.region_source_url = generic_source_url.replace("GWA_country_code",  self.gwa_country_code)
-                self.log.info(f">> Downloading {key} from {self.region_source_url}")
+                utils.print_update(level=print_level_base,message=f"{__name__}| Downloading {key} from {self.region_source_url}")
                 self.download_file(self.region_source_url, self.raster_path)
 
             try:
@@ -65,7 +63,7 @@ class GWACells(GADMBoundaries):
 
                 data_list.append(data)
             except Exception as e:
-                print(f"Error processing {key}: {e}")
+                utils.print_update(level=print_level_base+1,message=f"{__name__}| Error processing {key}: {e}")
 
         # Merge and clean the data in a more efficient way
         self.merged_data = xr.merge(data_list) if data_list else xr.DataArray() #.rename('gwa_data')
@@ -74,14 +72,14 @@ class GWACells(GADMBoundaries):
         self.merged_df.reset_index(inplace=True)
         
         if memory_resource_limitation:
-            self.log.info(f"Memory resource limitations enabled. Filtering GWA cells witn windspeed mask to limit the data offload processing...")
+            utils.print_update(level=print_level_base,message=f"{__name__}| Memory resource limitations enabled. Filtering GWA cells within windspeed mask to limit the data offload processing...")
         else:
             windpseed_min:float=0 #m/s
             windpseed_max:float=50 #m/s
  
         mask=(self.merged_df['windspeed_gwa'] >= windpseed_min) & (self.merged_df['windspeed_gwa'] <= windpseed_max)
         self.merged_df_f=self.merged_df[mask]
-        self.log.info(f">> {abs(len(self.merged_df_f) - self.merged_df.shape[0])} cells have been filtered due to Windspeed filter [{windpseed_min}-{windpseed_max} m/s].\n>>> Cleaned data loaded for {len(self.merged_df_f)} GWA cells")
+        utils.print_update(level=print_level_base+1,message=f"{__name__}| {abs(len(self.merged_df_f) - self.merged_df.shape[0])} cells have been filtered due to Windspeed filter [{windpseed_min}-{windpseed_max} m/s].\n>>> Cleaned data loaded for {len(self.merged_df_f)} GWA cells")
         
         # class_mapping = {0: 'III', 1: 'II', 2: 'I', 3: 'T', 4: 'S'}
         # # Correctly modifying only one column
@@ -102,7 +100,7 @@ class GWACells(GADMBoundaries):
             with destination.open('wb') as f:
                 f.write(response.content)
         except requests.RequestException as e:
-            self.log.error(f">> Failed to download {destination} from {url}. Error: {e}")
+            utils.print_update(level=print_level_base,message=f"{__name__}| Failed to download {destination} from {url}. Error: {e}")
 
     
     def load_gwa_cells(self,
@@ -118,7 +116,7 @@ class GWACells(GADMBoundaries):
 
         # self.gwa_cells_gdf = self.calculate_common_parameters_GWA_cells()
         # self.gwa_cells_gdf = self.map_GWAcells_to_ERA5cells()
-        self.log.info(f">> Global Wind Atlas (GWA) Cells loaded. Size: {len(self.region_gwa_cells_df)}")
+        utils.print_update(level=print_level_base,message=f"{__name__}| Global Wind Atlas (GWA) Cells loaded. Size: {len(self.region_gwa_cells_df)}")
         
         return self.gwa_cells_gdf
     
@@ -136,10 +134,10 @@ class GWACells(GADMBoundaries):
  
         self.gwa_cells_gdf = self.load_gwa_cells(memory_resource_limitation)
 
-        self.log.info(f">> Mapping {len(self.gwa_cells_gdf)} GWA Cells to {len(_era5_cells_)} ERA5 Cells...")
+        utils.print_update(level=print_level_base+1,message=f"{__name__}| Mapping {len(self.gwa_cells_gdf)} GWA Cells to {len(_era5_cells_)} ERA5 Cells...")
 
         results = []  # List to store results for each region
-        self.log.info(">> Calculating aggregated values for ERA5 Cell's...")
+        utils.print_update(level=print_level_base+1,message=f"{__name__}| Calculating aggregated values for ERA5 Cell's...")
         
         for region in _era5_cells_['Region'].unique():
             _era5_cells_region = _era5_cells_[_era5_cells_['Region'] == region]
@@ -155,7 +153,7 @@ class GWACells(GADMBoundaries):
             regional_df=_data_.loc[:, selected_columns]
             
             numeric_cols = regional_df.select_dtypes(include='number') 
-            regional_mapped_gwa_cells_aggregated = numeric_cols.groupby(regional_df['cell']).mean() # Aggregateds he numeric columns data via mean
+            regional_mapped_gwa_cells_aggregated = numeric_cols.groupby(regional_df['cell']).mean() # Aggregates columns data via mean
             
             # Store mapped GWA cells in results list
             results.append(regional_mapped_gwa_cells_aggregated)

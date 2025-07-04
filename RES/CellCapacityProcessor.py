@@ -5,8 +5,7 @@ import pandas as pd
 from shapely.geometry import Polygon
 from typing import Dict
 import matplotlib.pyplot as plt
-import xarray as xr
-
+import inspect
 # Local Packages
 import RES.utility as utils
 # from RES.AttributesParser import AttributesParser
@@ -14,7 +13,7 @@ from RES.lands import LandContainer
 from RES.era5_cutout import ERA5Cutout
 from RES.hdf5_handler import DataHandler
 from RES.atb import NREL_ATBProcessor
-
+print_level_base=2
 
 class CellCapacityProcessor(LandContainer,
                             ERA5Cutout,
@@ -66,6 +65,8 @@ class CellCapacityProcessor(LandContainer,
     
     def load_cost(self,
                   resource_atb:pd.DataFrame):
+        utils.print_update(level=print_level_base+1,
+                           message=f"{__name__}| Extracting cost attributes...")
         
         grid_connection_cost_per_km = self.disaggregation_config.get('transmission', {}).get('grid_connection_cost_per_Km', 0)
         tx_line_rebuild_cost = self.disaggregation_config.get('transmission', {}).get('tx_line_rebuild_cost', 0)
@@ -107,11 +108,15 @@ class CellCapacityProcessor(LandContainer,
         ])
         
     def get_capacity(self):
+        utils.print_update(level=print_level_base+1,
+                           message=f"{__name__}| Cell capacity processor initiated...")
+        
     #a. load cutout and region boundary for which the cutout has been created.
         self.cutout,self.region_boundary=self.get_era5_cutout()
         
     #b. load excluder
         composite_excluder=self.set_excluder()
+        
         
     #d. Load costs (float)
         (
@@ -130,17 +135,33 @@ class CellCapacityProcessor(LandContainer,
                 )
         
     ## 2.1 Compute availability Matrix
-        self.region_shape= self.__get_unified_region_shape__() # we need to pass the unified region shape to the cutout.
+        self.region_shape= self.__get_unified_region_shape__() # we need to pass the unified region shape to the availability matrix calculation.
+
+        utils.print_update(level=print_level_base+1,
+                   message=f"{__name__}| Processing Availability Matrix... ")
         self.Availability_matrix:xr = self.cutout.availabilitymatrix(self.region_shape, composite_excluder)
+        
+        utils.print_info(f"{__name__}| @ Line: {inspect.currentframe().f_lineno-1} | We need to pass the unified `region_shape` to the cutout to calculate availability for the entire region as in one of the dimensions e.g. here 'Province'. If we pass multipolygons/geoms of each Regional district (sub-provincial) we will get availability for each regional district as a dimension; which adds additional step to produce our intended data. For this analysis, one unified shape for entire region is sufficient")
+        
+        utils.print_update(level=print_level_base+2,
+                   message=f"{__name__}| ✓ Availability Matrix processed for {self.region_name}. ")
+        
+        utils.print_update(level=print_level_base+1,
+                           message=f"{__name__}| Creating visuals for land-availability")
         self.plot_ERAF5_grid_land_availability()
         self.plot_excluder_land_availability()
         
         area = self.cutout.grid.set_index(["y", "x"]).to_crs(3035).area / 1e6 # This crs is fit for area calculation
         area = xr.DataArray(area, dims=("spatial"))
-
+        
+        utils.print_update(level=print_level_base+1,
+               message=f"{__name__}| Calculating capacity matrix, using land-use intensity for {self.resource_type} resources: {self.resource_landuse_intensity} MW/km²")
         capacity_matrix:xr.DataArray = self.Availability_matrix.stack(spatial=["y", "x"]) * area * self.resource_landuse_intensity
+        
         self.capacity_matrix=capacity_matrix.rename(f'potential_capacity_{self.resource_type}')
-
+        utils.print_update(level=print_level_base+2,
+                   message=f"{__name__}| ✓ Capacity Matrix processed for {self.region_name}. ")
+        
     ## 2.1 convert the Availability Matrix to dataframe.
         # _provincial_cell_capacity_df:pd.DataFrame=self.capacity_matrix.to_dataframe()
         _df_flat:pd.DataFrame=self.capacity_matrix.to_dataframe()
@@ -196,10 +217,12 @@ class CellCapacityProcessor(LandContainer,
         capacity_data = namedtuple('capacity_data', ['data','matrix','cutout'])
         
         self.resources_nt=capacity_data(self.provincial_cells,capacity_matrix,self.cutout)
+        utils.print_update(level=print_level_base+2,
+                   message=f"{__name__}| ✓ Capacity dataframe cleaned and processed")
         
-        print(f">> Total ERA5 cells loaded : {len(self.provincial_cells)} [each with .025 deg. (~30km) resolution ]")
-        self.log.info(">> Saving to the local store (as HDF5 file)")
-        
+        utils.print_update(level=print_level_base+1,
+                   message=f"{__name__}| ERA5 cells' capacity loaded for : {len(self.provincial_cells)} Cells [each with .025 deg. (~30km) resolution ]")
+       
         self.datahandler.to_store(self.provincial_cells,'cells')
      
         return self.resources_nt
@@ -265,7 +288,7 @@ class CellCapacityProcessor(LandContainer,
         ax.set_axis_off()
 
         # Shadow effect offset
-        shadow_offset = 0.008
+        shadow_offset = 0.004
 
         # Plot solar map on ax1
         # Add shadow effect for solar map
@@ -287,7 +310,7 @@ class CellCapacityProcessor(LandContainer,
         # Adjust layout for cleaner appearance
         plt.tight_layout()
         plt.savefig(f'vis/misc/land_availability_ERA5grid_{self.region_name}.png')
-        print(f"Land availability (grid cells) map saved at vis/misc/land_availability_ERA5grid_{self.region_name}.png")
+        utils.print_update(level=print_level_base+3,message=f"{__name__}|Land availability (grid cells) map saved at vis/misc/land_availability_ERA5grid_{self.region_name}.png")
         return fig
         # plt.close(fig)  # Close the figure to free up memory
 
@@ -304,6 +327,6 @@ class CellCapacityProcessor(LandContainer,
                                               ax=ax)
         ax.axis("off")
         plt.savefig(f'vis/misc/land_availability_excluderResolution_{self.region_name}.png')
-        print(f"Land availability map (excluder resolution) saved at vis/misc/land_availability_excluderResolution_{self.region_name}.png")
+        utils.print_update(level=print_level_base+3,message=f"{__name__}|Land availability map (excluder resolution) saved at vis/misc/land_availability_excluderResolution_{self.region_name}.png")
         return fig
         # plt.close(fig)  # Close the figure to free up memory

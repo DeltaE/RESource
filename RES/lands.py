@@ -11,7 +11,7 @@ from RES.era5_cutout import ERA5Cutout
 from RES.gaez import GAEZRasterProcessor
 from RES.osm import OSMData
 
-print_base_level=2
+print_level_base=2
 class ConservationLands(GADMBoundaries):
 
     """
@@ -44,13 +44,13 @@ class ConservationLands(GADMBoundaries):
             - This tool is configured to geom in degrees, e.g tolerance of 0.005 corresponds to approximately 500m (at the equator) geoms will be simplified.
         """
 
-        
+        utils.print_update(level=print_level_base+3,message=f"{__name__}| Processing Conserved areas for {self.region_name}")
         file_name_prefix = self.conserved_lands_cfg['data_name']
         provincial_file_path = Path('data/downloaded_data/lands') / f"{file_name_prefix}_{self.region_short_code}.pickle"
         provincial_file_path.parent.mkdir(parents=True, exist_ok=True)
         
         if provincial_file_path.exists():
-            utils.print_update(level=print_base_level,message="Loading Canadian Protected and Conserved Areas Database (CPCAD) from locally stored datafile - {provincial_file_path}")
+            utils.print_update(level=print_level_base,message=f"{__name__}| Loading Canadian Protected and Conserved Areas Database (CPCAD) from locally stored datafile - {provincial_file_path}")
             gdf=gpd.GeoDataFrame(pd.read_pickle(provincial_file_path))
         else:
             gdb_file_path = self.__get_conserved_lands__()
@@ -86,16 +86,16 @@ class ConservationLands(GADMBoundaries):
         """Download the source ZIP file, extract contents, and return the .gdb file path."""
         # Check if the extraction directory exists
         if self.extraction_dir.exists():
-           utils.print_update(level=print_base_level+1,message=f"Extraction directory {self.extraction_dir} already exists, skipping download and extraction.")
+           utils.print_update(level=print_level_base+1,message=f"Extraction directory {self.extraction_dir} already exists, skipping download and extraction.")
         else:
             if self.zip_file_path.exists():
-                utils.print_update(level=print_base_level+1,message=f"ZIP file {self.zip_file_path} already exists, skipping download.")
+                utils.print_update(level=print_level_base+1,message=f"ZIP file {self.zip_file_path} already exists, skipping download.")
             else:
                 # Download the ZIP file
-                utils.print_update(level=print_base_level+1,message="Downloading Canadian Protected and Conserved Areas Database (CPCAD)")
+                utils.print_update(level=print_level_base+1,message="Downloading Canadian Protected and Conserved Areas Database (CPCAD)")
                 self.zip_file_path.parent.mkdir(parents=True, exist_ok=True)
                 utils.download_data(self.source_url, self.zip_file_path)
-                utils.print_update(level=print_base_level+1,message=f"Downloaded ZIP file to {self.zip_file_path}")
+                utils.print_update(level=print_level_base+1,message=f"Downloaded ZIP file to {self.zip_file_path}")
 
             # Create the extraction directory and extract ZIP contents
             self.extraction_dir.mkdir(parents=True, exist_ok=True)
@@ -144,9 +144,9 @@ class ConservationLands(GADMBoundaries):
 
                 # Save the map as an HTML file
                 m.save(save_path)
-                utils.print_update(level=print_base_level+1,message="Interactive map for '{self.region_short_code}' saved to {save_path}.")
+                utils.print_update(level=print_level_base+1,message="Interactive map for '{self.region_short_code}' saved to {save_path}.")
             else:
-                utils.print_update(level=print_base_level+1,message="Skipping save, 'save' is set to False.")
+                utils.print_update(level=print_level_base+1,message="Skipping save, 'save' is set to False.")
         
         return m
     
@@ -170,6 +170,9 @@ class LandContainer(ERA5Cutout,
         self.excluder = ExclusionContainer(crs=self.excluder_crs)  # CRS 3347 fit for Canada
     
     def set_excluder(self):
+        
+        utils.print_update(level=print_level_base+1,
+                           message=f"{__name__}| Exclusion Container Initiated initiated...")
         # GAEZ configs
         self.gaez_config = self.get_gaez_data_config()
         
@@ -178,13 +181,15 @@ class LandContainer(ERA5Cutout,
         
         # Retrieve custom land configuration if available
         custom_land_config = self.get_custom_land_layers()
-        utils.print_update(level=print_base_level+1,message="Loading global filters' rasters from GAEZ, trimmed to {self.region_name}")
-        self.process_all_rasters(show=False) # Donwloads and processes all GAEZ rasters
+        
+        utils.print_update(level=print_level_base+2,message=f"{__name__}| Loading global filters' rasters from GAEZ, trimmed to {self.region_name}")
+        self.process_all_rasters(show=False) # Downloads and processes all GAEZ rasters
+        
         # Loop over each raster type in GAEZ config and set up each raster
         for raster_type in self.gaez_config['raster_types']:
             raster_name = raster_type['name']
             raster_file = str(self.region_short_code+"_"+raster_type['raster'])
-            zip_direct = raster_type['zip_extract_direct']
+            # zip_direct = raster_type['zip_extract_direct']
             
             # Determine the class inclusion/exclusion based on resource type
             inclusion_key = 'class_inclusion' if 'class_inclusion' in raster_type else 'class_exclusion'
@@ -197,7 +202,7 @@ class LandContainer(ERA5Cutout,
                 'invert': inclusion_key == 'class_inclusion'  # invert if it's an inclusion class
             }
             
-            utils.print_update(level=print_base_level+1,message=f"Loading {raster_name.capitalize()} layers from {raster_configs[f'gaez_{raster_name}']['raster']}")
+            utils.print_update(level=print_level_base+1,message=f"{__name__}| Loading {raster_name.capitalize()} layers from {raster_configs[f'gaez_{raster_name}']['raster']}")
         
         # Load additional custom raster configurations from YAML if specified
         # for raster_name, config in custom_land_config.get('rasters', {}).items():
@@ -224,24 +229,34 @@ class LandContainer(ERA5Cutout,
                 buffer=config['buffer'], 
                 invert=config['invert']
             )
+            utils.print_update(level=print_level_base+2,message=f"{__name__}| ✔ {raster_name.capitalize()} loaded to exclusion container")
+        
 
         # Load additional layers
-        self.conservation_lands_region_gdf = self.get_provincial_conserved_lands()
-        self.aeroway_gdf = self.get_osm_layer('aeroway')
+
         
         # Set up resource disaggregation configurations
         self.resource_disaggregation_config = self.get_resource_disaggregation_config()
-
+        
+        ## Load Geometries (vectors)
+        utils.print_update(level=print_level_base+2,message=f"{__name__}| Loading Conserved areas for {self.region_name}")
+        self.conservation_lands_region_gdf = self.get_provincial_conserved_lands()
+        utils.print_update(level=print_level_base+2,message=f"{__name__}| Loading Aeroways areas for {self.region_name}")
+        self.aeroway_gdf = self.get_osm_layer('aeroway')
+        
         # Add local (Canadian) vector geometries to excluder
         self.excluder.add_geometry(
             self.conservation_lands_region_gdf.geometry, 
             buffer=self.resource_disaggregation_config['buffer']['conserved_lands']
         )
+        utils.print_update(level=print_level_base+2,message=f"{__name__}| ✔ Conserved Lands with {self.resource_disaggregation_config['buffer']['conserved_lands']}m buffer for {self.region_name} loaded to exclusion container")
+        
         self.excluder.add_geometry(
             self.aeroway_gdf.geometry, 
             buffer=self.resource_disaggregation_config['buffer']['aeroway']
         )
+        utils.print_update(level=print_level_base+2,message=f"{__name__}| ✔ Aeroways with {self.resource_disaggregation_config['buffer']['aeroway']}m buffer for {self.region_name} loaded to exclusion container")
         
-        self.log.info(f"{self.excluder}")
+        utils.print_update(level=print_level_base+2,message=f"{__name__}| ✔ Exclusion Container Preapred : \n {self.excluder}")
         
         return self.excluder

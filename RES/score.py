@@ -1,6 +1,8 @@
 import pandas as pd
 from RES.AttributesParser import AttributesParser
 from dataclasses import dataclass
+import RES.utility as utils
+print_level_base=2
 
 @dataclass
 class CellScorer(AttributesParser):
@@ -78,7 +80,8 @@ class CellScorer(AttributesParser):
            
             """
             dataframe = cells.copy()  # Use the input DataFrame for calculations
-            print(">> Calculating Score for each Cell...")
+            utils.print_update(level=print_level_base+2,
+                           message=f"{__name__}| Calculating score for cells...") 
             
             # Calculate the LCOE for each cell
             N=cells[f'Operational_life_{self.resource_type}'].iloc[0]

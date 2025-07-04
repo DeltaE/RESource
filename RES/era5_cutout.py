@@ -4,10 +4,12 @@ import numpy as np
 import pandas as pd
 
 from RES.boundaries import GADMBoundaries
-import RES.windspeed as windspeed
+import RES.utility as utils
 
 import os
 os.environ['CDSAPI_URL'] = 'https://cds.climate.copernicus.eu/api'
+
+print_level_base=3
 
 class ERA5Cutout(GADMBoundaries):
     def __post_init__(self):
@@ -74,7 +76,12 @@ class ERA5Cutout(GADMBoundaries):
         Note:
             After execution, all downloaded data is stored at cutout.path. By default, it is not loaded into memory but into Dask arrays to keep memory consumption low. The data is accessible via cutout.data, which is an xarray.Dataset.
         """
+        utils.print_update(level=print_level_base+1,
+                           message=f"{__name__}|  Processing ERA5's cutout...")
+        
         MBR,region_boundary=self.get_bounding_box()
+        utils.print_update(level=print_level_base+2,
+                   message=f"{__name__}| ✓ MBR and regional boundary created. ")
         
         # Extract parameters from the configuration file
         dx, dy = self.cutout_config["dx"], self.cutout_config['dy']
@@ -94,18 +101,18 @@ class ERA5Cutout(GADMBoundaries):
 
         cutout.prepare(monthly_requests=True, 
                        concurrent_requests=False)  # Prepare the cutout data
-        print("""
-    >>> Memory management remarks:
+        utils.print_info(info=""" Memory management remarks:
     * After execution, all downloaded data is stored at cutout.path. By default, it is not loaded into memory, but into dask arrays. This keeps the memory consumption extremely low.
     * The data is accessible in cutout.data, which is an xarray.Dataset. Querying the cutout gives us some basic information on which data is contained in it.
     * For more operations related to cutout, check the tool docs @ https://atlite.readthedocs.io/en/master/examples/create_cutout.html#
         """)
-        cutout,region_boundary
+        # cutout,region_boundary
         
         # # Define a namedtuple
         # data_tuple = namedtuple('capacity_data', ['cutout','region_boundary'])
         
         # self.data=data_tuple(cutout,region_boundary)
-            
+        utils.print_update(level=print_level_base+1,
+                   message=f"{__name__}| ✓ Cutout and regional boundary processed. ")
         return cutout,region_boundary
     

@@ -3,6 +3,8 @@ import geopandas as gpd
 from pathlib import Path
 
 from RES.AttributesParser import AttributesParser
+import RES.utility as utils
+print_level_base=3
 
 ox.settings.max_query_area_size =10_000 * 1E6  # 10,000 sq km
 
@@ -32,17 +34,19 @@ class OSMData(AttributesParser):
         """
         Access or load the GeoDataFrame for a specific data key.
         """
+        utils.print_update(level=print_level_base+1,message=f"{__name__}| processing Aeroways data for {self.region_name}")
+        
         if data_key in self.gdfs:
-            self.log.info(f"GeoDataFrame for '{data_key}' already exists, returning it.")
+            utils.print_update(level=print_level_base+1,message=f"{__name__}|GeoDataFrame for '{data_key}' already exists, returning it.")
             return self.gdfs[data_key]
         
         # Load the data if it doesn't exist in memory
         if data_key in self.data_keys:
             gdf = self.__load_tagged_data_from_OSM__(self.data_keys[data_key], data_key)
-            self.gdfs[data_key] = gdf  # Cache for future use
+            self.gdfs[data_key] = gdf  # Cache for later use
             return gdf
         else:
-            self.log.warning(f"'{data_key}' is not a valid key in the configuration.")
+            utils.print_update(level=print_level_base+1,message=f"{__name__}|  ❌{data_key}' is not a valid key in the configuration.")
             return None
         
     def run(self) -> dict:

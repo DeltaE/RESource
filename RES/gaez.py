@@ -39,11 +39,12 @@ class GAEZRasterProcessor(GADMBoundaries):
         self.__extract_rasters__()
         self.region_boundary = self.get_region_boundary()
         
+        utils.print_update(level=print_level_base,message=f"{__name__}| Clipping Rasters to regional boundaries.. ")
         # Loop over raster types and process each
         for raster_type in self.raster_types:
             self.__clip_to_boundary_n_plot__(raster_type, self.region_boundary.geometry,show)
         
-        utils.print_update(level=print_level_base,message="All required rasters for GAEZ processed and plotted successfully.")
+        utils.print_update(level=print_level_base,message=f"{__name__}| ✔ All required rasters for GAEZ processed and plotted successfully.")
 
     def __download_resources_zip_file__(self):
         """Downloads the resources zip file from GAEZ if not already downloaded."""
@@ -53,9 +54,9 @@ class GAEZRasterProcessor(GADMBoundaries):
         if response.status_code == 200:
             with open(self.gaez_root / self.zip_file, 'wb') as f:
                 f.write(response.content)
-            utils.print_update(level=print_level_base,message=f">> GAEZ Raster Resource '.zip' file downloaded and saved to: {self.gaez_root}")
+            utils.print_update(level=print_level_base,message=f"{__name__}| GAEZ Raster Resource '.zip' file downloaded and saved to: {self.gaez_root}")
         else:
-            utils.print_update(level=print_level_base,message=f">> Failed to download the Resources zip file from GAEZ. Status code: {response.status_code}")
+            utils.print_update(level=print_level_base,message=f"{__name__}|  ❌ Failed to download the Resources zip file from GAEZ. Status code: {response.status_code}")
 
     def __extract_rasters__(self):
         """Extracts required raster files from the downloaded zip file."""
@@ -71,11 +72,11 @@ class GAEZRasterProcessor(GADMBoundaries):
                     # Check for existence as a string in zip_ref
                     if file_inside_zip in zip_ref.namelist():
                         zip_ref.extract(file_inside_zip, path=self.gaez_root / self.Rasters_in_use_direct)
-                        utils.print_update(level=print_level_base,message=f">> Raster file '{raster_file}' extracted from {file_inside_zip}")
+                        utils.print_update(level=print_level_base,message=f"{__name__}| Raster file '{raster_file}' extracted from {file_inside_zip}")
                     else:
-                        utils.print_update(level=print_level_base,message=f">> Raster file '{raster_file}' not found in the archive {file_inside_zip}")
+                        utils.print_update(level=print_level_base,message=f"{__name__}| Raster file '{raster_file}' not found in the archive {file_inside_zip}")
                 else:
-                    utils.print_update(level=print_level_base,message=f">> Raster file '{raster_file}' found in local directory, skipping download.")
+                    utils.print_update(level=print_level_base,message=f"{__name__}| Raster file '{raster_file}' found in local directory, skipping download.")
 
 
     def __clip_to_boundary_n_plot__(self, raster_type, boundary_geom,show):
@@ -109,7 +110,7 @@ class GAEZRasterProcessor(GADMBoundaries):
                                color_map, 
                                plot_title, 
                                plot_save_to,show)
-            utils.print_update(level=print_level_base,message=f">> Raster plot saved at: {plot_save_to}")
+            utils.print_update(level=print_level_base+1,message=f"{__name__}| Clipped Raster plot for {self.region_name} saved at: {plot_save_to}")
             return raster_plot
 
     def plot_gaez_tif(self, tif_path, color_map, plot_title, save_to, show=False):

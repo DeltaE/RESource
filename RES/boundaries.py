@@ -3,10 +3,12 @@ from pathlib import Path
 import geopandas as gpd
 import pygadm
 from dataclasses import dataclass
+import inspect
 
 # Import local packages
 from RES.AttributesParser import AttributesParser
-
+import RES.utility as utils
+print_level_base=4
 @dataclass
 
 class GADMBoundaries(AttributesParser):
@@ -95,13 +97,16 @@ class GADMBoundaries(AttributesParser):
         Returns:
             gpd.GeoDataFrame: GeoDataFrame of the region boundaries.
         """
+        utils.print_update(level=print_level_base+2,
+                           message=f"{__name__}| Collecting regional boundary...")
         
         if self.region_code_validity:
     
             # It should be saved in processed because the column names have been modified from source.
             
             if self.region_file.exists() and not force_update: # There is a local file and no update required
-                self.log.info(f">> Loading GADM boundaries (Sub-provincial | level =2) for {self.region_name}  from local file {self.region_file}.")
+                utils.print_update(level=print_level_base+1,message=f"{__name__}| Loading GADM boundaries (Sub-provincial | level =2) for {self.region_name} from local file {self.region_file}.")
+                
                 self.boundary_region:gpd.GeoDataFrame=gpd.read_file(self.region_file)
             
             else: # When the local file for region doesn't exist, Filter region data from country file and save locally
@@ -110,8 +115,8 @@ class GADMBoundaries(AttributesParser):
                 _boundary_region_ = _boundary_country.loc[self.boundary_country['NAME_1'] == self.region_name]
 
                 if _boundary_region_.empty : 
-                    self.log.error(f">> No data found for region '{self.region_name}'.")
-                    raise ValueError(f">> No data found for region '{self.region_name}'.")
+                    utils.print_update(level=print_level_base+1,message=f"{__name__}|  No data found for region '{self.region_name}'.")
+                    raise ValueError(f"{__name__} | @ LINE {inspect.currentframe().f_lineno} | No data found for region '{self.region_name}'.")
                 else:
                     _boundary_region_ = _boundary_region_[['NAME_0', 'NAME_1', 'NAME_2', 'geometry']].rename(columns={
                         'NAME_0': self.boundary_datafields['NAME_0'], 'NAME_1': self.boundary_datafields['NAME_1'], 'NAME_2': self.boundary_datafields['NAME_2']
@@ -120,10 +125,10 @@ class GADMBoundaries(AttributesParser):
       
                 
                 self.boundary_region.to_file(self.region_file, driver='GeoJSON')
-                self.log.info(f"GADM data for {self.region_name} saved to {self.region_file}.")
+                utils.print_update(level=print_level_base+1,message=f"{__name__}| GADM data for {self.region_name} saved to {self.region_file}.")
             return self.boundary_region
         else:
-            self.log.error(f">> Invalid region code: {self.region_short_code}.")
+            raise ValueError(f"{__name__} | @ LINE {inspect.currentframe().f_lineno} Invalid region code: {self.region_short_code}.")
 
     
     def get_bounding_box(self)->tuple:
@@ -131,6 +136,9 @@ class GADMBoundaries(AttributesParser):
         """
         This method returns the Minimum Bounding Rectangle (MBR) to extract the 
         """
+        utils.print_update(level=print_level_base+1,
+                           message=f"{__name__}| Processing regional bounding box...")
+        
         self.actual_boundary=self.get_region_boundary()
         # self.log.info(f"Setting up the Minimum Bounding Region (MBR) for {self.region_short_code}...")
         min_x, min_y, max_x, max_y=self.actual_boundary.geometry.total_bounds

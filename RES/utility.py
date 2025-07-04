@@ -19,6 +19,9 @@ from pathlib import Path
 import geojson as gj
 import rasterio as rio
 import numpy as np
+from RES.logger import setup_logger
+import logging
+logger = setup_logger(__name__, level=logging.DEBUG)
 
 now = datetime.datetime.now()
 date_time_str = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -34,7 +37,7 @@ def print_update(level: int=None,
             color = Fore.CYAN
             prefix=" └"
         elif level == 3:
-            color = Fore.LIGHTMAGENTA_EX
+            color = Fore.LIGHTCYAN_EX + Style.DIM
             prefix="  └"
         elif level > 3:
             color = Fore.LIGHTBLACK_EX + Style.DIM
@@ -55,6 +58,8 @@ def print_banner(message: str):
     print(f"{Fore.GREEN}{Style.BRIGHT}{message}{Style.RESET_ALL}")
     print(f"{Fore.GREEN}{Style.BRIGHT}{line}{Style.RESET_ALL}")
 
+def print_info(info:str):
+    print(f"{Fore.LIGHTBLACK_EX}{Style.BRIGHT}ℹ️  {info}{Style.RESET_ALL}")
 
 def load_geojson_file(geojson_file_path:str|Path)->list:
     """
@@ -92,6 +97,7 @@ def assign_cell_id(cells: gpd.GeoDataFrame,
     """
     # Ensure the source column exists
     if source_column not in cells.columns:
+        logger.error(f"'{source_column}' does not exist in the GeoDataFrame.")
         raise ValueError(f"'{source_column}' does not exist in the GeoDataFrame.")
 
     # Remove spaces in the region names for consistency
@@ -257,14 +263,6 @@ def load_config(file_path):
 
     return data
 
-
-# this is a damn good function that downloads any datafile ! 
-import requests
-import logging
-
-# Initialize logging
-logging.basicConfig(level=logging.INFO)
-log = logging.getLogger(__name__)
 
 def download_data(source_URL: str, file_path: str) -> str:
     """
