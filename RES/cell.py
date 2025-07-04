@@ -101,7 +101,7 @@ class GridCells(ERA5Cutout):
         
         self.datahandler.to_store(self.grid_cells,'cells',force_update_key=True)
         
-        self.log.info(f">> {len(self.grid_cells)} Grid Cells prepared for {self.region_short_code}.")
+        utils.print_update(level=2,message=f"{len(self.grid_cells)} Grid Cells prepared for {self.region_short_code}.")
                                   
         return self.grid_cells
     

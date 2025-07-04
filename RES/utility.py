@@ -52,6 +52,11 @@ def print_update(level: int=None,
     
     print(f"{color}{prefix}> {message}{Style.RESET_ALL}")
 
+def print_module_title(text, Length_Char_inLine=60):
+    print(f"{Fore.LIGHTCYAN_EX}{Length_Char_inLine * '_'}{Style.RESET_ALL}\n"
+          f"{Fore.LIGHTGREEN_EX}{5 * ' '}{text}{Style.RESET_ALL}\n"
+          f"{Fore.LIGHTCYAN_EX}{Length_Char_inLine * '_'}{Style.RESET_ALL}")
+    
 def print_banner(message: str):
     line = "*" * len(message)
     print(f"{Fore.GREEN}{Style.BRIGHT}{line}{Style.RESET_ALL}")
@@ -80,6 +85,7 @@ def load_geojson_file(geojson_file_path:str|Path)->list:
             coords_list = gj.load(f)['geometry']['coordinates']
             f.close()
             return coords_list
+        
 # Function to generate a unique index from region name and coordinates
 def assign_cell_id(cells: gpd.GeoDataFrame, 
                   source_column: str = 'Region', 
@@ -97,7 +103,7 @@ def assign_cell_id(cells: gpd.GeoDataFrame,
     """
     # Ensure the source column exists
     if source_column not in cells.columns:
-        logger.error(f"'{source_column}' does not exist in the GeoDataFrame.")
+        print(f"'{source_column}' does not exist in the GeoDataFrame.")
         raise ValueError(f"'{source_column}' does not exist in the GeoDataFrame.")
 
     # Remove spaces in the region names for consistency
@@ -165,40 +171,8 @@ def assign_regional_cell_ids(cells_dataframe, Source_Column, index_name):
 
     return dataframe_with_cell_ids
 
-def create_log(log_path):
-    if not os.path.exists('workflow/log'):
-        # If it doesn't exist, create it
-        os.mkdir('workflow/log')
-        print("Directory 'log' created successfully.")
-    else:
-        # exit
-        None
-        
-    log.basicConfig(level=log.INFO, format='%(asctime)s - %(levelname)s - %(message)s' , datefmt='%Y-%m-%d %H:%M:%S')
-    with open(log_path, 'w') as file:
-        pass
-    file_handler = log.FileHandler(log_path)
-    log.getLogger().addHandler(file_handler)
-    
-    return log.getLogger()
-
-def create_directories(base_path, structure):
-    for key, value in structure.items():
-        # Create the main directory
-        dir_path = os.path.join(base_path, key)
-        if os.path.exists(dir_path):
-            print(f" >> !! '{key}' already exists")
-        else:
-            os.makedirs(dir_path, exist_ok=True)
-            print(f"- '{key}' created")
-        
-        # Recursively create subdirectories
-        if isinstance(value, dict):
-            create_directories(dir_path, value)
-        elif value is None:
-            print(f"'{key}' has no subdirectories")
-
-
+# print_update(level=2, message=f"{__name__}| ❌ ")
+             
 def dict_to_pickle(
         my_dictionary:dict,
         save_to_path:str):
@@ -221,7 +195,7 @@ def create_blank_yaml(file_path):
 def save_dict_datafile(dictionary,save_to):
     with open(save_to,'w') as json_file:
         json.dump(dictionary,json_file)
-        return log.info(f" saved as '{save_to}")
+        return print_update(level=2, message=f"{__name__}| Dictionary datafile saved as '{save_to}")
     
 def load_dict_datafile(json_file_path:str)->dict:
     with open(json_file_path,'r') as json_file:
@@ -244,16 +218,16 @@ def check_LocalCopy_and_run_function(
     """
     if force_update:
         output=function_to_run()
-        log.info(f"Forcefully ran '{function_to_run.__name__}' on '{directory_path}'.")
+        print_update(level=2, message=f"{__name__}| Forcefully ran '{function_to_run.__name__}' on '{directory_path}'.")
         return output
     else:
         if not os.path.exists(directory_path):
             output=function_to_run()
-            log.info(f"Directory '{directory_path}' created.")
+            print_update(level=2, message=f"{__name__}| Directory '{directory_path}' created.")
             return output
         else:
             # log.info(f"Directory '{directory_path}' found locally.")
-            return log.info(f"Directory '{directory_path}' found locally.")
+            print_update(level=2, message=f"{__name__}| Directory '{directory_path}' found locally.")
 
 # Function to Load User Configuration File
 def load_config(file_path):
@@ -287,166 +261,20 @@ def download_data(source_URL: str, file_path: str) -> str:
         if response.status_code == 200:
             with open(file_path, 'wb') as file:
                 file.write(response.content)
-            log.info(f">> File downloaded successfully and saved as {file_path}")
+            print_update(level=3,message=f"{__name__}| ✔ File downloaded successfully and saved as {file_path}")
             return file_path
         else:
-            log.warning(f">> Failed to download the file. Status code: {response.status_code}")
-            return f">> Please download the data manually from {source_URL} and save it to {file_path}"
+            print_update(level=2, message=f"{__name__}| ❌ Failed to download the file. Status code: {response.status_code}")
+            return print_update(level=2, message=f"{__name__}| Please download the data manually from {source_URL} and save it to {file_path}")
     except requests.RequestException as e:
-        log.error(f">> An error occurred while downloading the file: {e}")
-        return f">> Please download the data manually from {source_URL} and save it to {file_path}"
+        print_update(level=3,message=f"{__name__}| ❌ An error occurred while downloading the file: {e}")
+        return print_update(level=2, message=f"{__name__}| Please download the data manually from {source_URL} and save it to {file_path}")
 
-
-
-""" >>> not in use
-def create_layout_for_generation(cutout,cells_gdf,capacity_column):
-    log.info(f"Creating Layout for PV generation from BC Grid Cells...")
-    resource_layout_MW = cutout.layout_from_capacity_list(
-        cells_gdf, col=capacity_column)
-    resource_layout_MW = resource_layout_MW.where(resource_layout_MW != 0, drop=True)
-
-    return resource_layout_MW  #xarray
-"""
-
-
-# def select_top_sites(
-#     all_scored_sites_gdf:gpd.GeoDataFrame, 
-#     resource_max_capacity:float)-> gpd.GeoDataFrame:
-#     print(f">>> Selecting TOP Sites to for {resource_max_capacity} GW Capacity Investment in BC...")
-#     """
-#     Select the top sites based on potential capacity and a maximum resource capacity limit.
-
-#     Parameters:
-#     - sites_gdf: GeoDataFrame containing  cell and bucket information.
-#     - resource_max_capacity : Maximum allowable  capacity in GW.
-
-#     Returns:
-#     - selected_sites: GeoDataFrame with the selected top sites.
-#     """
-#     print(f"{'_'*50}")
-#     print(f"Selecting the Top Ranked Sites to invest in {resource_max_capacity} GW PV in BC")
-#     print(f"{'_'*50}\n")
-
-#     # Initialize variables
-#     selected_rows:list = []
-#     total_capacity:float = 0.0
-
-#     top_sites:gpd.GeoDataFrame = all_scored_sites_gdf.copy()
-
-#     if top_sites['potential_capacity'].iloc[0] < resource_max_capacity * 1000:
-#         # Iterate through the sorted GeoDataFrame
-#         for index, row in top_sites.iterrows():
-#             # Check if adding the current row's capacity exceeds resource capacity
-#             if total_capacity + row['potential_capacity'] <= resource_max_capacity * 1000:
-#                 selected_rows.append(index)  # Add the row to the selection
-#                 # Update the total capacity
-#                 total_capacity += row['potential_capacity']
-#             # If adding the current row's capacity would exceed max resource capacity, stop the loop
-#             else:
-#                 break
-
-#         # Create a new GeoDataFrame with the selected rows
-#         top_sites:gpd.GeoDataFrame = top_sites.loc[selected_rows]
-
-#         # Apply the additional logic
-#         mask = all_scored_sites_gdf['Site_ID'] > top_sites['Site_ID'].max()
-#         selected_additional_sites:gpd.GeoDataFrame = all_scored_sites_gdf[mask].head(1)
-        
-#         remaining_capacity:float = resource_max_capacity * 1000 - top_sites['potential_capacity'].sum()
-
-#         if remaining_capacity > 0:
-            
-#             # selected_additional_sites['capex'] = capex* remaining_capacity
-#             print(f"\n!! Note: The Last cluster originally had {round(selected_additional_sites['potential_capacity'].iloc[0] / 1000,2)} GW potential capacity."
-#                  f"To fit the maximum capacity investment of {resource_max_capacity} GW, it has been adjusted to {round(remaining_capacity / 1000,2)} GW\n")
-            
-#             selected_additional_sites['potential_capacity'] = remaining_capacity
-#         # Concatenate the DataFrames
-#         top_sites = pd.concat([top_sites, selected_additional_sites])
-#     else:
-#         original_capacity = all_scored_sites_gdf['potential_capacity'].iloc[0]
-
-#         print(f"\n!! Note: The first cluster originally had {round(original_capacity / 1000,2)} GW potential capacity."
-#               f"To fit the maximum capacity investment of {resource_max_capacity} GW, it has been adjusted. \n")
-
-#         top_sites = top_sites.iloc[:1]  # Keep only the first row
-#         # Adjust the potential_capacity of the first row
-#         top_sites.at[top_sites.index[0], 'potential_capacity'] = resource_max_capacity * 1000
-
-#     return top_sites  # gdf
-
-
-# def select_top_sites(all_scored_sites_gdf, resource_max_capacity):
-#     print(f">>> Selecting TOP Sites to for {resource_max_capacity} GW Capacity Investment in region...")
-#     """
-#     Select the top sites based on potential capacity and a maximum capacity limit.
-
-#     Parameters:
-#     - sites_gdf: GeoDataFrame containing cell and bucket information.
-#     - Maximum allowable resource capacity in GW.
-
-#     Returns:
-#     - selected_sites: GeoDataFrame with the selected top sites.
-#     """
-#     print(f"{'_'*50}")
-#     print(f"Selecting the Top Ranked Sites to invest in {resource_max_capacity} GW resource in region")
-#     print(f"{'_'*50}\n")
-
-#     selected_rows = []
-#     total_capacity = 0.0
-
-#     top_sites = all_scored_sites_gdf.copy()
-
-#     if top_sites['potential_capacity'].iloc[0] < resource_max_capacity * 1000:
-#         # Iterate through the sorted GeoDataFrame
-#         for index, row in top_sites.iterrows():
-#             # Check if adding the current row's capacity exceeds max_resource_capacity
-#             if total_capacity + row['potential_capacity'] <= resource_max_capacity * 1000:
-#                 selected_rows.append(index)  # Add the row to the selection
-#                 # Update the total capacity
-#                 total_capacity += row['potential_capacity']
-#             # If adding the current row's capacity would exceed max_resource_capacity, stop the loop
-#             else:
-#                 break
-
-#         # Create a new GeoDataFrame with the selected rows
-#         top_sites = top_sites.loc[selected_rows]
-
-#         # Apply the additional logic
-#         mask = all_scored_sites_gdf['Site_ID'] > top_sites['Site_ID'].max()
-#         selected_additional_sites = all_scored_sites_gdf[mask].head(1)
-        
-#         remaining_capacity = resource_max_capacity * 1000 - top_sites['potential_capacity'].sum()
-
-#         if remaining_capacity > 0:
-            
-#             # selected_additional_sites['capex'] = capex* remaining_capacity
-#             print(f"\n!! Note: The Last cluster originally had {round(selected_additional_sites['potential_capacity'].iloc[0] / 1000,2)} GW potential capacity."
-#                  f"To fit the maximum capacity investment of {resource_max_capacity} GW, it has been adjusted to {round(remaining_capacity / 1000,2)} GW\n")
-            
-#             selected_additional_sites['potential_capacity'] = remaining_capacity
-#         # Concatenate the DataFrames
-#         top_sites = pd.concat([top_sites, selected_additional_sites])
-#     else:
-#         original_capacity = all_scored_sites_gdf['potential_capacity'].iloc[0]
-
-#         print(f"\n!! Note: The first cluster originally had {round(original_capacity / 1000,2)} GW potential capacity."
-#               f"To fit the maximum capacity investment of {resource_max_capacity} GW, it has been adjusted. \n")
-
-#         top_sites = top_sites.iloc[:1]  # Keep only the first row
-#         # Adjust the potential_capacity of the first row
-#         top_sites.at[top_sites.index[0], 'potential_capacity'] = resource_max_capacity * 1000
-
-#     return top_sites  # gdf
 
 def load_raster_file(raster_path:str|Path)->np.ndarray :
-    wind_atlas_path=Path(raster_path)
-    with rio.open(wind_atlas_path) as f:
+    raster_path=Path(raster_path)
+    with rio.open(raster_path) as f:
         raster_data: np.ndarray = f.read(1)
         f.close()  
     return raster_data
 
-def print_module_title(text, Length_Char_inLine=60):
-    print(f"{Fore.LIGHTCYAN_EX}{Length_Char_inLine * '_'}{Style.RESET_ALL}\n"
-          f"{Fore.LIGHTGREEN_EX}{5 * ' '}{text}{Style.RESET_ALL}\n"
-          f"{Fore.LIGHTCYAN_EX}{Length_Char_inLine * '_'}{Style.RESET_ALL}")

@@ -7,12 +7,15 @@ from pathlib import Path
 import geopandas as gpd
 import plotly.graph_objects as go
 
-# Linking Tool - Local Packages
+# from RES
 import RES.windspeed as windspeed
 from RES.hdf5_handler import DataHandler
 from RES.tech import OEDBTurbines
 from RES.era5_cutout import ERA5Cutout
+from RES.gwa import GWACells
 import RES.utility as utils
+
+print_level_base=1
 
 @dataclass
 class Timeseries(ERA5Cutout):
@@ -25,6 +28,12 @@ class Timeseries(ERA5Cutout):
         
         # Initialize the local store
         self.datahandler=DataHandler(self.store)
+        self.required_args = {   #order doesn't matter
+            "config_file_path" : self.config_file_path,
+            "region_short_code": self.region_short_code,
+            "resource_type": self.resource_type
+        }
+        self.gwa_cells=GWACells(**self.required_args)
     
     def get_timeseries(self,
                        cells:gpd.GeoDataFrame)-> tuple:
@@ -88,16 +97,12 @@ class Timeseries(ERA5Cutout):
         '''
         
         # Step 4: Calculate the mean capacity factor (CF) for each cell and store it in 'CF_mean'
-        self.log.info(f">> Calculating CF mean from the {len(self.CF_ts_df)} data points for each Cell ...")
-        self.log.info(f">> Total Grid Cells: {len(cells)}, "
-                      f">> Timeseries Generated for: {len(self.CF_ts_df.columns)}, "
-                    #   f">> Matched Sites: {self.CF_ts_df[self.resource_type][self.region_grid_cells_store.index].shape}")
-                      f">> Matched Sites: {self.CF_ts_df[cells.index].shape}")
+        utils.print_update(level=print_level_base+1,message=f"{__name__}| Calculating CF mean from the {len(self.CF_ts_df)} data points for each Cell ...")
+        utils.print_update(level=print_level_base+2,message=f"{__name__}| Total Grid Cells: {len(cells)}")
+        utils.print_update(level=print_level_base+2,message=f"{__name__}| Timeseries Generated for: {len(self.CF_ts_df.columns)}")
+        utils.print_update(level=print_level_base+2,message=f"{__name__}| Matched Sites: {self.CF_ts_df[cells.index].shape}")
         
-        self.log.info(f">> Calculating '{self.resource_type}_CF_mean' for {len(cells)} Cells...")
-        # self.region_grid_cells_store[f'{self.resource_type}_CF_mean'] = self.CF_ts_df[self.resource_type].mean(axis=0) # Mean of all rows (Hours)
         cells[f'{self.resource_type}_CF_mean'] = self.CF_ts_df.mean(axis=0) # Mean of all rows (Hours)
-        # Updates the 'CF_mean' field to stored dataframe with key 'cells. The grid cells must have matched "X(grid cell's)-Y(timeseries header)" index to do this step.
         '''
         Future Scope: Replacing CF_mean with high resolution data (likely from Global Solar Atlas/ Local data)
         '''
@@ -105,19 +110,12 @@ class Timeseries(ERA5Cutout):
         # Step 6: Define a namedtuple to store both the grid cells and the filtered timeseries
         site_data = namedtuple('site_data', ['cells', 'timeseries'])
         self.data : tuple= site_data(cells, self.CF_ts_df)
-        '''
-        @ to access return data
-        Both PV and WIND are gonna go under same 'key' 
-        # To access the PV timeseries, user has to use the "Y" index to access PV timeseries e.g. pv_timeseries_dataframe = data.timeseries.solar ('timeseries' is name of the tuple, 'solar' is the first level column name of the dataframe.)
-        '''
-            # Step 5: Save the grid cells and timeseries to the local HDF5 store
-        self.datahandler.to_store(cells, 'cells') # We don't want 'force-update' here, just need to append 'CF_mean' datafields to cells.
-        self.datahandler.to_store(self.CF_ts_df, f'timeseries/{self.resource_type}') # Hierarchical data of resources under kley 'timeseries' 
-        '''
-        @ store data
-        Both PV and WIND are gonna go under same 'key' 
-        # To access the PV timeseries, user has to use the "Y" index to access PV timeseries e.g. pv_timeseries_dataframe = timeseries.solar ('timeseries' = key to stored data)
-        '''
+
+
+        # Step 5: Save the grid cells and timeseries to the local HDF5 store
+        self.datahandler.to_store(cells, 'cells') # We don't want 'force-update' here, just need to append 'CF_mean' data to cells.
+        self.datahandler.to_store(self.CF_ts_df, f'timeseries/{self.resource_type}') # Hierarchical data of resources under key 'timeseries' 
+
         return self.data 
 
     
@@ -128,7 +126,6 @@ class Timeseries(ERA5Cutout):
         """
         
         # Step 1.1: Get the Atlite's Cutout Object loaded
-        self.log.info(">> Loading ERA5 Cutout")
         self.cutout,self.region_boundary=self.get_era5_cutout()
         
         ## Only,if cells are not processed already
@@ -139,8 +136,8 @@ class Timeseries(ERA5Cutout):
          # Initialize the local store for updated data
         self.datahandler=DataHandler(self.store)
         # self.region_grid_cells_store=self.datahandler.from_store('cells')
-        self.log.info(f">> {len(cells)} Grid Cells from Store Cutout")
-        
+
+        utils.print_update(level=print_level_base+1,message=f"{__name__}| Loading technology attributes...")
         # Step 1.3: Set arguments for the atlite cutout's pv method
         pv_args = {
             'panel': self.resource_disaggregation_config['atlite_panel'],
@@ -168,6 +165,7 @@ class Timeseries(ERA5Cutout):
         }
 
         # Step 1.4: Generate PV timeseries profile using the atlite's cutout
+        utils.print_update(level=print_level_base+1,message=f"{__name__}| ⚠️ Processing timeseries from ERA5 cutout, may take a while...")
         self.pv_profile: xr.DataArray = self.cutout.pv(**pv_args).rename(self.resource_type)
         
         return self.pv_profile
@@ -271,18 +269,20 @@ class Timeseries(ERA5Cutout):
                                                                                wind_geojson=self.wind_geojson)
         
         '''
-        utils.print_update(level=3,message='Rescaling ERA5 windspeed with GWA windspeed')
+        utils.print_update(level=print_level_base+1,message=f'{__name__}| Rescaling ERA5 windspeed with GWA windspeed')
+
         self.cutout=windspeed.rescale_cutout_windspeed(self.cutout, cells)
         # Step 1.2: Get the region Grid Cells from Store. Ideally these cells should have same resolution as the Cutout (the indices are prepared from x,y coords and Region names)
         
         self.wind_turbine_config=self.get_turbines_config()
+        utils.print_update(level=print_level_base+1,message=f'{__name__}| Loading technology attributes...')
         
         if turbine_model_source=='atlite':
             atlite_turbine_model:str=self.wind_turbine_config[turbine_model_source][model]['name'] # The default is set in Attributes parser's .get_turbine_config() method.
             hub_height_turbine=atlite.resource.get_windturbineconfig(atlite_turbine_model)['hub_height']
             
             self.turbine_config:dict = atlite.resource.get_windturbineconfig(atlite_turbine_model, {"hub_height": 100})
-            self.log.info(f">> selected Wind Turbine  Model : {atlite_turbine_model} @ {hub_height_turbine}m Hub Height")
+            utils.print_update(level=print_level_base+2,message=f"{__name__}| Selected Wind Turbine  Model : {atlite_turbine_model} @ {hub_height_turbine}m Hub Height")
             
         elif turbine_model_source=='OEDB':
             self.OEDB_config:dict=self.wind_turbine_config[turbine_model_source]
@@ -326,6 +326,7 @@ class Timeseries(ERA5Cutout):
         }
 
         # Step 1.4: Generate PV timeseries profile using the atlite's cutout
+        utils.print_update(level=print_level_base+1,message=f"{__name__}| ⚠️ Processing timeseries from ERA5 cutout, may take a while...")
         self.wind_profile: xr.DataArray = self.cutout.wind(**wind_args).rename(self.resource_type)
         
         return self.wind_profile
@@ -336,6 +337,7 @@ class Timeseries(ERA5Cutout):
         This function converts the timeseries index with timezone information imputed conversion.<br>
         <b> Recommended timeseries index conversion method</b> in contrast to naive timestamp index reset method. 
         '''
+        utils.print_update(level=print_level_base+1,message=f'{__name__}| Harmonizing timezone for {self.region_name} with {self.region_timezone}')
         # Localize to UTC (assuming your times are currently in UTC)
         df_index_utc = data.tz_localize('UTC')
 
@@ -375,7 +377,7 @@ class Timeseries(ERA5Cutout):
         if results:
             self.cluster_df = pd.concat(results, axis=1)
         else:
-            print(f"⚠️ No valid clusters to process for cluster {cluster}.")
+            utils.print_update(level=print_level_base+1,message=f"{__name__}| ⚠️ No valid clusters to process for cluster {cluster}.")
             self.cluster_df = pd.DataFrame()
             
         self.datahandler.to_store(self.cluster_df, f'timeseries/clusters/{self.resource_type}',force_update=True)# Hierarchical data of resources under kley 'timeseries' 
@@ -462,10 +464,10 @@ def get_timeseries_for_project_points(
     
     # Save the time series data as CSV files
     solar_ts.to_csv(solar_ts_save_to)
-    print(f"Saved solar time series data to {solar_ts_save_to}")
+    utils.print_update(level=print_level_base+1,message=f"{__name__}| Saved solar time series data to {solar_ts_save_to}")
     
     wind_ts.to_csv(wind_ts_save_to)
-    print(f"Saved wind time series data to {wind_ts_save_to}")
+    utils.print_update(level=print_level_base+1,message=f"{__name__}| Saved wind time series data to {wind_ts_save_to}")
 
     # Plotting the time series for Solar Projects
     fig_s = go.Figure()
@@ -479,7 +481,7 @@ def get_timeseries_for_project_points(
         legend_title="Sites"
     )
     fig_s.write_html(save_to / 'projects_solar_ts.html')
-    print(f"Saved solar time series data to {save_to / 'projects_solar_ts.html'}")
+    utils.print_update(level=print_level_base+1,message=f"{__name__}| Saved solar time series data to {save_to / 'projects_solar_ts.html'}")
 
 
     
@@ -495,7 +497,7 @@ def get_timeseries_for_project_points(
         legend_title="Sites"
     )
     fig_w.write_html(save_to / 'projects_wind_ts.html')
-    print(f"Saved wind time series data to {save_to / 'projects_wind_ts.html'}")
+    utils.print_update(level=print_level_base+1,message=f"{__name__}| Saved wind time series data to {save_to / 'projects_wind_ts.html'}")
     
     
     if show:

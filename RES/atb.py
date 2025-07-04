@@ -94,14 +94,13 @@ class NREL_ATBProcessor(AttributesParser):
                 - BESS (self.bess_cost)
         """
         
-        # self.log.info("Processing Annual Technology Baseline (ATB) data sourced from NREL...")
-        utils.print_update(level=print_level_base+1,message="Processing Annual Technology Baseline (ATB) data sourced from NREL...")
+        utils.print_update(level=print_level_base+1,message=f"{__name__}| Processing Annual Technology Baseline (ATB) data sourced from NREL...")
         self.check_and_download_data()
         
         atb_cost = pd.read_parquet(self.atb_file_path)
         
-        utils.print_update(level=print_level_base+1,message=f"ATB cost datafile: {self.atb_file_path.name} loaded")
-        # self.log.info(f"ATB cost datafile: {self.atb_file_path.name} loaded")
+        utils.print_update(level=print_level_base+1,message=f"{__name__}| ATB cost datafile: {self.atb_file_path.name} loaded")
+
         
         utils.print_update(level=print_level_base+1,message="Extracting technology baseline costs...")
         f"ATB cost datafile: {self.atb_file_path.name} loaded"

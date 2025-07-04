@@ -4,6 +4,7 @@ from RES import utility
 import numpy as np
 import pandas as pd
 import RES.utility as utils
+import inspect
 print_level_base=3
 
 def impute_ERA5_windspeed_to_Cells(
@@ -78,7 +79,6 @@ def scale_wind(row:pd.Series,
 def rescale_cutout_windspeed(cutout: atlite.Cutout,
                             wind_assets:pd.DataFrame):
 
-
     #The wind data is the main target here
     wnd = cutout.data.wnd100m
 
@@ -92,6 +92,7 @@ def rescale_cutout_windspeed(cutout: atlite.Cutout,
     wind_assets['y'] = y_near
 
     #Get scaled wind values and x-y coords
+    utils.print_info(f"{__name__}| @Line {inspect.currentframe().f_lineno+1} | ⚠️ Initiating Memory intensive process and may take a while to process...")
     scaled_wind = wind_assets.apply(lambda x: scale_wind(x, wnd), axis=1)
     xy = wind_assets.apply(lambda x: get_XY(x, wnd), axis=1)
 

@@ -67,7 +67,7 @@ class OSMData(AttributesParser):
         
         # Check if data is already stored locally
         if geojson_path.exists():
-            self.log.info(f">> Loading locally stored OSM data for '{data_key}' from {geojson_path}")
+            utils.print_update(level=print_level_base+1,message=f"{__name__}| Loading locally stored OSM data for '{data_key}' from {geojson_path}")
             return gpd.read_file(geojson_path)
         else:
             print(f">> Downloading data for {self.area_name} with tags {tags} and saving to {geojson_path}")
@@ -81,7 +81,7 @@ class OSMData(AttributesParser):
         """
         
         if not geojson_path.exists():
-            self.log.info(f">> Saving OSM data to {geojson_path}")
+            utils.print_update(level=print_level_base+1,message=f"{__name__}| Saving OSM data to {geojson_path}")
             gdf.to_file(geojson_path, driver='GeoJSON')
         else:
-            self.log.info(f">> File {geojson_path} already exists, skipping save.")
+            utils.print_update(level=print_level_base+1,message=f"{__name__}| File {geojson_path} already exists, skipping save.")
