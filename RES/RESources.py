@@ -73,7 +73,7 @@ class RESources_builder(AttributesParser):
         utils.print_update(level=print_level_base+1,
                            message="Preparing Grid Cells...")
         
-        self.region_grid_cells=self.gridcells.get_default_grid()
+        self.region_grid_cells:gpd.GeoDataFrame=self.gridcells.get_default_grid()
         
         utils.print_update(level=print_level_base+2,
                            message="Grid Cells updated.")
@@ -425,15 +425,17 @@ class RESources_builder(AttributesParser):
     # _________________________________________________________________________________
 
     def build(self,
-                       select_top_sites:Optional[bool]=True,
-                       use_pypsa_buses:Optional[bool]=True,
-                       memory_resource_limitation:Optional[bool]=True):
+            select_top_sites:Optional[bool]=True,
+            use_pypsa_buses:Optional[bool]=True,
+            memory_resource_limitation:Optional[bool]=True):
         """
         Execute the specific module logic for the given resource type ('solar' or 'wind').
         """
-        print(f"{50*'_'}\n Initiating {self.resource_type} module for {self.get_region_name()}...")
+        utils.print_module_title(f"Initiating {self.resource_type} module for {self.get_region_name()}...")
         self.memory_resource_limitation=memory_resource_limitation
+        #Step>>1
         self.get_grid_cells()
+        #Step>>2
         self.get_cell_capacity()
         self.extract_weather_data()
         self.update_gwa_scaled_params(self.memory_resource_limitation) # testing, 2025 04 21
