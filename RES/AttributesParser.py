@@ -114,7 +114,7 @@ class AttributesParser:
             return 3347 # default CRS for CANADA, atlite's default is 3035
     
     def get_vis_dir(self) -> Path:
-        return Path('vis') / (self.resource_type if self.resource_type else 'misc')
+        return Path(f'vis/{self.region_short_code}') / (self.resource_type if self.resource_type else f'misc/{self.region_short_code}')
 
     def get_gaez_data_config(self) -> Dict[str, dict]:
         return self.config.get('GAEZ', {})

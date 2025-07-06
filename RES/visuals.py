@@ -167,6 +167,7 @@ def plot_resources_scatter_metric_combined(
 def get_CF_wind_check_plot(cells: gpd.GeoDataFrame,
                            gwa_raster_data: xarray.DataArray,
                            boundary: gpd.GeoDataFrame,
+                           region_code: str,
                            region_name: str,
                            columns: list,
                            figure_height: int = 7,
@@ -254,13 +255,11 @@ def get_CF_wind_check_plot(cells: gpd.GeoDataFrame,
         ha='left', fontsize=9, color='gray'
     )
 
-    plt.show()
     plt.rcParams['font.family']=font_family
 
-    # Summary table
-    display(cells[columns].describe().style.format(precision=2).set_caption("Summary Statistics for CF_IEC3 and calibrated Wind CF_mean"))
+
     if save_to is None:
-        save_to = Path(f"vis/{region_name}")
+        save_to = Path(f"vis/{region_code}")
     else:
         save_to = Path(save_to)
 
@@ -268,6 +267,8 @@ def get_CF_wind_check_plot(cells: gpd.GeoDataFrame,
     save_to_file = save_to / "Wind_CF_comparison.png"
     plt.savefig(save_to_file, dpi=300, bbox_inches='tight', transparent=False)
     utils.print_update(level=1, message=f"Wind CF comparison plot created and saved to: {save_to_file}")
+    # Summary table
+    display(cells[columns].describe().style.format(precision=2).set_caption("Summary Statistics for CF_IEC3 and calibrated Wind CF_mean"))
 
 
 def plot_resources_scatter_metric(resource_type:str,
