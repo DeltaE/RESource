@@ -115,7 +115,7 @@ def plot_resources_scatter_metric_combined(
         wind['lcoe'],
         s=wind['potential_capacity']*bubbles_scale,  # Scale down for better visibility
         alpha=0.7,
-        c='navy',
+        c='purple',
         edgecolors='w',
         linewidth=0.5,
         label='Wind'
