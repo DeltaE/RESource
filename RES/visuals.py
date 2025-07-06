@@ -20,6 +20,9 @@ from matplotlib import lines as mlines
 from pathlib import Path
 import RES.utility as utils
 from matplotlib.patches import RegularPolygon
+import xarray
+from matplotlib.gridspec import GridSpec
+from IPython.display import display
 
 log.basicConfig(level=log.INFO, format='%(asctime)s - %(levelname)s - %(message)s' , datefmt='%Y-%m-%d %H:%M:%S')
 log_name=f'workflow/log/linking_vis.txt'
@@ -78,7 +81,9 @@ def plot_resources_scatter_metric_combined(
     bubbles_GW:list= [1, 5, 10],
     bubbles_scale:float= 0.4,
     lcoe_threshold:float= 200,
-    save_to_root:str='vis'
+    font_family='sans-serif',
+    save_to_root:str='vis',
+    set_transparent:bool=False
 ):
     import matplotlib.pyplot as plt
     from matplotlib.ticker import MultipleLocator, FuncFormatter
@@ -148,15 +153,121 @@ def plot_resources_scatter_metric_combined(
          "Note: The Scoring is calculated to reflect Dollar investment required to get an unit of Energy yield (MWh). "
          "\nTo reflect market competitiveness and incentives, the Score ($/MWh) needs financial adjustment factors to be considered on top of it.",
          ha='center', va='center', fontsize=9.5, color='gray', bbox=dict(facecolor='None', linewidth=0.2, edgecolor='grey', boxstyle='round,pad=0.5'))
-
+    plt.rcParams['font.family'] = font_family
     plt.tight_layout()
-    fig.patch.set_alpha(0)
+        
     save_to_root = Path(save_to_root)
     save_to_root.mkdir(parents=True, exist_ok=True)
     file_path = save_to_root / "Resources_CF_vs_LCOE_combined.png"
-    plt.savefig(file_path, dpi=600, transparent=True)
+    plt.savefig(file_path, dpi=600, transparent=set_transparent)
     utils.print_update(level=1, message=f"Combined CF vs LCOE plot created and saved to: {file_path}")
     # return fig
+
+
+def get_CF_wind_check_plot(cells: gpd.GeoDataFrame,
+                           gwa_raster_data: xarray.DataArray,
+                           boundary: gpd.GeoDataFrame,
+                           region_name: str,
+                           columns: list,
+                           figure_height: int = 7,
+                           font_family:str='sans-serif',
+                           compass_size: int = 8,
+                           save_to: str | Path = None):
+    """
+    Plots GWA benchmark (left), CF_IEC3 (middle), and wind_CF_mean (right).
+    """
+      # assumes vis.add_compass_to_plot() exists
+    
+    assert len(columns) == 2, "Expected exactly two columns: CF_IEC3 and wind_CF_mean"
+    col_mid, col_right = columns
+
+    # Color scale
+    vmin = cells[columns].min().min()
+    vmax = cells[columns].max().max()
+
+    # Layout: 1 row × 3 columns
+    fig = plt.figure(figsize=(13, figure_height), constrained_layout=True)
+    spec = GridSpec(nrows=1, ncols=3, width_ratios=[1, 1, 1], figure=fig)
+
+
+    axes = []
+
+    # LEFT: GWA benchmark
+    ax_gwa = fig.add_subplot(spec[0, 0])
+    gwa_raster_data.plot(ax=ax_gwa, cmap='BuPu', vmin=vmin, vmax=vmax, add_colorbar=False)
+    boundary.plot(ax=ax_gwa, facecolor='none', edgecolor='white', linewidth=0.5)
+    ax_gwa.set_title('GWA CF-IEC3 Reference (High-res)', fontsize=11)
+    ax_gwa.axis('off')
+    axes.append(ax_gwa)
+
+    # MIDDLE: CF_IEC3
+    ax_mid = fig.add_subplot(spec[0, 1])
+    shadow_offset = 0.02
+    cells_shadow = cells.copy()
+    cells_shadow['geometry'] = cells_shadow['geometry'].translate(xoff=-shadow_offset, yoff=shadow_offset)
+    cells_shadow.plot(column=col_mid, cmap='Greys', ax=ax_mid, edgecolor='white', alpha=1, linewidth=0.2, zorder=1)
+
+    cells.plot(
+        column=col_mid,
+        ax=ax_mid,
+        cmap='BuPu',
+        vmin=vmin, vmax=vmax,
+        linewidth=0.2,
+        legend=False
+    )
+    ax_mid.set_title(col_mid.replace('_', ' '), fontsize=10)
+    ax_mid.axis('off')
+    axes.append(ax_mid)
+
+    # RIGHT: wind_CF_mean
+    ax_right = fig.add_subplot(spec[0, 2])
+    col = col_right
+    cells_shadow = cells.copy()
+    cells_shadow['geometry'] = cells_shadow['geometry'].translate(xoff=-shadow_offset, yoff=shadow_offset)
+    cells_shadow.plot(column=col, cmap='Greys', ax=ax_right, edgecolor='white', alpha=1, linewidth=0.2, zorder=1)
+
+    cells.plot(
+        column=col,
+        ax=ax_right,
+        cmap='BuPu',
+        vmin=vmin, vmax=vmax,
+        linewidth=0.2,
+        legend=False
+    )
+    ax_right.set_title(col.replace('_', ' '), fontsize=10)
+    ax_right.axis('off')
+    axes.append(ax_right)
+    add_compass_to_plot(ax_right)
+
+    # Unified colorbar
+    norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
+    sm = mpl.cm.ScalarMappable(cmap='BuPu', norm=norm)
+    cbar = fig.colorbar(sm, ax=axes, orientation='vertical', fraction=0.025, pad=0.02)
+    cbar.set_label('Capacity Factor', fontsize=11)
+
+    # Title and notes
+    plt.suptitle(f"Wind Capacity Factor Comparison for {region_name}", fontsize=14, fontweight='bold', y=1.02)
+    plt.figtext(
+        0.01, 0.01,
+        "* CF_IEC3 is rescaled from GWA to ERA5 resolution.\n"
+        "* wind_CF_mean is computed using atlite (ERA5 adjusted with GWA).",
+        ha='left', fontsize=9, color='gray'
+    )
+
+    plt.show()
+    plt.rcParams['font.family']=font_family
+
+    # Summary table
+    display(cells[columns].describe().style.format(precision=2).set_caption("Summary Statistics for CF_IEC3 and calibrated Wind CF_mean"))
+    if save_to is None:
+        save_to = Path(f"vis/{region_name}")
+    else:
+        save_to = Path(save_to)
+
+    save_to.mkdir(parents=True, exist_ok=True)
+    save_to_file = save_to / "Wind_CF_comparison.png"
+    plt.savefig(save_to_file, dpi=300, bbox_inches='tight', transparent=False)
+    utils.print_update(level=1, message=f"Wind CF comparison plot created and saved to: {save_to_file}")
 
 
 def plot_resources_scatter_metric(resource_type:str,
@@ -676,6 +787,8 @@ def get_data_in_map_plot(cells,
                     title:str=None,
                     ax=None,
                     compass_size:float=10,
+                    font_family:str='sans-serif',
+                    discalimers:bool=False,
                     show=True):
     
     import matplotlib.pyplot as plt
@@ -742,7 +855,8 @@ def get_data_in_map_plot(cells,
             ax.set_axis_off()
             if resource_type=='solar':
                 utils.print_update(level=2,message= "Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name")
-            if column_keyword == 'SCORE':
+            if column_keyword == 'SCORE' and discalimers:
+                # Add disclaimer text at the bottom of the plot
                 ax.text(
                     0.5, 0,
                     "Note: The Scoring is calculated to reflect Dollar investment required to get an unit of Energy yield (MWh).\nTo reflect market competitiveness and incentives, the Score ($/MWh) needs financial adjustment factors to be considered on top of it.\nScore Higher than 200 $/MWh are assumed to be not feasible and not shown in this map.",
@@ -750,10 +864,75 @@ def get_data_in_map_plot(cells,
                 )
             if show:
                 plt.show()
-                
-            add_compass_to_plot(ax,size=compass_size,triangle_size=0.014)
+            # Set font family for all text in the plot
+            plt.rcParams['font.family'] = font_family
+            add_compass_to_plot(ax, size=compass_size, triangle_size=0.014)
         
     return ax
+
+
+
+def plot_grid_lines(
+    region_code:str,
+    region_name:str,
+    lines:gpd.GeoDataFrame,
+    boundary:gpd.GeoDataFrame,
+    font_family:str='sans-serif',
+    figsize:tuple=(10, 8),
+    save_to:str|Path=None,
+    show:bool=True,
+):
+
+
+    fig, ax = plt.subplots(figsize=(10, 8))
+    plt.rcParams['font.family'] = font_family
+    boundary.plot(ax=ax, facecolor='grey', edgecolor='black', linewidth=1, alpha=0.1)
+
+    if 'voltage' in lines.columns:
+        # Convert to numeric and drop NaNs
+        voltages = pd.to_numeric(lines['voltage'], errors='coerce').dropna().unique()
+        voltages.sort()
+        
+        # Convert to kilovolts (kV)
+        voltages_kv = voltages / 1000
+
+        # Use a qualitative color map with enough distinct colors
+        cmap = plt.cm.get_cmap('Dark2', len(voltages_kv))  # tab20 has 20 distinct colors
+
+        color_map = {v_orig: cmap(i) for i, v_orig in enumerate(voltages)}
+
+        # Plot each voltage level with its unique color
+        for v_orig in voltages:
+            color = color_map[v_orig]
+            mask = pd.to_numeric(lines['voltage'], errors='coerce') == v_orig
+            lines[mask].plot(ax=ax, color=color, linewidth=1.5, alpha=0.8)
+
+        # Create legend patches
+        legend_patches = [
+            mpatches.Patch(color=color_map[v], label=f"{int(v / 1000)} kV") for v in voltages
+        ]
+        ax.legend(handles=legend_patches, title='Voltage', frameon=False, fontsize=10, loc='upper right')
+        ax.set_title(f'Transmission Lines by Voltage (kV) for {region_name}', fontsize=14)
+
+    else:
+        lines.plot(ax=ax, color='blue', linewidth=1)
+        ax.set_title('Transmission Lines', fontsize=14)
+
+    ax.set_axis_off()
+    plt.tight_layout()
+    
+    if save_to is None:
+        save_to = Path("vis") / region_code / "network"
+    else:
+        save_to=Path(save_to)
+        
+    save_to.mkdir(parents=True, exist_ok=True)
+    save_to_file = save_to / f"transmission_lines_{region_code}.png"
+    plt.savefig(save_to_file, bbox_inches='tight', dpi=300)
+    utils.print_update(level=2,message=f"Transmission Lines for {region_name} saved to {save_to_file}")
+    if show:
+        plt.show()
+
 
 def create_key_data_map_interactive(
     province_gadm_regions_gdf:gpd.GeoDataFrame,
