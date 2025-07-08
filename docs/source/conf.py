@@ -22,9 +22,7 @@ release = '2025.07'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon',   # For Google/NumPy docstrings
-    'sphinx.ext.viewcode',
+    "myst_parser"  # For Markdown support
 ]
 
 templates_path = ['_templates']
