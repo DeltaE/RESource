@@ -3,9 +3,9 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="RESource" href="index.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
+    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
         <title>Usage - RESource 2025.07 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
@@ -199,8 +199,9 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Usage</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/tutorial.html">Test</a></li>
 </ul>
 
 </div>
@@ -250,6 +251,155 @@
 </pre></div>
 </div>
 </section>
+<section id="create-resources">
+<h2>Create Resources<a class="headerlink" href="#create-resources" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="RES.cluster.find_optimal_K">
+<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">find_optimal_K</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_for_clustering</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcss_tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#RES.cluster.find_optimal_K" title="Link to this definition">¶</a></dt>
+<dd><p>takes the scored grid cells and gives the optimal number of k-means cluster from the elbow chart approach.
+The Within Cluster Sum of Squares (WCSS) is a tolerance measure to find that optimal number of k. Higher the WCSS, higher the aggregation of cells i.e. less number of cluster.
+WCSS measures the squared average distance (difference between cluster's mean CF and individual CF) of all the points within a cluster to the cluster centroid (here - mean CF)</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.boundaries.</span></span><span class="sig-name descname"><span class="pre">GADMBoundaries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'config/config.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_short_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'BC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'None'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RES.boundaries.GADMBoundaries" title="Link to this definition">¶</a></dt>
+<dd><p>A class to process GADM country files and extract specific regional boundaries at a given administrative level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Dependency for core data<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pygadm</p>
+</dd>
+<dt class="field-even">Crs<span class="colon">:</span></dt>
+<dd class="field-even"><p>EPSG:4326</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_bounding_box">
+<span class="sig-name descname"><span class="pre">get_bounding_box</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_bounding_box" title="Link to this definition">¶</a></dt>
+<dd><p>This method loads the region boundary using <cite>get_region_boundary()</cite> method and gets Minimum Bounding Rectangle (MBR).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple containing the dictionary of bounding box coordinates, and the actual boundary GeoDataFrame for the specified region.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Purpose:</dt><dd><p>To be used internally to get the bounding box of the region to set ERA5 cutout boundaries.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_country_boundary">
+<span class="sig-name descname"><span class="pre">get_country_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">country</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GeoDataFrame</span></span></span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_country_boundary" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieves and prepares the GADM boundaries dataset for the specified country (Administrative Level 2).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>country</strong> (<em>str</em>) -- The name of the country to fetch GADM data for. If None, extracts the country from the user config file.</p></li>
+<li><p><strong>force_update</strong> (<em>bool</em>) -- If True, re-fetch the GADM data even if a local file exists.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>GeoDataFrame of the country's GADM regions in crs '4326'</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gpd.GeoDataFrame</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Dependency:</dt><dd><p>Depends on pygadm package to fetch the GADM data.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ValueError</strong> -- If the country is not found in the GADM dataset.</p></li>
+<li><p><strong>Exception</strong> -- If there is an error fetching or loading the GADM data.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_region_boundary">
+<span class="sig-name descname"><span class="pre">get_region_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">region_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GeoDataFrame</span></span></span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_region_boundary" title="Link to this definition">¶</a></dt>
+<dd><p>Prepares the boundaries for the specified region within the country. The defaults datafields (e.g. NAME_0, NAME_1, NAME_2) gets modified to match the user config file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>force_update</strong> (<em>bool</em>) -- To force update the data and formatting.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>GeoDataFrame of the region boundaries.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gpd.GeoDataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> -- If the region code is invalid or no data is found for the specified region</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.run" title="Link to this definition">¶</a></dt>
+<dd><p>Executes the process of extracting boundaries and creating an interactive map.
+To be used as a main method to run the class's sequential tasks.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.show_regions">
+<span class="sig-name descname"><span class="pre">show_regions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">basemap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'CartoDB</span> <span class="pre">positron'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'vis/regions'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.show_regions" title="Link to this definition">¶</a></dt>
+<dd><p>Create and save an interactive map for the specified region.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>basemap</strong> (<em>str</em>) -- The basemap to use (default is 'CartoDB positron').</p></li>
+<li><p><strong>save_path</strong> (<em>str</em>) -- The path to save the HTML map. The default is given.</p></li>
+<li><p><strong>save</strong> (<em>bool</em>) -- If the user want's to skip saving as local file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An interactive map object showing the region boundaries.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>folium.Map</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="RES.cell.GridCells">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.cell.</span></span><span class="sig-name descname"><span class="pre">GridCells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'config/config.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_short_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'BC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'None'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RES.cell.GridCells" title="Link to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="RES.cell.GridCells._check_resolution">
+<span class="sig-name descname"><span class="pre">_check_resolution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RES.cell.GridCells._check_resolution" title="Link to this definition">¶</a></dt>
+<dd><p>Check if the resolution meets the conditions and issue warnings.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RES.cell.GridCells.generate_coords">
+<span class="sig-name descname"><span class="pre">generate_coords</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RES.cell.GridCells.generate_coords" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RES.cell.GridCells.get_custom_grid">
+<span class="sig-name descname"><span class="pre">get_custom_grid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RES.cell.GridCells.get_custom_grid" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RES.cell.GridCells.get_default_grid">
+<span class="sig-name descname"><span class="pre">get_default_grid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RES.cell.GridCells.get_default_grid" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
 </section>
 
         </article>
@@ -258,17 +408,7 @@
         
         <div class="related-pages">
           
-          <a class="prev-page" href="index.html">
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-              <div class="page-info">
-                <div class="context">
-                  <span>Previous</span>
-                </div>
-                
-                <div class="title">Home</div>
-                
-              </div>
-            </a>
+          
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -301,6 +441,25 @@
             <ul>
 <li><a class="reference internal" href="#">Usage</a><ul>
 <li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#create-resources">Create Resources</a><ul>
+<li><a class="reference internal" href="#RES.cluster.find_optimal_K"><code class="docutils literal notranslate"><span class="pre">find_optimal_K()</span></code></a></li>
+<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries</span></code></a><ul>
+<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_bounding_box"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_bounding_box()</span></code></a></li>
+<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_country_boundary"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_country_boundary()</span></code></a></li>
+<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_region_boundary"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_region_boundary()</span></code></a></li>
+<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.run"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.run()</span></code></a></li>
+<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.show_regions"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.show_regions()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#RES.cell.GridCells"><code class="docutils literal notranslate"><span class="pre">GridCells</span></code></a><ul>
+<li><a class="reference internal" href="#RES.cell.GridCells._check_resolution"><code class="docutils literal notranslate"><span class="pre">GridCells._check_resolution()</span></code></a></li>
+<li><a class="reference internal" href="#RES.cell.GridCells.generate_coords"><code class="docutils literal notranslate"><span class="pre">GridCells.generate_coords()</span></code></a></li>
+<li><a class="reference internal" href="#RES.cell.GridCells.get_custom_grid"><code class="docutils literal notranslate"><span class="pre">GridCells.get_custom_grid()</span></code></a></li>
+<li><a class="reference internal" href="#RES.cell.GridCells.get_default_grid"><code class="docutils literal notranslate"><span class="pre">GridCells.get_default_grid()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -316,5 +475,6 @@
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     </body>
 </html>

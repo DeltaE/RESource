@@ -78,15 +78,15 @@ class NREL_ATBProcessor(AttributesParser):
     def pull_data(self):
         """
         Pulls and processes the Annual Technology Baseline (ATB) data sourced from NREL.
-        This method performs the following steps:
-        1. Logs the start of the ATB data processing.
-        2. Checks and downloads the required data file if not already available.
-        3. Reads the ATB cost data from a Parquet file.
-        4. Processes the ATB cost data to extract:
-            - Utility-scale photovoltaic (PV) cost.
-            - Land-based wind cost.
-            - Battery energy storage system (BESS) cost.
-        5. Logs the successful loading of the ATB cost data file.
+        
+        Jobs:
+            - Loads the config file, checks and downloads the required data file (from defined source url in config) if not already available.
+            - Reads the ATB cost data from a Parquet file.
+            - Processes the ATB cost data to extract -
+                - Utility-scale photovoltaic (PV) cost.
+                - Land-based wind cost.
+                - Battery energy storage system (BESS) cost.
+        
         Returns:
             tuple: A tuple containing the processed cost data for:
                 - Utility-scale PV (self.utility_pv_cost)
@@ -95,7 +95,7 @@ class NREL_ATBProcessor(AttributesParser):
         """
         
         utils.print_update(level=print_level_base+1,message=f"{__name__}| Processing Annual Technology Baseline (ATB) data sourced from NREL...")
-        self.check_and_download_data()
+        self.__check_and_download_data()
         
         atb_cost = pd.read_parquet(self.atb_file_path)
         
@@ -104,15 +104,15 @@ class NREL_ATBProcessor(AttributesParser):
         
         utils.print_update(level=print_level_base+1,message="Extracting technology baseline costs...")
         f"ATB cost datafile: {self.atb_file_path.name} loaded"
-        self.utility_pv_cost=self.process_solar_cost(atb_cost)
-        self.land_based_wind_cost=self.process_wind_cost(atb_cost)
-        self.bess_cost=self.process_bess_cost(atb_cost)
+        self.utility_pv_cost=self.__process_solar_cost(atb_cost)
+        self.land_based_wind_cost=self.__process_wind_cost(atb_cost)
+        self.bess_cost=self.__process_bess_cost(atb_cost)
         
         return (self.utility_pv_cost, 
                 self.land_based_wind_cost, 
                 self.bess_cost)
 
-    def check_and_download_data(self):
+    def __check_and_download_data(self):
         """
         Checks the existence of a local copy of the ATB data file and downloads it if necessary.
 
@@ -137,7 +137,7 @@ class NREL_ATBProcessor(AttributesParser):
             force_update=False
         )
 
-    def process_solar_cost(self, atb_cost):
+    def __process_solar_cost(self, atb_cost):
         """
         Processes solar cost data from the ATB (Annual Technology Baseline) dataset.
 
@@ -182,7 +182,7 @@ class NREL_ATBProcessor(AttributesParser):
         self.res_data.to_store(utility_pv_cost,'cost/atb/solar',force_update = True)
         return utility_pv_cost
 
-    def process_wind_cost(self, atb_cost):
+    def __process_wind_cost(self, atb_cost):
         """
         Processes wind cost data from the ATB (Annual Technology Baseline) dataset 
         and saves the filtered results to a CSV file and a data store.
@@ -226,7 +226,7 @@ class NREL_ATBProcessor(AttributesParser):
         self.res_data.to_store(land_based_wind_cost,'cost/atb/wind',force_update = True)
         return land_based_wind_cost
 
-    def process_bess_cost(self, atb_cost):
+    def __process_bess_cost(self, atb_cost):
         """
         Processes the cost data for Utility-Scale Battery Storage (BESS) from the ATB dataset.
 

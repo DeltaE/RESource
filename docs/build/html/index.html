@@ -3,9 +3,9 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Usage" href="usage.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="RESource Builder Module" href="resource_builder.html" />
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
+    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
         <title>RESource 2025.07 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
@@ -200,7 +200,9 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/tutorial.html">Test</a></li>
 </ul>
 
 </div>
@@ -241,113 +243,47 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="resource">
+          <img src="_static/Issue_msg_box.png" alt="Issue" width="600"/>
+<p><strong>One of the many solutions ?</strong></p>
+<img src="_static/RESource_logo.png" alt="RESource logo" width="200"/>
+<section id="resource">
 <h1>RESource<a class="headerlink" href="#resource" title="Link to this heading">¶</a></h1>
-<section id="resource-builder">
-<h2>Resource Builder<a class="headerlink" href="#resource-builder" title="Link to this heading">¶</a></h2>
-<p>The heart of RES package is <strong>RESources.py</strong> module. The module contains a class 'RESources_builder'. The core method <code class="docutils literal notranslate"><span class="pre">build()</span></code> steers the workflow to run sequential tasks to populate necessary datafields required for producing the stepwise resource assessment results.</p>
-</section>
-<section id="steps-methods">
-<h2>Steps (Methods)<a class="headerlink" href="#steps-methods" title="Link to this heading">¶</a></h2>
-<section id="step-1-get-grid-cells">
-<h3>Step 1: <code class="docutils literal notranslate"><span class="pre">get_grid_cells()</span></code><a class="headerlink" href="#step-1-get-grid-cells" title="Link to this heading">¶</a></h3>
-<p>Returns a GeoDataframe with ERA5 resolution grid cells with coordinates, geometry and unique cell ids.</p>
-<ol class="arabic simple">
-<li><p>The <code class="docutils literal notranslate"><span class="pre">get_default_grid()</span></code> creates several attributes e.g. the atlite's <code class="docutils literal notranslate"><span class="pre">cutout</span></code> object, the <code class="docutils literal notranslate"><span class="pre">region_boundary</span></code>.</p></li>
-<li><p>Uses <code class="docutils literal notranslate"><span class="pre">cutout.grid</span></code> attribute to create our test beds for the analysis i.e. the grid cells (geodataframe)</p></li>
-</ol>
-<p>The resulting GeoDataFrame from <code class="docutils literal notranslate"><span class="pre">get_grid_cells()</span></code> includes the following columns:</p>
-<div class="table-wrapper colwidths-auto docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Attribute</p></th>
-<th class="head"><p>x</p></th>
-<th class="head"><p>y</p></th>
-<th class="head"><p>Country</p></th>
-<th class="head"><p>Province</p></th>
-<th class="head"><p>Region</p></th>
-<th class="head"><p>geometry</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Description</p></td>
-<td><p>Longitude coordinate (center) of the grid cell</p></td>
-<td><p>Latitude coordinate (center) of the grid cell</p></td>
-<td><p>Name of the country containing the grid cell</p></td>
-<td><p>Name of the province or state containing the grid cell</p></td>
-<td><p>Name of the specific region containing the grid cell</p></td>
-<td><p>Polygon geometry defining the spatial extent of the grid cell</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="step-2-get-cell-capacity">
-<h3>Step 2: <code class="docutils literal notranslate"><span class="pre">get_cell_capacity()</span></code><a class="headerlink" href="#step-2-get-cell-capacity" title="Link to this heading">¶</a></h3>
-<p>Calculates the maximum installable capacity for each grid cell based on available area, land use constraints, and technology-specific parameters.</p>
-<ul class="simple">
-<li><ol class="arabic simple">
-<li><p>Determines % of usable area within each grid cell after applying exclusion criteria (e.g., protected areas, water bodies).</p></li>
-</ol>
-</li>
-<li><ol class="arabic simple" start="2">
-<li><p>Applies technology landuse intensity (e.g., MW/km² for wind or solar) to estimate the potential capacity.</p></li>
-</ol>
-</li>
-<li><ol class="arabic simple" start="3">
-<li><p>Adds a new column to the GeoDataFrame indicating the calculated capacity for each cell.</p></li>
-</ol>
-</li>
-</ul>
-</section>
-<section id="step-3a-extract-weather-data-update-gwa-scaled-params">
-<h3>Step 3a: <code class="docutils literal notranslate"><span class="pre">extract_weather_data()</span></code> , <code class="docutils literal notranslate"><span class="pre">update_gwa_scaled_params()</span></code><a class="headerlink" href="#step-3a-extract-weather-data-update-gwa-scaled-params" title="Link to this heading">¶</a></h3>
-<ul class="simple">
-<li><ol class="arabic simple">
-<li><p>Extracts relevant weather data (e.g., wind speed, solar irradiance) for each grid cell, required for resource assessment.</p></li>
-</ol>
-</li>
-<li><ol class="arabic simple" start="2">
-<li><p>Updates grid cell parameters using Global Wind Atlas (GWA) data, scaling them as needed for accurate modeling.</p></li>
-</ol>
-</li>
-</ul>
-</section>
-<section id="step-4-get-cf-timeseries">
-<h3>Step 4: <code class="docutils literal notranslate"><span class="pre">get_CF_timeseries()</span></code><a class="headerlink" href="#step-4-get-cf-timeseries" title="Link to this heading">¶</a></h3>
-<p>Generates capacity factor (CF) time series for each grid cell using weather data and technology characteristics.</p>
-</section>
-<section id="step-5-find-grid-nodes">
-<h3>Step 5: <code class="docutils literal notranslate"><span class="pre">find_grid_nodes()</span></code><a class="headerlink" href="#step-5-find-grid-nodes" title="Link to this heading">¶</a></h3>
-<p>Identifies and assigns grid nodes to each cell, facilitating network analysis and connection cost estimation.</p>
-</section>
-<section id="step-6-score-cells">
-<h3>Step 6: <code class="docutils literal notranslate"><span class="pre">score_cells()</span></code><a class="headerlink" href="#step-6-score-cells" title="Link to this heading">¶</a></h3>
-<p>Scores each grid cell based on multiple criteria (e.g., resource quality, proximity to grid), supporting site selection.</p>
-</section>
-<section id="step-7-1-get-clusters">
-<h3>Step 7.1: <code class="docutils literal notranslate"><span class="pre">get_clusters()</span></code><a class="headerlink" href="#step-7-1-get-clusters" title="Link to this heading">¶</a></h3>
-<p>Groups grid cells into clusters based on spatial or resource characteristics to enable aggregated analysis.</p>
-</section>
-<section id="step-7-2-get-cluster-timeseries">
-<h3>Step 7.2: <code class="docutils literal notranslate"><span class="pre">get_cluster_timeseries()</span></code><a class="headerlink" href="#step-7-2-get-cluster-timeseries" title="Link to this heading">¶</a></h3>
-<p>Produces time series data for each cluster, summarizing the resource and capacity factor information at the cluster level.</p>
-<p>For further info, check out <a class="reference internal" href="usage.html"><span class="doc">Usage</span></a>.
-Read installation instruction in <span class="xref std std-ref">Installation</span>.</p>
+<p><strong>A Modular and Transparent Open-Source Framework for Sub-National Assessment of Solar and Land-based Wind Potential.</strong></p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>This library is under heavy development</p>
 </div>
+<p>RESource is developed to enable reproducible, adaptable assessments of VRE potential that are sensitive to local constraints and planning priorities. We developed a structured, modular workflow that integrates geospatial, temporal, economic, and regulatory data to evaluate site suitability for solar and wind energy development. This structured methodology ensures transparency and transferability, allowing RESource to be adapted for different regions and scaled for long-term strategic energy planning.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/assessment_steps.png"><img alt="RESource logo" src="_images/assessment_steps.png" style="width: 400px;" />
+</a>
+</figure>
+<section id="workflow-overview">
+<h2>Workflow overview<a class="headerlink" href="#workflow-overview" title="Link to this heading">¶</a></h2>
+<img src="_static/high_level_workflow.png" alt="high_level_workflow" width="1000"/>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="resource_builder.html#step-1-prepare-spatial-grid-cells">Step 1: Prepare Spatial Grid Cells</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resource_builder.html#step-2-calculate-potential-capacity">Step 2: Calculate Potential Capacity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resource_builder.html#step-3a-get-cf-and-windspeed-from-higher-resolution-data">Step 3a: Get CF and Windspeed from Higher Resolution Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resource_builder.html#step-4-get-timeseries">Step 4: Get Timeseries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resource_builder.html#step-5-find-grid-proximity">Step 5: Find Grid Proximity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resource_builder.html#step-6-scoring-metric-to-rank-the-sites">Step 6: Scoring Metric to Rank the Sites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resource_builder.html#step-7-clusterized-representation-of-the-sites">Step 7: Clusterized Representation of the Sites</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">RES APIs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#resource-builder">RESource Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#annual-technology-baseline-atb">Annual Technology baseline (ATB)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#administrative-boundaries">Administrative Boundaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#spatial-grid-cell-processor">Spatial Grid Cell Processor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/tutorial.html">Test</a></li>
 </ul>
 </div>
-</section>
 </section>
 </section>
 
@@ -356,12 +292,12 @@ Read installation instruction in <span class="xref std std-ref">Installation</sp
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="usage.html">
+          <a class="next-page" href="resource_builder.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Usage</div>
+                <div class="title">RESource Builder Module</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -397,18 +333,7 @@ Read installation instruction in <span class="xref std std-ref">Installation</sp
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">RESource</a><ul>
-<li><a class="reference internal" href="#resource-builder">Resource Builder</a></li>
-<li><a class="reference internal" href="#steps-methods">Steps (Methods)</a><ul>
-<li><a class="reference internal" href="#step-1-get-grid-cells">Step 1: <code class="docutils literal notranslate"><span class="pre">get_grid_cells()</span></code></a></li>
-<li><a class="reference internal" href="#step-2-get-cell-capacity">Step 2: <code class="docutils literal notranslate"><span class="pre">get_cell_capacity()</span></code></a></li>
-<li><a class="reference internal" href="#step-3a-extract-weather-data-update-gwa-scaled-params">Step 3a: <code class="docutils literal notranslate"><span class="pre">extract_weather_data()</span></code> , <code class="docutils literal notranslate"><span class="pre">update_gwa_scaled_params()</span></code></a></li>
-<li><a class="reference internal" href="#step-4-get-cf-timeseries">Step 4: <code class="docutils literal notranslate"><span class="pre">get_CF_timeseries()</span></code></a></li>
-<li><a class="reference internal" href="#step-5-find-grid-nodes">Step 5: <code class="docutils literal notranslate"><span class="pre">find_grid_nodes()</span></code></a></li>
-<li><a class="reference internal" href="#step-6-score-cells">Step 6: <code class="docutils literal notranslate"><span class="pre">score_cells()</span></code></a></li>
-<li><a class="reference internal" href="#step-7-1-get-clusters">Step 7.1: <code class="docutils literal notranslate"><span class="pre">get_clusters()</span></code></a></li>
-<li><a class="reference internal" href="#step-7-2-get-cluster-timeseries">Step 7.2: <code class="docutils literal notranslate"><span class="pre">get_cluster_timeseries()</span></code></a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#workflow-overview">Workflow overview</a></li>
 </ul>
 </li>
 </ul>
@@ -424,5 +349,8 @@ Read installation instruction in <span class="xref std std-ref">Installation</sp
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>
 </html>

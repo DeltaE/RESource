@@ -1,25 +1,35 @@
-% RESource documentation master file, created by
-% sphinx-quickstart on Fri Jul  4 06:02:54 2025.
-% You can adapt this file completely to your liking, but it should at least
-% contain the root `toctree` directive.
+<img src="_static/Issue_msg_box.png" alt="Issue" width="600"/>
 
-# RESource
 
-```{include} ../../README.md
-:relative-images:
-```
+__One of the many solutions ?__
 
-For further info, check out {doc}`usage`.
-Read installation instruction in {ref}`Installation`.
 
+<img src="_static/RESource_logo.png" alt="RESource logo" width="200"/>
+
+# RESource 
+
+__A Modular and Transparent Open-Source Framework for Sub-National Assessment of Solar and Land-based Wind Potential.__
 
 ```{warning}
 This library is under heavy development
 ```
 
+RESource is developed to enable reproducible, adaptable assessments of VRE potential that are sensitive to local constraints and planning priorities. We developed a structured, modular workflow that integrates geospatial, temporal, economic, and regulatory data to evaluate site suitability for solar and wind energy development. This structured methodology ensures transparency and transferability, allowing RESource to be adapted for different regions and scaled for long-term strategic energy planning.
+
+```{figure} _static/assessment_steps.png
+:alt: RESource logo
+:width: 400px
+```
+
+## Workflow overview
+<img src="_static/high_level_workflow.png" alt="high_level_workflow" width="1000"/>
+
 ```{toctree}
 :caption: 'Contents:'
 :maxdepth: 2
 
-usage
+resource_builder
+api
+notebooks/tutorial
+
 ```

@@ -6,9 +6,6 @@ import warnings
 from RES.hdf5_handler import DataHandler
 from RES import utility as utils
 from RES.era5_cutout import ERA5Cutout
-from RES.logger import setup_logger
-import logging
-logger = setup_logger(__name__)
 
 class GridCells(ERA5Cutout):
     

@@ -73,7 +73,21 @@ class RESources_builder(AttributesParser):
     - Step to create the Cells with unique indices generated from their x,y (centroids). 
     - We fill the incremental datafields for cells as we progress with the methods (functions).
     '''
-    def get_grid_cells(self):
+    def get_grid_cells(self)->gpd.GeoDataFrame:
+        """
+        Retrieves the default grid cells for the region.
+    
+        Args:
+            None
+    
+        Returns:
+            gpd.GeoDataFrame: A GeoDataFrame containing the grid cells with their coordinates, geometry, and unique cell ids.
+    
+        Notes:
+            - The `get_default_grid()` method creates several attributes, such as the atlite `cutout` object and the `region_boundary`.
+            - Uses the `cutout.grid` attribute to create the analysis grid cells (GeoDataFrame).
+            
+        """  
         
         utils.print_update(level=print_level_base+1,
                            message=f"{__name__}| Preparing Grid Cells...")
@@ -172,7 +186,6 @@ class RESources_builder(AttributesParser):
         return self.store_grid_cells 
     
     #---------------------------
-    
     
     '''
     ______________________
