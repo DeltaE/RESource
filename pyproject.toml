@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "RES"
+version = "1.0"
+description = "This tool standardizes the resource assessment framework for Renewable Energy resources. Currently support Solar and On-shore Wind resource assessments. Developed by Delta E+ Research Lab, Simon Fraser University, BC, CA"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+  { name = "Md Eliasinul Islam", email = "eliasinul@gmail.com" }
+]
+classifiers = [
+  "Programming Language :: Python :: 3.11",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent"
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/RES"  # Optional, update with your actual project URL
+
+[project.scripts]
+RES = "RES.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[peoject.optional-dependencies]
+doc=[
+  "sphinx>=7.0",
+]

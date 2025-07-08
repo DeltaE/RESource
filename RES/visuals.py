@@ -143,7 +143,7 @@ def plot_resources_scatter_metric_combined(
     # Resource legend
     resource_handles = [
         mlines.Line2D([], [], color='darkorange', marker='o', linestyle='None', label='Solar'),
-        mlines.Line2D([], [], color='navy', marker='o', linestyle='None', label='Wind')
+        mlines.Line2D([], [], color='purple', marker='o', linestyle='None', label='Wind')
     ]
 
     ax.legend(handles=legend_handles + resource_handles, loc='upper right', framealpha=0, prop={'size': 12, 'weight': 'bold'})
