@@ -33,5 +33,8 @@ language = 'Python'
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'sphinx_rtd_theme' #'sphinx_rtd_theme' , 'alabaster'
+# Some popular Sphinx HTML themes:
+html_theme = 'sphinx_rtd_theme'  # 'sphinx_rtd_theme', 'alabaster', 'furo', 'pydata_sphinx_theme', 'sphinx_book_theme', 'classic', 'bizstyle', 'nature', 'scrolls', 'agogo', 'haiku', 'pyramid', 'traditional'
+
+
 html_static_path = ['_static']
