@@ -22,7 +22,10 @@ release = '2025.07'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    "myst_parser"  # For Markdown support
+    "myst_parser",  # For Markdown support
+    "sphinx.ext.duration",  # For generating documentation
+    "sphinx.ext.autodoc",  # For automatic documentation generation from docstrings
+
 ]
 
 templates_path = ['_templates']
@@ -34,7 +37,7 @@ language = 'Python'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 # Some popular Sphinx HTML themes:
-html_theme = 'sphinx_rtd_theme'  # 'sphinx_rtd_theme', 'alabaster', 'furo', 'pydata_sphinx_theme', 'sphinx_book_theme', 'classic', 'bizstyle', 'nature', 'scrolls', 'agogo', 'haiku', 'pyramid', 'traditional'
+html_theme = 'furo' # Furo is a modern, responsive theme
 
 
 html_static_path = ['_static']
