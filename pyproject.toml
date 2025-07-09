@@ -12,6 +12,12 @@ license = { text = "MIT" }
 authors = [
   { name = "Md Eliasinul Islam", email = "eliasinul@gmail.com" }
 ]
+
+dependencies = [
+    "sphinx",
+    "myst-parser",  # <-- add this
+    # any other deps
+]
 classifiers = [
   "Programming Language :: Python :: 3.11",
   "License :: OSI Approved :: MIT License",
@@ -28,10 +34,10 @@ RES = "RES.cli:main"
 where = ["."]
 
 [project.optional-dependencies]
+
 doc = [
   "sphinx>=7.0", # Sphinx for documentation generation
   "myst-parser", # For Markdown support in Sphinx
   "furo", # Furo is a modern, responsive theme for Sphinx
-  "sphinx.ext.autodoc", # For automatic documentation generation from docstrings
   "nbsphinx", # For Jupyter Notebook support in Sphinx
 ]
