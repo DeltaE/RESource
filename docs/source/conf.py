@@ -8,7 +8,16 @@
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../..'))  # Point to the root of the project
+
+# Add project root to path
+sys.path.insert(0, os.path.abspath('../..'))
+
+# For Read the Docs compatibility
+on_rtd = os.environ.get('READTHEDOCS') == 'True'
+if on_rtd:
+    # Set up minimal environment for Read the Docs
+    import warnings
+    warnings.filterwarnings("ignore")
 
 project = 'RESource'
 copyright = '2025, Md Eliasinul Islam'
@@ -53,32 +62,22 @@ autodoc_default_options = {
     'members': True,
     'undoc-members': False,
     'show-inheritance': True,
+    'ignore-module-all': True,
 }
 
-# Enhanced function to skip methods based on various criteria
+# More robust function for Read the Docs compatibility
 def skip_private_members(app, what, name, obj, skip, options):
     # Skip private and dunder methods
     if name.startswith('_'):
         return True
-    
-    # Skip methods with certain docstring markers
-    if hasattr(obj, '__doc__') and obj.__doc__:
-        if 'NODOC' in obj.__doc__ or ':nodoc:' in obj.__doc__:
-            return True
-    
-    # Skip methods marked with @no_doc decorator
-    if hasattr(obj, '__no_doc__'):
-        return True
-    
-    # Skip specific method names
-    skip_methods = ['setup', 'teardown', 'cleanup', 'validate']
-    if name in skip_methods:
-        return True
-    
     return skip
 
 def setup(app):
     app.connect('autodoc-skip-member', skip_private_members)
+
+# Suppress warnings and errors for Read the Docs compatibility
+suppress_warnings = ['autodoc.import_error', 'autodoc', 'app.add_autodoc_attrgetter']
+autodoc_inherit_docstrings = False
 
 # Suppress warnings for missing imports
 suppress_warnings = ['autodoc.import_error']

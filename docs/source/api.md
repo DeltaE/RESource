@@ -6,7 +6,6 @@ This page is under heavy development
 
 ```{eval-rst}
 .. autoclass:: RES.RESources.RESources_builder
-   :exclude-members: setup, teardown, validate
 ```
 
 ## Annual Technology baseline (ATB)
@@ -49,6 +48,7 @@ This page is under heavy development
 .. automodule:: RES.cluster
     :members:
 ```
+
 ## Local Data Store with HDF5 file
 
 ```{eval-rst}
