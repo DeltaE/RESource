@@ -22,3 +22,7 @@ export:
 	@echo "Exporting the environment..."
 	conda env export -n RES > env/environment.yml
 	@echo "Environment exported to env/environment.yml."
+
+autobuild:
+	@echo "Building the documentation..."
+	sphinx-autobuild docs/source docs/build/html
