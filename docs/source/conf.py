@@ -60,6 +60,7 @@ autodoc_default_options = {
     'undoc-members': False,  # include undocumented just in case
     # 'private-members': True,
 }
+
 html_context = {
     "default_mode": "light"
 }
