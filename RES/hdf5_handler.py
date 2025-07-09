@@ -33,7 +33,7 @@ class DataHandler:
             warnings.warn(f"❌ Error reading file: {e}")
                
     def to_store(self,
-                 data: pd.DataFrame | gpd.GeoDataFrame, 
+                 data: pd.DataFrame, 
                  key: str,
                  hdf_file_path:Path=None,
                  force_update: bool = False):

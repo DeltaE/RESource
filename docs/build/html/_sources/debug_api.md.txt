@@ -1,0 +1,35 @@
+# API Debug Test
+
+## Working: Turbine Configuration (Simple class)
+```{eval-rst}
+.. autoclass:: RES.tech.OEDBTurbines
+```
+
+## Test 1: RESource Builder (try basic autoclass)
+```{eval-rst}
+.. autoclass:: RES.RESources.RESources_builder
+```
+
+## Test 2: RESource Builder (try with no options)
+```{eval-rst}
+.. autoclass:: RES.RESources.RESources_builder
+   :members:
+```
+
+## Test 3: RESource Builder (try automodule)
+```{eval-rst}
+.. automodule:: RES.RESources
+   :members: RESources_builder
+```
+
+## Test 4: RESource Builder (try currentmodule)
+```{eval-rst}
+.. currentmodule:: RES.RESources
+.. autoclass:: RESources_builder
+```
+
+## Test 5: Just check if module can be imported
+```{eval-rst}
+.. automodule:: RES.RESources
+   :members:
+```
