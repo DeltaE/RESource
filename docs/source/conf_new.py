@@ -66,10 +66,6 @@ def skip_private_members(app, what, name, obj, skip, options):
         if 'NODOC' in obj.__doc__ or ':nodoc:' in obj.__doc__:
             return True
     
-    # Skip methods marked with @no_doc decorator
-    if hasattr(obj, '__no_doc__'):
-        return True
-    
     # Skip specific method names
     skip_methods = ['setup', 'teardown', 'cleanup', 'validate']
     if name in skip_methods:
@@ -79,6 +75,12 @@ def skip_private_members(app, what, name, obj, skip, options):
 
 def setup(app):
     app.connect('autodoc-skip-member', skip_private_members)
+
+# Handle import errors gracefully - keep only essential mocks
+autodoc_mock_imports = [
+    'numpy', 'pandas', 'geopandas', 'matplotlib', 'sklearn', 'scipy', 'xarray', 
+    'netcdf4', 'h5py', 'rasterio', 'shapely', 'pyproj', 'requests', 'pyyaml'
+]
 
 # Suppress warnings for missing imports
 suppress_warnings = ['autodoc.import_error']

@@ -188,6 +188,9 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../../_static/RESource_logo.png" alt="Logo"/>
+  </div>
   
   <span class="sidebar-brand-text">RESource 2025.07 documentation</span>
   
@@ -244,6 +247,8 @@
 <span class="kn">from</span> <span class="nn">RES.hdf5_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
 <span class="n">print_level_base</span><span class="o">=</span><span class="mi">2</span>
 
+<div class="viewcode-block" id="NREL_ATBProcessor">
+<a class="viewcode-back" href="../../api.html#RES.atb.NREL_ATBProcessor">[docs]</a>
 <span class="k">class</span> <span class="nc">NREL_ATBProcessor</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    NREL_ATBProcessor is a class from RESource module, designed to process the Annual Technology Baseline (ATB) data </span>
@@ -282,6 +287,8 @@
 <span class="sd">            ATB dataset based on specific criteria. Saves the processed data to a CSV file </span>
 <span class="sd">            and stores it in the data handler.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="NREL_ATBProcessor.__post_init__">
+<a class="viewcode-back" href="../../api.html#RES.atb.NREL_ATBProcessor.__post_init__">[docs]</a>
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Post-initialization method for setting up ATB-related configurations and paths.</span>
@@ -300,6 +307,8 @@
 <span class="sd">        - atb_datafile: Name of the ATB data parquet file as specified in the configuration.</span>
 <span class="sd">        - atb_file_path: Full path to the ATB data file.</span>
 <span class="sd">        - datahandler: Instance of `DataHandler` initialized with the provided store.</span>
+<span class="sd">        </span>
+<span class="sd">        NODOC</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;NREL_ATBProcessor initiated...&#39;</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__post_init__</span><span class="p">()</span>
@@ -312,7 +321,8 @@
         
         <span class="c1"># Create the parent directories if they do not exist</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">atb_file_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">res_data</span><span class="o">=</span><span class="n">DataHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">res_data</span><span class="o">=</span><span class="n">DataHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">)</span></div>
+
         
 <div class="viewcode-block" id="NREL_ATBProcessor.pull_data">
 <a class="viewcode-back" href="../../api.html#RES.atb.NREL_ATBProcessor.pull_data">[docs]</a>
@@ -508,7 +518,8 @@
         <span class="n">bess_cost</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">save_to</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">res_data</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="n">bess_cost</span><span class="p">,</span><span class="s1">&#39;cost/atb/bess&#39;</span><span class="p">,</span><span class="n">force_update</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
         
-        <span class="k">return</span> <span class="n">bess_cost</span>
+        <span class="k">return</span> <span class="n">bess_cost</span></div>
+
 
 </pre></div>
         </article>

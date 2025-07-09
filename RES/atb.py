@@ -61,6 +61,8 @@ class NREL_ATBProcessor(AttributesParser):
         - atb_datafile: Name of the ATB data parquet file as specified in the configuration.
         - atb_file_path: Full path to the ATB data file.
         - datahandler: Instance of `DataHandler` initialized with the provided store.
+        
+        NODOC
         """
         utils.print_update(level=print_level_base,message='NREL_ATBProcessor initiated...')
         super().__post_init__()

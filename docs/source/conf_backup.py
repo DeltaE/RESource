@@ -1,14 +1,29 @@
-# Configuration file for the Sphinx documentation builder.
-#
-# For the full list of built-in configuration values, see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-# -- Project information -----------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../..'))  # Point to the root of the project
+sys.path.insert(0, os.path.abs# Enhanced function to skip methods based on various criteria
+def skip_private_members(app, what, name, obj, skip, options):
+    # Skip private and dunder methods
+    if name.startswith('_'):
+        return True
+    
+    # Skip methods with certain docstring markers
+    if hasattr(obj, '__doc__') and obj.__doc__:
+        if 'NODOC' in obj.__doc__ or ':nodoc:' in obj.__doc__:
+            return True
+    
+    # Skip specific method names
+    skip_methods = ['setup', 'teardown', 'cleanup', 'validate']
+    if name in skip_methods:
+        return True
+    
+    return skip
+
+def setup(app):
+    app.connect('autodoc-skip-member', skip_private_members)/..'))  # Point to the root of the project
+
+
 
 project = 'RESource'
 copyright = '2025, Md Eliasinul Islam'
@@ -43,10 +58,10 @@ exclude_patterns = []
 
 language = 'Python'
 
-# -- Options for HTML output -------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
+# Some popular Sphinx HTML themes:
+html_theme = 'furo' # Furo is a modern, responsive theme
 
-html_theme = 'furo'  # Furo is a modern, responsive theme
+
 html_static_path = ['_static']
 
 autodoc_default_options = {
@@ -55,26 +70,10 @@ autodoc_default_options = {
     'show-inheritance': True,
 }
 
-# Enhanced function to skip methods based on various criteria
+# To skip private and dunder methods
 def skip_private_members(app, what, name, obj, skip, options):
-    # Skip private and dunder methods
     if name.startswith('_'):
         return True
-    
-    # Skip methods with certain docstring markers
-    if hasattr(obj, '__doc__') and obj.__doc__:
-        if 'NODOC' in obj.__doc__ or ':nodoc:' in obj.__doc__:
-            return True
-    
-    # Skip methods marked with @no_doc decorator
-    if hasattr(obj, '__no_doc__'):
-        return True
-    
-    # Skip specific method names
-    skip_methods = ['setup', 'teardown', 'cleanup', 'validate']
-    if name in skip_methods:
-        return True
-    
     return skip
 
 def setup(app):
