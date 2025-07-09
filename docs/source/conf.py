@@ -79,6 +79,14 @@ def setup(app):
 suppress_warnings = ['autodoc.import_error', 'autodoc', 'app.add_autodoc_attrgetter']
 autodoc_inherit_docstrings = False
 
+# Add minimal mock imports for problematic modules only
+autodoc_mock_imports = [
+    'RES.era5_cutout', 'RES.windspeed', 'RES.CellCapacityProcessor', 'RES.coders',
+    'RES.power_nodes', 'RES.timeseries', 'RES.gwa', 'RES.utility',
+    'RES.logger', 'RES.AttributesParser', 'RES.WorldPop', 'RES.gaez', 'RES.lands',
+    'RES.osm', 'RES.visuals', 'RES.wind', 'RES.dash_input_config'
+]
+
 # Suppress warnings for missing imports
 suppress_warnings = ['autodoc.import_error']
 

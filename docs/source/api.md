@@ -56,13 +56,17 @@ This page is under heavy development
 ```
 
 ## Turbine Configuration
+
 ```{eval-rst}
 .. autoclass:: RES.tech.OEDBTurbines
 ```
+
 ## Units
+
 ```{eval-rst}
 .. autoclass:: RES.units.Units
 ```
+
 ---
 ```{warning}
 This page is under heavy development
