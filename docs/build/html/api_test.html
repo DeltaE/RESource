@@ -6,9 +6,10 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
-        <title>RES APIs (Test Version) - RESource 2025.07 documentation</title>
+        <title>&lt;no title&gt; - RESource 2025.07 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
     
     
@@ -178,7 +179,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -190,7 +191,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   <div class="sidebar-logo-container">
-    <img class="sidebar-logo" src="_static/RESource_logo.png" alt="Logo"/>
+    <img class="sidebar-logo" src="_static/RESource_logo_2025.07.jpg" alt="Logo"/>
   </div>
   
   <span class="sidebar-brand-text">RESource 2025.07 documentation</span>
@@ -205,7 +206,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="debug_api.html">API Debug Test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case.html">Canadian Case Study</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/tutorial.html">Test</a></li>
 </ul>
 
@@ -241,137 +242,13 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section class="tex2jax_ignore mathjax_ignore" id="res-apis-test-version">
-<h1>RES APIs (Test Version)<a class="headerlink" href="#res-apis-test-version" title="Link to this heading">¶</a></h1>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>This page is under heavy development</p>
-</div>
-<section id="resource-builder">
-<h2>RESource Builder<a class="headerlink" href="#resource-builder" title="Link to this heading">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">RESources_builder</span></code> class is the main entry point for the RESource framework. It provides a unified interface for renewable energy resource assessment.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="RES.RESources.RESources_builder">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.RESources.</span></span><span class="sig-name descname"><span class="pre">RESources_builder</span></span><a class="headerlink" href="#RES.RESources.RESources_builder" title="Link to this definition">¶</a></dt>
-<dd><p>Main builder class for RESource framework.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.RESources.RESources_builder.get_grid_cells">
-<span class="sig-name descname"><span class="pre">get_grid_cells</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RES.RESources.RESources_builder.get_grid_cells" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieves the default grid cells for the region.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.RESources.RESources_builder.get_temporal_data">
-<span class="sig-name descname"><span class="pre">get_temporal_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RES.RESources.RESources_builder.get_temporal_data" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieves temporal data for the region.</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="annual-technology-baseline-atb">
-<h2>Annual Technology baseline (ATB)<a class="headerlink" href="#annual-technology-baseline-atb" title="Link to this heading">¶</a></h2>
-</section>
-<section id="administrative-boundaries">
-<h2>Administrative Boundaries<a class="headerlink" href="#administrative-boundaries" title="Link to this heading">¶</a></h2>
-</section>
-<section id="spatial-grid-cell-processor">
-<h2>Spatial Grid Cell Processor<a class="headerlink" href="#spatial-grid-cell-processor" title="Link to this heading">¶</a></h2>
-</section>
-<section id="scorer">
-<h2>Scorer<a class="headerlink" href="#scorer" title="Link to this heading">¶</a></h2>
-</section>
-<section id="module-RES.cluster">
-<span id="clustering"></span><h2>Clustering<a class="headerlink" href="#module-RES.cluster" title="Link to this heading">¶</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="RES.cluster.assign_cluster_id">
-<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">assign_cluster_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Region'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cell'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/cluster.html#assign_cluster_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.cluster.assign_cluster_id" title="Link to this definition">¶</a></dt>
-<dd><p>Assigns unique cell IDs to each region in the specified GeoDataFrame.</p>
-<p>Parameters:
-cells (gpd.GeoDataFrame): Input GeoDataFrame containing spatial data with 'x' and 'y' coordinates.
-source_column (str): Column name in the GeoDataFrame that contains regional names.
-index_name (str): Name for the new index column to be created.</p>
-<p>Returns:
-gpd.GeoDataFrame: GeoDataFrame with a new column of unique cell IDs for each region.</p>
-<dl class="field-list simple">
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="RES.cluster.cells_to_cluster_mapping">
-<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">cells_to_cluster_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells_scored</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vis_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcss_tolerance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_columns</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/cluster.html#cells_to_cluster_mapping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.cluster.cells_to_cluster_mapping" title="Link to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>Clustering requires a base prior to perform the aggregation/clustering similar data. Here, we are doing spatial clustering which aggregates the spatial regions
-based on some common features. As a common feature, the modellers can design tailored metric find/calculate a feature which performs as a good proxy of the suitability of the cells as a
-potential renewable energy site. For this tool (this version), we are calculating a composite scoring approach to find the suitability of the sites. The composite score has been labelled as
-as &quot;lcoe&quot; i.e. proxy Levelized Cost of Electricity (LCOE) which denotes the energy yield (MWh) per dollar of investment in a cell. We have calculated this composite score for each cell and
-here with this function, this score will be acting as the common feature for the spatial clustering.</p>
-<p>Does the following sequential tasks:</p>
-</div></blockquote>
-<p>Processes the GWA cells before we approach for clustering . An output of this function is a region vs optimal cluster for the region and another output denotes cell vs mapped region vs cluster no. (in which the cells will be merged into).</p>
-<dl class="field-list simple">
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="RES.cluster.clip_cluster_boundaries_upto_regions">
-<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">clip_cluster_boundaries_upto_regions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell_cluster_gdf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gadm_regions_gdf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/cluster.html#clip_cluster_boundaries_upto_regions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.cluster.clip_cluster_boundaries_upto_regions" title="Link to this definition">¶</a></dt>
-<dd><p>xxx</p>
-<dl class="field-list simple">
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="RES.cluster.create_cells_Union_in_clusters">
-<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">create_cells_Union_in_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cluster_map_gdf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_optimal_k_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/cluster.html#create_cells_Union_in_clusters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.cluster.create_cells_Union_in_clusters" title="Link to this definition">¶</a></dt>
-<dd><p>Dissolve a GeoDataFrame based on 'Bucket_No' and aggregate columns as specified.</p>
-<p>Parameters:
-- cluster_map_gdf: GeoDataFrame, the input GeoDataFrame to be dissolved and aggregated.
-- region_optimal_k_df: DataFrame, a DataFrame containing region information.</p>
-<p>Returns:
-- dissolved_gdf: GeoDataFrame, the dissolved and aggregated GeoDataFrame.
-- dissolved_indices: dict, a dictionary containing the indices of the dissolved rows for each region and each Cluster_No.</p>
-<dl class="field-list simple">
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="RES.cluster.find_optimal_K">
-<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">find_optimal_K</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_for_clustering</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcss_tolerance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/cluster.html#find_optimal_K"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.cluster.find_optimal_K" title="Link to this definition">¶</a></dt>
-<dd><p>takes the scored grid cells and gives the optimal number of k-means cluster from the elbow chart approach.
-The Within Cluster Sum of Squares (WCSS) is a tolerance measure to find that optimal number of k. Higher the WCSS, higher the aggregation of cells i.e. less number of cluster.
-WCSS measures the squared average distance (difference between cluster's mean CF and individual CF) of all the points within a cluster to the cluster centroid (here - mean CF)</p>
-<dl class="field-list simple">
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="RES.cluster.pre_process_cluster_mapping">
-<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">pre_process_cluster_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells_scored</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vis_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcss_tolerance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/cluster.html#pre_process_cluster_mapping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.cluster.pre_process_cluster_mapping" title="Link to this definition">¶</a></dt>
-<dd><p>xxx</p>
-<dl class="field-list simple">
-</dl>
-</dd></dl>
-
-</section>
-<section id="local-data-store-with-hdf5-file">
-<h2>Local Data Store with HDF5 file<a class="headerlink" href="#local-data-store-with-hdf5-file" title="Link to this heading">¶</a></h2>
-</section>
-<section id="turbine-configuration">
-<h2>Turbine Configuration<a class="headerlink" href="#turbine-configuration" title="Link to this heading">¶</a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>This page is under heavy development</p>
-</div>
-</section>
-</section>
-
+          
         </article>
       </div>
       <footer>
@@ -397,49 +274,8 @@ WCSS measures the squared average distance (difference between cluster's mean CF
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">RES APIs (Test Version)</a><ul>
-<li><a class="reference internal" href="#resource-builder">RESource Builder</a><ul>
-<li><a class="reference internal" href="#RES.RESources.RESources_builder"><code class="docutils literal notranslate"><span class="pre">RES.RESources.RESources_builder</span></code></a><ul>
-<li><a class="reference internal" href="#RES.RESources.RESources_builder.get_grid_cells"><code class="docutils literal notranslate"><span class="pre">RES.RESources.RESources_builder.get_grid_cells()</span></code></a></li>
-<li><a class="reference internal" href="#RES.RESources.RESources_builder.get_temporal_data"><code class="docutils literal notranslate"><span class="pre">RES.RESources.RESources_builder.get_temporal_data()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#annual-technology-baseline-atb">Annual Technology baseline (ATB)</a></li>
-<li><a class="reference internal" href="#administrative-boundaries">Administrative Boundaries</a></li>
-<li><a class="reference internal" href="#spatial-grid-cell-processor">Spatial Grid Cell Processor</a></li>
-<li><a class="reference internal" href="#scorer">Scorer</a></li>
-<li><a class="reference internal" href="#module-RES.cluster">Clustering</a><ul>
-<li><a class="reference internal" href="#RES.cluster.assign_cluster_id"><code class="docutils literal notranslate"><span class="pre">assign_cluster_id()</span></code></a></li>
-<li><a class="reference internal" href="#RES.cluster.cells_to_cluster_mapping"><code class="docutils literal notranslate"><span class="pre">cells_to_cluster_mapping()</span></code></a></li>
-<li><a class="reference internal" href="#RES.cluster.clip_cluster_boundaries_upto_regions"><code class="docutils literal notranslate"><span class="pre">clip_cluster_boundaries_upto_regions()</span></code></a></li>
-<li><a class="reference internal" href="#RES.cluster.create_cells_Union_in_clusters"><code class="docutils literal notranslate"><span class="pre">create_cells_Union_in_clusters()</span></code></a></li>
-<li><a class="reference internal" href="#RES.cluster.find_optimal_K"><code class="docutils literal notranslate"><span class="pre">find_optimal_K()</span></code></a></li>
-<li><a class="reference internal" href="#RES.cluster.pre_process_cluster_mapping"><code class="docutils literal notranslate"><span class="pre">pre_process_cluster_mapping()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#local-data-store-with-hdf5-file">Local Data Store with HDF5 file</a></li>
-<li><a class="reference internal" href="#turbine-configuration">Turbine Configuration</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

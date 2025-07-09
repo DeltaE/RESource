@@ -3,9 +3,11 @@ from pathlib import Path
 from RES import utility as utils
 from RES.AttributesParser import AttributesParser
 from RES.hdf5_handler import DataHandler
+from dataclasses import dataclass, field
 print_level_base=2
 
-class NREL_ATBProcessor(AttributesParser):
+@dataclass
+class NREL_ATBProcessor:
     """ 
     NREL_ATBProcessor is a class from RESource module, designed to process the Annual Technology Baseline (ATB) data 
     sourced from the National Renewable Energy Laboratory (NREL). This class provides methods 
@@ -14,6 +16,9 @@ class NREL_ATBProcessor(AttributesParser):
     storage systems (BESS).
     
     Attributes:
+        config_file_path (Path): Path to the configuration file.
+        region_short_code (str): Short code for the region.
+        resource_type (str): Type of resource being processed.
         atb_config (dict): Configuration dictionary containing paths and settings for ATB data.
         atb_data_save_to (Path): Path to the directory where ATB data will be saved.
         atb_parquet_source (str): Source URL or path for the ATB Parquet file.
@@ -43,18 +48,25 @@ class NREL_ATBProcessor(AttributesParser):
             ATB dataset based on specific criteria. Saves the processed data to a CSV file 
             and stores it in the data handler.
     """
+    
+    # Input parameters
+    config_file_path: Path = field(default_factory=lambda: Path('config/config.yaml'))
+    region_short_code: str = field(default='BC')
+    resource_type: str = field(default='None')
+    
     def __post_init__(self):
         """
         Post-initialization method for setting up ATB-related configurations and paths.
         
         This method performs the following tasks:
-        - Calls the parent class's `__post_init__` method to ensure proper initialization.
+        - Creates an AttributesParser instance to handle configuration loading.
         - Retrieves the ATB configuration using `get_atb_config`.
         - Sets up paths for saving ATB data and accessing ATB parquet files.
         - Ensures that the directory for the ATB data file exists, creating it if necessary.
         - Initializes a `DataHandler` instance with the provided store.
         
         Attributes initialized:
+        - attributes_parser: AttributesParser instance for configuration handling.
         - atb_config: Configuration dictionary for ATB settings.
         - atb_data_save_to: Path object representing the root directory for saving ATB data.
         - atb_parquet_source: Path to the source parquet file as specified in the configuration.
@@ -65,17 +77,27 @@ class NREL_ATBProcessor(AttributesParser):
         NODOC
         """
         utils.print_update(level=print_level_base,message='NREL_ATBProcessor initiated...')
-        super().__post_init__()
         
-        self.atb_config=self.get_atb_config()
+        # Create AttributesParser instance to handle configuration
+        self.attributes_parser = AttributesParser(
+            config_file_path=self.config_file_path,
+            region_short_code=self.region_short_code,
+            resource_type=self.resource_type
+        )
+        
+        # Access configuration through the attributes_parser
+        self.config = self.attributes_parser.config
+        self.store = self.attributes_parser.store
+        
+        self.atb_config = self.attributes_parser.get_atb_config()
         self.atb_data_save_to = Path(self.atb_config['root'])
         self.atb_parquet_source = self.atb_config['source']['parquet']
         self.atb_datafile = self.atb_config['datafile']['parquet']
-        self.atb_file_path = Path (self.atb_data_save_to) / self.atb_datafile
+        self.atb_file_path = Path(self.atb_data_save_to) / self.atb_datafile
         
         # Create the parent directories if they do not exist
         self.atb_file_path.parent.mkdir(parents=True, exist_ok=True)
-        self.res_data=DataHandler(self.store)
+        self.res_data = DataHandler(self.store)
         
     def pull_data(self):
         """

@@ -6,52 +6,15 @@ This page is under heavy development
 
 **Main class for the RESource framework providing renewable energy resource assessment capabilities.**
 
-```{eval-rst}
-.. py:class:: RES.RESources.RESources_builder
 
-   Main builder class for RESource framework that integrates geospatial, temporal, economic, and regulatory data to evaluate site suitability for solar and wind energy development.
-
-   .. py:method:: get_grid_cells()
-
-      Retrieves the default grid cells for the region.
-
-      :returns: GeoDataFrame containing grid cells
-      :rtype: geopandas.GeoDataFrame
-
-   .. py:method:: get_temporal_data()
-
-      Retrieves temporal data for the specified region and time period.
-
-      :returns: Temporal data for the region
-      :rtype: xarray.Dataset
-
-   .. py:method:: run_assessment()
-
-      Runs the complete renewable energy resource assessment.
-
-      :returns: Assessment results
-      :rtype: dict
-```
-
-## Annual Technology baseline (ATB)
+## Annual Technology Baseline (ATB)
 
 **Processor for NREL's Annual Technology Baseline data.**
 
 ```{eval-rst}
-.. py:class:: RES.atb.NREL_ATBProcessor
-
-   Class for processing and managing NREL Annual Technology Baseline data for renewable energy cost and performance projections.
-
-   .. py:method:: load_data()
-
-      Loads ATB data for the specified year.
-
-   .. py:method:: get_technology_data(technology)
-
-      Retrieves data for a specific technology.
-
-      :param technology: Technology type (e.g., 'wind', 'solar')
-      :type technology: str
+.. autoclass:: RES.atb.NREL_ATBProcessor
+   :members:
+   :show-inheritance:
 ```
 
 > ℹ️ The ATB data source and configuration may change annually. Ensure you are referencing the correct year and dataset for your analysis.
@@ -63,21 +26,20 @@ This page is under heavy development
 **Handler for GADM administrative boundary data.**
 
 ```{eval-rst}
-.. py:class:: RES.boundaries.GADMBoundaries
-
-   Class for downloading and processing GADM (Global Administrative Areas) boundary data.
-
-   .. py:method:: download_boundaries(country_code)
-
-      Downloads boundary data for the specified country.
-
-      :param country_code: ISO country code
-      :type country_code: str
-
-   .. py:method:: get_regions()
-
-      Retrieves available administrative regions.
+.. autoclass:: RES.boundaries.GADMBoundaries
+   :members:
+   :show-inheritance:
+   :noindex:
 ```
+
+```{note}
+If the above documentation doesn't render properly, this indicates import issues with heavy geospatial dependencies. The GADMBoundaries class provides:
+
+- **download_boundaries(country_code)**: Downloads boundary data for the specified country
+- **get_regions()**: Retrieves available administrative regions  
+- **process_boundaries()**: Processes and validates boundary data
+```
+
 > ℹ️ `RES.boundaries.GADMBoundaries` is to be used for standalone data download/validation purposes.
 
 
@@ -85,29 +47,52 @@ This page is under heavy development
 
 ```{eval-rst}
 .. autoclass:: RES.cell.GridCells
+   :members:
+   :show-inheritance:
+   :noindex:
 ```
 
 ```{note}
-`RES.boundaries.GADMBoundaries.run` is to be used for standalone data download/validation purposes.
+If the above documentation doesn't render, this class provides grid cell processing capabilities for spatial analysis.
 ```
 
 ## Scorer
 
 ```{eval-rst}
 .. autoclass:: RES.score.CellScorer
+   :members:
+   :show-inheritance:
+   :noindex:
+```
+
+```{note}
+If the above documentation doesn't render, this class provides cell scoring capabilities for renewable energy site assessment.
 ```
 
 ## Clustering
 
 ```{eval-rst}
 .. automodule:: RES.cluster
-    :members:
+   :members:
+   :show-inheritance:
+   :noindex:
+```
+
+```{note}
+If the above documentation doesn't render properly, this module provides clustering algorithms for renewable energy resource grouping and analysis.
 ```
 
 ## Local Data Store with HDF5 file
 
 ```{eval-rst}
 .. autoclass:: RES.hdf5_handler.DataHandler
+   :members:
+   :show-inheritance:
+   :noindex:
+```
+
+```{note}
+If the above documentation doesn't render, this class provides HDF5-based data storage and retrieval capabilities for the RESource framework.
 ```
 
 ## Turbine Configuration
