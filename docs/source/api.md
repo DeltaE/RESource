@@ -19,8 +19,6 @@ This page is under heavy development
 > * Currently configured for 2024 ATB.
 > * Please review and update configuration if using for a different year or context.
 
-
-
 ## Administrative Boundaries
 
 ```{eval-rst}
@@ -37,4 +35,31 @@ This page is under heavy development
 
 ```{note}
 `RES.boundaries.GADMBoundaries.run` is to be used for standalone data download/validation purposes.
+```
+
+## Scorer
+
+```{eval-rst}
+.. autoclass:: RES.score.CellScorer
+```
+
+## Clustering
+
+```{eval-rst}
+.. automodule:: RES.cluster
+    :members:
+```
+## Local Data Store with HDF5 file
+
+```{eval-rst}
+.. autoclass:: RES.hdf5_handler.DataHandler
+```
+
+## Turbine Configuration
+```{eval-rst}
+.. autoclass:: RES.tech.OEDBTurbines
+```
+
+```{warning}
+This page is under heavy development
 ```

@@ -11,8 +11,6 @@ from pathlib import Path
         
 imputer = SimpleImputer(strategy="mean")  # Other strategies: "median", "most_frequent"
 
-
-
 def assign_cluster_id(cells: gpd.GeoDataFrame, 
                   source_column: str = 'Region', 
                   index_name: str = 'cell') -> gpd.GeoDataFrame:
