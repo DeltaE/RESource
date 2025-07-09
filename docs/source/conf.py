@@ -9,7 +9,6 @@
 
 import os
 import sys
-import subprocess
 sys.path.insert(0, os.path.abspath('..'))
 
 
@@ -64,11 +63,5 @@ autodoc_default_options = {
 html_context = {
     "default_mode": "light"
 }
-
-# Ensure extensions are installed in the Read the Docs environment
-
-# If building on Read the Docs, install requirements
-if os.environ.get('READTHEDOCS') == 'True':
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', '../requirements.txt'])
 
 html_logo = "_static/RESource_logo.png"
