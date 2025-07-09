@@ -64,11 +64,4 @@ html_context = {
     "default_mode": "light"
 }
 
-html_logo = "_static/logo.png"
-
-html_theme_options = {
-    "rightsidebar": True,  # enables the right sidebar
-    "stickysidebar": True,  # sidebar scrolls with page
-    "collapsiblesidebar": True,  # sidebar can be collapsed
-    "externalrefs": False,  # don't style external links
-}
+html_logo = "_static/RESource_logo.png"
