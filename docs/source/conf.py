@@ -72,8 +72,14 @@ def skip_private_members(app, what, name, obj, skip, options):
         return True
     return skip
 
+# Handle autodoc import failures gracefully
+def autodoc_skip_member_handler(app, what, name, obj, skip, options):
+    return skip_private_members(app, what, name, obj, skip, options)
+
 def setup(app):
-    app.connect('autodoc-skip-member', skip_private_members)
+    app.connect('autodoc-skip-member', autodoc_skip_member_handler)
+    # Continue on import errors
+    app.config.autodoc_mock_imports_fallback = True
 
 # Suppress warnings and errors for Read the Docs compatibility
 suppress_warnings = ['autodoc.import_error', 'autodoc', 'app.add_autodoc_attrgetter']
@@ -81,6 +87,10 @@ autodoc_inherit_docstrings = False
 
 # Add minimal mock imports for problematic modules only
 autodoc_mock_imports = [
+    # External dependencies that might not be available
+    'numpy', 'pandas', 'geopandas', 'xarray', 'netcdf4', 'h5py', 'rasterio', 
+    'shapely', 'pyproj', 'scipy', 'sklearn', 'matplotlib', 'requests',
+    # Internal RES modules that have complex dependencies
     'RES.era5_cutout', 'RES.windspeed', 'RES.CellCapacityProcessor', 'RES.coders',
     'RES.power_nodes', 'RES.timeseries', 'RES.gwa', 'RES.utility',
     'RES.logger', 'RES.AttributesParser', 'RES.WorldPop', 'RES.gaez', 'RES.lands',

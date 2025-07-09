@@ -27,6 +27,7 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 
 resource_builder
 api
+api_test_simple
 notebooks/tutorial
 
 ```
