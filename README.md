@@ -19,3 +19,5 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 
 ## Workflow overview
 <img src="docs/source/_static/high_level_workflow.png" alt="high_level_workflow" width="1000"/>
+
+for more - [RESource-readthedocs](https://deltae-resource.readthedocs.io/en/latest/)
