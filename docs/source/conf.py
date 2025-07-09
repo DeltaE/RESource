@@ -9,7 +9,7 @@
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('../..'))  # Point to the root of the project
 
 
 
@@ -31,6 +31,23 @@ extensions = [
     "sphinx.ext.viewcode",  # For linking to source code
     "sphinx.ext.autosectionlabel",  # For automatic section labels
 ]
+
+# MyST parser configuration
+myst_enable_extensions = [
+    "deflist",
+    "tasklist", 
+    "fieldlist",
+    "colon_fence",
+    "dollarmath",
+    "amsmath",
+    "html_admonition",
+    "html_image",
+    "attrs_inline",
+    "attrs_block",
+]
+
+# Enable MyST to handle eval-rst directive
+myst_fence_as_directive = ["eval-rst"]
 
 templates_path = ['_templates']
 exclude_patterns = []
@@ -57,9 +74,20 @@ html_static_path = ['_static']
 
 autodoc_default_options = {
     'members': True,
-    'undoc-members': False,  # include undocumented just in case
-    # 'private-members': True,
+    'undoc-members': True,  # Include undocumented members
+    'show-inheritance': True,
+    'inherited-members': True,
+    'special-members': '__init__',
 }
+
+# Handle import errors gracefully
+autodoc_mock_imports = [
+    'numpy', 'pandas', 'geopandas', 'matplotlib', 'sklearn', 'scipy', 'xarray', 
+    'netcdf4', 'h5py', 'rasterio', 'shapely', 'pyproj', 'cartopy', 'seaborn', 
+    'plotly', 'folium', 'osmnx', 'requests', 'beautifulsoup4', 'lxml', 'openpyxl', 
+    'xlrd', 'psutil', 'tqdm', 'joblib', 'dask', 'zarr', 'bottleneck', 'numexpr', 
+    'cython', 'numba', 'pyyaml', 'toml', 'configparser'
+]
 
 html_context = {
     "default_mode": "light"
