@@ -3,12 +3,13 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Test" href="notebooks/tutorial.html" /><link rel="prev" title="RESource Builder Module" href="resource_builder.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Canadian Case Study" href="case.html" /><link rel="prev" title="RESource Builder Module" href="resource_builder.html" />
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
         <title>RES APIs - RESource 2025.07 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
     
     
@@ -190,7 +191,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   <div class="sidebar-logo-container">
-    <img class="sidebar-logo" src="_static/RESource_logo.png" alt="Logo"/>
+    <img class="sidebar-logo" src="_static/RESource_logo_2025.07.jpg" alt="Logo"/>
   </div>
   
   <span class="sidebar-brand-text">RESource 2025.07 documentation</span>
@@ -205,6 +206,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case.html">Canadian Case Study</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/tutorial.html">Test</a></li>
 </ul>
 
@@ -246,7 +248,7 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section class="tex2jax_ignore mathjax_ignore" id="res-apis">
+          <section id="res-apis">
 <h1>RES APIs<a class="headerlink" href="#res-apis" title="Link to this heading">¶</a></h1>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -254,9 +256,218 @@
 </div>
 <section id="resource-builder">
 <h2>RESource Builder<a class="headerlink" href="#resource-builder" title="Link to this heading">¶</a></h2>
+<p><strong>Main class for the RESource framework providing renewable energy resource assessment capabilities.</strong></p>
 </section>
 <section id="annual-technology-baseline-atb">
-<h2>Annual Technology baseline (ATB)<a class="headerlink" href="#annual-technology-baseline-atb" title="Link to this heading">¶</a></h2>
+<h2>Annual Technology Baseline (ATB)<a class="headerlink" href="#annual-technology-baseline-atb" title="Link to this heading">¶</a></h2>
+<p><strong>Processor for NREL's Annual Technology Baseline data.</strong></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="RES.atb.NREL_ATBProcessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.atb.</span></span><span class="sig-name descname"><span class="pre">NREL_ATBProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_path:</span> <span class="pre">~pathlib.Path</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_short_code:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'BC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'None'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/atb.html#NREL_ATBProcessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.atb.NREL_ATBProcessor" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>NREL_ATBProcessor is a class from RESource module, designed to process the Annual Technology Baseline (ATB) data
+sourced from the National Renewable Energy Laboratory (NREL). This class provides methods
+to pull, process, and store cost data for various renewable energy technologies, including
+utility-scale photovoltaic (PV) systems, land-based wind turbines, and battery energy
+storage systems (BESS).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RES.atb.NREL_ATBProcessor.config_file_path">
+<span class="sig-name descname"><span class="pre">config_file_path</span></span><a class="headerlink" href="#RES.atb.NREL_ATBProcessor.config_file_path" title="Link to this definition">¶</a></dt>
+<dd><p>Path to the configuration file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RES.atb.NREL_ATBProcessor.region_short_code">
+<span class="sig-name descname"><span class="pre">region_short_code</span></span><a class="headerlink" href="#RES.atb.NREL_ATBProcessor.region_short_code" title="Link to this definition">¶</a></dt>
+<dd><p>Short code for the region.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RES.atb.NREL_ATBProcessor.resource_type">
+<span class="sig-name descname"><span class="pre">resource_type</span></span><a class="headerlink" href="#RES.atb.NREL_ATBProcessor.resource_type" title="Link to this definition">¶</a></dt>
+<dd><p>Type of resource being processed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RES.atb.NREL_ATBProcessor.atb_config">
+<span class="sig-name descname"><span class="pre">atb_config</span></span><a class="headerlink" href="#RES.atb.NREL_ATBProcessor.atb_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration dictionary containing paths and settings for ATB data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RES.atb.NREL_ATBProcessor.atb_data_save_to">
+<span class="sig-name descname"><span class="pre">atb_data_save_to</span></span><a class="headerlink" href="#RES.atb.NREL_ATBProcessor.atb_data_save_to" title="Link to this definition">¶</a></dt>
+<dd><p>Path to the directory where ATB data will be saved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RES.atb.NREL_ATBProcessor.atb_parquet_source">
+<span class="sig-name descname"><span class="pre">atb_parquet_source</span></span><a class="headerlink" href="#RES.atb.NREL_ATBProcessor.atb_parquet_source" title="Link to this definition">¶</a></dt>
+<dd><p>Source URL or path for the ATB Parquet file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RES.atb.NREL_ATBProcessor.atb_datafile">
+<span class="sig-name descname"><span class="pre">atb_datafile</span></span><a class="headerlink" href="#RES.atb.NREL_ATBProcessor.atb_datafile" title="Link to this definition">¶</a></dt>
+<dd><p>Name of the ATB data file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RES.atb.NREL_ATBProcessor.atb_file_path">
+<span class="sig-name descname"><span class="pre">atb_file_path</span></span><a class="headerlink" href="#RES.atb.NREL_ATBProcessor.atb_file_path" title="Link to this definition">¶</a></dt>
+<dd><p>Full path to the ATB data file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RES.atb.NREL_ATBProcessor.datahandler">
+<span class="sig-name descname"><span class="pre">datahandler</span></span><a class="headerlink" href="#RES.atb.NREL_ATBProcessor.datahandler" title="Link to this definition">¶</a></dt>
+<dd><p>Instance of DataHandler for storing processed data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataHandler</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RES.atb.NREL_ATBProcessor.__post_init__">
+<span class="sig-name descname"><span class="pre">__post_init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/atb.html#NREL_ATBProcessor.__post_init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.atb.NREL_ATBProcessor.__post_init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initializes the processor by loading configurations, setting up paths,
+and creating necessary directories.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RES.atb.NREL_ATBProcessor.pull_data">
+<span class="sig-name descname"><span class="pre">pull_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/atb.html#NREL_ATBProcessor.pull_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.atb.NREL_ATBProcessor.pull_data" title="Link to this definition">¶</a></dt>
+<dd><p>Pulls and processes the ATB data, extracting cost data for utility-scale PV,
+land-based wind, and BESS. Returns the processed data as a tuple.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RES.atb.NREL_ATBProcessor._check_and_download_data">
+<span class="sig-name descname"><span class="pre">_check_and_download_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RES.atb.NREL_ATBProcessor._check_and_download_data" title="Link to this definition">¶</a></dt>
+<dd><p>Checks for the existence of the ATB data file locally and downloads it if
+necessary.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RES.atb.NREL_ATBProcessor._process_solar_cost">
+<span class="sig-name descname"><span class="pre">_process_solar_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atb_cost</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RES.atb.NREL_ATBProcessor._process_solar_cost" title="Link to this definition">¶</a></dt>
+<dd><p>Filters and processes solar cost data from the ATB dataset based on specific
+criteria. Saves the processed data to a CSV file and stores it in the data handler.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RES.atb.NREL_ATBProcessor._process_wind_cost">
+<span class="sig-name descname"><span class="pre">_process_wind_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atb_cost</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RES.atb.NREL_ATBProcessor._process_wind_cost" title="Link to this definition">¶</a></dt>
+<dd><p>Filters and processes land-based wind cost data from the ATB dataset based on
+specific criteria. Saves the processed data to a CSV file and stores it in the
+data handler.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RES.atb.NREL_ATBProcessor._process_bess_cost">
+<span class="sig-name descname"><span class="pre">_process_bess_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atb_cost</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RES.atb.NREL_ATBProcessor._process_bess_cost" title="Link to this definition">¶</a></dt>
+<dd><p>Filters and processes battery energy storage system (BESS) cost data from the
+ATB dataset based on specific criteria. Saves the processed data to a CSV file
+and stores it in the data handler.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">config_file_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Path</span></em><a class="headerlink" href="#id0" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">pull_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/atb.html#NREL_ATBProcessor.pull_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Link to this definition">¶</a></dt>
+<dd><p>Pulls and processes the Annual Technology Baseline (ATB) data sourced from NREL.</p>
+<dl class="simple">
+<dt>Jobs:</dt><dd><ul class="simple">
+<li><p>Loads the config file, checks and downloads the required data file (from defined source url in config) if not already available.</p></li>
+<li><p>Reads the ATB cost data from a Parquet file.</p></li>
+<li><dl class="simple">
+<dt>Processes the ATB cost data to extract -</dt><dd><ul>
+<li><p>Utility-scale photovoltaic (PV) cost.</p></li>
+<li><p>Land-based wind cost.</p></li>
+<li><p>Battery energy storage system (BESS) cost.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>A tuple containing the processed cost data for:</dt><dd><ul class="simple">
+<li><p>Utility-scale PV (self.utility_pv_cost)</p></li>
+<li><p>Land-based wind (self.land_based_wind_cost)</p></li>
+<li><p>BESS (self.bess_cost)</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">region_short_code</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'BC'</span></em><a class="headerlink" href="#id2" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">resource_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'None'</span></em><a class="headerlink" href="#id3" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <blockquote>
 <div><p>ℹ️ The ATB data source and configuration may change annually. Ensure you are referencing the correct year and dataset for your analysis.</p>
 <ul class="simple">
@@ -267,9 +478,10 @@
 </section>
 <section id="administrative-boundaries">
 <h2>Administrative Boundaries<a class="headerlink" href="#administrative-boundaries" title="Link to this heading">¶</a></h2>
+<p><strong>Handler for GADM administrative boundary data.</strong></p>
 <dl class="py class">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.boundaries.</span></span><span class="sig-name descname"><span class="pre">GADMBoundaries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'config/config.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_short_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'BC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'None'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/boundaries.html#GADMBoundaries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.boundaries.GADMBoundaries" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.boundaries.</span></span><span class="sig-name descname"><span class="pre">GADMBoundaries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'config/config.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_short_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'BC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'None'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/boundaries.html#GADMBoundaries"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AttributesParser</span></code></p>
 <p>A class to process GADM country files and extract specific regional boundaries at a given administrative level.</p>
 <dl class="field-list simple">
@@ -281,23 +493,8 @@
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'config/config.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_short_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'BC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'None'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.__init__" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.config_file_path">
-<span class="sig-name descname"><span class="pre">config_file_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Path</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'config/config.yaml'</span></em><a class="headerlink" href="#RES.boundaries.GADMBoundaries.config_file_path" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_atb_config">
-<span class="sig-name descname"><span class="pre">get_atb_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_atb_config" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_bounding_box">
-<span class="sig-name descname"><span class="pre">get_bounding_box</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/RES/boundaries.html#GADMBoundaries.get_bounding_box"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_bounding_box" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_bounding_box</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/RES/boundaries.html#GADMBoundaries.get_bounding_box"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>This method loads the region boundary using <cite>get_region_boundary()</cite> method and gets Minimum Bounding Rectangle (MBR).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -314,18 +511,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_cell_resolution">
-<span class="sig-name descname"><span class="pre">get_cell_resolution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_cell_resolution" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_country">
-<span class="sig-name descname"><span class="pre">get_country</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_country" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_country_boundary">
-<span class="sig-name descname"><span class="pre">get_country_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">country</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">geopandas.GeoDataFrame</span></span></span><a class="reference internal" href="_modules/RES/boundaries.html#GADMBoundaries.get_country_boundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_country_boundary" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_country_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">country</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">geopandas.GeoDataFrame</span></span></span><a class="reference internal" href="_modules/RES/boundaries.html#GADMBoundaries.get_country_boundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Retrieves and prepares the GADM boundaries dataset for the specified country (Administrative Level 2).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -356,48 +543,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_custom_land_layers">
-<span class="sig-name descname"><span class="pre">get_custom_land_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_custom_land_layers" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_cutout_config">
-<span class="sig-name descname"><span class="pre">get_cutout_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_cutout_config" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_default_crs">
-<span class="sig-name descname"><span class="pre">get_default_crs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_default_crs" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_excluder_crs">
-<span class="sig-name descname"><span class="pre">get_excluder_crs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">country</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_excluder_crs" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_gadm_config">
-<span class="sig-name descname"><span class="pre">get_gadm_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_gadm_config" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_gaez_data_config">
-<span class="sig-name descname"><span class="pre">get_gaez_data_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_gaez_data_config" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_gwa_config">
-<span class="sig-name descname"><span class="pre">get_gwa_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_gwa_config" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_osm_config">
-<span class="sig-name descname"><span class="pre">get_osm_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_osm_config" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_region_boundary">
-<span class="sig-name descname"><span class="pre">get_region_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">region_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">geopandas.GeoDataFrame</span></span></span><a class="reference internal" href="_modules/RES/boundaries.html#GADMBoundaries.get_region_boundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_region_boundary" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_region_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">region_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">geopandas.GeoDataFrame</span></span></span><a class="reference internal" href="_modules/RES/boundaries.html#GADMBoundaries.get_region_boundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Prepares the boundaries for the specified region within the country. The defaults datafields (e.g. NAME_0, NAME_1, NAME_2) gets modified to match the user config file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -416,87 +563,15 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_region_mapping">
-<span class="sig-name descname"><span class="pre">get_region_mapping</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_region_mapping" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_region_name">
-<span class="sig-name descname"><span class="pre">get_region_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_region_name" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_region_timezone">
-<span class="sig-name descname"><span class="pre">get_region_timezone</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_region_timezone" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_resource_disaggregation_config">
-<span class="sig-name descname"><span class="pre">get_resource_disaggregation_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_resource_disaggregation_config" title="Link to this definition">¶</a></dt>
-<dd><p>Returns the capacity disaggregation configuration for the given resource type.
-If the resource type is None or not found, returns an empty dictionary.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_resource_landuse_intensity">
-<span class="sig-name descname"><span class="pre">get_resource_landuse_intensity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_resource_landuse_intensity" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_turbines_config">
-<span class="sig-name descname"><span class="pre">get_turbines_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_turbines_config" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.get_vis_dir">
-<span class="sig-name descname"><span class="pre">get_vis_dir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.get_vis_dir" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.is_region_code_valid">
-<span class="sig-name descname"><span class="pre">is_region_code_valid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.is_region_code_valid" title="Link to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>region_short_code</strong> -- 2 letter short code of the region.</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>Description:</dt><dd><p>Checks of the region code is correct. If not, then suggests the available list of codes that are liked to data supply-chain.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.load_config">
-<span class="sig-name descname"><span class="pre">load_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.load_config" title="Link to this definition">¶</a></dt>
-<dd><p>Loads the yaml file as dictionary and extracts the attributes to pass on child classes.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.load_snapshot">
-<span class="sig-name descname"><span class="pre">load_snapshot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#RES.boundaries.GADMBoundaries.load_snapshot" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.region_short_code">
-<span class="sig-name descname"><span class="pre">region_short_code</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'BC'</span></em><a class="headerlink" href="#RES.boundaries.GADMBoundaries.region_short_code" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.resource_type">
-<span class="sig-name descname"><span class="pre">resource_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'None'</span></em><a class="headerlink" href="#RES.boundaries.GADMBoundaries.resource_type" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/boundaries.html#GADMBoundaries.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.boundaries.GADMBoundaries.run" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/boundaries.html#GADMBoundaries.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Executes the process of extracting boundaries and creating an interactive map.
 To be used as a main method to run the class's sequential tasks.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="RES.boundaries.GADMBoundaries.show_regions">
-<span class="sig-name descname"><span class="pre">show_regions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">basemap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'CartoDB</span> <span class="pre">positron'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'vis/regions'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/boundaries.html#GADMBoundaries.show_regions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.boundaries.GADMBoundaries.show_regions" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">show_regions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">basemap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'CartoDB</span> <span class="pre">positron'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'vis/regions'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/boundaries.html#GADMBoundaries.show_regions"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Create and save an interactive map for the specified region.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -517,6 +592,15 @@ To be used as a main method to run the class's sequential tasks.</p>
 
 </dd></dl>
 
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the above documentation doesn't render properly, this indicates import issues with heavy geospatial dependencies. The GADMBoundaries class provides:</p>
+<ul class="simple">
+<li><p><strong>download_boundaries(country_code)</strong>: Downloads boundary data for the specified country</p></li>
+<li><p><strong>get_regions()</strong>: Retrieves available administrative regions</p></li>
+<li><p><strong>process_boundaries()</strong>: Processes and validates boundary data</p></li>
+</ul>
+</div>
 <blockquote>
 <div><p>ℹ️ <code class="docutils literal notranslate"><span class="pre">RES.boundaries.GADMBoundaries</span></code> is to be used for standalone data download/validation purposes.</p>
 </div></blockquote>
@@ -525,17 +609,21 @@ To be used as a main method to run the class's sequential tasks.</p>
 <h2>Spatial Grid Cell Processor<a class="headerlink" href="#spatial-grid-cell-processor" title="Link to this heading">¶</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><code class="docutils literal notranslate"><span class="pre">RES.boundaries.GADMBoundaries.run</span></code> is to be used for standalone data download/validation purposes.</p>
+<p>If the above documentation doesn't render, this class provides grid cell processing capabilities for spatial analysis.</p>
 </div>
 </section>
 <section id="scorer">
 <h2>Scorer<a class="headerlink" href="#scorer" title="Link to this heading">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the above documentation doesn't render, this class provides cell scoring capabilities for renewable energy site assessment.</p>
+</div>
 </section>
-<section id="module-RES.cluster">
-<span id="clustering"></span><h2>Clustering<a class="headerlink" href="#module-RES.cluster" title="Link to this heading">¶</a></h2>
+<section id="clustering">
+<h2>Clustering<a class="headerlink" href="#clustering" title="Link to this heading">¶</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="RES.cluster.assign_cluster_id">
-<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">assign_cluster_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">geopandas.GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Region'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cell'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">geopandas.GeoDataFrame</span></span></span><a class="reference internal" href="_modules/RES/cluster.html#assign_cluster_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.cluster.assign_cluster_id" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">assign_cluster_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">geopandas.GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Region'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cell'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">geopandas.GeoDataFrame</span></span></span><a class="reference internal" href="_modules/RES/cluster.html#assign_cluster_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Assigns unique cell IDs to each region in the specified GeoDataFrame.</p>
 <p>Parameters:
 cells (gpd.GeoDataFrame): Input GeoDataFrame containing spatial data with 'x' and 'y' coordinates.
@@ -546,8 +634,8 @@ gpd.GeoDataFrame: GeoDataFrame with a new column of unique cell IDs for each reg
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="RES.cluster.cells_to_cluster_mapping">
-<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">cells_to_cluster_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells_scored</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vis_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcss_tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/RES/cluster.html#cells_to_cluster_mapping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.cluster.cells_to_cluster_mapping" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">cells_to_cluster_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells_scored</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vis_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcss_tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/RES/cluster.html#cells_to_cluster_mapping"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><blockquote>
 <div><p>Clustering requires a base prior to perform the aggregation/clustering similar data. Here, we are doing spatial clustering which aggregates the spatial regions
 based on some common features. As a common feature, the modellers can design tailored metric find/calculate a feature which performs as a good proxy of the suitability of the cells as a
@@ -560,14 +648,14 @@ here with this function, this score will be acting as the common feature for the
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="RES.cluster.clip_cluster_boundaries_upto_regions">
-<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">clip_cluster_boundaries_upto_regions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell_cluster_gdf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">geopandas.GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gadm_regions_gdf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">geopandas.GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">geopandas.GeoDataFrame</span></span></span><a class="reference internal" href="_modules/RES/cluster.html#clip_cluster_boundaries_upto_regions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.cluster.clip_cluster_boundaries_upto_regions" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">clip_cluster_boundaries_upto_regions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell_cluster_gdf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">geopandas.GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gadm_regions_gdf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">geopandas.GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">geopandas.GeoDataFrame</span></span></span><a class="reference internal" href="_modules/RES/cluster.html#clip_cluster_boundaries_upto_regions"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>xxx</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="RES.cluster.create_cells_Union_in_clusters">
-<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">create_cells_Union_in_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cluster_map_gdf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">geopandas.GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_optimal_k_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/RES/cluster.html#create_cells_Union_in_clusters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.cluster.create_cells_Union_in_clusters" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">create_cells_Union_in_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cluster_map_gdf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">geopandas.GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_optimal_k_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/RES/cluster.html#create_cells_Union_in_clusters"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Dissolve a GeoDataFrame based on 'Bucket_No' and aggregate columns as specified.</p>
 <p>Parameters:
 - cluster_map_gdf: GeoDataFrame, the input GeoDataFrame to be dissolved and aggregated.
@@ -578,25 +666,94 @@ here with this function, this score will be acting as the common feature for the
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="RES.cluster.find_optimal_K">
-<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">find_optimal_K</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_for_clustering</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcss_tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="reference internal" href="_modules/RES/cluster.html#find_optimal_K"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.cluster.find_optimal_K" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">find_optimal_K</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_for_clustering</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcss_tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="reference internal" href="_modules/RES/cluster.html#find_optimal_K"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>takes the scored grid cells and gives the optimal number of k-means cluster from the elbow chart approach.
 The Within Cluster Sum of Squares (WCSS) is a tolerance measure to find that optimal number of k. Higher the WCSS, higher the aggregation of cells i.e. less number of cluster.
 WCSS measures the squared average distance (difference between cluster's mean CF and individual CF) of all the points within a cluster to the cluster centroid (here - mean CF)</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="RES.cluster.pre_process_cluster_mapping">
-<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">pre_process_cluster_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells_scored</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vis_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcss_tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/RES/cluster.html#pre_process_cluster_mapping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.cluster.pre_process_cluster_mapping" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">pre_process_cluster_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells_scored</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vis_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcss_tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/RES/cluster.html#pre_process_cluster_mapping"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>xxx</p>
 </dd></dl>
 
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the above documentation doesn't render properly, this module provides clustering algorithms for renewable energy resource grouping and analysis.</p>
+</div>
 </section>
 <section id="local-data-store-with-hdf5-file">
 <h2>Local Data Store with HDF5 file<a class="headerlink" href="#local-data-store-with-hdf5-file" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.hdf5_handler.</span></span><span class="sig-name descname"><span class="pre">DataHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hdf_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent_initiation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_structure</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/hdf5_handler.html#DataHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">del_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">store_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_to_delete</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/hdf5_handler.html#DataHandler.del_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">from_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/hdf5_handler.html#DataHandler.from_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Load data from the HDF5 store and handle geometry conversion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> -- Key for loading the DataFrame or GeoDataFrame.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame or GeoDataFrame based on the data loaded.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">refresh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/hdf5_handler.html#DataHandler.refresh"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Refresh the store path to the current store.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">show_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">store_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/hdf5_handler.html#DataHandler.show_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Recursively print the hierarchy of an HDF5 file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> -- Path to the HDF5 file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdf_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/RES/hdf5_handler.html#DataHandler.to_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Save the DataFrame or GeoDataFrame to an HDF5 file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> -- The DataFrame or GeoDataFrame to save.</p></li>
+<li><p><strong>key</strong> -- Key for saving the DataFrame to the HDF5 file.</p></li>
+<li><p><strong>force_update</strong> -- If True, force update the data even if it exists.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the above documentation doesn't render, this class provides HDF5-based data storage and retrieval capabilities for the RESource framework.</p>
+</div>
 </section>
 <section id="turbine-configuration">
 <h2>Turbine Configuration<a class="headerlink" href="#turbine-configuration" title="Link to this heading">¶</a></h2>
+</section>
+<section id="units">
+<h2>Units<a class="headerlink" href="#units" title="Link to this heading">¶</a></h2>
+<hr class="docutils" />
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>This page is under heavy development</p>
@@ -609,12 +766,12 @@ WCSS measures the squared average distance (difference between cluster's mean CF
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="notebooks/tutorial.html">
+          <a class="next-page" href="case.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Test</div>
+                <div class="title">Canadian Case Study</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -661,56 +818,38 @@ WCSS measures the squared average distance (difference between cluster's mean CF
             <ul>
 <li><a class="reference internal" href="#">RES APIs</a><ul>
 <li><a class="reference internal" href="#resource-builder">RESource Builder</a></li>
-<li><a class="reference internal" href="#annual-technology-baseline-atb">Annual Technology baseline (ATB)</a></li>
-<li><a class="reference internal" href="#administrative-boundaries">Administrative Boundaries</a><ul>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries</span></code></a><ul>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.__init__"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.__init__()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.config_file_path"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.config_file_path</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_atb_config"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_atb_config()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_bounding_box"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_bounding_box()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_cell_resolution"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_cell_resolution()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_country"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_country()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_country_boundary"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_country_boundary()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_custom_land_layers"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_custom_land_layers()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_cutout_config"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_cutout_config()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_default_crs"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_default_crs()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_excluder_crs"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_excluder_crs()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_gadm_config"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_gadm_config()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_gaez_data_config"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_gaez_data_config()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_gwa_config"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_gwa_config()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_osm_config"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_osm_config()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_region_boundary"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_region_boundary()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_region_mapping"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_region_mapping()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_region_name"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_region_name()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_region_timezone"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_region_timezone()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_resource_disaggregation_config"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_resource_disaggregation_config()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_resource_landuse_intensity"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_resource_landuse_intensity()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_turbines_config"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_turbines_config()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.get_vis_dir"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.get_vis_dir()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.is_region_code_valid"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.is_region_code_valid()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.load_config"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.load_config()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.load_snapshot"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.load_snapshot()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.region_short_code"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.region_short_code</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.resource_type"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.resource_type</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.run"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.run()</span></code></a></li>
-<li><a class="reference internal" href="#RES.boundaries.GADMBoundaries.show_regions"><code class="docutils literal notranslate"><span class="pre">GADMBoundaries.show_regions()</span></code></a></li>
+<li><a class="reference internal" href="#annual-technology-baseline-atb">Annual Technology Baseline (ATB)</a><ul>
+<li><a class="reference internal" href="#RES.atb.NREL_ATBProcessor"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor</span></code></a><ul>
+<li><a class="reference internal" href="#RES.atb.NREL_ATBProcessor.config_file_path"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor.config_file_path</span></code></a></li>
+<li><a class="reference internal" href="#RES.atb.NREL_ATBProcessor.region_short_code"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor.region_short_code</span></code></a></li>
+<li><a class="reference internal" href="#RES.atb.NREL_ATBProcessor.resource_type"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor.resource_type</span></code></a></li>
+<li><a class="reference internal" href="#RES.atb.NREL_ATBProcessor.atb_config"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor.atb_config</span></code></a></li>
+<li><a class="reference internal" href="#RES.atb.NREL_ATBProcessor.atb_data_save_to"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor.atb_data_save_to</span></code></a></li>
+<li><a class="reference internal" href="#RES.atb.NREL_ATBProcessor.atb_parquet_source"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor.atb_parquet_source</span></code></a></li>
+<li><a class="reference internal" href="#RES.atb.NREL_ATBProcessor.atb_datafile"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor.atb_datafile</span></code></a></li>
+<li><a class="reference internal" href="#RES.atb.NREL_ATBProcessor.atb_file_path"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor.atb_file_path</span></code></a></li>
+<li><a class="reference internal" href="#RES.atb.NREL_ATBProcessor.datahandler"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor.datahandler</span></code></a></li>
+<li><a class="reference internal" href="#RES.atb.NREL_ATBProcessor.__post_init__"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor.__post_init__()</span></code></a></li>
+<li><a class="reference internal" href="#RES.atb.NREL_ATBProcessor.pull_data"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor.pull_data()</span></code></a></li>
+<li><a class="reference internal" href="#RES.atb.NREL_ATBProcessor._check_and_download_data"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor._check_and_download_data()</span></code></a></li>
+<li><a class="reference internal" href="#RES.atb.NREL_ATBProcessor._process_solar_cost"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor._process_solar_cost()</span></code></a></li>
+<li><a class="reference internal" href="#RES.atb.NREL_ATBProcessor._process_wind_cost"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor._process_wind_cost()</span></code></a></li>
+<li><a class="reference internal" href="#RES.atb.NREL_ATBProcessor._process_bess_cost"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor._process_bess_cost()</span></code></a></li>
+<li><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor.config_file_path</span></code></a></li>
+<li><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor.pull_data()</span></code></a></li>
+<li><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor.region_short_code</span></code></a></li>
+<li><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">NREL_ATBProcessor.resource_type</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li><a class="reference internal" href="#administrative-boundaries">Administrative Boundaries</a></li>
 <li><a class="reference internal" href="#spatial-grid-cell-processor">Spatial Grid Cell Processor</a></li>
 <li><a class="reference internal" href="#scorer">Scorer</a></li>
-<li><a class="reference internal" href="#module-RES.cluster">Clustering</a><ul>
-<li><a class="reference internal" href="#RES.cluster.assign_cluster_id"><code class="docutils literal notranslate"><span class="pre">assign_cluster_id()</span></code></a></li>
-<li><a class="reference internal" href="#RES.cluster.cells_to_cluster_mapping"><code class="docutils literal notranslate"><span class="pre">cells_to_cluster_mapping()</span></code></a></li>
-<li><a class="reference internal" href="#RES.cluster.clip_cluster_boundaries_upto_regions"><code class="docutils literal notranslate"><span class="pre">clip_cluster_boundaries_upto_regions()</span></code></a></li>
-<li><a class="reference internal" href="#RES.cluster.create_cells_Union_in_clusters"><code class="docutils literal notranslate"><span class="pre">create_cells_Union_in_clusters()</span></code></a></li>
-<li><a class="reference internal" href="#RES.cluster.find_optimal_K"><code class="docutils literal notranslate"><span class="pre">find_optimal_K()</span></code></a></li>
-<li><a class="reference internal" href="#RES.cluster.pre_process_cluster_mapping"><code class="docutils literal notranslate"><span class="pre">pre_process_cluster_mapping()</span></code></a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#clustering">Clustering</a></li>
 <li><a class="reference internal" href="#local-data-store-with-hdf5-file">Local Data Store with HDF5 file</a></li>
 <li><a class="reference internal" href="#turbine-configuration">Turbine Configuration</a></li>
+<li><a class="reference internal" href="#units">Units</a></li>
 </ul>
 </li>
 </ul>
