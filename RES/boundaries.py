@@ -29,7 +29,7 @@ class GADMBoundaries(AttributesParser):
         self.admin_level:int= 2 # hardcoded to keep the workflow intact. The workflow has dependency on Regional District name i.e. level 2 boundaries.
 
         # Setup paths and ensure directories exist
-        self.gadm_config=self.get_gadm_config()
+        self.gadm_config = super().get_gadm_config()
         
         self.gadm_root = Path(self.gadm_config['root'])
         self.gadm_root.mkdir(parents=True, exist_ok=True) # Creates parent directories if not exists.
@@ -38,6 +38,7 @@ class GADMBoundaries(AttributesParser):
         self.gadm_processed.mkdir(parents=True, exist_ok=True) # Creates parent directories if not exists.
         
         self.crs=self.get_default_crs()
+        self.country=self.get_country()
 
         self.region_file:Path = Path(self.gadm_processed) / f'gadm41_{self.country}_L{self.admin_level}_{self.region_short_code}.geojson'
         
@@ -71,8 +72,6 @@ class GADMBoundaries(AttributesParser):
         # store the user input (via method args)
         if country is not None:
             self.country = country.capitalize()
-        else:
-            self.country = self.get_country()
             
         utils.print_update(level=print_level_base+1,message=f"{__name__} | Country Selected: {self.country}.")
         self.country_file:Path=Path (self.gadm_root) /  f'gadm41_{self.country}_L{self.admin_level}.geojson'  

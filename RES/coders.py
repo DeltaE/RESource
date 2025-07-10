@@ -7,6 +7,13 @@ from shapely.geometry import Point
 from pathlib import Path
 from RES.AttributesParser import AttributesParser
 from RES import utility as utils
+import sys
+import os
+# Ensure the script runs from the project root directory
+project_root = Path(__file__).resolve().parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+os.chdir(project_root)
 
 def load_api_key(file_path="data/downloaded_data/CODERS/coders_api.yaml"):
     """

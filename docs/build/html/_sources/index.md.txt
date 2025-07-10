@@ -25,8 +25,15 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 :maxdepth: 2
 
 resource_builder
+getting_started
 api
 case
-notebooks/tutorial
+```
 
+```{toctree}
+:caption: 'Notebooks:'
+:maxdepth: 2
+
+notebooks/Store_explorer
+notebooks/Visuals_BC
 ```
