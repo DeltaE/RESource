@@ -1,0 +1,539 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RES.gwa &#8212; RESource 2025.07 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=e9b82cb4"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/RES/gwa';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/RESource_logo_2025.07.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/RESource_logo_2025.07.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../case.html">Canadian Case Study</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Store_explorer.html">Explore data store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for RES.gwa</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">rioxarray</span> <span class="k">as</span> <span class="nn">rxr</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">from</span> <span class="nn">RES.hdf5_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">RES.boundaries</span> <span class="kn">import</span> <span class="n">GADMBoundaries</span>
+<span class="kn">import</span> <span class="nn">RES.utility</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="n">print_level_base</span><span class="o">=</span><span class="mi">3</span>
+
+<div class="viewcode-block" id="GWACells">
+<a class="viewcode-back" href="../../api.html#RES.gwa.GWACells">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">GWACells</span><span class="p">(</span><span class="n">GADMBoundaries</span><span class="p">):</span>
+    <span class="n">merged_data</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__post_init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gwa_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_gwa_config</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span> <span class="o">=</span> <span class="n">DataHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GWACells.prepare_GWA_data">
+<a class="viewcode-back" href="../../api.html#RES.gwa.GWACells.prepare_GWA_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">prepare_GWA_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                         <span class="n">windpseed_min</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                         <span class="n">windpseed_max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                         <span class="n">memory_resource_limitation</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prepares the Global Wind Atlas (GWA) data by loading and merging raster files.</span>
+<span class="sd">        Downloads files from sources if they do not exist.</span>
+<span class="sd">        Returns a cleaned DataArray with relevant data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Load configuration parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gwa_datafields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gwa_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;datafields&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gwa_rasters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gwa_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rasters&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gwa_sources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gwa_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sources&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gwa_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gwa_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="s1">&#39;data/downloaded_data/GWA&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bounding_box</span><span class="p">()</span>
+        <span class="c1"># Create the root directory if it doesn&#39;t exist</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gwa_root</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Check for existence and download if necessary</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">raster_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gwa_rasters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gwa_country_code</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">region_mapping</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;GWA_country_code&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">raster_name</span><span class="o">=</span><span class="n">raster_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;GWA_country_code&quot;</span><span class="p">,</span>  <span class="bp">self</span><span class="o">.</span><span class="n">gwa_country_code</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gwa_root</span> <span class="o">/</span> <span class="n">raster_name</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="n">generic_source_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gwa_sources</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">region_source_url</span> <span class="o">=</span> <span class="n">generic_source_url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;GWA_country_code&quot;</span><span class="p">,</span>  <span class="bp">self</span><span class="o">.</span><span class="n">gwa_country_code</span><span class="p">)</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Downloading </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_source_url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region_source_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span><span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Process each raster using a streamlined approach</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">rxr</span><span class="o">.</span><span class="n">open_rasterio</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">clip_box</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">bounding_box</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">drop_vars</span><span class="p">([</span><span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="s1">&#39;spatial_ref&#39;</span><span class="p">])</span>
+                    <span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">band</span><span class="o">=</span><span class="mi">1</span> <span class="k">if</span> <span class="s1">&#39;*Class*&#39;</span> <span class="ow">in</span> <span class="n">key</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># &#39;IEC_Class_ExLoads&#39; data is in band 1</span>
+                <span class="p">)</span>
+
+                <span class="n">data_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Error processing </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Merge and clean the data in a more efficient way</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">merged_data</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">data_list</span><span class="p">)</span> <span class="k">if</span> <span class="n">data_list</span> <span class="k">else</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">()</span> <span class="c1">#.rename(&#39;gwa_data&#39;)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">merged_data</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">memory_resource_limitation</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Memory resource limitations enabled. Filtering GWA cells within windspeed mask to limit the data offload processing...&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">windpseed_min</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="mi">0</span> <span class="c1">#m/s</span>
+            <span class="n">windpseed_max</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="mi">50</span> <span class="c1">#m/s</span>
+ 
+        <span class="n">mask</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span><span class="p">[</span><span class="s1">&#39;windspeed_gwa&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">windpseed_min</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span><span class="p">[</span><span class="s1">&#39;windspeed_gwa&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">windpseed_max</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">merged_df_f</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df_f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2"> cells have been filtered due to Windspeed filter [</span><span class="si">{</span><span class="n">windpseed_min</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">windpseed_max</span><span class="si">}</span><span class="s2"> m/s].</span><span class="se">\n</span><span class="s2">&gt;&gt;&gt; Cleaned data loaded for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df_f</span><span class="p">)</span><span class="si">}</span><span class="s2"> GWA cells&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># class_mapping = {0: &#39;III&#39;, 1: &#39;II&#39;, 2: &#39;I&#39;, 3: &#39;T&#39;, 4: &#39;S&#39;}</span>
+        <span class="c1"># # Correctly modifying only one column</span>
+        <span class="c1"># self.merged_df_f[&#39;IEC_Class_ExLoads&#39;] = self.merged_df_f[&#39;IEC_Class_ExLoads&#39;].map(class_mapping).fillna(0)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">merged_df_f</span></div>
+
+    
+<div class="viewcode-block" id="GWACells.download_file">
+<a class="viewcode-back" href="../../api.html#RES.gwa.GWACells.download_file">[docs]</a>
+    <span class="k">def</span> <span class="nf">download_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                      <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> 
+                      <span class="n">destination</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Downloads a file from a given URL to a specified destination.&quot;&quot;&quot;</span>
+        
+        <span class="n">destination</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">ensure_path</span><span class="p">(</span><span class="n">destination</span><span class="p">)</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>  <span class="c1"># Raise an error for bad responses</span>
+            <span class="k">with</span> <span class="n">destination</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Failed to download </span><span class="si">{</span><span class="n">destination</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">. Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+    
+<div class="viewcode-block" id="GWACells.load_gwa_cells">
+<a class="viewcode-back" href="../../api.html#RES.gwa.GWACells.load_gwa_cells">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_gwa_cells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                       <span class="n">memory_resource_limitation</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">region_gwa_cells_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_GWA_data</span><span class="p">(</span><span class="n">memory_resource_limitation</span><span class="p">)</span>
+
+        <span class="c1"># Vectorized creation of geometries</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gwa_cells_gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">region_gwa_cells_df</span><span class="p">,</span>
+            <span class="n">geometry</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region_gwa_cells_df</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_gwa_cells_df</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]),</span>
+            <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_default_crs</span><span class="p">()</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_region_boundary</span><span class="p">(),</span> <span class="n">keep_geom_type</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># self.gwa_cells_gdf = self.calculate_common_parameters_GWA_cells()</span>
+        <span class="c1"># self.gwa_cells_gdf = self.map_GWAcells_to_ERA5cells()</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Global Wind Atlas (GWA) Cells loaded. Size: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region_gwa_cells_df</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gwa_cells_gdf</span></div>
+
+    
+
+<div class="viewcode-block" id="GWACells.map_GWA_cells_to_ERA5">
+<a class="viewcode-back" href="../../api.html#RES.gwa.GWACells.map_GWA_cells_to_ERA5">[docs]</a>
+    <span class="k">def</span> <span class="nf">map_GWA_cells_to_ERA5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                              <span class="n">memory_resource_limitation</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Maps the GWA high resolution cells to comparatively low resolution ERA5 Cells.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># Load the grid cells and GWA cells as GeoDataFrames</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">store_grid_cells</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;cells&#39;</span><span class="p">)</span>
+        
+        <span class="n">_era5_cells_</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">store_grid_cells</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+ 
+        <span class="bp">self</span><span class="o">.</span><span class="n">gwa_cells_gdf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_gwa_cells</span><span class="p">(</span><span class="n">memory_resource_limitation</span><span class="p">)</span>
+
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Mapping </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gwa_cells_gdf</span><span class="p">)</span><span class="si">}</span><span class="s2"> GWA Cells to </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">_era5_cells_</span><span class="p">)</span><span class="si">}</span><span class="s2"> ERA5 Cells...&quot;</span><span class="p">)</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># List to store results for each region</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Calculating aggregated values for ERA5 Cell&#39;s...&quot;</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">_era5_cells_</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
+            <span class="n">_era5_cells_region</span> <span class="o">=</span> <span class="n">_era5_cells_</span><span class="p">[</span><span class="n">_era5_cells_</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">region</span><span class="p">]</span>
+            
+            <span class="c1"># Perform overlay operation</span>
+            <span class="n">_data_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gwa_cells_gdf</span><span class="o">.</span><span class="n">overlay</span><span class="p">(</span><span class="n">_era5_cells_region</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;intersection&#39;</span><span class="p">,</span> <span class="n">keep_geom_type</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            
+            <span class="c1"># Rename columns and select relevant data</span>
+            <span class="c1"># _data_ = _data_.rename(columns={&#39;x_1&#39;: &#39;x&#39;, &#39;y_1&#39;: &#39;y&#39;}) # x1,y1 are the GWA coords</span>
+            <span class="n">_data_</span> <span class="o">=</span> <span class="n">_data_</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;x_2&#39;</span><span class="p">:</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y_2&#39;</span><span class="p">:</span> <span class="s1">&#39;y&#39;</span><span class="p">})</span> <span class="c1">#x2,y2 are the ERA5 coords</span>
+            <span class="n">selected_columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">_data_</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="c1"># + [f&#39;{self.resource_type}_CF_mean&#39;]</span>
+
+            <span class="n">regional_df</span><span class="o">=</span><span class="n">_data_</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">selected_columns</span><span class="p">]</span>
+            
+            <span class="n">numeric_cols</span> <span class="o">=</span> <span class="n">regional_df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="s1">&#39;number&#39;</span><span class="p">)</span> 
+            <span class="n">regional_mapped_gwa_cells_aggregated</span> <span class="o">=</span> <span class="n">numeric_cols</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">regional_df</span><span class="p">[</span><span class="s1">&#39;cell&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="c1"># Aggregates columns data via mean</span>
+            
+            <span class="c1"># Store mapped GWA cells in results list</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">regional_mapped_gwa_cells_aggregated</span><span class="p">)</span>
+        
+        
+        <span class="c1"># Concatenate all results into a single GeoDataFrame</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mapped_gwa_cells_aggr_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    
+            
+        <span class="c1"># Store the aggregated data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mapped_gwa_cells_aggr_df</span><span class="p">,</span> <span class="s1">&#39;cells&#39;</span><span class="p">,</span><span class="n">force_update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  </div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
