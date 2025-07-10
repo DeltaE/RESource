@@ -34,7 +34,7 @@ release = '2025.07'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    "myst_parser",  # For Markdown support
+    "myst_parser",  # For Markdown support - must be first
     "sphinx.ext.duration",  # For generating documentation
     "sphinx.ext.autodoc",  # For automatic documentation generation from docstrings
     "sphinx.ext.napoleon",  # For Google-style docstrings
@@ -50,7 +50,7 @@ myst_enable_extensions = [
     "html_admonition",
 ]
 
-# Enable MyST to handle eval-rst directive
+# MyST configuration for eval-rst
 myst_fence_as_directive = ["eval-rst"]
 
 templates_path = ['_templates']
@@ -87,3 +87,7 @@ html_logo = "_static/RESource_logo_2025.07.jpg"
 nbsphinx_execute = 'never'  # Don't execute notebooks during build
 nbsphinx_allow_errors = True  # Allow notebooks with errors to be included
 nbsphinx_timeout = 60  # Timeout for notebook execution
+
+# Additional NBSphinx settings for better compatibility
+nbsphinx_kernel_name = 'python3'
+nbsphinx_codecell_lexer = 'none'
