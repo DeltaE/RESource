@@ -1,4 +1,4 @@
-.PHONY: setup install clean vscode
+.PHONY: setup install clean export sync-notebooks docs autobuild
 
 # Create and activate env, install dependencies
 setup:
@@ -23,6 +23,21 @@ export:
 	conda env export -n RES > env/environment.yml
 	@echo "Environment exported to env/environment.yml."
 
-autobuild:
-	@echo "Building the documentation..."
+# Sync notebooks from root to docs/source/notebooks
+sync-notebooks:
+	@echo "Syncing notebooks from root to docs/source/notebooks..."
+	@mkdir -p docs/source/notebooks
+	@cp notebooks/Store_explorer.ipynb docs/source/notebooks/ 2>/dev/null || echo "Store_explorer.ipynb not found, skipping..."
+	@cp notebooks/Visuals_BC.ipynb docs/source/notebooks/ 2>/dev/null || echo "Visuals_BC.ipynb not found, skipping..."
+	@echo "Notebooks synced successfully!"
+
+# Build documentation with notebook sync
+docs: sync-notebooks
+	@echo "Building the documentation with updated notebooks..."
+	cd docs && make html
+	@echo "Documentation built successfully! Open docs/build/html/index.html to view."
+
+# Auto-rebuild documentation with notebook sync
+autobuild: sync-notebooks
+	@echo "Building the documentation with auto-rebuild..."
 	sphinx-autobuild docs/source docs/build/html
