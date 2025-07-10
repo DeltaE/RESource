@@ -8,7 +8,6 @@
         <title>RES.boundaries - RESource 2025.07 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=302659d7" />
     
     
@@ -204,9 +203,9 @@
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">RES APIs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../case.html">Canadian Case Study</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notebooks/tutorial.html">Test</a></li>
 </ul>
 
 </div>
@@ -275,7 +274,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">admin_level</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span> <span class="mi">2</span> <span class="c1"># hardcoded to keep the workflow intact. The workflow has dependency on Regional District name i.e. level 2 boundaries.</span>
 
         <span class="c1"># Setup paths and ensure directories exist</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gadm_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_gadm_config</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gadm_config</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_gadm_config</span><span class="p">()</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">gadm_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gadm_config</span><span class="p">[</span><span class="s1">&#39;root&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gadm_root</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Creates parent directories if not exists.</span>
@@ -284,6 +283,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">gadm_processed</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Creates parent directories if not exists.</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_default_crs</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_country</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">region_file</span><span class="p">:</span><span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gadm_processed</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s1">&#39;gadm41_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="si">}</span><span class="s1">_L</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">admin_level</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="si">}</span><span class="s1">.geojson&#39;</span>
         
@@ -319,8 +319,6 @@
         <span class="c1"># store the user input (via method args)</span>
         <span class="k">if</span> <span class="n">country</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">country</span> <span class="o">=</span> <span class="n">country</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">country</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_country</span><span class="p">()</span>
             
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> | Country Selected: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">country_file</span><span class="p">:</span><span class="n">Path</span><span class="o">=</span><span class="n">Path</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gadm_root</span><span class="p">)</span> <span class="o">/</span>  <span class="sa">f</span><span class="s1">&#39;gadm41_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="si">}</span><span class="s1">_L</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">admin_level</span><span class="si">}</span><span class="s1">.geojson&#39;</span>  
