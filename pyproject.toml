@@ -33,9 +33,12 @@ where = ["."]
 
 [project.optional-dependencies]
 
-doc = [
+docs = [
   "sphinx>=7.0", # Sphinx for documentation generation
   "myst-parser", # For Markdown support in Sphinx
   "furo", # Furo is a modern, responsive theme for Sphinx
   "nbsphinx", # For Jupyter Notebook support in Sphinx
+  "sphinx-autobuild", # For auto-rebuilding docs during development
+  "ipykernel", # Required for notebook execution
+  "jupyter", # Jupyter dependencies for notebooks
 ]

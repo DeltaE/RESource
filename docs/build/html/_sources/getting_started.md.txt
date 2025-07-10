@@ -147,6 +147,57 @@ The `make docs` and `make autobuild` commands automatically sync the latest note
 
 The documentation will be available at `docs/build/html/index.html`.
 
+## Automated Documentation Deployment
+
+RESource includes automated GitHub Pages deployment for documentation:
+
+### GitHub Actions Workflows
+
+Two workflows are available for documentation deployment:
+
+1. **`deploy-docs.yml`** (Primary)
+   - Automatically triggers on pushes to `main` or `master` branch
+   - Uses pip installation for faster builds
+   - Syncs notebooks from root directory
+   - Deploys to GitHub Pages
+
+2. **`deploy-docs-conda.yml`** (Backup)
+   - Manual trigger only (workflow_dispatch)
+   - Uses conda environment for complex dependencies
+   - Fallback option if pip installation fails
+
+### Setup GitHub Pages
+
+To enable GitHub Pages for your repository:
+
+1. Go to your repository settings
+2. Navigate to "Pages" section
+3. Set source to "GitHub Actions"
+4. The documentation will be available at: `https://yourusername.github.io/RESource`
+
+### Workflow Features
+
+- **Automatic notebook sync**: Copies notebooks from root to docs directory
+- **Dependency management**: Installs project with docs dependencies
+- **Error handling**: Graceful handling of missing notebooks
+- **Branch protection**: Only deploys from main/master branches
+- **Manual triggers**: Allows manual deployment when needed
+
+### Local Testing Before Deployment
+
+Always test your documentation locally before pushing:
+
+```bash
+# Test the complete build process
+make docs
+
+# Verify notebooks are included
+ls docs/source/notebooks/
+
+# Check for build errors
+cat docs/build/html/index.html
+```
+
 ## Configuration
 
 RESource uses YAML configuration files located in the `config/` directory. Key configuration files:
