@@ -1,4 +1,4 @@
-.PHONY: setup install clean export sync-notebooks docs autobuild
+.PHONY: setup install clean clean-docs export sync-notebooks docs docs-build debug-sphinx autobuild
 
 # Create and activate env, install dependencies
 setup:
@@ -18,6 +18,12 @@ clean:
 	conda env remove -n RES
 	@echo "Environment removed."
 
+# Clean documentation build
+clean-docs:
+	@echo "Cleaning documentation build..."
+	rm -rf docs/build/
+	@echo "Documentation build cleaned."
+
 export:
 	@echo "Exporting the environment..."
 	conda env export -n RES > env/environment.yml
@@ -34,8 +40,31 @@ sync-notebooks:
 # Build documentation with notebook sync
 docs: sync-notebooks
 	@echo "Building the documentation with updated notebooks..."
-	cd docs && make html
+	sphinx-build -b html docs/source docs/build/html
 	@echo "Documentation built successfully! Open docs/build/html/index.html to view."
+	ghp-import -n -p -f docs/build/html
+
+# Build documentation only (without deploying)
+docs-build: sync-notebooks
+	@echo "Building the documentation with updated notebooks..."
+	@echo "Using sphinx-build: $$(which sphinx-build)"
+	@echo "Source dir: docs/source"
+	@echo "Build dir: docs/build/html"
+	@mkdir -p docs/build/html
+	sphinx-build -v -b html docs/source docs/build/html || echo "Sphinx build failed"
+	@echo "Documentation built successfully! Open docs/build/html/index.html to view."
+
+# Debug sphinx configuration
+debug-sphinx:
+	@echo "Debugging sphinx configuration..."
+	@echo "Python version: $$(python --version)"
+	@echo "Sphinx version: $$(sphinx-build --version 2>/dev/null || echo 'sphinx-build not found')"
+	@echo "Current directory: $$(pwd)"
+	@echo "Source directory exists: $$(test -d docs/source && echo 'YES' || echo 'NO')"
+	@echo "Config file exists: $$(test -f docs/source/conf.py && echo 'YES' || echo 'NO')"
+	@echo "Testing conf.py import..."
+	@cd docs/source && python -c "import conf; print('conf.py imported successfully')" 2>/dev/null || echo "conf.py import failed"
+
 
 # Auto-rebuild documentation with notebook sync
 autobuild: sync-notebooks
