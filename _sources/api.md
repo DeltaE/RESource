@@ -43,7 +43,6 @@ If the above documentation doesn't render properly, this indicates import issues
 
 > ℹ️ `RES.boundaries.GADMBoundaries` is to be used for standalone data download/validation purposes.
 
-
 ## Spatial Grid Cell Processor
 
 ```{eval-rst}
@@ -75,6 +74,14 @@ If the above documentation doesn't render, these classes provide grid cell proce
 
 ```{eval-rst}
 .. autoclass:: RES.gwa.GWACells
+   :members:
+   :show-inheritance:
+   :noindex:
+```
+## Visualization
+
+```{eval-rst}
+.. automodule:: RES.visuals
    :members:
    :show-inheritance:
    :noindex:
