@@ -40,7 +40,9 @@ sync-notebooks:
 # Build documentation with notebook sync
 docs: sync-notebooks
 	@echo "Building the documentation with updated notebooks..."
+	@mkdir -p docs/build/html
 	sphinx-build -b html docs/source docs/build/html
+	@touch docs/build/html/.nojekyll
 	@echo "Documentation built successfully! Open docs/build/html/index.html to view."
 	ghp-import -n -p -f docs/build/html
 
@@ -52,6 +54,7 @@ docs-build: sync-notebooks
 	@echo "Build dir: docs/build/html"
 	@mkdir -p docs/build/html
 	sphinx-build -v -b html docs/source docs/build/html || echo "Sphinx build failed"
+	@touch docs/build/html/.nojekyll
 	@echo "Documentation built successfully! Open docs/build/html/index.html to view."
 
 # Debug sphinx configuration
