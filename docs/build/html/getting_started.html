@@ -210,10 +210,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Store_explorer.html">Load Store Handler Class</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Store_explorer.html#Define-Province-Code">Define Province Code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Store_explorer.html#What's-inside-the-Store-?">What’s inside the Store ?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Store_explorer.html#Load-Data-from-Store">Load Data from Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Store_explorer.html">Explore data store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/Visuals_BC.html#Static-Plots">Static Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/Visuals_BC.html#Static-Data-Visuals-in-Interactive-Maps">Static Data Visuals in Interactive Maps</a></li>
@@ -404,6 +401,65 @@ make<span class="w"> </span>html
 <p>The documentation will be available at <code class="docutils literal notranslate"><span class="pre">docs/build/html/index.html</span></code>.</p>
 </section>
 </section>
+<section id="automated-documentation-deployment">
+<h2>Automated Documentation Deployment<a class="headerlink" href="#automated-documentation-deployment" title="Link to this heading">¶</a></h2>
+<p>RESource includes automated GitHub Pages deployment for documentation:</p>
+<section id="github-actions-workflows">
+<h3>GitHub Actions Workflows<a class="headerlink" href="#github-actions-workflows" title="Link to this heading">¶</a></h3>
+<p>Two workflows are available for documentation deployment:</p>
+<ol class="arabic simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">deploy-docs.yml</span></code></strong> (Primary)</p>
+<ul class="simple">
+<li><p>Automatically triggers on pushes to <code class="docutils literal notranslate"><span class="pre">main</span></code> or <code class="docutils literal notranslate"><span class="pre">master</span></code> branch</p></li>
+<li><p>Uses pip installation for faster builds</p></li>
+<li><p>Syncs notebooks from root directory</p></li>
+<li><p>Deploys to GitHub Pages</p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">deploy-docs-conda.yml</span></code></strong> (Backup)</p>
+<ul class="simple">
+<li><p>Manual trigger only (workflow_dispatch)</p></li>
+<li><p>Uses conda environment for complex dependencies</p></li>
+<li><p>Fallback option if pip installation fails</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="setup-github-pages">
+<h3>Setup GitHub Pages<a class="headerlink" href="#setup-github-pages" title="Link to this heading">¶</a></h3>
+<p>To enable GitHub Pages for your repository:</p>
+<ol class="arabic simple">
+<li><p>Go to your repository settings</p></li>
+<li><p>Navigate to &quot;Pages&quot; section</p></li>
+<li><p>Set source to &quot;GitHub Actions&quot;</p></li>
+<li><p>The documentation will be available at: <code class="docutils literal notranslate"><span class="pre">https://yourusername.github.io/RESource</span></code></p></li>
+</ol>
+</section>
+<section id="workflow-features">
+<h3>Workflow Features<a class="headerlink" href="#workflow-features" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Automatic notebook sync</strong>: Copies notebooks from root to docs directory</p></li>
+<li><p><strong>Dependency management</strong>: Installs project with docs dependencies</p></li>
+<li><p><strong>Error handling</strong>: Graceful handling of missing notebooks</p></li>
+<li><p><strong>Branch protection</strong>: Only deploys from main/master branches</p></li>
+<li><p><strong>Manual triggers</strong>: Allows manual deployment when needed</p></li>
+</ul>
+</section>
+<section id="local-testing-before-deployment">
+<h3>Local Testing Before Deployment<a class="headerlink" href="#local-testing-before-deployment" title="Link to this heading">¶</a></h3>
+<p>Always test your documentation locally before pushing:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Test the complete build process</span>
+make<span class="w"> </span>docs
+
+<span class="c1"># Verify notebooks are included</span>
+ls<span class="w"> </span>docs/source/notebooks/
+
+<span class="c1"># Check for build errors</span>
+cat<span class="w"> </span>docs/build/html/index.html
+</pre></div>
+</div>
+</section>
+</section>
 <section id="configuration">
 <h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h2>
 <p>RESource uses YAML configuration files located in the <code class="docutils literal notranslate"><span class="pre">config/</span></code> directory. Key configuration files:</p>
@@ -552,6 +608,13 @@ make<span class="w"> </span>setup
 <li><a class="reference internal" href="#working-with-notebooks">Working with Notebooks</a></li>
 <li><a class="reference internal" href="#documentation">Documentation</a><ul>
 <li><a class="reference internal" href="#build-documentation-locally">Build Documentation Locally</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#automated-documentation-deployment">Automated Documentation Deployment</a><ul>
+<li><a class="reference internal" href="#github-actions-workflows">GitHub Actions Workflows</a></li>
+<li><a class="reference internal" href="#setup-github-pages">Setup GitHub Pages</a></li>
+<li><a class="reference internal" href="#workflow-features">Workflow Features</a></li>
+<li><a class="reference internal" href="#local-testing-before-deployment">Local Testing Before Deployment</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#configuration">Configuration</a></li>
