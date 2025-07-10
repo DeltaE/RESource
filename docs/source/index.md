@@ -20,6 +20,7 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 ## Workflow overview
 <img src="_static/high_level_workflow.jpg" alt="high_level_workflow" width="900"/>
 
+
 ```{toctree}
 :caption: 'Contents:'
 :maxdepth: 3
@@ -28,6 +29,7 @@ resource_builder
 getting_started
 api
 case
+developers
 ```
 
 ```{toctree}
