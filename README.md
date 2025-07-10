@@ -4,7 +4,7 @@
 __One of the many solutions ?__
 
 
-<img src="docs/source/_static/RESource_logo.png" alt="RESource logo" width="200"/>
+<img src="docs/source/_static/RESource_logo_2025.07.png" alt="RESource logo" width="200"/>
 
 # RESource 
 
@@ -20,4 +20,4 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 ## Workflow overview
 <img src="docs/source/_static/high_level_workflow.png" alt="high_level_workflow" width="1000"/>
 
-for more - [RESource-readthedocs](https://deltae-resource.readthedocs.io/en/latest/)
+for more - [RESource-readthedocs](https://deltae.github.io/RESource/)
