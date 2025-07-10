@@ -1,4 +1,4 @@
-.PHONY: setup install clean clean-docs export sync-notebooks docs docs-build debug-sphinx autobuild
+.PHONY: setup install clean clean-docs export sync-notebooks docs docs-deploy docs-deploy-git docs-build debug-sphinx debug-pages autobuild
 
 # Create and activate env, install dependencies
 setup:
@@ -37,14 +37,15 @@ sync-notebooks:
 	@cp notebooks/Visuals_BC.ipynb docs/source/notebooks/ 2>/dev/null || echo "Visuals_BC.ipynb not found, skipping..."
 	@echo "Notebooks synced successfully!"
 
-# Build documentation with notebook sync
+# Build documentation with notebook sync (build only, no deploy)
 docs: sync-notebooks
 	@echo "Building the documentation with updated notebooks..."
 	@mkdir -p docs/build/html
 	sphinx-build -b html docs/source docs/build/html
 	@touch docs/build/html/.nojekyll
 	@echo "Documentation built successfully! Open docs/build/html/index.html to view."
-	ghp-import -n -p -f docs/build/html
+	@echo "To deploy: git add, commit, and push to trigger GitHub Actions deployment."
+
 
 # Build documentation only (without deploying)
 docs-build: sync-notebooks
@@ -67,6 +68,18 @@ debug-sphinx:
 	@echo "Config file exists: $$(test -f docs/source/conf.py && echo 'YES' || echo 'NO')"
 	@echo "Testing conf.py import..."
 	@cd docs/source && python -c "import conf; print('conf.py imported successfully')" 2>/dev/null || echo "conf.py import failed"
+
+# Check GitHub Pages setup
+debug-pages:
+	@echo "Checking GitHub Pages setup..."
+	@echo "Current branch: $$(git branch --show-current)"
+	@echo "Remote branches:"
+	@git branch -r | grep -E "(gh-pages|main|master)" || echo "No gh-pages branch found"
+	@echo "Last few commits:"
+	@git log --oneline -5
+	@echo ""
+	@echo "IMPORTANT: Make sure GitHub Pages is set to 'GitHub Actions' source, not 'Deploy from branch'"
+	@echo "Go to: Settings → Pages → Source → GitHub Actions"
 
 
 # Auto-rebuild documentation with notebook sync
