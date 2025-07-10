@@ -37,14 +37,22 @@ sync-notebooks:
 	@cp notebooks/Visuals_BC.ipynb docs/source/notebooks/ 2>/dev/null || echo "Visuals_BC.ipynb not found, skipping..."
 	@echo "Notebooks synced successfully!"
 
-# Build documentation with notebook sync (build only, no deploy)
+# Build documentation with notebook sync and deploy to GitHub Pages
 docs: sync-notebooks
 	@echo "Building the documentation with updated notebooks..."
 	@mkdir -p docs/build/html
 	sphinx-build -b html docs/source docs/build/html
-	@touch docs/build/html/.nojekyll
-	@echo "Documentation built successfully! Open docs/build/html/index.html to view."
-	@echo "To deploy: git add, commit, and push to trigger GitHub Actions deployment."
+	@echo "Creating .nojekyll file to disable Jekyll..."
+	@echo "" > docs/build/html/.nojekyll
+	@echo "Creating additional Jekyll bypass files..."
+	@echo "theme: none" > docs/build/html/_config.yml
+	@echo "# GitHub Pages - No Jekyll Processing" > docs/build/html/README.md
+	@echo "Verifying bypass files exist:"
+	@ls -la docs/build/html/.nojekyll docs/build/html/_config.yml docs/build/html/README.md
+	@echo "Documentation built successfully!"
+	@echo "Deploying to GitHub Pages with Jekyll bypass..."
+	ghp-import -n -p -f docs/build/html
+	@echo "Documentation deployed to GitHub Pages!"
 
 
 # Build documentation only (without deploying)
@@ -58,31 +66,15 @@ docs-build: sync-notebooks
 	@touch docs/build/html/.nojekyll
 	@echo "Documentation built successfully! Open docs/build/html/index.html to view."
 
-# Debug sphinx configuration
-debug-sphinx:
-	@echo "Debugging sphinx configuration..."
-	@echo "Python version: $$(python --version)"
-	@echo "Sphinx version: $$(sphinx-build --version 2>/dev/null || echo 'sphinx-build not found')"
-	@echo "Current directory: $$(pwd)"
-	@echo "Source directory exists: $$(test -d docs/source && echo 'YES' || echo 'NO')"
-	@echo "Config file exists: $$(test -f docs/source/conf.py && echo 'YES' || echo 'NO')"
-	@echo "Testing conf.py import..."
-	@cd docs/source && python -c "import conf; print('conf.py imported successfully')" 2>/dev/null || echo "conf.py import failed"
-
-# Check GitHub Pages setup
-debug-pages:
-	@echo "Checking GitHub Pages setup..."
-	@echo "Current branch: $$(git branch --show-current)"
-	@echo "Remote branches:"
-	@git branch -r | grep -E "(gh-pages|main|master)" || echo "No gh-pages branch found"
-	@echo "Last few commits:"
-	@git log --oneline -5
-	@echo ""
-	@echo "IMPORTANT: Make sure GitHub Pages is set to 'GitHub Actions' source, not 'Deploy from branch'"
-	@echo "Go to: Settings → Pages → Source → GitHub Actions"
-
 
 # Auto-rebuild documentation with notebook sync
 autobuild: sync-notebooks
 	@echo "Building the documentation with auto-rebuild..."
 	sphinx-autobuild docs/source docs/build/html
+
+# Manual deployment using ghp-import (only when needed)
+docs-deploy-manual: docs
+	@echo "Deploying documentation manually to GitHub Pages..."
+	ghp-import -n -p -f docs/build/html
+	@echo "Documentation deployed to GitHub Pages!"
+	@echo "Note: Use GitHub Actions workflow for automated deployment instead."
