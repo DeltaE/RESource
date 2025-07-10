@@ -15,6 +15,7 @@ This page is under heavy development
 .. autoclass:: RES.atb.NREL_ATBProcessor
    :members:
    :show-inheritance:
+   :noindex:
 ```
 
 > ℹ️ The ATB data source and configuration may change annually. Ensure you are referencing the correct year and dataset for your analysis.
