@@ -156,10 +156,11 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
 <ul class="nav bd-sidenav">
@@ -298,7 +299,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">RES.utility</span> <span class="k">as</span> <span class="nn">utils</span>
 
 <div class="viewcode-block" id="DataHandler">
-<a class="viewcode-back" href="../../api.html#RES.hdf5_handler.DataHandler">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler">[docs]</a>
 <span class="k">class</span> <span class="nc">DataHandler</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">hdf_file_path</span><span class="p">:</span><span class="n">Path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -323,7 +324,7 @@ document.write(`
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;❌ Error reading file: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                
 <div class="viewcode-block" id="DataHandler.to_store">
-<a class="viewcode-back" href="../../api.html#RES.hdf5_handler.DataHandler.to_store">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler.to_store">[docs]</a>
     <span class="k">def</span> <span class="nf">to_store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> 
                  <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -380,7 +381,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="DataHandler.from_store">
-<a class="viewcode-back" href="../../api.html#RES.hdf5_handler.DataHandler.from_store">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler.from_store">[docs]</a>
     <span class="k">def</span> <span class="nf">from_store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
                    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -411,7 +412,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="DataHandler.refresh">
-<a class="viewcode-back" href="../../api.html#RES.hdf5_handler.DataHandler.refresh">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler.refresh">[docs]</a>
     <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Refresh the store path to the current store.</span>
@@ -419,7 +420,7 @@ document.write(`
         <span class="k">return</span> <span class="n">DataHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">,</span> <span class="n">silent_initiation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_structure</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DataHandler.show_tree">
-<a class="viewcode-back" href="../../api.html#RES.hdf5_handler.DataHandler.show_tree">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler.show_tree">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">show_tree</span><span class="p">(</span><span class="n">store_path</span><span class="p">,</span>
                   <span class="n">show_dataset</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -452,7 +453,7 @@ document.write(`
 
             
 <div class="viewcode-block" id="DataHandler.del_key">
-<a class="viewcode-back" href="../../api.html#RES.hdf5_handler.DataHandler.del_key">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler.del_key">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">del_key</span><span class="p">(</span><span class="n">store_path</span><span class="p">,</span>
                 <span class="n">key_to_delete</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>

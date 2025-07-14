@@ -156,10 +156,11 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
 <ul class="nav bd-sidenav">
@@ -300,7 +301,7 @@ document.write(`
 <span class="n">imputer</span> <span class="o">=</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>  <span class="c1"># Other strategies: &quot;median&quot;, &quot;most_frequent&quot;</span>
 
 <div class="viewcode-block" id="assign_cluster_id">
-<a class="viewcode-back" href="../../api.html#RES.cluster.assign_cluster_id">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.cluster.assign_cluster_id">[docs]</a>
 <span class="k">def</span> <span class="nf">assign_cluster_id</span><span class="p">(</span><span class="n">cells</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> 
                   <span class="n">source_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;Region&#39;</span><span class="p">,</span> 
                   <span class="n">index_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;cell&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
@@ -341,7 +342,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="find_optimal_K">
-<a class="viewcode-back" href="../../api.html#RES.cluster.find_optimal_K">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.cluster.find_optimal_K">[docs]</a>
 <span class="k">def</span> <span class="nf">find_optimal_K</span><span class="p">(</span>
         <span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
         <span class="n">data_for_clustering</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> 
@@ -403,7 +404,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="pre_process_cluster_mapping">
-<a class="viewcode-back" href="../../api.html#RES.cluster.pre_process_cluster_mapping">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.cluster.pre_process_cluster_mapping">[docs]</a>
 <span class="k">def</span> <span class="nf">pre_process_cluster_mapping</span><span class="p">(</span>
         <span class="n">cells_scored</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
         <span class="n">vis_directory</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
@@ -492,7 +493,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="cells_to_cluster_mapping">
-<a class="viewcode-back" href="../../api.html#RES.cluster.cells_to_cluster_mapping">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.cluster.cells_to_cluster_mapping">[docs]</a>
 <span class="k">def</span> <span class="nf">cells_to_cluster_mapping</span><span class="p">(</span>
         <span class="n">cells_scored</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
         <span class="n">vis_directory</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
@@ -539,7 +540,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="create_cells_Union_in_clusters">
-<a class="viewcode-back" href="../../api.html#RES.cluster.create_cells_Union_in_clusters">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.cluster.create_cells_Union_in_clusters">[docs]</a>
 <span class="k">def</span> <span class="nf">create_cells_Union_in_clusters</span><span class="p">(</span>
         <span class="n">cluster_map_gdf</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> 
         <span class="n">region_optimal_k_df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -620,7 +621,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="clip_cluster_boundaries_upto_regions">
-<a class="viewcode-back" href="../../api.html#RES.cluster.clip_cluster_boundaries_upto_regions">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.cluster.clip_cluster_boundaries_upto_regions">[docs]</a>
 <span class="k">def</span> <span class="nf">clip_cluster_boundaries_upto_regions</span><span class="p">(</span>
         <span class="n">cell_cluster_gdf</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
         <span class="n">gadm_regions_gdf</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>

@@ -156,10 +156,11 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
 <ul class="nav bd-sidenav">
@@ -299,7 +300,7 @@ document.write(`
 
 <span class="c1"># Define the GAEZRasterProcessor class</span>
 <div class="viewcode-block" id="GAEZRasterProcessor">
-<a class="viewcode-back" href="../../api.html#RES.gaez.GAEZRasterProcessor">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.gaez.GAEZRasterProcessor">[docs]</a>
 <span class="k">class</span> <span class="nc">GAEZRasterProcessor</span><span class="p">(</span><span class="n">GADMBoundaries</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -321,7 +322,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="GAEZRasterProcessor.process_all_rasters">
-<a class="viewcode-back" href="../../api.html#RES.gaez.GAEZRasterProcessor.process_all_rasters">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.gaez.GAEZRasterProcessor.process_all_rasters">[docs]</a>
     <span class="k">def</span> <span class="nf">process_all_rasters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                             <span class="n">show</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Main pipeline to download, extract, clip, and plot rasters based on configuration.&quot;&quot;&quot;</span>
@@ -407,7 +408,7 @@ document.write(`
             <span class="k">return</span> <span class="n">raster_plot</span>
 
 <div class="viewcode-block" id="GAEZRasterProcessor.plot_gaez_tif">
-<a class="viewcode-back" href="../../api.html#RES.gaez.GAEZRasterProcessor.plot_gaez_tif">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.gaez.GAEZRasterProcessor.plot_gaez_tif">[docs]</a>
     <span class="k">def</span> <span class="nf">plot_gaez_tif</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tif_path</span><span class="p">,</span> <span class="n">color_map</span><span class="p">,</span> <span class="n">plot_title</span><span class="p">,</span> <span class="n">save_to</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Visualize and save the raster plot.&quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">tif_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>

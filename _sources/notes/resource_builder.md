@@ -84,7 +84,7 @@ The resulting GeoDataFrame from `get_grid_cells()` includes the following column
 - Future improvements are planned to identify spatial areas (geometry) inside a grid cell.
 ```
 
-### Step 3a: Get CF and Windspeed from Higher Resolution Data
+### Step 3: Get CF and Windspeed from Higher Resolution Data
 
 ```{attention}
 - Currently configured for Wind Resources only. 
