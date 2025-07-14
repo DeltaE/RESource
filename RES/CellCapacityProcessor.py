@@ -107,7 +107,15 @@ class CellCapacityProcessor(LandContainer,
             (x - half_res, y + half_res)   # Top-left
         ])
         
-    def get_capacity(self):
+    def get_capacity(self)->tuple:
+        """
+        This method processes the capacity of the resources based on the availability matrix and other parameters.
+        It calculates the potential capacity for each cell in the region and returns a named tuple containing the
+        processed data and the capacity matrix.
+        Returns:
+            namedtuple: A named tuple containing the processed `data` and the capacity `matrix`. Can be accessed as:
+            `<self.resources_nt>.data` and `<self.resources_nt>.matrix`
+        """
         utils.print_update(level=print_level_base+1,
                            message=f"{__name__}| Cell capacity processor initiated...")
         
@@ -214,9 +222,9 @@ class CellCapacityProcessor(LandContainer,
         # era5_cell_capacity=_provincial_cell_capacity_gdf
         
         # Define a namedtuple
-        capacity_data = namedtuple('capacity_data', ['data','matrix','cutout'])
+        capacity_data = namedtuple('capacity_data', ['data','matrix'])
         
-        self.resources_nt=capacity_data(self.provincial_cells,capacity_matrix,self.cutout)
+        self.resources_nt=capacity_data(self.provincial_cells,capacity_matrix)
         utils.print_update(level=print_level_base+2,
                    message=f"{__name__}| ✓ Capacity dataframe cleaned and processed")
         

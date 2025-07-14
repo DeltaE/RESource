@@ -156,10 +156,11 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
 <ul class="nav bd-sidenav">
@@ -298,7 +299,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">RES.utility</span> <span class="k">as</span> <span class="nn">utils</span>
 <span class="n">print_level_base</span><span class="o">=</span><span class="mi">4</span>
 <div class="viewcode-block" id="GADMBoundaries">
-<a class="viewcode-back" href="../../api.html#RES.boundaries.GADMBoundaries">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.boundaries.GADMBoundaries">[docs]</a>
 <span class="nd">@dataclass</span>
 
 <span class="k">class</span> <span class="nc">GADMBoundaries</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>
@@ -337,7 +338,7 @@ document.write(`
     <span class="c1"># Define a function to create bounding boxes (of cell) directly from coordinates (x, y) and resolution</span>
     
 <div class="viewcode-block" id="GADMBoundaries.get_country_boundary">
-<a class="viewcode-back" href="../../api.html#RES.boundaries.GADMBoundaries.get_country_boundary">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.boundaries.GADMBoundaries.get_country_boundary">[docs]</a>
     <span class="k">def</span> <span class="nf">get_country_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                              <span class="n">country</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                              <span class="n">force_update</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
@@ -395,7 +396,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="GADMBoundaries.get_region_boundary">
-<a class="viewcode-back" href="../../api.html#RES.boundaries.GADMBoundaries.get_region_boundary">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.boundaries.GADMBoundaries.get_region_boundary">[docs]</a>
     <span class="k">def</span> <span class="nf">get_region_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                             <span class="n">region_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                             <span class="n">force_update</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
@@ -455,7 +456,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="GADMBoundaries.get_bounding_box">
-<a class="viewcode-back" href="../../api.html#RES.boundaries.GADMBoundaries.get_bounding_box">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.boundaries.GADMBoundaries.get_bounding_box">[docs]</a>
     <span class="k">def</span> <span class="nf">get_bounding_box</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">tuple</span><span class="p">:</span>
 <span class="w">        </span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -500,7 +501,7 @@ document.write(`
 
         
 <div class="viewcode-block" id="GADMBoundaries.show_regions">
-<a class="viewcode-back" href="../../api.html#RES.boundaries.GADMBoundaries.show_regions">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.boundaries.GADMBoundaries.show_regions">[docs]</a>
     <span class="k">def</span> <span class="nf">show_regions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
                     <span class="n">basemap</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;CartoDB positron&#39;</span><span class="p">,</span> 
                     <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;vis/regions&#39;</span><span class="p">,</span>
@@ -536,7 +537,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="GADMBoundaries.run">
-<a class="viewcode-back" href="../../api.html#RES.boundaries.GADMBoundaries.run">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.boundaries.GADMBoundaries.run">[docs]</a>
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Executes the process of extracting boundaries and creating an interactive map. </span>

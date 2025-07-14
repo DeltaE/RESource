@@ -56,6 +56,7 @@ class RESources_builder(AttributesParser):
         self.scorer=CellScorer(**self.required_args)
         self.gwa_cells=GWACells(**self.required_args)
         self.results_save_to=Path('results/RESource')
+        self.region_name=self.get_region_name()
         
         # Snapshot (range of of the temporal data)
         (
@@ -111,7 +112,7 @@ class RESources_builder(AttributesParser):
     '''
     def get_cell_capacity(self, 
                           force_update=False):
-        "returns cells geodataframe, capacity matrix data array and cutout "
+        "returns 'data' i.e. cells  geodataframe, capacity 'matrix' "
                 
         utils.print_update(level=print_level_base+1,
                            message=f"{__name__}| Preparing Cells' capacity...")
@@ -122,7 +123,7 @@ class RESources_builder(AttributesParser):
         utils.print_update(level=print_level_base+2,
                            message=f"{__name__}| Cells' capacity updated.")
         
-        return self.cells_with_cap_nt
+        return self.cells_with_cap_nt # returns a namedtuple with `data` and `matrix attributes
 
     '''
     ______________________

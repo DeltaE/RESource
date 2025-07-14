@@ -156,10 +156,11 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
 <ul class="nav bd-sidenav">
@@ -296,7 +297,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">RES.era5_cutout</span> <span class="kn">import</span> <span class="n">ERA5Cutout</span>
 
 <div class="viewcode-block" id="GridCells">
-<a class="viewcode-back" href="../../api.html#RES.cell.GridCells">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.cell.GridCells">[docs]</a>
 <span class="k">class</span> <span class="nc">GridCells</span><span class="p">(</span><span class="n">ERA5Cutout</span><span class="p">):</span>
     
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -333,7 +334,7 @@ document.write(`
        
 
 <div class="viewcode-block" id="GridCells.generate_coords">
-<a class="viewcode-back" href="../../api.html#RES.cell.GridCells.generate_coords">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.cell.GridCells.generate_coords">[docs]</a>
     <span class="k">def</span> <span class="nf">generate_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Get bounding box and actual boundary from parent class method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">actual_boundary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bounding_box</span><span class="p">()</span>
@@ -385,7 +386,7 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box_grid</span>
     
 <div class="viewcode-block" id="GridCells.get_custom_grid">
-<a class="viewcode-back" href="../../api.html#RES.cell.GridCells.get_custom_grid">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.cell.GridCells.get_custom_grid">[docs]</a>
     <span class="k">def</span> <span class="nf">get_custom_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box_grid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__get_grid__</span><span class="p">()</span>
         <span class="n">_grid_cells_</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">boundary_region</span><span class="o">.</span><span class="n">overlay</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounding_box_grid</span><span class="p">,</span><span class="n">how</span><span class="o">=</span><span class="s1">&#39;intersection&#39;</span><span class="p">,</span><span class="n">keep_geom_type</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -399,7 +400,7 @@ document.write(`
 
     
 <div class="viewcode-block" id="GridCells.get_default_grid">
-<a class="viewcode-back" href="../../api.html#RES.cell.GridCells.get_default_grid">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.cell.GridCells.get_default_grid">[docs]</a>
     <span class="k">def</span> <span class="nf">get_default_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_era5_cutout</span><span class="p">()</span>
         <span class="n">_era5_grid_cells_gdf_</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="o">.</span><span class="n">grid</span>
