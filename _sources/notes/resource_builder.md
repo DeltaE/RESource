@@ -90,7 +90,7 @@ The resulting GeoDataFrame from `get_grid_cells()` includes the following column
 - Currently configured for Wind Resources only. 
 ```
 
-### Why wind resources' ERA5 data are rescaled ?
+- __Why wind resources' ERA5 data are rescaled ?__
 Wind resources (windspeed) are known to have significant variations across ERA5's ~30km resolution. To account for this, we rescaled the windspeed using higher resolution data from the Global Wind Atlas (GWA). This allows us to better estimate the windspeed at the grid cell level. However, GWA does not provide hourly profiles, so we source the profile from ERA5.
 
 

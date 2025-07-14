@@ -28,7 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -336,7 +336,6 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-prepare-spatial-grid-cells">Step 1: Prepare Spatial Grid Cells</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-calculate-potential-capacity">Step 2: Calculate Potential Capacity</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3a-get-cf-and-windspeed-from-higher-resolution-data">Step 3a: Get CF and Windspeed from Higher Resolution Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-wind-resources-era5-data-are-rescaled">Why wind resources' ERA5 data are rescaled ?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-get-timeseries">Step 4: Get Timeseries</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-5-find-grid-proximity">Step 5: Find Grid Proximity</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-6-scoring-metric-to-rank-the-sites">Step 6: Scoring Metric to Rank the Sites</a></li>
@@ -505,10 +504,10 @@ document.write(`
 <li><p>Currently configured for Wind Resources only.</p></li>
 </ul>
 </div>
-</section>
-<section id="why-wind-resources-era5-data-are-rescaled">
-<h2>Why wind resources' ERA5 data are rescaled ?<a class="headerlink" href="#why-wind-resources-era5-data-are-rescaled" title="Link to this heading">#</a></h2>
-<p>Wind resources (windspeed) are known to have significant variations across ERA5's ~30km resolution. To account for this, we rescaled the windspeed using higher resolution data from the Global Wind Atlas (GWA). This allows us to better estimate the windspeed at the grid cell level. However, GWA does not provide hourly profiles, so we source the profile from ERA5.</p>
+<ul class="simple">
+<li><p><strong>Why wind resources' ERA5 data are rescaled ?</strong>
+Wind resources (windspeed) are known to have significant variations across ERA5's ~30km resolution. To account for this, we rescaled the windspeed using higher resolution data from the Global Wind Atlas (GWA). This allows us to better estimate the windspeed at the grid cell level. However, GWA does not provide hourly profiles, so we source the profile from ERA5.</p></li>
+</ul>
 <figure class="align-default" id="era5-vs-gwa-windspeed-bc">
 <a class="reference internal image-reference" href="../_images/ERA5_resolution_windspeed_distribution_ERA5vsGWA_British_Columbia.png"><img alt="../_images/ERA5_resolution_windspeed_distribution_ERA5vsGWA_British_Columbia.png" src="../_images/ERA5_resolution_windspeed_distribution_ERA5vsGWA_British_Columbia.png" style="width: 600px;" />
 </a>
@@ -677,7 +676,6 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-prepare-spatial-grid-cells">Step 1: Prepare Spatial Grid Cells</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-calculate-potential-capacity">Step 2: Calculate Potential Capacity</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3a-get-cf-and-windspeed-from-higher-resolution-data">Step 3a: Get CF and Windspeed from Higher Resolution Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-wind-resources-era5-data-are-rescaled">Why wind resources' ERA5 data are rescaled ?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-get-timeseries">Step 4: Get Timeseries</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-5-find-grid-proximity">Step 5: Find Grid Proximity</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-6-scoring-metric-to-rank-the-sites">Step 6: Scoring Metric to Rank the Sites</a></li>
