@@ -12,7 +12,7 @@ Check the open-access publication on [RESource]()
 For detailed API documentation of the methods, see {doc}`api` and apis under {ref}`RESource Builder`.
 ```
 
-<insert flow diagram of typical resoruce assessment>
+<insert flow diagram of typical resource assessment>
 
 
 ### Step 1: Prepare Spatial Grid Cells
@@ -26,6 +26,9 @@ For detailed API documentation of the methods, see {doc}`api` and apis under {re
 - We use that MBR as a cutout to source weather resources data from ERA5 via CDSAPI. The ERA5's cutout is then stored as a netcdf `.nc' file.
 - We load that cutout as `atlite`'s `cutout` object.
 - We then use `atlite`'s `cutout.grid` attribute to create our test beds for the analysis i.e. the grid cells (geodataframe)
+- We get the following key visuals out of this step:
+  - Land availability map at excluder's highest resolution and another one at ERA5's resolution.
+    > To harmonize the grid cells with the weather resources data, we use the ERA5's resolution data for further stages
 
 ```{important}
 Data supply-chain for this method Requires [CDS-API setup](https://cds.climate.copernicus.eu/how-to-api)
@@ -35,12 +38,13 @@ The resulting GeoDataFrame from `get_grid_cells()` includes the following column
 
 |Attribute   | Description|
 |------------|---------------------------------------------------------------|
-|x           | Longitude coordinate (center) of the grid cell|
-|y           | Latitude coordinate (center) of the grid cell|
-|Country     | Name of the country containing the grid cell|
-|Province    | Name of the province or state containing the grid cell|
-|Region      | Name of the specific region containing the grid cell|
-|geometry    | Polygon geometry defining the spatial extent of the grid cell|
+|`x `          | Longitude coordinate (center) of the grid cell|
+|`y`           | Latitude coordinate (center) of the grid cell|
+|`Country`    | Name of the country containing the grid cell. This is datafield 'NAME_0' in GADM's dataset |
+|`Province`   | Name of the province or state containing the grid cell. This is datafield 'NAME_1' in GADM's dataset |
+|`Region`    | Name of the specific region containing the grid cell. This is datafield 'NAME_2' in GADM's dataset |
+|`geometry`   | Polygon geometry defining the spatial extent of the grid cell. The default CRS is EPSG:4326, to be set via config file|
+
 
 ### Step 2: Calculate Potential Capacity
 
@@ -58,6 +62,23 @@ The resulting GeoDataFrame from `get_grid_cells()` includes the following column
 ```
 - We get the maximum installable capacity for each grid cell based on available area, land use constraints, and technology-specific parameters.
 
+- This method returns a named tuple with 'data' (a GeoDataFrame) and 'matrix' (availability matrix xarray).
+
+```{tip}
+- You can access the individual elements of the named tuple using dot notation, e.g., it you named the methods results as `result` then `result.data`, `result.matrix`
+```
+- Resulting GeoDataFrame includes the following new fields for each resource type (e.g., wind, solar):
+
+| Attribute                                      | Description                                                      |
+|------------------------------------------------|------------------------------------------------------------------|
+| `potential_capacity_<resource_type>`           | Maximum installable capacity (MW) for the resource in the grid cell |
+| `capex_<resource_type>`                        | Capital expenditure per MW for the resource                      |
+| `fom_<resource_type>`                          | Fixed operation & maintenance cost per MW                        |
+| `vom_<resource_type>`                          | Variable operation & maintenance cost per MWh                    |
+| `grid_connection_cost_per_km_<resource_type>`  | Estimated grid connection cost per km for the resource           |
+| `tx_line_rebuild_cost_<resource_type>`         | Transmission line rebuild cost per km for the resource           |
+| `Operational_life_<resource_type>`             | Expected operational lifetime (years) for the resource           |
+
 ```{hint}
 - Working enhancement includes VRE farm layout calculation models to make the potential capacity calculation more closer to the real world scenarios.
 - Future improvements are planned to identify spatial areas (geometry) inside a grid cell.
@@ -66,8 +87,36 @@ The resulting GeoDataFrame from `get_grid_cells()` includes the following column
 ### Step 3a: Get CF and Windspeed from Higher Resolution Data
 
 ```{attention}
-- Currently configured for Wind Resources only. Wind resources (windspeed) are known to have significant variations across ERA5's ~30km resolution. We rescaled the windspeed with higher resolution windspeed from Global Wind Atlas (GWA). Then we calculate the ERA5 scaled windspeed from the mapped GWA cells. However, GWA does not provide hourly profiles. We source the profile from ERA5.
+- Currently configured for Wind Resources only. 
 ```
+
+### Why wind resources' ERA5 data are rescaled ?
+Wind resources (windspeed) are known to have significant variations across ERA5's ~30km resolution. To account for this, we rescaled the windspeed using higher resolution data from the Global Wind Atlas (GWA). This allows us to better estimate the windspeed at the grid cell level. However, GWA does not provide hourly profiles, so we source the profile from ERA5.
+
+<table>
+<tr>
+<td width="50%" align="center">
+
+```{figure} ../_static/gwa_resolution_windspeed_distribution_British Columbia.jpg
+:width: 300px
+:name: gwa-windspeed-bc
+
+GWA Resolution Windspeed Distribution (British Columbia)
+```
+
+</td>
+<td width="50%" align="center">
+
+```{figure} ../_static/ERA5_resolution_windspeed_distribution_ERA5vsGWA_British Columbia.png
+:width: 300px
+:name: era5-vs-gwa-windspeed-bc
+
+ERA5 vs GWA Resolution Windspeed Distribution (British Columbia)
+```
+
+</td>
+</tr>
+</table>
 
 ```{attention}
 -  Working enhancement includes similar rescaling method for solar resources.
@@ -76,9 +125,12 @@ The resulting GeoDataFrame from `get_grid_cells()` includes the following column
 ```{seealso}
 `extract_weather_data()` , `update_gwa_scaled_params()` at {ref}`RESource Builder`.
 ```
+
+
 - Extracts relevant weather data (e.g., wind speed, solar irradiance) for each grid cell. This calculation has been used for validation purposes. However, the available CF parameters (from different methods) could be used for scoring metric, energy calculations etc. 
   - We compared CF for IEC Class 2,3 turbines sourced from GWA and compared with RESource's result CFs.
 - Updates grid cell parameters using Global Wind Atlas (GWA) data, scaling them as needed for accurate modeling.
+
 
 ### Step 4: Get Timeseries
 
@@ -112,7 +164,8 @@ This method generates capacity factor (CF) time series for each grid cell using 
 ```
 
 - Identifies and assigns grid nodes to each cell. 
-- Calculates dis
+- Calculates distance (in km) from each grid cell to the nearest grid node (e.g., transmission line, substation) to assess connectivity and feasibility for energy transport.
+
     
 ```{tip}
 If your use case of the resource options are to be plugged in to a downstream operational model (e.g. PyPSA), use harmonized nodes to populate this data.
