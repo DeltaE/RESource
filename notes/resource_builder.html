@@ -28,7 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -336,6 +336,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-prepare-spatial-grid-cells">Step 1: Prepare Spatial Grid Cells</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-calculate-potential-capacity">Step 2: Calculate Potential Capacity</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3a-get-cf-and-windspeed-from-higher-resolution-data">Step 3a: Get CF and Windspeed from Higher Resolution Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-wind-resources-era5-data-are-rescaled">Why wind resources' ERA5 data are rescaled ?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-get-timeseries">Step 4: Get Timeseries</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-5-find-grid-proximity">Step 5: Find Grid Proximity</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-6-scoring-metric-to-rank-the-sites">Step 6: Scoring Metric to Rank the Sites</a></li>
@@ -365,19 +366,28 @@ document.write(`
 <p class="admonition-title">See also</p>
 <p>For detailed API documentation of the methods, see <a class="reference internal" href="api.html"><span class="doc">RES APIs</span></a> and apis under <a class="reference internal" href="api.html#resource-builder"><span class="std std-ref">RESource Builder</span></a>.</p>
 </div>
-<insert flow diagram of typical resoruce assessment>
+<insert flow diagram of typical resource assessment>
 <section id="step-1-prepare-spatial-grid-cells">
 <h2>Step 1: Prepare Spatial Grid Cells<a class="headerlink" href="#step-1-prepare-spatial-grid-cells" title="Link to this heading">#</a></h2>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><code class="docutils literal notranslate"><span class="pre">get_grid_cells()</span></code> at <a class="reference internal" href="api.html#resource-builder"><span class="std std-ref">RESource Builder</span></a> of <a class="reference internal" href="api.html"><span class="doc">RES APIs</span></a>.</p>
 </div>
-<ul class="simple">
+<ul>
 <li><p>This method collects the sub-national administrative boundaries.</p></li>
 <li><p>Using that boundary, we calculate the Minimum Bounding Rectangle (MBR).</p></li>
 <li><p>We use that MBR as a cutout to source weather resources data from ERA5 via CDSAPI. The ERA5's cutout is then stored as a netcdf `.nc' file.</p></li>
 <li><p>We load that cutout as <code class="docutils literal notranslate"><span class="pre">atlite</span></code>'s <code class="docutils literal notranslate"><span class="pre">cutout</span></code> object.</p></li>
 <li><p>We then use <code class="docutils literal notranslate"><span class="pre">atlite</span></code>'s <code class="docutils literal notranslate"><span class="pre">cutout.grid</span></code> attribute to create our test beds for the analysis i.e. the grid cells (geodataframe)</p></li>
+<li><p>We get the following key visuals out of this step:</p>
+<ul>
+<li><p>Land availability map at excluder's highest resolution and another one at ERA5's resolution.</p>
+<blockquote>
+<div><p>To harmonize the grid cells with the weather resources data, we use the ERA5's resolution data for further stages</p>
+</div></blockquote>
+</li>
+</ul>
+</li>
 </ul>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -391,23 +401,23 @@ document.write(`
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>x</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">x</span> </code></p></td>
 <td><p>Longitude coordinate (center) of the grid cell</p></td>
 </tr>
-<tr class="row-odd"><td><p>y</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">y</span></code></p></td>
 <td><p>Latitude coordinate (center) of the grid cell</p></td>
 </tr>
-<tr class="row-even"><td><p>Country</p></td>
-<td><p>Name of the country containing the grid cell</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Country</span></code></p></td>
+<td><p>Name of the country containing the grid cell. This is datafield 'NAME_0' in GADM's dataset</p></td>
 </tr>
-<tr class="row-odd"><td><p>Province</p></td>
-<td><p>Name of the province or state containing the grid cell</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Province</span></code></p></td>
+<td><p>Name of the province or state containing the grid cell. This is datafield 'NAME_1' in GADM's dataset</p></td>
 </tr>
-<tr class="row-even"><td><p>Region</p></td>
-<td><p>Name of the specific region containing the grid cell</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Region</span></code></p></td>
+<td><p>Name of the specific region containing the grid cell. This is datafield 'NAME_2' in GADM's dataset</p></td>
 </tr>
-<tr class="row-odd"><td><p>geometry</p></td>
-<td><p>Polygon geometry defining the spatial extent of the grid cell</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">geometry</span></code></p></td>
+<td><p>Polygon geometry defining the spatial extent of the grid cell. The default CRS is EPSG:4326, to be set via config file</p></td>
 </tr>
 </tbody>
 </table>
@@ -437,7 +447,48 @@ document.write(`
 </div>
 <ul class="simple">
 <li><p>We get the maximum installable capacity for each grid cell based on available area, land use constraints, and technology-specific parameters.</p></li>
+<li><p>This method returns a named tuple with 'data' (a GeoDataFrame) and 'matrix' (availability matrix xarray).</p></li>
 </ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<ul class="simple">
+<li><p>You can access the individual elements of the named tuple using dot notation, e.g., it you named the methods results as <code class="docutils literal notranslate"><span class="pre">result</span></code> then <code class="docutils literal notranslate"><span class="pre">result.data</span></code>, <code class="docutils literal notranslate"><span class="pre">result.matrix</span></code></p></li>
+</ul>
+</div>
+<ul class="simple">
+<li><p>Resulting GeoDataFrame includes the following new fields for each resource type (e.g., wind, solar):</p></li>
+</ul>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">potential_capacity_&lt;resource_type&gt;</span></code></p></td>
+<td><p>Maximum installable capacity (MW) for the resource in the grid cell</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">capex_&lt;resource_type&gt;</span></code></p></td>
+<td><p>Capital expenditure per MW for the resource</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">fom_&lt;resource_type&gt;</span></code></p></td>
+<td><p>Fixed operation &amp; maintenance cost per MW</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">vom_&lt;resource_type&gt;</span></code></p></td>
+<td><p>Variable operation &amp; maintenance cost per MWh</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">grid_connection_cost_per_km_&lt;resource_type&gt;</span></code></p></td>
+<td><p>Estimated grid connection cost per km for the resource</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tx_line_rebuild_cost_&lt;resource_type&gt;</span></code></p></td>
+<td><p>Transmission line rebuild cost per km for the resource</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Operational_life_&lt;resource_type&gt;</span></code></p></td>
+<td><p>Expected operational lifetime (years) for the resource</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <ul class="simple">
@@ -451,9 +502,35 @@ document.write(`
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
 <ul class="simple">
-<li><p>Currently configured for Wind Resources only. Wind resources (windspeed) are known to have significant variations across ERA5's ~30km resolution. We rescaled the windspeed with higher resolution windspeed from Global Wind Atlas (GWA). Then we calculate the ERA5 scaled windspeed from the mapped GWA cells. However, GWA does not provide hourly profiles. We source the profile from ERA5.</p></li>
+<li><p>Currently configured for Wind Resources only.</p></li>
 </ul>
 </div>
+</section>
+<section id="why-wind-resources-era5-data-are-rescaled">
+<h2>Why wind resources' ERA5 data are rescaled ?<a class="headerlink" href="#why-wind-resources-era5-data-are-rescaled" title="Link to this heading">#</a></h2>
+<p>Wind resources (windspeed) are known to have significant variations across ERA5's ~30km resolution. To account for this, we rescaled the windspeed using higher resolution data from the Global Wind Atlas (GWA). This allows us to better estimate the windspeed at the grid cell level. However, GWA does not provide hourly profiles, so we source the profile from ERA5.</p>
+<table>
+<tr>
+<td width="50%" align="center">
+<figure class="align-default" id="gwa-windspeed-bc">
+<a class="reference internal image-reference" href="_static/gwa_resolution_windspeed_distribution_BritishColumbia.jpg"><img alt="_static/gwa_resolution_windspeed_distribution_BritishColumbia.jpg" src="_static/gwa_resolution_windspeed_distribution_BritishColumbia.jpg" style="width: 300px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">GWA Resolution Windspeed Distribution (British Columbia)</span><a class="headerlink" href="#gwa-windspeed-bc" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</td>
+<td width="50%" align="center">
+<figure class="align-default" id="era5-vs-gwa-windspeed-bc">
+<a class="reference internal image-reference" href="_static/ERA5_resolution_windspeed_distribution_ERA5vsGWA_BritishColumbia.png"><img alt="_static/ERA5_resolution_windspeed_distribution_ERA5vsGWA_BritishColumbia.png" src="_static/ERA5_resolution_windspeed_distribution_ERA5vsGWA_BritishColumbia.png" style="width: 300px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">ERA5 vs GWA Resolution Windspeed Distribution (British Columbia)</span><a class="headerlink" href="#era5-vs-gwa-windspeed-bc" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</td>
+</tr>
+</table>
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
 <ul class="simple">
@@ -519,7 +596,7 @@ document.write(`
 </div>
 <ul class="simple">
 <li><p>Identifies and assigns grid nodes to each cell.</p></li>
-<li><p>Calculates dis</p></li>
+<li><p>Calculates distance (in km) from each grid cell to the nearest grid node (e.g., transmission line, substation) to assess connectivity and feasibility for energy transport.</p></li>
 </ul>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -615,6 +692,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-prepare-spatial-grid-cells">Step 1: Prepare Spatial Grid Cells</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-calculate-potential-capacity">Step 2: Calculate Potential Capacity</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3a-get-cf-and-windspeed-from-higher-resolution-data">Step 3a: Get CF and Windspeed from Higher Resolution Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-wind-resources-era5-data-are-rescaled">Why wind resources' ERA5 data are rescaled ?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-get-timeseries">Step 4: Get Timeseries</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-5-find-grid-proximity">Step 5: Find Grid Proximity</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-6-scoring-metric-to-rank-the-sites">Step 6: Scoring Metric to Rank the Sites</a></li>
