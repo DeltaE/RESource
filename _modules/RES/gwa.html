@@ -156,10 +156,11 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
 <ul class="nav bd-sidenav">
@@ -300,7 +301,7 @@ document.write(`
 <span class="n">print_level_base</span><span class="o">=</span><span class="mi">3</span>
 
 <div class="viewcode-block" id="GWACells">
-<a class="viewcode-back" href="../../api.html#RES.gwa.GWACells">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.gwa.GWACells">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">GWACells</span><span class="p">(</span><span class="n">GADMBoundaries</span><span class="p">):</span>
     <span class="n">merged_data</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -311,7 +312,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span> <span class="o">=</span> <span class="n">DataHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">)</span>
 
 <div class="viewcode-block" id="GWACells.prepare_GWA_data">
-<a class="viewcode-back" href="../../api.html#RES.gwa.GWACells.prepare_GWA_data">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.gwa.GWACells.prepare_GWA_data">[docs]</a>
     <span class="k">def</span> <span class="nf">prepare_GWA_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                          <span class="n">windpseed_min</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                          <span class="n">windpseed_max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
@@ -381,7 +382,7 @@ document.write(`
 
     
 <div class="viewcode-block" id="GWACells.download_file">
-<a class="viewcode-back" href="../../api.html#RES.gwa.GWACells.download_file">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.gwa.GWACells.download_file">[docs]</a>
     <span class="k">def</span> <span class="nf">download_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                       <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> 
                       <span class="n">destination</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -400,7 +401,7 @@ document.write(`
 
     
 <div class="viewcode-block" id="GWACells.load_gwa_cells">
-<a class="viewcode-back" href="../../api.html#RES.gwa.GWACells.load_gwa_cells">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.gwa.GWACells.load_gwa_cells">[docs]</a>
     <span class="k">def</span> <span class="nf">load_gwa_cells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                        <span class="n">memory_resource_limitation</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">region_gwa_cells_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_GWA_data</span><span class="p">(</span><span class="n">memory_resource_limitation</span><span class="p">)</span>
@@ -421,7 +422,7 @@ document.write(`
     
 
 <div class="viewcode-block" id="GWACells.map_GWA_cells_to_ERA5">
-<a class="viewcode-back" href="../../api.html#RES.gwa.GWACells.map_GWA_cells_to_ERA5">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.gwa.GWACells.map_GWA_cells_to_ERA5">[docs]</a>
     <span class="k">def</span> <span class="nf">map_GWA_cells_to_ERA5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                               <span class="n">memory_resource_limitation</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
