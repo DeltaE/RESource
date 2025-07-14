@@ -156,10 +156,11 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
 <ul class="nav bd-sidenav">
@@ -316,7 +317,7 @@ document.write(`
 <span class="n">log_name</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;workflow/log/linking_vis.txt&#39;</span>
 
 <div class="viewcode-block" id="size_for_legend">
-<a class="viewcode-back" href="../../api.html#RES.visuals.size_for_legend">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.size_for_legend">[docs]</a>
 <span class="k">def</span> <span class="nf">size_for_legend</span><span class="p">(</span><span class="n">mw</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mw</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># since s = mw / 100 in scatter</span></div>
 
@@ -329,7 +330,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">RegularPolygon</span>
 
 <div class="viewcode-block" id="add_compass_arrow">
-<a class="viewcode-back" href="../../api.html#RES.visuals.add_compass_arrow">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.add_compass_arrow">[docs]</a>
 <span class="k">def</span> <span class="nf">add_compass_arrow</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">text_offset</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="n">length</span><span class="p">),</span>
                 <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span>
@@ -339,7 +340,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="add_compass_to_plot">
-<a class="viewcode-back" href="../../api.html#RES.visuals.add_compass_to_plot">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.add_compass_to_plot">[docs]</a>
 <span class="k">def</span> <span class="nf">add_compass_to_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x_offset</span><span class="o">=</span><span class="mf">0.76</span><span class="p">,</span> <span class="n">y_offset</span><span class="o">=</span><span class="mf">0.92</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">triangle_size</span><span class="o">=</span><span class="mf">0.02</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Adds a simple upward-pointing triangle with an &#39;N&#39; label below it as a North indicator.</span>
@@ -373,7 +374,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="plot_resources_scatter_metric_combined">
-<a class="viewcode-back" href="../../api.html#RES.visuals.plot_resources_scatter_metric_combined">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.plot_resources_scatter_metric_combined">[docs]</a>
 <span class="k">def</span> <span class="nf">plot_resources_scatter_metric_combined</span><span class="p">(</span>
     <span class="n">solar_clusters</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">wind_clusters</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -465,7 +466,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="get_CF_wind_check_plot">
-<a class="viewcode-back" href="../../api.html#RES.visuals.get_CF_wind_check_plot">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.get_CF_wind_check_plot">[docs]</a>
 <span class="k">def</span> <span class="nf">get_CF_wind_check_plot</span><span class="p">(</span><span class="n">cells</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
                            <span class="n">gwa_raster_data</span><span class="p">:</span> <span class="n">xarray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">,</span>
                            <span class="n">boundary</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
@@ -575,7 +576,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="plot_resources_scatter_metric">
-<a class="viewcode-back" href="../../api.html#RES.visuals.plot_resources_scatter_metric">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.plot_resources_scatter_metric">[docs]</a>
 <span class="k">def</span> <span class="nf">plot_resources_scatter_metric</span><span class="p">(</span><span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
                                   <span class="n">clusters_resources</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
                                   <span class="n">lcoe_threshold</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="mi">999</span><span class="p">,</span>
@@ -674,7 +675,7 @@ document.write(`
 
     
 <div class="viewcode-block" id="plot_with_matched_cells">
-<a class="viewcode-back" href="../../api.html#RES.visuals.plot_with_matched_cells">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.plot_with_matched_cells">[docs]</a>
 <span class="k">def</span> <span class="nf">plot_with_matched_cells</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">cells</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">filtered_cells</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cmap</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                             <span class="n">background_cell_linewidth</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">selected_cells_linewidth</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span><span class="n">font_size</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">9</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper function to plot cells with matched cells overlay.&quot;&quot;&quot;</span>
@@ -712,7 +713,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="get_selected_vs_missed_visuals">
-<a class="viewcode-back" href="../../api.html#RES.visuals.get_selected_vs_missed_visuals">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.get_selected_vs_missed_visuals">[docs]</a>
 <span class="k">def</span> <span class="nf">get_selected_vs_missed_visuals</span><span class="p">(</span><span class="n">cells</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
                                   <span class="n">province_short_code</span><span class="p">,</span>
                                   <span class="n">resource_type</span><span class="p">,</span>
@@ -787,7 +788,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="create_raster_image_with_legend">
-<a class="viewcode-back" href="../../api.html#RES.visuals.create_raster_image_with_legend">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.create_raster_image_with_legend">[docs]</a>
 <span class="k">def</span> <span class="nf">create_raster_image_with_legend</span><span class="p">(</span>
         <span class="n">raster</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> 
         <span class="n">cmap</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> 
@@ -881,7 +882,7 @@ document.write(`
 <span class="c1">#     log.info(f&quot;GADM Regions visualization reated and saved locally.\n&quot;)</span>
 
 <div class="viewcode-block" id="plot_data_in_GADM_regions">
-<a class="viewcode-back" href="../../api.html#RES.visuals.plot_data_in_GADM_regions">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.plot_data_in_GADM_regions">[docs]</a>
 <span class="k">def</span> <span class="nf">plot_data_in_GADM_regions</span><span class="p">(</span>
         <span class="n">dataframe</span><span class="p">,</span>
         <span class="n">data_column_df</span><span class="p">,</span>
@@ -903,7 +904,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="visualize_ss_nodes">
-<a class="viewcode-back" href="../../api.html#RES.visuals.visualize_ss_nodes">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.visualize_ss_nodes">[docs]</a>
 <span class="k">def</span> <span class="nf">visualize_ss_nodes</span><span class="p">(</span><span class="n">substations_gdf</span><span class="p">,</span>
                        <span class="n">provincem_gadm_regions_gdf</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> 
                            <span class="n">plot_name</span><span class="p">):</span>
@@ -936,7 +937,7 @@ document.write(`
 
         
 <div class="viewcode-block" id="create_timeseries_plots">
-<a class="viewcode-back" href="../../api.html#RES.visuals.create_timeseries_plots">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.create_timeseries_plots">[docs]</a>
 <span class="k">def</span> <span class="nf">create_timeseries_plots</span><span class="p">(</span><span class="n">cells_df</span><span class="p">,</span> <span class="n">CF_timeseries_df</span><span class="p">,</span> <span class="n">max_resource_capacity</span><span class="p">,</span> <span class="n">dissolved_indices</span><span class="p">,</span> <span class="n">resampling</span><span class="p">,</span> <span class="n">representative_color_palette</span><span class="p">,</span> <span class="n">std_deviation_gradient</span><span class="p">,</span> <span class="n">vis_directory</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; Generating CF timeseries PLOTs for TOP Sites for </span><span class="si">{</span><span class="n">max_resource_capacity</span><span class="si">}</span><span class="s2"> GW Capacity investment in province...&quot;</span><span class="p">)</span>
 
@@ -985,7 +986,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="create_timeseries_plots_solar">
-<a class="viewcode-back" href="../../api.html#RES.visuals.create_timeseries_plots_solar">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.create_timeseries_plots_solar">[docs]</a>
 <span class="k">def</span> <span class="nf">create_timeseries_plots_solar</span><span class="p">(</span><span class="n">cells_df</span><span class="p">,</span><span class="n">CF_timeseries_df</span><span class="p">,</span> <span class="n">dissolved_indices</span><span class="p">,</span><span class="n">max_solar_capacity</span><span class="p">,</span><span class="n">resampling</span><span class="p">,</span><span class="n">solar_vis_directory</span><span class="p">):</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; Generating CF timeseries for TOP Sites for </span><span class="si">{</span><span class="n">max_solar_capacity</span><span class="si">}</span><span class="s2"> GW Capacity Investment in BC...&quot;</span><span class="p">)</span>
@@ -1034,7 +1035,7 @@ document.write(`
 
     
 <div class="viewcode-block" id="create_timeseries_interactive_plots">
-<a class="viewcode-back" href="../../api.html#RES.visuals.create_timeseries_interactive_plots">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.create_timeseries_interactive_plots">[docs]</a>
 <span class="k">def</span> <span class="nf">create_timeseries_interactive_plots</span><span class="p">(</span>
     <span class="n">ts_df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">save_to_dir</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
@@ -1113,7 +1114,7 @@ document.write(`
     <span class="c1"># pio.show(fig)</span>
     
 <div class="viewcode-block" id="get_data_in_map_plot">
-<a class="viewcode-back" href="../../api.html#RES.visuals.get_data_in_map_plot">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.get_data_in_map_plot">[docs]</a>
 <span class="k">def</span> <span class="nf">get_data_in_map_plot</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span> 
                     <span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="n">datafield</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1207,7 +1208,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="plot_grid_lines">
-<a class="viewcode-back" href="../../api.html#RES.visuals.plot_grid_lines">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.plot_grid_lines">[docs]</a>
 <span class="k">def</span> <span class="nf">plot_grid_lines</span><span class="p">(</span>
     <span class="n">region_code</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
     <span class="n">region_name</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
@@ -1272,7 +1273,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="create_key_data_map_interactive">
-<a class="viewcode-back" href="../../api.html#RES.visuals.create_key_data_map_interactive">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.create_key_data_map_interactive">[docs]</a>
 <span class="k">def</span> <span class="nf">create_key_data_map_interactive</span><span class="p">(</span>
     <span class="n">province_gadm_regions_gdf</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
     <span class="n">provincial_conservation_protected_lands</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
@@ -1305,7 +1306,7 @@ document.write(`
     
 
 <div class="viewcode-block" id="create_sites_ts_plots_all_sites">
-<a class="viewcode-back" href="../../api.html#RES.visuals.create_sites_ts_plots_all_sites">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.create_sites_ts_plots_all_sites">[docs]</a>
 <span class="k">def</span> <span class="nf">create_sites_ts_plots_all_sites</span><span class="p">(</span>
     <span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
     <span class="n">CF_ts_df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -1331,7 +1332,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="create_sites_ts_plots_all_sites_2">
-<a class="viewcode-back" href="../../api.html#RES.visuals.create_sites_ts_plots_all_sites_2">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.create_sites_ts_plots_all_sites_2">[docs]</a>
 <span class="k">def</span> <span class="nf">create_sites_ts_plots_all_sites_2</span><span class="p">(</span>
     <span class="n">resource_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">CF_ts_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>

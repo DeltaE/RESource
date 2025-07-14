@@ -156,10 +156,11 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
 <ul class="nav bd-sidenav">
@@ -304,7 +305,7 @@ document.write(`
 <span class="n">print_level_base</span><span class="o">=</span><span class="mi">2</span>
 
 <div class="viewcode-block" id="CellCapacityProcessor">
-<a class="viewcode-back" href="../../api.html#RES.CellCapacityProcessor.CellCapacityProcessor">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor">[docs]</a>
 <span class="k">class</span> <span class="nc">CellCapacityProcessor</span><span class="p">(</span><span class="n">LandContainer</span><span class="p">,</span>
                             <span class="n">ERA5Cutout</span><span class="p">,</span>
                             <span class="p">):</span>
@@ -343,7 +344,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_resolution</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutout_config</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span>
     
 <div class="viewcode-block" id="CellCapacityProcessor.set_composite_excluder">
-<a class="viewcode-back" href="../../api.html#RES.CellCapacityProcessor.CellCapacityProcessor.set_composite_excluder">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor.set_composite_excluder">[docs]</a>
     <span class="k">def</span> <span class="nf">set_composite_excluder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">LandContainer</span><span class="o">.</span><span class="n">set_excluder</span><span class="p">()</span></div>
 
@@ -357,7 +358,7 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_shape</span>
     
 <div class="viewcode-block" id="CellCapacityProcessor.load_cost">
-<a class="viewcode-back" href="../../api.html#RES.CellCapacityProcessor.CellCapacityProcessor.load_cost">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor.load_cost">[docs]</a>
     <span class="k">def</span> <span class="nf">load_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                   <span class="n">resource_atb</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
@@ -404,8 +405,16 @@ document.write(`
         <span class="p">])</span>
         
 <div class="viewcode-block" id="CellCapacityProcessor.get_capacity">
-<a class="viewcode-back" href="../../api.html#RES.CellCapacityProcessor.CellCapacityProcessor.get_capacity">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor.get_capacity">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">tuple</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method processes the capacity of the resources based on the availability matrix and other parameters.</span>
+<span class="sd">        It calculates the potential capacity for each cell in the region and returns a named tuple containing the</span>
+<span class="sd">        processed data and the capacity matrix.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            namedtuple: A named tuple containing the processed `data` and the capacity `matrix`. Can be accessed as:</span>
+<span class="sd">            `&lt;self.resources_nt&gt;.data` and `&lt;self.resources_nt&gt;.matrix`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Cell capacity processor initiated...&quot;</span><span class="p">)</span>
         
@@ -512,9 +521,9 @@ document.write(`
         <span class="c1"># era5_cell_capacity=_provincial_cell_capacity_gdf</span>
         
         <span class="c1"># Define a namedtuple</span>
-        <span class="n">capacity_data</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;capacity_data&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="s1">&#39;matrix&#39;</span><span class="p">,</span><span class="s1">&#39;cutout&#39;</span><span class="p">])</span>
+        <span class="n">capacity_data</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;capacity_data&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="s1">&#39;matrix&#39;</span><span class="p">])</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">resources_nt</span><span class="o">=</span><span class="n">capacity_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">provincial_cells</span><span class="p">,</span><span class="n">capacity_matrix</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources_nt</span><span class="o">=</span><span class="n">capacity_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">provincial_cells</span><span class="p">,</span><span class="n">capacity_matrix</span><span class="p">)</span>
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
                    <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| ✓ Capacity dataframe cleaned and processed&quot;</span><span class="p">)</span>
         
@@ -528,7 +537,7 @@ document.write(`
 
 <span class="c1">## Visuals</span>
 <div class="viewcode-block" id="CellCapacityProcessor.show_capacity_map">
-<a class="viewcode-back" href="../../api.html#RES.CellCapacityProcessor.CellCapacityProcessor.show_capacity_map">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor.show_capacity_map">[docs]</a>
     <span class="k">def</span> <span class="nf">show_capacity_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         
         <span class="n">gdf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">resources_nt</span><span class="o">.</span><span class="n">data</span>
@@ -545,7 +554,7 @@ document.write(`
 
     
 <div class="viewcode-block" id="CellCapacityProcessor.plot_ERAF5_grid_land_availability">
-<a class="viewcode-back" href="../../api.html#RES.CellCapacityProcessor.CellCapacityProcessor.plot_ERAF5_grid_land_availability">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor.plot_ERAF5_grid_land_availability">[docs]</a>
     <span class="k">def</span> <span class="nf">plot_ERAF5_grid_land_availability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                           <span class="n">legend_box_x_y</span><span class="p">:</span><span class="nb">tuple</span><span class="o">=</span><span class="p">(</span><span class="mf">1.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
 <span class="w">        </span>
@@ -620,7 +629,7 @@ document.write(`
         <span class="c1"># plt.close(fig)  # Close the figure to free up memory</span>
 
 <div class="viewcode-block" id="CellCapacityProcessor.plot_excluder_land_availability">
-<a class="viewcode-back" href="../../api.html#RES.CellCapacityProcessor.CellCapacityProcessor.plot_excluder_land_availability">[docs]</a>
+<a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor.plot_excluder_land_availability">[docs]</a>
     <span class="k">def</span> <span class="nf">plot_excluder_land_availability</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            fig, ax = plt.subplots()</span>
