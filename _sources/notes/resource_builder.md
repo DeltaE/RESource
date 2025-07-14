@@ -93,30 +93,13 @@ The resulting GeoDataFrame from `get_grid_cells()` includes the following column
 ### Why wind resources' ERA5 data are rescaled ?
 Wind resources (windspeed) are known to have significant variations across ERA5's ~30km resolution. To account for this, we rescaled the windspeed using higher resolution data from the Global Wind Atlas (GWA). This allows us to better estimate the windspeed at the grid cell level. However, GWA does not provide hourly profiles, so we source the profile from ERA5.
 
-<table>
-<tr>
-<td width="50%" align="center">
 
-```{figure} ../_static/gwa_resolution_windspeed_distribution_British Columbia.jpg
-:width: 300px
-:name: gwa-windspeed-bc
-
-GWA Resolution Windspeed Distribution (British Columbia)
-```
-
-</td>
-<td width="50%" align="center">
-
-```{figure} ../_static/ERA5_resolution_windspeed_distribution_ERA5vsGWA_British Columbia.png
-:width: 300px
+```{figure} ../_static/ERA5_resolution_windspeed_distribution_ERA5vsGWA_British_Columbia.png
+:width: 600px
 :name: era5-vs-gwa-windspeed-bc
 
-ERA5 vs GWA Resolution Windspeed Distribution (British Columbia)
+Windspeed Distribution - ERA5 vs GWA (resampled to ERA5 Resolution) | Example from _British Columbia_ Study 
 ```
-
-</td>
-</tr>
-</table>
 
 ```{attention}
 -  Working enhancement includes similar rescaling method for solar resources.
