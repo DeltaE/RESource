@@ -114,13 +114,6 @@ RESource includes several Jupyter notebooks for demonstration and analysis:
 - **Visuals_BC.ipynb**: Visualization examples for British Columbia
 - **RESources_report_builder.ipynb**: Generate assessment reports
 
-To start Jupyter:
-
-```bash
-jupyter lab
-# or
-jupyter notebook
-```
 
 ## Documentation
 
@@ -166,7 +159,8 @@ Two workflows are available for documentation deployment:
    - Uses conda environment for complex dependencies
    - Fallback option if pip installation fails
 
-### Setup GitHub Pages
+
+### Setup GitHub Pages [optional]
 
 To enable GitHub Pages for your repository:
 
@@ -183,9 +177,10 @@ To enable GitHub Pages for your repository:
 - **Branch protection**: Only deploys from main/master branches
 - **Manual triggers**: Allows manual deployment when needed
 
+
 ### Local Testing Before Deployment
 
-Always test your documentation locally before pushing:
+To test the documentation build locally before pushing changes:
 
 ```bash
 # Test the complete build process
