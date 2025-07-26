@@ -29,7 +29,7 @@ notes/resource_builder
 notes/getting_started
 notes/environment_setup
 notes/api
-notes/case
+case_studies/BC.md
 notes/developers
 ```
 

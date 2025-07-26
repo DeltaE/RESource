@@ -1,3 +1,7 @@
+```{warning}
+This library is under heavy development
+```
+
 # Case study: VRE site selection in British Columbia
 For more on this case study, please refer to the open-access publication [here](https://www.example.com).
 
