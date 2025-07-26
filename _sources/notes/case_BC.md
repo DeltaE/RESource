@@ -15,9 +15,10 @@ BC was discretized into uniform grid cells using the spatial resolution of ERA5 
 ## Spatial Screening and Land Availability
 Key parameters are configurable to reflect geographic constraints (e.g., slope, protected areas), We applied the spatial screening process using global raster datasets from the GAEZ to systematically identify suitable VRE sites by filtering land based on land cover, terrain slope, and exclusion zones.. Land cover data layers are used to selectively include classes such as croplands, grasslands, shrubs, and bare soil while excluding artificial surfaces, dense forests, and water bodies. Terrain slope rasters helped eliminate areas with steep gradients over 30%, which pose construction and accessibility challenges. Additionally, exclusion zones—compiled from global biodiversity, wetland, and protected area databases—were entirely filtered out from consideration to respect environmental conservation boundaries. This layered geospatial filtering ensures that selected sites align with both technical feasibility and ecological integrity. We extracted the land availability map from this spatial screening process. 
 
-<img src="_static/GAEZ_layers_BC_2025.jpg" alt="GAEZ layers used in BC spatial screening showing land cover, slope, and exclusion zones" width="500"/>
 
-For full details on the raster classes used in the spatial screening, refer to the [GAEZ_v4 documentation](https://doi.org/10.4060/cb4744en).
+![GAEZ layers used in BC spatial screening showing land cover, slope, and exclusion zones](_static/GAEZ_layers_BC_2025.jpg){width="500"}
+
+> For full details on the raster classes, refer to the [GAEZ_v4 documentation](https://doi.org/10.4060/cb4744en).
 
 ```{tip}
 page 17; Elevation and terrain-slope data 
