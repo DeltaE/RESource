@@ -1,4 +1,4 @@
-```{warning}
+```{warTo demonstrate RESource'We translated eligible land into theoretical energy capacity using technology-specific land-use intensity benchmarks—3 MW/km² for wind and 1.45 MW/km² for solar PV consistent with [prior studies](https://linkinghub.elsevier.com/retrieve/pii/S2666792423000379) on [wind resource assessments](https://linkinghub.elsevier.com/retrieve/pii/S2211467X18300804) and [renewable energy modeling](https://doi.org/10.1088/2515-7620/abf5c4). practical utility, we apply the framework to the Canadian province of British Columbia (BC). BC presents an ideal testbed due to its varied geography—coastal areas, rugged mountains, and interior plateaus—and a favorable policy environment, including the [Clean Energy Act](https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/10022_01), [expedited permitting processes for wind projects](https://news.gov.bc.ca/releases/2025ECS0006-000100) and renewable energy targeted call for power [2024](https://www.bchydro.com/work-with-us/selling-clean-energy/2024-call-for-power.html), [2025](https://www.bchydro.com/work-with-us/selling-clean-energy/2025-call-for-power.html) by BC Hydro. These characteristics offer a rich context for testing spatial, technical, and regulatory dimensions of VRE siting.ing}
 This library is under heavy development
 ```
 
@@ -15,13 +15,15 @@ BC was discretized into uniform grid cells using the spatial resolution of ERA5 
 ## Spatial Screening and Land Availability
 Key parameters are configurable to reflect geographic constraints (e.g., slope, protected areas), We applied the spatial screening process using global raster datasets from the GAEZ to systematically identify suitable VRE sites by filtering land based on land cover, terrain slope, and exclusion zones.. Land cover data layers are used to selectively include classes such as croplands, grasslands, shrubs, and bare soil while excluding artificial surfaces, dense forests, and water bodies. Terrain slope rasters helped eliminate areas with steep gradients over 30%, which pose construction and accessibility challenges. Additionally, exclusion zones—compiled from global biodiversity, wetland, and protected area databases—were entirely filtered out from consideration to respect environmental conservation boundaries. This layered geospatial filtering ensures that selected sites align with both technical feasibility and ecological integrity. We extracted the land availability map from this spatial screening process. 
 
-<img src="GAEZ_layers_BC_2025.jpg" alt="RESource logo" width="500"/>
+<img src="case_studies/GAEZ_layers_BC_2025.jpg" alt="GAEZ_layers_BC_2025" width="500"/>
 
 For full details on the raster classes used in the spatial screening, refer to the [GAEZ_v4 documentation](https://doi.org/10.4060/cb4744en).
 
 ```{tip}
 page 17; Elevation and terrain-slope data 
+
 page 18; Land Cover data
+
 page 20; Exclusion zones
 ```
 
@@ -75,25 +77,6 @@ To translate spatial availability into investment prioritization, RESource ranks
 ### Ranking and prioritization
 XXXX
 
-# References
+---
 
-<a id="1">[1]</a> 
-[Clean Energy Act, BC](https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/10022_01)
-
-<a id="2">[2]</a> 
-[Solutions E and C. New legislation will accelerate B.C. renewable energy projects. BC Gov News. 2025](https://news.gov.bc.ca/releases/2025ECS0006-000100)
-
-<a id="3">[3]</a> 
-[BCH-2025 Call for Power](https://www.bchydro.com/work-with-us/selling-clean-energy/2025-call-for-power.html)
-
-<a id="4">[4]</a> 
-[BCH-2024 Call for Power](https://www.bchydro.com/work-with-us/selling-clean-energy/2024-call-for-power.html)
-
-<a id="5">[5]</a> 
-[Pelser T, Weinand JM, Kuckertz P, McKenna R, Linssen J, Stolten D. Reviewing accuracy & reproducibility of large-scale wind resource assessments. Advances in Applied Energy. 2024 Feb; 13:100158](https://linkinghub.elsevier.com/retrieve/pii/S2666792423000379)
-
-<a id="6">[6]</a> 
-[Hörsch J, Hofmann F, Schlachtberger D, Brown T. PyPSA-Eur: An open optimisation model of the European transmission system. Energy Strategy Reviews. 2018 Nov; 22:207–15.](https://linkinghub.elsevier.com/retrieve/pii/S2211467X18300804)
-
-<a id="7">[7]</a> 
-[Fejzić E, Niet T, Wade C, Usher W. Aligning the Western Balkans power sectors with the European Green Deal. Environ Res Commun. 2024 Nov; 6(11):115008.](https://doi.org/10.1088/2515-7620/abf5c4)
+*This case study demonstrates RESource's application to real-world renewable energy planning scenarios, integrating multiple data sources and constraints to provide actionable insights for VRE development in British Columbia.*
