@@ -1,0 +1,706 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RES.cluster &#8212; RESource 2025.07 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=e9b82cb4"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/RES/cluster';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/RESource_logo_2025.07.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/RESource_logo_2025.07.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Store_explorer.html">Explore data store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for RES.cluster</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">logging</span> <span class="k">as</span> <span class="nn">log</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">RES.utility</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="kn">import</span> <span class="n">SimpleImputer</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+        
+<span class="n">imputer</span> <span class="o">=</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>  <span class="c1"># Other strategies: &quot;median&quot;, &quot;most_frequent&quot;</span>
+
+<div class="viewcode-block" id="assign_cluster_id">
+<a class="viewcode-back" href="../../notes/api.html#RES.cluster.assign_cluster_id">[docs]</a>
+<span class="k">def</span> <span class="nf">assign_cluster_id</span><span class="p">(</span><span class="n">cells</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> 
+                  <span class="n">source_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;Region&#39;</span><span class="p">,</span> 
+                  <span class="n">index_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;cell&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Assigns unique cell IDs to each region in the specified GeoDataFrame.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    cells (gpd.GeoDataFrame): Input GeoDataFrame containing spatial data with &#39;x&#39; and &#39;y&#39; coordinates.</span>
+<span class="sd">    source_column (str): Column name in the GeoDataFrame that contains regional names.</span>
+<span class="sd">    index_name (str): Name for the new index column to be created.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    gpd.GeoDataFrame: GeoDataFrame with a new column of unique cell IDs for each region.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Ensure the source column exists</span>
+    <span class="k">if</span> <span class="n">source_column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cells</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">source_column</span><span class="si">}</span><span class="s2">&#39; does not exist in the GeoDataFrame.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Remove spaces in the region names for consistency</span>
+    <span class="n">cells</span><span class="p">[</span><span class="n">source_column</span><span class="p">]</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="n">source_column</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># Check if &#39;x&#39; and &#39;y&#39; coordinates exist</span>
+    <span class="k">if</span> <span class="s1">&#39;x&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cells</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="s1">&#39;y&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cells</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Columns &#39;x&#39; and &#39;y&#39; must exist in the GeoDataFrame.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Generate unique cell IDs using a combination of the region name and coordinates</span>
+    <span class="n">cells</span><span class="p">[</span><span class="n">index_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">cells</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="n">source_column</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Set the index to the newly created column</span>
+    <span class="n">cells</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">index_name</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cells</span></div>
+
+
+<div class="viewcode-block" id="find_optimal_K">
+<a class="viewcode-back" href="../../notes/api.html#RES.cluster.find_optimal_K">[docs]</a>
+<span class="k">def</span> <span class="nf">find_optimal_K</span><span class="p">(</span>
+        <span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">data_for_clustering</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> 
+        <span class="n">region</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> 
+        <span class="n">wcss_tolerance</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span> 
+        <span class="n">max_k</span>  <span class="p">:</span><span class="nb">int</span>
+        <span class="p">)</span><span class="o">-&gt;</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    takes the scored grid cells and gives the optimal number of k-means cluster from the elbow chart approach. </span>
+<span class="sd">    The Within Cluster Sum of Squares (WCSS) is a tolerance measure to find that optimal number of k. Higher the WCSS, higher the aggregation of cells i.e. less number of cluster.</span>
+<span class="sd">    WCSS measures the squared average distance (difference between cluster&#39;s mean CF and individual CF) of all the points within a cluster to the cluster centroid (here - mean CF)  </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;Estimating optimal number of Clusters for each region based on the Score for each Cell ...&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Initialize empty list to store the within-cluster sum of squares (WCSS)</span>
+    <span class="n">wcss_data</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Try different values of k (number of clusters)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">max_k</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_for_clustering</span><span class="p">))):</span>
+        <span class="c1"># Handle NaN values by filling them with the mean of the column</span>
+
+
+        <span class="n">kmeans_data</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data_for_clustering</span><span class="p">)</span>
+        <span class="c1"># Inertia is the within-cluster sum of squares</span>
+        <span class="n">wcss_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kmeans_data</span><span class="o">.</span><span class="n">inertia_</span><span class="p">)</span>
+
+    <span class="c1"># Calculate the total WCSS</span>
+    <span class="n">total_wcss_data</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">wcss_data</span><span class="p">)</span>
+
+    <span class="c1"># Calculate the tolerance as a percentage of the total WCSS</span>
+    <span class="n">tolerance_data</span> <span class="o">=</span> <span class="n">wcss_tolerance</span> <span class="o">*</span> <span class="n">total_wcss_data</span>
+
+    <span class="c1"># Initialize the optimal k</span>
+    <span class="n">optimal_k_data</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">wcss_value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">wcss_data</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">wcss_value</span> <span class="o">&lt;=</span> <span class="n">tolerance_data</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+
+<span class="c1"># Plot and save the elbow charts</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">max_k</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_for_clustering</span><span class="p">))),</span> <span class="n">wcss_data</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">optimal_k_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">optimal_k_data</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span>
+                    <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Optimal k = </span><span class="si">{</span><span class="n">optimal_k_data</span><span class="si">}</span><span class="s2">; K-means with </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">wcss_tolerance</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span><span class="si">}</span><span class="s2">% of WCSS&quot;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Elbow plot of K-means Clustering with &#39;LCOE_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s2">&#39; for Region-</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Number of Clusters (k)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Within-Cluster Sum of Squares (WCSS)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+    <span class="c1"># Ensure x-axis ticks are integers</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">max_k</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_for_clustering</span><span class="p">))))</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="c1"># Print the optimal k</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zone </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2"> - Optimal k for LCOE_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s2"> based clustering: </span><span class="si">{</span><span class="n">optimal_k_data</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">optimal_k_data</span></div>
+
+
+<div class="viewcode-block" id="pre_process_cluster_mapping">
+<a class="viewcode-back" href="../../notes/api.html#RES.cluster.pre_process_cluster_mapping">[docs]</a>
+<span class="k">def</span> <span class="nf">pre_process_cluster_mapping</span><span class="p">(</span>
+        <span class="n">cells_scored</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">vis_directory</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">wcss_tolerance</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span>
+        <span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    xxx </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">unique_regions</span> <span class="o">=</span> <span class="n">cells_scored</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">elbow_plot_directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">vis_directory</span><span class="p">,</span> <span class="s1">&#39;Regional_cluster_Elbow_Plots&#39;</span><span class="p">)</span>
+        <span class="n">elbow_plot_directory</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to create directory at </span><span class="si">{</span><span class="n">elbow_plot_directory</span><span class="si">}</span><span class="s2">. Ensure &#39;vis_directory&#39; is valid. Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">region_optimal_k_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Loop over unique regions</span>
+    <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">unique_regions</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Processing region: </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2"> ===&quot;</span><span class="p">)</span>
+        <span class="n">expected_cols</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
+        
+        <span class="n">available_cols</span> <span class="o">=</span> <span class="n">cells_scored</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Available columns in cells_scored:&quot;</span><span class="p">,</span> <span class="n">available_cols</span><span class="p">)</span>
+        
+        <span class="c1"># Check if all required columns exist</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">col</span> <span class="ow">in</span> <span class="n">available_cols</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">expected_cols</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing columns for clustering in region </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2">. Skipping.&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">data_for_clustering</span> <span class="o">=</span> <span class="n">cells_scored</span><span class="p">[</span><span class="n">cells_scored</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">region</span><span class="p">][</span><span class="n">expected_cols</span><span class="p">]</span>
+        
+        <span class="c1"># Replace inf/-inf with NaN so they can be imputed</span>
+        <span class="n">data_for_clustering</span><span class="o">.</span><span class="n">replace</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data before imputation:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">data_for_clustering</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+
+        <span class="c1"># Drop columns that are entirely NaN</span>
+        <span class="n">data_for_clustering</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">data_for_clustering</span><span class="o">.</span><span class="n">empty</span> <span class="ow">or</span> <span class="n">data_for_clustering</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data for clustering is empty or invalid for region </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2">. Skipping.&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">imputed_array</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data_for_clustering</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Imputer failed for region </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2"> with error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">data_for_clustering_cleaned</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">imputed_array</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">data_for_clustering</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        
+        
+        <span class="c1"># Call the function for K-means clustering and elbow plot</span>
+        <span class="n">optimal_k</span> <span class="o">=</span> <span class="n">find_optimal_K</span><span class="p">(</span><span class="n">resource_type</span><span class="p">,</span><span class="n">data_for_clustering_cleaned</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">wcss_tolerance</span><span class="p">,</span> <span class="n">max_k</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        
+        <span class="c1"># Append values to the list</span>
+        <span class="n">region_optimal_k_list</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;Region&#39;</span><span class="p">:</span> <span class="n">region</span><span class="p">,</span> <span class="s1">&#39;Optimal_k&#39;</span><span class="p">:</span> <span class="n">optimal_k</span><span class="p">})</span>
+
+        <span class="c1"># Save the elbow plot</span>
+        <span class="n">plot_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;elbow_plot_region_</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s1">.png&#39;</span>
+        <span class="n">plot_save_to</span><span class="o">=</span><span class="n">elbow_plot_directory</span><span class="o">/</span><span class="n">plot_name</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">plot_save_to</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>  <span class="c1"># Close the plot to avoid overlapping</span>
+    <span class="c1">##################################################################</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;&gt; K-means clustering Elbow plots generated for each region based on the Score for each Cell ...&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create a DataFrame from the list</span>
+    <span class="n">region_optimal_k_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">region_optimal_k_list</span><span class="p">)</span>
+    <span class="n">region_optimal_k_df</span><span class="p">[</span><span class="s1">&#39;Optimal_k&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">region_optimal_k_df</span><span class="p">[</span><span class="s1">&#39;Optimal_k&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">region_optimal_k_df</span><span class="p">[</span><span class="s1">&#39;Optimal_k&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    
+    <span class="n">NonZeroClustersmask</span><span class="o">=</span><span class="n">region_optimal_k_df</span><span class="p">[</span><span class="s1">&#39;Optimal_k&#39;</span><span class="p">]</span><span class="o">!=</span><span class="mi">0</span>
+    <span class="n">region_optimal_k_df</span><span class="o">=</span><span class="n">region_optimal_k_df</span><span class="p">[</span><span class="n">NonZeroClustersmask</span><span class="p">]</span>
+
+    <span class="n">_x</span> <span class="o">=</span> <span class="n">cells_scored</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">region_optimal_k_df</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;Region&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+    <span class="n">cells_scored</span> <span class="o">=</span> <span class="n">assign_cluster_id</span><span class="p">(</span><span class="n">_x</span><span class="p">,</span><span class="s1">&#39;Region&#39;</span><span class="p">,</span> <span class="s1">&#39;cell&#39;</span><span class="p">)</span><span class="c1">#.set_index(&#39;cell&#39;)</span>
+    
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Optimal-k based on &#39;LCOE&#39; clustering calculated for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">unique_regions</span><span class="p">)</span><span class="si">}</span><span class="s2"> zones and saved to cell dataframe.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">cells_scored_cluster_mapped</span><span class="o">=</span><span class="n">cells_scored</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">cells_scored_cluster_mapped</span><span class="p">,</span><span class="n">region_optimal_k_df</span></div>
+
+
+<div class="viewcode-block" id="cells_to_cluster_mapping">
+<a class="viewcode-back" href="../../notes/api.html#RES.cluster.cells_to_cluster_mapping">[docs]</a>
+<span class="k">def</span> <span class="nf">cells_to_cluster_mapping</span><span class="p">(</span>
+        <span class="n">cells_scored</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">vis_directory</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">wcss_tolerance</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span>
+        <span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">sort_columns</span><span class="p">:</span><span class="nb">list</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clustering requires a base prior to perform the aggregation/clustering similar data. Here, we are doing spatial clustering which aggregates the spatial regions</span>
+<span class="sd">    based on some common features. As a common feature, the modellers can design tailored metric find/calculate a feature which performs as a good proxy of the suitability of the cells as a</span>
+<span class="sd">    potential renewable energy site. For this tool (this version), we are calculating a composite scoring approach to find the suitability of the sites. The composite score has been labelled as </span>
+<span class="sd">    as &quot;lcoe&quot; i.e. proxy Levelized Cost of Electricity (LCOE) which denotes the energy yield (MWh) per dollar of investment in a cell. We have calculated this composite score for each cell and</span>
+<span class="sd">    here with this function, this score will be acting as the common feature for the spatial clustering.</span>
+
+<span class="sd">    Does the following sequential tasks:</span>
+<span class="sd">  Processes the GWA cells before we approach for clustering . An output of this function is a region vs optimal cluster for the region and another output denotes cell vs mapped region vs cluster no. (in which the cells will be merged into).</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dataframe</span><span class="p">,</span><span class="n">optimal_k_df</span><span class="o">=</span><span class="n">pre_process_cluster_mapping</span><span class="p">(</span><span class="n">cells_scored</span><span class="p">,</span><span class="n">vis_directory</span><span class="p">,</span><span class="n">wcss_tolerance</span><span class="p">,</span><span class="n">resource_type</span><span class="p">)</span>
+
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;Mapping the Optimal Number of Clusters for Each region ...&quot;</span><span class="p">)</span>
+
+    <span class="n">clusters</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">dataframe_filtered</span><span class="o">=</span><span class="n">dataframe</span><span class="p">[</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">optimal_k_df</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]))]</span>
+    
+    <span class="k">for</span> <span class="n">region</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">dataframe_filtered</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Region&#39;</span><span class="p">):</span>
+        <span class="n">group</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">sort_columns</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">region_rows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+        
+        <span class="n">optimal_k</span> <span class="o">=</span> <span class="n">optimal_k_df</span><span class="p">[</span><span class="n">optimal_k_df</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">region</span><span class="p">][</span><span class="s1">&#39;Optimal_k&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">region_step_size</span> <span class="o">=</span> <span class="n">region_rows</span> <span class="o">//</span> <span class="n">optimal_k</span>
+        
+        <span class="n">clusters</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">group</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">region_step_size</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">region_rows</span><span class="p">,</span> <span class="n">region_step_size</span><span class="p">)])</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">clusters</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">region_step_size</span><span class="p">:</span>
+            <span class="n">clusters</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">clusters</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">clusters</span><span class="o">.</span><span class="n">pop</span><span class="p">()],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        
+        <span class="n">cluster_no_counter</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Reset cluster_no_counter for each region</span>
+        <span class="k">for</span> <span class="n">cluster_df</span> <span class="ow">in</span> <span class="n">clusters</span><span class="p">[</span><span class="o">-</span><span class="n">optimal_k</span><span class="p">:]:</span>
+            <span class="n">cluster_df</span><span class="p">[</span><span class="s1">&#39;Cluster_No&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cluster_no_counter</span>
+            <span class="n">cluster_no_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">cells_cluster_map_df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">clusters</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cells_cluster_map_df</span><span class="p">,</span><span class="n">optimal_k_df</span></div>
+
+
+<div class="viewcode-block" id="create_cells_Union_in_clusters">
+<a class="viewcode-back" href="../../notes/api.html#RES.cluster.create_cells_Union_in_clusters">[docs]</a>
+<span class="k">def</span> <span class="nf">create_cells_Union_in_clusters</span><span class="p">(</span>
+        <span class="n">cluster_map_gdf</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> 
+        <span class="n">region_optimal_k_df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span>
+            <span class="p">)</span><span class="o">-&gt;</span><span class="nb">tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span><span class="nb">dict</span><span class="p">]:</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dissolve a GeoDataFrame based on &#39;Bucket_No&#39; and aggregate columns as specified.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    - cluster_map_gdf: GeoDataFrame, the input GeoDataFrame to be dissolved and aggregated.</span>
+<span class="sd">    - region_optimal_k_df: DataFrame, a DataFrame containing region information.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    - dissolved_gdf: GeoDataFrame, the dissolved and aggregated GeoDataFrame.</span>
+<span class="sd">    - dissolved_indices: dict, a dictionary containing the indices of the dissolved rows for each region and each Cluster_No.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot; Preparing Clusters...&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Initialize an aggregation dictionary</span>
+    <span class="n">agg_dict</span> <span class="o">=</span> <span class="p">{</span><span class="c1">#f&#39;LCOE_{resource_type}&#39;: lambda x: x.iloc[len(x) // 2], </span>
+                <span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">],</span> 
+                <span class="sa">f</span><span class="s1">&#39;capex_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span><span class="s1">&#39;first&#39;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s1">&#39;fom_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span><span class="s1">&#39;first&#39;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s1">&#39;vom_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span><span class="s1">&#39;first&#39;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">_CF_mean&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;Cluster_No&#39;</span><span class="p">:</span><span class="s1">&#39;first&#39;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;Region&#39;</span><span class="p">:</span> <span class="s1">&#39;first&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;nearest_station&#39;</span><span class="p">:</span><span class="s1">&#39;first&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;nearest_station_distance_km&#39;</span><span class="p">:</span><span class="s1">&#39;first&#39;</span><span class="p">}</span>
+
+    <span class="c1"># Initialize an empty list to store the dissolved results</span>
+    <span class="n">dissolved_gdf_list</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="c1"># Initialize an empty dictionary to store dissolved indices for each region and each Cluster_No</span>
+    <span class="n">dissolved_indices</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+    <span class="c1"># Loop through each region</span>
+    <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">region_optimal_k_df</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]:</span>
+        <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; Creating cluster for </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">region_optimal_k_df</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">region_mask</span> <span class="o">=</span> <span class="n">cluster_map_gdf</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">region</span>
+        <span class="n">region_cells</span> <span class="o">=</span> <span class="n">cluster_map_gdf</span><span class="p">[</span><span class="n">region_mask</span><span class="p">]</span>
+
+        <span class="c1"># Initialize dictionary for the current region</span>
+        <span class="n">dissolved_indices</span><span class="p">[</span><span class="n">region</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Loop through each Cluster_No in the current region</span>
+        <span class="k">for</span> <span class="n">cluster_no</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">region_cells</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Cluster_No&#39;</span><span class="p">):</span>
+            <span class="c1"># Store the indices of the rows before dissolving</span>
+            <span class="n">dissolved_indices</span><span class="p">[</span><span class="n">region</span><span class="p">][</span><span class="n">cluster_no</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+            <span class="c1"># Dissolve by &#39;Bucket_No&#39; and aggregate using the agg_dict</span>
+            <span class="n">region_dissolved</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">dissolve</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;Cluster_No&#39;</span><span class="p">,</span> <span class="n">aggfunc</span><span class="o">=</span><span class="n">agg_dict</span><span class="p">)</span>
+
+            <span class="c1"># Append the dissolved GeoDataFrame to the list</span>
+            <span class="n">dissolved_gdf_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">region_dissolved</span><span class="p">)</span>
+
+        <span class="c1"># Concatenate all GeoDataFrames in the list</span>
+        <span class="n">dissolved_gdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dissolved_gdf_list</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="c1"># Keep only the specified columns</span>
+        <span class="c1"># columns_to_keep = [&#39;Region&#39;,&#39;Region&#39;,&#39;Cluster_No&#39;, &#39;capex&#39;, &#39;potential_capacity&#39;,&#39;lcoe&#39;,&#39;nearest_station&#39;,&#39;nearest_station_distance_km&#39;,&#39;geometry&#39; ]</span>
+        <span class="c1"># dissolved_gdf = dissolved_gdf[columns_to_keep]</span>
+
+        <span class="n">dissolved_gdf</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">assign_regional_cell_ids</span><span class="p">(</span><span class="n">dissolved_gdf</span><span class="p">,</span><span class="s1">&#39;Region&#39;</span><span class="p">,</span><span class="s1">&#39;cluster_id&#39;</span><span class="p">)</span>
+
+        <span class="n">dissolved_gdf</span><span class="p">[</span><span class="s1">&#39;Cluster_No&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dissolved_gdf</span><span class="p">[</span><span class="s1">&#39;Cluster_No&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">dissolved_gdf</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># dissolved_gdf.sort_values(by=f&#39;LCOE_{resource_type}&#39;, ascending=True, inplace=True)</span>
+        <span class="n">dissolved_gdf</span><span class="p">[</span><span class="s1">&#39;Rank&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dissolved_gdf</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="n">dissolved_gdf</span><span class="o">.</span><span class="n">columns</span><span class="o">=</span><span class="n">dissolved_gdf</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">fr</span><span class="s2">&quot;(?i)(_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s2">_)&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;Clusters Created and a list generated to map the Cells inside each Cluster...&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dissolved_gdf</span><span class="p">,</span> <span class="n">dissolved_indices</span></div>
+
+
+<div class="viewcode-block" id="clip_cluster_boundaries_upto_regions">
+<a class="viewcode-back" href="../../notes/api.html#RES.cluster.clip_cluster_boundaries_upto_regions">[docs]</a>
+<span class="k">def</span> <span class="nf">clip_cluster_boundaries_upto_regions</span><span class="p">(</span>
+        <span class="n">cell_cluster_gdf</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+        <span class="n">gadm_regions_gdf</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+        <span class="n">resource_type</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    xxx </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cell_cluster_gdf_clipped</span><span class="o">=</span><span class="n">cell_cluster_gdf</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">gadm_regions_gdf</span><span class="p">,</span><span class="n">keep_geom_type</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="c1"># cell_cluster_gdf_clipped.sort_values(by=[f&#39;LCOE_{resource_type}&#39;], ascending=True, inplace=True) </span>
+    <span class="n">cell_cluster_gdf_clipped</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
+
+    <span class="k">return</span> <span class="n">cell_cluster_gdf_clipped</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -27,8 +27,19 @@ def load_api_key(file_path="data/downloaded_data/CODERS/coders_api.yaml"):
                      returns the first available API key from the configuration.
                      Returns None if no API key is found.
     """
-    api_cfg = utils.load_config(file_path)
-    
+    try:
+        api_cfg = utils.load_config(file_path)
+    except FileNotFoundError:
+        print(f"API key file not found: {file_path}")
+        print("Please create a YAML file at the above path with the following structure:")
+        print("""
+api_keys:
+  your_username: your_api_key_here
+Default_user: your_username
+        """)
+        print("Refer to the CODERS API setup guide for more details.")
+        return None
+
     default_user = api_cfg.get("Default_user")
     api_keys = api_cfg.get("api_keys", {})
 

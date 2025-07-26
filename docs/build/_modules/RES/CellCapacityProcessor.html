@@ -1,0 +1,719 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RES.CellCapacityProcessor &#8212; RESource 2025.07 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=e9b82cb4"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/RES/CellCapacityProcessor';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/RESource_logo_2025.07.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/RESource_logo_2025.07.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Store_explorer.html">Explore data store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for RES.CellCapacityProcessor</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Polygon</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="c1"># Local Packages</span>
+<span class="kn">import</span> <span class="nn">RES.utility</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="c1"># from RES.AttributesParser import AttributesParser</span>
+<span class="kn">from</span> <span class="nn">RES.lands</span> <span class="kn">import</span> <span class="n">LandContainer</span>
+<span class="kn">from</span> <span class="nn">RES.era5_cutout</span> <span class="kn">import</span> <span class="n">ERA5Cutout</span>
+<span class="kn">from</span> <span class="nn">RES.hdf5_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
+<span class="kn">from</span> <span class="nn">RES.atb</span> <span class="kn">import</span> <span class="n">NREL_ATBProcessor</span>
+<span class="n">print_level_base</span><span class="o">=</span><span class="mi">2</span>
+
+<div class="viewcode-block" id="CellCapacityProcessor">
+<a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor">[docs]</a>
+<span class="k">class</span> <span class="nc">CellCapacityProcessor</span><span class="p">(</span><span class="n">LandContainer</span><span class="p">,</span>
+                            <span class="n">ERA5Cutout</span><span class="p">,</span>
+                            <span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="c1"># Call the parent class __post_init__ to initialize inherited attributes</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__post_init__</span><span class="p">()</span>
+    
+        <span class="c1"># This dictionary will be used to pass arguments to external classes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_args</span> <span class="o">=</span> <span class="p">{</span> <span class="c1">#order doesn&#39;t matter</span>
+                <span class="s2">&quot;config_file_path&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_file_path</span><span class="p">,</span>
+                <span class="s2">&quot;region_short_code&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="p">,</span>
+                <span class="s2">&quot;resource_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span>
+            <span class="p">}</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_disaggregation_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_resource_disaggregation_config</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_landuse_intensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_disaggregation_config</span><span class="p">[</span><span class="s1">&#39;landuse_intensity&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atb</span><span class="o">=</span><span class="n">NREL_ATBProcessor</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">required_args</span><span class="p">)</span>
+        
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">utility_pv_cost</span><span class="p">,</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">land_based_wind_cost</span><span class="p">,</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">bess_cost</span><span class="p">)</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atb</span><span class="o">.</span><span class="n">pull_data</span><span class="p">()</span>
+        
+        <span class="c1">## Initiate the Store and Datahandler (interfacing with the Store)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">=</span><span class="n">DataHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">)</span>
+
+        <span class="c1">## Load geospatial data (geodataframes)</span>
+        <span class="c1"># self.gadm=GADMBoundaries(**self.required_args)</span>
+        
+        <span class="c1">### Exclusion Layer Container</span>
+        <span class="c1"># self.land_container=LandContainer(**self.required_args)</span>
+    
+        <span class="c1">### ERA5 Cutout</span>
+        <span class="c1"># self.era5_cutout=ERA5Cutout(**self.required_args)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_resolution</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutout_config</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span>
+    
+<div class="viewcode-block" id="CellCapacityProcessor.set_composite_excluder">
+<a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor.set_composite_excluder">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_composite_excluder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">LandContainer</span><span class="o">.</span><span class="n">set_excluder</span><span class="p">()</span></div>
+
+    
+    <span class="c1"># def __get_raster_path__(self, config, root, rasters_dir):</span>
+    <span class="c1">#     return os.path.join(root, rasters_dir , config[&#39;zip_extract_direct&#39;], config[&#39;raster&#39;])</span>
+    
+    <span class="k">def</span> <span class="nf">__get_unified_region_shape__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">region_shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="o">.</span><span class="n">dissolve</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gadm_config</span><span class="p">[</span><span class="s1">&#39;datafield_mapping&#39;</span><span class="p">][</span><span class="s1">&#39;NAME_1&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">])</span>
+        <span class="c1"># self.region_shape=self.store_grid_cells.dissolve(by=&#39;region&#39;).drop(columns =[&#39;Region&#39;])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_shape</span>
+    
+<div class="viewcode-block" id="CellCapacityProcessor.load_cost">
+<a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor.load_cost">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                  <span class="n">resource_atb</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+                           <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Extracting cost attributes...&quot;</span><span class="p">)</span>
+        
+        <span class="n">grid_connection_cost_per_km</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">disaggregation_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;transmission&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;grid_connection_cost_per_Km&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">tx_line_rebuild_cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">disaggregation_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;transmission&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tx_line_rebuild_cost&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">ATB</span><span class="p">:</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">dict</span><span class="p">]</span><span class="o">=</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_atb_config</span><span class="p">()</span>
+        <span class="n">source_column</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ATB</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;column&#39;</span><span class="p">,{})</span>
+        <span class="n">cost_params_mapping</span><span class="p">:</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ATB</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cost_params&#39;</span><span class="p">,{})</span>
+        
+        
+        <span class="c1"># capex,fom,vom in NREL is given in US$/kw and we need to convert it to million $/MW</span>
+        <span class="n">resource_capex</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="n">resource_atb</span><span class="p">[</span><span class="n">resource_atb</span><span class="p">[</span><span class="n">source_column</span><span class="p">]</span><span class="o">==</span><span class="n">cost_params_mapping</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;capex&#39;</span><span class="p">,{})]</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span> <span class="mf">1E3</span>  <span class="c1"># Convert to million $/MW</span>
+        <span class="n">resource_fom</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="n">resource_atb</span><span class="p">[</span><span class="n">resource_atb</span><span class="p">[</span><span class="n">source_column</span><span class="p">]</span><span class="o">==</span><span class="n">cost_params_mapping</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fom&#39;</span><span class="p">,{})]</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span><span class="mf">1E3</span>  <span class="c1"># Convert to million $/MW</span>
+        
+        <span class="c1"># Initialize resource_vom based on the availability of &#39;vom&#39; in cost_params_mapping</span>
+        <span class="n">resource_vom</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Default value if &#39;vom&#39; is not found</span>
+        
+
+        <span class="k">if</span> <span class="n">cost_params_mapping</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;vom&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Check if the DataFrame &#39;utility_scale_cost&#39; is not empty and get the value for &#39;vom&#39;</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">resource_atb</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">vom_row</span> <span class="o">=</span> <span class="n">resource_atb</span><span class="p">[</span><span class="n">resource_atb</span><span class="p">[</span><span class="n">source_column</span><span class="p">]</span> <span class="o">==</span> <span class="n">cost_params_mapping</span><span class="p">[</span><span class="s1">&#39;vom&#39;</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">vom_row</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                    <span class="n">resource_vom</span> <span class="o">=</span> <span class="n">vom_row</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1E3</span>  <span class="c1"># Convert to million $/MW</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">resource_capex</span><span class="p">,</span> <span class="c1"># in million $/MW</span>
+                <span class="n">resource_vom</span><span class="p">,</span>   <span class="c1"># in million $/MW</span>
+                <span class="n">resource_fom</span><span class="p">,</span>  <span class="c1"># in million $/MW</span>
+                <span class="n">grid_connection_cost_per_km</span><span class="p">,</span>  <span class="c1"># in million $</span>
+                <span class="n">tx_line_rebuild_cost</span><span class="p">)</span> <span class="c1"># in million $</span></div>
+
+    
+    <span class="c1"># Define a function to create bounding boxes (of cell) directly from coordinates (x, y) and resolution</span>
+    <span class="k">def</span> <span class="nf">__create_cell_geom__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="n">half_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_resolution</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="n">Polygon</span><span class="p">([</span>
+            <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">half_res</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="n">half_res</span><span class="p">),</span>  <span class="c1"># Bottom-left</span>
+            <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">half_res</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="n">half_res</span><span class="p">),</span>  <span class="c1"># Bottom-right</span>
+            <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">half_res</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">half_res</span><span class="p">),</span>  <span class="c1"># Top-right</span>
+            <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">half_res</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">half_res</span><span class="p">)</span>   <span class="c1"># Top-left</span>
+        <span class="p">])</span>
+        
+<div class="viewcode-block" id="CellCapacityProcessor.get_capacity">
+<a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor.get_capacity">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">tuple</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method processes the capacity of the resources based on the availability matrix and other parameters.</span>
+<span class="sd">        It calculates the potential capacity for each cell in the region and returns a named tuple containing the</span>
+<span class="sd">        processed data and the capacity matrix.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            namedtuple: A named tuple containing the processed `data` and the capacity `matrix`. Can be accessed as:</span>
+<span class="sd">            `&lt;self.resources_nt&gt;.data` and `&lt;self.resources_nt&gt;.matrix`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+                           <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Cell capacity processor initiated...&quot;</span><span class="p">)</span>
+        
+    <span class="c1">#a. load cutout and region boundary for which the cutout has been created.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_era5_cutout</span><span class="p">()</span>
+        
+    <span class="c1">#b. load excluder</span>
+        <span class="n">composite_excluder</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">set_excluder</span><span class="p">()</span>
+        
+        
+    <span class="c1">#d. Load costs (float)</span>
+        <span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_capex</span><span class="p">,</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_fom</span><span class="p">,</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_vom</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_connection_cost_per_km</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tx_line_rebuild_cost</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_cost</span><span class="p">(</span>
+                <span class="n">resource_atb</span><span class="o">=</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">utility_pv_cost</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span> <span class="o">==</span> <span class="s1">&#39;solar&#39;</span> <span class="k">else</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">land_based_wind_cost</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span> <span class="o">==</span> <span class="s1">&#39;wind&#39;</span> <span class="k">else</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">bess_cost</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span> <span class="o">==</span> <span class="s1">&#39;bess&#39;</span> <span class="k">else</span>
+                    <span class="kc">None</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+        
+    <span class="c1">## 2.1 Compute availability Matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">region_shape</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_unified_region_shape__</span><span class="p">()</span> <span class="c1"># we need to pass the unified region shape to the availability matrix calculation.</span>
+
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+                   <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Processing Availability Matrix... &quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Availability_matrix</span><span class="p">:</span><span class="n">xr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="o">.</span><span class="n">availabilitymatrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region_shape</span><span class="p">,</span> <span class="n">composite_excluder</span><span class="p">)</span>
+        
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| @ Line: </span><span class="si">{</span><span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_lineno</span><span class="o">-</span><span class="mi">1</span><span class="si">}</span><span class="s2"> | We need to pass the unified `region_shape` to the cutout to calculate availability for the entire region as in one of the dimensions e.g. here &#39;Province&#39;. If we pass multipolygons/geoms of each Regional district (sub-provincial) we will get availability for each regional district as a dimension; which adds additional step to produce our intended data. For this analysis, one unified shape for entire region is sufficient&quot;</span><span class="p">)</span>
+        
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
+                   <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| ✓ Availability Matrix processed for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2">. &quot;</span><span class="p">)</span>
+        
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+                           <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Creating visuals for land-availability&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_ERAF5_grid_land_availability</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_excluder_land_availability</span><span class="p">()</span>
+        
+        <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="mi">3035</span><span class="p">)</span><span class="o">.</span><span class="n">area</span> <span class="o">/</span> <span class="mf">1e6</span> <span class="c1"># This crs is fit for area calculation</span>
+        <span class="n">area</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;spatial&quot;</span><span class="p">))</span>
+        
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+               <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Calculating capacity matrix, using land-use intensity for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s2"> resources: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_landuse_intensity</span><span class="si">}</span><span class="s2"> MW/km²&quot;</span><span class="p">)</span>
+        <span class="n">capacity_matrix</span><span class="p">:</span><span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Availability_matrix</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">spatial</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="n">area</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_landuse_intensity</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">capacity_matrix</span><span class="o">=</span><span class="n">capacity_matrix</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
+                   <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| ✓ Capacity Matrix processed for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2">. &quot;</span><span class="p">)</span>
+        
+    <span class="c1">## 2.1 convert the Availability Matrix to dataframe.</span>
+        <span class="c1"># _provincial_cell_capacity_df:pd.DataFrame=self.capacity_matrix.to_dataframe()</span>
+        <span class="n">_df_flat</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity_matrix</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span>
+        <span class="n">_df_flat</span> <span class="o">=</span> <span class="n">_df_flat</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span>
+        <span class="n">_df_flat</span> <span class="o">=</span> <span class="n">_df_flat</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="c1"># _df_flat = _df_flat.drop(columns=&#39;dim_0&#39;)  # optional</span>
+        <span class="n">_df_flat</span> <span class="o">=</span> <span class="n">_df_flat</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">keep</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span>
+        <span class="c1"># filter the cells that has no lands (i.e. no potential capacity)</span>
+        <span class="c1"># _provincial_cell_capacity_df = _provincial_cell_capacity[_provincial_cell_capacity[&quot;potential_capacity&quot;] != 0]</span>
+
+        <span class="c1"># The xarray doesn&#39;t create cell geometries by default. We hav to create it.</span>
+        <span class="c1"># Apply the bounding box (cell) creation to the DataFrame&#39;s x,y coordinates (centroid of the cells)</span>
+        <span class="n">_provincial_cell_capacity_gdf</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
+            <span class="n">_df_flat</span><span class="p">,</span>
+            <span class="n">geometry</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__create_cell_geom__</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">_df_flat</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">_df_flat</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])],</span>
+            <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_default_crs</span><span class="p">()</span>
+        <span class="p">)</span>
+        
+    <span class="c1">## 3 Assign Static exogenous Costs after potential capacity calculation</span>
+        <span class="n">parameters_to_add</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;capex&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_capex</span><span class="p">,</span> <span class="c1"># m$/MW</span>
+            <span class="s1">&#39;fom&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_fom</span><span class="p">,</span> <span class="c1"># m$/MW</span>
+            <span class="s1">&#39;vom&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_vom</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="c1"># m$/MW</span>
+            <span class="s1">&#39;grid_connection_cost_per_km&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_connection_cost_per_km</span><span class="p">,</span> <span class="c1"># m$/km</span>
+            <span class="s1">&#39;tx_line_rebuild_cost&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx_line_rebuild_cost</span><span class="p">,</span>  <span class="c1"># m$/km</span>
+            <span class="s1">&#39;Operational_life&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span> <span class="o">==</span> <span class="s1">&#39;solar&#39;</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span> <span class="o">==</span> <span class="s1">&#39;wind&#39;</span> <span class="k">else</span> <span class="mi">0</span>   <span class="c1"># years</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Create a new dictionary with stylized keys</span>
+        <span class="n">stylized_columns</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">parameters_to_add</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+        <span class="c1"># Assign the new stylized columns to the DataFrame</span>
+        <span class="n">_provincial_cell_capacity_gdf</span> <span class="o">=</span> <span class="n">_provincial_cell_capacity_gdf</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="o">**</span><span class="n">stylized_columns</span><span class="p">)</span>
+
+    <span class="c1">## 4 Trim the cells to sub-provincial boundaries instead of overlapping cell (boxes) in the regional boundaries.</span>
+        <span class="n">_provincial_cell_capacity_gdf</span><span class="o">=</span><span class="n">_provincial_cell_capacity_gdf</span><span class="o">.</span><span class="n">overlay</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">provincial_cells</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">assign_cell_id</span><span class="p">(</span><span class="n">_provincial_cell_capacity_gdf</span><span class="p">)</span>
+
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; </span>
+<span class="sd">        &gt;&gt;&gt; here, self.provincial_cells = our default  grid cells</span>
+<span class="sd">        ## Future Scope, while we will have user defined grid cells </span>
+<span class="sd">        </span>
+<span class="sd">        # self.store_grid_cells=self.datahandler.from_store(&#39;cells&#39;)</span>
+<span class="sd">        # Add new columns to the existing DataFrame</span>
+<span class="sd">        # for column in self._updated_provincial_cells_.columns:</span>
+<span class="sd">        #     self.store_grid_cells[column] = self._updated_provincial_cells_[column]</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="c1"># era5_cell_capacity=utils.assign_cell_id(_provincial_cell_capacity_gdf,&#39;Region&#39;,self.site_index)</span>
+        <span class="c1"># era5_cell_capacity=_provincial_cell_capacity_gdf</span>
+        
+        <span class="c1"># Define a namedtuple</span>
+        <span class="n">capacity_data</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;capacity_data&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="s1">&#39;matrix&#39;</span><span class="p">])</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources_nt</span><span class="o">=</span><span class="n">capacity_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">provincial_cells</span><span class="p">,</span><span class="n">capacity_matrix</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
+                   <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| ✓ Capacity dataframe cleaned and processed&quot;</span><span class="p">)</span>
+        
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+                   <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| ERA5 cells&#39; capacity loaded for : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">provincial_cells</span><span class="p">)</span><span class="si">}</span><span class="s2"> Cells [each with .025 deg. (~30km) resolution ]&quot;</span><span class="p">)</span>
+       
+        <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">provincial_cells</span><span class="p">,</span><span class="s1">&#39;cells&#39;</span><span class="p">)</span>
+     
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources_nt</span></div>
+
+
+<span class="c1">## Visuals</span>
+<div class="viewcode-block" id="CellCapacityProcessor.show_capacity_map">
+<a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor.show_capacity_map">[docs]</a>
+    <span class="k">def</span> <span class="nf">show_capacity_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="n">gdf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">resources_nt</span><span class="o">.</span><span class="n">data</span>
+        
+        <span class="n">m</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">explore</span><span class="p">(</span>
+                    <span class="n">column</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>  <span class="c1"># Use potential_capacity for marker size</span>
+                    <span class="n">markersize</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>  <span class="c1"># Adjust marker size based on capacity</span>
+                    <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">tiles</span><span class="o">=</span><span class="s1">&#39;CartoDB dark_matter&#39;</span><span class="p">,</span>
+                    <span class="n">marker_type</span><span class="o">=</span><span class="s1">&#39;circle&#39;</span><span class="p">,</span>
+                    <span class="n">icon</span><span class="o">=</span><span class="s1">&#39;power&#39;</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">m</span></div>
+
+    
+<div class="viewcode-block" id="CellCapacityProcessor.plot_ERAF5_grid_land_availability">
+<a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor.plot_ERAF5_grid_land_availability">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_ERAF5_grid_land_availability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                          <span class="n">legend_box_x_y</span><span class="p">:</span><span class="nb">tuple</span><span class="o">=</span><span class="p">(</span><span class="mf">1.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+<span class="w">        </span>
+<span class="w">        </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            import matplotlib.pyplot as plt</span>
+
+<span class="sd">            fig, ax = plt.subplots()</span>
+<span class="sd">            RES_module.cell_processor.Availability_matrix.sel(Province=&#39;British Columbia&#39;).plot(ax=ax, cmap=&#39;Greens&#39;)</span>
+<span class="sd">            RES_module.cell_processor.boundary_region.plot(ax=ax, facecolor=&#39;none&#39;, edgecolor=&#39;black&#39;,linewidth=0.2)</span>
+<span class="sd">            plt.show()</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">region_boundary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span>
+        
+        <span class="c1"># Load availability data</span>
+        <span class="n">_AM_</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Availability_matrix</span>
+        <span class="n">A_df</span><span class="o">=</span><span class="n">_AM_</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;availability&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        
+        <span class="c1"># Define bins and labels</span>
+        <span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">/</span> <span class="mi">100</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">]]</span>  <span class="c1"># Define bin edges</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;0-10%&quot;</span><span class="p">,</span> <span class="s2">&quot;10-30%&quot;</span><span class="p">,</span> <span class="s2">&quot;30-60%&quot;</span><span class="p">,</span> <span class="s2">&quot;60-90%&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;90%&quot;</span><span class="p">]</span>
+        
+        
+        <span class="c1"># Categorize availability into bins</span>
+        <span class="n">A_df</span><span class="p">[</span><span class="s2">&quot;availability_category&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">A_df</span><span class="p">[</span><span class="s2">&quot;availability&quot;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">include_lowest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="c1"># Convert to GeoDataFrame</span>
+        <span class="n">A_gdf</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
+                    <span class="n">A_df</span><span class="p">,</span>
+                    <span class="n">geometry</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__create_cell_geom__</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">A_df</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">A_df</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])],</span>
+                    <span class="n">crs</span><span class="o">=</span><span class="s1">&#39;EPSG:4326&#39;</span>
+                <span class="p">)</span>
+                
+        <span class="n">A_gdf</span><span class="o">=</span><span class="n">A_gdf</span><span class="o">.</span><span class="n">overlay</span><span class="p">(</span><span class="n">region_boundary</span><span class="p">)</span>
+
+        <span class="c1"># Categorize availability into bins</span>
+        <span class="n">A_gdf</span><span class="p">[</span><span class="s2">&quot;availability_category&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">A_gdf</span><span class="p">[</span><span class="s2">&quot;availability&quot;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">include_lowest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Create figure and axes for side-by-side plotting</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span><span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Set axis off for both subplots</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+
+        <span class="c1"># Shadow effect offset</span>
+        <span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.004</span>
+
+        <span class="c1"># Plot solar map on ax1</span>
+        <span class="c1"># Add shadow effect for solar map</span>
+        <span class="n">region_boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">region_boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">)</span>
+        <span class="n">region_boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>  <span class="c1"># Shadow layer</span>
+
+        <span class="c1"># Plot solar cells</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;AB&#39;</span><span class="p">,</span> <span class="s1">&#39;SK&#39;</span><span class="p">]:</span>
+            <span class="n">bbox_anchor_offset</span><span class="o">=</span><span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># AB and SK has skewed map, custom tweak for CANADA</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">bbox_anchor_offset</span><span class="o">=</span><span class="n">legend_box_x_y</span>
+        <span class="n">A_gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;availability_category&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                <span class="n">legend_kwds</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s2">&quot;Land Availability&quot;</span><span class="p">,</span> <span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="n">bbox_anchor_offset</span><span class="p">,</span><span class="s1">&#39;borderpad&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span><span class="s1">&#39;frameon&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+
+        <span class="c1"># Plot actual boundary for solar map</span>
+        <span class="n">region_boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">right</span><span class="o">=</span><span class="mf">0.85</span><span class="p">)</span>  <span class="c1"># Increase space on the right</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Land Availability in ERA5 Grid Cells (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+        <span class="c1"># Adjust layout for cleaner appearance</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;vis/misc/land_availability_ERA5grid_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">|Land availability (grid cells) map saved at vis/misc/land_availability_ERA5grid_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fig</span></div>
+
+        <span class="c1"># plt.close(fig)  # Close the figure to free up memory</span>
+
+<div class="viewcode-block" id="CellCapacityProcessor.plot_excluder_land_availability">
+<a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor.plot_excluder_land_availability">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_excluder_land_availability</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            fig, ax = plt.subplots()</span>
+<span class="sd">            RES_module.cell_processor.excluder.plot_shape_availability(RES_module.cell_processor.region_shape, ax=ax)</span>
+<span class="sd">            RES_module.cell_processor.cutout.grid.to_crs(RES_module.cell_processor.excluder.crs).plot(edgecolor=&quot;grey&quot;, color=&quot;None&quot;, ax=ax, ls=&quot;:&quot;,linewidth=0.1)</span>
+<span class="sd">            ax.axis(&quot;off&quot;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">excluder</span><span class="o">.</span><span class="n">plot_shape_availability</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region_shape</span><span class="p">,</span>
+                                              <span class="n">plot_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;facecolor&#39;</span><span class="p">:</span><span class="s1">&#39;none&#39;</span><span class="p">,</span><span class="s1">&#39;edgecolor&#39;</span><span class="p">:</span><span class="s1">&#39;black&#39;</span><span class="p">},</span>
+                                              <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;vis/misc/land_availability_excluderResolution_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">|Land availability map (excluder resolution) saved at vis/misc/land_availability_excluderResolution_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fig</span></div>
+</div>
+
+        <span class="c1"># plt.close(fig)  # Close the figure to free up memory</span>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

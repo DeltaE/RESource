@@ -1,0 +1,1901 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Example Visuals for BC &#8212; RESource 2025.07 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=e9b82cb4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/Visuals_BC';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Explore data store" href="Store_explorer.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/RESource_logo_2025.07.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../_static/RESource_logo_2025.07.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/developers.html">Contributing Developers</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Store_explorer.html">Explore data store</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Example Visuals for BC</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/Visuals_BC.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Example Visuals for BC</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Example Visuals for BC</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Load-dataframes-from-Store">Load dataframes from Store</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Create-Visuals">Create Visuals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Grid">Grid</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lines">lines</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Substations">Substations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Resources">Resources</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Capacity-Factor-Map">Capacity Factor Map</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Capacity">Capacity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Score">Score</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#Capacity-Plot-(bins)">Capacity Plot (bins)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#CF-checks">CF checks</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Wind">Wind</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#CLusters">CLusters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#Static-Plots">Static Plots</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#Static-Data-Visuals-in-Interactive-Maps">Static Data Visuals in Interactive Maps</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#Timeseries-Plots">Timeseries Plots</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="Example-Visuals-for-BC">
+<h1>Example Visuals for BC<a class="headerlink" href="#Example-Visuals-for-BC" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p>load packages</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">RES.hdf5_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
+<span class="kn">import</span> <span class="nn">RES.visuals</span> <span class="k">as</span> <span class="nn">vis</span>
+<span class="kn">import</span> <span class="nn">RES.utility</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="c1"># Suppress specific warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">font_family</span><span class="o">=</span><span class="s1">&#39;sans-serif&#39;</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p>Load Config</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">colorama</span> <span class="kn">import</span> <span class="n">Fore</span><span class="p">,</span> <span class="n">Style</span>
+
+<span class="n">cfg</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="s1">&#39;../config/config_CAN.yaml&#39;</span><span class="p">)</span>
+<span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Supported Regions for </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;country&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Fore</span><span class="o">.</span><span class="n">YELLOW</span> <span class="o">+</span> <span class="s2">&quot;&gt;&gt; RegionCode: name &lt;&lt;&quot;</span> <span class="o">+</span> <span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">keys</span> <span class="ow">in</span> <span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;region_mapping&#39;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">keys</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;region_mapping&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-green-intense-fg ansi-bold">****************************</span>
+<span class="ansi-green-intense-fg ansi-bold">Supported Regions for Canada</span>
+<span class="ansi-green-intense-fg ansi-bold">****************************</span>
+<span class="ansi-yellow-fg">&gt;&gt; RegionCode: name &lt;&lt;</span>
+
+AB: Alberta
+BC: British Columbia
+MB: Manitoba
+NB: New Brunswick
+NL: Newfoundland and Labrador
+NS: Nova Scotia
+ON: Ontario
+PE: Prince Edward Island
+QC: Québec
+SK: Saskatchewan
+</pre></div></div>
+</div>
+<ul class="simple">
+<li><p>Set Region</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The tool is designed to work for WB6 regions</span>
+<span class="n">region_code</span><span class="o">=</span><span class="s1">&#39;BC&#39;</span>
+<span class="n">region_name</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;region_mapping&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">region_code</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span> <span class="c1"># type: ignore</span>
+<span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Selected Region: </span><span class="si">{</span><span class="n">region_name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-green-intense-fg ansi-bold">**************************************</span>
+<span class="ansi-green-intense-fg ansi-bold">Selected Region: British Columbia (BC)</span>
+<span class="ansi-green-intense-fg ansi-bold">**************************************</span>
+</pre></div></div>
+</div>
+<ul class="simple">
+<li><p>Load store (hdf5 file)</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><span></span><span class="n">store</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;./data/store/resources_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">.h5&quot;</span>
+<span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Store loaded for </span><span class="si">{</span><span class="n">region_name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+<span class="n">res_data</span><span class="o">=</span><span class="n">DataHandler</span><span class="p">(</span><span class="n">store</span><span class="p">)</span> <span class="c1"># the DataHandler object could be initiated without the store definition as well.</span>
+<span class="n">res_data</span><span class="o">.</span><span class="n">show_tree</span><span class="p">(</span><span class="n">store</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-green-intense-fg ansi-bold">**************************************</span>
+<span class="ansi-green-intense-fg ansi-bold">Store loaded for British Columbia (BC)</span>
+<span class="ansi-green-intense-fg ansi-bold">**************************************</span>
+<span class="ansi-magenta-intense-fg"> ─&gt; RES.hdf5_handler|  ❌ Error reading file: [Errno 2] Unable to synchronously open file (unable to open file: name = &#39;./data/store/resources_BC.h5&#39;, errno = 2, error message = &#39;No such file or directory&#39;, flags = 0, o_flags = 0)</span>
+</pre></div></div>
+</div>
+<section id="Load-dataframes-from-Store">
+<h2>Load dataframes from Store<a class="headerlink" href="#Load-dataframes-from-Store" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loading dataframes</span>
+<span class="n">cells</span><span class="o">=</span><span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;cells&#39;</span><span class="p">)</span>
+<span class="n">boundary</span><span class="o">=</span><span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;boundary&#39;</span><span class="p">)</span>
+<span class="n">lines</span><span class="o">=</span><span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;lines&#39;</span><span class="p">)</span>
+<span class="n">ss</span><span class="o">=</span><span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;substations&#39;</span><span class="p">)</span>
+<span class="n">timeseries_clusters_solar</span><span class="o">=</span><span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;timeseries/clusters/solar&#39;</span><span class="p">)</span>
+<span class="n">timeseries_clusters_wind</span><span class="o">=</span><span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;timeseries/clusters/wind&#39;</span><span class="p">)</span>
+<span class="n">clusters_solar</span><span class="o">=</span><span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;clusters/solar&#39;</span><span class="p">)</span>
+<span class="n">clusters_wind</span><span class="o">=</span><span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;clusters/wind&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Create-Visuals">
+<h2>Create Visuals<a class="headerlink" href="#Create-Visuals" title="Link to this heading">#</a></h2>
+</section>
+<section id="Grid">
+<h2>Grid<a class="headerlink" href="#Grid" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for columns in lines.columns:</span>
+<span class="c1">#     print(f&quot;{columns}&quot;)</span>
+</pre></div>
+</div>
+</div>
+<section id="lines">
+<h3>lines<a class="headerlink" href="#lines" title="Link to this heading">#</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vis</span><span class="o">.</span><span class="n">plot_grid_lines</span><span class="p">(</span>
+    <span class="n">region_code</span><span class="o">=</span><span class="n">region_code</span><span class="p">,</span>
+    <span class="n">region_name</span><span class="o">=</span><span class="n">region_name</span><span class="p">,</span>
+    <span class="n">lines</span><span class="o">=</span><span class="n">lines</span><span class="p">,</span>
+    <span class="n">boundary</span><span class="o">=</span><span class="n">boundary</span><span class="p">,</span>
+    <span class="n">save_to</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;vis/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">font_family</span><span class="o">=</span><span class="n">font_family</span><span class="p">,</span>
+    <span class="n">show</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-fg"> └&gt; Transmission Lines for British Columbia saved to vis/BC/transmission_lines_BC.png</span>
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Visuals_BC_16_1.png" src="../_images/notebooks_Visuals_BC_16_1.png" />
+</div>
+</div>
+</section>
+<section id="Substations">
+<h3>Substations<a class="headerlink" href="#Substations" title="Link to this heading">#</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;code&gt;</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Resources">
+<h2>Resources<a class="headerlink" href="#Resources" title="Link to this heading">#</a></h2>
+<section id="Capacity-Factor-Map">
+<h3>Capacity Factor Map<a class="headerlink" href="#Capacity-Factor-Map" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Individual Maps</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vis</span><span class="o">.</span><span class="n">get_data_in_map_plot</span><span class="p">(</span><span class="n">cells</span><span class="o">=</span><span class="n">cells</span><span class="p">,</span>
+                <span class="n">resource_type</span><span class="o">=</span><span class="s1">&#39;solar&#39;</span><span class="p">,</span>
+                <span class="n">datafield</span><span class="o">=</span><span class="s1">&#39;CF&#39;</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Solar Resources for </span><span class="si">{</span><span class="n">region_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="c1"># ax=ax1,</span>
+                <span class="n">font_family</span><span class="o">=</span><span class="n">font_family</span><span class="p">,</span>
+                <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;Axes: title={&#39;center&#39;: &#39;Solar Resources for British Columbia&#39;}&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Visuals_BC_22_2.png" src="../_images/notebooks_Visuals_BC_22_2.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># vis.get_data_in_map_plot(cells,</span>
+<span class="c1">#                 resource_type=&#39;wind&#39;,</span>
+<span class="c1">#                   datafield=&#39;CF&#39;,</span>
+<span class="c1">#                 title=f&quot;Wind Resources for {region_name}&quot;,</span>
+<span class="c1">#                 # ax=ax1,</span>
+<span class="c1">#                 show=False)</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p>Combined Map</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Resources for </span><span class="si">{</span><span class="n">region_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="n">vis</span><span class="o">.</span><span class="n">get_data_in_map_plot</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span>
+                <span class="n">resource_type</span><span class="o">=</span><span class="s1">&#39;solar&#39;</span><span class="p">,</span>
+                <span class="n">datafield</span><span class="o">=</span><span class="s1">&#39;CF&#39;</span><span class="p">,</span>
+                <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span>
+                <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">vis</span><span class="o">.</span><span class="n">get_data_in_map_plot</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span>
+                <span class="n">resource_type</span><span class="o">=</span><span class="s1">&#39;wind&#39;</span><span class="p">,</span>
+                <span class="n">datafield</span><span class="o">=</span><span class="s1">&#39;CF&#39;</span><span class="p">,</span>
+                <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
+                <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;vis/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">/Resources_combined_CF.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Visuals_BC_25_1.png" src="../_images/notebooks_Visuals_BC_25_1.png" />
+</div>
+</div>
+</section>
+<section id="Capacity">
+<h3>Capacity<a class="headerlink" href="#Capacity" title="Link to this heading">#</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># vis.get_data_in_map_plot(cells,</span>
+<span class="c1">#                 resource_type=&#39;solar&#39;,</span>
+<span class="c1">#                 datafield=&#39;capacity&#39;,</span>
+<span class="c1">#                 # ax=ax1,</span>
+<span class="c1">#                 show=False)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Resources for </span><span class="si">{</span><span class="n">region_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="n">vis</span><span class="o">.</span><span class="n">get_data_in_map_plot</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span>
+                <span class="n">resource_type</span><span class="o">=</span><span class="s1">&#39;solar&#39;</span><span class="p">,</span>
+                <span class="n">datafield</span><span class="o">=</span><span class="s1">&#39;capacity&#39;</span><span class="p">,</span>
+                <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span>
+                <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">vis</span><span class="o">.</span><span class="n">get_data_in_map_plot</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span>
+                <span class="n">resource_type</span><span class="o">=</span><span class="s1">&#39;wind&#39;</span><span class="p">,</span>
+                <span class="n">datafield</span><span class="o">=</span><span class="s1">&#39;capacity&#39;</span><span class="p">,</span>
+                <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
+                <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;vis/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">/Resources_combined_CAPACITY.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Visuals_BC_28_1.png" src="../_images/notebooks_Visuals_BC_28_1.png" />
+</div>
+</div>
+</section>
+<section id="Score">
+<h3>Score<a class="headerlink" href="#Score" title="Link to this heading">#</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># vis.get_data_in_map_plot(cells,</span>
+<span class="c1">#                 resource_type=&#39;solar&#39;,</span>
+<span class="c1">#                 datafield=&#39;score&#39;,</span>
+<span class="c1">#                 # ax=ax1,</span>
+<span class="c1">#                 show=False)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Resources for </span><span class="si">{</span><span class="n">region_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="n">vis</span><span class="o">.</span><span class="n">get_data_in_map_plot</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span>
+                <span class="n">resource_type</span><span class="o">=</span><span class="s1">&#39;solar&#39;</span><span class="p">,</span>
+                <span class="n">datafield</span><span class="o">=</span><span class="s1">&#39;score&#39;</span><span class="p">,</span>
+                <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span>
+                <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">vis</span><span class="o">.</span><span class="n">get_data_in_map_plot</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span>
+                <span class="n">resource_type</span><span class="o">=</span><span class="s1">&#39;wind&#39;</span><span class="p">,</span>
+                <span class="n">datafield</span><span class="o">=</span><span class="s1">&#39;score&#39;</span><span class="p">,</span>
+                <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
+                <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+    <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="s2">&quot;Note: The Scoring is calculated to reflect Dollar investment required to get a unit of Energy yield (MWh).To reflect market competitiveness and incentives, the Score ($/MWh) needs financial adjustment factors to be considered on top of it. Score higher than 200 $/MWh are assumed to be not feasible and not shown in this map.&quot;</span><span class="p">,</span>
+    <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span><span class="n">wrap</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;vis/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">/Resources_combined_SCORE.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Visuals_BC_31_1.png" src="../_images/notebooks_Visuals_BC_31_1.png" />
+</div>
+</div>
+<section id="Capacity-Plot-(bins)">
+<h4>Capacity Plot (bins)<a class="headerlink" href="#Capacity-Plot-(bins)" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Not required for now</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import matplotlib.pyplot as plt</span>
+<span class="c1"># import pandas as pd</span>
+
+<span class="c1"># legend_x_ax_offset=1.1</span>
+
+<span class="c1"># # Ensure &#39;Region&#39; is in the columns for both boundary and cells</span>
+<span class="c1"># # if boundary is not None and (&#39;Region&#39; not in boundary.columns or &#39;Country&#39; not in boundary.columns):</span>
+<span class="c1"># #     boundary = boundary.reset_index()</span>
+
+<span class="c1"># # Assign a number to each region</span>
+<span class="c1"># # boundary[&#39;Region_Number&#39;] = range(1, len(boundary) + 1)</span>
+
+<span class="c1"># # Define custom bins and labels for solar and wind capacity</span>
+<span class="c1"># solar_bins = [0, 100, 200, 300, 500, float(&#39;inf&#39;)]  # Custom ranges</span>
+<span class="c1"># solar_labels = [&#39;&lt;100&#39;,&#39;100-200&#39;, &#39;200-300&#39;, &#39;300-500&#39;,&#39;&gt;500&#39;]  # Labels for legend</span>
+
+<span class="c1"># # Define custom bins and labels for solar and wind capacity</span>
+<span class="c1"># wind_bins = [0, 300, 500, 1000, 2000,3000, float(&#39;inf&#39;)]  # Custom ranges</span>
+<span class="c1"># wind_labels = [&#39;&lt;300&#39;,&#39;300-500&#39;, &#39;500-1000&#39;, &#39;1000-2000&#39;,&#39;2000-3000&#39;, &#39;&gt;3000&#39;]  # Labels for legend</span>
+
+<span class="c1"># # Categorize potential_capacity_solar and potential_capacity_wind into bins</span>
+<span class="c1"># clusters_solar[&#39;solar_category&#39;] = pd.cut(clusters_solar[&#39;potential_capacity&#39;], bins=solar_bins, labels=solar_labels, include_lowest=True)</span>
+<span class="c1"># clusters_wind[&#39;wind_category&#39;] = pd.cut(clusters_wind[&#39;potential_capacity&#39;], bins=wind_bins, labels=wind_labels, include_lowest=True)</span>
+
+<span class="c1"># # Create figure and axes for side-by-side plotting</span>
+<span class="c1"># fig, (ax1, ax2) = plt.subplots(figsize=(18, 8), ncols=2)</span>
+<span class="c1"># fig.suptitle(&quot;Potential Sites for Targeted Capacity Investments&quot;, fontsize=16,weight=&#39;bold&#39;)</span>
+<span class="c1"># # Set axis off for both subplots</span>
+<span class="c1"># ax1.set_axis_off()</span>
+<span class="c1"># ax2.set_axis_off()</span>
+
+<span class="c1"># # Shadow effect offset</span>
+<span class="c1"># shadow_offset = 0.01</span>
+
+<span class="c1"># # Plot solar map on ax1</span>
+<span class="c1"># # Add shadow effect for solar map</span>
+<span class="c1"># boundary.geometry = boundary.geometry.translate(xoff=shadow_offset, yoff=-shadow_offset)</span>
+<span class="c1"># boundary.plot(ax=ax1, color=&#39;None&#39;, edgecolor=&#39;grey&#39;, linewidth=1, alpha=0.7)  # Shadow layer</span>
+<span class="c1"># boundary.geometry = boundary.geometry.translate(xoff=-shadow_offset, yoff=shadow_offset)</span>
+
+<span class="c1"># # Plot solar cells</span>
+<span class="c1"># clusters_solar.plot(column=&#39;solar_category&#39;, ax=ax1, cmap=&#39;Wistia&#39;, legend=True,</span>
+<span class="c1">#            legend_kwds={&#39;title&#39;: &quot;Solar Capacity (MW)&quot;, &#39;loc&#39;: &#39;upper right&#39;,&#39;fontsize&#39;:12,&#39;bbox_to_anchor&#39;:(legend_x_ax_offset,1), &#39;frameon&#39;: False})</span>
+
+<span class="c1"># # Plot actual boundary for solar map</span>
+<span class="c1"># # boundary.plot(ax=ax1, facecolor=&#39;none&#39;, edgecolor=&#39;black&#39;, linewidth=0.2, alpha=0.7)</span>
+<span class="c1"># &quot;&quot;&quot;</span>
+<span class="c1"># # Annotate region numbers for solar map</span>
+<span class="c1"># for idx, row in boundary.iterrows():</span>
+<span class="c1">#     centroid = row.geometry.centroid</span>
+<span class="c1">#     ax1.annotate(f&quot;{row[&#39;Region_Number&#39;]}&quot;,</span>
+<span class="c1">#                  xy=(centroid.x, centroid.y),</span>
+<span class="c1">#                  ha=&#39;center&#39;, va=&#39;center&#39;,</span>
+<span class="c1">#                  fontsize=7, color=&#39;black&#39;,</span>
+<span class="c1">#                  bbox=dict(facecolor=&#39;white&#39;, edgecolor=&#39;none&#39;, alpha=0.7, boxstyle=&#39;round,pad=0.2&#39;))</span>
+<span class="c1"># &quot;&quot;&quot;</span>
+<span class="c1"># # Plot wind map on ax2</span>
+<span class="c1"># # Add shadow effect for wind map</span>
+<span class="c1"># boundary.geometry = boundary.geometry.translate(xoff=shadow_offset, yoff=-shadow_offset)</span>
+<span class="c1"># boundary.plot(ax=ax2, color=&#39;None&#39;, edgecolor=&#39;grey&#39;, linewidth=1, alpha=0.7)  # Shadow layer</span>
+<span class="c1"># boundary.geometry = boundary.geometry.translate(xoff=-shadow_offset, yoff=shadow_offset)</span>
+
+<span class="c1"># # Plot wind cells</span>
+<span class="c1"># clusters_wind.plot(column=&#39;wind_category&#39;, ax=ax2, cmap=&#39;summer&#39;, legend=True,</span>
+<span class="c1">#            legend_kwds={&#39;title&#39;: &quot;Wind Capacity (MW)&quot;, &#39;fontsize&#39;:12,&#39;bbox_to_anchor&#39;:(legend_x_ax_offset,1), &#39;frameon&#39;: False})</span>
+
+<span class="c1"># # Plot actual boundary for wind map</span>
+<span class="c1"># boundary.plot(ax=ax2, facecolor=&#39;none&#39;, edgecolor=&#39;black&#39;, linewidth=0.2, alpha=0.7)</span>
+<span class="c1"># &quot;&quot;&quot;</span>
+<span class="c1"># # Annotate region numbers for wind map</span>
+<span class="c1"># for idx, row in boundary.iterrows():</span>
+<span class="c1">#     centroid = row.geometry.centroid</span>
+<span class="c1">#     ax2.annotate(f&quot;{row[&#39;Region_Number&#39;]}&quot;,</span>
+<span class="c1">#                  xy=(centroid.x, centroid.y),</span>
+<span class="c1">#                  ha=&#39;center&#39;, va=&#39;center&#39;,</span>
+<span class="c1">#                  fontsize=8, color=&#39;black&#39;,</span>
+<span class="c1">#                  bbox=dict(facecolor=&#39;white&#39;, edgecolor=&#39;none&#39;, alpha=0.7, boxstyle=&#39;round,pad=0.2&#39;))</span>
+<span class="c1"># &quot;&quot;&quot;</span>
+<span class="c1"># # Adjust layout for cleaner appearance</span>
+<span class="c1"># fig.patch.set_alpha(0)  # Make figure background transparent</span>
+<span class="c1"># plt.tight_layout()</span>
+
+
+<span class="c1"># # Add annotation for solar capacity</span>
+<span class="c1"># ax1.annotate(f&quot;Targeted Capacity: \n{int(clusters_solar.potential_capacity.sum()/1e3)} GW&quot;,</span>
+<span class="c1">#              xy=(1.2, 0.5), xycoords=&#39;axes fraction&#39;, ha=&#39;center&#39;,</span>
+<span class="c1">#              fontsize=14, color=&#39;black&#39;, fontweight=&#39;bold&#39;)</span>
+
+<span class="c1"># # Add annotation for wind capacity</span>
+<span class="c1"># ax2.annotate(f&quot;Targeted Capacity: \n{int(clusters_wind.potential_capacity.sum()/1e3)} GW&quot;,</span>
+<span class="c1">#              xy=(1.2, 0.5), xycoords=&#39;axes fraction&#39;, ha=&#39;center&#39;,</span>
+<span class="c1">#              fontsize=14, color=&#39;black&#39;, fontweight=&#39;bold&#39;)</span>
+<span class="c1"># # Show the side-by-side plot</span>
+
+<span class="c1"># plt.savefig(&#39;vis/solar_wind_capacity_map.png&#39;,dpi=300)</span>
+<span class="c1"># # Add a directional compass (north arrow) to both subplots</span>
+<span class="c1"># # Use a more standard north arrow style</span>
+<span class="c1"># vis.add_compass_to_plot(ax1)</span>
+<span class="c1"># vis.add_compass_to_plot(ax2)</span>
+<span class="c1"># plt.show()</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p>Not required for now</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import matplotlib.pyplot as plt</span>
+<span class="c1"># import pandas as pd</span>
+
+<span class="c1"># legend_x_ax_offset = 1.1</span>
+<span class="c1"># shadow_offset = 0.01</span>
+
+<span class="c1"># # Create figure and axes</span>
+<span class="c1"># fig, (ax1, ax2) = plt.subplots(figsize=(18, 8), ncols=2)</span>
+<span class="c1"># fig.suptitle(&quot;Potential Sites for Targeted Capacity Investments&quot;, fontsize=16, weight=&#39;bold&#39;)</span>
+<span class="c1"># ax1.set_axis_off()</span>
+<span class="c1"># ax2.set_axis_off()</span>
+
+<span class="c1"># # --- Solar Map ---</span>
+<span class="c1"># boundary.geometry = boundary.geometry.translate(xoff=shadow_offset, yoff=-shadow_offset)</span>
+<span class="c1"># boundary.plot(ax=ax1, color=&#39;None&#39;, edgecolor=&#39;grey&#39;, linewidth=0.2, alpha=0.7)</span>
+<span class="c1"># boundary.geometry = boundary.geometry.translate(xoff=-shadow_offset, yoff=shadow_offset)</span>
+
+<span class="c1"># clusters_solar.plot(</span>
+<span class="c1">#     column=&#39;potential_capacity&#39;,</span>
+<span class="c1">#     ax=ax1,</span>
+<span class="c1">#     cmap=&#39;Wistia&#39;,</span>
+<span class="c1">#     legend=True,</span>
+<span class="c1">#     legend_kwds={&#39;label&#39;: &quot;Solar Capacity (MW)&quot;, &#39;shrink&#39;: 0.7}  # valid kwargs for colorbar</span>
+<span class="c1"># )</span>
+
+
+<span class="c1"># # --- Wind Map ---</span>
+<span class="c1"># boundary.geometry = boundary.geometry.translate(xoff=shadow_offset, yoff=-shadow_offset)</span>
+<span class="c1"># boundary.plot(ax=ax2, color=&#39;None&#39;, edgecolor=&#39;grey&#39;, linewidth=0.2, alpha=0.7)</span>
+<span class="c1"># boundary.geometry = boundary.geometry.translate(xoff=-shadow_offset, yoff=shadow_offset)</span>
+
+<span class="c1"># clusters_wind.plot(</span>
+<span class="c1">#     column=&#39;potential_capacity&#39;,</span>
+<span class="c1">#     ax=ax2,</span>
+<span class="c1">#     cmap=&#39;summer&#39;,</span>
+<span class="c1">#     legend=True,</span>
+<span class="c1">#     legend_kwds={&#39;label&#39;: &quot;Wind Capacity (MW)&quot;, &#39;shrink&#39;: 0.7}</span>
+<span class="c1"># )</span>
+
+
+<span class="c1"># boundary.plot(ax=ax2, facecolor=&#39;none&#39;, edgecolor=&#39;black&#39;, linewidth=0.2, alpha=0.7)</span>
+
+<span class="c1"># # Add capacity annotations</span>
+<span class="c1"># ax1.annotate(f&quot;Targeted Capacity: \n{int(clusters_solar.potential_capacity.sum()/1e3)} GW&quot;,</span>
+<span class="c1">#              xy=(1.2, 0.5), xycoords=&#39;axes fraction&#39;, ha=&#39;center&#39;,</span>
+<span class="c1">#              fontsize=14, color=&#39;black&#39;, fontweight=&#39;bold&#39;)</span>
+
+<span class="c1"># ax2.annotate(f&quot;Targeted Capacity: \n{int(clusters_wind.potential_capacity.sum()/1e3)} GW&quot;,</span>
+<span class="c1">#              xy=(1.2, 0.5), xycoords=&#39;axes fraction&#39;, ha=&#39;center&#39;,</span>
+<span class="c1">#              fontsize=14, color=&#39;black&#39;, fontweight=&#39;bold&#39;)</span>
+
+<span class="c1"># fig.patch.set_alpha(0)</span>
+<span class="c1"># plt.tight_layout()</span>
+<span class="c1"># plt.savefig(&#39;vis/solar_wind_capacity_map.png&#39;, dpi=300)</span>
+
+<span class="c1"># # Add compass</span>
+<span class="c1"># vis.add_compass_to_plot(ax1)</span>
+<span class="c1"># vis.add_compass_to_plot(ax2)</span>
+
+<span class="c1"># plt.show()</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example of correct argument dictionary (if you want to use kwargs)</span>
+<span class="n">scatter_plot_args</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;solar_clusters&quot;</span><span class="p">:</span> <span class="n">clusters_solar</span><span class="p">,</span>
+    <span class="s2">&quot;wind_clusters&quot;</span><span class="p">:</span> <span class="n">clusters_wind</span><span class="p">,</span>
+    <span class="s2">&quot;bubbles_GW&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="c1"># bubble sizes in GW</span>
+    <span class="s2">&quot;bubbles_scale&quot;</span><span class="p">:</span> <span class="mf">0.025</span><span class="p">,</span> <span class="c1">#100 times smaller than the original scale</span>
+    <span class="s2">&quot;lcoe_threshold&quot;</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span> <span class="c1"># LCOE threshold in $/MWh</span>
+    <span class="s2">&quot;font_family&quot;</span><span class="p">:</span><span class="n">font_family</span><span class="p">,</span>
+    <span class="s2">&quot;save_to_root&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;vis/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># Call the function using the argument dictionary</span>
+<span class="n">vis</span><span class="o">.</span><span class="n">plot_resources_scatter_metric_combined</span><span class="p">(</span><span class="o">**</span><span class="n">scatter_plot_args</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-yellow-fg">└&gt; Combined CF vs LCOE plot created and saved to: vis/BC/Resources_CF_vs_LCOE_combined.png</span>
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Visuals_BC_37_1.png" src="../_images/notebooks_Visuals_BC_37_1.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="CF-checks">
+<h2>CF checks<a class="headerlink" href="#CF-checks" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gwa_country_code</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;region_mapping&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">region_code</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;GWA_country_code&#39;</span><span class="p">)</span>
+<span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;GWA Country Code Selected: </span><span class="si">{</span><span class="n">gwa_country_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-green-intense-fg ansi-bold">******************************</span>
+<span class="ansi-green-intense-fg ansi-bold">GWA Country Code Selected: CAN</span>
+<span class="ansi-green-intense-fg ansi-bold">******************************</span>
+</pre></div></div>
+</div>
+<section id="Wind">
+<h3>Wind<a class="headerlink" href="#Wind" title="Link to this heading">#</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get total bounds from boundary GeoDataFrame</span>
+<span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">total_bounds</span>
+
+<span class="c1"># Create bounding_box_dict with correct keys for downstream use</span>
+<span class="n">bounding_box_dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;minx&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">minx</span><span class="p">),</span>
+    <span class="s2">&quot;miny&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">miny</span><span class="p">),</span>
+    <span class="s2">&quot;maxx&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">maxx</span><span class="p">),</span>
+    <span class="s2">&quot;maxy&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">maxy</span><span class="p">)</span>
+<span class="p">}</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">rioxarray</span> <span class="k">as</span> <span class="nn">rxr</span>
+
+<span class="n">raster_path</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;./data/downloaded_data/GWA/</span><span class="si">{</span><span class="n">gwa_country_code</span><span class="si">}</span><span class="s1">_capacity-factor_IEC3.tif&#39;</span>
+<span class="n">gwa_raster_data</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">rxr</span><span class="o">.</span><span class="n">open_rasterio</span><span class="p">(</span><span class="n">raster_path</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">clip_box</span><span class="p">(</span><span class="o">**</span><span class="n">bounding_box_dict</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;CF_IEC3&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">drop_vars</span><span class="p">([</span><span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="s1">&#39;spatial_ref&#39;</span><span class="p">])</span>
+        <span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">band</span><span class="o">=</span><span class="mi">1</span> <span class="k">if</span> <span class="s1">&#39;*Class*&#39;</span> <span class="ow">in</span> <span class="s1">&#39;CF_IEC3&#39;</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># &#39;IEC_Class_ExLoads&#39; data is in band 1</span>
+    <span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">gwa_raster_data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;BuPu&#39;</span><span class="p">,</span> <span class="n">add_colorbar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;GWA CF-IEC3 Reference (High-res)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">fontfamily</span><span class="o">=</span><span class="n">font_family</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;vis/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">/GWA_CF_IEC3.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Visuals_BC_43_0.png" src="../_images/notebooks_Visuals_BC_43_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CF_IEC2&#39;</span><span class="p">,</span> <span class="s1">&#39;CF_IEC3&#39;</span><span class="p">,</span> <span class="s1">&#39;wind_CF_mean&#39;</span><span class="p">]</span>
+<span class="n">cells</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Summary Statistics for GWA CF data and calibrated Wind CF_mean&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<style type="text/css">
+</style>
+<table id="T_35983">
+  <caption>Summary Statistics for GWA CF data and calibrated Wind CF_mean</caption>
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_35983_level0_col0" class="col_heading level0 col0" >CF_IEC2</th>
+      <th id="T_35983_level0_col1" class="col_heading level0 col1" >CF_IEC3</th>
+      <th id="T_35983_level0_col2" class="col_heading level0 col2" >wind_CF_mean</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_35983_level0_row0" class="row_heading level0 row0" >count</th>
+      <td id="T_35983_row0_col0" class="data row0 col0" >2948.00</td>
+      <td id="T_35983_row0_col1" class="data row0 col1" >2948.00</td>
+      <td id="T_35983_row0_col2" class="data row0 col2" >2948.00</td>
+    </tr>
+    <tr>
+      <th id="T_35983_level0_row1" class="row_heading level0 row1" >mean</th>
+      <td id="T_35983_row1_col0" class="data row1 col0" >0.26</td>
+      <td id="T_35983_row1_col1" class="data row1 col1" >0.29</td>
+      <td id="T_35983_row1_col2" class="data row1 col2" >0.26</td>
+    </tr>
+    <tr>
+      <th id="T_35983_level0_row2" class="row_heading level0 row2" >std</th>
+      <td id="T_35983_row2_col0" class="data row2 col0" >0.09</td>
+      <td id="T_35983_row2_col1" class="data row2 col1" >0.09</td>
+      <td id="T_35983_row2_col2" class="data row2 col2" >0.12</td>
+    </tr>
+    <tr>
+      <th id="T_35983_level0_row3" class="row_heading level0 row3" >min</th>
+      <td id="T_35983_row3_col0" class="data row3 col0" >0.06</td>
+      <td id="T_35983_row3_col1" class="data row3 col1" >0.07</td>
+      <td id="T_35983_row3_col2" class="data row3 col2" >0.02</td>
+    </tr>
+    <tr>
+      <th id="T_35983_level0_row4" class="row_heading level0 row4" >25%</th>
+      <td id="T_35983_row4_col0" class="data row4 col0" >0.20</td>
+      <td id="T_35983_row4_col1" class="data row4 col1" >0.22</td>
+      <td id="T_35983_row4_col2" class="data row4 col2" >0.17</td>
+    </tr>
+    <tr>
+      <th id="T_35983_level0_row5" class="row_heading level0 row5" >50%</th>
+      <td id="T_35983_row5_col0" class="data row5 col0" >0.25</td>
+      <td id="T_35983_row5_col1" class="data row5 col1" >0.28</td>
+      <td id="T_35983_row5_col2" class="data row5 col2" >0.24</td>
+    </tr>
+    <tr>
+      <th id="T_35983_level0_row6" class="row_heading level0 row6" >75%</th>
+      <td id="T_35983_row6_col0" class="data row6 col0" >0.32</td>
+      <td id="T_35983_row6_col1" class="data row6 col1" >0.35</td>
+      <td id="T_35983_row6_col2" class="data row6 col2" >0.34</td>
+    </tr>
+    <tr>
+      <th id="T_35983_level0_row7" class="row_heading level0 row7" >max</th>
+      <td id="T_35983_row7_col0" class="data row7 col0" >0.61</td>
+      <td id="T_35983_row7_col1" class="data row7 col1" >0.63</td>
+      <td id="T_35983_row7_col2" class="data row7 col2" >0.71</td>
+    </tr>
+  </tbody>
+</table></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vis</span><span class="o">.</span><span class="n">get_CF_wind_check_plot</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span>
+                       <span class="n">gwa_raster_data</span><span class="p">,</span>
+                       <span class="n">boundary</span><span class="p">,</span>
+                       <span class="n">region_code</span><span class="p">,</span>
+                       <span class="n">region_name</span><span class="p">,</span>
+                       <span class="p">[</span><span class="s1">&#39;CF_IEC3&#39;</span><span class="p">,</span> <span class="s1">&#39;wind_CF_mean&#39;</span><span class="p">],</span>
+                       <span class="n">figure_height</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                       <span class="n">font_family</span><span class="o">=</span><span class="n">font_family</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-yellow-fg">└&gt; Wind CF comparison plot created and saved to: vis/BC/Wind_CF_comparison.png</span>
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<style type="text/css">
+</style>
+<table id="T_49014">
+  <caption>Summary Statistics for CF_IEC3 and calibrated Wind CF_mean</caption>
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_49014_level0_col0" class="col_heading level0 col0" >CF_IEC3</th>
+      <th id="T_49014_level0_col1" class="col_heading level0 col1" >wind_CF_mean</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_49014_level0_row0" class="row_heading level0 row0" >count</th>
+      <td id="T_49014_row0_col0" class="data row0 col0" >2948.00</td>
+      <td id="T_49014_row0_col1" class="data row0 col1" >2948.00</td>
+    </tr>
+    <tr>
+      <th id="T_49014_level0_row1" class="row_heading level0 row1" >mean</th>
+      <td id="T_49014_row1_col0" class="data row1 col0" >0.29</td>
+      <td id="T_49014_row1_col1" class="data row1 col1" >0.26</td>
+    </tr>
+    <tr>
+      <th id="T_49014_level0_row2" class="row_heading level0 row2" >std</th>
+      <td id="T_49014_row2_col0" class="data row2 col0" >0.09</td>
+      <td id="T_49014_row2_col1" class="data row2 col1" >0.12</td>
+    </tr>
+    <tr>
+      <th id="T_49014_level0_row3" class="row_heading level0 row3" >min</th>
+      <td id="T_49014_row3_col0" class="data row3 col0" >0.07</td>
+      <td id="T_49014_row3_col1" class="data row3 col1" >0.02</td>
+    </tr>
+    <tr>
+      <th id="T_49014_level0_row4" class="row_heading level0 row4" >25%</th>
+      <td id="T_49014_row4_col0" class="data row4 col0" >0.22</td>
+      <td id="T_49014_row4_col1" class="data row4 col1" >0.17</td>
+    </tr>
+    <tr>
+      <th id="T_49014_level0_row5" class="row_heading level0 row5" >50%</th>
+      <td id="T_49014_row5_col0" class="data row5 col0" >0.28</td>
+      <td id="T_49014_row5_col1" class="data row5 col1" >0.24</td>
+    </tr>
+    <tr>
+      <th id="T_49014_level0_row6" class="row_heading level0 row6" >75%</th>
+      <td id="T_49014_row6_col0" class="data row6 col0" >0.35</td>
+      <td id="T_49014_row6_col1" class="data row6 col1" >0.34</td>
+    </tr>
+    <tr>
+      <th id="T_49014_level0_row7" class="row_heading level0 row7" >max</th>
+      <td id="T_49014_row7_col0" class="data row7 col0" >0.63</td>
+      <td id="T_49014_row7_col1" class="data row7 col1" >0.71</td>
+    </tr>
+  </tbody>
+</table></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">textwrap</span> <span class="kn">import</span> <span class="n">fill</span>
+
+<span class="c1"># Set a clean and minimal style</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+
+<span class="c1"># Initialize the figure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">font_family</span>
+<span class="c1"># Create the boxplot</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">cells</span><span class="p">[[</span><span class="s1">&#39;CF_IEC2&#39;</span><span class="p">,</span> <span class="s1">&#39;CF_IEC3&#39;</span><span class="p">,</span> <span class="s1">&#39;wind_CF_mean&#39;</span><span class="p">]],</span>
+    <span class="n">palette</span><span class="o">=</span><span class="s2">&quot;pastel&quot;</span><span class="p">,</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="mf">0.6</span>
+<span class="p">)</span>
+
+<span class="c1"># Set title and labels</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Capacity Factor Distribution Comparison&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;semibold&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Capacity Factor&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+<span class="c1"># Tweak tick formatting</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Remove all spines</span>
+<span class="k">for</span> <span class="n">spine</span> <span class="ow">in</span> <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+    <span class="n">spine</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Add horizontal grid lines</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figtext</span><span class="p">(</span>
+    <span class="mf">0.01</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.08</span><span class="p">,</span>
+    <span class="s2">&quot;*&#39;CF_IEC2, CF_IEC3: Average CF for ERA5 Cells, calculated from high-resolution yearly average CF from GWA for IEC Class 2 and 3 turbines.</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;*wind_CF_mean: Average CF for ERA5 Cells, calculated from the ERA5 windspeed (rescaled with GWA) time series &quot;</span><span class="p">,</span>
+    <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span>
+<span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;vis/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">/CF_distribution_comparison.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Visuals_BC_46_0.png" src="../_images/notebooks_Visuals_BC_46_0.png" />
+</div>
+</div>
+<ul class="simple">
+<li><p>Solar</p></li>
+</ul>
+</section>
+<section id="CLusters">
+<h3>CLusters<a class="headerlink" href="#CLusters" title="Link to this heading">#</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clusters_wind_f</span><span class="o">=</span><span class="n">clusters_wind</span><span class="p">[</span><span class="n">clusters_wind</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">clusters_solar_f</span><span class="o">=</span><span class="n">clusters_solar</span><span class="p">[</span><span class="n">clusters_solar</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total sites </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">clusters_wind_f</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">total_capacity</span><span class="o">=</span><span class="n">clusters_wind_f</span><span class="o">.</span><span class="n">potential_capacity</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total Capacity </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">total_capacity</span><span class="o">/</span><span class="mf">1E3</span><span class="p">)</span><span class="si">}</span><span class="s1"> GW&#39;</span><span class="p">)</span>
+<span class="n">sites</span><span class="o">=</span><span class="mi">5</span>
+<span class="n">top_sites_capacity</span><span class="o">=</span><span class="n">clusters_wind_f</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">sites</span><span class="p">)</span><span class="o">.</span><span class="n">potential_capacity</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Top </span><span class="si">{</span><span class="n">sites</span><span class="si">}</span><span class="s1"> sites (</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">sites</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">clusters_wind_f</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span><span class="si">}</span><span class="s1">% site) capacity </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">top_sites_capacity</span><span class="o">/</span><span class="mf">1E3</span><span class="p">)</span><span class="si">}</span><span class="s1"> GW (</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">top_sites_capacity</span><span class="o">/</span><span class="n">total_capacity</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span><span class="si">}</span><span class="s1">% of total capacity)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Total sites 56
+Total Capacity 663 GW
+Top 5 sites (9% site) capacity 136 GW (21% of total capacity)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total sites </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">clusters_solar_f</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">total_capacity</span><span class="o">=</span><span class="n">clusters_solar_f</span><span class="o">.</span><span class="n">potential_capacity</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total Capacity </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">total_capacity</span><span class="o">/</span><span class="mf">1E3</span><span class="p">)</span><span class="si">}</span><span class="s1"> GW&#39;</span><span class="p">)</span>
+<span class="n">sites</span><span class="o">=</span><span class="mi">5</span>
+<span class="n">top_sites_capacity</span><span class="o">=</span><span class="n">clusters_solar_f</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">sites</span><span class="p">)</span><span class="o">.</span><span class="n">potential_capacity</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Top </span><span class="si">{</span><span class="n">sites</span><span class="si">}</span><span class="s1"> sites (</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">sites</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">clusters_solar_f</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span><span class="si">}</span><span class="s1">% site) capacity </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">top_sites_capacity</span><span class="o">/</span><span class="mf">1E3</span><span class="p">)</span><span class="si">}</span><span class="s1"> GW (</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">top_sites_capacity</span><span class="o">/</span><span class="n">total_capacity</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span><span class="si">}</span><span class="s1">% of total capacity)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Total sites 82
+Total Capacity 517 GW
+Top 5 sites (6% site) capacity 19 GW (4% of total capacity)
+</pre></div></div>
+</div>
+</section>
+</section>
+</section>
+<section id="Static-Plots">
+<h1>Static Plots<a class="headerlink" href="#Static-Plots" title="Link to this heading">#</a></h1>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aeroway</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;./data/downloaded_data/OSM/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">_aeroway.geojson&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/localhome/mei3/miniconda3/envs/RES/lib/python3.12/site-packages/pyogrio/raw.py:196: RuntimeWarning: Several features with id = 1374701 have been found. Altering it to be unique. This warning will not be emitted anymore for this layer
+  return ogr_read(
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">font_family</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">shadow_offset</span><span class="o">=</span><span class="mf">0.05</span>
+<span class="c1"># Plot boundary with subtle shadow effect</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">)</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">)</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Plot aeroway data</span>
+<span class="n">aeroway</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">column</span><span class="o">=</span><span class="s1">&#39;aeroway&#39;</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">legend_kwds</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s2">&quot;Aeroway Lands with Buffer&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;lower left&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">),</span>
+        <span class="s1">&#39;frameon&#39;</span><span class="p">:</span> <span class="kc">False</span>
+    <span class="p">},</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Paired&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Clean up plot</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Aeroway Lands in </span><span class="si">{</span><span class="n">region_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;vis/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">/misc/Aeroway_</span><span class="si">{</span><span class="n">region_name</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Visuals_BC_54_0.png" src="../_images/notebooks_Visuals_BC_54_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="c1"># Set Seaborn style for better aesthetics</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+
+<span class="c1"># Create figure</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;#f9f9f9&quot;</span><span class="p">)</span>  <span class="c1"># Light background</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">font_family</span>
+
+<span class="c1"># Define custom colors</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#1f77b4&#39;</span><span class="p">,</span> <span class="s1">&#39;#ff6347&#39;</span><span class="p">]</span>
+
+<span class="c1"># Plot using Seaborn</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">timeseries_clusters_solar</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">timeseries_clusters_solar</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">timeseries_clusters_solar</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">timeseries_clusters_solar</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">timeseries_clusters_solar</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">timeseries_clusters_solar</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,)</span>
+
+<span class="c1"># Enhance aesthetics</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s2">&quot;#ffffff&quot;</span><span class="p">)</span>  <span class="c1"># Pure white plot area</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+
+<span class="c1"># Labels &amp; title</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Solar Sites&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="c1"># ax.set_xlabel(&quot;Time&quot;, fontsize=14, color=&quot;black&quot;, labelpad=10)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;CF&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Customize ticks</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="c1"># Add a legend</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;#f0f0f0&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Show plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Visuals_BC_55_0.png" src="../_images/notebooks_Visuals_BC_55_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import matplotlib.pyplot as plt</span>
+<span class="c1"># import seaborn as sns</span>
+
+<span class="c1"># # Set Seaborn style for better aesthetics</span>
+<span class="c1"># sns.set_style(&quot;whitegrid&quot;)</span>
+
+<span class="c1"># # Create figure</span>
+<span class="c1"># fig, ax = plt.subplots(figsize=(20, 4.5), facecolor=&quot;#f9f9f9&quot;)  # Light background</span>
+
+<span class="c1"># # Define custom colors</span>
+<span class="c1"># colors = [&#39;#1f77b4&#39;, &#39;#ff6347&#39;]</span>
+
+<span class="c1"># # Plot using Seaborn</span>
+<span class="c1"># sns.lineplot(data=timeseries_clusters_wind, x=timeseries_clusters_wind.index, y=&#39;Capital_1&#39;, ax=ax, color=colors[0], linewidth=1.5, alpha=0.8, label=&quot;Capital 1&quot;)</span>
+<span class="c1"># sns.lineplot(data=timeseries_clusters_wind, x=timeseries_clusters_wind.index, y=&#39;PeaceRiver_1&#39;, ax=ax, color=colors[1], linewidth=1.5, alpha=0.8, label=&quot;Peace River 1&quot;)</span>
+
+<span class="c1"># # Enhance aesthetics</span>
+<span class="c1"># ax.set_facecolor(&quot;#ffffff&quot;)  # Pure white plot area</span>
+<span class="c1"># ax.grid(True, linestyle=&quot;--&quot;, linewidth=0.6, alpha=0.6, color=&quot;gray&quot;)</span>
+
+<span class="c1"># # Labels &amp; title</span>
+<span class="c1"># ax.set_title(&quot;Wind Sites&quot;, fontsize=16, color=&quot;black&quot;, fontweight=&quot;bold&quot;, pad=15)</span>
+<span class="c1"># # ax.set_xlabel(&quot;Time&quot;, fontsize=14, color=&quot;black&quot;, labelpad=10)</span>
+<span class="c1"># ax.set_ylabel(&quot;CF&quot;, fontsize=14, color=&quot;black&quot;, labelpad=10)</span>
+
+<span class="c1"># # Customize ticks</span>
+<span class="c1"># ax.tick_params(axis=&#39;x&#39;, colors=&quot;black&quot;, labelsize=12)</span>
+<span class="c1"># ax.tick_params(axis=&#39;y&#39;, colors=&quot;black&quot;, labelsize=12)</span>
+
+<span class="c1"># # Add a legend</span>
+<span class="c1"># ax.legend(facecolor=&quot;#f0f0f0&quot;, edgecolor=&quot;black&quot;, fontsize=12, loc=&quot;upper left&quot;, frameon=True)</span>
+
+<span class="c1"># # Show plot</span>
+<span class="c1"># plt.show()</span>
+<br/></pre></div>
+</div>
+</div>
+</section>
+<section id="Static-Data-Visuals-in-Interactive-Maps">
+<h1>Static Data Visuals in Interactive Maps<a class="headerlink" href="#Static-Data-Visuals-in-Interactive-Maps" title="Link to this heading">#</a></h1>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">import hvplot.pandas</span>
+<span class="sd">import holoviews as hv</span>
+<span class="sd">from holoviews import opts</span>
+<span class="sd">from bokeh.layouts import gridplot</span>
+<span class="sd">from bokeh.io import show</span>
+
+<span class="sd"># Initialize Holoviews extension</span>
+<span class="sd">hv.extension(&#39;bokeh&#39;)</span>
+
+
+<span class="sd"># Define a dictionary to map columns to specific colormaps</span>
+<span class="sd">cmap_mapping = {</span>
+<span class="sd">    &#39;lcoe_wind&#39;: &#39;cool&#39;,</span>
+<span class="sd">    &#39;potential_capacity_wind&#39;: &#39;Blues&#39;,</span>
+<span class="sd">    &#39;lcoe_solar&#39;: &#39;autumn&#39;,</span>
+<span class="sd">    &#39;CF_IEC2&#39;: &#39;RdYlGn&#39;,</span>
+<span class="sd">    &#39;wind_CF_mean&#39;: &#39;RdYlGn&#39;,</span>
+<span class="sd">    &#39;windspeed_ERA5&#39;: &#39;winter&#39;,</span>
+<span class="sd">    &#39;nearest_station_distance_km&#39;: &#39;Oranges&#39;,</span>
+<span class="sd">    &#39;potential_capacity_wind&#39;: &#39;Blues&#39;,</span>
+<span class="sd">    &#39;potential_capacity_solar&#39;: &#39;Oranges&#39;,</span>
+<span class="sd">}</span>
+
+<span class="sd"># Define a function to create individual plots</span>
+<span class="sd">def create_plot(column_name, cmap):</span>
+<span class="sd">    return cells.hvplot(</span>
+<span class="sd">        color=column_name,</span>
+<span class="sd">        cmap=cmap,</span>
+<span class="sd">        geo=True,</span>
+<span class="sd">        tiles=&#39;CartoDark&#39;,  # Default base map</span>
+<span class="sd">        frame_width=300,  # Adjust the size of the plots</span>
+<span class="sd">        frame_height=300,  # Adjust the size of the plots</span>
+<span class="sd">        data_aspect=.5,</span>
+<span class="sd">        alpha=0.8,</span>
+<span class="sd">        line_color=&#39;None&#39;,</span>
+<span class="sd">        line_width=0.1,</span>
+<span class="sd">        hover_line_color=&#39;red&#39;</span>
+<span class="sd">    ).opts(title=column_name,</span>
+<span class="sd">            show_grid=True,</span>
+<span class="sd">            show_legend=True,</span>
+<span class="sd">            tools=[&#39;hover&#39;, &#39;pan&#39;, &#39;wheel_zoom&#39;,&#39;reset&#39;,&#39;box_select&#39;],</span>
+<span class="sd">            legend_position=&#39;top_right&#39;</span>
+<span class="sd">        )</span>
+
+<span class="sd"># Create a list of plots for each column</span>
+<span class="sd">plots = [create_plot(col, cmap) for col, cmap in cmap_mapping.items()]</span>
+
+<span class="sd"># Create a grid layout for the plots</span>
+<span class="sd">grid = hv.Layout(plots).cols(3)  # Adjust the number of columns as needed</span>
+
+<span class="sd"># Show the layout</span>
+<span class="sd">hv.save(grid, &#39;docs/grid_plots.html&#39;)  # Save the grid layout as an HTML file</span>
+
+
+
+<span class="sd"># Render the layout as a Bokeh object</span>
+<span class="sd">bokeh_layout = hv.render(grid, backend=&#39;bokeh&#39;)</span>
+
+<span class="sd"># Show the layout</span>
+<span class="sd">show(bokeh_layout)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#34;\nimport hvplot.pandas\nimport holoviews as hv\nfrom holoviews import opts\nfrom bokeh.layouts import gridplot\nfrom bokeh.io import show\n\n# Initialize Holoviews extension\nhv.extension(&#39;bokeh&#39;)\n\n\n# Define a dictionary to map columns to specific colormaps\ncmap_mapping = {\n    &#39;lcoe_wind&#39;: &#39;cool&#39;,\n    &#39;potential_capacity_wind&#39;: &#39;Blues&#39;,\n    &#39;lcoe_solar&#39;: &#39;autumn&#39;,\n    &#39;CF_IEC2&#39;: &#39;RdYlGn&#39;,\n    &#39;wind_CF_mean&#39;: &#39;RdYlGn&#39;,\n    &#39;windspeed_ERA5&#39;: &#39;winter&#39;,\n    &#39;nearest_station_distance_km&#39;: &#39;Oranges&#39;,\n    &#39;potential_capacity_wind&#39;: &#39;Blues&#39;,\n    &#39;potential_capacity_solar&#39;: &#39;Oranges&#39;,\n}\n\n# Define a function to create individual plots\ndef create_plot(column_name, cmap):\n    return cells.hvplot(\n        color=column_name,\n        cmap=cmap,\n        geo=True,\n        tiles=&#39;CartoDark&#39;,  # Default base map\n        frame_width=300,  # Adjust the size of the plots\n        frame_height=300,  # Adjust the size of the plots\n        data_aspect=.5,\n        alpha=0.8,\n        line_color=&#39;None&#39;,\n        line_width=0.1,\n        hover_line_color=&#39;red&#39;\n    ).opts(title=column_name,\n            show_grid=True,\n            show_legend=True,\n            tools=[&#39;hover&#39;, &#39;pan&#39;, &#39;wheel_zoom&#39;,&#39;reset&#39;,&#39;box_select&#39;],\n            legend_position=&#39;top_right&#39;\n        )\n\n# Create a list of plots for each column\nplots = [create_plot(col, cmap) for col, cmap in cmap_mapping.items()]\n\n# Create a grid layout for the plots\ngrid = hv.Layout(plots).cols(3)  # Adjust the number of columns as needed\n\n# Show the layout\nhv.save(grid, &#39;docs/grid_plots.html&#39;)  # Save the grid layout as an HTML file\n\n\n\n# Render the layout as a Bokeh object\nbokeh_layout = hv.render(grid, backend=&#39;bokeh&#39;)\n\n# Show the layout\nshow(bokeh_layout)\n&#34;
+</pre></div></div>
+</div>
+</section>
+<section id="Timeseries-Plots">
+<h1>Timeseries Plots<a class="headerlink" href="#Timeseries-Plots" title="Link to this heading">#</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import pandas as pd</span>
+<span class="c1"># import hvplot.pandas</span>
+<span class="c1"># import panel as pn</span>
+<span class="c1"># import random</span>
+
+<span class="c1"># # Initialize Panel with the dark theme</span>
+<span class="c1"># pn.extension(theme=&#39;default&#39;)</span>
+
+<span class="c1"># # Load your DataFrames</span>
+<span class="c1"># df_solar = timeseries_clusters_solar  # Your solar DataFrame</span>
+<span class="c1"># df_wind = timeseries_clusters_wind    # Your wind DataFrame</span>
+
+<span class="c1"># # Create a list of the column names for the dropdowns</span>
+<span class="c1"># solar_options = df_solar.columns.tolist()</span>
+<span class="c1"># wind_options = df_wind.columns.tolist()</span>
+
+<span class="c1"># # Function to generate a random vibrant color</span>
+<span class="c1"># def get_random_vibrant_color():</span>
+<span class="c1">#     return &quot;#{:02x}{:02x}{:02x}&quot;.format(random.randint(150, 255), random.randint(150, 255), random.randint(150, 255))</span>
+
+
+<span class="c1"># # Create a function to update the solar plot based on the selected time series</span>
+<span class="c1"># def update_solar_plot(selected_series):</span>
+<span class="c1">#     return df_solar[selected_series].hvplot.line(</span>
+<span class="c1">#         title=f&quot;Time Series - Solar: {selected_series}&quot;,</span>
+<span class="c1">#         xlabel=&quot;DateTime&quot;,</span>
+<span class="c1">#         ylabel=&quot;Value&quot;,</span>
+<span class="c1">#         legend=&#39;top_left&#39;,</span>
+<span class="c1">#         width=1000,  # Width of the plot</span>
+<span class="c1">#         height=200,  # Height of the plot</span>
+<span class="c1">#         tools=[&#39;hover&#39;],  # Enable hover tool</span>
+<span class="c1">#         line_color=get_random_vibrant_color()  # Random vibrant color for the solar plot</span>
+<span class="c1">#     )</span>
+
+<span class="c1"># # Create a function to update the wind plot based on the selected time series</span>
+<span class="c1"># def update_wind_plot(selected_series):</span>
+<span class="c1">#     return df_wind[selected_series].hvplot.line(</span>
+<span class="c1">#         title=f&quot;Time Series - Wind: {selected_series}&quot;,</span>
+<span class="c1">#         xlabel=&quot;DateTime&quot;,</span>
+<span class="c1">#         ylabel=&quot;Value&quot;,</span>
+<span class="c1">#         legend=&#39;top_left&#39;,</span>
+<span class="c1">#         width=1000,  # Width of the plot</span>
+<span class="c1">#         height=200,  # Height of the plot</span>
+<span class="c1">#         tools=[&#39;hover&#39;],  # Enable hover tool</span>
+<span class="c1">#         line_color=get_random_vibrant_color()  # Random vibrant color for the wind plot</span>
+<span class="c1">#     )</span>
+
+<span class="c1"># # Create dropdown widgets for selecting the time series</span>
+<span class="c1"># solar_dropdown = pn.widgets.Select(name=&#39;Select Solar Time Series&#39;, options=solar_options)</span>
+<span class="c1"># wind_dropdown = pn.widgets.Select(name=&#39;Select Wind Time Series&#39;, options=wind_options)</span>
+
+<span class="c1"># # Create dynamic panels that update the plot based on the dropdown selections</span>
+<span class="c1"># dynamic_solar_plot = pn.bind(update_solar_plot, selected_series=solar_dropdown)</span>
+<span class="c1"># dynamic_wind_plot = pn.bind(update_wind_plot, selected_series=wind_dropdown)</span>
+
+<span class="c1"># # Create a layout with the dropdowns and the plots in a two-row grid</span>
+<span class="c1"># grid_layout = pn.Column(</span>
+<span class="c1">#     solar_dropdown, dynamic_solar_plot,  # Solar plot in the first row</span>
+<span class="c1">#     wind_dropdown, dynamic_wind_plot     # Wind plot in the second row</span>
+<span class="c1"># )</span>
+
+<span class="c1"># # Save the grid layout as an HTML file</span>
+<span class="c1"># grid_layout.save(&#39;../docs/time_series_plots.html&#39;)</span>
+
+<span class="c1"># # Display the panel in a notebook or in a web application</span>
+<span class="c1"># grid_layout.show()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import pandas as pd</span>
+<span class="c1"># import hvplot.pandas</span>
+<span class="c1"># import panel as pn</span>
+<span class="c1"># import random</span>
+
+<span class="c1"># # Initialize Panel with the dark theme</span>
+<span class="c1"># pn.extension(theme=&#39;default&#39;)</span>
+
+<span class="c1"># # Load your DataFrames</span>
+<span class="c1"># df_solar = timeseries_clusters_solar  # Your solar DataFrame</span>
+<span class="c1"># df_wind = timeseries_clusters_wind    # Your wind DataFrame</span>
+<span class="c1"># clusters_solar = clusters_solar       # Your clusters_solar DataFrame</span>
+
+<span class="c1"># # Create a list of the column names for the dropdowns</span>
+<span class="c1"># solar_options = df_solar.columns.tolist()</span>
+<span class="c1"># wind_options = df_wind.columns.tolist()</span>
+
+<span class="c1"># # Function to generate a random vibrant color</span>
+<span class="c1"># def get_random_vibrant_color():</span>
+<span class="c1">#     return &quot;#{:02x}{:02x}{:02x}&quot;.format(random.randint(150, 255), random.randint(150, 255), random.randint(150, 255))</span>
+
+<span class="c1"># # Create a function to update the solar plot based on the selected time series</span>
+<span class="c1"># def update_solar_plot(selected_series):</span>
+<span class="c1">#     return df_solar[selected_series].hvplot.line(</span>
+<span class="c1">#         title=f&quot;Time Series - Solar: {selected_series}&quot;,</span>
+<span class="c1">#         xlabel=&quot;DateTime&quot;,</span>
+<span class="c1">#         ylabel=&quot;Value&quot;,</span>
+<span class="c1">#         legend=&#39;top_left&#39;,</span>
+<span class="c1">#         width=1000,  # Width of the plot</span>
+<span class="c1">#         height=300,  # Increased height for better visibility</span>
+<span class="c1">#         tools=[&#39;hover&#39;],  # Enable hover tool</span>
+<span class="c1">#         line_color=get_random_vibrant_color(),  # Random vibrant color for the solar plot</span>
+<span class="c1">#         line_width=2,  # Make line thicker for better visibility</span>
+<span class="c1">#         fontsize={&#39;title&#39;: 16, &#39;xlabel&#39;: 14, &#39;ylabel&#39;: 14, &#39;legend&#39;: 12},  # Adjust font sizes</span>
+<span class="c1">#     )</span>
+
+<span class="c1"># # Create a function to update the wind plot based on the selected time series</span>
+<span class="c1"># def update_wind_plot(selected_series):</span>
+<span class="c1">#     return df_wind[selected_series].hvplot.line(</span>
+<span class="c1">#         title=f&quot;Time Series - Wind: {selected_series}&quot;,</span>
+<span class="c1">#         xlabel=&quot;DateTime&quot;,</span>
+<span class="c1">#         ylabel=&quot;Value&quot;,</span>
+<span class="c1">#         legend=&#39;top_left&#39;,</span>
+<span class="c1">#         width=1000,  # Width of the plot</span>
+<span class="c1">#         height=300,  # Increased height for better visibility</span>
+<span class="c1">#         tools=[&#39;hover&#39;],  # Enable hover tool</span>
+<span class="c1">#         line_color=get_random_vibrant_color(),  # Random vibrant color for the wind plot</span>
+<span class="c1">#         line_width=2,  # Make line thicker for better visibility</span>
+<span class="c1">#         fontsize={&#39;title&#39;: 16, &#39;xlabel&#39;: 14, &#39;ylabel&#39;: 14, &#39;legend&#39;: 12},  # Adjust font sizes</span>
+<span class="c1">#     )</span>
+
+<span class="c1"># # Create dropdown widgets for selecting the time series</span>
+<span class="c1"># solar_dropdown = pn.widgets.Select(name=&#39;Select Solar Time Series&#39;, options=solar_options, width=300)</span>
+<span class="c1"># wind_dropdown = pn.widgets.Select(name=&#39;Select Wind Time Series&#39;, options=wind_options, width=300)</span>
+
+
+<span class="c1"># # Create dynamic panels that update the plot based on the dropdown selections</span>
+<span class="c1"># dynamic_solar_plot = pn.bind(update_solar_plot, selected_series=solar_dropdown)</span>
+<span class="c1"># dynamic_wind_plot = pn.bind(update_wind_plot, selected_series=wind_dropdown)</span>
+
+<span class="c1"># # Function to get relevant row data from clusters_solar</span>
+<span class="c1"># def get_cluster_info(selected_series):</span>
+<span class="c1">#     # Use the selected series name to find the relevant row in clusters_solar</span>
+<span class="c1">#     selected_row = clusters_solar.loc[selected_series]</span>
+<span class="c1">#     return selected_row</span>
+
+<span class="c1"># # Create a function to update the table based on the selected time series</span>
+<span class="c1"># def update_cluster_table(selected_series):</span>
+<span class="c1">#     cluster_info = get_cluster_info(selected_series)</span>
+
+<span class="c1">#     # Drop the geometry column if it exists</span>
+<span class="c1">#     if &#39;geometry&#39; in cluster_info.index:</span>
+<span class="c1">#         cluster_info = cluster_info.drop(&#39;geometry&#39;)</span>
+
+<span class="c1">#     # Return the DataFrame widget without the geometry column</span>
+<span class="c1">#     return pn.widgets.DataFrame(cluster_info.to_frame().T, width=800, height=200)</span>
+
+
+<span class="c1"># # Create dynamic panels for the table</span>
+<span class="c1"># dynamic_cluster_table = pn.bind(update_cluster_table, selected_series=solar_dropdown)</span>
+
+<span class="c1"># # Adjust the overall layout for better alignment and spacing</span>
+<span class="c1"># grid_layout = pn.Column(</span>
+<span class="c1">#     pn.Row(solar_dropdown, dynamic_solar_plot, align=&quot;center&quot;),  # Center align solar dropdown and plot</span>
+<span class="c1">#     pn.Row(dynamic_cluster_table),  # Show the table below the solar plot</span>
+<span class="c1">#     pn.Row(wind_dropdown, dynamic_wind_plot, align=&quot;center&quot;),    # Center align wind dropdown and plot</span>
+<span class="c1">#     sizing_mode=&#39;stretch_width&#39;,  # Make layout responsive to different screen sizes</span>
+<span class="c1">#     width=1100,  # Set a consistent width for the layout</span>
+<span class="c1">#     height=900   # Adjust height to give more space for plots</span>
+<span class="c1"># )</span>
+
+<span class="c1"># # Save the grid layout as an HTML file</span>
+<span class="c1"># grid_layout.save(&#39;../docs/time_series_plots_with_table.html&#39;)</span>
+
+<span class="c1"># # Display the panel in a notebook or in a web application</span>
+<span class="c1"># grid_layout.show()</span>
+<br/></pre></div>
+</div>
+</div>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Store_explorer.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Explore data store</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Example Visuals for BC</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Load-dataframes-from-Store">Load dataframes from Store</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Create-Visuals">Create Visuals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Grid">Grid</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lines">lines</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Substations">Substations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Resources">Resources</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Capacity-Factor-Map">Capacity Factor Map</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Capacity">Capacity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Score">Score</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#Capacity-Plot-(bins)">Capacity Plot (bins)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#CF-checks">CF checks</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Wind">Wind</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#CLusters">CLusters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#Static-Plots">Static Plots</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#Static-Data-Visuals-in-Interactive-Maps">Static Data Visuals in Interactive Maps</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#Timeseries-Plots">Timeseries Plots</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

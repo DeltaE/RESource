@@ -1,0 +1,921 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Conda Environment Setup for RESource &#8212; RESource 2025.07 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=e9b82cb4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notes/environment_setup';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/RESource_logo_2025.07.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../_static/RESource_logo_2025.07.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Store_explorer.html">Explore data store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notes/environment_setup.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Conda Environment Setup for RESource</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick Start</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">1. Prerequisites</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-environment">2. Setup Environment</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-management-commands">Environment Management Commands</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-and-management">Setup and Management</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#daily-usage">Daily Usage</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-code">Running Code</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#main-resource-module">Main RESource Module</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-scripts">Custom Scripts</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-and-deploy">Build and Deploy</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-structure">Environment Structure</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-scientific-computing-from-conda-forge">Core Scientific Computing (from conda-forge)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geospatial-stack-optimized-conda-versions">Geospatial Stack (optimized conda versions)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization">Visualization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#climate-and-weather">Climate and Weather</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development-tools">Development Tools</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#specialized-packages-via-pip">Specialized Packages (via pip)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-file-location">Environment File Location</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#file-structure">File Structure</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-env-directory">Why <code class="docutils literal notranslate"><span class="pre">env/</span></code> Directory?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#working-with-environment-files">Working with Environment Files</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-file">Environment File</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sharing-and-collaboration">Sharing and Collaboration</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#export-current-environment">Export Current Environment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-environment">Reproduce Environment</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">Troubleshooting</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-creation-issues">Environment Creation Issues</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#package-conflicts">Package Conflicts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#missing-packages">Missing Packages</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jupyter-kernel-issues">Jupyter Kernel Issues</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#daily-workflow-maintenance-and-collaboration">Daily Workflow, Maintenance, and Collaboration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-benefits">Performance Benefits</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#see-also">See Also</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="conda-environment-setup-for-resource">
+<h1>Conda Environment Setup for RESource<a class="headerlink" href="#conda-environment-setup-for-resource" title="Link to this heading">#</a></h1>
+<p>The RESource project uses a conda environment called <code class="docutils literal notranslate"><span class="pre">RES</span></code> for reproducible analysis workflows. The environment specification is located in <code class="docutils literal notranslate"><span class="pre">env/environment.yml</span></code>.</p>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h2>
+<section id="prerequisites">
+<h3>1. Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Conda or Miniconda installed</p></li>
+<li><p>Git</p></li>
+</ul>
+</section>
+<section id="setup-environment">
+<h3>2. Setup Environment<a class="headerlink" href="#setup-environment" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clone repository</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/DeltaE/RESource.git
+<span class="nb">cd</span><span class="w"> </span>RESource
+
+<span class="c1"># Create conda environment from env/environment.yml</span>
+make<span class="w"> </span>setup-conda
+
+<span class="c1"># Activate environment</span>
+conda<span class="w"> </span>activate<span class="w"> </span>RES
+
+<span class="c1"># Test installation</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import RES; print(&#39;✅ RESource is ready!&#39;)&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="environment-management-commands">
+<h2>Environment Management Commands<a class="headerlink" href="#environment-management-commands" title="Link to this heading">#</a></h2>
+<section id="setup-and-management">
+<h3>Setup and Management<a class="headerlink" href="#setup-and-management" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>setup-conda<span class="w">       </span><span class="c1"># Create/update conda environment &#39;RES&#39; from env/environment.yml</span>
+make<span class="w"> </span>conda-status<span class="w">      </span><span class="c1"># Check environment status and packages</span>
+make<span class="w"> </span>clean-conda<span class="w">       </span><span class="c1"># Remove conda environment</span>
+make<span class="w"> </span>export-env<span class="w">        </span><span class="c1"># Export current environment to env/environment_exported.yml</span>
+</pre></div>
+</div>
+</section>
+<section id="daily-usage">
+<h3>Daily Usage<a class="headerlink" href="#daily-usage" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>RES<span class="w">     </span><span class="c1"># Activate environment</span>
+conda<span class="w"> </span>deactivate<span class="w">      </span><span class="c1"># Deactivate environment</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="running-code">
+<h2>Running Code<a class="headerlink" href="#running-code" title="Link to this heading">#</a></h2>
+<section id="main-resource-module">
+<h3>Main RESource Module<a class="headerlink" href="#main-resource-module" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>run-res
+</pre></div>
+</div>
+</section>
+<section id="custom-scripts">
+<h3>Custom Scripts<a class="headerlink" href="#custom-scripts" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Basic usage</span>
+make<span class="w"> </span>run-conda<span class="w"> </span><span class="nv">SCRIPT</span><span class="o">=</span>path/to/script.py
+
+<span class="c1"># With arguments</span>
+make<span class="w"> </span>run-conda<span class="w"> </span><span class="nv">SCRIPT</span><span class="o">=</span>workflow/scripts/bess_module_v2.py<span class="w"> </span><span class="nv">ARGS</span><span class="o">=</span><span class="s2">&quot;config/config_CAN.yaml bess&quot;</span>
+
+<span class="c1"># Examples</span>
+make<span class="w"> </span>run-conda<span class="w"> </span><span class="nv">SCRIPT</span><span class="o">=</span>examples/analysis.py
+make<span class="w"> </span>run-conda<span class="w"> </span><span class="nv">SCRIPT</span><span class="o">=</span>RES/cli.py<span class="w"> </span><span class="nv">ARGS</span><span class="o">=</span><span class="s2">&quot;--help&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h2>
+<section id="build-and-deploy">
+<h3>Build and Deploy<a class="headerlink" href="#build-and-deploy" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build and deploy to GitHub Pages</span>
+make<span class="w"> </span>docs-conda
+
+<span class="c1"># Build locally only</span>
+make<span class="w"> </span>docs-build
+</pre></div>
+</div>
+</section>
+</section>
+<section id="environment-structure">
+<h2>Environment Structure<a class="headerlink" href="#environment-structure" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">RES</span></code> conda environment includes:</p>
+<section id="core-scientific-computing-from-conda-forge">
+<h3>Core Scientific Computing (from conda-forge)<a class="headerlink" href="#core-scientific-computing-from-conda-forge" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>python=3.11</strong>: Python interpreter</p></li>
+<li><p><strong>numpy</strong>: Numerical computing with optimized BLAS</p></li>
+<li><p><strong>pandas</strong>: Data manipulation</p></li>
+<li><p><strong>scipy</strong>: Scientific computing</p></li>
+<li><p><strong>xarray</strong>: Multi-dimensional data</p></li>
+</ul>
+</section>
+<section id="geospatial-stack-optimized-conda-versions">
+<h3>Geospatial Stack (optimized conda versions)<a class="headerlink" href="#geospatial-stack-optimized-conda-versions" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>geopandas</strong>: Geographic data analysis</p></li>
+<li><p><strong>rasterio</strong>: Raster data I/O</p></li>
+<li><p><strong>shapely</strong>: Geometric operations</p></li>
+<li><p><strong>fiona</strong>: Vector data I/O</p></li>
+<li><p><strong>pyproj</strong>: Coordinate transformations</p></li>
+<li><p><strong>cartopy</strong>: Cartographic projections</p></li>
+</ul>
+</section>
+<section id="visualization">
+<h3>Visualization<a class="headerlink" href="#visualization" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>matplotlib</strong>: Basic plotting</p></li>
+<li><p><strong>seaborn</strong>: Statistical visualization</p></li>
+<li><p><strong>plotly</strong>: Interactive plots</p></li>
+</ul>
+</section>
+<section id="climate-and-weather">
+<h3>Climate and Weather<a class="headerlink" href="#climate-and-weather" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>netcdf4</strong>: Climate data handling</p></li>
+<li><p><strong>h5py</strong>: HDF5 file format</p></li>
+</ul>
+</section>
+<section id="development-tools">
+<h3>Development Tools<a class="headerlink" href="#development-tools" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>jupyter</strong>: Notebook ecosystem</p></li>
+<li><p><strong>jupyterlab</strong>: Modern notebook interface</p></li>
+<li><p><strong>ipykernel</strong>: Jupyter kernel</p></li>
+<li><p><strong>sphinx</strong>: Documentation</p></li>
+</ul>
+</section>
+<section id="specialized-packages-via-pip">
+<h3>Specialized Packages (via pip)<a class="headerlink" href="#specialized-packages-via-pip" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>atlite</strong>: Renewable energy modeling</p></li>
+<li><p><strong>cdsapi</strong>: Climate Data Store API</p></li>
+<li><p><strong>pygadm</strong>: Administrative boundaries</p></li>
+<li><p><strong>folium</strong>: Interactive maps</p></li>
+<li><p><strong>dash</strong>: Web applications</p></li>
+<li><p><strong>pyrosm</strong>: OpenStreetMap data</p></li>
+<li><p><strong>osmnx</strong>: Street network analysis</p></li>
+</ul>
+</section>
+</section>
+<section id="environment-file-location">
+<h2>Environment File Location<a class="headerlink" href="#environment-file-location" title="Link to this heading">#</a></h2>
+<p>The environment definition is located at <code class="docutils literal notranslate"><span class="pre">env/environment.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># env/environment.yml</span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RES</span>
+<span class="nt">channels</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conda-forge</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">defaults</span>
+<span class="nt">dependencies</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python=3.11</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">numpy</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pandas</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">geopandas</span>
+<span class="w">  </span><span class="c1"># ... other conda packages</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pip</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">pip</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">atlite</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cdsapi</span>
+<span class="w">    </span><span class="c1"># ... pip-only packages</span>
+</pre></div>
+</div>
+</section>
+<section id="file-structure">
+<h2>File Structure<a class="headerlink" href="#file-structure" title="Link to this heading">#</a></h2>
+<p>The environment files are organized in the <code class="docutils literal notranslate"><span class="pre">env/</span></code> directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>RESource/
+├── env/
+│   ├── environment.yml          # Main conda environment definition
+│   └── environment_exported.yml # Exported snapshot (created by make export-env)
+├── docs/
+├── RES/
+├── Makefile                     # References env/environment.yml
+└── README.md
+</pre></div>
+</div>
+<section id="why-env-directory">
+<h3>Why <code class="docutils literal notranslate"><span class="pre">env/</span></code> Directory?<a class="headerlink" href="#why-env-directory" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Organization</strong>: Keeps environment files separate from code</p></li>
+<li><p><strong>Multiple environments</strong>: Can store different environment variants</p></li>
+<li><p><strong>Clear purpose</strong>: Makes it obvious what the directory contains</p></li>
+<li><p><strong>Standard practice</strong>: Common pattern in Python projects</p></li>
+</ul>
+</section>
+<section id="working-with-environment-files">
+<h3>Working with Environment Files<a class="headerlink" href="#working-with-environment-files" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create environment from env/environment.yml</span>
+make<span class="w"> </span>setup-conda
+
+<span class="c1"># Export current environment to env/environment_exported.yml  </span>
+make<span class="w"> </span>export-env
+
+<span class="c1"># Manually update environment</span>
+conda<span class="w"> </span>env<span class="w"> </span>update<span class="w"> </span>-f<span class="w"> </span>env/environment.yml
+
+<span class="c1"># View environment definition</span>
+cat<span class="w"> </span>env/environment.yml
+</pre></div>
+</div>
+</section>
+</section>
+<section id="environment-file">
+<h2>Environment File<a class="headerlink" href="#environment-file" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">environment.yml</span></code> file defines the conda environment:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RES</span>
+<span class="nt">channels</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conda-forge</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">defaults</span>
+<span class="nt">dependencies</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python=3.11</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">numpy</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pandas</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">geopandas</span>
+<span class="w">  </span><span class="c1"># ... other conda packages</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pip</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">pip</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">atlite</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cdsapi</span>
+<span class="w">    </span><span class="c1"># ... pip-only packages</span>
+</pre></div>
+</div>
+</section>
+<section id="sharing-and-collaboration">
+<h2>Sharing and Collaboration<a class="headerlink" href="#sharing-and-collaboration" title="Link to this heading">#</a></h2>
+<section id="export-current-environment">
+<h3>Export Current Environment<a class="headerlink" href="#export-current-environment" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>export-env
+<span class="c1"># Creates environment_exported.yml with exact versions</span>
+</pre></div>
+</div>
+</section>
+<section id="reproduce-environment">
+<h3>Reproduce Environment<a class="headerlink" href="#reproduce-environment" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># On any machine with conda</span>
+git<span class="w"> </span>clone<span class="w"> </span>&lt;repository&gt;
+<span class="nb">cd</span><span class="w"> </span>RESource
+make<span class="w"> </span>setup-conda
+</pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">#</a></h2>
+<section id="environment-creation-issues">
+<h3>Environment Creation Issues<a class="headerlink" href="#environment-creation-issues" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clean and recreate</span>
+make<span class="w"> </span>clean-conda
+make<span class="w"> </span>setup-conda
+</pre></div>
+</div>
+</section>
+<section id="package-conflicts">
+<h3>Package Conflicts<a class="headerlink" href="#package-conflicts" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check environment status</span>
+make<span class="w"> </span>conda-status
+
+<span class="c1"># Update environment</span>
+conda<span class="w"> </span>env<span class="w"> </span>update<span class="w"> </span>-f<span class="w"> </span>environment.yml
+</pre></div>
+</div>
+</section>
+<section id="missing-packages">
+<h3>Missing Packages<a class="headerlink" href="#missing-packages" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Activate environment and install</span>
+conda<span class="w"> </span>activate<span class="w"> </span>RES
+conda<span class="w"> </span>install<span class="w"> </span>package-name
+<span class="c1"># or</span>
+pip<span class="w"> </span>install<span class="w"> </span>package-name
+
+<span class="c1"># Export updated environment</span>
+make<span class="w"> </span>export-env
+</pre></div>
+</div>
+</section>
+<section id="jupyter-kernel-issues">
+<h3>Jupyter Kernel Issues<a class="headerlink" href="#jupyter-kernel-issues" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>RES
+python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="o">=</span>RES<span class="w"> </span>--display-name<span class="o">=</span><span class="s2">&quot;Python (RES)&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h2>
+</section>
+<section id="daily-workflow-maintenance-and-collaboration">
+<h2>Daily Workflow, Maintenance, and Collaboration<a class="headerlink" href="#daily-workflow-maintenance-and-collaboration" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Task Category</p></th>
+<th class="head"><p>Step/Action</p></th>
+<th class="head"><p>Command/Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Daily Workflow</strong></p></td>
+<td><p>Activate environment</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">RES</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>Work on analysis/code</p></td>
+<td><p><em>(your usual workflow)</em></p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p>Test code</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">run-res</span></code> or <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">jupyter</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>Update documentation</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">docs-build</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p>Deactivate environment</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">deactivate</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Environment Maintenance</strong></p></td>
+<td><p>Regular updates</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">env</span> <span class="pre">update</span> <span class="pre">-f</span> <span class="pre">environment.yml</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p>Export changes after adding packages</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">export-env</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>Clean rebuild if issues arise</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean-conda</span> <span class="pre">&amp;&amp;</span> <span class="pre">make</span> <span class="pre">setup-conda</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Team Collaboration</strong></p></td>
+<td><p>Commit environment file to version control</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">environment.yml</span> <span class="pre">&amp;&amp;</span> <span class="pre">git</span> <span class="pre">commit</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>Team members set up environment</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">setup-conda</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p>Update environment as needed</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">env</span> <span class="pre">update</span> <span class="pre">-f</span> <span class="pre">environment.yml</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="performance-benefits">
+<h2>Performance Benefits<a class="headerlink" href="#performance-benefits" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Benefit Area</p></th>
+<th class="head"><p>Conda Advantages</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Optimized Packages</p></td>
+<td><p>NumPy/SciPy with MKL/OpenBLAS for improved performance</p></td>
+</tr>
+<tr class="row-odd"><td><p>Native Dependencies</p></td>
+<td><p>GDAL, PROJ, GEOS compiled for your platform</p></td>
+</tr>
+<tr class="row-even"><td><p>Faster Installs</p></td>
+<td><p>Pre-built binary packages reduce installation time</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dependency Handling</p></td>
+<td><p>Superior conflict resolution compared to pip</p></td>
+</tr>
+<tr class="row-even"><td><p>Memory &amp; Speed</p></td>
+<td><p>Faster imports and better runtime performance via optimized binaries</p></td>
+</tr>
+<tr class="row-odd"><td><p>Reduced Conflicts</p></td>
+<td><p>Compatible package versions minimize dependency issues</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.conda.io/">Conda Documentation</a></p></li>
+<li><p><a class="reference external" href="https://conda-forge.org/">Conda-Forge</a></p></li>
+<li><p><a class="reference internal" href="getting_started.html"><span class="doc">Getting Started</span></a> - Project setup</p></li>
+<li><p><a class="reference internal" href="api.html"><span class="doc">RES APIs</span></a> - Python API documentation</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick Start</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">1. Prerequisites</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-environment">2. Setup Environment</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-management-commands">Environment Management Commands</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-and-management">Setup and Management</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#daily-usage">Daily Usage</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-code">Running Code</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#main-resource-module">Main RESource Module</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-scripts">Custom Scripts</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-and-deploy">Build and Deploy</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-structure">Environment Structure</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-scientific-computing-from-conda-forge">Core Scientific Computing (from conda-forge)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geospatial-stack-optimized-conda-versions">Geospatial Stack (optimized conda versions)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization">Visualization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#climate-and-weather">Climate and Weather</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development-tools">Development Tools</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#specialized-packages-via-pip">Specialized Packages (via pip)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-file-location">Environment File Location</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#file-structure">File Structure</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-env-directory">Why <code class="docutils literal notranslate"><span class="pre">env/</span></code> Directory?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#working-with-environment-files">Working with Environment Files</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-file">Environment File</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sharing-and-collaboration">Sharing and Collaboration</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#export-current-environment">Export Current Environment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-environment">Reproduce Environment</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">Troubleshooting</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-creation-issues">Environment Creation Issues</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#package-conflicts">Package Conflicts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#missing-packages">Missing Packages</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jupyter-kernel-issues">Jupyter Kernel Issues</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#daily-workflow-maintenance-and-collaboration">Daily Workflow, Maintenance, and Collaboration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-benefits">Performance Benefits</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#see-also">See Also</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

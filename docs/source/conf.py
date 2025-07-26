@@ -22,7 +22,9 @@ if on_rtd:
     # Add additional mock imports for Read the Docs
     additional_mocks = [
         'numba', 'dask', 'distributed', 'lxml', 'openpyxl', 'xlrd',
-        'pyarrow', 'fastparquet', 'tables', 'bottleneck', 'numexpr'
+        'pyarrow', 'fastparquet', 'tables', 'bottleneck', 'numexpr',
+        'atlite', 'rasterio', 'rasterio.features', 'shapely', 'shapely.geometry',
+        'cartopy', 'cartopy.crs', 'folium', 'cdsapi', 'pyproj'
     ]
 
 project = 'RESource'
