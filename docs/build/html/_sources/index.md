@@ -27,9 +27,9 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 
 notes/resource_builder
 notes/getting_started
-notes/virtual_environment.md
+notes/environment_setup
 notes/api
-notes/case
+case_studies/BC.md
 notes/developers
 ```
 
