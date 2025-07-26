@@ -1,0 +1,661 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RES.atb &#8212; RESource 2025.07 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=e9b82cb4"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/RES/atb';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/RESource_logo_2025.07.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/RESource_logo_2025.07.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Store_explorer.html">Explore data store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for RES.atb</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">RES</span> <span class="kn">import</span> <span class="n">utility</span> <span class="k">as</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">RES.AttributesParser</span> <span class="kn">import</span> <span class="n">AttributesParser</span>
+<span class="kn">from</span> <span class="nn">RES.hdf5_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="n">print_level_base</span><span class="o">=</span><span class="mi">2</span>
+
+<div class="viewcode-block" id="NREL_ATBProcessor">
+<a class="viewcode-back" href="../../notes/api.html#RES.atb.NREL_ATBProcessor">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">NREL_ATBProcessor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    NREL_ATBProcessor is a class from RESource module, designed to process the Annual Technology Baseline (ATB) data </span>
+<span class="sd">    sourced from the National Renewable Energy Laboratory (NREL). This class provides methods </span>
+<span class="sd">    to pull, process, and store cost data for various renewable energy technologies, including </span>
+<span class="sd">    utility-scale photovoltaic (PV) systems, land-based wind turbines, and battery energy </span>
+<span class="sd">    storage systems (BESS).</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        config_file_path (Path): Path to the configuration file.</span>
+<span class="sd">        region_short_code (str): Short code for the region.</span>
+<span class="sd">        resource_type (str): Type of resource being processed.</span>
+<span class="sd">        atb_config (dict): Configuration dictionary containing paths and settings for ATB data.</span>
+<span class="sd">        atb_data_save_to (Path): Path to the directory where ATB data will be saved.</span>
+<span class="sd">        atb_parquet_source (str): Source URL or path for the ATB Parquet file.</span>
+<span class="sd">        atb_datafile (str): Name of the ATB data file.</span>
+<span class="sd">        atb_file_path (Path): Full path to the ATB data file.</span>
+<span class="sd">        datahandler (DataHandler): Instance of DataHandler for storing processed data.</span>
+<span class="sd">        </span>
+<span class="sd">    Methods:</span>
+<span class="sd">        __post_init__():</span>
+<span class="sd">            Initializes the processor by loading configurations, setting up paths, </span>
+<span class="sd">            and creating necessary directories.</span>
+<span class="sd">        pull_data():</span>
+<span class="sd">            Pulls and processes the ATB data, extracting cost data for utility-scale PV, </span>
+<span class="sd">            land-based wind, and BESS. Returns the processed data as a tuple.</span>
+<span class="sd">        _check_and_download_data():</span>
+<span class="sd">            Checks for the existence of the ATB data file locally and downloads it if </span>
+<span class="sd">            necessary.</span>
+<span class="sd">        _process_solar_cost(atb_cost):</span>
+<span class="sd">            Filters and processes solar cost data from the ATB dataset based on specific </span>
+<span class="sd">            criteria. Saves the processed data to a CSV file and stores it in the data handler.</span>
+<span class="sd">        _process_wind_cost(atb_cost):</span>
+<span class="sd">            Filters and processes land-based wind cost data from the ATB dataset based on </span>
+<span class="sd">            specific criteria. Saves the processed data to a CSV file and stores it in the </span>
+<span class="sd">            data handler.</span>
+<span class="sd">        _process_bess_cost(atb_cost):</span>
+<span class="sd">            Filters and processes battery energy storage system (BESS) cost data from the </span>
+<span class="sd">            ATB dataset based on specific criteria. Saves the processed data to a CSV file </span>
+<span class="sd">            and stores it in the data handler.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># Input parameters</span>
+    <span class="n">config_file_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;config/config.yaml&#39;</span><span class="p">))</span>
+    <span class="n">region_short_code</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;BC&#39;</span><span class="p">)</span>
+    <span class="n">resource_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="NREL_ATBProcessor.__post_init__">
+<a class="viewcode-back" href="../../notes/api.html#RES.atb.NREL_ATBProcessor.__post_init__">[docs]</a>
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Post-initialization method for setting up ATB-related configurations and paths.</span>
+<span class="sd">        </span>
+<span class="sd">        This method performs the following tasks:</span>
+<span class="sd">        - Creates an AttributesParser instance to handle configuration loading.</span>
+<span class="sd">        - Retrieves the ATB configuration using `get_atb_config`.</span>
+<span class="sd">        - Sets up paths for saving ATB data and accessing ATB parquet files.</span>
+<span class="sd">        - Ensures that the directory for the ATB data file exists, creating it if necessary.</span>
+<span class="sd">        - Initializes a `DataHandler` instance with the provided store.</span>
+<span class="sd">        </span>
+<span class="sd">        Attributes initialized:</span>
+<span class="sd">        - attributes_parser: AttributesParser instance for configuration handling.</span>
+<span class="sd">        - atb_config: Configuration dictionary for ATB settings.</span>
+<span class="sd">        - atb_data_save_to: Path object representing the root directory for saving ATB data.</span>
+<span class="sd">        - atb_parquet_source: Path to the source parquet file as specified in the configuration.</span>
+<span class="sd">        - atb_datafile: Name of the ATB data parquet file as specified in the configuration.</span>
+<span class="sd">        - atb_file_path: Full path to the ATB data file.</span>
+<span class="sd">        - datahandler: Instance of `DataHandler` initialized with the provided store.</span>
+<span class="sd">        </span>
+<span class="sd">        NODOC</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;NREL_ATBProcessor initiated...&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Create AttributesParser instance to handle configuration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes_parser</span> <span class="o">=</span> <span class="n">AttributesParser</span><span class="p">(</span>
+            <span class="n">config_file_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config_file_path</span><span class="p">,</span>
+            <span class="n">region_short_code</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="p">,</span>
+            <span class="n">resource_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># Access configuration through the attributes_parser</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes_parser</span><span class="o">.</span><span class="n">config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">store</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes_parser</span><span class="o">.</span><span class="n">store</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">atb_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes_parser</span><span class="o">.</span><span class="n">get_atb_config</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atb_data_save_to</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atb_config</span><span class="p">[</span><span class="s1">&#39;root&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atb_parquet_source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atb_config</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">][</span><span class="s1">&#39;parquet&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atb_datafile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atb_config</span><span class="p">[</span><span class="s1">&#39;datafile&#39;</span><span class="p">][</span><span class="s1">&#39;parquet&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atb_file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atb_data_save_to</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">atb_datafile</span>
+        
+        <span class="c1"># Create the parent directories if they do not exist</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atb_file_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">res_data</span> <span class="o">=</span> <span class="n">DataHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">)</span></div>
+
+        
+<div class="viewcode-block" id="NREL_ATBProcessor.pull_data">
+<a class="viewcode-back" href="../../notes/api.html#RES.atb.NREL_ATBProcessor.pull_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">pull_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pulls and processes the Annual Technology Baseline (ATB) data sourced from NREL.</span>
+<span class="sd">        </span>
+<span class="sd">        Jobs:</span>
+<span class="sd">            - Loads the config file, checks and downloads the required data file (from defined source url in config) if not already available.</span>
+<span class="sd">            - Reads the ATB cost data from a Parquet file.</span>
+<span class="sd">            - Processes the ATB cost data to extract -</span>
+<span class="sd">                - Utility-scale photovoltaic (PV) cost.</span>
+<span class="sd">                - Land-based wind cost.</span>
+<span class="sd">                - Battery energy storage system (BESS) cost.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: A tuple containing the processed cost data for:</span>
+<span class="sd">                - Utility-scale PV (self.utility_pv_cost)</span>
+<span class="sd">                - Land-based wind (self.land_based_wind_cost)</span>
+<span class="sd">                - BESS (self.bess_cost)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Processing Annual Technology Baseline (ATB) data sourced from NREL...&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__check_and_download_data</span><span class="p">()</span>
+        
+        <span class="n">atb_cost</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atb_file_path</span><span class="p">)</span>
+        
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| ATB cost datafile: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">atb_file_path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> loaded&quot;</span><span class="p">)</span>
+
+        
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;Extracting technology baseline costs...&quot;</span><span class="p">)</span>
+        <span class="sa">f</span><span class="s2">&quot;ATB cost datafile: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">atb_file_path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> loaded&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">utility_pv_cost</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__process_solar_cost</span><span class="p">(</span><span class="n">atb_cost</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">land_based_wind_cost</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__process_wind_cost</span><span class="p">(</span><span class="n">atb_cost</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bess_cost</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__process_bess_cost</span><span class="p">(</span><span class="n">atb_cost</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">utility_pv_cost</span><span class="p">,</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">land_based_wind_cost</span><span class="p">,</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">bess_cost</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">__check_and_download_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks the existence of a local copy of the ATB data file and downloads it if necessary.</span>
+
+<span class="sd">        This method ensures that the required ATB data file is available locally. If the file</span>
+<span class="sd">        does not exist, it triggers a download from the specified source. The download is</span>
+<span class="sd">        skipped if the file already exists and `force_update` is set to False.</span>
+
+<span class="sd">        Uses:</span>
+<span class="sd">            - `utils.check_LocalCopy_and_run_function` to verify the local copy and execute</span>
+<span class="sd">              the download function if needed.</span>
+<span class="sd">            - `utils.download_data` to handle the actual data download process.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            None</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">check_LocalCopy_and_run_function</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">atb_file_path</span><span class="p">,</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">download_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atb_parquet_source</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">atb_file_path</span><span class="p">),</span>
+            <span class="n">force_update</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__process_solar_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atb_cost</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Processes solar cost data from the ATB (Annual Technology Baseline) dataset.</span>
+
+<span class="sd">        This method filters the ATB cost data for utility-scale photovoltaic (PV) systems</span>
+<span class="sd">        based on specific criteria such as technology alias, core metric parameters, scenario,</span>
+<span class="sd">        core metric case, technology details, and other attributes. The filtered data is then</span>
+<span class="sd">        saved to a specified file and stored using the data handler.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            atb_cost (pd.DataFrame): The ATB cost dataset containing cost information</span>
+<span class="sd">                                     for various technologies and scenarios.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: A DataFrame containing the filtered and processed solar cost data.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            KeyError: If required keys are missing in the configuration dictionary.</span>
+<span class="sd">            FileNotFoundError: If the specified save path is invalid or inaccessible.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            - The method assumes the configuration dictionary (`self.config`) contains</span>
+<span class="sd">              the necessary keys and paths for filtering and saving the data.</span>
+<span class="sd">            - The `self.datahandler.to_store` method is used to store the processed data</span>
+<span class="sd">              for further use.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;Extracting Solar PV technology cost...&quot;</span><span class="p">)</span>
+        <span class="n">pv_cost_mask</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;technology_alias&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Utility PV&#39;</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;core_metric_parameter&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">&#39;CAPEX&#39;</span><span class="p">,</span> <span class="s1">&#39;Fixed O&amp;M&#39;</span><span class="p">,</span> <span class="s1">&#39;Variable O&amp;M&#39;</span><span class="p">,</span><span class="s1">&#39;OCC&#39;</span><span class="p">]))</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;scenario&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Moderate&#39;</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;core_metric_case&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Market&#39;</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;techdetail&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;capacity_disaggregation&#39;</span><span class="p">][</span><span class="s1">&#39;solar&#39;</span><span class="p">][</span><span class="s1">&#39;NREL_ATB_type&#39;</span><span class="p">])</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;crpyears&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;20&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="c1"># capital recovery period</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;core_metric_variable&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2022</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">utility_pv_cost</span> <span class="o">=</span> <span class="n">atb_cost</span><span class="p">[</span><span class="n">pv_cost_mask</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;core_metric_variable&#39;</span><span class="p">)</span>
+
+        <span class="n">save_to</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;capacity_disaggregation&#39;</span><span class="p">][</span><span class="s1">&#39;solar&#39;</span><span class="p">][</span><span class="s1">&#39;cost_data&#39;</span><span class="p">])</span>
+        <span class="n">save_to</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">utility_pv_cost</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">save_to</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">res_data</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="n">utility_pv_cost</span><span class="p">,</span><span class="s1">&#39;cost/atb/solar&#39;</span><span class="p">,</span><span class="n">force_update</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">utility_pv_cost</span>
+
+    <span class="k">def</span> <span class="nf">__process_wind_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atb_cost</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Processes wind cost data from the ATB (Annual Technology Baseline) dataset </span>
+<span class="sd">        and saves the filtered results to a CSV file and a data store.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            atb_cost (pd.DataFrame): A DataFrame containing ATB cost data with </span>
+<span class="sd">                various attributes such as technology alias, core metric parameters, </span>
+<span class="sd">                scenarios, and more.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: A filtered and sorted DataFrame containing land-based wind </span>
+<span class="sd">            cost data based on the specified criteria.</span>
+<span class="sd">        Filtering Criteria:</span>
+<span class="sd">            - Technology alias is &#39;Land-Based Wind&#39;.</span>
+<span class="sd">            - Core metric parameter is one of [&#39;CAPEX&#39;, &#39;Fixed O&amp;M&#39;, &#39;Variable O&amp;M&#39;, &#39;OCC&#39;].</span>
+<span class="sd">            - Scenario is &#39;Moderate&#39;.</span>
+<span class="sd">            - Core metric case is &#39;Market&#39;.</span>
+<span class="sd">            - Technology detail matches the NREL_ATB_type specified in the configuration.</span>
+<span class="sd">            - CRP years is &#39;20&#39;.</span>
+<span class="sd">            - Core metric variable is 2024.</span>
+<span class="sd">        Side Effects:</span>
+<span class="sd">            - Saves the filtered DataFrame to a CSV file at the path specified in </span>
+<span class="sd">              the configuration under &#39;capacity_disaggregation&#39; -&gt; &#39;wind&#39; -&gt; &#39;cost_data&#39;.</span>
+<span class="sd">            - Stores the filtered DataFrame in the data handler under the key </span>
+<span class="sd">              &#39;cost/atb/wind&#39; with force update enabled.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;Extracting Wind Turbine technology cost...&quot;</span><span class="p">)</span>
+        <span class="n">land_based_wind_cost_mask</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;technology_alias&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Land-Based Wind&#39;</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;core_metric_parameter&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">&#39;CAPEX&#39;</span><span class="p">,</span> <span class="s1">&#39;Fixed O&amp;M&#39;</span><span class="p">,</span> <span class="s1">&#39;Variable O&amp;M&#39;</span><span class="p">,</span><span class="s1">&#39;OCC&#39;</span><span class="p">]))</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;scenario&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Moderate&#39;</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;core_metric_case&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Market&#39;</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;techdetail2&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;capacity_disaggregation&#39;</span><span class="p">][</span><span class="s1">&#39;wind&#39;</span><span class="p">][</span><span class="s1">&#39;turbines&#39;</span><span class="p">][</span><span class="s1">&#39;NREL_ATB_type&#39;</span><span class="p">])</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;crpyears&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;20&#39;</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;core_metric_variable&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2024</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">land_based_wind_cost</span> <span class="o">=</span> <span class="n">atb_cost</span><span class="p">[</span><span class="n">land_based_wind_cost_mask</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;core_metric_variable&#39;</span><span class="p">)</span>
+        
+        <span class="n">save_to</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;capacity_disaggregation&#39;</span><span class="p">][</span><span class="s1">&#39;wind&#39;</span><span class="p">][</span><span class="s1">&#39;cost_data&#39;</span><span class="p">])</span>
+        <span class="n">save_to</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">land_based_wind_cost</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">save_to</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">res_data</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="n">land_based_wind_cost</span><span class="p">,</span><span class="s1">&#39;cost/atb/wind&#39;</span><span class="p">,</span><span class="n">force_update</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">land_based_wind_cost</span>
+
+    <span class="k">def</span> <span class="nf">__process_bess_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atb_cost</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Processes the cost data for Utility-Scale Battery Storage (BESS) from the ATB dataset.</span>
+
+<span class="sd">        This method filters the ATB cost data based on specific criteria such as technology alias,</span>
+<span class="sd">        core metric parameters, scenario, core metric case, technology details, and other attributes.</span>
+<span class="sd">        The filtered data is then sorted, saved to a CSV file, and stored in the data handler.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            atb_cost (pd.DataFrame): The ATB cost dataset containing cost information for various technologies.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: The filtered and processed cost data for Utility-Scale Battery Storage (BESS).</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            KeyError: If required configuration keys are missing in `self.config`.</span>
+<span class="sd">            FileNotFoundError: If the specified save path is invalid or inaccessible.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            - The method assumes that the configuration dictionary (`self.config`) contains the necessary</span>
+<span class="sd">              keys and values for filtering and saving the data.</span>
+<span class="sd">            - The filtered data is stored in the data handler under the key &#39;cost/atb/bess&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;Extracting BESS technology cost...&quot;</span><span class="p">)</span>
+        <span class="n">bess_cost_mask</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;technology_alias&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Utility-Scale Battery Storage&#39;</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;core_metric_parameter&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">&#39;CAPEX&#39;</span><span class="p">,</span> <span class="s1">&#39;Fixed O&amp;M&#39;</span><span class="p">,</span> <span class="s1">&#39;Variable O&amp;M&#39;</span><span class="p">,</span><span class="s1">&#39;OCC&#39;</span><span class="p">]))</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;scenario&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Moderate&#39;</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;core_metric_case&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Market&#39;</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;techdetail&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;capacity_disaggregation&#39;</span><span class="p">][</span><span class="s1">&#39;bess&#39;</span><span class="p">][</span><span class="s1">&#39;NREL_ATB_type&#39;</span><span class="p">])</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;crpyears&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;20&#39;</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">atb_cost</span><span class="p">[</span><span class="s1">&#39;core_metric_variable&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2024</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">bess_cost</span> <span class="o">=</span> <span class="n">atb_cost</span><span class="p">[</span><span class="n">bess_cost_mask</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;core_metric_variable&#39;</span><span class="p">)</span>
+        <span class="n">save_to</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;capacity_disaggregation&#39;</span><span class="p">][</span><span class="s1">&#39;bess&#39;</span><span class="p">][</span><span class="s1">&#39;cost_data&#39;</span><span class="p">])</span>
+        <span class="n">save_to</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">bess_cost</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">save_to</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">res_data</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="n">bess_cost</span><span class="p">,</span><span class="s1">&#39;cost/atb/bess&#39;</span><span class="p">,</span><span class="n">force_update</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">bess_cost</span></div>
+
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

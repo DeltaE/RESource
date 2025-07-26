@@ -1,0 +1,600 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RES.score &#8212; RESource 2025.07 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=e9b82cb4"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/RES/score';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/RESource_logo_2025.07.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/RESource_logo_2025.07.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Store_explorer.html">Explore data store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for RES.score</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">RES.AttributesParser</span> <span class="kn">import</span> <span class="n">AttributesParser</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">import</span> <span class="nn">RES.utility</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="n">print_level_base</span><span class="o">=</span><span class="mi">2</span>
+
+<div class="viewcode-block" id="CellScorer">
+<a class="viewcode-back" href="../../notes/api.html#RES.score.CellScorer">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">CellScorer</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__post_init__</span><span class="p">()</span>
+        
+<div class="viewcode-block" id="CellScorer.get_CRF">
+<a class="viewcode-back" href="../../notes/api.html#RES.score.CellScorer.get_CRF">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_CRF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                <span class="n">r</span><span class="p">,</span> 
+                <span class="n">N</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">**</span> <span class="n">N</span><span class="p">)</span> <span class="o">/</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">**</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">N</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span></div>
+
+        
+<div class="viewcode-block" id="CellScorer.calculate_total_cost">
+<a class="viewcode-back" href="../../notes/api.html#RES.score.CellScorer.calculate_total_cost">[docs]</a>
+    <span class="k">def</span> <span class="nf">calculate_total_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                             <span class="n">distance_to_grid_km</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> 
+                             <span class="n">grid_connection_cost_per_km</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> 
+                             <span class="n">tx_line_rebuild_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> 
+                             <span class="n">capex_tech</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                             <span class="n">potential_capacity_mw</span><span class="p">:</span><span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the total cost, which includes the CAPEX and distance-based grid connection costs.</span>
+<span class="sd">        Method: Simple Levelized Cost of Energy Calculation (https://www.nrel.gov/analysis/tech-lcoe-documentation.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Calculate distance-based cost</span>
+        <span class="n">add_to_grid_cost</span> <span class="o">=</span> <span class="p">(</span><span class="n">distance_to_grid_km</span> <span class="o">*</span> <span class="n">grid_connection_cost_per_km</span> <span class="o">/</span> <span class="mf">1.60934</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">tx_line_rebuild_cost</span> <span class="o">/</span> <span class="mf">1.60934</span><span class="p">)</span>  <span class="c1"># Convert to miles as our costs are given in $/miles (USA study)</span>
+
+        <span class="c1"># Total cost is CAPEX plus distance cost</span>
+        <span class="n">total_cost</span> <span class="o">=</span> <span class="n">capex_tech</span><span class="o">*</span><span class="n">potential_capacity_mw</span> <span class="o">+</span> <span class="n">add_to_grid_cost</span>  <span class="c1"># in M$</span>
+        
+        <span class="k">return</span> <span class="n">total_cost</span></div>
+
+    
+<div class="viewcode-block" id="CellScorer.calculate_score">
+<a class="viewcode-back" href="../../notes/api.html#RES.score.CellScorer.calculate_score">[docs]</a>
+    <span class="k">def</span> <span class="nf">calculate_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                        <span class="n">row</span><span class="p">,</span>
+                        <span class="n">CF_column</span><span class="p">,</span>
+                        <span class="n">CRF</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the potential LCOE score for each cell in the dataframe,</span>
+<span class="sd">        reading cost parameters directly from the DataFrame.</span>
+<span class="sd">        </span>
+<span class="sd">        ## Args:</span>
+<span class="sd">        - **row** : A single row of the DataFrame.</span>
+<span class="sd">        </span>
+<span class="sd">        ## Returns:</span>
+<span class="sd">        - **float** : The calculated LCOE value for the row.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Calculate the total cost</span>
+        <span class="n">total_cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_total_cost</span><span class="p">(</span>
+            <span class="n">row</span><span class="p">[</span><span class="s1">&#39;nearest_station_distance_km&#39;</span><span class="p">],</span>  <span class="c1"># km</span>
+            <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;grid_connection_cost_per_km_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>  <span class="c1"># m$/km</span>
+            <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;tx_line_rebuild_cost_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>  <span class="c1"># m$/km</span>
+            <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;capex_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>
+            <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span><span class="c1"># MW</span>
+        <span class="p">)</span> <span class="c1"># mW</span>
+        
+        <span class="n">annual_energy</span> <span class="o">=</span> <span class="mi">8760</span>  <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="n">CF_column</span><span class="p">]</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span><span class="c1"># Total energy produced in a year</span>
+        <span class="k">if</span> <span class="n">annual_energy</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># some cells have no potentials</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;999&#39;</span><span class="p">)</span>  <span class="c1"># handle the error </span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Calculate the LCOE</span>
+
+            <span class="n">lcoe</span> <span class="o">=</span> <span class="p">(</span><span class="n">total_cost</span> <span class="o">*</span> <span class="n">CRF</span> <span class="o">/</span> <span class="n">annual_energy</span><span class="p">)</span>  <span class="c1"># Avoid division by zero,  m$/MWh</span>
+        
+            <span class="k">return</span> <span class="n">lcoe</span> <span class="o">*</span> <span class="mf">1E6</span> <span class="c1"># m$/MWh → $/MWh</span></div>
+
+        
+<div class="viewcode-block" id="CellScorer.get_cell_score">
+<a class="viewcode-back" href="../../notes/api.html#RES.score.CellScorer.get_cell_score">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_cell_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                    <span class="n">cells</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                    <span class="n">CF_column</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+                    <span class="n">interest_rate</span><span class="o">=</span><span class="mf">0.03</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Calculate the potential LCOE score for each cell in the dataframe,</span>
+<span class="sd">            reading cost parameters directly from the DataFrame.</span>
+<span class="sd">            </span>
+<span class="sd">            ## Args:</span>
+<span class="sd">            - **Cells** : Pandas DataFrame of grid cells.</span>
+<span class="sd">            - **CF_column**: Column name from which Capacity Factor (CF) will be used to calculated Annual. Avg. Energy (MWh). User can have multiple CF_mean columns sourced from different data sources.</span>
+<span class="sd">           </span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">dataframe</span> <span class="o">=</span> <span class="n">cells</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># Use the input DataFrame for calculations</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
+                           <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Calculating score for cells...&quot;</span><span class="p">)</span> 
+            
+            <span class="c1"># Calculate the LCOE for each cell</span>
+            <span class="n">N</span><span class="o">=</span><span class="n">cells</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Operational_life_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">CRF</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_CRF</span><span class="p">(</span><span class="n">interest_rate</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+            <span class="n">dataframe</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_total_cost</span><span class="p">(</span>
+                    <span class="n">x</span><span class="p">[</span><span class="s1">&#39;nearest_station_distance_km&#39;</span><span class="p">],</span> <span class="c1"># km</span>
+                    <span class="n">x</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;grid_connection_cost_per_km_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>  <span class="c1"># m$/km</span>
+                    <span class="n">x</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;tx_line_rebuild_cost_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>  <span class="c1"># m$/km</span>
+                    <span class="n">x</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;capex_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>
+                    <span class="n">x</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span><span class="c1"># m$</span>
+                <span class="p">)</span><span class="o">*</span><span class="n">CRF</span> <span class="o">/</span> <span class="p">(</span><span class="mi">8760</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">CF_column</span><span class="p">]</span><span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="p">(</span><span class="mi">8760</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">CF_column</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">),</span>  <span class="c1"># LCOE = Total Cost / Total Energy Produced</span>
+                <span class="n">axis</span><span class="o">=</span><span class="mi">1</span> <span class="c1"># LCOE in M$/MWh;</span>
+            <span class="p">)</span>  
+            
+            <span class="c1"># dataframe[f&#39;lcoe_{self.resource_type}&#39;]=dataframe[f&#39;lcoe_{self.resource_type}&#39;]*1E3 # LCOE in $/kWh; lower lcoe indicates better cells</span>
+            <span class="n">dataframe</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_score</span><span class="p">(</span><span class="n">row</span><span class="p">,</span><span class="n">CF_column</span><span class="p">,</span><span class="n">CRF</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># LCOE in $/MWh  # adopting NREL&#39;s method + some added costs</span>
+            <span class="n">scored_dataframe</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># Lower LCOE is better</span>
+            
+            <span class="c1"># dataframe[f&#39;LCOE_{self.resource_type}&#39;] = dataframe.apply(lambda row: self.calc_LCOE_lambda_m2(row), axis=1) # LCOE in $/MWh  # adopting NREL&#39;s method + some added costs</span>
+            <span class="c1"># scored_dataframe = dataframe.sort_values(by=f&#39;LCOE_{self.resource_type}&#39;, ascending=False).copy()  # Lower LCOE is better</span>
+            
+            <span class="k">return</span> <span class="n">scored_dataframe</span></div>
+
+
+<div class="viewcode-block" id="CellScorer.calc_LCOE_lambda_m1">
+<a class="viewcode-back" href="../../notes/api.html#RES.score.CellScorer.calc_LCOE_lambda_m1">[docs]</a>
+    <span class="k">def</span> <span class="nf">calc_LCOE_lambda_m1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                         <span class="n">row</span><span class="p">):</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        # Method: </span>
+<span class="sd">        LCOE = [(FCR x TCC + FOC + GCC + TRC) / AEP + VOC)</span>
+<span class="sd">            - Total Capital cost, $ (TCC)</span>
+<span class="sd">            - Fixed annual operating cost, $ (FOC)</span>
+<span class="sd">            - Variable operating cost, $/kWh (VOC)</span>
+<span class="sd">            - Fixed charge rate (FCR)</span>
+<span class="sd">            - Annual electricity production, kWh (AEP)</span>
+<span class="sd">            - Grid Connection Cost (GCC)</span>
+<span class="sd">            - Transmission Line Rebuild Cost (TRC) </span>
+<span class="sd">            </span>
+<span class="sd">        ### Ref: </span>
+<span class="sd">        - https://atb.nrel.gov/electricity/2024/equations_&amp;_variables</span>
+<span class="sd">        - https://sam.nrel.gov/financial-models/lcoe-calculator.html</span>
+<span class="sd">        - https://www.nrel.gov/docs/legosti/old/5173.pdf</span>
+<span class="sd">        - https://www.nrel.gov/docs/fy07osti/40566.pdf</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dtg</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;nearest_station_distance_km&#39;</span><span class="p">]</span> <span class="c1"># km</span>
+        <span class="n">gcc_pu</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;grid_connection_cost_per_km_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="c1"># m$/km</span>
+        <span class="n">gcc</span><span class="o">=</span><span class="n">dtg</span><span class="o">*</span><span class="n">gcc_pu</span><span class="o">/</span><span class="mf">1.60934</span>  <span class="c1"># Convert to miles as our costs are given in m$/miles (USA study)</span>
+        <span class="n">trc</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;tx_line_rebuild_cost_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span><span class="o">/</span> <span class="mf">1.60934</span> <span class="c1"># m$/km</span>
+        <span class="n">tcc</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;capex_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="c1"># m$/km</span>
+        
+        <span class="n">foc</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;fom_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="c1"># m$/ MW * MW</span>
+        <span class="n">voc</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;vom_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="c1"># m$/ MW * MW</span>
+        
+        <span class="n">fcr</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;FCR&#39;</span><span class="p">,</span> <span class="mf">0.098</span><span class="p">)</span> 
+        <span class="n">aep</span> <span class="o">=</span> <span class="mi">8760</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">_CF_mean&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="c1"># MWh</span>
+        
+        <span class="k">if</span> <span class="n">aep</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># some cells have no potentials</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="mi">99999</span><span class="p">)</span>  <span class="c1"># handle the error </span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lcoe</span> <span class="o">=</span> <span class="p">((</span><span class="n">fcr</span> <span class="o">*</span> <span class="n">tcc</span> <span class="o">+</span> <span class="n">gcc</span> <span class="o">+</span> <span class="n">trc</span> <span class="o">+</span> <span class="n">foc</span><span class="p">)</span> <span class="o">/</span> <span class="n">aep</span> <span class="o">+</span> <span class="n">voc</span><span class="p">)</span>  <span class="c1"># m$/MWh</span>
+            <span class="k">return</span> <span class="n">lcoe</span>  <span class="o">*</span> <span class="mf">1E6</span> <span class="c1"># LCOE in $/MWh      </span></div>
+
+<span class="w">        </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    &#39;Fixed O&amp;M&#39;, &#39;CFC&#39;, &#39;LCOE&#39;, &#39;CAPEX&#39;, &#39;CF&#39;, &#39;OCC&#39;, &#39;GCC&#39;,</span>
+<span class="sd">       &#39;Variable O&amp;M&#39;, &#39;Heat Rate&#39;, &#39;Fuel&#39;, &#39;Additional OCC&#39;,</span>
+<span class="sd">       &#39;Heat Rate Penalty&#39;, &#39;Net Output Penalty&#39;, &#39;FCR&#39;, &#39;Inflation Rate&#39;,</span>
+<span class="sd">       &#39;Interest Rate Nominal&#39;, &#39;Rate of Return on Equity Nominal&#39;,</span>
+<span class="sd">       &#39;Calculated Interest Rate Real&#39;,</span>
+<span class="sd">       &#39;Interest During Construction - Nominal&#39;,</span>
+<span class="sd">       &#39;Calculated Rate of Return on Equity Real&#39;, &#39;Debt Fraction&#39;,</span>
+<span class="sd">       &#39;Tax Rate (Federal and State)&#39;, &#39;WACC Nominal&#39;, &#39;WACC Real&#39;, &#39;CRF&#39;</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="CellScorer.calc_LCOE_lambda_m2">
+<a class="viewcode-back" href="../../notes/api.html#RES.score.CellScorer.calc_LCOE_lambda_m2">[docs]</a>
+    <span class="k">def</span> <span class="nf">calc_LCOE_lambda_m2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                         <span class="n">row</span><span class="p">):</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        # Method: </span>
+<span class="sd">        LCOE = [{(FCR x CAPEX) + FOM ) /  (CF x 8760) } + VOM + Fuel - PTC)</span>
+<span class="sd">            </span>
+<span class="sd">            - Fixed charge rate (FCR) :</span>
+<span class="sd">                - Amount of revenue per dollar of investment required that must be collected annually from customers to pay the carrying charges on that investment.</span>
+<span class="sd">            - CAPEX (m$)</span>
+<span class="sd">                - expenditures required to achieve commercial operation of the generation plant.</span>
+<span class="sd">                - ConFinFactor x (OCC +GCC)</span>
+<span class="sd">                    - ConFinFactor: Conversion Factor for Capital Recovery. </span>
+<span class="sd">                        - The portion of all-in capital cost associated with construction period financing; </span>
+<span class="sd">                        - ConFinFactor = Σ(y=0 t0 C-1) FC-y x AI_y</span>
+<span class="sd">                        - assumed to be 1.0 for simplification</span>
+<span class="sd">                    - OCC ($/kW) : Overnight Capital Cost CAPEX if plant could be constructed overnight (i.e., excludes construction period financing); includes on-site electrical equipment (e.g., switchyard), a nominal-distance spur line (&lt;1 mi), and necessary upgrades at a transmission substation. ($/kW)</span>
+<span class="sd">                    - GCC ($/kW): Grid Connection Cost </span>
+<span class="sd">            - CF: Capacity Factor</span>
+<span class="sd">            - Variable operation and maintenance (VOM), $/MWh (VOC)</span>
+<span class="sd">            - Fuel: </span>
+<span class="sd">                - Fuel costs, converted to $/MWh, using heat rates.</span>
+<span class="sd">                - Heat rate (MMBtu/MWh) * Fuel Costs($/MMBtu)</span>
+<span class="sd">                - Zero for VREs</span>
+<span class="sd">            - PTC ($/MWh) :  Production Tax Credit</span>
+<span class="sd">                - a before-tax credit that reduces LCOE; credits are available for 10 years, so it must be adjusted for a 10-year CRF relative to the full CRF of the project. </span>
+<span class="sd">                - This formulation of the PTC accounts for a pre-tax LCOE and aligns with the equation used for the ProFinFactor.</span>
+<span class="sd">                - PTC= {PTC_full/(1-TR)}x(CRF/CRF_10yrs)</span>
+<span class="sd">                    - TR: Tax Rate</span>
+<span class="sd">                    - CRF: Capital Recovery Factor</span>
+<span class="sd">                        - ratio of a constant annuity to the present value of receiving that annuity for a given length of time</span>
+<span class="sd">                        - CRF = WACC x[1/(1-(1+WACC)^-t)]</span>
+<span class="sd">                            - WACC: Weighted Average Cost of Capital</span>
+<span class="sd">                                - average expected rate that is paid to finance assets</span>
+<span class="sd">                                - WACC = [ 1+ [1-DF] x [(1+RROE)(1=i)-1] + DF x [(1+IR)(1+i)-1] x [1-TR] ]/(1+i) -1</span>
+
+<span class="sd">            </span>
+<span class="sd">        ### Ref: </span>
+<span class="sd">        - https://atb.nrel.gov/electricity/2024/equations_&amp;_variables</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dtg</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;nearest_station_distance_km&#39;</span><span class="p">]</span> <span class="c1"># km</span>
+        
+        <span class="n">gcc_pu</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;grid_connection_cost_per_km_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="c1"># m$/km</span>
+        <span class="n">gcc</span><span class="o">=</span><span class="n">dtg</span><span class="o">*</span><span class="n">gcc_pu</span><span class="o">/</span><span class="mf">1.60934</span>  <span class="c1"># Convert to miles as our costs are given in m$/miles (USA study)</span>
+        
+        <span class="n">trc</span><span class="o">=</span><span class="n">dtg</span><span class="o">*</span><span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;tx_line_rebuild_cost_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span><span class="o">/</span> <span class="mf">1.60934</span> <span class="c1"># m$=m$/km*km</span>
+        
+        <span class="n">tcc</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;capex_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="c1"># m$=m$/MW * MW</span>
+        
+        <span class="n">foc</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;fom_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="c1"># m$/ MW * MW</span>
+        <span class="n">voc</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;vom_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>  <span class="c1"># m$/ MW </span>
+        
+        <span class="n">fcr</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;FCR&#39;</span><span class="p">,</span> <span class="mf">0.098</span><span class="p">)</span> 
+        <span class="n">aep</span> <span class="o">=</span> <span class="mi">8760</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">_CF_mean&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="c1"># MWh</span>
+        
+        <span class="k">if</span> <span class="n">aep</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># some cells have no potentials</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;99999&#39;</span><span class="p">)</span>  <span class="c1"># handle the error </span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lcoe</span> <span class="o">=</span> <span class="p">((</span><span class="n">fcr</span> <span class="o">*</span> <span class="p">(</span><span class="n">tcc</span> <span class="o">+</span> <span class="n">gcc</span> <span class="o">+</span> <span class="n">trc</span> <span class="p">)</span> <span class="o">+</span> <span class="n">foc</span><span class="p">)</span> <span class="o">/</span> <span class="n">aep</span> <span class="o">+</span> <span class="n">voc</span><span class="p">)</span>  <span class="c1"># m$/MWh</span>
+            <span class="k">return</span> <span class="n">lcoe</span>  <span class="o">*</span> <span class="mf">1E6</span> <span class="c1"># LCOE in $/MWh      </span></div>
+</div>
+
+        
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

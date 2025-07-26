@@ -1,193 +1,190 @@
-.PHONY: setup install clean clean-docs export sync-notebooks docs docs-deploy docs-deploy-git docs-build debug-sphinx debug-pages autobuild
+# RESource Project Makefile - Conda Environment Management
 
-# Create and activate env, install dependencies
-setup:
-	@echo "Creating and setting up the environment..."
-	conda env create -f env/environment.yml
-	@echo "Environment created. Please restart your shell or run 'conda activate RES' manually."
+.PHONY: help setup-conda clean-conda conda-status run-res run-conda jupyter docs-conda docs-build deploy sync-notebooks export-env autobuild
 
-# Update the environment
-update:
-	@echo "Updating environment..."
-	conda env update -f env/environment.yml
-	@echo "Environment updated. Please restart your shell or run 'conda activate RES' manually."
+# Default target
+help:
+	@echo "RESource Project - Available commands:"
+	@echo ""
+	@echo "Environment Management:"
+	@echo "  setup-conda          - Create conda environment 'RES' from env/environment.yml"
+	@echo "  clean-conda          - Remove conda environment 'RES'"
+	@echo "  conda-status         - Show conda environment status"
+	@echo "  export-env           - Export environment to env/environment_exported.yml"
+	@echo ""
+	@echo "Running Code:"
+	@echo "  run-res              - Run main RESource module"
+	@echo "  run-conda SCRIPT=... - Run any script with conda environment"
+	@echo "  jupyter              - Start Jupyter Lab with conda environment"
+	@echo ""
+	@echo "Documentation:"
+	@echo "  docs-conda           - Build and deploy documentation"
+	@echo "  docs-build           - Build documentation only"
+	@echo "  deploy               - Deploy documentation to GitHub Pages"
+	@echo "  sync-notebooks       - Sync notebooks to docs"
+	@echo "  autobuild            - Live rebuild documentation with auto-reload"
 
-# Optional: clean up env (if you want this)
-clean:
-	@echo "Removing the environment..."
-	conda env remove -n RES
+# Environment Management
+setup-conda:
+	@echo "Creating conda environment 'RES'..."
+	@if conda env list | grep -q "^RES "; then \
+		echo "Environment 'RES' already exists. Updating..."; \
+		conda env update -f env/environment.yml; \
+	else \
+		echo "Creating new environment 'RES'..."; \
+		conda env create -f env/environment.yml; \
+	fi
+	@echo "Installing RESource package in development mode..."
+	conda run -n RES pip install -e .
+	@echo "✅ Conda environment 'RES' setup completed!"
+	@echo "To activate: conda activate RES"
+	@echo "To deactivate: conda deactivate"
+
+clean-conda:
+	@echo "Removing conda environment 'RES'..."
+	@conda env remove -n RES -y || echo "Environment 'RES' not found"
 	@echo "Environment removed."
 
-# Clean documentation build
-clean-docs:
-	@echo "Cleaning documentation build..."
-	rm -rf docs/build/
-	@echo "Documentation build cleaned."
+conda-status:
+	@echo "=== Conda Environment Status ==="
+	@if conda env list | grep -q "^RES "; then \
+		echo "✅ Environment 'RES' exists"; \
+		echo ""; \
+		echo "Environment details:"; \
+		conda env list | grep RES; \
+		echo ""; \
+		echo "Python version:"; \
+		conda run -n RES python --version; \
+		echo ""; \
+		echo "Key packages installed:"; \
+		conda run -n RES conda list | grep -E "(numpy|pandas|geopandas|atlite|sphinx)" || echo "Package list unavailable"; \
+		echo ""; \
+		echo "RESource module:"; \
+		conda run -n RES python -c "import RES; print('✅ RES module available')" 2>/dev/null || echo "❌ RES module not available"; \
+	else \
+		echo "❌ Environment 'RES' not found"; \
+		echo "Run 'make setup-conda' to create it"; \
+	fi
 
-export:
-	@echo "Exporting the environment..."
-	conda env export -n RES > env/environment.yml
-	@echo "Environment exported to env/environment.yml."
+export-env:
+	@echo "Exporting current environment to env/environment_exported.yml..."
+	conda env export -n RES > env/environment_exported.yml
+	@echo "Environment exported to env/environment_exported.yml"
 
-# Sync notebooks from root to docs/source/notebooks
+# Running Code
+run-res:
+	@echo "Running main RESource module..."
+	@if conda env list | grep -q "^RES "; then \
+		conda run -n RES python run.py; \
+	else \
+		echo "❌ Conda environment 'RES' not found. Run 'make setup-conda' first."; \
+		exit 1; \
+	fi
+
+run-conda:
+	@if [ -z "$(SCRIPT)" ]; then \
+		echo "Usage: make run-conda SCRIPT=path/to/script.py [ARGS='arg1 arg2']"; \
+		echo "Example: make run-conda SCRIPT=examples/analysis.py"; \
+		echo "Example: make run-conda SCRIPT=workflow/scripts/bess_module_v2.py ARGS='config/config_CAN.yaml bess'"; \
+		exit 1; \
+	fi
+	@echo "Running $(SCRIPT) with conda environment 'RES'..."
+	@if conda env list | grep -q "^RES "; then \
+		conda run -n RES python $(SCRIPT) $(ARGS); \
+	else \
+		echo "❌ Conda environment 'RES' not found. Run 'make setup-conda' first."; \
+		exit 1; \
+	fi
+
+jupyter:
+	@echo "Starting Jupyter Lab with conda environment 'RES'..."
+	@if conda env list | grep -q "^RES "; then \
+		conda run -n RES jupyter lab; \
+	else \
+		echo "❌ Conda environment 'RES' not found. Run 'make setup-conda' first."; \
+		exit 1; \
+	fi
+
+# Documentation
 sync-notebooks:
 	@echo "Syncing notebooks from root to docs/source/notebooks..."
 	@mkdir -p docs/source/notebooks
 	@cp notebooks/Store_explorer.ipynb docs/source/notebooks/ 2>/dev/null || echo "Store_explorer.ipynb not found, skipping..."
 	@cp notebooks/Visuals_BC.ipynb docs/source/notebooks/ 2>/dev/null || echo "Visuals_BC.ipynb not found, skipping..."
+	@cp resource_module_runner.ipynb docs/source/notebooks/ 2>/dev/null || echo "resource_module_runner.ipynb not found, skipping..."
 	@echo "Notebooks synced successfully!"
 
-# Build documentation with notebook sync and deploy to GitHub Pages
-docs: sync-notebooks
-	@echo "Building the documentation with updated notebooks..."
-	@mkdir -p docs/build/html
-	sphinx-build -b html docs/source docs/build/html
-	@echo "Creating .nojekyll file to disable Jekyll..."
-	@echo "" > docs/build/html/.nojekyll
+docs-build: sync-notebooks
+	@echo "Building documentation with conda environment 'RES'..."
+	@if conda env list | grep -q "^RES "; then \
+		mkdir -p docs/build/html; \
+		conda run -n RES sphinx-build -b html docs/source docs/build/html; \
+		echo "Creating .nojekyll file to disable Jekyll..."; \
+		echo "" > docs/build/html/.nojekyll; \
+		echo "Documentation built successfully in docs/build/html/"; \
+	else \
+		echo "❌ Conda environment 'RES' not found. Run 'make setup-conda' first."; \
+		exit 1; \
+	fi
+
+docs-conda: docs-build
+	@echo "Deploying documentation to GitHub Pages..."
 	@echo "Creating additional Jekyll bypass files..."
 	@echo "theme: none" > docs/build/html/_config.yml
 	@echo "# GitHub Pages - No Jekyll Processing" > docs/build/html/README.md
 	@echo "Verifying bypass files exist:"
 	@ls -la docs/build/html/.nojekyll docs/build/html/_config.yml docs/build/html/README.md
-	@echo "Documentation built successfully!"
-	@echo "Deploying to GitHub Pages with Jekyll bypass..."
-	ghp-import -n -p -f docs/build/html
-	@echo "Documentation deployed to GitHub Pages!"
-
-# Setup comprehensive virtual environment for the entire project
-setup-venv:
-	@echo "Setting up comprehensive virtual environment..."
-	@if [ -d "venv" ]; then \
-		echo "Removing existing virtual environment..."; \
-		rm -rf venv; \
-	fi
-	@echo "Creating new virtual environment..."
-	python -m venv venv
-	@echo "Upgrading pip..."
-	source venv/bin/activate && pip install --upgrade pip setuptools wheel
-	@echo "Installing core scientific packages..."
-	source venv/bin/activate && pip install numpy pandas geopandas
-	@echo "Installing geospatial and mapping packages..."
-	source venv/bin/activate && pip install rasterio shapely fiona pyproj cartopy folium
-	@echo "Installing data analysis and visualization packages..."
-	source venv/bin/activate && pip install matplotlib seaborn plotly dash dash-bootstrap-components
-	@echo "Installing renewable energy and weather packages..."
-	source venv/bin/activate && pip install atlite netcdf4 xarray cdsapi pygadm
-	@echo "Installing web scraping and API packages..."
-	source venv/bin/activate && pip install requests beautifulsoup4 pyrosm osmnx
-	@echo "Installing machine learning packages..."
-	source venv/bin/activate && pip install scikit-learn
-	@echo "Installing documentation packages..."
-	source venv/bin/activate && pip install sphinx myst-parser sphinx-book-theme nbsphinx sphinx-autobuild ghp-import
-	@echo "Installing Jupyter packages..."
-	source venv/bin/activate && pip install jupyter ipykernel notebook jupyterlab
-	@echo "Installing additional utility packages..."
-	source venv/bin/activate && pip install pyyaml openpyxl tqdm joblib pyarrow
-	@echo "Installing project in development mode..."
-	source venv/bin/activate && pip install -e .
-	@echo "Virtual environment setup completed!"
-	@echo "To activate: source venv/bin/activate"
-	@echo "To deactivate: deactivate"
-
-# Build documentation with virtual environment
-docs-venv: sync-notebooks
-	@echo "Building the documentation with virtual environment..."
-	@if [ ! -d "venv" ]; then \
-		echo "Virtual environment not found. Run 'make setup-venv' first."; \
+	@echo "Deploying with ghp-import..."
+	@if conda env list | grep -q "^RES "; then \
+		conda run -n RES ghp-import -n -p -f docs/build/html; \
+		echo "✅ Documentation deployed to GitHub Pages!"; \
+	else \
+		echo "❌ Conda environment 'RES' not found. Run 'make setup-conda' first."; \
 		exit 1; \
 	fi
-	@echo "Activating virtual environment and building..."
-	source venv/bin/activate && sphinx-build -b html docs/source docs/build/html
-	@echo "Creating .nojekyll file to disable Jekyll..."
-	@echo "" > docs/build/html/.nojekyll
+
+# Auto-rebuild documentation with live reload
+autobuild: sync-notebooks
+	@echo "Starting live documentation rebuild with conda environment 'RES'..."
+	@if conda env list | grep -q "^RES "; then \
+		echo "🔄 Auto-building documentation with live reload..."; \
+		echo "📂 Source: docs/source"; \
+		echo "🌐 Build: docs/build"; \
+		echo "🔗 Open http://localhost:8000 in your browser"; \
+		conda run -n RES sphinx-autobuild docs/source docs/build; \
+	else \
+		echo "❌ Conda environment 'RES' not found. Run 'make setup-conda' first."; \
+		exit 1; \
+	fi
+
+# Deployment
+deploy: docs-build
+	@echo "Deploying documentation to GitHub Pages..."
 	@echo "Creating additional Jekyll bypass files..."
 	@echo "theme: none" > docs/build/html/_config.yml
 	@echo "# GitHub Pages - No Jekyll Processing" > docs/build/html/README.md
-	@echo "Documentation built successfully!"
-	@echo "Deploying to GitHub Pages with Jekyll bypass..."
-	source venv/bin/activate && ghp-import -n -p -f docs/build/html
-	@echo "Documentation deployed to GitHub Pages!"
-
-# Build documentation only (without deploying)
-docs-build: sync-notebooks
-	@echo "Building the documentation with updated notebooks..."
-	@echo "Using sphinx-build: $$(which sphinx-build)"
-	@echo "Source dir: docs/source"
-	@echo "Build dir: docs/build/html"
-	@mkdir -p docs/build/html
-	sphinx-build -v -b html docs/source docs/build/html || echo "Sphinx build failed"
-	@touch docs/build/html/.nojekyll
-	@echo "Documentation built successfully! Open docs/build/html/index.html to view."
-
-
-# Auto-rebuild documentation with notebook sync
-autobuild: sync-notebooks
-	@echo "Building the documentation with auto-rebuild..."
-	sphinx-autobuild docs/source docs/build
-
-# Manual deployment using ghp-import (only when needed)
-docs-deploy: 
-	@echo "Deploying documentation manually to GitHub Pages..."
-	ghp-import -n -p -f docs/build/html
-	@echo "Documentation deployed to GitHub Pages!"
-	@echo "Note: Use GitHub Actions workflow for automated deployment instead."
-
-# Run scripts with virtual environment
-run-venv:
-	@echo "Running script with virtual environment..."
-	@if [ ! -d "venv" ]; then \
-		echo "Virtual environment not found. Run 'make setup-venv' first."; \
-		exit 1; \
-	fi
-	@if [ -z "$(SCRIPT)" ]; then \
-		echo "Usage: make run-venv SCRIPT=path/to/script.py [ARGS='arg1 arg2']"; \
-		exit 1; \
-	fi
-	source venv/bin/activate && python $(SCRIPT) $(ARGS)
-
-# Run the main RES module with virtual environment
-run-res:
-	@echo "Running main RES module..."
-	@if [ ! -d "venv" ]; then \
-		echo "Virtual environment not found. Run 'make setup-venv' first."; \
-		exit 1; \
-	fi
-	source venv/bin/activate && python run.py
-
-# Start Jupyter Lab with virtual environment
-jupyter:
-	@echo "Starting Jupyter Lab..."
-	@if [ ! -d "venv" ]; then \
-		echo "Virtual environment not found. Run 'make setup-venv' first."; \
-		exit 1; \
-	fi
-	source venv/bin/activate && jupyter lab
-
-# Clean virtual environment
-clean-venv:
-	@echo "Removing virtual environment..."
-	rm -rf venv
-	@echo "Virtual environment removed."
-
-# Show virtual environment status
-venv-status:
-	@if [ -d "venv" ]; then \
-		echo "Virtual environment exists at: venv/"; \
-		echo "Python version:"; \
-		source venv/bin/activate && python --version; \
-		echo "Installed packages:"; \
-		source venv/bin/activate && pip list | head -20; \
-		echo "... (use 'source venv/bin/activate && pip list' for full list)"; \
+	@echo "Verifying bypass files exist:"
+	@ls -la docs/build/html/.nojekyll docs/build/html/_config.yml docs/build/html/README.md
+	@echo "Deploying with ghp-import..."
+	@if conda env list | grep -q "^RES "; then \
+		conda run -n RES ghp-import -n -p -f docs/build/html; \
+		echo "✅ Documentation deployed to GitHub Pages!"; \
+		echo "🌐 Visit: https://deltae.github.io/RESource/"; \
 	else \
-		echo "Virtual environment not found. Run 'make setup-venv' to create it."; \
-	fi
-
-# Export requirements from virtual environment
-export-requirements:
-	@echo "Exporting requirements..."
-	@if [ ! -d "venv" ]; then \
-		echo "Virtual environment not found. Run 'make setup-venv' first."; \
+		echo "❌ Conda environment 'RES' not found. Run 'make setup-conda' first."; \
 		exit 1; \
 	fi
-	source venv/bin/activate && pip freeze > requirements.txt
-	@echo "Requirements exported to requirements.txt"
+
+# Legacy aliases (for backward compatibility)
+docs: docs-conda
+setup-venv: setup-conda
+	@echo "Note: setup-venv is deprecated. Use 'make setup-conda' instead."
+
+# Cleanup
+clean-docs:
+	@echo "Cleaning documentation build files..."
+	@rm -rf docs/build/
+	@echo "Documentation build files removed."
+
+clean-all: clean-conda clean-docs
+	@echo "All build files and environments cleaned."

@@ -1,0 +1,673 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>CODERS &#8212; RESource 2025.07 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=e9b82cb4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notes/data';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/RESource_logo_2025.07.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../_static/RESource_logo_2025.07.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Store_explorer.html">Explore data store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notes/data.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>CODERS</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">CODERS</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#demographics">1. Demographics</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#population">1.1 - Population</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#climate-and-weather-data">2. Climate and Weather Data</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cutout-from-era5">2.1  Cutout from ERA5</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#geospatial-raster-vectors">2. Geospatial Raster/Vectors</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#boundaries-from-gadm">2.1 Boundaries from GADM</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conservation-and-protected-lands">2.2 Conservation and Protected Lands</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#energy-and-emission-exogenous">Energy and Emission (exogenous)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#community-energy-and-emissions-inventory-ceei">Community Energy and Emissions Inventory(CEEI)</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#information-template">Information Template</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <p>The data supply chain is  created mostly from global data sources, local data sources (local gov./authorities) have been used in absence of suitable global data sources. A few of the data sources do not have API/static URL and/or requires form inputs from user. This guideline will help the user to have overall idea about the data, sources and download process. The use-case denotes the usage exclusively in this tool and analysis.</p>
+<section id="coders">
+<h1>CODERS<a class="headerlink" href="#coders" title="Link to this heading">#</a></h1>
+<blockquote>
+<div><p>for CANADIAN studies.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Create <code class="docutils literal notranslate"><span class="pre">coders_api.yaml</span></code> config file</p></li>
+</ul>
+<blockquote>
+<div><p>structure for <code class="docutils literal notranslate"><span class="pre">coders_api.yaml</span></code> below:</p>
+</div></blockquote>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">Default_user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your_username&gt; or &lt;other username&gt;)&gt;</span>
+<span class="nt">api_keys</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">&lt;your_username&gt;</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your_api_key&gt;</span>
+<span class="w">  </span><span class="nt">&lt;other_user1&gt;</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;other_api_key1&gt;</span>
+<span class="w">  </span><span class="nt">&lt;other_user2&gt;</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;other_api_key2&gt;</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">.....</span>
+<span class="w">  </span><span class="nt">&lt;other_userN&gt;</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;other_api_keyN&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Save it at directory: <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/CODERS</span></code></p></li>
+</ul>
+</section>
+<section id="demographics">
+<h1>1. Demographics<a class="headerlink" href="#demographics" title="Link to this heading">#</a></h1>
+<section id="population">
+<h2>1.1 - Population<a class="headerlink" href="#population" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><U>Tag</U>: Local</p></li>
+<li><p><U>Authority</U>: Statistics Canada</p></li>
+<li><p><U>License</U> : Data obtained through this application is distributed under the <a class="reference external" href="https://www2.gov.bc.ca/gov/content/data/policy-standards/open-data/open-government-licence-bc">Canadian Open Government License</a>.</p>
+<ul>
+<li><p>In-short :  worldwide, royalty-free, perpetual, non-exclusive licence to Copy, modify, publish, translate, adapt, distribute or otherwise use the Information in any medium, mode or format for any lawful purpose</p></li>
+</ul>
+</li>
+<li><p><U>Data</U>: <a class="reference external" href="https://bcstats.shinyapps.io/popApp">Population projection 2021-2046</a></p>
+<ul>
+<li><p><U>Resolution</U>: Annual population for regional districts (sub-provincial).</p></li>
+</ul>
+</li>
+<li><p><U>Description</U>: Historical data up to 2023 and projection for 2024-2046.</p></li>
+<li><p><U>Use-case</U> : To mimic the load-centers in Canada at sub-provincial level (regional districts of province)</p></li>
+<li><p><U>Supply_chain_mode</U> : Manual Download from the portal</p>
+<ul>
+<li><p>Instruction: Manually download from the portal with mentioned steps given in <a class="reference external" href="https://github.com/DeltaE/Linking_tool/blob/main/config/data_source.yml">data_sources.yml</a></p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="climate-and-weather-data">
+<h1>2. Climate and Weather Data<a class="headerlink" href="#climate-and-weather-data" title="Link to this heading">#</a></h1>
+<section id="cutout-from-era5">
+<h2>2.1  Cutout from ERA5<a class="headerlink" href="#cutout-from-era5" title="Link to this heading">#</a></h2>
+<ul>
+<li><p><U>Tag</U>: Global</p></li>
+<li><p><U>Authority</U>: Copernicus Climate Change Service (C3S), ECMWF, EU.</p></li>
+<li><p><U>License</U> : free of charge, worldwide, non-exclusive, royalty free and perpetual.</p>
+<ul class="simple">
+<li><p>Caution: have to mention the attribution regarding C3S.</p></li>
+<li><p><a class="reference external" href="https://cds.climate.copernicus.eu/api/v2/terms/static/licence-to-use-copernicus-products.pdf">Check Article 4,5 of the license agreement</a></p></li>
+</ul>
+</li>
+<li><p><U>Data</U>: <a class="reference external" href="https://cds-beta.climate.copernicus.eu/datasets/reanalysis-era5-complete?tab=overview">Complete ERA5 global atmospheric reanalysis</a></p></li>
+<li><p><U>Description</U>: Solar influx, wind speed (vertical components at 100m), land elevation (heights) time-series data for weather years.</p>
+<ul class="simple">
+<li><p><U>Resolution</U>: hourly time-series for .25 arc degree (~ 30km) grids.</p></li>
+</ul>
+</li>
+<li><p><U>Use-case</U> :</p>
+<ul class="simple">
+<li><p>A cutout is one of the basis for this work and associated calculations.</p></li>
+<li><p>We are using <a class="reference external" href="https://atlite.readthedocs.io/en/master/index.html">atlite</a> to create the cutout and also to download the <a class="reference external" href="https://www.ecmwf.int/en/forecasts/dataset/ecmwf-reanalysis-v5#:~:text=ERA5%20is%20the%20fifth%20generation,Service%20(C3S)%20at%20ECMWF.">ERA5</a> data for the cutout. The cutout will be saved as a NetCDF (<strong>.nc</strong>) file. NetCDF is a file format often used for storing large scientific data sets that often involves time-series data, especially in the fields of climate and weather research. Please check this resource for <a class="reference external" href="https://atlite.readthedocs.io/en/latest/examples/create_cutout.html">more about cutout preparation and customization</a>.</p></li>
+<li><p>In this analysis, we are downloading ERA5 data on-demand for a specified region e.g. <strong>BC region cutout</strong> . But <a class="reference external" href="https://atlite.readthedocs.io/en/latest/examples/create_cutout.html">atlite</a> does also work with other data sources e.g. <a class="reference external" href="https://atlite.readthedocs.io/en/latest/examples/create_cutout_SARAH.html">SARAH-2</a> for high resolution solar dataset.</p></li>
+<li><p>NREL has higher spatio-temporal dataset for renewable resources but does not cover complete global regions. Atlite currently does not support  NREL's <a class="reference external" href="https://nsrdb.nrel.gov">NSDRB for solar</a> or <a class="reference external" href="https://wrdb.nrel.gov/">WRDB for wind</a>. Users can <a class="reference external" href="https://github.com/PyPSA/atlite/issues/213">follow this thread for updates</a>.</p></li>
+<li><p>Atlite does not support ERA5 forecast data yet. Users can <a class="reference external" href="https://github.com/PyPSA/atlite/issues/184">follow this thread for updates</a></p></li>
+</ul>
+<p>Please go through <a class="reference external" href="https://atlite.readthedocs.io/en/master/examples/create_cutout.html">this documentation</a> and example usage of cutout to learn further.</p>
+</li>
+<li><p><U>Supply_chain_mode</U> : Automated via cdsapi (current version is <a class="reference external" href="https://cds-beta.climate.copernicus.eu/">cds-beta</a>)</p>
+<blockquote>
+<div><p><U>Note</U>: From Sep 26, 2024 onwards the ERA5 dataset will only be supplied via cds-beta or ads-beta (<a class="reference external" href="https://confluence.ecmwf.int/display/CKB/Please+read%3A+CDS+and+ADS+migrating+to+new+infrastructure%3A+Common+Data+Store+%28CDS%29+Engine">source</a>)</p>
+</div></blockquote>
+<ul>
+<li><p>Before the data can be downloaded from ERA5, it has to be processed by CDS servers, this might take a while depending on the volume of data requested. This only works if you have in before</p>
+<ul class="simple">
+<li><p>For linux users, please proceed as follows:</p></li>
+<li><p>Steps to install the Copernicus Climate Data Store cdsapi package at your <strong>local Linux/WSL</strong> (sourced from &gt; <a class="reference external" href="https://cds-beta.climate.copernicus.eu/how-to-api">Registered and setup your CDS API key as described</a>)</p></li>
+</ul>
+<blockquote>
+<div><p>step1: Setup the CDS API personal access token <br>
+step2: Install the CDS API client. <br></p>
+<blockquote>
+<div><p>Note: atlite currently supports cdsapi &lt;=0.7.2</p>
+</div></blockquote>
+</div></blockquote>
+<p>Now your datapipeline to create the ERA5 Cutout is set.</p>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="geospatial-raster-vectors">
+<h1>2. Geospatial Raster/Vectors<a class="headerlink" href="#geospatial-raster-vectors" title="Link to this heading">#</a></h1>
+<section id="boundaries-from-gadm">
+<h2>2.1 Boundaries from GADM<a class="headerlink" href="#boundaries-from-gadm" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><U>Tag</U>: Global</p>
+<ul>
+<li><p>This data could be sourced locally as well e.g for Canada from <a class="reference external" href="https://open.canada.ca/data/en/dataset/306e5004-534b-4110-9feb-58e3a5c3fd97">Canadian open-dataset</a></p></li>
+<li><p>Other global data sources :</p>
+<ul>
+<li><p>OpenstreetMap via <a class="reference external" href="https://pyrosm.readthedocs.io/en/latest/basics.html#read-boundaries">pyrosm</a> library.</p></li>
+<li><p>World Administrative Boundaries - Countries and Territories by opendatasoft (https://public.opendatasoft.com/explore/dataset/world-administrative-boundaries/export)</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><U>License</U> : <a class="reference external" href="https://gadm.org/license.html">freely available for academic use and other non-commercial use</a></p></li>
+<li><p><U>Authority</U>:  University of Berkeley, Museum of Vertebrate Zoology and the International Rice Research Institute (2012)</p></li>
+<li><p><U>Data</U>: <a class="reference external" href="https://gadm.org/download_country.html">Download GADM data (v4.1 | 16 July 2022 )</a></p></li>
+<li><p><U>Description</U>: <a class="reference external" href="https://gadm.org/">GADM</a>, the Database of Global Administrative Areas, is a high-resolution database of country administrative areas, with a goal of &quot;all countries, at all levels, at any time period.</p></li>
+<li><p><U>Use-case</U> : This boundary has been processed for admin level 2 (i.e. sub-provincial) to extract geospatial boundaries of the Regional Districts (RD) e.g. 28 RDs inside BC, Canada. This boundary is primarily used for spatial-grid cell/point mapping, regional overlay visuals, clipping point of interests in regional level while clustering.</p></li>
+<li><p><U>Supply_chain_mode</U> : Automated via <a class="reference external" href="https://pypi.org/project/pygadm">pygadm</a> library [supports GADM data V4.1]</p></li>
+</ul>
+</section>
+<section id="conservation-and-protected-lands">
+<h2>2.2 Conservation and Protected Lands<a class="headerlink" href="#conservation-and-protected-lands" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><U>Tag</U>: Local</p>
+<ul>
+<li><p>GAEZ also has similar global data under Land Resources (LR) theme, raster data with 7 classes. We are using this data as a mandatory filter in the process. But the local (pan-Canadian) data has more detailed local government and indigenous protected areas' data. The user can control the classes of exclusion and also can use buffer around exclusion for both case.</p></li>
+</ul>
+</li>
+<li><p><U>License</U> : Data obtained through this application is distributed under the <a class="reference external" href="https://www2.gov.bc.ca/gov/content/data/policy-standards/open-data/open-government-licence-bc">Canadian Open Government License</a>.</p>
+<ul>
+<li><p>In-short :  worldwide, royalty-free, perpetual, non-exclusive licence to Copy, modify, publish, translate, adapt, distribute or otherwise use the Information in any medium, mode or format for any lawful purpose</p></li>
+</ul>
+</li>
+<li><p><U>Authority</U>: Environment and Climate Change Canada (ECCC)</p></li>
+<li><p><U>Data</U>: <a class="reference external" href="https://catalogue.ec.gc.ca/geonetwork/oilsands/api/records/6c343726-1e92-451a-876a-76e17d398a1c">Canadian Protected and Conserved Areas Database (CPCAD) | 2023-12-31</a></p>
+<ul>
+<li><p><U>downloadble</U>_source_url: https://data-donnees.az.ec.gc.ca/api/file?path=%2Fspecies%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FDatabases%2FProtectedConservedArea_2022.gdb.zip</p></li>
+<li><p><U>Resolution</U>: Spatial boundaries vector data</p></li>
+</ul>
+</li>
+<li><p><U>Description</U>: CPCAD is the authoritative source of data on protected and conserved areas in Canada. The database consists of the most up-to-date spatial and attribute data on marine and terrestrial protected areas in all governance categories recognized by the International Union for Conservation of Nature (IUCN), as well as other effective area-based conservation measures (OECMs, or conserved areas) across the country. Indigenous Protected and Conserved Areas (IPCAs) are also included if they are recognized as protected or conserved areas. CPCAD adheres to national reporting standards and is available to the public.</p></li>
+<li><p><U>Use-case</U> : These specific areas (raster cells/vectors) are excluded in analysis for site considerations. The modeller can also consider buffer around exclusion areas.</p></li>
+<li><p><U>Supply_chain_mode</U> : Automated via specific url download. Has dependency on <a class="reference external" href="https://data-donnees.az.ec.gc.ca/api/file?path=%2Fspecies%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FDatabases%2FProtectedConservedArea_2022.gdb.zip">source_url</a>.</p></li>
+</ul>
+</section>
+</section>
+<section id="energy-and-emission-exogenous">
+<h1>Energy and Emission (exogenous)<a class="headerlink" href="#energy-and-emission-exogenous" title="Link to this heading">#</a></h1>
+<section id="community-energy-and-emissions-inventory-ceei">
+<h2>Community Energy and Emissions Inventory(CEEI)<a class="headerlink" href="#community-energy-and-emissions-inventory-ceei" title="Link to this heading">#</a></h2>
+<ul>
+<li><p><U>Tag</U>: Local</p></li>
+<li><p><U>License</U> : Data obtained through this application is distributed under the <a class="reference external" href="https://www2.gov.bc.ca/gov/content/data/policy-standards/open-data/open-government-licence-bc">Canadian Open Government License</a>.</p></li>
+<li><p><U>Authority</U>:  [Community Energy and Emissions Inventory(CEEI)]https://www2.gov.bc.ca/gov/content/environment/climate-change/data/ceei</p></li>
+<li><p><U>Data</U>: <a class="reference external" href="https://www2.gov.bc.ca/gov/content/environment/climate-change/data/ceei/current-data">CEEI data up to 2021</a></p>
+<ul class="simple">
+<li><p><U>Resolution</U>: Annual total for Regional Districts, for different sectors and different end-use demands.</p></li>
+</ul>
+</li>
+<li><p><U>Description</U>: The Community Energy and Emissions Inventory (CEEI) provides community-level greenhouse gas (GHG) emissions and energy consumption estimates for communities across BC. The data covers the buildings, municipal solid waste, and on-road transportation sectors for 161 municipalities, 28 regional districts, and 1 region (Stikine).</p>
+<ul class="simple">
+<li><p>Buildings :The data is provided by utility companies and includes the amount of electricity and natural gas used by residential, commercial and some industrial buildings.</p></li>
+<li><p>Transportation : Community-level data on greenhouse gas emissions from on-road transportation.</p></li>
+<li><p>Waste : Estimates of community greenhouse gas emissions based on historic annual tonnes of waste disposed at regional district landfills.</p></li>
+</ul>
+<blockquote>
+<div><p>More about <a class="reference external" href="https://www2.gov.bc.ca/gov/content/environment/climate-change/data/ceei/methodology">data methods</a> and <a class="reference external" href="https://www2.gov.bc.ca/gov/content/environment/climate-change/data/ceei/current-data">inputs</a></p>
+</div></blockquote>
+</li>
+<li><p><U>Use-case</U> : Used for load-center estimations on regional district level. Further used for Battery Energy Storage (BESS) size and required discharge hour estimation.</p></li>
+<li><p><U>Supply_chain_mode</U> : Automated via specific url download. Check config file for specific url dependencies.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="information-template">
+<h1>Information Template<a class="headerlink" href="#information-template" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p><U>Tag</U>:</p></li>
+<li><p><U>License</U> :</p></li>
+<li><p><U>Authority</U>:</p></li>
+<li><p><U>Data</U>: <a class="reference internal" href="#Url"><span class="xref myst">title</span></a></p>
+<ul>
+<li><p><U>Resolution</U>:</p></li>
+</ul>
+</li>
+<li><p><U>Description</U>:</p></li>
+<li><p><U>Use-case</U> :</p></li>
+<li><p><U>Supply_chain_mode</U> :</p>
+<ul>
+<li><p>Instruction:</p></li>
+</ul>
+</li>
+</ul>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">CODERS</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#demographics">1. Demographics</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#population">1.1 - Population</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#climate-and-weather-data">2. Climate and Weather Data</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cutout-from-era5">2.1  Cutout from ERA5</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#geospatial-raster-vectors">2. Geospatial Raster/Vectors</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#boundaries-from-gadm">2.1 Boundaries from GADM</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conservation-and-protected-lands">2.2 Conservation and Protected Lands</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#energy-and-emission-exogenous">Energy and Emission (exogenous)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#community-energy-and-emissions-inventory-ceei">Community Energy and Emissions Inventory(CEEI)</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#information-template">Information Template</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
