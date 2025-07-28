@@ -126,6 +126,7 @@ Gov:
     url: https://data-donnees.az.ec.gc.ca/api/file?path=%2Fspecies%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FDatabases%2FProtectedConservedArea_2023.zip
     root: 'data/downloaded_data/Gov/Conservation_Lands'
     data_name: 'ProtectedConservedArea'  # Zip and the processed data will be saved with this prefix
+    gdb_layer: 'ProtectedConservedArea_2023'
     IUCN_CAT_mapping: # Check TABLE 10 of user manual from the source_url.
       1: 'Strict  Nature Reserve'
       2: 'Wilderness Area'
@@ -136,6 +137,7 @@ Gov:
       7: 'Protected Area with Sustainable Use of Natural Resources'
       8: 'Interim Sites (unknown specifics)'
       9 : 'OECM areas'
+
     LOCATION_mapping: # Check TABLE 13 of user manual from the source_url.
       "Alberta": 1
       "British Columbia": 2
@@ -176,6 +178,7 @@ Gov:
       12: "not known or reported" # by the data provider
 
     data_license: https://catalogue.ec.gc.ca/geonetwork/oilsands/api/records/6c343726-1e92-451a-876a-76e17d398a1c
+
   Population:
     root: 'data/downloaded_data/Gov/Population'
     datafile: 'Population_Projections.csv'
@@ -269,19 +272,25 @@ GAEZ:
   self.: 'https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip'
   zip_file: 'LR.zip'
   Rasters_in_use_direct: 'Rasters_in_use'
-  raster_types:
-    - name: 'land_cover'
-      raster: "faocmb_2010.tif"  # Dominant land cover/use ; 11 classes; (5 arc-minute)
-      zip_extract_direct: 'LR/lco'
-      color_map: 'YlGn'
-      class_inclusion:
-        solar: [2, 3, 5, 8, 9]
-        wind: [2, 3, 5, 8, 9]
+  raster_types: # list of dictionaries
+
+    - name: 'exclusion_areas'
+      raster: "exclusion_2017.tif" # Exclusion areas defined by Int'l orgs ; 7 classes;
+      zip_extract_direct: 'LR/excl'
+      color_map: 'OrRd'
+      stepwise_plot_title: "Excluding Global Exclusion Areas"
+      class_exclusion:
+        solar: [2, 3, 4, 5, 6, 7]
+        wind: [2, 3, 4, 5, 6, 7]
+        buffer: 
+          solar: 500 #m
+          wind: 500 #m
         
     - name: 'terrain_resources'
       raster: "slpmed05.tif" # Median terrain slope classes; 8 classes ; (5 arc-minute)
       zip_extract_direct: 'LR/ter'
       color_map: 'terrain'
+      stepwise_plot_title: "Excluding Terrain Slope"
       class_exclusion:
         solar: [9]
         wind: [7, 8, 9]
@@ -289,17 +298,14 @@ GAEZ:
           solar: 0 #m
           wind: 500 #m
 
-    - name: 'exclusion_areas'
-      raster: "exclusion_2017.tif" # Exclusion areas defined by Int'l orgs ; 7 classes;
-      zip_extract_direct: 'LR/excl'
-      color_map: 'OrRd'
-      class_exclusion:
-        solar: [2, 3, 4, 5, 6, 7]
-        wind: [2, 3, 4, 5, 6, 7]
-        buffer: 
-          solar: 500 #m
-          wind: 500 #m
-          
+    - name: 'land_cover'
+      raster: "faocmb_2010.tif"  # Dominant land cover/use ; 11 classes; (5 arc-minute)
+      zip_extract_direct: 'LR/lco'
+      color_map: 'YlGn'
+      stepwise_plot_title: "Excluding not-Suitable Landcovers"
+      class_inclusion:
+        solar: [2, 3, 5, 8, 9]
+        wind: [2, 3, 5, 8, 9]
 WorldPop:
   root: 'data/downloaded_data/WorldPop'
   source : 
@@ -356,9 +362,29 @@ capacity_disaggregation:
     cell_static_CF_tolerance: 0.16
     cell_capacity_tolerance: 1 #MW
     WCSS_tolerance: 0.005 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
-    buffer:
-      aeroway: 100 # m
-      conserved_lands: 1000 #m
+    vector_buffers: #list of dictionaries
+      - aeroway:
+          buffer_mapping_key: 'aeroway'
+          buffer_mapping_key_buffers: # Buffer distances in meters for each aeroway type
+            aerodrome: 100 # m
+            runway: 100 # m
+            taxiway: 100 # m
+            helipad: 100 # m
+            apron: 100 # m
+            gate: 100 # m
+      - conserved_lands: 
+          buffer_mapping_key: 'IUCN_CAT_desc'
+          buffer_mapping_key_buffers: # Buffer distances in meters for each IUCN category
+                'Strict Nature Reserve': 1000 # IUCN Category 1
+                'Wilderness Area': 1000 # IUCN Category 2
+                'National Park': 1000 # IUCN Category 3
+                'Natural Monument or Feature': 500 # IUCN Category 4
+                'Habitat/Species Management Area': 500 # IUCN Category 5
+                'Protected Landscape/Seascape': 500 # IUCN Category 6
+                'Protected Area with Sustainable Use of Natural Resources': 500 # IUCN Category 7
+                'Interim Sites (unknown specifics)': 500 # IUCN Category 8
+                'OECM areas': 500 # IUCN Category 9
+
     
   wind:
     max_capacity: 15  # GW
@@ -395,9 +421,28 @@ capacity_disaggregation:
             P: 3.2 #Nominal Power
             manufacturer: 'Senvion/REpower'
             config: 'data/downloaded_data/OEDB/3.2M114_NES.yaml'
-    buffer:
-      aeroway: 1000 # m
-      conserved_lands: 2000 #m
+    vector_buffers: #list of dictionaries
+      - aeroway:
+          buffer_mapping_key: 'aeroway'
+          buffer_mapping_key_buffers: # Buffer distances in meters for each aeroway type
+            aerodrome: 100 # m
+            runway: 100 # m
+            taxiway: 100 # m
+            helipad: 100 # m
+            apron: 100 # m
+            gate: 100 # m
+      - conserved_lands: 
+          buffer_mapping_key: 'IUCN_CAT_desc'
+          buffer_mapping_key_buffers: # Buffer distances in meters for each IUCN category
+                'Strict Nature Reserve': 1000 # IUCN Category 1
+                'Wilderness Area': 1000 # IUCN Category 2
+                'National Park': 1000 # IUCN Category 3
+                'Natural Monument or Feature': 500 # IUCN Category 4
+                'Habitat/Species Management Area': 500 # IUCN Category 5
+                'Protected Landscape/Seascape': 500 # IUCN Category 6
+                'Protected Area with Sustainable Use of Natural Resources': 500 # IUCN Category 7
+                'Interim Sites (unknown specifics)': 500 # IUCN Category 8
+                'OECM areas': 500 # IUCN Category 9
   bess:
     max_capacity : 10 #GW
     cost_data: 'data/processed_data/bess/bess_LI_6hr_cost_moderate_NREL_ATB2024.csv'

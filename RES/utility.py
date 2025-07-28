@@ -29,7 +29,11 @@ date_time_str = now.strftime("%Y-%m-%d %H:%M:%S")
 def print_update(level: int=None,
                  message: str="--",
                  alert:Optional[bool]=False):
-    if level is not None:
+    if alert:
+            level=level or 2
+            color = Fore.RED
+            prefix=" └ ❌ "
+    elif level is not None:
         if level == 1:
             color = Fore.YELLOW
             prefix="└"
@@ -37,15 +41,11 @@ def print_update(level: int=None,
             color = Fore.CYAN
             prefix=" └"
         elif level == 3:
-            color = Fore.LIGHTCYAN_EX + Style.DIM
+            color = Fore.LIGHTWHITE_EX + Style.DIM
             prefix="  └"
         elif level > 3:
             color = Fore.LIGHTBLACK_EX + Style.DIM
             prefix="  └─"
-        elif alert:
-            level=2
-            color = Fore.RED
-            prefix=" └ X "
     else:
         color = Fore.LIGHTMAGENTA_EX + Style.DIM
         prefix=" ─"

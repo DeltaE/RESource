@@ -47,7 +47,8 @@ class CellCapacityProcessor(LandContainer,
         
         ### Exclusion Layer Container
         # self.land_container=LandContainer(**self.required_args)
-    
+
+
         ### ERA5 Cutout
         # self.era5_cutout=ERA5Cutout(**self.required_args)
         self.cell_resolution=self.cutout_config['dx']
@@ -144,7 +145,6 @@ class CellCapacityProcessor(LandContainer,
         
     ## 2.1 Compute availability Matrix
         self.region_shape= self.__get_unified_region_shape__() # we need to pass the unified region shape to the availability matrix calculation.
-
         utils.print_update(level=print_level_base+1,
                    message=f"{__name__}| Processing Availability Matrix... ")
         self.Availability_matrix:xr = self.cutout.availabilitymatrix(self.region_shape, composite_excluder)

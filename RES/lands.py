@@ -1,17 +1,19 @@
+from pathlib import Path
+from pickle import LIST
+from zipfile import ZipFile
+from atlite.gis import ExclusionContainer
 import geopandas as gpd
 import pandas as pd
-from pathlib import Path
-from zipfile import ZipFile
-from RES import utility as utils
-
-from atlite.gis import ExclusionContainer,shape_availability
-
+import fiona
 from RES.boundaries import GADMBoundaries
+from RES import utility as utils
 from RES.era5_cutout import ERA5Cutout
 from RES.gaez import GAEZRasterProcessor
 from RES.osm import OSMData
+import matplotlib.pyplot as plt
 
 print_level_base=2
+
 class ConservationLands(GADMBoundaries):
 
     """
@@ -31,7 +33,18 @@ class ConservationLands(GADMBoundaries):
         self.zip_file_path = Path(self.data_root) / self.zip_file_name
         self.extraction_dir = Path (self.data_root) / self.zip_file_path.stem
         self.extraction_dir.parent.mkdir(parents=True, exist_ok=True)
-        
+
+        # Initialize region_boundary attribute
+        self.region_boundary = self.get_region_boundary()
+        self.region_shape = self.region_boundary.dissolve(by=self.gadm_config['datafield_mapping']['NAME_1']) # Get the geometry of the region boundary
+        self.region_name = self.get_region_name()
+
+        # Set up resource disaggregation configurations
+        self.resource_disaggregation_config:dict=self.get_resource_disaggregation_config()
+
+        self.aeroway_gdf: gpd.GeoDataFrame = None  # Initialize aeroway_gdf attribute
+        self.raster_configs: list = []  # Initialize raster_configs attribute
+
     def get_provincial_conserved_lands(self,
                                        geom_simplification_tolerance=0.005) -> gpd.GeoDataFrame:
         
@@ -45,40 +58,41 @@ class ConservationLands(GADMBoundaries):
         """
 
         utils.print_update(level=print_level_base+3,message=f"{__name__}| Processing Conserved areas for {self.region_name}")
-        file_name_prefix = self.conserved_lands_cfg['data_name']
+        
+        file_name_prefix:str = self.conserved_lands_cfg.get('data_name', 'ProtectedConservedArea')
+        gdb_layer:str=self.conserved_lands_cfg.get('gdb_layer', 'ProtectedConservedArea_2023')
+        
         provincial_file_path = Path('data/downloaded_data/lands') / f"{file_name_prefix}_{self.region_short_code}.pickle"
         provincial_file_path.parent.mkdir(parents=True, exist_ok=True)
         
         if provincial_file_path.exists():
-            utils.print_update(level=print_level_base,message=f"{__name__}| Loading Canadian Protected and Conserved Areas Database (CPCAD) from locally stored datafile - {provincial_file_path}")
+            utils.print_update(level=print_level_base,message=f"{__name__}| Loading regional data from Canadian Protected and Conserved Areas Database (CPCAD) from locally stored datafile - {provincial_file_path}")
             gdf=gpd.GeoDataFrame(pd.read_pickle(provincial_file_path))
-        else:
-            gdb_file_path = self.__get_conserved_lands__()
             
+        else:
+            gdb_file_path:Path = self.__get_conserved_lands__()
             
             # Get Region Boundaries
-            self.region_boundary=self.get_region_boundary()
-            
-            # Load the .gdb file as a GeoDataFrame
-            gdf = gpd.read_file(gdb_file_path, mask=self.region_boundary)
-            gdf.to_crs(self.region_boundary.crs, inplace=True)
-            
-            gdf['geometry'] = gdf['geometry'].simplify(geom_simplification_tolerance)
+            self.region_boundary:gpd.GeoDataFrame=self.get_region_boundary()
 
-            # Map IUCN categories to descriptions
-            IUCN_CAT = self.conserved_lands_cfg['IUCN_CAT_mapping']
-            gdf['IUCN_CAT_desc'] = gdf['IUCN_CAT'].map(IUCN_CAT)
+            layers:list=fiona.listlayers(gdb_file_path)
             
-            gdf[['IUCN_CAT_desc','NAME_E', 'ZONEDESC_E',
-            'BIOME', 'PA_OECM_DF', 'IUCN_CAT', 'IPCA', 'IND_TERM',
-            'O_AREA_HA', 'LOC', 'MECH_E', 'TYPE_E', 'OWNER_TYPE', 'OWNER_E',
-            'GOV_TYPE', 'MGMT_E', 'STATUS', 'ESTYEAR', 'QUALYEAR', 'DELISTYEAR',
-            'SUBSRIGHT', 'CONS_OBJ', 'NO_TAKE', 'NO_TAKE_HA', 'MPLAN', 'MPLAN_REF',
-            'M_EFF', 'AUDITYEAR', 'AUDITRES', 'PROVIDER', 'Shape_Length',
-            'Shape_Area', 'geometry']]
-        
-            gdf.to_pickle(provincial_file_path)
-            
+            try:
+                assert gdb_layer in layers, f"Layer '{gdb_layer}' not found in the GDB file. Please configure the valid 'gdb_layer' key in config file."
+                utils.print_update(level=print_level_base+2,message=f"{__name__}| Loading  {gdb_layer} Layer from the GDB file.")
+                
+                # Load the .gdb file as a GeoDataFrame
+                gdf = gpd.read_file(gdb_file_path, mask=self.region_boundary,layer=gdb_layer) # Specifying layer and mask to load only the relevant region, faster loading
+                gdf.to_crs(self.region_boundary.crs, inplace=True)
+                
+                gdf['geometry'] = gdf['geometry'].simplify(geom_simplification_tolerance) # Simplify geometries to reduce complexity that are not relevant at ERA5 resolution and faster processing
+
+                # Map IUCN categories to descriptions
+                IUCN_CAT = self.conserved_lands_cfg['IUCN_CAT_mapping']
+                gdf['IUCN_CAT_desc'] = gdf['IUCN_CAT'].map(IUCN_CAT)       
+                gdf.to_pickle(provincial_file_path)
+            except AssertionError as e:
+                utils.print_update(level=print_level_base+1,message=f"{__name__}| {e}",alert=True)
         
         return gdf
 
@@ -86,7 +100,7 @@ class ConservationLands(GADMBoundaries):
         """Download the source ZIP file, extract contents, and return the .gdb file path."""
         # Check if the extraction directory exists
         if self.extraction_dir.exists():
-           utils.print_update(level=print_level_base+1,message=f"Extraction directory {self.extraction_dir} already exists, skipping download and extraction.")
+            utils.print_update(level=print_level_base+1,message=f"Extraction directory {self.extraction_dir} already exists, skipping download and extraction.")
         else:
             if self.zip_file_path.exists():
                 utils.print_update(level=print_level_base+1,message=f"ZIP file {self.zip_file_path} already exists, skipping download.")
@@ -159,7 +173,7 @@ class LandContainer(ERA5Cutout,
     Handles the inclusion/exclusion of lands from raster/vector data.
     
     """
-    
+   
     def __post_init__(self):
     # Call the parent class __post_init__ to initialize inherited attributes
         super().__post_init__()
@@ -168,95 +182,295 @@ class LandContainer(ERA5Cutout,
         
         # Initiate Exclusion Container
         self.excluder = ExclusionContainer(crs=self.excluder_crs)  # CRS 3347 fit for Canada
-    
+
+        # Initialize resource_disaggregation_config attribute
+        self.resource_disaggregation_config = self.get_resource_disaggregation_config()
+
+        # Initialize conservation_lands_region_gdf attribute
+        self.conservation_lands_region_gdf = None
+
     def set_excluder(self):
         
+        raster_configs, vector_configs = self.get_layers()
+        
         utils.print_update(level=print_level_base+1,
-                           message=f"{__name__}| Exclusion Container Initiated initiated...")
-        # GAEZ configs
+                           message=f"{__name__}| Loading layers to Excluder for {self.region_name}. This may take a while to compute and plot...")
+        
+        # Load all layers to the excluder
+        excluder_with_layers=load_layers_to_excluder(self.resource_type,
+                                                     self.excluder,
+                                self.region_shape,
+                                raster_configs,
+                                vector_configs,
+                                plot_save_to=f"vis/{self.region_short_code}/lands")
+        return excluder_with_layers
+    
+    def get_layers(self):
+        
+        """ Load all raster and vector layers for the specified region.
+        Returns:
+            tuple: A tuple containing two lists - raster_configs and vector_configs.
+        """
+        # load Raster Layers
+        utils.print_update(level=print_level_base+2,message=f"{__name__}| Loading GAEZ raster layers for {self.region_name}...")
         self.gaez_config = self.get_gaez_data_config()
+        raster_configs:list[dict]=self.gaez_config['raster_types']
+        regional_raster_paths:dict=self.process_all_rasters(show=False)
         
-        # Initialize raster configurations
-        raster_configs = {}
-        
-        # Retrieve custom land configuration if available
-        custom_land_config = self.get_custom_land_layers()
-        
-        utils.print_update(level=print_level_base+2,message=f"{__name__}| Loading global filters' rasters from GAEZ, trimmed to {self.region_name}")
-        self.process_all_rasters(show=False) # Downloads and processes all GAEZ rasters
-        
-        # Loop over each raster type in GAEZ config and set up each raster
-        for raster_type in self.gaez_config['raster_types']:
-            raster_name = raster_type['name']
-            raster_file = str(self.region_short_code+"_"+raster_type['raster'])
-            # zip_direct = raster_type['zip_extract_direct']
-            
-            # Determine the class inclusion/exclusion based on resource type
-            inclusion_key = 'class_inclusion' if 'class_inclusion' in raster_type else 'class_exclusion'
-            
-            raster_configs[f"gaez_{raster_name}"] = {
-                # 'raster': self.__get_raster_path__(raster_type, self.gaez_root, self.Rasters_in_use_direct),
-                'raster': self.gaez_root/ self.Rasters_in_use_direct/raster_type['zip_extract_direct']/raster_file,
-                inclusion_key: raster_type[inclusion_key][self.resource_type],
-                'buffer': raster_type.get('buffer', {}).get(self.resource_type, 0),
-                'invert': inclusion_key == 'class_inclusion'  # invert if it's an inclusion class
-            }
-            
-            utils.print_update(level=print_level_base+1,message=f"{__name__}| Loading {raster_name.capitalize()} layers from {raster_configs[f'gaez_{raster_name}']['raster']}")
-        
-        # Load additional custom raster configurations from YAML if specified
-        # for raster_name, config in custom_land_config.get('rasters', {}).items():
-        #     raster_path = config['raster']
-            
-        #     # Skip if raster path is missing or empty
-        #     if raster_path is None:
-        #         self.log.warning(f"Skipping {raster_name}: Raster file does not exist or is empty.")
-        #         continue
-            
-        #     raster_configs[raster_name] = {
-        #         'raster': raster_path,
-        #         'class_exclusion': config.get('class_exclusion', []),
-        #         'buffer': config.get('buffer', 0),
-        #         'invert': config.get('invert', False)
-        #     }
+        for raster_config_item in raster_configs:
+            name = raster_config_item.get('name')
+            if name and name in regional_raster_paths:
+                raster_config_item['filepath'] = str(regional_raster_paths[name])
 
-        # Add all raster configurations to the excluder
-        for key, config in raster_configs.items():
-            inclusion_or_exclusion = config.get('class_inclusion', config.get('class_exclusion'))
-            self.excluder.add_raster(
-                config['raster'], 
-                inclusion_or_exclusion, 
-                buffer=config['buffer'], 
-                invert=config['invert']
+        # Load Vector layers
+        utils.print_update(level=print_level_base+2,message=f"{__name__}| Loading vector layers for {self.region_name}...")
+        vector_configs: list[dict] = self.resource_disaggregation_config['vector_buffers']
+
+        for vector_config_item in vector_configs:
+            # vector_config_item is a dictionary
+            vector_name = list(vector_config_item.keys())[0]
+            utils.print_update(level=print_level_base+2,message=f"{__name__}| Loading {vector_name} areas for {self.region_name}")
+  
+            if vector_name == 'conserved_lands':
+                # Add local (Canadian) vector geometries to excluder
+                utils.print_update(level=print_level_base+2,message=f"{__name__}| Loading Conserved areas for {self.region_name}")
+                vector_gdf = self.get_provincial_conserved_lands()
+                if vector_gdf.empty:
+                    utils.print_update(level=print_level_base+1,message=f"{__name__}| No {vector_name} data found for {self.region_name}. Skipping.",alert=True)
+                    continue
+                vector_config_item[vector_name]['stepwise_plot_title']='Excluding Regional Conservation Areas'
+                        
+            elif vector_name == 'aeroway':
+                # Load vector geometries from OSM
+                vector_gdf = self.get_osm_layer(vector_name)
+                if vector_gdf.empty:
+                    utils.print_update(level=print_level_base+1,message=f"{__name__}| No {vector_name} data found for {self.region_name}. Skipping.",alert=True)
+                    continue
+                vector_config_item[vector_name]['stepwise_plot_title']='Excluding Regional Aeroways'
+
+            # Apply buffer to the vector geometries
+            vector_gdf_with_buffer, vector_area_comparison = apply_buffer_to_vector(
+                                                                                  vector_gdf,
+                                                                                  vector_config_item[vector_name]['buffer_mapping_key_buffers'],
+                                                                                  vector_config_item[vector_name]['buffer_mapping_key']
             )
-            utils.print_update(level=print_level_base+2,message=f"{__name__}| ✔ {raster_name.capitalize()} loaded to exclusion container")
-        
+            vector_config_item[vector_name]['gdf'] = vector_gdf_with_buffer
+            
+            # Save the area comparison to a CSV file
+            area_comparison_save_path = Path('data/processed_data/lands') / f"{vector_config_item[vector_name]['buffer_mapping_key']}_area_comparisons_{self.region_name}.csv"
+            area_comparison_save_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Save the area comparison DataFrame to CSV
+            vector_area_comparison.to_csv(area_comparison_save_path)
+            utils.print_update(level=print_level_base+2,
+                            message=f"{__name__}| Vector Area comparison for {vector_config_item[vector_name]['buffer_mapping_key']} saved to {area_comparison_save_path}")
+            vector_config_item[vector_name]['area_comparison'] = vector_area_comparison
+            
+        # We want to flat list of dictionaries without vector_name in the keys
+        vector_configs = [list(d.values())[0] for d in vector_configs]
 
-        # Load additional layers
+        return raster_configs, vector_configs
 
-        
-        # Set up resource disaggregation configurations
-        self.resource_disaggregation_config = self.get_resource_disaggregation_config()
-        
-        ## Load Geometries (vectors)
-        utils.print_update(level=print_level_base+2,message=f"{__name__}| Loading Conserved areas for {self.region_name}")
-        self.conservation_lands_region_gdf = self.get_provincial_conserved_lands()
-        utils.print_update(level=print_level_base+2,message=f"{__name__}| Loading Aeroways areas for {self.region_name}")
-        self.aeroway_gdf = self.get_osm_layer('aeroway')
-        
-        # Add local (Canadian) vector geometries to excluder
-        self.excluder.add_geometry(
-            self.conservation_lands_region_gdf.geometry, 
-            buffer=self.resource_disaggregation_config['buffer']['conserved_lands']
+
+@staticmethod
+def add_and_plot_exclusion_layer(excluder:ExclusionContainer,
+                         region_shape:gpd.GeoDataFrame,
+                         ax, 
+                         geometry, 
+                         title,
+                         invert=False,
+                         is_raster=False,
+                         filepath=None,
+                         codes=None):
+    """
+    Add a layer to the ExclusionContainer and plot the availability of the region shape.
+
+    Args:
+        excluder (ExclusionContainer): The ExclusionContainer to add the layer to.
+        region_shape (gpd.GeoDataFrame): The region shape GeoDataFrame.
+        ax (_type_): The axes to plot on.
+        geometry (_type_): The geometry to add to the ExclusionContainer.
+        title (_type_): The title for the plot.
+        invert (bool, optional): Whether to invert the exclusion. Defaults to False.
+        is_raster (bool, optional): Whether the layer is a raster layer. Defaults to False.
+        filepath (_type_, optional): The file path for the raster layer. Defaults to None.
+        codes (_type_, optional): The codes for the raster layer. Defaults to None.
+
+    Returns:
+        _type_: _description_
+    """
+    if is_raster:
+        excluder.add_raster(filepath, codes, invert=invert)
+    else:
+        excluder.add_geometry(geometry)
+
+    eligible_share = get_eligible_share(region_shape, excluder)
+
+    excluder.plot_shape_availability(
+        geometry=region_shape,
+        ax=ax,
+        set_title=False,
+        show_kwargs={"interpolation": "nearest", 'alpha': 0.6},
+        plot_kwargs={"edgecolor": "black", "linewidth": 0.5, "facecolor": "none", "zorder": 3},
+    )
+
+    ax.set_title(f"{title} ({eligible_share:.2%})")
+    ax.axis("off")
+
+    excluder_with_layers: ExclusionContainer = excluder
+
+    return excluder_with_layers
+
+
+@staticmethod
+def load_layers_to_excluder(resource_type:str,
+                            excluder: ExclusionContainer,
+                   region_shape: gpd.GeoDataFrame,
+                   raster_configs: list[dict],
+                   vector_configs: list[dict],
+                   font_family:str='sans-serif',
+                   plot_save_to: str|Path = None) -> ExclusionContainer:
+    """
+    Load raster and vector layers to the ExclusionContainer and plot the availability of the region shape.  
+    Args:
+        excluder (ExclusionContainer): The ExclusionContainer to add the layers to.
+        region_shape (gpd.GeoDataFrame): The region shape GeoDataFrame.
+        raster_configs (list[dict]): List of raster configurations.
+        vector_configs (list[dict]): List of vector configurations.
+        plot_save_to (str|Path, optional): Path to save the plot. Defaults to None.
+    Returns:
+        ExclusionContainer: The ExclusionContainer with the added layers.
+    """       
+    plt.rcParams['font.family'] = font_family
+    plt.rcParams['font.size'] = 14
+    
+    n_rasters = len(raster_configs)
+    n_vectors = len(vector_configs)
+
+    # 2. Plot setup
+    total_layers = n_rasters + n_vectors
+    
+    fig, axes = plt.subplots(1, total_layers, figsize=(6 * total_layers, total_layers+4)) # revise this accordingly to make the plot looks nicer
+    
+    # 3. Raster layers
+    for i, r in enumerate(raster_configs):
+        utils.print_update(level=print_level_base+2,message=f"{__name__}| Loading raster layer '{r.get('name', '')}'...")
+        # Handle raster layer inclusion/exclusion logic smartly
+        class_inclusion = r.get("class_inclusion")
+        class_exclusion = r.get("class_exclusion")
+        invert = False
+        codes = None
+
+        if class_inclusion and resource_type in class_inclusion:
+            codes = class_inclusion[resource_type]
+            invert = True
+        elif class_exclusion and resource_type in class_exclusion:
+            codes = class_exclusion[resource_type]
+            invert = False
+        else:
+            utils.print_update(level=print_level_base+1,
+                      message=f"{__name__}| No valid class_inclusion/class_exclusion for raster '{r.get('name', '')}' and resource '{resource_type}'. Skipping.",
+                      alert=True)
+            continue
+
+        excluder_with_layers = add_and_plot_exclusion_layer(
+            excluder,
+            region_shape=region_shape,
+            ax=axes[i],
+            geometry=None,
+            title=r.get("stepwise_plot_title", r.get("name", "Raster Layer")),
+            invert=invert,
+            is_raster=True,
+            filepath=r["filepath"],
+            codes=codes,
         )
-        utils.print_update(level=print_level_base+2,message=f"{__name__}| ✔ Conserved Lands with {self.resource_disaggregation_config['buffer']['conserved_lands']}m buffer for {self.region_name} loaded to exclusion container")
-        
-        self.excluder.add_geometry(
-            self.aeroway_gdf.geometry, 
-            buffer=self.resource_disaggregation_config['buffer']['aeroway']
+
+    # 4. Vector layers
+    for i, v in enumerate(vector_configs):
+        utils.print_update(level=print_level_base+2,message=f"{__name__}| Loading vector layers for '{list(vector_configs[i]['buffer_mapping_key_buffers'].keys())}'...")
+        # Assert that the geometries in vector_configs are in the same CRS as excluder
+        if v["gdf"].crs != excluder.crs:
+            v["gdf"] = v["gdf"].to_crs(excluder.crs)
+        excluder_with_layers=add_and_plot_exclusion_layer(
+            excluder,
+            region_shape=region_shape,
+            ax=axes[n_rasters + i],
+            geometry=v["gdf"].geometry,
+            title=v["stepwise_plot_title"],
+            invert=v.get("invert", False),
+            is_raster=False,
         )
-        utils.print_update(level=print_level_base+2,message=f"{__name__}| ✔ Aeroways with {self.resource_disaggregation_config['buffer']['aeroway']}m buffer for {self.region_name} loaded to exclusion container")
-        
-        utils.print_update(level=print_level_base+2,message=f"{__name__}| ✔ Exclusion Container Preapred : \n {self.excluder}")
-        
-        return self.excluder
+
+    plt.tight_layout()
+    fig.suptitle("Land Availability for Exclusion/Inclusion Layers for BC", fontsize=24, y=1.05)
+    
+    # Save the figure
+    if isinstance(plot_save_to, str):
+        plot_save_to = Path(plot_save_to)
+    if not plot_save_to.parent.exists():
+        plot_save_to.parent.mkdir(parents=True, exist_ok=True)
+
+    plt.savefig(plot_save_to / "stepwise_land_availability_plot.png", bbox_inches='tight', dpi=300)
+    utils.print_update(level=3, message=f"Stepwise Availability Plots saved to {plot_save_to}")
+
+    return excluder_with_layers
+
+@staticmethod
+def apply_buffer_to_vector(
+    gdf: gpd.GeoDataFrame,
+    buffer_mapping: dict,
+    buffer_mapping_key: str
+    ) -> tuple[gpd.GeoDataFrame, pd.DataFrame]:
+    """
+    Projects the input GeoDataFrame to BC Albers, applies buffer distances from config,
+    and reprojects back to EPSG:4326. Returns the buffered GeoDataFrame and area comparison.
+    Adds a column 'buffer_applied_m' to show actual buffer distance applied per feature.
+    """
+
+    # 1. Project to BC Albers (EPSG:3005)
+    gdf_proj = gdf.to_crs(epsg=3005)
+
+    # 2. Assign buffer distances from mapping
+    buffer_series = pd.Series(buffer_mapping)
+    gdf_proj["buffer_applied_m"] = gdf_proj[buffer_mapping_key].map(buffer_series).fillna(0)
+
+    # 3. Keep unbuffered copy for area comparison
+    gdf_unbuffered = gdf_proj.copy()
+
+    # 4. Apply buffer (in meters)
+    gdf_buffered = gdf_proj.copy()
+    gdf_buffered["geometry"] = gdf_proj.geometry.buffer(gdf_proj["buffer_applied_m"])
+
+    # 5. Area calculations (in km²)
+    gdf_unbuffered["area_km2"] = gdf_unbuffered.geometry.area / 1e6
+    gdf_buffered["area_km2"] = gdf_buffered.geometry.area / 1e6
+    area_original = gdf_unbuffered.groupby(buffer_mapping_key)["area_km2"].sum().rename("original_area_km2")
+    area_buffered = gdf_buffered.groupby(buffer_mapping_key)["area_km2"].sum().rename("buffered_area_km2")
+
+    # 6. Area comparison
+    area_comparison = pd.concat([area_original, area_buffered], axis=1)
+    area_comparison['buffer_applied_m'] = area_comparison.index.map(buffer_mapping)
+    area_comparison["delta_km2"] = area_comparison["buffered_area_km2"] - area_comparison["original_area_km2"]
+    area_comparison["percent_increase"] = 100 * area_comparison["delta_km2"] / area_comparison["original_area_km2"]
+    area_comparison = area_comparison.sort_values("original_area_km2", ascending=False).round(4) 
+    
+    # 7. Reproject back to EPSG:4326
+    gdf_buffered = gdf_buffered.to_crs(epsg=4326)
+
+    return gdf_buffered, area_comparison
+
+
+@staticmethod
+def get_eligible_share(region_shape, excluder: ExclusionContainer) -> tuple:
+    """
+    Calculate the eligible share of the region based on the exclusion container.
+    """
+    if region_shape.crs != excluder.crs:
+        # Reproject region_shape to match the CRS of the excluder
+        region_shape = region_shape.to_crs(excluder.crs)
+    masked, transform = excluder.compute_shape_availability(region_shape)
+    region_area = region_shape.geometry.item().area
+    eligible_area = masked.sum() * excluder.res**2
+    eligible_share = eligible_area / region_area
+
+    return eligible_share

@@ -1,43 +1,50 @@
 import os
+from pathlib import Path
+import folium
+import geopandas as gpd
+import matplotlib as mpl
+import matplotlib.colors as mcolors
+import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
-# import seaborn as sns
-import logging as log
+import numpy as np
 import pandas as pd
-import seaborn as sns
 import plotly.express as px
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-import geopandas as gpd
-import folium
 import rasterio
-import numpy as np
-import matplotlib.patches as mpatches
-import matplotlib.colors as mcolors
-import matplotlib as mpl
-from matplotlib.ticker import MultipleLocator, FuncFormatter
-from matplotlib import lines as mlines
-
-from pathlib import Path
-import RES.utility as utils
-from matplotlib.patches import RegularPolygon
+import seaborn as sns
 import xarray
-from matplotlib.gridspec import GridSpec
 from IPython.display import display
-
-log.basicConfig(level=log.INFO, format='%(asctime)s - %(levelname)s - %(message)s' , datefmt='%Y-%m-%d %H:%M:%S')
-log_name=f'workflow/log/linking_vis.txt'
+from matplotlib import lines as mlines
+from matplotlib.font_manager import FontProperties
+from matplotlib.gridspec import GridSpec
+from matplotlib.lines import Line2D
+from matplotlib.patches import RegularPolygon
+from matplotlib.ticker import FuncFormatter, MultipleLocator
+import matplotlib.cm as cm
+from plotly.subplots import make_subplots
+import RES.utility as utils
+import RES.lands as lands
+from atlite import ExclusionContainer
 
 def size_for_legend(mw):
+    """Calculate the size of the bubble for the legend based on megawatts (MW).
+    Args:
+        mw (float): The megawatt value to convert to bubble size.
+    Returns:
+        float: The size of the bubble in points.
+    """
     return np.sqrt(mw / 100)  # since s = mw / 100 in scatter
 
-# with open(log_name, 'w') as file:
-#     pass
-# file_handler = log.FileHandler(log_name)
-# log.getLogger().addHandler(file_handler)
-
-from matplotlib.patches import RegularPolygon
-
 def add_compass_arrow(ax, x=0.9, y=0.9, length=0.05, text_offset=0.01):
+    """
+    Adds a simple north arrow to the plot.
+    Parameters:
+        ax (matplotlib.axes.Axes): The plot axes to annotate.
+        x (float): X position in axes fraction coordinates.
+        y (float): Y position in axes fraction coordinates.
+        length (float): Length of the arrow in axes fraction units.
+        text_offset (float): Offset for the 'N' label below the arrow.
+    """
     ax.annotate('', xy=(x, y), xytext=(x, y - length),
                 xycoords='axes fraction',
                 arrowprops=dict(facecolor='black', width=1.5, headwidth=6))
@@ -85,11 +92,22 @@ def plot_resources_scatter_metric_combined(
     save_to_root:str='vis',
     set_transparent:bool=False
 ):
-    import matplotlib.pyplot as plt
-    from matplotlib.ticker import MultipleLocator, FuncFormatter
-    import matplotlib.lines as mlines
-    import numpy as np
-    from pathlib import Path
+    """Plot combined scatter metrics for solar and wind resources.
+
+    Args:
+        solar_clusters (pd.DataFrame): DataFrame containing solar cluster data.
+        wind_clusters (pd.DataFrame): DataFrame containing wind cluster data.
+        bubbles_GW (list, optional): List of bubble sizes in GW. Defaults to [1, 5, 10].
+        bubbles_scale (float, optional): Scaling factor for bubble sizes. Defaults to 0.4.
+        lcoe_threshold (float, optional): LCOE threshold for filtering. Defaults to 200.
+        font_family (str, optional): Font family for the plot. Defaults to 'sans-serif'.
+        save_to_root (str, optional): Directory to save the plot. Defaults to 'vis'.
+        set_transparent (bool, optional): Whether to set the background transparent. Defaults to False.
+
+    Yields:
+        _type_: _description_
+    """
+
 
     # Filter by LCOE threshold
     solar = solar_clusters[solar_clusters['lcoe'] <= lcoe_threshold]
@@ -98,7 +116,7 @@ def plot_resources_scatter_metric_combined(
     fig, ax = plt.subplots(figsize=(10, 6))
 
     # Solar scatter
-    solar_scatter = ax.scatter(
+    ax.scatter(
         solar['CF_mean'],
         solar['lcoe'],
         s=solar['potential_capacity']*bubbles_scale,  # Scale down for better visibility
@@ -110,7 +128,7 @@ def plot_resources_scatter_metric_combined(
     )
 
     # Wind scatter
-    wind_scatter = ax.scatter(
+    ax.scatter(
         wind['CF_mean'],
         wind['lcoe'],
         s=wind['potential_capacity']*bubbles_scale,  # Scale down for better visibility
@@ -172,7 +190,6 @@ def get_CF_wind_check_plot(cells: gpd.GeoDataFrame,
                            columns: list,
                            figure_height: int = 7,
                            font_family:str='sans-serif',
-                           compass_size: int = 8,
                            save_to: str | Path = None):
     """
     Plots GWA benchmark (left), CF_IEC3 (middle), and wind_CF_mean (right).
@@ -314,7 +331,7 @@ def plot_resources_scatter_metric(resource_type:str,
     
     # Create a scatter plot
     fig, ax = plt.subplots(figsize=(10, 6))
-    scatter = ax.scatter(  # noqa: F841
+    ax.scatter( 
         clusters_resources['CF_mean'],
         clusters_resources['lcoe'],
         s=clusters_resources['potential_capacity'] / 100,  # Adjust the size for better visualization
@@ -416,7 +433,24 @@ def get_selected_vs_missed_visuals(cells: gpd.GeoDataFrame,
                                    dpi=1000,
                                    figsize=(12, 7),
                                    save=False):
-    
+    """Generate visualizations for selected vs missed cells.
+
+    Args:
+        cells (gpd.GeoDataFrame): GeoDataFrame containing cell data.
+        province_short_code (str): Short code for the province.
+        resource_type (str): Type of renewable resource (e.g., 'solar', 'wind').
+        lcoe_threshold (float): _description_
+        CF_threshold (float): _description_
+        capacity_threshold (float): _description_
+        text_box_x (float, optional): _description_. Defaults to .4.
+        text_box_y (float, optional): _description_. Defaults to .95.
+        title_y (int, optional): _description_. Defaults to 1.
+        title_x (float, optional): _description_. Defaults to 0.6.
+        font_size (int, optional): _description_. Defaults to 10.
+        dpi (int, optional): _description_. Defaults to 1000.
+        figsize (tuple, optional): _description_. Defaults to (12, 7).
+        save (bool, optional): _description_. Defaults to False.
+    """
     mask=(cells[f'{resource_type}_CF_mean']>=CF_threshold)&(cells[f'potential_capacity_{resource_type}']>=capacity_threshold)&(cells[f'lcoe_{resource_type}']<=lcoe_threshold)
     filtered_cells=cells[mask]
     
@@ -479,6 +513,8 @@ def create_raster_image_with_legend(
         cmap:str, 
         title:str, 
         plot_save_to:str):
+    """Creates a raster image with a legend for land classes."""
+    
     with rasterio.open(raster) as src:
         # Read the raster data
         raster_data = src.read(1)
@@ -520,51 +556,6 @@ def create_raster_image_with_legend(
         plt.savefig(plot_save_to, dpi=300)
         plt.close()  # Close the plot to avoid superimposing
 
-        return log.info(f"Raster images created for {title}. Please check GAEZ model documentation for raster class descriptions")
-
-# Load data from YAML file
-# configs=utility.load_config('config/config_linking_tool.yml')
-# solar_vis_directory=configs['solar']['solar_vis_directory']
-#  %%
-# def visualize_GADM_regions(
-#         gadm_regions_gdf:gpd.GeoDataFrame,
-#         color_palette:list,
-#         plot_save_to:str):
-#     """
-#     Takes in the GADM  regions (with given admin level) and plots with given color coded regions, saving the plot to given path.
-#     """
-#     palette = sns.color_palette(color_palette, n_colors=len(gadm_regions_gdf))
-
-#     # Create a dictionary to map Map_IDs to colors
-#     color_map = {map_id: color for map_id, color in zip(gadm_regions_gdf['Region_ID'], palette)}
-
-#     # Sort gadm_regions_gdf by Map_ID
-#     gadm_regions_gdf = gadm_regions_gdf.sort_values(by='Region_ID')
-
-#     # Plot the GeoDataFrame with Map_ID numbers
-#     fig, ax = plt.subplots(figsize=(12, 12))
-#     gadm_regions_gdf.plot(ax=ax, color=[color_map[region] for region in gadm_regions_gdf['Region_ID']])
-
-#     # Annotate each region with its Map_ID
-#     for idx, row in gadm_regions_gdf.iterrows():
-#         plt.annotate(text=str(row['Region_ID']), xy=row['geometry'].centroid.coords[0], ha='center', color='black')
-
-#     # Create legend with region names and Map_IDs
-#     handles = [plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=color, markersize=10) for color in palette]
-#     labels = [f"{row['Region']} ({row['Region_ID']})" for idx, row in gadm_regions_gdf.iterrows()]
-#     plt.legend(handles, labels, title='Regions', loc='upper left', bbox_to_anchor=(1, 1))
-
-#     # Set plot title
-#     plt.title('Map of Regions with Map_ID Numbers')
-#     plt.tight_layout()
-
-#     # Show the plot or save it to a file
-#     plt.savefig(plot_save_to)
-    
-#     fig = plt.gcf()
-#     plt.close(fig)
-#     log.info(f"GADM Regions visualization reated and saved locally.\n")
-
 def plot_data_in_GADM_regions(
         dataframe,
         data_column_df,
@@ -574,6 +565,19 @@ def plot_data_in_GADM_regions(
         plt_title,
         plt_file_name,
         vis_directory):
+    """
+    Plots data from a DataFrame on GADM regions using GeoPandas and Matplotlib.
+
+    Args:
+        dataframe (pd.DataFrame): DataFrame containing the data to plot.
+        data_column_df (str): Name of the column in the DataFrame to plot.
+        gadm_regions_gdf (gpd.GeoDataFrame): GeoDataFrame containing the GADM regions.
+        color_map (str): Name of the color map to use for the plot.
+        dpi (int): Dots per inch for the plot.
+        plt_title (str): Title of the plot.
+        plt_file_name (str): File name for saving the plot.
+        vis_directory (str): Directory for saving the visualization.
+    """
     
     ax = dataframe.plot(column=data_column_df, edgecolor='white',linewidth=0.2,legend=True,cmap=color_map)
     gadm_regions_gdf.plot(ax=ax, alpha=0.6, color='none', edgecolor='k', linewidth=0.7)
@@ -581,38 +585,35 @@ def plot_data_in_GADM_regions(
     plt_save_to=os.path.join(vis_directory,plt_file_name)
     plt.tight_layout()
     plt.savefig(plt_save_to,dpi=dpi)
-    plt.close
-    return log.info(f"Plot Created for {plt_title} for Potential Plants and Save to {plt_save_to}")
+    plt.close()
+
 
 def visualize_ss_nodes(substations_gdf,
                        provincem_gadm_regions_gdf:gpd.GeoDataFrame, 
                            plot_name):
-        """
-        Visualizes transmission nodes (buses) on a map with different colors based on substation types.
+    """
+    Visualizes transmission nodes (buses) on a map with different colors based on substation types.
 
-        Parameters:
-        - gadm_regions_gdf (GeoDataFrame): GeoDataFrame containing base regions to plot.
-        - buses_gdf (GeoDataFrame): GeoDataFrame containing buses with 'substation_type' column.
-        - plot_name (str): File path to save the plot image.
+    Parameters:
+    - gadm_regions_gdf (GeoDataFrame): GeoDataFrame containing base regions to plot.
+    - buses_gdf (GeoDataFrame): GeoDataFrame containing buses with 'substation_type' column.
+    - plot_name (str): File path to save the plot image.
 
-        Returns:
-        - None
-        """
-        
-        fig, ax = plt.subplots(figsize=(10, 8))
-        provincem_gadm_regions_gdf.plot(ax=ax, color="lightgrey", edgecolor="black", linewidth=0.8,alpha=0.2)
-        substations_gdf.plot('substation_type',ax=ax,legend=True,cmap='viridis',marker='x',markersize=10,linewidth=1,alpha=0.6)
+    Returns:
+    - None
+    """
+    
+    fig, ax = plt.subplots(figsize=(10, 8))
+    provincem_gadm_regions_gdf.plot(ax=ax, color="lightgrey", edgecolor="black", linewidth=0.8,alpha=0.2)
+    substations_gdf.plot('substation_type',ax=ax,legend=True,cmap='viridis',marker='x',markersize=10,linewidth=1,alpha=0.6)
 
-        # Finalize plot details
-        plt.title('Buses with Colormap of Substation Types')
-        plt.tight_layout()
-        
-        # Save and close the plot
-        plt.savefig(plot_name)
-        plt.close()
-        
-        # Logging success message
-        log.info(f"Plot for Grid Nodes Generated and saved as {plot_name}")
+    # Finalize plot details
+    plt.title('Buses with Colormap of Substation Types')
+    plt.tight_layout()
+    
+    # Save and close the plot
+    plt.savefig(plot_name)
+    plt.close()
         
 def create_timeseries_plots(cells_df, CF_timeseries_df, max_resource_capacity, dissolved_indices, resampling, representative_color_palette, std_deviation_gradient, vis_directory):
     print(f">>> Generating CF timeseries PLOTs for TOP Sites for {max_resource_capacity} GW Capacity investment in province...")
@@ -657,10 +658,17 @@ def create_timeseries_plots(cells_df, CF_timeseries_df, max_resource_capacity, d
         plt.savefig(os.path.join(vis_directory,plt_name))
         plt.close()
 
-    log.info(f">>> Plots generated for CF timeseries of TOP Sites for {max_resource_capacity} GW Capacity Investment in Province...")
-
 
 def create_timeseries_plots_solar(cells_df,CF_timeseries_df, dissolved_indices,max_solar_capacity,resampling,solar_vis_directory):
+    """ Generates time series plots for solar capacity factor (CF) data.
+    Args:
+        cells_df (pd.DataFrame): DataFrame containing cell information.
+        CF_timeseries_df (pd.DataFrame): DataFrame containing capacity factor time series data.
+        dissolved_indices (dict): Dictionary mapping regions and cluster numbers to indices in CF_timeseries_df.
+        max_solar_capacity (float): Maximum solar capacity for investment.
+        resampling (str): Resampling frequency for the time series data.
+        solar_vis_directory (str): Directory to save the generated plots.
+    """
 
     print(f">>> Generating CF timeseries for TOP Sites for {max_solar_capacity} GW Capacity Investment in BC...")
     
@@ -792,8 +800,21 @@ def get_data_in_map_plot(cells,
                     discalimers:bool=False,
                     show=True):
     
-    import matplotlib.pyplot as plt
-    import matplotlib as mpl
+    """
+    Plots a map of renewable energy resources (solar or wind) with capacity factor, potential capacity, or LCOE.
+    Args:
+        cells (gpd.GeoDataFrame): GeoDataFrame containing the resource data.
+        resource_type (str, optional): Type of renewable resource ('solar' or 'wind'). Defaults to None.
+        datafield (str, optional): Data field to plot ('CF', 'CAPACITY', or 'SCORE'). Defaults to None.
+        title (str, optional): Title for the plot. Defaults to None.
+        ax (matplotlib.axes.Axes, optional): Axes to plot on. If None, a new figure and axes are created. Defaults to None.
+        compass_size (float, optional): Size of the compass in the plot. Defaults to 10.
+        font_family (str, optional): Font family for text in the plot. Defaults to 'sans-serif'.
+        discalimers (bool, optional): Whether to include disclaimers in the plot. Defaults to False.
+        show (bool, optional): Whether to display the plot. Defaults to True.
+    Returns:
+        ax (matplotlib.axes.Axes): The axes with the plotted map.
+    """
     column_keyword=datafield.upper()
     resource_type = resource_type.lower()
     
@@ -871,8 +892,6 @@ def get_data_in_map_plot(cells,
         
     return ax
 
-
-
 def plot_grid_lines(
     region_code:str,
     region_name:str,
@@ -883,7 +902,19 @@ def plot_grid_lines(
     save_to:str|Path=None,
     show:bool=True,
 ):
+    """
+    Plots transmission lines with voltage levels in a specified region.
 
+    Args:
+        region_code (str): The code of the region to plot.
+        region_name (str): The name of the region to plot.
+        lines (gpd.GeoDataFrame): GeoDataFrame containing the transmission lines.       
+        boundary (gpd.GeoDataFrame): _description_
+        font_family (str, optional): _description_. Defaults to 'sans-serif'.
+        figsize (tuple, optional): _description_. Defaults to (10, 8).
+        save_to (str | Path, optional): _description_. Defaults to None.
+        show (bool, optional): _description_. Defaults to True.
+    """
 
     fig, ax = plt.subplots(figsize=(10, 8))
     plt.rcParams['font.family'] = font_family
@@ -946,6 +977,20 @@ def create_key_data_map_interactive(
     about_OSM_data:dict[dict],
     map_html_save_to:str
     ):
+    """
+    Creates an interactive map with key data for a specific province, including regions, conservation lands, aeroways, and bus nodes.
+
+    Args:
+        province_gadm_regions_gdf (gpd.GeoDataFrame): GeoDataFrame containing the province's administrative regions.
+        provincial_conservation_protected_lands (gpd.GeoDataFrame): GeoDataFrame containing conservation and protected lands.
+        aeroway_with_buffer_solar (gpd.GeoDataFrame): GeoDataFrame containing solar aeroways with buffer zones.
+        aeroway_with_buffer_wind (gpd.GeoDataFrame): GeoDataFrame containing wind aeroways with buffer zones.
+        aeroway (gpd.GeoDataFrame): GeoDataFrame containing aeroways.
+        provincial_bus_gdf (gpd.GeoDataFrame): GeoDataFrame containing provincial bus routes.
+        current_region (dict): Dictionary containing information about the current region.
+        about_OSM_data (dict[dict]): Dictionary containing information about OSM data.
+        map_html_save_to (str): _description_
+    """
     buffer_distance_m:dict[dict]=about_OSM_data['aeroway_buffer']
     
     m = province_gadm_regions_gdf.explore('Region', color='grey',style_kwds={'fillOpacity': 0.1}, name=f"{current_region['code']} Regions")
@@ -961,14 +1006,19 @@ def create_key_data_map_interactive(
 
     # Display the map
     m.save(map_html_save_to)
-    log.info(f"Key data map create for BC and saved to {map_html_save_to}")
-    # return m
     
 
 def create_sites_ts_plots_all_sites(
     resource_type:str,
     CF_ts_df:pd.DataFrame,
     save_to_dir:str):
+    """
+    Creates an interactive timeseries plot for the top sites of a given resource type.
+    Args:
+        resource_type (str): The type of resource (e.g., 'solar', 'wind').
+        CF_ts_df (pd.DataFrame): DataFrame containing the capacity factor timeseries data.
+        save_to_dir (str): Directory to save the plot.
+    """
     
     # Create a plot using plotly.express
     fig = px.line(CF_ts_df, x=CF_ts_df.index, y=CF_ts_df.columns[0:], title=f'Hourly timeseries for {resource_type} sites',
@@ -1068,6 +1118,149 @@ def create_sites_ts_plots_all_sites_2(
     # Save the plot to an HTML file
     fig.write_html(f'{save_to_dir}/Timeseries_top_sites_{resource_type}.html')
 
-    # Optionally display the plot
-    # fig.show()
-# 
+
+def get_conservation_lands_plot(CPCAD_actual:gpd.GeoDataFrame, CPCAD_with_buffer:gpd.GeoDataFrame,
+                                save_to:Path|str,
+                                font_family:str='sans-serif'):
+    """
+    Creates a plot comparing original and buffered conservation lands.
+    """
+
+    plt.rcParams['font.family'] =font_family
+    
+    # 1. Define colormap and normalization
+    unique_cats = CPCAD_actual['IUCN_CAT'].unique()
+    cmap = plt.cm.get_cmap('tab10', len(unique_cats))
+
+    # 2. Setup subplots
+    fig, axes = plt.subplots(1, 2, figsize=(12, 8), sharex=True, sharey=True)
+
+    # 3. Original geometries
+    CPCAD_actual.plot(
+        ax=axes[0],
+        column='IUCN_CAT_desc',
+        cmap=cmap,
+        linewidth=0.2,
+        edgecolor='k',
+        facecolor=None,
+        legend=False
+    )
+    axes[0].set_title("Original Conservation Lands")
+    axes[0].axis('off')
+
+    # 4. Buffered geometries
+    CPCAD_with_buffer.plot(
+        ax=axes[1],
+        column='IUCN_CAT_desc',
+        cmap=cmap,
+        linewidth=0.5,
+        edgecolor='none',
+        alpha=0.6,
+        legend=False
+    )
+    axes[1].set_title("Buffered Conservation Lands")
+    axes[1].axis('off')
+    # 5. Add shared legend
+    legend_labels = CPCAD_actual[['IUCN_CAT', 'IUCN_CAT_desc']].drop_duplicates().sort_values('IUCN_CAT')
+    handles = [
+        Line2D([0], [0], color=cmap(i-1), lw=4, label=desc)
+        for i, desc in zip(legend_labels['IUCN_CAT'], legend_labels['IUCN_CAT_desc'])
+    ]
+
+    title_font = FontProperties(weight='bold', size=14)
+    fig.legend(
+        handles=handles,
+        title="IUCN Category",
+        loc='lower center',
+        ncol=4,
+        frameon=False,
+        fontsize=12,
+        title_fontproperties=title_font
+    )
+
+    add_compass_arrow(ax=axes[1],length=0.03)
+    # 6. Final layout
+    plt.suptitle("Comparison of Original vs Buffered Conservation Areas", fontsize=16)
+    plt.tight_layout(rect=[0, 0.05, 1, 0.95])   
+    save_to=Path(save_to)
+    save_to.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(save_to, bbox_inches='tight', dpi=300)
+    utils.print_update(level=3, message=f"Conservation Lands Plot saved to {save_to}")
+
+
+def get_stepwise_availability_plots(excluder:ExclusionContainer,
+                                    region_shape:gpd.GeoDataFrame,
+                                    raster_configs:list[dict], 
+                                    vector_configs:list[dict],
+                                    save_to:str|Path):
+    
+    plt.rcParams['font.family']='serif'
+    
+    n_rasters = len(raster_configs)
+    n_vectors = len(vector_configs)
+
+    # 2. Plot setup
+    total_layers = n_rasters + n_vectors
+    fig, axes = plt.subplots(1, total_layers, figsize=(6 * total_layers, 8))
+
+    # Helper function
+    def plot_exclusion_layer(ax, 
+                             geometry, 
+                             title, 
+                             invert=False, 
+                             is_raster=False, 
+                             filepath=None, 
+                             codes=None):
+        if is_raster:
+            excluder.add_raster(filepath, codes, invert=invert)
+        else:
+            excluder.add_geometry(geometry)
+        
+        eligible_share, eligible_area, region_area = lands.get_eligible_share(region_shape, excluder)
+        
+        excluder.plot_shape_availability(
+            geometry=region_shape,
+            ax=ax,
+            set_title=False,
+            show_kwargs={"interpolation": "nearest", 'alpha': 0.7},
+            plot_kwargs={"edgecolor": "black", "linewidth": 0.4, "facecolor": "none", "zorder": 3},
+        )
+
+        ax.set_title(f"{title} ({eligible_share:.2%})")
+        ax.axis("off")
+
+    # 3. Raster layers
+    for i, r in enumerate(raster_configs):
+        plot_exclusion_layer(
+            ax=axes[i],
+            geometry=None,
+            title=r["title"],
+            invert=r["invert"],
+            is_raster=True,
+            filepath=r["filepath"],
+            codes=r["codes"],
+        )
+
+    # 4. Vector layers
+    for i, v in enumerate(vector_configs):
+        # Assert that the geometries in vector_configs are in the same CRS as excluder
+        if v["gdf"].crs != excluder.crs:
+                v["gdf"] = v["gdf"].to_crs(excluder.crs)
+        plot_exclusion_layer(
+            ax=axes[n_rasters + i],
+            geometry=v["gdf"].geometry,
+            title=v["title"],
+            invert=v.get("invert", False),
+            is_raster=False,
+        )
+
+    plt.tight_layout()
+    fig.suptitle("Land Availability for Exclusion/Inclusion Layers for BC", fontsize=16, y=1.05)
+    
+    # Save the figure
+    if isinstance(save_to, str):
+        save_to = Path(save_to)
+    if not save_to.parent.exists():
+        save_to.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(save_to, bbox_inches='tight', dpi=300)
+    utils.print_update(level=3, message=f"Stepwise Availability Plots saved to {save_to}")

@@ -14,8 +14,9 @@ project_root = Path(__file__).resolve().parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 os.chdir(project_root)
+default_coders_cfg_file_path="data/downloaded_data/CODERS/coders_api.yaml"
 
-def load_api_key(file_path="data/downloaded_data/CODERS/coders_api.yaml"):
+def load_api_key(file_path=default_coders_cfg_file_path):
     """
     Loads an API key from a configuration file.
     Args:
@@ -29,16 +30,27 @@ def load_api_key(file_path="data/downloaded_data/CODERS/coders_api.yaml"):
     """
     try:
         api_cfg = utils.load_config(file_path)
+        if api_cfg is None:
+            utils.print_update(level=1,message=f"API key file is empty or could not be loaded: {file_path}",alert=True)
+            utils.print_update(level=2, message="Please create a YAML file at the above path with the following structure:")
+            utils.print_update(level=2, message="""
+        api_keys:
+          your_username: your_api_key_here
+        Default_user: your_username
+            """)
+            utils.print_update(level=2, message=f"save the file to : {file_path} and try again.")
+            utils.print_update(level=2, message="Refer to the CODERS API setup guide for more details.")
+            return None
     except FileNotFoundError:
-        print(f"API key file not found: {file_path}")
-        print("Please create a YAML file at the above path with the following structure:")
-        print("""
-api_keys:
-  your_username: your_api_key_here
-Default_user: your_username
-        """)
-        print("Refer to the CODERS API setup guide for more details.")
-        return None
+            utils.print_update(level=1, message=f"API key file not found: {file_path}")
+            utils.print_update(level=2, message="Please create a YAML file at the above path with the following structure:")
+            utils.print_update(level=2, message="""
+        api_keys:
+          your_username: your_api_key_here
+        Default_user: your_username
+            """)
+            utils.print_update(level=1, message="Refer to the CODERS API setup guide for more details.")
+            return None
 
     default_user = api_cfg.get("Default_user")
     api_keys = api_cfg.get("api_keys", {})
@@ -46,24 +58,30 @@ Default_user: your_username
     if default_user:
         api_key = api_keys.get(default_user)
         if api_key:
-            return api_key
+            return api_key,default_user
 
     # fallback: try any other API key
     for user, key in api_keys.items():
         if key:
-            return key
+            return key,user
 
     return None  # or raise an exception
 
 
-api_key = load_api_key()
-utils.print_update(level=2,message=f"Using CODERS API key: {api_key}")
+api_key,user = load_api_key(default_coders_cfg_file_path)
+if api_key is None:
+    utils.print_update(message="No API key found. Please ensure you have a valid API key in the configuration file.",
+                       alert=True)
+else:
+    utils.print_update(level=2,message=f"CODERS API key loaded from: {default_coders_cfg_file_path}")
+    utils.print_update(level=3,message=f"user {user}: {api_key}")
 
 
 @dataclass
 class CODERSData(AttributesParser):
     def __post_init__(self):
-     # Call the parent class __post_init__ to initialize inherited attributes
+        
+        # Call the parent class __post_init__ to initialize inherited attributes
         super().__post_init__()
 
         # Load CODERS data config

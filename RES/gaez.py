@@ -28,6 +28,7 @@ class GAEZRasterProcessor(GADMBoundaries):
         self.Rasters_in_use_direct.mkdir(parents=True, exist_ok=True)
 
         self.raster_types = self.gaez_config['raster_types']
+        self.region_boundary = None
 
 
     def process_all_rasters(self,
@@ -35,6 +36,7 @@ class GAEZRasterProcessor(GADMBoundaries):
         """Main pipeline to download, extract, clip, and plot rasters based on configuration."""
         if not (self.gaez_root / self.zip_file).exists():
             self.__download_resources_zip_file__()
+        raster_paths = {}
         
         self.__extract_rasters__()
         self.region_boundary = self.get_region_boundary()
@@ -42,9 +44,11 @@ class GAEZRasterProcessor(GADMBoundaries):
         utils.print_update(level=print_level_base,message=f"{__name__}| Clipping Rasters to regional boundaries.. ")
         # Loop over raster types and process each
         for raster_type in self.raster_types:
-            self.__clip_to_boundary_n_plot__(raster_type, self.region_boundary.geometry,show)
-        
+            raster_path = self.__clip_to_boundary_n_plot__(raster_type, self.region_boundary.geometry, show)
+            raster_paths[raster_type['name']] = raster_path
+
         utils.print_update(level=print_level_base,message=f"{__name__}| ✔ All required rasters for GAEZ processed and plotted successfully.")
+        return raster_paths
 
     def __download_resources_zip_file__(self):
         """Downloads the resources zip file from GAEZ if not already downloaded."""
@@ -106,12 +110,12 @@ class GAEZRasterProcessor(GADMBoundaries):
             
             # Call visualization method
             plot_save_to = Path('vis/misc') / raster_file.replace('.tif', f'_raster_{self.region_short_code}.png')
-            raster_plot=self.plot_gaez_tif(clipped_raster_path, 
+            self.plot_gaez_tif(clipped_raster_path, 
                                color_map, 
                                plot_title, 
                                plot_save_to,show)
             utils.print_update(level=print_level_base+1,message=f"{__name__}| Clipped Raster plot for {self.region_name} saved at: {plot_save_to}")
-            return raster_plot
+            return clipped_raster_path
 
     def plot_gaez_tif(self, tif_path, color_map, plot_title, save_to, show=False):
         """Visualize and save the raster plot."""

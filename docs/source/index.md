@@ -29,7 +29,8 @@ notes/resource_builder
 notes/getting_started
 notes/environment_setup
 notes/api
-case_studies/BC.md
+notes/data.md
+notes/case_BC.md
 notes/developers
 ```
 

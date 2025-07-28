@@ -177,15 +177,7 @@ class GADMBoundaries(AttributesParser):
         
         utils.print_update(level=print_level_base+1,message=f"{__name__}| Setting up the Minimum Bounding Region (MBR) for {self.region_short_code}...")
         min_x, min_y, max_x, max_y=self.actual_boundary.geometry.total_bounds
-        
-        """
-        Alternate:
-        self.region_gadm_gdf.unary_union.buffer(1).bounds # 
-        Key Differences:
-            Performance: .total_bounds is much faster because it doesn’t require merging or buffering geometries.
-            Output: Both return bounding coordinates, but .unary_union.buffer(1).bounds includes a buffer, whereas .total_bounds is the simplest, direct bounding box of the original geometries.
-            Complexity: Use .unary_union.buffer(1).bounds when you need more advanced spatial transformations (e.g., merging or buffering), otherwise use .total_bounds for basic bounding box calculations.
-        """
+
         
         # MBR=box(min_x, min_y, max_x, max_y)
         self.bounding_box:dict={
