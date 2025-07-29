@@ -158,8 +158,10 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/environment_setup.html">Conda Environment Setup for RESource</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
@@ -338,7 +340,8 @@ document.write(`
         
         <span class="c1">### Exclusion Layer Container</span>
         <span class="c1"># self.land_container=LandContainer(**self.required_args)</span>
-    
+
+
         <span class="c1">### ERA5 Cutout</span>
         <span class="c1"># self.era5_cutout=ERA5Cutout(**self.required_args)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_resolution</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutout_config</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span>
@@ -443,7 +446,6 @@ document.write(`
         
     <span class="c1">## 2.1 Compute availability Matrix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">region_shape</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_unified_region_shape__</span><span class="p">()</span> <span class="c1"># we need to pass the unified region shape to the availability matrix calculation.</span>
-
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
                    <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Processing Availability Matrix... &quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Availability_matrix</span><span class="p">:</span><span class="n">xr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="o">.</span><span class="n">availabilitymatrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region_shape</span><span class="p">,</span> <span class="n">composite_excluder</span><span class="p">)</span>
