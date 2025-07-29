@@ -10,13 +10,12 @@ To demonstrate RESource's practical utility, we apply the framework to the Canad
 ## Extracting Spatial grid cells
 BC was discretized into uniform grid cells using the spatial resolution of ERA5 data (~30 km × 30 km), with each cell serving as the basic unit of analysis. For each cell, RESource processed multiple geospatial layers, filtering out ineligible land based on legal (e.g., protected areas), environmental (e.g., slope, wetlands), and infrastructure-related constraints (e.g., distance to substations). Eligible cells were then evaluated for their proximity to the grid and assigned hourly profiles of solar irradiance and wind speed, allowing theoretical VRE potential to be estimated per technology.
  
-<!-- <Figure 3 of the paper> -->
+<img src="../_static/Grid_cells.jpg" alt="Extraction of Spatial Grid Cells in BC" width="600"/>
 
 ## Spatial Screening and Land Availability
 Key parameters are configurable to reflect geographic constraints (e.g., slope, protected areas), We applied the spatial screening process using global raster datasets from the GAEZ to systematically identify suitable VRE sites by filtering land based on land cover, terrain slope, and exclusion zones.. Land cover data layers are used to selectively include classes such as croplands, grasslands, shrubs, and bare soil while excluding artificial surfaces, dense forests, and water bodies. Terrain slope rasters helped eliminate areas with steep gradients over 30%, which pose construction and accessibility challenges. Additionally, exclusion zones—compiled from global biodiversity, wetland, and protected area databases—were entirely filtered out from consideration to respect environmental conservation boundaries. This layered geospatial filtering ensures that selected sites align with both technical feasibility and ecological integrity. We extracted the land availability map from this spatial screening process. 
 
-
-![GAEZ layers used in BC spatial screening showing land cover, slope, and exclusion zones](_static/GAEZ_layers_BC_2025.jpg){width="500"}
+<img src="../_static/GAEZ_layers_BC_2025.jpg" alt="GAEZ layers used in BC spatial screening showing land cover, slope, and exclusion zones" width="600"/>
 
 > For full details on the raster classes, refer to the [GAEZ_v4 documentation](https://doi.org/10.4060/cb4744en).
 
@@ -30,6 +29,14 @@ page 20; Exclusion zones
 
 
 Spatial screening revealed that roughly 64% of BC’s land is unsuitable for VRE development due to terrain, regulatory restrictions, and conservation priorities. The remaining land comprises technically viable areas suitable for further capacity and cost assessment. Figure 5 illustrates the land availability for grid cells (in the left most plot) and the potential capacity translated from availability percentage. It illustrates that steep terrain in the province’s western region limits turbine deployment, while the southern interior exhibits favorable solar deployment. Regulatory buffers around aeroways and parks further shape siting decisions.
+
+- Resource's spatial screening process for BC, showing the stepwise filtering of land availability based on terrain, land cover, and exclusion zones.
+  
+<img src="../_static/stepwise_land_availability_plot.png" alt="Stepwise layer results for BC" width="900"/>
+
+- Rescaling the land availability map to the ERA5 grid resolution
+  
+<img src="../_static/land_availability_ERA5grid_British Columbia.png" alt="Final results for BC rescaled to ERA5 Resolution" width="600"/>
 
 ## Potential capacity
 We translated eligible land into theoretical energy capacity using technology-specific land-use intensity benchmarks—3 MW/km² for wind and 1.45 MW/km² for solar PV consistent with prior studies [[5](#5),[6](#6),[7](#7)].
