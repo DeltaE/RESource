@@ -82,9 +82,14 @@ class AttributesParser:
         start_date = self.config.get('cutout', {}).get('snapshots', {}).get('start', [[]])[0]
         end_date = self.config.get('cutout', {}).get('snapshots', {}).get('end', [[]])[0]
         return start_date, end_date
+    
+    @property
+    def default_font_size(self):
+        return 14
 
-    
-    
+    @property
+    def default_font_family(self):
+       return 'serif'
 
 # Methods for dynamically fetching data from the config
 
