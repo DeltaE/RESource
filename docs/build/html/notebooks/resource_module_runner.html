@@ -377,7 +377,7 @@ conda<span class="w"> </span>activate<span class="w"> </span>RES
 <section id="Set-Required-Args-to-Activate-Modules">
 <h2>Set Required Args to Activate Modules<a class="headerlink" href="#Set-Required-Args-to-Activate-Modules" title="Link to this heading">#</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">RES.RESources</span> <span class="k">as</span> <span class="nn">RES</span>
@@ -393,11 +393,13 @@ conda<span class="w"> </span>activate<span class="w"> </span>RES
 <span class="ansi-white-intense-fg">  └&gt; user Elias: w0OksqQKMFMtKPbO</span>
 </pre></div></div>
 </div>
+<p><img alt="assessment_steps" class="no-scaled-link" src="notebooks/docs/source/_static/assessment_steps.jpg" style="width: 400px;" /></p>
+<p><img alt="high_level_workflow" class="no-scaled-link" src="notebooks/docs/source/_static/high_level_workflow.jpg" style="width: 900px;" /></p>
 <ul class="simple">
 <li><p>All steps are integrated in this 'RES_module.build()' method.</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Iterate over provinces for both solar and wind resources</span>
@@ -416,12 +418,12 @@ conda<span class="w"> </span>activate<span class="w"> </span>RES
 
 
     <span class="c1"># For complete workflow, uncomment the following line</span>
-        <span class="c1"># RES_module.build(select_top_sites=True,</span>
-        <span class="c1">#                  use_pypsa_buses=False)</span>
+        <span class="n">RES_module</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">select_top_sites</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">use_pypsa_buses</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
@@ -442,57 +444,14 @@ conda<span class="w"> </span>activate<span class="w"> </span>RES
 <span class="ansi-black-intense-fg">  └─&gt; Extracting Wind Turbine technology cost...</span>
 <span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler|💾 Data (GeoDataFrame/DataFrame) saved to data/store/resources_BC.h5 with key &#39;cost/atb/wind&#39;</span>
 <span class="ansi-black-intense-fg">  └─&gt; Extracting BESS technology cost...</span>
-<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler|💾 Data (GeoDataFrame/DataFrame) saved to data/store/resources_BC.h5 with key &#39;cost/atb/bess&#39;</span>
-<span class="ansi-cyan-fg"> └&gt; Snapshot for Resources: 2023-01-01 07:00:00 to 2024-01-01 06:00:00</span>
-<span class="ansi-cyan-intense-fg">____________________________________________________________</span>
-<span class="ansi-green-intense-fg">     Initiating RESource Builder | RES.RESources</span>
-<span class="ansi-cyan-intense-fg">____________________________________________________________</span>
-<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Region Set to &gt;&gt; Short Code : BC, Name: British Columbia).</span>
-<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Collecting regional boundary...</span>
-<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Loading GADM boundaries (Sub-provincial | level =2) for British Columbia from local file data/processed_data/regions/gadm41_Canada_L2_BC.geojson.</span>
-<span class="ansi-cyan-fg"> └&gt; NREL_ATBProcessor initiated...</span>
-<span class="ansi-white-intense-fg">  └&gt; RES.atb| Processing Annual Technology Baseline (ATB) data sourced from NREL...</span>
-<span class="ansi-cyan-fg"> └&gt; RES.utility| Directory &#39;data/downloaded_data/NREL/ATB/ATBe.parquet&#39; found locally.</span>
-<span class="ansi-white-intense-fg">  └&gt; RES.atb| ATB cost datafile: ATBe.parquet loaded</span>
-<span class="ansi-white-intense-fg">  └&gt; Extracting technology baseline costs...</span>
-<span class="ansi-black-intense-fg">  └─&gt; Extracting Solar PV technology cost...</span>
-<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler|💾 Data (GeoDataFrame/DataFrame) saved to data/store/resources_BC.h5 with key &#39;cost/atb/solar&#39;</span>
-<span class="ansi-black-intense-fg">  └─&gt; Extracting Wind Turbine technology cost...</span>
-<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler|💾 Data (GeoDataFrame/DataFrame) saved to data/store/resources_BC.h5 with key &#39;cost/atb/wind&#39;</span>
-<span class="ansi-black-intense-fg">  └─&gt; Extracting BESS technology cost...</span>
-<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler|💾 Data (GeoDataFrame/DataFrame) saved to data/store/resources_BC.h5 with key &#39;cost/atb/bess&#39;</span>
-<span class="ansi-cyan-fg"> └&gt; Snapshot for Resources: 2023-01-01 07:00:00 to 2024-01-01 06:00:00</span>
 </pre></div></div>
-</div>
-<p><img alt="assessment_steps" class="no-scaled-link" src="notebooks/docs/source/_static/assessment_steps.jpg" style="width: 400px;" /></p>
-</section>
-</section>
-<section id="Stepwise-Checks/Debugging-[when-required]">
-<h1>Stepwise Checks/Debugging [when required]<a class="headerlink" href="#Stepwise-Checks/Debugging-[when-required]" title="Link to this heading">#</a></h1>
-<p><img alt="high_level_workflow" class="no-scaled-link" src="notebooks/docs/source/_static/high_level_workflow.jpg" style="width: 900px;" /></p>
-<ul class="simple">
-<li><p>This method collects the sub-national administrative boundaries.</p></li>
-<li><p>Using that boundary, we calculate the Minimum Bounding Rectangle (MBR).</p></li>
-<li><p>We use that MBR as a cutout to source weather resources data from ERA5 via CDSAPI. The ERA5’s cutout is then stored as a netcdf `.nc' file.</p></li>
-<li><p>We load that cutout as <code class="docutils literal notranslate"><span class="pre">atlite</span></code>’s <code class="docutils literal notranslate"><span class="pre">cutout</span></code> object.</p></li>
-<li><p>We then use <code class="docutils literal notranslate"><span class="pre">atlite</span></code>’s <code class="docutils literal notranslate"><span class="pre">cutout.grid</span></code> attribute to create our test beds for the analysis i.e. the grid cells (geodataframe)</p></li>
-</ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">step1_results</span><span class="o">=</span><span class="n">RES_module</span><span class="o">.</span><span class="n">get_grid_cells</span><span class="p">()</span>
-
-<span class="n">step1_results</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># See the first 5 rows of the grid cells data</span>
-</pre></div>
-</div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-2025-07-28 18:16:57,959 - INFO - Storing temporary files in /tmp/tmpt7drfpwd
+2025-07-30 12:42:55,889 - INFO - Storing temporary files in /tmp/tmpbenfuxly
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -500,6 +459,14 @@ conda<span class="w"> </span>activate<span class="w"> </span>RES
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler|💾 Data (GeoDataFrame/DataFrame) saved to data/store/resources_BC.h5 with key &#39;cost/atb/bess&#39;</span>
+<span class="ansi-cyan-fg"> └&gt; Snapshot for Resources: 2023-01-01 07:00:00 to 2024-01-01 06:00:00</span>
+<span class="ansi-cyan-intense-fg">____________________________________________________________</span>
+<span class="ansi-green-intense-fg">     Initiating wind module for British Columbia...</span>
+<span class="ansi-cyan-intense-fg">____________________________________________________________</span>
+<span class="ansi-green-intense-fg ansi-bold">**************************************</span>
+<span class="ansi-green-intense-fg ansi-bold">Step 1 : Prepare Cutout and Grid Cells</span>
+<span class="ansi-green-intense-fg ansi-bold">**************************************</span>
 <span class="ansi-cyan-fg"> └&gt; RES.RESources| Preparing Grid Cells...</span>
 <span class="ansi-black-intense-fg">  └─&gt; RES.era5_cutout|  Processing ERA5&#39;s cutout...</span>
 <span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Processing regional bounding box...</span>
@@ -514,125 +481,42 @@ conda<span class="w"> </span>activate<span class="w"> </span>RES
     * For more operations related to cutout, check the tool docs @ https://atlite.readthedocs.io/en/master/examples/create_cutout.html#
         </span>
 <span class="ansi-black-intense-fg">  └─&gt; RES.era5_cutout| ✓ Cutout and regional boundary processed. </span>
-<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| 💾 Updated &#39;cells&#39; saved to data/store/resources_BC.h5 with key &#39;cells&#39;</span>
-<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| 💾 Updated &#39;boundary&#39; saved to data/store/resources_BC.h5 with key &#39;boundary&#39;</span>
-<span class="ansi-white-intense-fg">  └&gt; RES.RESources| Grid Cells updated.</span>
 </pre></div></div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
-</pre></div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
 </div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>x</th>
-      <th>y</th>
-      <th>Country</th>
-      <th>Province</th>
-      <th>Region</th>
-      <th>geometry</th>
-    </tr>
-    <tr>
-      <th>cell</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Capital_-123.75_48.25</th>
-      <td>-123.75</td>
-      <td>48.25</td>
-      <td>Canada</td>
-      <td>British Columbia</td>
-      <td>Capital</td>
-      <td>MULTIPOLYGON (((-123.625 48.32983, -123.6294 4...</td>
-    </tr>
-    <tr>
-      <th>Capital_-123.5_48.25</th>
-      <td>-123.50</td>
-      <td>48.25</td>
-      <td>Canada</td>
-      <td>British Columbia</td>
-      <td>Capital</td>
-      <td>MULTIPOLYGON (((-123.625 48.375, -123.52298 48...</td>
-    </tr>
-    <tr>
-      <th>CowichanValley_-124.75_48.5</th>
-      <td>-124.75</td>
-      <td>48.50</td>
-      <td>Canada</td>
-      <td>British Columbia</td>
-      <td>CowichanValley</td>
-      <td>POLYGON ((-124.625 48.625, -124.625 48.56944, ...</td>
-    </tr>
-    <tr>
-      <th>Capital_-124.5_48.5</th>
-      <td>-124.50</td>
-      <td>48.50</td>
-      <td>Canada</td>
-      <td>British Columbia</td>
-      <td>Capital</td>
-      <td>POLYGON ((-124.375 48.625, -124.375 48.51105, ...</td>
-    </tr>
-    <tr>
-      <th>CowichanValley_-124.5_48.5</th>
-      <td>-124.50</td>
-      <td>48.50</td>
-      <td>Canada</td>
-      <td>British Columbia</td>
-      <td>CowichanValley</td>
-      <td>POLYGON ((-124.625 48.625, -124.48926 48.625, ...</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
-<ul class="simple">
-<li><p>This method loads the cutout (atlite’s cutout object), regional boundary (GeoDataFrame), loads the cost parameters and also initiates a <strong>composite excluder</strong></p>
-<ul>
-<li><p>The (<code class="docutils literal notranslate"><span class="pre">`atlite</span></code>’s exclusion container &lt;<a class="reference external" href="https://atlite.readthedocs.io/en/master/ref_api.html#atlite.Cutout.availabilitymatrix">https://atlite.readthedocs.io/en/master/ref_api.html#atlite.Cutout.availabilitymatrix</a>&gt;`__) to merge all the spatial layers.</p></li>
-</ul>
-</li>
-<li><p>the <code class="docutils literal notranslate"><span class="pre">cutout.availabilitymatrix</span></code> method calculates % of usable area within each grid cell after applying exclusion criteria (e.g., protected areas, water bodies) and returns an <code class="docutils literal notranslate"><span class="pre">`AvaliabilityMatrix</span></code> &lt;<a class="reference external" href="https://atlite.readthedocs.io/en/master/ref_api.html#atlite.Cutout.availabilitymatrix">https://atlite.readthedocs.io/en/master/ref_api.html#atlite.Cutout.availabilitymatrix</a>&gt;`__</p></li>
-<li><p>We apply technology landuse intensity (e.g., MW/km² for wind or solar) to translate this to potential capacity data.</p></li>
-<li><p>We get the maximum installable capacity for each grid cell based on available area, land use constraints, and technology-specific parameters. &gt; - Current results gives a percentage of availability for each grid cell. It does not tell specifically which spatial area inside a grid cell is unavailable. &gt; - The <em>potential capacity</em> translation processing involves <code class="docutils literal notranslate"><span class="pre">area</span></code> calculation. The area calculation method is integrated to <code class="docutils literal notranslate"><span class="pre">RES.cell_processor.get_capacity()</span></code>. That method is sensitive to
-area calculation specific coordinate-system projection of the geodataframe. It is recommended to be cautious about choosing this crs.</p></li>
-</ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RES_module</span><span class="o">.</span><span class="n">cell_processor</span><span class="o">.</span><span class="n">set_excluder</span><span class="p">()</span>
-</pre></div>
-</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+2025-07-30 12:42:56,454 - INFO - Storing temporary files in /tmp/tmpn3jkncbn
+</pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| 💾 Updated &#39;cells&#39; saved to data/store/resources_BC.h5 with key &#39;cells&#39;</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| 💾 Updated &#39;boundary&#39; saved to data/store/resources_BC.h5 with key &#39;boundary&#39;</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.RESources| Grid Cells updated.</span>
+<span class="ansi-green-intense-fg ansi-bold">****************************************************************</span>
+<span class="ansi-green-intense-fg ansi-bold">Step 2 : Calculate Land availability and process capacity matrix</span>
+<span class="ansi-green-intense-fg ansi-bold">****************************************************************</span>
+<span class="ansi-cyan-fg"> └&gt; RES.RESources| Preparing Cells&#39; capacity...</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.CellCapacityProcessor| Cell capacity processor initiated...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.era5_cutout|  Processing ERA5&#39;s cutout...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Processing regional bounding box...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Region Set to &gt;&gt; Short Code : BC, Name: British Columbia).</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Collecting regional boundary...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Loading GADM boundaries (Sub-provincial | level =2) for British Columbia from local file data/processed_data/regions/gadm41_Canada_L2_BC.geojson.</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Setting up the Minimum Bounding Region (MBR) for BC...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.era5_cutout| ✓ MBR and regional boundary created. </span>
+<span class="ansi-black-intense-fg ansi-bold">ℹ️   Memory management remarks:
+    * After execution, all downloaded data is stored at cutout.path. By default, it is not loaded into memory, but into dask arrays. This keeps the memory consumption extremely low.
+    * The data is accessible in cutout.data, which is an xarray.Dataset. Querying the cutout gives us some basic information on which data is contained in it.
+    * For more operations related to cutout, check the tool docs @ https://atlite.readthedocs.io/en/master/examples/create_cutout.html#
+        </span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.era5_cutout| ✓ Cutout and regional boundary processed. </span>
 <span class="ansi-black-intense-fg">  └─&gt; RES.lands| Loading GAEZ raster layers for British Columbia...</span>
 <span class="ansi-black-intense-fg">  └─&gt; RES.gaez| Raster file &#39;exclusion_2017.tif&#39; found in local directory, skipping download.</span>
 <span class="ansi-black-intense-fg">  └─&gt; RES.gaez| Raster file &#39;slpmed05.tif&#39; found in local directory, skipping download.</span>
@@ -645,6 +529,7 @@ area calculation specific coordinate-system projection of the geodataframe. It i
 <span class="ansi-black-intense-fg">  └─&gt; RES.gaez| Clipped Raster plot for British Columbia saved at: vis/misc/slpmed05_raster_BC.png</span>
 <span class="ansi-black-intense-fg">  └─&gt; RES.gaez| Clipped Raster plot for British Columbia saved at: vis/misc/faocmb_2010_raster_BC.png</span>
 <span class="ansi-black-intense-fg">  └─&gt; RES.gaez| ✔ All required rasters for GAEZ processed and plotted successfully.</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.lands| Raster Layers Loaded</span>
 <span class="ansi-black-intense-fg">  └─&gt; RES.lands| Loading vector layers for British Columbia...</span>
 <span class="ansi-black-intense-fg">  └─&gt; RES.lands| Loading aeroway areas for British Columbia</span>
 <span class="ansi-black-intense-fg">  └─&gt; RES.osm| processing Aeroways data for British Columbia</span>
@@ -655,34 +540,449 @@ area calculation specific coordinate-system projection of the geodataframe. It i
 <span class="ansi-black-intense-fg">  └─&gt; RES.lands| Processing Conserved areas for British Columbia</span>
 <span class="ansi-cyan-fg"> └&gt; RES.lands| Loading regional data from Canadian Protected and Conserved Areas Database (CPCAD) from locally stored datafile - data/downloaded_data/lands/ProtectedConservedArea_BC.pickle</span>
 <span class="ansi-black-intense-fg">  └─&gt; RES.lands| Vector Area comparison for IUCN_CAT_desc saved to data/processed_data/lands/IUCN_CAT_desc_area_comparisons_British Columbia.csv</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.lands| Vector Layers Loaded</span>
 <span class="ansi-white-intense-fg">  └&gt; RES.lands| Loading layers to Excluder for British Columbia. This may take a while to compute and plot...</span>
-<span class="ansi-black-intense-fg">  └─&gt; RES.lands| Loading raster layer &#39;exclusion_areas&#39;...</span>
-<span class="ansi-black-intense-fg">  └─&gt; RES.lands| Loading raster layer &#39;terrain_resources&#39;...</span>
-<span class="ansi-black-intense-fg">  └─&gt; RES.lands| Loading raster layer &#39;land_cover&#39;...</span>
-<span class="ansi-black-intense-fg">  └─&gt; RES.lands| Loading vector layers for &#39;[&#39;aerodrome&#39;, &#39;runway&#39;, &#39;taxiway&#39;, &#39;helipad&#39;, &#39;apron&#39;, &#39;gate&#39;]&#39;...</span>
-<span class="ansi-black-intense-fg">  └─&gt; RES.lands| Loading vector layers for &#39;[&#39;Strict Nature Reserve&#39;, &#39;Wilderness Area&#39;, &#39;National Park&#39;, &#39;Natural Monument or Feature&#39;, &#39;Habitat/Species Management Area&#39;, &#39;Protected Landscape/Seascape&#39;, &#39;Protected Area with Sustainable Use of Natural Resources&#39;, &#39;Interim Sites (unknown specifics)&#39;, &#39;OECM areas&#39;]&#39;...</span>
-<span class="ansi-white-intense-fg">  └&gt; Stepwise Availability Plots saved to vis/BC/lands</span>
+<span class="ansi-black-intense-fg ansi-bold">ℹ️  RES.lands| The Stepwise Land-availability plots and numbers are sensitive to the sequence of layers are loaded. However, the collective impact of layers on final availability is same</span>
+<span class="ansi-black-intense-fg ansi-bold">ℹ️  RES.lands| The order of loading raster layers mimics the given order in config file under keys: &#39;GAEZ&#39; and then &#39;raster_types&#39;</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.lands| Loading raster layer 1 &#39;exclusion_areas&#39; to ExclusionContainer ...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.lands| Loading raster layer 2 &#39;terrain_resources&#39; to ExclusionContainer ...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.lands| Loading raster layer 3 &#39;land_cover&#39; to ExclusionContainer ...</span>
+<span class="ansi-black-intense-fg ansi-bold">ℹ️  RES.lands| The order of loading vector layers mimics the given order in config file under keys: &#39;capacity_disaggregation&#39; and then &lt;resource_type&gt; &#39;solar&#39; or &#39;wind&#39; and then &#39;vector_buffers&#39;. However, the collective impact of layers on final availability is same </span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.lands| Loading vector layer 1 for &#39;[&#39;aerodrome&#39;, &#39;runway&#39;, &#39;taxiway&#39;, &#39;helipad&#39;, &#39;apron&#39;, &#39;gate&#39;]&#39; to ExclusionContainer ...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.lands| Loading vector layer 2 for &#39;[&#39;Strict Nature Reserve&#39;, &#39;Wilderness Area&#39;, &#39;National Park&#39;, &#39;Natural Monument or Feature&#39;, &#39;Habitat/Species Management Area&#39;, &#39;Protected Landscape/Seascape&#39;, &#39;Protected Area with Sustainable Use of Natural Resources&#39;, &#39;Interim Sites (unknown specifics)&#39;, &#39;OECM areas&#39;]&#39; to ExclusionContainer ...</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.lands| Stepwise Availability Plots saved to vis/BC/lands</span>
+<span class="ansi-yellow-intense-fg ansi-bold">⚠️  RES.lands|&#39;disregard_other_layers&#39; set to TRUE. This parameter should be used exclusively for plotting purposes to showcase land availability impact for individual layers</span>
+<span class="ansi-black-intense-fg ansi-bold">ℹ️  RES.lands| The Stepwise Land-availability plots and numbers are sensitive to the sequence of layers are loaded. However, the collective impact of layers on final availability is same</span>
+<span class="ansi-black-intense-fg ansi-bold">ℹ️  RES.lands| The order of loading raster layers mimics the given order in config file under keys: &#39;GAEZ&#39; and then &#39;raster_types&#39;</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.lands| Loading raster layer 1 &#39;exclusion_areas&#39; to ExclusionContainer ...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.lands| Loading raster layer 2 &#39;terrain_resources&#39; to ExclusionContainer ...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.lands| Loading raster layer 3 &#39;land_cover&#39; to ExclusionContainer ...</span>
+<span class="ansi-black-intense-fg ansi-bold">ℹ️  RES.lands| The order of loading vector layers mimics the given order in config file under keys: &#39;capacity_disaggregation&#39; and then &lt;resource_type&gt; &#39;solar&#39; or &#39;wind&#39; and then &#39;vector_buffers&#39;. However, the collective impact of layers on final availability is same </span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.lands| Loading vector layer 1 for &#39;[&#39;aerodrome&#39;, &#39;runway&#39;, &#39;taxiway&#39;, &#39;helipad&#39;, &#39;apron&#39;, &#39;gate&#39;]&#39; to ExclusionContainer ...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.lands| Loading vector layer 2 for &#39;[&#39;Strict Nature Reserve&#39;, &#39;Wilderness Area&#39;, &#39;National Park&#39;, &#39;Natural Monument or Feature&#39;, &#39;Habitat/Species Management Area&#39;, &#39;Protected Landscape/Seascape&#39;, &#39;Protected Area with Sustainable Use of Natural Resources&#39;, &#39;Interim Sites (unknown specifics)&#39;, &#39;OECM areas&#39;]&#39; to ExclusionContainer ...</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.lands| Stepwise Availability Plots saved to vis/BC/lands</span>
+<span class="ansi-black-intense-fg ansi-bold">ℹ️  RES.lands| Please set the `disregard_other_layers` to False to get the ExclusionContainer with the cumulative impact of all layers</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.CellCapacityProcessor| Extracting cost attributes...</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.CellCapacityProcessor| Processing Availability Matrix... </span>
+<span class="ansi-black-intense-fg ansi-bold">ℹ️  RES.CellCapacityProcessor| @ Line: 149 | We need to pass the unified `region_shape` to the cutout to calculate availability for the entire region as in one of the dimensions e.g. here &#39;Province&#39;. If we pass multipolygons/geoms of each Regional district (sub-provincial) we will get availability for each regional district as a dimension; which adds additional step to produce our intended data. For this analysis, one unified shape for entire region is sufficient</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.CellCapacityProcessor| ✓ Availability Matrix processed for British Columbia. </span>
+<span class="ansi-white-intense-fg">  └&gt; RES.CellCapacityProcessor| Creating visuals for land-availability</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.CellCapacityProcessor|Land availability (grid cells) map saved at vis/misc/land_availability_ERA5grid_British Columbia.png</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.CellCapacityProcessor|Land availability map (excluder resolution) saved at vis/misc/land_availability_excluderResolution_British Columbia.png</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.CellCapacityProcessor| Calculating capacity matrix, using land-use intensity for wind resources: 3 MW/km²</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.CellCapacityProcessor| ✓ Capacity Matrix processed for British Columbia. </span>
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+2025-07-30 12:47:52,788 - INFO - Storing temporary files in /tmp/tmpa8fci8ix
+2025-07-30 12:47:52,791 - INFO - &gt;&gt; Loading ERA5 Cutout
+2025-07-30 12:47:52,851 - INFO - Storing temporary files in /tmp/tmpovmy0_hb
+2025-07-30 12:47:52,854 - INFO - &gt;&gt; 2948 Grid Cells from Store Cutout
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Exclusion Container
- registered rasters: 3
- registered geometry collections: 2
- CRS: 3347 - Resolution: 100
+<span class="ansi-black-intense-fg">  └─&gt; RES.CellCapacityProcessor| ✓ Capacity dataframe cleaned and processed</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.CellCapacityProcessor| ERA5 cells&#39; capacity loaded for : 2956 Cells [each with .025 deg. (~30km) resolution ]</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| 💾 Updated &#39;cells&#39; saved to data/store/resources_BC.h5 with key &#39;cells&#39;</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.RESources| Cells&#39; capacity updated.</span>
+<span class="ansi-green-intense-fg ansi-bold">********************************************************************************************************</span>
+<span class="ansi-green-intense-fg ansi-bold">Step 3 : [if Wind Resources] Collect and rescale Global Wind Atlas Data and calibrate ERA5&#39;s windspeed. </span>
+<span class="ansi-green-intense-fg ansi-bold">********************************************************************************************************</span>
+<span class="ansi-cyan-fg"> └&gt; RES.RESources| Extracting ERA5 windspeed from cutout...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.era5_cutout|  Processing ERA5&#39;s cutout...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Processing regional bounding box...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Region Set to &gt;&gt; Short Code : BC, Name: British Columbia).</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Collecting regional boundary...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Loading GADM boundaries (Sub-provincial | level =2) for British Columbia from local file data/processed_data/regions/gadm41_Canada_L2_BC.geojson.</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Setting up the Minimum Bounding Region (MBR) for BC...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.era5_cutout| ✓ MBR and regional boundary created. </span>
+<span class="ansi-black-intense-fg ansi-bold">ℹ️   Memory management remarks:
+    * After execution, all downloaded data is stored at cutout.path. By default, it is not loaded into memory, but into dask arrays. This keeps the memory consumption extremely low.
+    * The data is accessible in cutout.data, which is an xarray.Dataset. Querying the cutout gives us some basic information on which data is contained in it.
+    * For more operations related to cutout, check the tool docs @ https://atlite.readthedocs.io/en/master/examples/create_cutout.html#
+        </span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.era5_cutout| ✓ Cutout and regional boundary processed. </span>
+<span class="ansi-white-intense-fg">  └&gt; RES.RESources|&#39;windspeed_ERA5&#39; already present in the stored dataset, skipping the data extraction from source.</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.RESources| Preparing high resolution windspeed data from Global Wind Atlas</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.RESources| &#39;CF_IEC2&#39;, &#39;CF_IEC3&#39;, &#39;windspeed_gwa&#39; are already present in the store information, skipping data extraction from source</span>
+<span class="ansi-green-intense-fg ansi-bold">*******************************************</span>
+<span class="ansi-green-intense-fg ansi-bold">Step 4 : Create timeseries for Resources CF</span>
+<span class="ansi-green-intense-fg ansi-bold">*******************************************</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.RESources| Preparing Timeseries for the Cells...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.era5_cutout|  Processing ERA5&#39;s cutout...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Processing regional bounding box...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Region Set to &gt;&gt; Short Code : BC, Name: British Columbia).</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Collecting regional boundary...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Loading GADM boundaries (Sub-provincial | level =2) for British Columbia from local file data/processed_data/regions/gadm41_Canada_L2_BC.geojson.</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Setting up the Minimum Bounding Region (MBR) for BC...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.era5_cutout| ✓ MBR and regional boundary created. </span>
+<span class="ansi-black-intense-fg ansi-bold">ℹ️   Memory management remarks:
+    * After execution, all downloaded data is stored at cutout.path. By default, it is not loaded into memory, but into dask arrays. This keeps the memory consumption extremely low.
+    * The data is accessible in cutout.data, which is an xarray.Dataset. Querying the cutout gives us some basic information on which data is contained in it.
+    * For more operations related to cutout, check the tool docs @ https://atlite.readthedocs.io/en/master/examples/create_cutout.html#
+        </span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.era5_cutout| ✓ Cutout and regional boundary processed. </span>
+<span class="ansi-cyan-fg"> └&gt; RES.timeseries| Rescaling ERA5 windspeed with GWA windspeed</span>
+<span class="ansi-black-intense-fg ansi-bold">ℹ️  RES.windspeed| @Line 96 | ⚠️ Initiating Memory intensive process and may take a while to process...</span>
 </pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+2025-07-30 12:52:41,498 - INFO - adding a cut-out wind speed to the turbine power curve at V=22.0 m/s.
+2025-07-30 12:52:41,498 - INFO - Convert and aggregate &#39;wind&#39;.
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-fg"> └&gt; RES.timeseries| Loading technology attributes...</span>
+Fetching Turbine: &#39;3.2M114_NES&#39; data from OEDB
+&gt;&gt; Loading turbine config from: data/downloaded_data/OEDB/3.2M114_NES.yaml
+&gt;&gt; selected Wind Turbine  Model : 3.2M114 NES @ 93.0m Hub Height
+<span class="ansi-cyan-fg"> └&gt; RES.timeseries| ⚠️ Processing timeseries from ERA5 cutout, may take a while...</span>
+<span class="ansi-cyan-fg"> └&gt; RES.timeseries| Harmonizing timezone for British Columbia with Etc/GMT+7</span>
+<span class="ansi-cyan-fg"> └&gt; RES.timeseries| Calculating CF mean from the 8760 data points for each Cell ...</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.timeseries| Total Grid Cells: 2948</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.timeseries| Timeseries Generated for: 2948</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.timeseries| Matched Sites: (8760, 2948)</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| 💾 Updated &#39;cells&#39; saved to data/store/resources_BC.h5 with key &#39;cells&#39;</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| 💾 Updated &#39;timeseries/wind&#39; saved to data/store/resources_BC.h5 with key &#39;timeseries/wind&#39;</span>
+<span class="ansi-green-intense-fg ansi-bold">******************************************</span>
+<span class="ansi-green-intense-fg ansi-bold">Step 5 : Find closed grid connection nodes</span>
+<span class="ansi-green-intense-fg ansi-bold">******************************************</span>
+<span class="ansi-cyan-fg"> └&gt; RES.RESources| Grid Node Location initiated...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.RESources| Using Substations (sourced from CODERS) preferred nodes for resource connection.</span>
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">gaierror</span>                                  Traceback (most recent call last)
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/urllib3/connection.py:198</span>, in <span class="ansi-cyan-fg">HTTPConnection._new_conn</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    197</span> <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
+<span class="ansi-green-fg">--&gt; 198</span>     sock <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">connection</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">create_connection</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-intense-fg ansi-bold">    199</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_dns_host</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">port</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    200</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">timeout</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    201</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">source_address</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">source_address</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    202</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">socket_options</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">socket_options</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    203</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    204</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> socket<span style="color: rgb(98,98,98)">.</span>gaierror <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> e:
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/urllib3/util/connection.py:60</span>, in <span class="ansi-cyan-fg">create_connection</span><span class="ansi-blue-fg">(address, timeout, source_address, socket_options)</span>
+<span class="ansi-green-intense-fg ansi-bold">     58</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> LocationParseError(<span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">&#39;</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>host<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">, label empty or too long</span><span style="color: rgb(175,0,0)">&#34;</span>) <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>
+<span class="ansi-green-fg">---&gt; 60</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> res <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span class="ansi-yellow-bg">socket</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">getaddrinfo</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">host</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">port</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">family</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">socket</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">SOCK_STREAM</span><span class="ansi-yellow-bg">)</span>:
+<span class="ansi-green-intense-fg ansi-bold">     61</span>     af, socktype, proto, canonname, sa <span style="color: rgb(98,98,98)">=</span> res
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/socket.py:976</span>, in <span class="ansi-cyan-fg">getaddrinfo</span><span class="ansi-blue-fg">(host, port, family, type, proto, flags)</span>
+<span class="ansi-green-intense-fg ansi-bold">    975</span> addrlist <span style="color: rgb(98,98,98)">=</span> []
+<span class="ansi-green-fg">--&gt; 976</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> res <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span class="ansi-yellow-bg">_socket</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">getaddrinfo</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">host</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">port</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">family</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">type</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">proto</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">flags</span><span class="ansi-yellow-bg">)</span>:
+<span class="ansi-green-intense-fg ansi-bold">    977</span>     af, socktype, proto, canonname, sa <span style="color: rgb(98,98,98)">=</span> res
+
+<span class="ansi-red-fg">gaierror</span>: [Errno -3] Temporary failure in name resolution
+
+The above exception was the direct cause of the following exception:
+
+<span class="ansi-red-fg">NameResolutionError</span>                       Traceback (most recent call last)
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/urllib3/connectionpool.py:787</span>, in <span class="ansi-cyan-fg">HTTPConnectionPool.urlopen</span><span class="ansi-blue-fg">(self, method, url, body, headers, retries, redirect, assert_same_host, timeout, pool_timeout, release_conn, chunked, body_pos, preload_content, decode_content, **response_kw)</span>
+<span class="ansi-green-intense-fg ansi-bold">    786</span> <span style="color: rgb(95,135,135)"># Make the request on the HTTPConnection object</span>
+<span class="ansi-green-fg">--&gt; 787</span> response <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_make_request</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-intense-fg ansi-bold">    788</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">conn</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    789</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">method</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    790</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">url</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    791</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">timeout</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">timeout_obj</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    792</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">body</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">body</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    793</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">headers</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">headers</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    794</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">chunked</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">chunked</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    795</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">retries</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">retries</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    796</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">response_conn</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">response_conn</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    797</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">preload_content</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">preload_content</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    798</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">decode_content</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">decode_content</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    799</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">response_kw</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    800</span> <span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    802</span> <span style="color: rgb(95,135,135)"># Everything went great!</span>
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/urllib3/connectionpool.py:488</span>, in <span class="ansi-cyan-fg">HTTPConnectionPool._make_request</span><span class="ansi-blue-fg">(self, conn, method, url, body, headers, retries, timeout, chunked, response_conn, preload_content, decode_content, enforce_content_length)</span>
+<span class="ansi-green-intense-fg ansi-bold">    487</span>         new_e <span style="color: rgb(98,98,98)">=</span> _wrap_proxy_error(new_e, conn<span style="color: rgb(98,98,98)">.</span>proxy<span style="color: rgb(98,98,98)">.</span>scheme)
+<span class="ansi-green-fg">--&gt; 488</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> new_e
+<span class="ansi-green-intense-fg ansi-bold">    490</span> <span style="color: rgb(95,135,135)"># conn.request() calls http.client.*.request, not the method in</span>
+<span class="ansi-green-intense-fg ansi-bold">    491</span> <span style="color: rgb(95,135,135)"># urllib3.request. It also calls makefile (recv) on the socket.</span>
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/urllib3/connectionpool.py:464</span>, in <span class="ansi-cyan-fg">HTTPConnectionPool._make_request</span><span class="ansi-blue-fg">(self, conn, method, url, body, headers, retries, timeout, chunked, response_conn, preload_content, decode_content, enforce_content_length)</span>
+<span class="ansi-green-intense-fg ansi-bold">    463</span> <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
+<span class="ansi-green-fg">--&gt; 464</span>     <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_validate_conn</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">conn</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    465</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> (SocketTimeout, BaseSSLError) <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> e:
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/urllib3/connectionpool.py:1093</span>, in <span class="ansi-cyan-fg">HTTPSConnectionPool._validate_conn</span><span class="ansi-blue-fg">(self, conn)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1092</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> conn<span style="color: rgb(98,98,98)">.</span>is_closed:
+<span class="ansi-green-fg">-&gt; 1093</span>     <span class="ansi-yellow-bg">conn</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">connect</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1095</span> <span style="color: rgb(95,135,135)"># TODO revise this, see https://github.com/urllib3/urllib3/issues/2791</span>
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/urllib3/connection.py:753</span>, in <span class="ansi-cyan-fg">HTTPSConnection.connect</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    752</span> sock: socket<span style="color: rgb(98,98,98)">.</span>socket <span style="color: rgb(98,98,98)">|</span> ssl<span style="color: rgb(98,98,98)">.</span>SSLSocket
+<span class="ansi-green-fg">--&gt; 753</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>sock <span style="color: rgb(98,98,98)">=</span> sock <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_new_conn</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    754</span> server_hostname: <span style="color: rgb(0,135,0)">str</span> <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>host
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/urllib3/connection.py:205</span>, in <span class="ansi-cyan-fg">HTTPConnection._new_conn</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    204</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> socket<span style="color: rgb(98,98,98)">.</span>gaierror <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> e:
+<span class="ansi-green-fg">--&gt; 205</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> NameResolutionError(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>host, <span style="color: rgb(0,135,0)">self</span>, e) <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">e</span>
+<span class="ansi-green-intense-fg ansi-bold">    206</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> SocketTimeout <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> e:
+
+<span class="ansi-red-fg">NameResolutionError</span>: &lt;urllib3.connection.HTTPSConnection object at 0x7fd74303bd70&gt;: Failed to resolve &#39;sesit.dev&#39; ([Errno -3] Temporary failure in name resolution)
+
+The above exception was the direct cause of the following exception:
+
+<span class="ansi-red-fg">MaxRetryError</span>                             Traceback (most recent call last)
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/requests/adapters.py:667</span>, in <span class="ansi-cyan-fg">HTTPAdapter.send</span><span class="ansi-blue-fg">(self, request, stream, timeout, verify, cert, proxies)</span>
+<span class="ansi-green-intense-fg ansi-bold">    666</span> <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
+<span class="ansi-green-fg">--&gt; 667</span>     resp <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">conn</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">urlopen</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-intense-fg ansi-bold">    668</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">method</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">request</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">method</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    669</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">url</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">url</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    670</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">body</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">request</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">body</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    671</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">headers</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">request</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">headers</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    672</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">redirect</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">False</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    673</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">assert_same_host</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">False</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    674</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">preload_content</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">False</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    675</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">decode_content</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">False</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    676</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">retries</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">max_retries</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    677</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">timeout</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">timeout</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    678</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">chunked</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">chunked</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    679</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    681</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> (ProtocolError, <span class="ansi-bold" style="color: rgb(215,95,95)">OSError</span>) <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> err:
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/urllib3/connectionpool.py:841</span>, in <span class="ansi-cyan-fg">HTTPConnectionPool.urlopen</span><span class="ansi-blue-fg">(self, method, url, body, headers, retries, redirect, assert_same_host, timeout, pool_timeout, release_conn, chunked, body_pos, preload_content, decode_content, **response_kw)</span>
+<span class="ansi-green-intense-fg ansi-bold">    839</span>     new_e <span style="color: rgb(98,98,98)">=</span> ProtocolError(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Connection aborted.</span><span style="color: rgb(175,0,0)">&#34;</span>, new_e)
+<span class="ansi-green-fg">--&gt; 841</span> retries <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">retries</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">increment</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-intense-fg ansi-bold">    842</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">method</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">url</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">error</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">new_e</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">_pool</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">_stacktrace</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">sys</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">exc_info</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">[</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">2</span><span class="ansi-yellow-bg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">    843</span> <span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    844</span> retries<span style="color: rgb(98,98,98)">.</span>sleep()
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/urllib3/util/retry.py:519</span>, in <span class="ansi-cyan-fg">Retry.increment</span><span class="ansi-blue-fg">(self, method, url, response, error, _pool, _stacktrace)</span>
+<span class="ansi-green-intense-fg ansi-bold">    518</span>     reason <span style="color: rgb(98,98,98)">=</span> error <span class="ansi-bold" style="color: rgb(175,0,255)">or</span> ResponseError(cause)
+<span class="ansi-green-fg">--&gt; 519</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> MaxRetryError(_pool, url, reason) <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">reason</span>  <span style="color: rgb(95,135,135)"># type: ignore[arg-type]</span>
+<span class="ansi-green-intense-fg ansi-bold">    521</span> log<span style="color: rgb(98,98,98)">.</span>debug(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Incremented Retry for (url=</span><span style="color: rgb(175,0,0)">&#39;</span><span class="ansi-bold" style="color: rgb(175,95,135)">%s</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">): </span><span class="ansi-bold" style="color: rgb(175,95,135)">%r</span><span style="color: rgb(175,0,0)">&#34;</span>, url, new_retry)
+
+<span class="ansi-red-fg">MaxRetryError</span>: HTTPSConnectionPool(host=&#39;sesit.dev&#39;, port=443): Max retries exceeded with url: /substations?key=w0OksqQKMFMtKPbO (Caused by NameResolutionError(&#34;&lt;urllib3.connection.HTTPSConnection object at 0x7fd74303bd70&gt;: Failed to resolve &#39;sesit.dev&#39; ([Errno -3] Temporary failure in name resolution)&#34;))
+
+During handling of the above exception, another exception occurred:
+
+<span class="ansi-red-fg">ConnectionError</span>                           Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[3], line 17</span>
+<span class="ansi-green-intense-fg ansi-bold">     13</span>     RES_module <span style="color: rgb(98,98,98)">=</span> RES<span style="color: rgb(98,98,98)">.</span>RESources_builder(<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>required_args)
+<span class="ansi-green-intense-fg ansi-bold">     16</span> <span style="color: rgb(95,135,135)"># For complete workflow, uncomment the following line</span>
+<span class="ansi-green-fg">---&gt; 17</span>     <span class="ansi-yellow-bg">RES_module</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">build</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">select_top_sites</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">True</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     18</span> <span class="ansi-yellow-bg">                     </span><span class="ansi-yellow-bg">use_pypsa_buses</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">False</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">/local-scratch/localhome/mei3/eliasinul/work/RESource/RES/RESources.py:446</span>, in <span class="ansi-cyan-fg">RESources_builder.build</span><span class="ansi-blue-fg">(self, select_top_sites, use_pypsa_buses, memory_resource_limitation)</span>
+<span class="ansi-green-intense-fg ansi-bold">    443</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>get_CF_timeseries(cells<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>store_grid_cells)
+<span class="ansi-green-intense-fg ansi-bold">    445</span> utils<span style="color: rgb(98,98,98)">.</span>print_banner(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Step 5 : Find closed grid connection nodes</span><span style="color: rgb(175,0,0)">&#34;</span>)
+<span class="ansi-green-fg">--&gt; 446</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">find_grid_nodes</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">cells</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">cells_with_ts_nt</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">cells</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    447</span> <span class="ansi-yellow-bg">                     </span><span class="ansi-yellow-bg">use_pypsa_buses</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">use_pypsa_buses</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    449</span> utils<span style="color: rgb(98,98,98)">.</span>print_banner(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Step 6 : Use capacity, energy yield and cost attributes to score each cell</span><span style="color: rgb(175,0,0)">&#34;</span>)
+<span class="ansi-green-intense-fg ansi-bold">    450</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>score_cells(cells<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>region_grid_cells_cap_with_nodes)
+
+File <span class="ansi-green-fg">/local-scratch/localhome/mei3/eliasinul/work/RESource/RES/RESources.py:245</span>, in <span class="ansi-cyan-fg">RESources_builder.find_grid_nodes</span><span class="ansi-blue-fg">(self, cells, use_pypsa_buses)</span>
+<span class="ansi-green-intense-fg ansi-bold">    242</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
+<span class="ansi-green-intense-fg ansi-bold">    243</span>     utils<span style="color: rgb(98,98,98)">.</span>print_update(level<span style="color: rgb(98,98,98)">=</span>print_level_base<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(98,98,98)">3</span>,
+<span class="ansi-green-intense-fg ansi-bold">    244</span>                    message<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#34;</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span><span style="color: rgb(0,0,135)">__name__</span><span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">| Using Substations (sourced from CODERS) preferred nodes for resource connection.</span><span style="color: rgb(175,0,0)">&#34;</span>)
+<span class="ansi-green-fg">--&gt; 245</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>grid_ss:gpd<span style="color: rgb(98,98,98)">.</span>GeoDataFrame<span style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">coders</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">get_table_provincial</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">substations</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    247</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>cutout,<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>region_boundary<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>era5_cutout<span style="color: rgb(98,98,98)">.</span>get_era5_cutout()
+<span class="ansi-green-intense-fg ansi-bold">    249</span> <span style="color: rgb(95,135,135)"># _grid_cells_=self.cutout.grid.overlay(self.region_boundary, how=&#39;intersection&#39;,keep_geom_type=True)</span>
+
+File <span class="ansi-green-fg">/local-scratch/localhome/mei3/eliasinul/work/RESource/RES/coders.py:227</span>, in <span class="ansi-cyan-fg">CODERSData.get_table_provincial</span><span class="ansi-blue-fg">(self, table_name, force_update)</span>
+<span class="ansi-green-intense-fg ansi-bold">    223</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>is_table_name_required(table_name): <span style="color: rgb(95,135,135)">#check if the data is required</span>
+<span class="ansi-green-intense-fg ansi-bold">    224</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>region_code_validity:
+<span class="ansi-green-intense-fg ansi-bold">    225</span>
+<span class="ansi-green-intense-fg ansi-bold">    226</span>         <span style="color: rgb(95,135,135)"># Get Canadian data first</span>
+<span class="ansi-green-fg">--&gt; 227</span>         df,gdf<span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">get_table_canada</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">table_name</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">force_update</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">force_update</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    230</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">lines</span><span style="color: rgb(175,0,0)">&#34;</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> table_name:
+<span class="ansi-green-intense-fg ansi-bold">    231</span>         <span style="color: rgb(95,135,135)"># Apply provincial mask</span>
+<span class="ansi-green-intense-fg ansi-bold">    232</span>         data<span style="color: rgb(98,98,98)">=</span>gdf
+
+File <span class="ansi-green-fg">/local-scratch/localhome/mei3/eliasinul/work/RESource/RES/coders.py:200</span>, in <span class="ansi-cyan-fg">CODERSData.get_table_canada</span><span class="ansi-blue-fg">(self, table_name, force_update)</span>
+<span class="ansi-green-intense-fg ansi-bold">    197</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>log<span style="color: rgb(98,98,98)">.</span>info(<span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Loaded </span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>table_name<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)"> data from local file: </span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>file_path<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">&#34;</span>)
+<span class="ansi-green-intense-fg ansi-bold">    198</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
+<span class="ansi-green-intense-fg ansi-bold">    199</span>     <span style="color: rgb(95,135,135)"># Fetch data from API if not found locally or if force_update is set</span>
+<span class="ansi-green-fg">--&gt; 200</span>     data <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">fetch_data</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">table_name</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    201</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>log<span style="color: rgb(98,98,98)">.</span>info(<span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">&gt;&gt; Data pulled </span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>table_name<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)"> from [source checked: CODERS(https://sesit.dev/api/docs)]</span><span style="color: rgb(175,0,0)">&#34;</span>)
+<span class="ansi-green-intense-fg ansi-bold">    202</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>save_data(data, table_name)
+
+File <span class="ansi-green-fg">/local-scratch/localhome/mei3/eliasinul/work/RESource/RES/coders.py:129</span>, in <span class="ansi-cyan-fg">CODERSData.fetch_data</span><span class="ansi-blue-fg">(self, table_name)</span>
+<span class="ansi-green-intense-fg ansi-bold">    124</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">fetch_data</span>(<span style="color: rgb(0,135,0)">self</span>,
+<span class="ansi-green-intense-fg ansi-bold">    125</span>                table_name: <span style="color: rgb(0,135,0)">str</span>) <span style="color: rgb(98,98,98)">-</span><span style="color: rgb(98,98,98)">&gt;</span> pd<span style="color: rgb(98,98,98)">.</span>DataFrame:
+<span class="ansi-green-intense-fg ansi-bold">    126</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">    127</span> <span style="color: rgb(175,0,0)">    Fetch data from the CODERS API for the specified table.</span>
+<span class="ansi-green-intense-fg ansi-bold">    128</span> <span style="color: rgb(175,0,0)">    &#34;&#34;&#34;</span>
+<span class="ansi-green-fg">--&gt; 129</span>     response <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">requests</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">get</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">f</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(175,95,135)">{</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">url</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(175,95,135)">}</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">/</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(175,95,135)">{</span><span class="ansi-yellow-bg">table_name</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(175,95,135)">}</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(175,95,135)">{</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">query</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(175,95,135)">}</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    131</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> response<span style="color: rgb(98,98,98)">.</span>status_code <span style="color: rgb(98,98,98)">==</span> <span style="color: rgb(98,98,98)">200</span>:
+<span class="ansi-green-intense-fg ansi-bold">    132</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> pd<span style="color: rgb(98,98,98)">.</span>DataFrame<span style="color: rgb(98,98,98)">.</span>from_dict(response<span style="color: rgb(98,98,98)">.</span>json())
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/requests/api.py:73</span>, in <span class="ansi-cyan-fg">get</span><span class="ansi-blue-fg">(url, params, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">     62</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">get</span>(url, params<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">None</span>, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs):
+<span class="ansi-green-intense-fg ansi-bold">     63</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">r</span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;Sends a GET request.</span>
+<span class="ansi-green-intense-fg ansi-bold">     64</span>
+<span class="ansi-green-intense-fg ansi-bold">     65</span> <span style="color: rgb(175,0,0)">    :param url: URL for the new :class:`Request` object.</span>
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-intense-fg ansi-bold">     70</span> <span style="color: rgb(175,0,0)">    :rtype: requests.Response</span>
+<span class="ansi-green-intense-fg ansi-bold">     71</span> <span style="color: rgb(175,0,0)">    &#34;&#34;&#34;</span>
+<span class="ansi-green-fg">---&gt; 73</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">request</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">get</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">url</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">params</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">params</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/requests/api.py:59</span>, in <span class="ansi-cyan-fg">request</span><span class="ansi-blue-fg">(method, url, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">     55</span> <span style="color: rgb(95,135,135)"># By using the &#39;with&#39; statement we are sure the session is closed, thus we</span>
+<span class="ansi-green-intense-fg ansi-bold">     56</span> <span style="color: rgb(95,135,135)"># avoid leaving sockets open which can trigger a ResourceWarning in some</span>
+<span class="ansi-green-intense-fg ansi-bold">     57</span> <span style="color: rgb(95,135,135)"># cases, and look like a memory leak in others.</span>
+<span class="ansi-green-intense-fg ansi-bold">     58</span> <span class="ansi-bold" style="color: rgb(0,135,0)">with</span> sessions<span style="color: rgb(98,98,98)">.</span>Session() <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> session:
+<span class="ansi-green-fg">---&gt; 59</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">session</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">request</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">method</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">method</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">url</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">url</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/requests/sessions.py:589</span>, in <span class="ansi-cyan-fg">Session.request</span><span class="ansi-blue-fg">(self, method, url, params, data, headers, cookies, files, auth, timeout, allow_redirects, proxies, hooks, stream, verify, cert, json)</span>
+<span class="ansi-green-intense-fg ansi-bold">    584</span> send_kwargs <span style="color: rgb(98,98,98)">=</span> {
+<span class="ansi-green-intense-fg ansi-bold">    585</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">timeout</span><span style="color: rgb(175,0,0)">&#34;</span>: timeout,
+<span class="ansi-green-intense-fg ansi-bold">    586</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">allow_redirects</span><span style="color: rgb(175,0,0)">&#34;</span>: allow_redirects,
+<span class="ansi-green-intense-fg ansi-bold">    587</span> }
+<span class="ansi-green-intense-fg ansi-bold">    588</span> send_kwargs<span style="color: rgb(98,98,98)">.</span>update(settings)
+<span class="ansi-green-fg">--&gt; 589</span> resp <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">send</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">prep</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">send_kwargs</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    591</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> resp
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/requests/sessions.py:703</span>, in <span class="ansi-cyan-fg">Session.send</span><span class="ansi-blue-fg">(self, request, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    700</span> start <span style="color: rgb(98,98,98)">=</span> preferred_clock()
+<span class="ansi-green-intense-fg ansi-bold">    702</span> <span style="color: rgb(95,135,135)"># Send the request</span>
+<span class="ansi-green-fg">--&gt; 703</span> r <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">adapter</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">send</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">request</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    705</span> <span style="color: rgb(95,135,135)"># Total elapsed time of the request (approximately)</span>
+<span class="ansi-green-intense-fg ansi-bold">    706</span> elapsed <span style="color: rgb(98,98,98)">=</span> preferred_clock() <span style="color: rgb(98,98,98)">-</span> start
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/requests/adapters.py:700</span>, in <span class="ansi-cyan-fg">HTTPAdapter.send</span><span class="ansi-blue-fg">(self, request, stream, timeout, verify, cert, proxies)</span>
+<span class="ansi-green-intense-fg ansi-bold">    696</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">isinstance</span>(e<span style="color: rgb(98,98,98)">.</span>reason, _SSLError):
+<span class="ansi-green-intense-fg ansi-bold">    697</span>         <span style="color: rgb(95,135,135)"># This branch is for urllib3 v1.22 and later.</span>
+<span class="ansi-green-intense-fg ansi-bold">    698</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> SSLError(e, request<span style="color: rgb(98,98,98)">=</span>request)
+<span class="ansi-green-fg">--&gt; 700</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ConnectionError</span>(e, request<span style="color: rgb(98,98,98)">=</span>request)
+<span class="ansi-green-intense-fg ansi-bold">    702</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> ClosedPoolError <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> e:
+<span class="ansi-green-intense-fg ansi-bold">    703</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ConnectionError</span>(e, request<span style="color: rgb(98,98,98)">=</span>request)
+
+<span class="ansi-red-fg">ConnectionError</span>: HTTPSConnectionPool(host=&#39;sesit.dev&#39;, port=443): Max retries exceeded with url: /substations?key=w0OksqQKMFMtKPbO (Caused by NameResolutionError(&#34;&lt;urllib3.connection.HTTPSConnection object at 0x7fd74303bd70&gt;: Failed to resolve &#39;sesit.dev&#39; ([Errno -3] Temporary failure in name resolution)&#34;))
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_resource_module_runner_5_10.png" src="../_images/notebooks_resource_module_runner_5_10.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_resource_module_runner_5_11.png" src="../_images/notebooks_resource_module_runner_5_11.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_resource_module_runner_5_12.png" src="../_images/notebooks_resource_module_runner_5_12.png" />
+</div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_resource_module_runner_14_2.png" src="../_images/notebooks_resource_module_runner_14_2.png" />
+<img alt="../_images/notebooks_resource_module_runner_5_13.png" src="../_images/notebooks_resource_module_runner_5_13.png" />
 </div>
 </div>
+</section>
+</section>
+<section id="Stepwise-Checks/Debugging-[when-required]">
+<h1>Stepwise Checks/Debugging [when required]<a class="headerlink" href="#Stepwise-Checks/Debugging-[when-required]" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p>This method collects the sub-national administrative boundaries.</p></li>
+<li><p>Using that boundary, we calculate the Minimum Bounding Rectangle (MBR).</p></li>
+<li><p>We use that MBR as a cutout to source weather resources data from ERA5 via CDSAPI. The ERA5’s cutout is then stored as a netcdf `.nc' file.</p></li>
+<li><p>We load that cutout as <code class="docutils literal notranslate"><span class="pre">atlite</span></code>’s <code class="docutils literal notranslate"><span class="pre">cutout</span></code> object.</p></li>
+<li><p>We then use <code class="docutils literal notranslate"><span class="pre">atlite</span></code>’s <code class="docutils literal notranslate"><span class="pre">cutout.grid</span></code> attribute to create our test beds for the analysis i.e. the grid cells (geodataframe)</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">step1_results</span><span class="o">=</span><span class="n">RES_module</span><span class="o">.</span><span class="n">get_grid_cells</span><span class="p">()</span>
+
+<span class="n">step1_results</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># See the first 5 rows of the grid cells data</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p>Get Individual Layer Impacts</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># RES_module.cell_processor.set_excluder()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rasters</span><span class="p">,</span><span class="n">vectors</span><span class="o">=</span><span class="n">RES_module</span><span class="o">.</span><span class="n">cell_processor</span><span class="o">.</span><span class="n">get_layers</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># from RES.lands import load_layers_to_excluder</span>
+
+<span class="c1"># load_layers_to_excluder(&#39;solar&#39;,</span>
+<span class="c1">#                         RES_module.cell_processor.excluder,</span>
+<span class="c1">#                         RES_module.cell_processor.region_shape,</span>
+<span class="c1">#                         rasters,vectors,</span>
+<span class="c1">#                         disregard_other_layers=True</span>
+<span class="c1">#                         )</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load_layers_to_excluder(&#39;wind&#39;,</span>
+<span class="c1">#                         RES_module.cell_processor.excluder,</span>
+<span class="c1">#                         RES_module.cell_processor.region_shape,</span>
+<span class="c1">#                         rasters,vectors,</span>
+<span class="c1">#                         disregard_other_layers=True</span>
+<span class="c1">#                         )</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p>This method loads the cutout (atlite’s cutout object), regional boundary (GeoDataFrame), loads the cost parameters and also initiates a <strong>composite excluder</strong></p>
+<ul>
+<li><p>The (<code class="docutils literal notranslate"><span class="pre">`atlite</span></code>’s exclusion container &lt;<a class="reference external" href="https://atlite.readthedocs.io/en/master/ref_api.html#atlite.Cutout.availabilitymatrix">https://atlite.readthedocs.io/en/master/ref_api.html#atlite.Cutout.availabilitymatrix</a>&gt;`__) to merge all the spatial layers.</p></li>
+</ul>
+</li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">cutout.availabilitymatrix</span></code> method calculates % of usable area within each grid cell after applying exclusion criteria (e.g., protected areas, water bodies) and returns an <code class="docutils literal notranslate"><span class="pre">`AvaliabilityMatrix</span></code> &lt;<a class="reference external" href="https://atlite.readthedocs.io/en/master/ref_api.html#atlite.Cutout.availabilitymatrix">https://atlite.readthedocs.io/en/master/ref_api.html#atlite.Cutout.availabilitymatrix</a>&gt;`__</p></li>
+<li><p>We apply technology landuse intensity (e.g., MW/km² for wind or solar) to translate this to potential capacity data.</p></li>
+<li><p>We get the maximum installable capacity for each grid cell based on available area, land use constraints, and technology-specific parameters. &gt; - Current results gives a percentage of availability for each grid cell. It does not tell specifically which spatial area inside a grid cell is unavailable. &gt; - The <em>potential capacity</em> translation processing involves <code class="docutils literal notranslate"><span class="pre">area</span></code> calculation. The area calculation method is integrated to <code class="docutils literal notranslate"><span class="pre">RES.cell_processor.get_capacity()</span></code>. That method is sensitive to
+area calculation specific coordinate-system projection of the geodataframe. It is recommended to be cautious about choosing this crs.</p></li>
+</ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>

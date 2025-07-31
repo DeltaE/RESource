@@ -44,7 +44,8 @@ import pandas as pd
 from atlite.gis import ExclusionContainer
 from matplotlib.colors import ListedColormap
 from rasterio.plot import show
-
+from shapely.geometry.base import BaseGeometry
+from matplotlib.axes import Axes
 from RES import utility as utils
 from RES.boundaries import GADMBoundaries
 from RES.era5_cutout import ERA5Cutout
@@ -286,16 +287,24 @@ class LandContainer(ERA5Cutout, GAEZRasterProcessor, ConservationLands, OSMData)
             message=f"{__name__}| Loading layers to Excluder for {self.region_name}. This may take a while to compute and plot...",
         )
 
+        args_add_excluder_layer = {
+            "resource_type": self.resource_type,
+            "excluder": self.excluder,
+            "region_shape": self.region_shape,
+            "raster_configs": raster_configs,
+            "vector_configs": vector_configs,
+            "font_family": self.default_font_family,
+            "plot_save_to": f"vis/{self.region_short_code}/lands"
+        }
+        
+        
         # Load all layers to the excluder
-        excluder_with_layers = load_layers_to_excluder(
-            self.resource_type,
-            self.excluder,
-            self.region_shape,
-            raster_configs,
-            vector_configs,
-            font_family=self.default_font_family,
-            plot_save_to=f"vis/{self.region_short_code}/lands",
-        )
+        excluder_with_layers = load_layers_to_excluder(**args_add_excluder_layer)
+        
+        # for plotting purposes
+        load_layers_to_excluder(**args_add_excluder_layer,
+                                disregard_other_layers=True)
+        
         return excluder_with_layers
 
     def get_layers(self):
@@ -303,7 +312,7 @@ class LandContainer(ERA5Cutout, GAEZRasterProcessor, ConservationLands, OSMData)
         Returns:
             tuple: A tuple containing two lists - raster_configs and vector_configs.
         """
-        # load Raster Layers
+    # load Raster Layers
         utils.print_update(
             level=PRINT_LEVEL_BASE + 2,
             message=f"{__name__}| Loading GAEZ raster layers for {self.region_name}...",
@@ -316,8 +325,9 @@ class LandContainer(ERA5Cutout, GAEZRasterProcessor, ConservationLands, OSMData)
             name = raster_config_item.get("name")
             if name and name in regional_raster_paths:
                 raster_config_item["filepath"] = str(regional_raster_paths[name])
-
-        # Load Vector layers
+        utils.print_update(level=PRINT_LEVEL_BASE+3,
+                           message= f"{__name__}| Raster Layers Loaded")
+    # Load Vector layers
         utils.print_update(
             level=PRINT_LEVEL_BASE + 2,
             message=f"{__name__}| Loading vector layers for {self.region_name}...",
@@ -391,6 +401,8 @@ class LandContainer(ERA5Cutout, GAEZRasterProcessor, ConservationLands, OSMData)
 
         # We want to flat list of dictionaries without vector_name in the keys
         vector_configs = [list(d.values())[0] for d in vector_configs]
+        utils.print_update(level=PRINT_LEVEL_BASE+3,
+                           message= f"{__name__}| Vector Layers Loaded")
 
         return raster_configs, vector_configs
 
@@ -399,13 +411,14 @@ class LandContainer(ERA5Cutout, GAEZRasterProcessor, ConservationLands, OSMData)
 def add_and_plot_exclusion_layer(
     excluder: ExclusionContainer,
     region_shape: gpd.GeoDataFrame,
-    ax,
-    geometry,
-    title,
-    invert=False,
-    is_raster=False,
-    filepath=None,
-    codes=None,
+    ax:Axes,
+    geometry:BaseGeometry,
+    title:str,
+    invert:bool=False,
+    is_raster:bool=False,
+    filepath:str|Path=None,
+    codes:list[int]=None,
+    disregard_other_layers:bool=False,
 ):
     """
     Add a layer to the ExclusionContainer and plot the availability of the region shape.
@@ -420,6 +433,8 @@ def add_and_plot_exclusion_layer(
         is_raster (bool, optional): Whether the layer is a raster layer. Defaults to False.
         filepath (_type_, optional): The file path for the raster layer. Defaults to None.
         codes (_type_, optional): The codes for the raster layer. Defaults to None.
+        disregard_other_layers(bool): Default to False. This param is exclusively to be used to plotting purpose. Plots to showcase the impact of each layer as a standalone.
+    
 
     Returns:
         _type_: _description_
@@ -431,14 +446,23 @@ def add_and_plot_exclusion_layer(
 
     masked, transform, eligible_share = get_eligible_share(region_shape, excluder)
 
-    # Simple solid green for eligible
-    cmap = ListedColormap(["#027227"])
-    cmap.set_bad(color=(1, 1, 1, 0))  # transparent 0s
 
     # Keep 1s, mask 0s
     raster_data = masked.astype(float)  # * 100
     masked_data = np.ma.masked_where(raster_data == 0, raster_data)
+    
+    if disregard_other_layers:
+        cmap = ListedColormap(["#078176"])
+        # Clean and modify title
+        title_cleaned = title.replace("Excluding", "Land filtered for").strip()
+        ax.set_title(f"{title_cleaned} ({eligible_share:.2%})")
+    else:
+        # Simple solid green for eligible
+        cmap = ListedColormap(["#027227"])
+        ax.set_title(f"{title} {eligible_share:.2%}")
 
+    cmap.set_bad(color=(1, 1, 1, 0))  # transparent 0s
+    
     # Plot masked raster
     show(
         masked_data,
@@ -451,11 +475,9 @@ def add_and_plot_exclusion_layer(
     if region_shape.crs != excluder.crs:
         region_shape = region_shape.to_crs(excluder.crs)
     region_shape.plot(ax=ax, facecolor="none", edgecolor="black", linewidth=1)
-    ax.set_title(f"Eligible area (green) {eligible_share:.2%}")
-
+    
     # Clean aesthetics
     ax.set_axis_off()
-    ax.set_title(f"{title} ({eligible_share:.2%})")
 
     excluder_with_layers: ExclusionContainer = excluder
 
@@ -471,6 +493,8 @@ def load_layers_to_excluder(
     vector_configs: list[dict],
     font_family: str = "serif",
     plot_save_to: str | Path = None,
+    intiate_excluder:bool=True,
+    disregard_other_layers:bool=False
 ) -> ExclusionContainer:
     """
     Load raster and vector layers to the ExclusionContainer and plot the availability of the region shape.
@@ -480,26 +504,35 @@ def load_layers_to_excluder(
         raster_configs (list[dict]): List of raster configurations.
         vector_configs (list[dict]): List of vector configurations.
         plot_save_to (str|Path, optional): Path to save the plot. Defaults to None.
+        disregard_other_layers(bool): Default to False. This param is exclusively to be used to plotting purpose. Plots to showcase the impact of each layer as a standalone.
     Returns:
         ExclusionContainer: The ExclusionContainer with the added layers.
     """
-
+    if not intiate_excluder:
+        utils.print_warning(f"{__name__}|'intiate_excluder' set to FALSE. ExclusionContainer has not been initiated. The container may have residual rasters/vector already loaded")
+    if disregard_other_layers:
+        utils.print_warning(f"{__name__}|'disregard_other_layers' set to TRUE. This parameter should be used exclusively for plotting purposes to showcase land availability impact for individual layers")
+    excluder=ExclusionContainer(excluder.crs)
+    
     n_rasters = len(raster_configs)
     n_vectors = len(vector_configs)
-
+    utils.print_info(f"{__name__}| The Stepwise Land-availability plots and numbers are sensitive to the sequence of layers are loaded. However, the collective impact of layers on final availability is same")
     # 2. Plot setup
     total_layers = n_rasters + n_vectors
 
     plt.rcParams["font.family"] = font_family
     plt.rcParams["font.size"] = 14
     fig, axes = plt.subplots(
-        1, total_layers, figsize=(6 * total_layers, total_layers + 4)
-    )  # revise this accordingly to make the plot looks nicer
+        1, total_layers, figsize=(9 * total_layers, total_layers + 6)# revise this accordingly to make the plot looks nicer
+        )  
+    utils.print_info(f"{__name__}| The order of loading raster layers mimics the given order in config file under keys: 'GAEZ' and then 'raster_types'")
     # 3. Raster layers
     for i, r in enumerate(raster_configs):
+        
+
         utils.print_update(
             level=PRINT_LEVEL_BASE + 2,
-            message=f"{__name__}| Loading raster layer '{r.get('name', '')}'...",
+            message=f"{__name__}| Loading raster layer {i+1} '{r.get('name', '')}' to ExclusionContainer ...",
         )
         # Handle raster layer inclusion/exclusion logic smartly
         class_inclusion = r.get("class_inclusion")
@@ -531,13 +564,17 @@ def load_layers_to_excluder(
             is_raster=True,
             filepath=r["filepath"],
             codes=codes,
+            disregard_other_layers=disregard_other_layers
         )
-
+    
+    utils.print_info(f"{__name__}| The order of loading vector layers mimics the given order in config file under keys: 'capacity_disaggregation' and then <resource_type> 'solar' or 'wind' and then 'vector_buffers'. However, the collective impact of layers on final availability is same ")
     # 4. Vector layers
     for i, v in enumerate(vector_configs):
+        if disregard_other_layers:
+            excluder=ExclusionContainer(crs=excluder.crs)
         utils.print_update(
             level=PRINT_LEVEL_BASE + 2,
-            message=f"{__name__}| Loading vector layers for '{list(vector_configs[i]['buffer_mapping_key_buffers'].keys())}'...",
+            message=f"{__name__}| Loading vector layer {i+1} for '{list(vector_configs[i]['buffer_mapping_key_buffers'].keys())}' to ExclusionContainer ...",
         )
         # Assert that the geometries in vector_configs are in the same CRS as excluder
         if v["gdf"].crs != excluder.crs:
@@ -550,30 +587,46 @@ def load_layers_to_excluder(
             title=v["stepwise_plot_title"],
             invert=v.get("invert", False),
             is_raster=False,
+            disregard_other_layers=disregard_other_layers
         )
 
     plt.tight_layout()
-    fig.suptitle(
-        "Land Availability for Exclusion/Inclusion Layers for BC", fontsize=24, y=1.05
-    )
+    if disregard_other_layers:
+        fig.suptitle(
+            f"Land Availability impact for each Exclusion/Inclusion Layers for {resource_type} resource at BC", 
+            fontsize=24, 
+            y=1.05
+        )
+        plot_name:str=f"individual_layers_impact_land_availability_plot_{resource_type}"
+    else:
+        fig.suptitle(
+            f"Stepwise Land Availability for Exclusion/Inclusion Layers for {resource_type} resource at BC",
+            fontsize=24,
+            y=1.05,
+        )
+        plot_name:str=f"stepwise_land_availability_plot_{resource_type}"
 
     # Save the figure
     if isinstance(plot_save_to, str):
-        plot_save_to = Path(plot_save_to)
+        plot_save_to = Path(plot_save_to)     
+    if plot_save_to is None:
+        plot_save_to=Path.cwd()
     if not plot_save_to.parent.exists():
         plot_save_to.parent.mkdir(parents=True, exist_ok=True)
 
     plt.savefig(
-        plot_save_to / "stepwise_land_availability_plot.png",
+        plot_save_to / f"{plot_name}.png",
         bbox_inches="tight",
         dpi=300,
     )
     utils.print_update(
-        level=3, message=f"Stepwise Availability Plots saved to {plot_save_to}"
+        level=3, message=f"{__name__}| Stepwise Availability Plots saved to {plot_save_to}"
     )
-
-    return excluder_with_layers
-
+    if disregard_other_layers:
+        utils.print_info(f"{__name__}| Please set the `disregard_other_layers` to False to get the ExclusionContainer with the cumulative impact of all layers")
+        return None
+    else:
+        return excluder_with_layers
 
 @staticmethod
 def apply_buffer_to_vector(

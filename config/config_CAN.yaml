@@ -366,8 +366,8 @@ capacity_disaggregation:
       - aeroway:
           buffer_mapping_key: 'aeroway'
           buffer_mapping_key_buffers: # Buffer distances in meters for each aeroway type
-            aerodrome: 100 # m
-            runway: 100 # m
+            aerodrome: 500 # m
+            runway: 500 # m
             taxiway: 100 # m
             helipad: 100 # m
             apron: 100 # m
@@ -434,15 +434,15 @@ capacity_disaggregation:
       - conserved_lands: 
           buffer_mapping_key: 'IUCN_CAT_desc'
           buffer_mapping_key_buffers: # Buffer distances in meters for each IUCN category
-                'Strict Nature Reserve': 1000 # IUCN Category 1
-                'Wilderness Area': 1000 # IUCN Category 2
-                'National Park': 1000 # IUCN Category 3
+                'Strict Nature Reserve': 5000 # IUCN Category 1
+                'Wilderness Area': 5000 # IUCN Category 2
+                'National Park': 5000 # IUCN Category 3
                 'Natural Monument or Feature': 500 # IUCN Category 4
                 'Habitat/Species Management Area': 500 # IUCN Category 5
                 'Protected Landscape/Seascape': 500 # IUCN Category 6
-                'Protected Area with Sustainable Use of Natural Resources': 500 # IUCN Category 7
+                'Protected Area with Sustainable Use of Natural Resources': 1000 # IUCN Category 7
                 'Interim Sites (unknown specifics)': 500 # IUCN Category 8
-                'OECM areas': 500 # IUCN Category 9
+                'OECM areas': 1000 # IUCN Category 9
   bess:
     max_capacity : 10 #GW
     cost_data: 'data/processed_data/bess/bess_LI_6hr_cost_moderate_NREL_ATB2024.csv'
