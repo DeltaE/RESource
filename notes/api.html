@@ -350,8 +350,6 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor.load_cost"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor.load_cost()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor.plot_ERAF5_grid_land_availability"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor.plot_ERAF5_grid_land_availability()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor.plot_excluder_land_availability"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor.plot_excluder_land_availability()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor.set_composite_excluder"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor.set_composite_excluder()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor.show_capacity_map"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor.show_capacity_map()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -799,32 +797,46 @@ processed data and the capacity matrix.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="RES.CellCapacityProcessor.CellCapacityProcessor.plot_ERAF5_grid_land_availability">
-<span class="sig-name descname"><span class="pre">plot_ERAF5_grid_land_availability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">legend_box_x_y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(1.1,</span> <span class="pre">1)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/CellCapacityProcessor.html#CellCapacityProcessor.plot_ERAF5_grid_land_availability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.CellCapacityProcessor.CellCapacityProcessor.plot_ERAF5_grid_land_availability" title="Link to this definition">#</a></dt>
-<dd><p>import matplotlib.pyplot as plt</p>
-<p>fig, ax = plt.subplots()
-RES_module.cell_processor.Availability_matrix.sel(Province='British Columbia').plot(ax=ax, cmap='Greens')
-RES_module.cell_processor.boundary_region.plot(ax=ax, facecolor='none', edgecolor='black',linewidth=0.2)
-plt.show()</p>
+<span class="sig-name descname"><span class="pre">plot_ERAF5_grid_land_availability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">region_boundary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Availability_matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataArray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(8,</span> <span class="pre">6)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_box_x_y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(1.2,</span> <span class="pre">1)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/CellCapacityProcessor.html#CellCapacityProcessor.plot_ERAF5_grid_land_availability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.CellCapacityProcessor.CellCapacityProcessor.plot_ERAF5_grid_land_availability" title="Link to this definition">#</a></dt>
+<dd><p>Plots the land availability based on the ERA5 grid cells.
+:param region_boundary: The region boundary to plot. If</p>
+<blockquote>
+<div><p>not provided, the default region boundary will be used.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Availability_matrix</strong> (<em>xr.DataArray</em><em>, </em><em>optional</em>) -- The availability matrix to plot.
+If not provided, the default Availability matrix will be used.</p></li>
+<li><p><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) -- The size of the figure to create. Defaults to (8, 6).</p></li>
+<li><p><strong>legend_box_x_y</strong> (<em>tuple</em><em>, </em><em>optional</em>) -- The position of the legend box in the plot.
+Defaults to (1.2, 1).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The figure object containing the plot.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>fig (matplotlib.figure.Figure)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="RES.CellCapacityProcessor.CellCapacityProcessor.plot_excluder_land_availability">
-<span class="sig-name descname"><span class="pre">plot_excluder_land_availability</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/CellCapacityProcessor.html#CellCapacityProcessor.plot_excluder_land_availability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.CellCapacityProcessor.CellCapacityProcessor.plot_excluder_land_availability" title="Link to this definition">#</a></dt>
-<dd><p>fig, ax = plt.subplots()
-RES_module.cell_processor.excluder.plot_shape_availability(RES_module.cell_processor.region_shape, ax=ax)
-RES_module.cell_processor.cutout.grid.to_crs(RES_module.cell_processor.excluder.crs).plot(edgecolor=&quot;grey&quot;, color=&quot;None&quot;, ax=ax, ls=&quot;:&quot;,linewidth=0.1)
-ax.axis(&quot;off&quot;)</p>
+<span class="sig-name descname"><span class="pre">plot_excluder_land_availability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">excluder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExclusionContainer</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/CellCapacityProcessor.html#CellCapacityProcessor.plot_excluder_land_availability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.CellCapacityProcessor.CellCapacityProcessor.plot_excluder_land_availability" title="Link to this definition">#</a></dt>
+<dd><p>Plots the land availability based on the excluder resolution.
+:param excluder: The excluder to use for plotting
+:type excluder: ExclusionContainer, optional</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The figure object containing the plot</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>fig (matplotlib.figure.Figure)</p>
+</dd>
+</dl>
 </dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.CellCapacityProcessor.CellCapacityProcessor.set_composite_excluder">
-<span class="sig-name descname"><span class="pre">set_composite_excluder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/CellCapacityProcessor.html#CellCapacityProcessor.set_composite_excluder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.CellCapacityProcessor.CellCapacityProcessor.set_composite_excluder" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.CellCapacityProcessor.CellCapacityProcessor.show_capacity_map">
-<span class="sig-name descname"><span class="pre">show_capacity_map</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/CellCapacityProcessor.html#CellCapacityProcessor.show_capacity_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.CellCapacityProcessor.CellCapacityProcessor.show_capacity_map" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 
@@ -1643,8 +1655,6 @@ as a DataFrame in HDF5 format, and exports to Excel.</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor.load_cost"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor.load_cost()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor.plot_ERAF5_grid_land_availability"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor.plot_ERAF5_grid_land_availability()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor.plot_excluder_land_availability"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor.plot_excluder_land_availability()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor.set_composite_excluder"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor.set_composite_excluder()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor.show_capacity_map"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor.show_capacity_map()</span></code></a></li>
 </ul>
 </li>
 </ul>
