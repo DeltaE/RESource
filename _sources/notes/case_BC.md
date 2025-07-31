@@ -78,8 +78,12 @@ While temporal profiles provide critical insight into seasonal and diurnal gener
 
 ##	 Impact of grid accessibility
 Following the assessment of temporal generation dynamics, we turn to a key economic driver of project feasibility: the spatial relationship between candidate sites and existing grid infrastructure. We map the centroid of each grid cell to the nearest substation for proximity analysis. RESource enables the site ranking sensitive to the proximity of existing infrastructure and provides a scalable approximation of grid connectivity costs. This helps prioritize sites where renewable generation can be integrated with minimal new infrastructure. shows the spatial distribution of grid substations and their proximity to each cell. Sites located closer to existing substations are inherently more attractive due to reduced transmission upgrade costs. In BC, where much of the terrain is remote or rugged, distance to infrastructure can outweigh resource quality in project feasibility. We also show the grid lines map (right side of Figure 8) to demonstrate that RESource can perform proximity analysis for both substations and the nearest connection points on explicitly rated lines. These spatial-economic filters feed directly into site scoring and prioritization workflows within RESource. 
- 
-<!-- <Figure 8: Proximity to existing (as on 2024) grid substations in BC.> -->
+
+<img src="../_static/Resources_proximity_to_grid_BC.jpg" alt="Heatmap of substation proximity in BC" height="400"/>
+<img src="../_static/transmission_lines_BC.png" alt="Heatmap of substation proximity in BC" height="400"/>
+
+> Grid data shown above is sourced from Open-streetmap.
+
 
 This case study in BC provides a practical example of how RESource integrates geospatial screening, weather-driven modeling, and infrastructure constraints to identify and evaluate VRE deployment opportunities. The following section presents the analytical outputs from this application, including estimated technical potential, site rankings, and the influence of policy constraints on site viability.
 
