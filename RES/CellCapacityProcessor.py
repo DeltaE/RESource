@@ -6,6 +6,7 @@ from shapely.geometry import Polygon
 from typing import Dict
 import matplotlib.pyplot as plt
 import inspect
+from atlite import ExclusionContainer
 # Local Packages
 import RES.utility as utils
 # from RES.AttributesParser import AttributesParser
@@ -47,14 +48,11 @@ class CellCapacityProcessor(LandContainer,
         
         ### Exclusion Layer Container
         # self.land_container=LandContainer(**self.required_args)
-
+        self.composite_excluder:ExclusionContainer=None
 
         ### ERA5 Cutout
         # self.era5_cutout=ERA5Cutout(**self.required_args)
         self.cell_resolution=self.cutout_config['dx']
-    
-    def set_composite_excluder(self):
-        return LandContainer.set_excluder()
     
     # def __get_raster_path__(self, config, root, rasters_dir):
     #     return os.path.join(root, rasters_dir , config['zip_extract_direct'], config['raster'])
@@ -124,7 +122,7 @@ class CellCapacityProcessor(LandContainer,
         self.cutout,self.region_boundary=self.get_era5_cutout()
         
     #b. load excluder
-        composite_excluder=self.set_excluder()
+        self.composite_excluder=self.set_excluder()
         
         
     #d. Load costs (float)
@@ -147,7 +145,7 @@ class CellCapacityProcessor(LandContainer,
         self.region_shape= self.__get_unified_region_shape__() # we need to pass the unified region shape to the availability matrix calculation.
         utils.print_update(level=print_level_base+1,
                    message=f"{__name__}| Processing Availability Matrix... ")
-        self.Availability_matrix:xr = self.cutout.availabilitymatrix(self.region_shape, composite_excluder)
+        self.Availability_matrix:xr = self.cutout.availabilitymatrix(self.region_shape, self.composite_excluder)
         
         utils.print_info(f"{__name__}| @ Line: {inspect.currentframe().f_lineno-1} | We need to pass the unified `region_shape` to the cutout to calculate availability for the entire region as in one of the dimensions e.g. here 'Province'. If we pass multipolygons/geoms of each Regional district (sub-provincial) we will get availability for each regional district as a dimension; which adds additional step to produce our intended data. For this analysis, one unified shape for entire region is sufficient")
         
@@ -157,7 +155,7 @@ class CellCapacityProcessor(LandContainer,
         utils.print_update(level=print_level_base+1,
                            message=f"{__name__}| Creating visuals for land-availability")
         self.plot_ERAF5_grid_land_availability()
-        self.plot_excluder_land_availability()
+        self.plot_excluder_land_availability(excluder=self.composite_excluder)
         
         area = self.cutout.grid.set_index(["y", "x"]).to_crs(3035).area / 1e6 # This crs is fit for area calculation
         area = xr.DataArray(area, dims=("spatial"))
@@ -290,7 +288,7 @@ class CellCapacityProcessor(LandContainer,
         # Categorize availability into bins
         A_gdf["availability_category"] = pd.cut(A_gdf["availability"], bins=bins, labels=labels, include_lowest=True)
         # Create figure and axes for side-by-side plotting
-        fig, ax = plt.subplots(figsize=(12, 8),constrained_layout=True)
+        fig, ax = plt.subplots(figsize=(8, 6),constrained_layout=True)
 
         # Set axis off for both subplots
         ax.set_axis_off()
@@ -317,24 +315,31 @@ class CellCapacityProcessor(LandContainer,
         ax.set_title(f"Land Availability in ERA5 Grid Cells ({self.region_name})", fontsize=16)
         # Adjust layout for cleaner appearance
         plt.tight_layout()
-        plt.savefig(f'vis/misc/land_availability_ERA5grid_{self.region_name}.png')
+        plt.savefig(f'vis/misc/land_availability_ERA5grid_{self.region_name}.png',dpi=300)
         utils.print_update(level=print_level_base+3,message=f"{__name__}|Land availability (grid cells) map saved at vis/misc/land_availability_ERA5grid_{self.region_name}.png")
         return fig
         # plt.close(fig)  # Close the figure to free up memory
 
-    def plot_excluder_land_availability(self):
+    def plot_excluder_land_availability(self,
+                                        excluder=None):
         """
             fig, ax = plt.subplots()
             RES_module.cell_processor.excluder.plot_shape_availability(RES_module.cell_processor.region_shape, ax=ax)
             RES_module.cell_processor.cutout.grid.to_crs(RES_module.cell_processor.excluder.crs).plot(edgecolor="grey", color="None", ax=ax, ls=":",linewidth=0.1)
             ax.axis("off")
         """
-        fig, ax = plt.subplots()
-        self.excluder.plot_shape_availability(self.region_shape,
+        
+        if excluder is None:
+            excluder = self.composite_excluder
+            
+        fig, ax = plt.subplots(figsize=(9, 6),constrained_layout=True)
+        excluder.plot_shape_availability(self.region_shape,
                                               plot_kwargs={'facecolor':'none','edgecolor':'black'},
                                               ax=ax)
         ax.axis("off")
-        plt.savefig(f'vis/misc/land_availability_excluderResolution_{self.region_name}.png')
+        plt.savefig(f'vis/misc/land_availability_excluderResolution_{self.region_name}.png',dpi=300)
         utils.print_update(level=print_level_base+3,message=f"{__name__}|Land availability map (excluder resolution) saved at vis/misc/land_availability_excluderResolution_{self.region_name}.png")
         return fig
+    
+        
         # plt.close(fig)  # Close the figure to free up memory

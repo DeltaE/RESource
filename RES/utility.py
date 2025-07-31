@@ -66,6 +66,9 @@ def print_banner(message: str):
 def print_info(info:str):
     print(f"{Fore.LIGHTBLACK_EX}{Style.BRIGHT}ℹ️  {info}{Style.RESET_ALL}")
 
+def print_warning(info: str):
+    print(f"{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}⚠️  {info}{Style.RESET_ALL}")
+    
 def load_geojson_file(geojson_file_path:str|Path)->list:
     """
     Loads a GeoJSON file and extracts the coordinates from its geometry.
