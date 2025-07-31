@@ -14,7 +14,7 @@ Here is a quick overview of the data sources used in this case study:
 <img src="../_static/Data_CAN_study.jpg" alt="Extraction of Spatial Grid Cells in BC" width="600"/>
 
 ```{seealso}
-{doc}`../notes/data_sources.md` provides a detailed overview of the data sources used in this case study.
+[Detailed overview of the data sources used in this case study.](https://deltae.github.io/RESource/notes/data.html)
 ```
 
 ## Extracting Spatial grid cells
@@ -42,15 +42,17 @@ Spatial screening revealed that roughly 64% of BC’s land is unsuitable for VRE
 
 - Resource's spatial screening process for BC, showing the stepwise filtering of land availability based on terrain, land cover, and exclusion zones. These plots are in 100m resolution, illustrating the progressive reduction of eligible land as each layer of constraints is applied.
 
-  - The land availability maps for BC, illustrating the remaining eligible areas after applying each layer of spatial constraints.
-  
-    <img src="../_static/_layers_impact1.jpg" alt="Stepwise layer results for BC" width="900"/>
 
-  - The cumulative impact of each layer on land availability, illustrating how terrain, land cover, and exclusion zones progressively reduce the pool of eligible sites.
+  - The land availability maps for BC, illustrating the __remaining eligible areas after applying each layer of spatial constraints__.
   
-    <img src="../_static/_layers_impact2.jpg" alt="Stepwise layer results for BC" width="900"/>
+    <img src="../_static/_layers_impact1.jpg" alt="Stepwise layer results for BC" width="auto"/>
 
-  - Rescaling the land availability map to the ERA5 grid resolution.
+  - The __cumulative impact of each layer__ on land availability, illustrating how terrain, land cover, and exclusion zones progressively reduce the pool of eligible sites.
+  
+    <img src="../_static/_layers_impact2.jpg" alt="Stepwise layer results for BC" width="auto"/>
+
+
+  - __Rescaling the land availability map to the ERA5 grid resolution__.
   
     <img src="../_static/ERA5_availability.jpg" alt="Final results for BC rescaled to ERA5 Resolution" width="800"/>
 
