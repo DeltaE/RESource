@@ -158,8 +158,10 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/environment_setup.html">Conda Environment Setup for RESource</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
@@ -319,6 +321,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">Rasters_in_use_direct</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">raster_types</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gaez_config</span><span class="p">[</span><span class="s1">&#39;raster_types&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span> <span class="o">=</span> <span class="kc">None</span>
 
 
 <div class="viewcode-block" id="GAEZRasterProcessor.process_all_rasters">
@@ -328,6 +331,7 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Main pipeline to download, extract, clip, and plot rasters based on configuration.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gaez_root</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">zip_file</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__download_resources_zip_file__</span><span class="p">()</span>
+        <span class="n">raster_paths</span> <span class="o">=</span> <span class="p">{}</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">__extract_rasters__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_region_boundary</span><span class="p">()</span>
@@ -335,9 +339,11 @@ document.write(`
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Clipping Rasters to regional boundaries.. &quot;</span><span class="p">)</span>
         <span class="c1"># Loop over raster types and process each</span>
         <span class="k">for</span> <span class="n">raster_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">raster_types</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__clip_to_boundary_n_plot__</span><span class="p">(</span><span class="n">raster_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span><span class="n">show</span><span class="p">)</span>
-        
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| ✔ All required rasters for GAEZ processed and plotted successfully.&quot;</span><span class="p">)</span></div>
+            <span class="n">raster_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__clip_to_boundary_n_plot__</span><span class="p">(</span><span class="n">raster_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span> <span class="n">show</span><span class="p">)</span>
+            <span class="n">raster_paths</span><span class="p">[</span><span class="n">raster_type</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">raster_path</span>
+
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| ✔ All required rasters for GAEZ processed and plotted successfully.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">raster_paths</span></div>
 
 
     <span class="k">def</span> <span class="nf">__download_resources_zip_file__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -400,12 +406,12 @@ document.write(`
             
             <span class="c1"># Call visualization method</span>
             <span class="n">plot_save_to</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;vis/misc&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="n">raster_file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.tif&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;_raster_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">)</span>
-            <span class="n">raster_plot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_gaez_tif</span><span class="p">(</span><span class="n">clipped_raster_path</span><span class="p">,</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot_gaez_tif</span><span class="p">(</span><span class="n">clipped_raster_path</span><span class="p">,</span> 
                                <span class="n">color_map</span><span class="p">,</span> 
                                <span class="n">plot_title</span><span class="p">,</span> 
                                <span class="n">plot_save_to</span><span class="p">,</span><span class="n">show</span><span class="p">)</span>
             <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Clipped Raster plot for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2"> saved at: </span><span class="si">{</span><span class="n">plot_save_to</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">raster_plot</span>
+            <span class="k">return</span> <span class="n">clipped_raster_path</span>
 
 <div class="viewcode-block" id="GAEZRasterProcessor.plot_gaez_tif">
 <a class="viewcode-back" href="../../notes/api.html#RES.gaez.GAEZRasterProcessor.plot_gaez_tif">[docs]</a>

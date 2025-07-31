@@ -159,8 +159,10 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environment_setup.html">Conda Environment Setup for RESource</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
@@ -504,17 +506,14 @@ document.write(`
 <li><p>Currently configured for Wind Resources only.</p></li>
 </ul>
 </div>
-<ul class="simple">
+<ul>
 <li><p><strong>Why wind resources' ERA5 data are rescaled ?</strong>
-Wind resources (windspeed) are known to have significant variations across ERA5's ~30km resolution. To account for this, we rescaled the windspeed using higher resolution data from the Global Wind Atlas (GWA). This allows us to better estimate the windspeed at the grid cell level. However, GWA does not provide hourly profiles, so we source the profile from ERA5.</p></li>
+Wind resources (windspeed) are known to have significant variations across ERA5's ~30km resolution. To account for this, we rescaled the windspeed using higher resolution data from the Global Wind Atlas (GWA). This allows us to better estimate the windspeed at the grid cell level. However, GWA does not provide hourly profiles, so we source the profile from ERA5.</p>
+<img src="../_static/ERA5_resolution_windspeed_distribution_ERA5vsGWA_British_Columbia.png" alt="Windspeed Distribution - ERA5 vs GWA (resampled to ERA5 Resolution) | Example from _British Columbia_ Study " width="400"/>
+<p>Here is a quick example from BC case study and how the rescaling looks like:</p>
+<img src="../_static/Wind_CF_comparison.png" alt="Windspeed - ERA5 vs GWA | Example from _British Columbia_ Study " width="900"/>
+</li>
 </ul>
-<figure class="align-default" id="era5-vs-gwa-windspeed-bc">
-<a class="reference internal image-reference" href="../_images/ERA5_resolution_windspeed_distribution_ERA5vsGWA_British_Columbia.png"><img alt="../_images/ERA5_resolution_windspeed_distribution_ERA5vsGWA_British_Columbia.png" src="../_images/ERA5_resolution_windspeed_distribution_ERA5vsGWA_British_Columbia.png" style="width: 600px;" />
-</a>
-<figcaption>
-<p><span class="caption-text">Windspeed Distribution - ERA5 vs GWA (resampled to ERA5 Resolution) | Example from <em>British Columbia</em> Study</span><a class="headerlink" href="#era5-vs-gwa-windspeed-bc" title="Link to this image">#</a></p>
-</figcaption>
-</figure>
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
 <ul class="simple">

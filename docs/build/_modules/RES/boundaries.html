@@ -158,8 +158,10 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/environment_setup.html">Conda Environment Setup for RESource</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
@@ -476,15 +478,7 @@ document.write(`
         
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Setting up the Minimum Bounding Region (MBR) for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
         <span class="n">min_x</span><span class="p">,</span> <span class="n">min_y</span><span class="p">,</span> <span class="n">max_x</span><span class="p">,</span> <span class="n">max_y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actual_boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">total_bounds</span>
-<span class="w">        </span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Alternate:</span>
-<span class="sd">        self.region_gadm_gdf.unary_union.buffer(1).bounds # </span>
-<span class="sd">        Key Differences:</span>
-<span class="sd">            Performance: .total_bounds is much faster because it doesn’t require merging or buffering geometries.</span>
-<span class="sd">            Output: Both return bounding coordinates, but .unary_union.buffer(1).bounds includes a buffer, whereas .total_bounds is the simplest, direct bounding box of the original geometries.</span>
-<span class="sd">            Complexity: Use .unary_union.buffer(1).bounds when you need more advanced spatial transformations (e.g., merging or buffering), otherwise use .total_bounds for basic bounding box calculations.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+
         
         <span class="c1"># MBR=box(min_x, min_y, max_x, max_y)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="p">{</span>

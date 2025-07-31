@@ -38,21 +38,18 @@ class Timeseries(ERA5Cutout):
     def get_timeseries(self,
                        cells:gpd.GeoDataFrame)-> tuple:
         """
-        Generate the site-specific timeseries for PV sites and filter based on capacity factor (CF) thresholds.
-
-        ### Args:
-            Args are set to match the internal named tuples to pass the args as **kwargs.
+        Retrieves the capacity factor (CF) timeseries for the cells.
         
-        ### Returns:
-            A named tuple 'site_data' containing:
-            - cells: GeoDataFrame with grid cells and their calculated CF mean.
-            - timeseries: DataFrame with timeseries data for the selected cells.
-            
-        ### Stores:
-            Locally stores the timeseries and grid cells with CF_mean and regional mapping.
-            @ 'data/store/solar_resources.h5'
-        
-        ### Future Scope:
+        Args:
+            cells (gpd.GeoDataFrame): Cells with their coordinates, geometry, and unique cell ids.
+            force_update (bool): If True, forces the update of the CF timeseries data.
+        Returns:
+            tuple: A namedtuple containing the cells with their timeseries data.
+        Jobs:
+            - Extract timeseries information for the Cells' e.g. static CF (yearly mean) and timeseries (hourly).
+            - The timeseries data is generated using the atlite library's cutout methods for solar and wind resources.
+            - The method processes the timeseries data for the specified resource type (solar or wind) and stores it in a pandas DataFrame.                 
+        Notes
             Plug-in multiple sources to fit timeseries data e.g. [NSRDB, NREL](https://nsrdb.nrel.gov/data-sets/how-to-access-data)
         """
         if self.resource_type=='solar':
@@ -63,39 +60,36 @@ class Timeseries(ERA5Cutout):
             # Step 1: Set-up Technology parameters and extract the synthetic timeseries data for all sites
             self.sites_profile:xr.DataArray = self.__process_WIND_timeseries__(cells,'OEDB',2)
         
-        '''
-        Here, 'sites_profile_profile' is a 2D array i.e. cell(Region_xcoord_ycoord) and timestamps. 
-        For xarray.DataArray.to_pandas we use DataArray.to_pandas() thus, 2D -> pandas.DataFrame
-        '''
+        # Here, 'sites_profile_profile' is a 2D array i.e. cell(Region_xcoord_ycoord) and timestamps. 
+        # For xarray.DataArray.to_pandas we use DataArray.to_pandas() thus, 2D -> pandas.DataFrame
+
          
         # Step 2: Convert the xarray:DataArray to pandas dataframe for easier navigation to site profile via site index (id).
-        '''
-        >>>>> Using "to_dataframe()" and then ".unstack()" methods instead for incorporating future scopes     
-        - self.pv_sites_profile.to_pandas() # We convert the Xarray to pandas df for easier access to data by using cell_indices. 
-        - The array index order is (time, cell) hence in pandas 'time' will be default index and 'cell' default header.
-        '''
+
+        # >>>>> Using "to_dataframe()" and then ".unstack()" methods instead for incorporating future scopes     
+        # - self.pv_sites_profile.to_pandas() # We convert the Xarray to pandas df for easier access to data by using cell_indices. 
+        # - The array index order is (time, cell) hence in pandas 'time' will be default index and 'cell' default header.
+
         self._CF_ts_df_org :pd.DataFrame=self.sites_profile.to_dataframe().unstack('cell') # Multi-index dataframe with Y_L1 index (array name i.e. "solar" or "wind")
         self._CF_ts_df_=self._CF_ts_df_org.loc[:,self.resource_type] # Multi-index dataframe with Y_L1 index (array name i.e. "solar" or "wind")
         
-        
-        ''' 
-        We already rename the Xarray to 'self.resource_type' i.e solar/wind at the end of "__process_PV_timeseries__()" method. Hence now the Xarray could be transformed to wide-format DataFrame.
-        - using the to_dataframe() method in xarray.DataArray, the behavior is different from to_pandas().
-        - The array index order is (time, cell) hence in pandas 'time' will be default index and 'cell' default header. But now it will have an additional "Y" index "PV" adopted from xarray name.
-        - WIND profile will be stored under same index to generate a synthetic hybrid availability (correlational) profile.
-        '''
+
+        # We already rename the Xarray to 'self.resource_type' i.e solar/wind at the end of "__process_PV_timeseries__()" method. Hence now the Xarray could be transformed to wide-format DataFrame.
+        # - using the to_dataframe() method in xarray.DataArray, the behavior is different from to_pandas().
+        # - The array index order is (time, cell) hence in pandas 'time' will be default index and 'cell' default header. But now it will have an additional "Y" index "PV" adopted from xarray name.
+        # - WIND profile will be stored under same index to generate a synthetic hybrid availability (correlational) profile.
+
         # here, "_CF_ts_df_" will provide same data formate alike .to_pandas() method, just have to use "_CF_ts_df_.PV"  ("solar" or "wind" is the xarray name)
         
         # Step 3: Convert the timeseries data to the appropriate region timezone
         self.region_timezone=self.get_region_timezone()
         self.CF_ts_df = self.__fix_timezone__(self._CF_ts_df_).tz_localize(None)
 
-        '''
-        - We localize the datetime-stamp (i.e. removing the timezone information) to sync the requirements for downstream models.
-        - The naive timestamps (without timezone info) found better harmonized with the other data sources.
-        - This step needs to be tailored by the user to harmonize the timeseries with other operational data.
-        '''
-        
+
+        # - We localize the datetime-stamp (i.e. removing the timezone information) to sync the requirements for downstream models.
+        # - The naive timestamps (without timezone info) found better harmonized with the other data sources.
+        # - This step needs to be tailored by the user to harmonize the timeseries with other operational data.
+
         # Step 4: Calculate the mean capacity factor (CF) for each cell and store it in 'CF_mean'
         utils.print_update(level=print_level_base+1,message=f"{__name__}| Calculating CF mean from the {len(self.CF_ts_df)} data points for each Cell ...")
         utils.print_update(level=print_level_base+2,message=f"{__name__}| Total Grid Cells: {len(cells)}")
@@ -103,22 +97,19 @@ class Timeseries(ERA5Cutout):
         utils.print_update(level=print_level_base+2,message=f"{__name__}| Matched Sites: {self.CF_ts_df[cells.index].shape}")
         
         cells[f'{self.resource_type}_CF_mean'] = self.CF_ts_df.mean(axis=0) # Mean of all rows (Hours)
-        '''
-        Future Scope: Replacing CF_mean with high resolution data (likely from Global Solar Atlas/ Local data)
-        '''
+ 
         
         # Step 6: Define a namedtuple to store both the grid cells and the filtered timeseries
-        site_data = namedtuple('site_data', ['cells', 'timeseries'])
-        self.data : tuple= site_data(cells, self.CF_ts_df)
-
+        # site_data = namedtuple('site_data', ['cells', 'timeseries'])
+        # self.data : tuple= site_data(cells, self.CF_ts_df)
+        
 
         # Step 5: Save the grid cells and timeseries to the local HDF5 store
         self.datahandler.to_store(cells, 'cells') # We don't want 'force-update' here, just need to append 'CF_mean' data to cells.
         self.datahandler.to_store(self.CF_ts_df, f'timeseries/{self.resource_type}') # Hierarchical data of resources under key 'timeseries' 
 
-        return self.data 
+        return cells,self.CF_ts_df
 
-    
     def __process_PV_timeseries__(self,
                                   cells:gpd.GeoDataFrame):
         """ 
