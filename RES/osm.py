@@ -34,7 +34,7 @@ class OSMData(AttributesParser):
         """
         Access or load the GeoDataFrame for a specific data key.
         """
-        utils.print_update(level=print_level_base+1,message=f"{__name__}| processing Aeroways data for {self.region_name}")
+        utils.print_update(level=print_level_base+1,message=f"{__name__}| processing Aeroways data for {self.region_short_code}")
         
         if data_key in self.gdfs:
             utils.print_update(level=print_level_base+1,message=f"{__name__}|GeoDataFrame for '{data_key}' already exists, returning it.")

@@ -1,8 +1,8 @@
 
-
+# Data Sources and Supply Chain
 The data supply chain is  created mostly from global data sources, local data sources (local gov./authorities) have been used in absence of suitable global data sources. A few of the data sources do not have API/static URL and/or requires form inputs from user. This guideline will help the user to have overall idea about the data, sources and download process. The use-case denotes the usage exclusively in this tool and analysis.
 
-# CODERS
+## CODERS
 > for CANADIAN studies.
 
 - Create `coders_api.yaml` config file
@@ -22,8 +22,8 @@ api_keys:
 
 
 
-# 1. Demographics
-## 1.1 - Population
+## 1. Demographics
+### 1.1 - Population
 - <U>Tag</U>: Local
 - <U>Authority</U>: Statistics Canada
 - <U>License</U> : Data obtained through this application is distributed under the [Canadian Open Government License](https://www2.gov.bc.ca/gov/content/data/policy-standards/open-data/open-government-licence-bc). 
@@ -35,8 +35,8 @@ api_keys:
 - <U>Supply_chain_mode</U> : Manual Download from the portal
     - Instruction: Manually download from the portal with mentioned steps given in [data_sources.yml](https://github.com/DeltaE/Linking_tool/blob/main/config/data_source.yml)
 
-# 2. Climate and Weather Data
-## 2.1  Cutout from ERA5
+## 2. Climate and Weather Data
+### 2.1  Cutout from ERA5
 - <U>Tag</U>: Global
 - <U>Authority</U>: Copernicus Climate Change Service (C3S), ECMWF, EU.
 - <U>License</U> : free of charge, worldwide, non-exclusive, royalty free and perpetual. 
@@ -69,8 +69,8 @@ api_keys:
         
         Now your datapipeline to create the ERA5 Cutout is set.
 
-# 2. Geospatial Raster/Vectors
-## 2.1 Boundaries from GADM
+## 2. Geospatial Raster/Vectors
+### 2.1 Boundaries from GADM
 - <U>Tag</U>: Global
     - This data could be sourced locally as well e.g for Canada from [Canadian open-dataset](https://open.canada.ca/data/en/dataset/306e5004-534b-4110-9feb-58e3a5c3fd97)
     - Other global data sources :
@@ -84,7 +84,7 @@ api_keys:
 - <U>Use-case</U> : This boundary has been processed for admin level 2 (i.e. sub-provincial) to extract geospatial boundaries of the Regional Districts (RD) e.g. 28 RDs inside BC, Canada. This boundary is primarily used for spatial-grid cell/point mapping, regional overlay visuals, clipping point of interests in regional level while clustering.
 - <U>Supply_chain_mode</U> : Automated via [pygadm](https://pypi.org/project/pygadm) library [supports GADM data V4.1]
 
-## 2.2 Conservation and Protected Lands
+### 2.2 Conservation and Protected Lands
 - <U>Tag</U>: Local
     - GAEZ also has similar global data under Land Resources (LR) theme, raster data with 7 classes. We are using this data as a mandatory filter in the process. But the local (pan-Canadian) data has more detailed local government and indigenous protected areas' data. The user can control the classes of exclusion and also can use buffer around exclusion for both case.
 - <U>License</U> : Data obtained through this application is distributed under the [Canadian Open Government License](https://www2.gov.bc.ca/gov/content/data/policy-standards/open-data/open-government-licence-bc). 
@@ -97,8 +97,8 @@ api_keys:
 - <U>Use-case</U> : These specific areas (raster cells/vectors) are excluded in analysis for site considerations. The modeller can also consider buffer around exclusion areas.
 - <U>Supply_chain_mode</U> : Automated via specific url download. Has dependency on [source_url](https://data-donnees.az.ec.gc.ca/api/file?path=%2Fspecies%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FDatabases%2FProtectedConservedArea_2022.gdb.zip).
 
-# Energy and Emission (exogenous)
-  ## Community Energy and Emissions Inventory(CEEI)
+## Energy and Emission (exogenous)
+  ### Community Energy and Emissions Inventory(CEEI)
 - <U>Tag</U>: Local
 - <U>License</U> : Data obtained through this application is distributed under the [Canadian Open Government License](https://www2.gov.bc.ca/gov/content/data/policy-standards/open-data/open-government-licence-bc).
 - <U>Authority</U>:  [Community Energy and Emissions Inventory(CEEI)]https://www2.gov.bc.ca/gov/content/environment/climate-change/data/ceei
@@ -113,7 +113,7 @@ api_keys:
 - <U>Supply_chain_mode</U> : Automated via specific url download. Check config file for specific url dependencies.
 
 ---
-# Information Template
+## Information Template
 - <U>Tag</U>: 
 - <U>License</U> : 
 - <U>Authority</U>: 

@@ -158,8 +158,10 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/environment_setup.html">Conda Environment Setup for RESource</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
@@ -288,50 +290,57 @@ document.write(`
                   
   <h1>Source code for RES.visuals</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">folium</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.colors</span> <span class="k">as</span> <span class="nn">mcolors</span>
+<span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="k">as</span> <span class="nn">mpatches</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="c1"># import seaborn as sns</span>
-<span class="kn">import</span> <span class="nn">logging</span> <span class="k">as</span> <span class="nn">log</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
-<span class="kn">from</span> <span class="nn">plotly.subplots</span> <span class="kn">import</span> <span class="n">make_subplots</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">folium</span>
 <span class="kn">import</span> <span class="nn">rasterio</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="k">as</span> <span class="nn">mpatches</span>
-<span class="kn">import</span> <span class="nn">matplotlib.colors</span> <span class="k">as</span> <span class="nn">mcolors</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
-<span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="kn">import</span> <span class="n">MultipleLocator</span><span class="p">,</span> <span class="n">FuncFormatter</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">lines</span> <span class="k">as</span> <span class="n">mlines</span>
-
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">import</span> <span class="nn">RES.utility</span> <span class="k">as</span> <span class="nn">utils</span>
-<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">RegularPolygon</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">import</span> <span class="nn">xarray</span>
-<span class="kn">from</span> <span class="nn">matplotlib.gridspec</span> <span class="kn">import</span> <span class="n">GridSpec</span>
 <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span>
-
-<span class="n">log</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">log</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span> <span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
-<span class="n">log_name</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;workflow/log/linking_vis.txt&#39;</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">lines</span> <span class="k">as</span> <span class="n">mlines</span>
+<span class="kn">from</span> <span class="nn">matplotlib.font_manager</span> <span class="kn">import</span> <span class="n">FontProperties</span>
+<span class="kn">from</span> <span class="nn">matplotlib.gridspec</span> <span class="kn">import</span> <span class="n">GridSpec</span>
+<span class="kn">from</span> <span class="nn">matplotlib.lines</span> <span class="kn">import</span> <span class="n">Line2D</span>
+<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">RegularPolygon</span>
+<span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="kn">import</span> <span class="n">FuncFormatter</span><span class="p">,</span> <span class="n">MultipleLocator</span>
+<span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="k">as</span> <span class="nn">cm</span>
+<span class="kn">from</span> <span class="nn">plotly.subplots</span> <span class="kn">import</span> <span class="n">make_subplots</span>
+<span class="kn">import</span> <span class="nn">RES.utility</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="kn">import</span> <span class="nn">RES.lands</span> <span class="k">as</span> <span class="nn">lands</span>
+<span class="kn">from</span> <span class="nn">atlite</span> <span class="kn">import</span> <span class="n">ExclusionContainer</span>
 
 <div class="viewcode-block" id="size_for_legend">
 <a class="viewcode-back" href="../../notes/api.html#RES.visuals.size_for_legend">[docs]</a>
 <span class="k">def</span> <span class="nf">size_for_legend</span><span class="p">(</span><span class="n">mw</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the size of the bubble for the legend based on megawatts (MW).</span>
+<span class="sd">    Args:</span>
+<span class="sd">        mw (float): The megawatt value to convert to bubble size.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: The size of the bubble in points.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mw</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># since s = mw / 100 in scatter</span></div>
 
-
-<span class="c1"># with open(log_name, &#39;w&#39;) as file:</span>
-<span class="c1">#     pass</span>
-<span class="c1"># file_handler = log.FileHandler(log_name)</span>
-<span class="c1"># log.getLogger().addHandler(file_handler)</span>
-
-<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">RegularPolygon</span>
 
 <div class="viewcode-block" id="add_compass_arrow">
 <a class="viewcode-back" href="../../notes/api.html#RES.visuals.add_compass_arrow">[docs]</a>
 <span class="k">def</span> <span class="nf">add_compass_arrow</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">text_offset</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds a simple north arrow to the plot.</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        ax (matplotlib.axes.Axes): The plot axes to annotate.</span>
+<span class="sd">        x (float): X position in axes fraction coordinates.</span>
+<span class="sd">        y (float): Y position in axes fraction coordinates.</span>
+<span class="sd">        length (float): Length of the arrow in axes fraction units.</span>
+<span class="sd">        text_offset (float): Offset for the &#39;N&#39; label below the arrow.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="n">length</span><span class="p">),</span>
                 <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span>
                 <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">headwidth</span><span class="o">=</span><span class="mi">6</span><span class="p">))</span>
@@ -385,11 +394,22 @@ document.write(`
     <span class="n">save_to_root</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">&#39;vis&#39;</span><span class="p">,</span>
     <span class="n">set_transparent</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">):</span>
-    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-    <span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="kn">import</span> <span class="n">MultipleLocator</span><span class="p">,</span> <span class="n">FuncFormatter</span>
-    <span class="kn">import</span> <span class="nn">matplotlib.lines</span> <span class="k">as</span> <span class="nn">mlines</span>
-    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-    <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot combined scatter metrics for solar and wind resources.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        solar_clusters (pd.DataFrame): DataFrame containing solar cluster data.</span>
+<span class="sd">        wind_clusters (pd.DataFrame): DataFrame containing wind cluster data.</span>
+<span class="sd">        bubbles_GW (list, optional): List of bubble sizes in GW. Defaults to [1, 5, 10].</span>
+<span class="sd">        bubbles_scale (float, optional): Scaling factor for bubble sizes. Defaults to 0.4.</span>
+<span class="sd">        lcoe_threshold (float, optional): LCOE threshold for filtering. Defaults to 200.</span>
+<span class="sd">        font_family (str, optional): Font family for the plot. Defaults to &#39;sans-serif&#39;.</span>
+<span class="sd">        save_to_root (str, optional): Directory to save the plot. Defaults to &#39;vis&#39;.</span>
+<span class="sd">        set_transparent (bool, optional): Whether to set the background transparent. Defaults to False.</span>
+
+<span class="sd">    Yields:</span>
+<span class="sd">        _type_: _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
 
     <span class="c1"># Filter by LCOE threshold</span>
     <span class="n">solar</span> <span class="o">=</span> <span class="n">solar_clusters</span><span class="p">[</span><span class="n">solar_clusters</span><span class="p">[</span><span class="s1">&#39;lcoe&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">lcoe_threshold</span><span class="p">]</span>
@@ -398,7 +418,7 @@ document.write(`
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 
     <span class="c1"># Solar scatter</span>
-    <span class="n">solar_scatter</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
         <span class="n">solar</span><span class="p">[</span><span class="s1">&#39;CF_mean&#39;</span><span class="p">],</span>
         <span class="n">solar</span><span class="p">[</span><span class="s1">&#39;lcoe&#39;</span><span class="p">],</span>
         <span class="n">s</span><span class="o">=</span><span class="n">solar</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">bubbles_scale</span><span class="p">,</span>  <span class="c1"># Scale down for better visibility</span>
@@ -410,7 +430,7 @@ document.write(`
     <span class="p">)</span>
 
     <span class="c1"># Wind scatter</span>
-    <span class="n">wind_scatter</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
         <span class="n">wind</span><span class="p">[</span><span class="s1">&#39;CF_mean&#39;</span><span class="p">],</span>
         <span class="n">wind</span><span class="p">[</span><span class="s1">&#39;lcoe&#39;</span><span class="p">],</span>
         <span class="n">s</span><span class="o">=</span><span class="n">wind</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">bubbles_scale</span><span class="p">,</span>  <span class="c1"># Scale down for better visibility</span>
@@ -475,7 +495,6 @@ document.write(`
                            <span class="n">columns</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
                            <span class="n">figure_height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span>
                            <span class="n">font_family</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span>
-                           <span class="n">compass_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
                            <span class="n">save_to</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plots GWA benchmark (left), CF_IEC3 (middle), and wind_CF_mean (right).</span>
@@ -620,7 +639,7 @@ document.write(`
     
     <span class="c1"># Create a scatter plot</span>
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-    <span class="n">scatter</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>  <span class="c1"># noqa: F841</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span> 
         <span class="n">clusters_resources</span><span class="p">[</span><span class="s1">&#39;CF_mean&#39;</span><span class="p">],</span>
         <span class="n">clusters_resources</span><span class="p">[</span><span class="s1">&#39;lcoe&#39;</span><span class="p">],</span>
         <span class="n">s</span><span class="o">=</span><span class="n">clusters_resources</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span><span class="p">,</span>  <span class="c1"># Adjust the size for better visualization</span>
@@ -728,7 +747,24 @@ document.write(`
                                    <span class="n">dpi</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
                                    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
                                    <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate visualizations for selected vs missed cells.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cells (gpd.GeoDataFrame): GeoDataFrame containing cell data.</span>
+<span class="sd">        province_short_code (str): Short code for the province.</span>
+<span class="sd">        resource_type (str): Type of renewable resource (e.g., &#39;solar&#39;, &#39;wind&#39;).</span>
+<span class="sd">        lcoe_threshold (float): _description_</span>
+<span class="sd">        CF_threshold (float): _description_</span>
+<span class="sd">        capacity_threshold (float): _description_</span>
+<span class="sd">        text_box_x (float, optional): _description_. Defaults to .4.</span>
+<span class="sd">        text_box_y (float, optional): _description_. Defaults to .95.</span>
+<span class="sd">        title_y (int, optional): _description_. Defaults to 1.</span>
+<span class="sd">        title_x (float, optional): _description_. Defaults to 0.6.</span>
+<span class="sd">        font_size (int, optional): _description_. Defaults to 10.</span>
+<span class="sd">        dpi (int, optional): _description_. Defaults to 1000.</span>
+<span class="sd">        figsize (tuple, optional): _description_. Defaults to (12, 7).</span>
+<span class="sd">        save (bool, optional): _description_. Defaults to False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mask</span><span class="o">=</span><span class="p">(</span><span class="n">cells</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">_CF_mean&#39;</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">CF_threshold</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">cells</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">capacity_threshold</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">cells</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">lcoe_threshold</span><span class="p">)</span>
     <span class="n">filtered_cells</span><span class="o">=</span><span class="n">cells</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
     
@@ -794,6 +830,8 @@ document.write(`
         <span class="n">cmap</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> 
         <span class="n">title</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> 
         <span class="n">plot_save_to</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a raster image with a legend for land classes.&quot;&quot;&quot;</span>
+    
     <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">raster</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
         <span class="c1"># Read the raster data</span>
         <span class="n">raster_data</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -833,53 +871,8 @@ document.write(`
 
         <span class="c1"># Save the plot</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">plot_save_to</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>  <span class="c1"># Close the plot to avoid superimposing</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>  <span class="c1"># Close the plot to avoid superimposing</span></div>
 
-        <span class="k">return</span> <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Raster images created for </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">. Please check GAEZ model documentation for raster class descriptions&quot;</span><span class="p">)</span></div>
-
-
-<span class="c1"># Load data from YAML file</span>
-<span class="c1"># configs=utility.load_config(&#39;config/config_linking_tool.yml&#39;)</span>
-<span class="c1"># solar_vis_directory=configs[&#39;solar&#39;][&#39;solar_vis_directory&#39;]</span>
-<span class="c1">#  %%</span>
-<span class="c1"># def visualize_GADM_regions(</span>
-<span class="c1">#         gadm_regions_gdf:gpd.GeoDataFrame,</span>
-<span class="c1">#         color_palette:list,</span>
-<span class="c1">#         plot_save_to:str):</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     Takes in the GADM  regions (with given admin level) and plots with given color coded regions, saving the plot to given path.</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     palette = sns.color_palette(color_palette, n_colors=len(gadm_regions_gdf))</span>
-
-<span class="c1">#     # Create a dictionary to map Map_IDs to colors</span>
-<span class="c1">#     color_map = {map_id: color for map_id, color in zip(gadm_regions_gdf[&#39;Region_ID&#39;], palette)}</span>
-
-<span class="c1">#     # Sort gadm_regions_gdf by Map_ID</span>
-<span class="c1">#     gadm_regions_gdf = gadm_regions_gdf.sort_values(by=&#39;Region_ID&#39;)</span>
-
-<span class="c1">#     # Plot the GeoDataFrame with Map_ID numbers</span>
-<span class="c1">#     fig, ax = plt.subplots(figsize=(12, 12))</span>
-<span class="c1">#     gadm_regions_gdf.plot(ax=ax, color=[color_map[region] for region in gadm_regions_gdf[&#39;Region_ID&#39;]])</span>
-
-<span class="c1">#     # Annotate each region with its Map_ID</span>
-<span class="c1">#     for idx, row in gadm_regions_gdf.iterrows():</span>
-<span class="c1">#         plt.annotate(text=str(row[&#39;Region_ID&#39;]), xy=row[&#39;geometry&#39;].centroid.coords[0], ha=&#39;center&#39;, color=&#39;black&#39;)</span>
-
-<span class="c1">#     # Create legend with region names and Map_IDs</span>
-<span class="c1">#     handles = [plt.Line2D([0], [0], marker=&#39;o&#39;, color=&#39;w&#39;, markerfacecolor=color, markersize=10) for color in palette]</span>
-<span class="c1">#     labels = [f&quot;{row[&#39;Region&#39;]} ({row[&#39;Region_ID&#39;]})&quot; for idx, row in gadm_regions_gdf.iterrows()]</span>
-<span class="c1">#     plt.legend(handles, labels, title=&#39;Regions&#39;, loc=&#39;upper left&#39;, bbox_to_anchor=(1, 1))</span>
-
-<span class="c1">#     # Set plot title</span>
-<span class="c1">#     plt.title(&#39;Map of Regions with Map_ID Numbers&#39;)</span>
-<span class="c1">#     plt.tight_layout()</span>
-
-<span class="c1">#     # Show the plot or save it to a file</span>
-<span class="c1">#     plt.savefig(plot_save_to)</span>
-    
-<span class="c1">#     fig = plt.gcf()</span>
-<span class="c1">#     plt.close(fig)</span>
-<span class="c1">#     log.info(f&quot;GADM Regions visualization reated and saved locally.\n&quot;)</span>
 
 <div class="viewcode-block" id="plot_data_in_GADM_regions">
 <a class="viewcode-back" href="../../notes/api.html#RES.visuals.plot_data_in_GADM_regions">[docs]</a>
@@ -892,6 +885,19 @@ document.write(`
         <span class="n">plt_title</span><span class="p">,</span>
         <span class="n">plt_file_name</span><span class="p">,</span>
         <span class="n">vis_directory</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots data from a DataFrame on GADM regions using GeoPandas and Matplotlib.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dataframe (pd.DataFrame): DataFrame containing the data to plot.</span>
+<span class="sd">        data_column_df (str): Name of the column in the DataFrame to plot.</span>
+<span class="sd">        gadm_regions_gdf (gpd.GeoDataFrame): GeoDataFrame containing the GADM regions.</span>
+<span class="sd">        color_map (str): Name of the color map to use for the plot.</span>
+<span class="sd">        dpi (int): Dots per inch for the plot.</span>
+<span class="sd">        plt_title (str): Title of the plot.</span>
+<span class="sd">        plt_file_name (str): File name for saving the plot.</span>
+<span class="sd">        vis_directory (str): Directory for saving the visualization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">ax</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="n">data_column_df</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">color_map</span><span class="p">)</span>
     <span class="n">gadm_regions_gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
@@ -899,8 +905,8 @@ document.write(`
     <span class="n">plt_save_to</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">vis_directory</span><span class="p">,</span><span class="n">plt_file_name</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">plt_save_to</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span>
-    <span class="k">return</span> <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plot Created for </span><span class="si">{</span><span class="n">plt_title</span><span class="si">}</span><span class="s2"> for Potential Plants and Save to </span><span class="si">{</span><span class="n">plt_save_to</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
 
 
 <div class="viewcode-block" id="visualize_ss_nodes">
@@ -908,32 +914,29 @@ document.write(`
 <span class="k">def</span> <span class="nf">visualize_ss_nodes</span><span class="p">(</span><span class="n">substations_gdf</span><span class="p">,</span>
                        <span class="n">provincem_gadm_regions_gdf</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> 
                            <span class="n">plot_name</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Visualizes transmission nodes (buses) on a map with different colors based on substation types.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Visualizes transmission nodes (buses) on a map with different colors based on substation types.</span>
 
-<span class="sd">        Parameters:</span>
-<span class="sd">        - gadm_regions_gdf (GeoDataFrame): GeoDataFrame containing base regions to plot.</span>
-<span class="sd">        - buses_gdf (GeoDataFrame): GeoDataFrame containing buses with &#39;substation_type&#39; column.</span>
-<span class="sd">        - plot_name (str): File path to save the plot image.</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    - gadm_regions_gdf (GeoDataFrame): GeoDataFrame containing base regions to plot.</span>
+<span class="sd">    - buses_gdf (GeoDataFrame): GeoDataFrame containing buses with &#39;substation_type&#39; column.</span>
+<span class="sd">    - plot_name (str): File path to save the plot image.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">        - None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        
-        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-        <span class="n">provincem_gadm_regions_gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;lightgrey&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
-        <span class="n">substations_gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;substation_type&#39;</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="sd">    Returns:</span>
+<span class="sd">    - None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">provincem_gadm_regions_gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;lightgrey&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+    <span class="n">substations_gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;substation_type&#39;</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
 
-        <span class="c1"># Finalize plot details</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Buses with Colormap of Substation Types&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-        
-        <span class="c1"># Save and close the plot</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">plot_name</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        
-        <span class="c1"># Logging success message</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plot for Grid Nodes Generated and saved as </span><span class="si">{</span><span class="n">plot_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+    <span class="c1"># Finalize plot details</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Buses with Colormap of Substation Types&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    
+    <span class="c1"># Save and close the plot</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">plot_name</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
         
 <div class="viewcode-block" id="create_timeseries_plots">
@@ -979,15 +982,22 @@ document.write(`
         
         <span class="n">plt_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Site Capacity Factor (Resample Span: </span><span class="si">{</span><span class="n">resampling</span><span class="si">}</span><span class="s1">) - </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">cluster_no</span><span class="si">}</span><span class="s1">.png&#39;</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">vis_directory</span><span class="p">,</span><span class="n">plt_name</span><span class="p">))</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; Plots generated for CF timeseries of TOP Sites for </span><span class="si">{</span><span class="n">max_resource_capacity</span><span class="si">}</span><span class="s2"> GW Capacity Investment in Province...&quot;</span><span class="p">)</span></div>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
 
 <div class="viewcode-block" id="create_timeseries_plots_solar">
 <a class="viewcode-back" href="../../notes/api.html#RES.visuals.create_timeseries_plots_solar">[docs]</a>
 <span class="k">def</span> <span class="nf">create_timeseries_plots_solar</span><span class="p">(</span><span class="n">cells_df</span><span class="p">,</span><span class="n">CF_timeseries_df</span><span class="p">,</span> <span class="n">dissolved_indices</span><span class="p">,</span><span class="n">max_solar_capacity</span><span class="p">,</span><span class="n">resampling</span><span class="p">,</span><span class="n">solar_vis_directory</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Generates time series plots for solar capacity factor (CF) data.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        cells_df (pd.DataFrame): DataFrame containing cell information.</span>
+<span class="sd">        CF_timeseries_df (pd.DataFrame): DataFrame containing capacity factor time series data.</span>
+<span class="sd">        dissolved_indices (dict): Dictionary mapping regions and cluster numbers to indices in CF_timeseries_df.</span>
+<span class="sd">        max_solar_capacity (float): Maximum solar capacity for investment.</span>
+<span class="sd">        resampling (str): Resampling frequency for the time series data.</span>
+<span class="sd">        solar_vis_directory (str): Directory to save the generated plots.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; Generating CF timeseries for TOP Sites for </span><span class="si">{</span><span class="n">max_solar_capacity</span><span class="si">}</span><span class="s2"> GW Capacity Investment in BC...&quot;</span><span class="p">)</span>
     
@@ -1124,9 +1134,22 @@ document.write(`
                     <span class="n">font_family</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span>
                     <span class="n">discalimers</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                     <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    
-    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-    <span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots a map of renewable energy resources (solar or wind) with capacity factor, potential capacity, or LCOE.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        cells (gpd.GeoDataFrame): GeoDataFrame containing the resource data.</span>
+<span class="sd">        resource_type (str, optional): Type of renewable resource (&#39;solar&#39; or &#39;wind&#39;). Defaults to None.</span>
+<span class="sd">        datafield (str, optional): Data field to plot (&#39;CF&#39;, &#39;CAPACITY&#39;, or &#39;SCORE&#39;). Defaults to None.</span>
+<span class="sd">        title (str, optional): Title for the plot. Defaults to None.</span>
+<span class="sd">        ax (matplotlib.axes.Axes, optional): Axes to plot on. If None, a new figure and axes are created. Defaults to None.</span>
+<span class="sd">        compass_size (float, optional): Size of the compass in the plot. Defaults to 10.</span>
+<span class="sd">        font_family (str, optional): Font family for text in the plot. Defaults to &#39;sans-serif&#39;.</span>
+<span class="sd">        discalimers (bool, optional): Whether to include disclaimers in the plot. Defaults to False.</span>
+<span class="sd">        show (bool, optional): Whether to display the plot. Defaults to True.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        ax (matplotlib.axes.Axes): The axes with the plotted map.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">column_keyword</span><span class="o">=</span><span class="n">datafield</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
     <span class="n">resource_type</span> <span class="o">=</span> <span class="n">resource_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     
@@ -1205,8 +1228,6 @@ document.write(`
     <span class="k">return</span> <span class="n">ax</span></div>
 
 
-
-
 <div class="viewcode-block" id="plot_grid_lines">
 <a class="viewcode-back" href="../../notes/api.html#RES.visuals.plot_grid_lines">[docs]</a>
 <span class="k">def</span> <span class="nf">plot_grid_lines</span><span class="p">(</span>
@@ -1219,7 +1240,19 @@ document.write(`
     <span class="n">save_to</span><span class="p">:</span><span class="nb">str</span><span class="o">|</span><span class="n">Path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">show</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots transmission lines with voltage levels in a specified region.</span>
 
+<span class="sd">    Args:</span>
+<span class="sd">        region_code (str): The code of the region to plot.</span>
+<span class="sd">        region_name (str): The name of the region to plot.</span>
+<span class="sd">        lines (gpd.GeoDataFrame): GeoDataFrame containing the transmission lines.       </span>
+<span class="sd">        boundary (gpd.GeoDataFrame): _description_</span>
+<span class="sd">        font_family (str, optional): _description_. Defaults to &#39;sans-serif&#39;.</span>
+<span class="sd">        figsize (tuple, optional): _description_. Defaults to (10, 8).</span>
+<span class="sd">        save_to (str | Path, optional): _description_. Defaults to None.</span>
+<span class="sd">        show (bool, optional): _description_. Defaults to True.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">font_family</span>
@@ -1285,6 +1318,20 @@ document.write(`
     <span class="n">about_OSM_data</span><span class="p">:</span><span class="nb">dict</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span>
     <span class="n">map_html_save_to</span><span class="p">:</span><span class="nb">str</span>
     <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates an interactive map with key data for a specific province, including regions, conservation lands, aeroways, and bus nodes.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        province_gadm_regions_gdf (gpd.GeoDataFrame): GeoDataFrame containing the province&#39;s administrative regions.</span>
+<span class="sd">        provincial_conservation_protected_lands (gpd.GeoDataFrame): GeoDataFrame containing conservation and protected lands.</span>
+<span class="sd">        aeroway_with_buffer_solar (gpd.GeoDataFrame): GeoDataFrame containing solar aeroways with buffer zones.</span>
+<span class="sd">        aeroway_with_buffer_wind (gpd.GeoDataFrame): GeoDataFrame containing wind aeroways with buffer zones.</span>
+<span class="sd">        aeroway (gpd.GeoDataFrame): GeoDataFrame containing aeroways.</span>
+<span class="sd">        provincial_bus_gdf (gpd.GeoDataFrame): GeoDataFrame containing provincial bus routes.</span>
+<span class="sd">        current_region (dict): Dictionary containing information about the current region.</span>
+<span class="sd">        about_OSM_data (dict[dict]): Dictionary containing information about OSM data.</span>
+<span class="sd">        map_html_save_to (str): _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">buffer_distance_m</span><span class="p">:</span><span class="nb">dict</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span><span class="o">=</span><span class="n">about_OSM_data</span><span class="p">[</span><span class="s1">&#39;aeroway_buffer&#39;</span><span class="p">]</span>
     
     <span class="n">m</span> <span class="o">=</span> <span class="n">province_gadm_regions_gdf</span><span class="o">.</span><span class="n">explore</span><span class="p">(</span><span class="s1">&#39;Region&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span><span class="n">style_kwds</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;fillOpacity&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">},</span> <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">current_region</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> Regions&quot;</span><span class="p">)</span>
@@ -1299,10 +1346,8 @@ document.write(`
     <span class="n">folium</span><span class="o">.</span><span class="n">LayerControl</span><span class="p">()</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 
     <span class="c1"># Display the map</span>
-    <span class="n">m</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">map_html_save_to</span><span class="p">)</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Key data map create for BC and saved to </span><span class="si">{</span><span class="n">map_html_save_to</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+    <span class="n">m</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">map_html_save_to</span><span class="p">)</span></div>
 
-    <span class="c1"># return m</span>
     
 
 <div class="viewcode-block" id="create_sites_ts_plots_all_sites">
@@ -1311,6 +1356,13 @@ document.write(`
     <span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
     <span class="n">CF_ts_df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">save_to_dir</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates an interactive timeseries plot for the top sites of a given resource type.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        resource_type (str): The type of resource (e.g., &#39;solar&#39;, &#39;wind&#39;).</span>
+<span class="sd">        CF_ts_df (pd.DataFrame): DataFrame containing the capacity factor timeseries data.</span>
+<span class="sd">        save_to_dir (str): Directory to save the plot.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="c1"># Create a plot using plotly.express</span>
     <span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">CF_ts_df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">CF_ts_df</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">CF_ts_df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">:],</span> <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Hourly timeseries for </span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1"> sites&#39;</span><span class="p">,</span>
@@ -1414,9 +1466,158 @@ document.write(`
     <span class="n">fig</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_to_dir</span><span class="si">}</span><span class="s1">/Timeseries_top_sites_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">.html&#39;</span><span class="p">)</span></div>
 
 
-    <span class="c1"># Optionally display the plot</span>
-    <span class="c1"># fig.show()</span>
-<span class="c1"># </span>
+
+<div class="viewcode-block" id="get_conservation_lands_plot">
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.get_conservation_lands_plot">[docs]</a>
+<span class="k">def</span> <span class="nf">get_conservation_lands_plot</span><span class="p">(</span><span class="n">CPCAD_actual</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">CPCAD_with_buffer</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+                                <span class="n">save_to</span><span class="p">:</span><span class="n">Path</span><span class="o">|</span><span class="nb">str</span><span class="p">,</span>
+                                <span class="n">font_family</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">&#39;sans-serif&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a plot comparing original and buffered conservation lands.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span> <span class="o">=</span><span class="n">font_family</span>
+    
+    <span class="c1"># 1. Define colormap and normalization</span>
+    <span class="n">unique_cats</span> <span class="o">=</span> <span class="n">CPCAD_actual</span><span class="p">[</span><span class="s1">&#39;IUCN_CAT&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;tab10&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_cats</span><span class="p">))</span>
+
+    <span class="c1"># 2. Setup subplots</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># 3. Original geometries</span>
+    <span class="n">CPCAD_actual</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">column</span><span class="o">=</span><span class="s1">&#39;IUCN_CAT_desc&#39;</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+        <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+        <span class="n">facecolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">legend</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Original Conservation Lands&quot;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+    <span class="c1"># 4. Buffered geometries</span>
+    <span class="n">CPCAD_with_buffer</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">column</span><span class="o">=</span><span class="s1">&#39;IUCN_CAT_desc&#39;</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+        <span class="n">legend</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Buffered Conservation Lands&quot;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="c1"># 5. Add shared legend</span>
+    <span class="n">legend_labels</span> <span class="o">=</span> <span class="n">CPCAD_actual</span><span class="p">[[</span><span class="s1">&#39;IUCN_CAT&#39;</span><span class="p">,</span> <span class="s1">&#39;IUCN_CAT_desc&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;IUCN_CAT&#39;</span><span class="p">)</span>
+    <span class="n">handles</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">desc</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">desc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">legend_labels</span><span class="p">[</span><span class="s1">&#39;IUCN_CAT&#39;</span><span class="p">],</span> <span class="n">legend_labels</span><span class="p">[</span><span class="s1">&#39;IUCN_CAT_desc&#39;</span><span class="p">])</span>
+    <span class="p">]</span>
+
+    <span class="n">title_font</span> <span class="o">=</span> <span class="n">FontProperties</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
+        <span class="n">handles</span><span class="o">=</span><span class="n">handles</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;IUCN Category&quot;</span><span class="p">,</span>
+        <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower center&#39;</span><span class="p">,</span>
+        <span class="n">ncol</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+        <span class="n">title_fontproperties</span><span class="o">=</span><span class="n">title_font</span>
+    <span class="p">)</span>
+
+    <span class="n">add_compass_arrow</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">length</span><span class="o">=</span><span class="mf">0.03</span><span class="p">)</span>
+    <span class="c1"># 6. Final layout</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Comparison of Original vs Buffered Conservation Areas&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">])</span>   
+    <span class="n">save_to</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="n">save_to</span><span class="p">)</span>
+    <span class="n">save_to</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">save_to</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Conservation Lands Plot saved to </span><span class="si">{</span><span class="n">save_to</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_stepwise_availability_plots">
+<a class="viewcode-back" href="../../notes/api.html#RES.visuals.get_stepwise_availability_plots">[docs]</a>
+<span class="k">def</span> <span class="nf">get_stepwise_availability_plots</span><span class="p">(</span><span class="n">excluder</span><span class="p">:</span><span class="n">ExclusionContainer</span><span class="p">,</span>
+                                    <span class="n">region_shape</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+                                    <span class="n">raster_configs</span><span class="p">:</span><span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> 
+                                    <span class="n">vector_configs</span><span class="p">:</span><span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span>
+                                    <span class="n">save_to</span><span class="p">:</span><span class="nb">str</span><span class="o">|</span><span class="n">Path</span><span class="p">):</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;serif&#39;</span>
+    
+    <span class="n">n_rasters</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">raster_configs</span><span class="p">)</span>
+    <span class="n">n_vectors</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">vector_configs</span><span class="p">)</span>
+
+    <span class="c1"># 2. Plot setup</span>
+    <span class="n">total_layers</span> <span class="o">=</span> <span class="n">n_rasters</span> <span class="o">+</span> <span class="n">n_vectors</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">total_layers</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="n">total_layers</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+    <span class="c1"># Helper function</span>
+    <span class="k">def</span> <span class="nf">plot_exclusion_layer</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> 
+                             <span class="n">geometry</span><span class="p">,</span> 
+                             <span class="n">title</span><span class="p">,</span> 
+                             <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                             <span class="n">is_raster</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                             <span class="n">filepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                             <span class="n">codes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">is_raster</span><span class="p">:</span>
+            <span class="n">excluder</span><span class="o">.</span><span class="n">add_raster</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">codes</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="n">invert</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">excluder</span><span class="o">.</span><span class="n">add_geometry</span><span class="p">(</span><span class="n">geometry</span><span class="p">)</span>
+        
+        <span class="n">eligible_share</span><span class="p">,</span> <span class="n">eligible_area</span><span class="p">,</span> <span class="n">region_area</span> <span class="o">=</span> <span class="n">lands</span><span class="o">.</span><span class="n">get_eligible_share</span><span class="p">(</span><span class="n">region_shape</span><span class="p">,</span> <span class="n">excluder</span><span class="p">)</span>
+        
+        <span class="n">excluder</span><span class="o">.</span><span class="n">plot_shape_availability</span><span class="p">(</span>
+            <span class="n">geometry</span><span class="o">=</span><span class="n">region_shape</span><span class="p">,</span>
+            <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+            <span class="n">set_title</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">show_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;interpolation&quot;</span><span class="p">:</span> <span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">},</span>
+            <span class="n">plot_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;edgecolor&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="s2">&quot;linewidth&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span> <span class="s2">&quot;facecolor&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="s2">&quot;zorder&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+        <span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">eligible_share</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+
+    <span class="c1"># 3. Raster layers</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">raster_configs</span><span class="p">):</span>
+        <span class="n">plot_exclusion_layer</span><span class="p">(</span>
+            <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="n">geometry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">],</span>
+            <span class="n">invert</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;invert&quot;</span><span class="p">],</span>
+            <span class="n">is_raster</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">filepath</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;filepath&quot;</span><span class="p">],</span>
+            <span class="n">codes</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;codes&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+
+    <span class="c1"># 4. Vector layers</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vector_configs</span><span class="p">):</span>
+        <span class="c1"># Assert that the geometries in vector_configs are in the same CRS as excluder</span>
+        <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="s2">&quot;gdf&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">crs</span> <span class="o">!=</span> <span class="n">excluder</span><span class="o">.</span><span class="n">crs</span><span class="p">:</span>
+                <span class="n">v</span><span class="p">[</span><span class="s2">&quot;gdf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="s2">&quot;gdf&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">excluder</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+        <span class="n">plot_exclusion_layer</span><span class="p">(</span>
+            <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="n">n_rasters</span> <span class="o">+</span> <span class="n">i</span><span class="p">],</span>
+            <span class="n">geometry</span><span class="o">=</span><span class="n">v</span><span class="p">[</span><span class="s2">&quot;gdf&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">v</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">],</span>
+            <span class="n">invert</span><span class="o">=</span><span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;invert&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">is_raster</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Land Availability for Exclusion/Inclusion Layers for BC&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.05</span><span class="p">)</span>
+    
+    <span class="c1"># Save the figure</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">save_to</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">save_to</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">save_to</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">save_to</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">save_to</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">save_to</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Stepwise Availability Plots saved to </span><span class="si">{</span><span class="n">save_to</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
 </pre></div>
 
                 </article>

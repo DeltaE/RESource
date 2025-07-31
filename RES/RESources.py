@@ -8,6 +8,7 @@ from datetime import datetime
 from itertools import product
 # RESource's Local
 
+from RES import timeseries
 from RES.era5_cutout import ERA5Cutout
 from RES import cluster
 from RES import windspeed as wind
@@ -34,6 +35,58 @@ warnings.filterwarnings("ignore")
 print_level_base=1
 
 class RESources_builder(AttributesParser):  
+    """
+    RESources_builder is a class that builds the resources for a given region and resource type (solar or wind).
+    It initializes various components such as grid cells, timeseries, data handler, cell capacity processor, coders data, ERA5 cutout, and cell scorer.
+    
+    Attributes:
+        config_file_path (str): Path to the configuration file.
+        region_short_code (str): Short code for the region.
+        resource_type (str): Type of resource ('solar' or 'wind').
+        store (Path): Path to the storage directory.
+        units (Units): Instance of Units class for handling units.
+        gridcells (GridCells): Instance of GridCells class for handling grid cells.
+        timeseries (Timeseries): Instance of Timeseries class for handling timeseries data.
+        datahandler (DataHandler): Instance of DataHandler class for managing data storage and retrieval.
+        cell_processor (CellCapacityProcessor): Instance of CellCapacityProcessor class for processing cell capacity.
+        coders (CODERSData): Instance of CODERSData class for handling CODERS data.
+        era5_cutout (ERA5Cutout): Instance of ERA5Cutout class for handling ERA5 cutouts.
+        scorer (CellScorer): Instance of CellScorer class for scoring cells.
+        gwa_cells (GWACells): Instance of GWACells class for handling Global Wind Atlas cells.
+        results_save_to (Path): Path to save the results.
+        region_name (str): Name of the region.
+        
+    Methods:
+        __post_init__(): Initializes the RESources_builder instance and its components.
+        get_grid_cells(): Retrieves the default grid cells for the region.
+        get_cell_capacity(force_update=False): Retrieves the potential capacity of the cells based on land availability and land-use intensity.
+        extract_weather_data(): Extracts weather data for the cells (e.g. windspeed, solar influx).
+        update_gwa_scaled_params(memory_resource_limitation=False): Updates Global Wind Atlas scaled parameters for wind resources.
+        get_CF_timeseries(cells=None, force_update=False): Extracts timeseries information for the Cells' e.g. static CF (yearly mean) and timeseries (hourly).
+        find_grid_nodes(cells=None, use_pypsa_buses=False): Finds the grid nodes for the given cells.
+        score_cells(cells=None): Scores the Cells based on calculated LCOE ($/MWh).
+        get_clusters(scored_cells=None, wcss_tolerance=0.05): Gets clusters of resources based on scored cells.
+        get_cluster_timeseries(clusters=None, dissolved_indices=None, cells_timeseries=None): Gets representative timeseries of the clusterized sites.
+        build(select_top_sites=True, use_pypsa_buses=True, memory_resource_limitation=True): Executes the specific module logic for the given resource type ('solar' or 'wind').
+        export_results(resource_type, resource_clusters, cluster_timeseries, save_to=Path('results')): Exports processed resource cluster results to standard datafield csvs as input for downstream models.
+        create_summary_info(resource_type, sites, timeseries): Creates summary information to be exported alongside results data.
+        dump_export_metadata(info: str, save_to: Optional[Path] = 'results/linking'): Dumps the metadata summary information to a file.
+        select_top_sites(sites:Union[gpd.GeoDataFrame,gpd.GeoSeries],timeseries:pd.DataFrame,resource_max_capacity=10)->tuple: Selects top sites based on resource capacity and returns a namedtuple with selected sites and their timeseries data.
+    Notes:
+        - The class is designed to handle both solar and wind resources.
+        - It uses various external classes to manage different aspects of the resource building process.
+        - The methods are designed to be modular and can be extended for future enhancements.
+        - The class inherits from AttributesParser to handle configuration and attributes parsing.
+        - The class is initialized with a configuration file path, region short code, and resource type.
+        - The __post_init__ method is called after the instance is created to initialize various components and load the snapshot of the resource data.
+        - The class provides methods to retrieve grid cells, calculate cell capacity, extract weather data, update Global Wind Atlas parameters, get CF timeseries, find grid nodes, score cells, get clusters, and get cluster timeseries.
+        - The build method orchestrates the entire process of building resources, including preparing grid cells, calculating land availability, extracting weather data, scoring cells, and selecting top sites.
+        - The export_results method exports the processed resource cluster results to standard datafield csvs for downstream models.
+        - The create_summary_info method generates a summary of the resource data, including total capacity and number of sites.
+        - The dump_export_metadata method saves the summary information to a file for future reference.
+        - The select_top_sites method selects the top sites based on potential capacity and returns a namedtuple with selected sites and their timeseries data.
+    ____________________________________________________________________________________________________________________________________________
+    """
     def __post_init__(self):
         # Call the parent class __post_init__ to initialize inherited attributes
         super().__post_init__()
@@ -58,6 +111,11 @@ class RESources_builder(AttributesParser):
         self.results_save_to=Path('results/RESource')
         self.region_name=self.get_region_name()
         
+        
+        # Intiate the attributes for the RESources_builder
+        self.store_grid_cells:gpd.GeoDataFrame=None
+        self.region_grid_cells:gpd.GeoDataFrame=None
+        
         # Snapshot (range of of the temporal data)
         (
             self.start_date,
@@ -66,14 +124,7 @@ class RESources_builder(AttributesParser):
         utils.print_update(level=print_level_base+1,
                            message=f"Snapshot for Resources: {self.start_date} to {self.end_date}")
         
-    '''
-     _________________________________________________________________________________________________________________________
-    *** Future Scope to give user flexibility to make their own grid resolution
-    Step 0: Set-up the Grid Cells and their Unique Indices to populate incremental datafields and to easy navigation to cells.
-    ___________________________________________________________________________________________________________________________
-    - Step to create the Cells with unique indices generated from their x,y (centroids). 
-    - We fill the incremental datafields for cells as we progress with the methods (functions).
-    '''
+
     def get_grid_cells(self)->gpd.GeoDataFrame:
         """
         Retrieves the default grid cells for the region.
@@ -87,9 +138,13 @@ class RESources_builder(AttributesParser):
         Notes:
             - The `get_default_grid()` method creates several attributes, such as the atlite `cutout` object and the `region_boundary`.
             - Uses the `cutout.grid` attribute to create the analysis grid cells (GeoDataFrame).
-            
-        """  
-        
+        _________________________________________________________________________________________________________________________
+        - Future Scopes:
+            To give user flexibility to make their own grid resolution
+            Step 0: Set-up the Grid Cells and their Unique Indices to populate incremental datafields and to easy navigation to cells
+                - Step to create the Cells with unique indices generated from their x,y (centroids).
+        """
+
         utils.print_update(level=print_level_base+1,
                            message=f"{__name__}| Preparing Grid Cells...")
         
@@ -99,21 +154,24 @@ class RESources_builder(AttributesParser):
                            message=f"{__name__}| Grid Cells updated.")
         
         return self.region_grid_cells
-    '''
-    _______________________________________________________________________________________________
-    Step 1: 
-    - Get Potential Capacity (MW), %CF (static/dynamic), and Grid Node information for Cells 
-    _______________________________________________________________________________________________
-    
-    - Step 1A: 
-    - Extract capacity information for the Cells.
-    - Potential capacity (MW) = available land (%) x land-use intensity (MW/sq.km) x Area of a cell (sq. km)
-    * Remarks:  Could be parallelized with Step 2A/2C.
-    '''
-    def get_cell_capacity(self, 
-                          force_update=False):
-        "returns 'data' i.e. cells  geodataframe, capacity 'matrix' "
-                
+
+    def get_cell_capacity(self):
+        """
+        Retrieves the potential capacity of the cells based on land availability and land-use intensity.
+        Args:   
+
+            force_update (bool): If True, forces the update of the cell capacity data.
+        Returns:
+            tuple: A namedtuple containing the cells GeoDataFrame and a capacity matrix.
+        Notes:
+            - The capacity matrix is a 2D array where each row corresponds to a cell and each column corresponds to a time step.
+            - The potential capacity is calculated as:
+                - Potential capacity (MW) = available land (%) x land-use intensity (MW/sq.km) x Area of a cell (sq. km)
+                - The method uses the `CellCapacityProcessor` class to process the capacity data.
+            - The method returns a namedtuple with two attributes: `data` (the cells GeoDataFrame) and `matrix` (the capacity matrix).
+            - Could be parallelized with Step 2A/2C.
+
+        """       
         utils.print_update(level=print_level_base+1,
                            message=f"{__name__}| Preparing Cells' capacity...")
         
@@ -125,14 +183,20 @@ class RESources_builder(AttributesParser):
         
         return self.cells_with_cap_nt # returns a namedtuple with `data` and `matrix attributes
 
-    '''
-    ______________________
-    Step 1B: Collect weather data for Cells (e.g. windspeed, solar influx). 
-    * Note: Currently active for windspeed only due to significant contrast with high resolution data.
-    ______________________
-    
-    '''
     def extract_weather_data(self):
+        """Extracts weather data for the cells (e.g. windspeed, solar influx).
+        This method retrieves the ERA5 cutout and extracts windspeed data for the cells.
+        If the windspeed data is already present in the stored dataset, it skips the extraction from the source.
+        If the resource type is 'wind', it extracts the 'windspeed_ERA5' from the cutout and updates the cells GeoDataFrame.
+        If the resource type is 'solar', it currently does not support extraction from the Global Solar Atlas data.
+        Args:
+            None
+    
+        Returns:
+            None
+        Notes:
+            - Currently active for windspeed only due to significant contrast with high resolution data.
+        """
         
         utils.print_update(level=print_level_base+1,
                            message=f"{__name__}| Extracting ERA5 windspeed from cutout...")
@@ -185,41 +249,45 @@ class RESources_builder(AttributesParser):
             pass
         
         return self.store_grid_cells 
-    
-    #---------------------------
-    
-    '''
-    ______________________
-    Step 1C: 
-    - Extract timeseries information for the Cells' e.g. static CF (yearly mean) and timeseries (hourly). 
-    * Remarks:  Could be parallelized with Step 2B/2C
-    ______________________
-    '''
     def get_CF_timeseries(self,
                           cells:gpd.GeoDataFrame=None,
                           force_update=False)->tuple:
-        "returns cells geodataframe and timeseries dataframes"
+        """
+        Extract timeseries information for the Cells' e.g. static CF (yearly mean) and timeseries (hourly). 
         
+        Args:
+            cells (gpd.GeoDataFrame): Cells with their coordinates, geometry, and unique cell ids.
+            force_update (bool): If True, forces the update of the CF timeseries data.  
+        Returns:
+            tuple: A namedtuple containing the cells with their timeseries data.
+        Notes:
+            - The method uses the `Timeseries` class to retrieve the timeseries data for the cells.
+            - The timeseries data is retrieved based on the resource type (e.g., 'solar' or 'wind').
+            - If the `cells` argument is not provided, it retrieves the cells from the data handler.
+            - Could be parallelized with Step 2B/2C
+        """
         utils.print_update(level=print_level_base+3,
                            message=f"{__name__}| Preparing Timeseries for the Cells...")
         if cells is None:
             self.datahandler.refresh()
             cells=self.datahandler.from_store('cells')
-        
-        self.cells_with_ts_nt:tuple= self.timeseries.get_timeseries(cells=cells)
-        
-        return self.cells_with_ts_nt
-        
-    '''
-    ______________________
-    Step 1D: 
-    - Extract Substation information for the Cells e.g. Nearest Node Id and distance to the Node.
-    * Remarks:  Could be parallelized with Step 1B/C.
-    ______________________
-    '''
+        cells_withCF,cells_timeseries= self.timeseries.get_timeseries(cells=cells)
+        return cells_withCF,cells_timeseries
+
     def find_grid_nodes(self,
                         cells:gpd.GeoDataFrame=None,
                         use_pypsa_buses:bool=False):
+        """
+        Find the grid nodes for the given cells.                            
+
+        Args:
+            cells (gpd.GeoDataFrame, optional): Cells with their coordinates, geometry, and unique cell ids. Defaults to None.
+            use_pypsa_buses (bool, optional): Whether to use PyPSA buses as preferred nodes for resource connection. Defaults to False.
+        Returns:
+            _type_: _description_
+        Notes:
+            Could be parallelized with Step 1B/C.
+        """
 
         self.grid=GridNodeLocator(**self.required_args)
         
@@ -443,8 +511,7 @@ class RESources_builder(AttributesParser):
         self.get_CF_timeseries(cells=self.store_grid_cells)
         
         utils.print_banner("Step 5 : Find closed grid connection nodes")
-        self.find_grid_nodes(cells=self.cells_with_ts_nt.cells,
-                             use_pypsa_buses=use_pypsa_buses)
+        self.find_grid_nodes(use_pypsa_buses=use_pypsa_buses)
         
         utils.print_banner("Step 6 : Use capacity, energy yield and cost attributes to score each cell")
         self.score_cells(cells=self.region_grid_cells_cap_with_nodes)

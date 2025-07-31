@@ -205,24 +205,13 @@ class CellCapacityProcessor(LandContainer,
     ## 4 Trim the cells to sub-provincial boundaries instead of overlapping cell (boxes) in the regional boundaries.
         _provincial_cell_capacity_gdf=_provincial_cell_capacity_gdf.overlay(self.region_boundary)
         self.provincial_cells=utils.assign_cell_id(_provincial_cell_capacity_gdf)
-
-        ''' 
-        >>> here, self.provincial_cells = our default  grid cells
-        ## Future Scope, while we will have user defined grid cells 
-        
-        # self.store_grid_cells=self.datahandler.from_store('cells')
-        # Add new columns to the existing DataFrame
-        # for column in self._updated_provincial_cells_.columns:
-        #     self.store_grid_cells[column] = self._updated_provincial_cells_[column]
-        '''
-        
-        # era5_cell_capacity=utils.assign_cell_id(_provincial_cell_capacity_gdf,'Region',self.site_index)
-        # era5_cell_capacity=_provincial_cell_capacity_gdf
         
         # Define a namedtuple
-        capacity_data = namedtuple('capacity_data', ['data','matrix'])
+        # capacity_data = namedtuple('capacity_data', ['data','matrix'])
         
-        self.resources_nt=capacity_data(self.provincial_cells,capacity_matrix)
+        # self.resources_nt=capacity_data(self.provincial_cells,capacity_matrix)
+        cells_with_capacity = self.provincial_cells
+        
         utils.print_update(level=print_level_base+2,
                    message=f"{__name__}| ✓ Capacity dataframe cleaned and processed")
         
@@ -231,42 +220,54 @@ class CellCapacityProcessor(LandContainer,
        
         self.datahandler.to_store(self.provincial_cells,'cells')
      
-        return self.resources_nt
+        return cells_with_capacity,capacity_matrix
 
-## Visuals
-    def show_capacity_map(self):
-        
-        gdf=self.resources_nt.data
-        
-        m = gdf.explore(
-                    column=f'potential_capacity_{self.resource_type}',  # Use potential_capacity for marker size
-                    markersize=f'potential_capacity_{self.resource_type}',  # Adjust marker size based on capacity
-                    legend=True,
-                    tiles='CartoDB dark_matter',
-                    marker_type='circle',
-                    icon='power'
-                )
-        return m
-    
+## Visuals 
     def plot_ERAF5_grid_land_availability(self,
-                                          legend_box_x_y:tuple=(1.1, 1)):
-        
+                                          region_boundary:gpd.GeoDataFrame=None,
+                                          Availability_matrix:xr.DataArray=None,
+                                          figsize=(8, 6),
+                                          legend_box_x_y:tuple=(1.2, 1)):
         
         """
-            import matplotlib.pyplot as plt
-
-            fig, ax = plt.subplots()
-            RES_module.cell_processor.Availability_matrix.sel(Province='British Columbia').plot(ax=ax, cmap='Greens')
-            RES_module.cell_processor.boundary_region.plot(ax=ax, facecolor='none', edgecolor='black',linewidth=0.2)
-            plt.show()
-
+        Plots the land availability based on the ERA5 grid cells.
+        Args:
+            region_boundary (gpd.GeoDataFrame, optional): The region boundary to plot. If
+                not provided, the default region boundary will be used.
+            Availability_matrix (xr.DataArray, optional): The availability matrix to plot.
+                If not provided, the default Availability matrix will be used.
+            figsize (tuple, optional): The size of the figure to create. Defaults to (8, 6).
+            legend_box_x_y (tuple, optional): The position of the legend box in the plot.
+                Defaults to (1.2, 1).
+        Returns:
+            fig (matplotlib.figure.Figure): The figure object containing the plot.
         """
-        
-        region_boundary = self.region_boundary
+        if region_boundary is None:
+            utils.print_update(level=print_level_base+2,
+                               message=f"{__name__}| No region boundary provided, using the default region boundary.")
+            # Use the default region boundary if not provided   
+            region_boundary = self.region_boundary
+        else:
+            utils.print_update(level=print_level_base+2,
+                               message=f"{__name__}| Using provided region boundary for plotting.")
+        # Ensure the region boundary is in the correct CRS
+        if region_boundary.crs is None or region_boundary.crs.to_string() != 'EPSG:4326'    :
+            utils.print_update(level=print_level_base+2,
+                               message=f"{__name__}| Region boundary CRS is None, setting to EPSG:4326.")
+            region_boundary = region_boundary.set_crs('EPSG:4326')
         
         # Load availability data
-        _AM_=self.Availability_matrix
-        A_df=_AM_.to_dataframe(name="availability").reset_index()
+        if Availability_matrix is None:
+            utils.print_update(level=print_level_base+2,
+                               message=f"{__name__}| No Availability matrix provided, using the default Availability matrix.")
+            # Use the default Availability matrix if not provided
+            Availability_matrix:xr.DataArray = self.Availability_matrix
+        else:
+            utils.print_update(level=print_level_base+2,
+                               message=f"{__name__}| Using provided Availability matrix for plotting.")
+            Availability_matrix:xr.DataArray = Availability_matrix
+            
+        Availability_df=Availability_matrix.to_dataframe(name="availability").reset_index()
         
         # Define bins and labels
         bins = [x / 100 for x in [0, 10, 30, 60, 90, 100]]  # Define bin edges
@@ -274,12 +275,12 @@ class CellCapacityProcessor(LandContainer,
         
         
         # Categorize availability into bins
-        A_df["availability_category"] = pd.cut(A_df["availability"], bins=bins, labels=labels, include_lowest=True)
-        
+        Availability_df["availability_category"] = pd.cut(Availability_df["availability"], bins=bins, labels=labels, include_lowest=True)
+
         # Convert to GeoDataFrame
         A_gdf:gpd.GeoDataFrame = gpd.GeoDataFrame(
-                    A_df,
-                    geometry=[self.__create_cell_geom__(x, y) for x, y in zip(A_df['x'], A_df['y'])],
+                    Availability_df,
+                    geometry=[self.__create_cell_geom__(x, y) for x, y in zip(Availability_df['x'], Availability_df['y'])],
                     crs='EPSG:4326'
                 )
                 
@@ -288,7 +289,7 @@ class CellCapacityProcessor(LandContainer,
         # Categorize availability into bins
         A_gdf["availability_category"] = pd.cut(A_gdf["availability"], bins=bins, labels=labels, include_lowest=True)
         # Create figure and axes for side-by-side plotting
-        fig, ax = plt.subplots(figsize=(8, 6),constrained_layout=True)
+        fig, ax = plt.subplots(figsize=figsize,constrained_layout=True)
 
         # Set axis off for both subplots
         ax.set_axis_off()
@@ -312,21 +313,21 @@ class CellCapacityProcessor(LandContainer,
         # Plot actual boundary for solar map
         region_boundary.plot(ax=ax, facecolor='none', edgecolor='black', linewidth=0.2, alpha=0.9)
         plt.subplots_adjust(right=0.85)  # Increase space on the right
-        ax.set_title(f"Land Availability in ERA5 Grid Cells ({self.region_name})", fontsize=16)
+        ax.set_title(f"Land Availability for {self.resource_type} resources ({self.region_name})", fontsize=14)
         # Adjust layout for cleaner appearance
         plt.tight_layout()
-        plt.savefig(f'vis/misc/land_availability_ERA5grid_{self.region_name}.png',dpi=300)
-        utils.print_update(level=print_level_base+3,message=f"{__name__}|Land availability (grid cells) map saved at vis/misc/land_availability_ERA5grid_{self.region_name}.png")
+        plt.savefig(f'vis/{self.region_short_code}/lands/land_availability_ERA5grid_{self.region_short_code}_{self.resource_type}.png',dpi=300)
+        utils.print_update(level=print_level_base+3,message=f"{__name__}|Land availability (grid cells) map saved at vis/{self.region_short_code}/lands/land_availability_ERA5grid_{self.region_short_code}.png")
         return fig
-        # plt.close(fig)  # Close the figure to free up memory
 
     def plot_excluder_land_availability(self,
-                                        excluder=None):
+                                        excluder:ExclusionContainer=None):
         """
-            fig, ax = plt.subplots()
-            RES_module.cell_processor.excluder.plot_shape_availability(RES_module.cell_processor.region_shape, ax=ax)
-            RES_module.cell_processor.cutout.grid.to_crs(RES_module.cell_processor.excluder.crs).plot(edgecolor="grey", color="None", ax=ax, ls=":",linewidth=0.1)
-            ax.axis("off")
+        Plots the land availability based on the excluder resolution.
+        Args:
+            excluder (ExclusionContainer, optional): The excluder to use for plotting
+        Returns:
+            fig (matplotlib.figure.Figure): The figure object containing the plot
         """
         
         if excluder is None:
@@ -340,6 +341,3 @@ class CellCapacityProcessor(LandContainer,
         plt.savefig(f'vis/misc/land_availability_excluderResolution_{self.region_name}.png',dpi=300)
         utils.print_update(level=print_level_base+3,message=f"{__name__}|Land availability map (excluder resolution) saved at vis/misc/land_availability_excluderResolution_{self.region_name}.png")
         return fig
-    
-        
-        # plt.close(fig)  # Close the figure to free up memory
