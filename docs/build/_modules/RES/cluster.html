@@ -156,10 +156,12 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES API References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
@@ -288,6 +290,32 @@ document.write(`
                   
   <h1>Source code for RES.cluster</h1><div class="highlight"><pre>
 <span></span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Spatial clustering and site aggregation module for renewable energy resource assessment.</span>
+
+<span class="sd">This module provides functionality for clustering renewable energy sites based on</span>
+<span class="sd">spatial proximity, resource characteristics, and economic metrics. It implements</span>
+<span class="sd">k-means clustering with automatic cluster number optimization and provides tools</span>
+<span class="sd">for generating representative time series profiles for clustered sites.</span>
+
+<span class="sd">The clustering approach balances spatial coherence with resource similarity to create</span>
+<span class="sd">meaningful site groupings that maintain resource diversity while reducing computational</span>
+<span class="sd">complexity for downstream energy system modeling.</span>
+
+<span class="sd">Functions:</span>
+<span class="sd">    assign_cluster_id: Generate unique identifiers for grid cells</span>
+<span class="sd">    determine_elbow_optimal_clusters: Find optimal cluster count using elbow method</span>
+<span class="sd">    cluster_sites: Perform spatial clustering with economic weighting</span>
+<span class="sd">    get_representative_timeseries: Generate cluster-representative time series</span>
+<span class="sd">    visualize_clusters: Create cluster visualization plots</span>
+
+<span class="sd">Dependencies:</span>
+<span class="sd">    - scikit-learn: K-means clustering and preprocessing</span>
+<span class="sd">    - geopandas: Spatial data manipulation</span>
+<span class="sd">    - matplotlib: Cluster visualization</span>
+<span class="sd">    - numpy/pandas: Data processing and analysis</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
@@ -306,15 +334,58 @@ document.write(`
                   <span class="n">source_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;Region&#39;</span><span class="p">,</span> 
                   <span class="n">index_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;cell&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Assigns unique cell IDs to each region in the specified GeoDataFrame.</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">    cells (gpd.GeoDataFrame): Input GeoDataFrame containing spatial data with &#39;x&#39; and &#39;y&#39; coordinates.</span>
-<span class="sd">    source_column (str): Column name in the GeoDataFrame that contains regional names.</span>
-<span class="sd">    index_name (str): Name for the new index column to be created.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">    gpd.GeoDataFrame: GeoDataFrame with a new column of unique cell IDs for each region.</span>
+<span class="sd">    Generate unique identifiers for grid cells based on region and coordinates.</span>
+<span class="sd">    </span>
+<span class="sd">    Creates standardized cell identifiers that combine regional information</span>
+<span class="sd">    with spatial coordinates to ensure uniqueness across the entire assessment</span>
+<span class="sd">    domain. These identifiers serve as primary keys for data linking and</span>
+<span class="sd">    result tracking throughout the assessment workflow.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cells : gpd.GeoDataFrame</span>
+<span class="sd">        Input GeoDataFrame containing spatial data with &#39;x&#39;, &#39;y&#39; coordinates</span>
+<span class="sd">        and regional classification information</span>
+<span class="sd">    source_column : str, default &#39;Region&#39;</span>
+<span class="sd">        Column name containing regional classification (e.g., province, state)</span>
+<span class="sd">    index_name : str, default &#39;cell&#39;</span>
+<span class="sd">        Name for the new unique identifier column</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    gpd.GeoDataFrame</span>
+<span class="sd">        GeoDataFrame with new unique cell identifier column set as index</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Basic cell ID assignment:</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; cells_with_ids = assign_cluster_id(</span>
+<span class="sd">    ...     cells=grid_cells,</span>
+<span class="sd">    ...     source_column=&#39;Province&#39;,</span>
+<span class="sd">    ...     index_name=&#39;cell_id&#39;</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; print(cells_with_ids.index.name)  # &#39;cell_id&#39;</span>
+<span class="sd">    </span>
+<span class="sd">    Custom identifier format:</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; # Creates IDs like: &quot;BC_-123.5_49.2&quot;</span>
+<span class="sd">    &gt;&gt;&gt; cells = assign_cluster_id(cells, &#39;Province&#39;, &#39;unique_cell&#39;)</span>
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If source_column doesn&#39;t exist in the GeoDataFrame</span>
+<span class="sd">    ValueError  </span>
+<span class="sd">        If required coordinate columns &#39;x&#39;, &#39;y&#39; are missing</span>
+<span class="sd">        </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Removes spaces from region names for consistent formatting</span>
+<span class="sd">    - ID format: &quot;{region}_{x_coord}_{y_coord}&quot;</span>
+<span class="sd">    - Coordinates maintain original decimal precision</span>
+<span class="sd">    - Sets generated IDs as DataFrame index for efficient lookups</span>
+<span class="sd">    - Essential for linking spatial analysis results across workflow steps</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Ensure the source column exists</span>
     <span class="k">if</span> <span class="n">source_column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cells</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>

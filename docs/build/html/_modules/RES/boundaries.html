@@ -156,10 +156,10 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/environment_setup.html">Conda Environment Setup for RESource</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES API References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
@@ -306,12 +306,79 @@ document.write(`
 
 <span class="k">class</span> <span class="nc">GADMBoundaries</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A class to process GADM country files and extract specific regional boundaries at a given administrative level.</span>
+<span class="sd">    GADM (Global Administrative Areas) boundary processor for regional analysis.</span>
 <span class="sd">    </span>
-<span class="sd">    :Dependency for core data:</span>
-<span class="sd">        pygadm</span>
-<span class="sd">    :crs:</span>
-<span class="sd">        EPSG:4326</span>
+<span class="sd">    This class handles the retrieval, processing, and management of administrative</span>
+<span class="sd">    boundaries from the GADM dataset. It provides functionality to extract specific</span>
+<span class="sd">    regional boundaries at administrative level 2 (typically states/provinces/districts)</span>
+<span class="sd">    for renewable energy resource assessment areas.</span>
+<span class="sd">    </span>
+<span class="sd">    The class automatically downloads and caches GADM data, processes it into</span>
+<span class="sd">    standardized formats, and provides region-specific boundary extractions</span>
+<span class="sd">    that serve as the spatial basis for grid cell generation and analysis.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    config_file_path : str or Path</span>
+<span class="sd">        Path to configuration file containing GADM settings</span>
+<span class="sd">    region_short_code : str</span>
+<span class="sd">        Short code identifying the target region within the country</span>
+<span class="sd">    resource_type : str</span>
+<span class="sd">        Resource type (passed through from parent workflow)</span>
+<span class="sd">        </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    admin_level : int</span>
+<span class="sd">        GADM administrative level (fixed at 2 for regional districts)</span>
+<span class="sd">    gadm_root : Path</span>
+<span class="sd">        Root directory for GADM data storage</span>
+<span class="sd">    gadm_processed : Path</span>
+<span class="sd">        Directory for processed regional boundary files</span>
+<span class="sd">    crs : str</span>
+<span class="sd">        Coordinate reference system (&#39;EPSG:4326&#39;)</span>
+<span class="sd">    country : str</span>
+<span class="sd">        Country name extracted from configuration</span>
+<span class="sd">    region_file : Path</span>
+<span class="sd">        Path to processed regional boundary file</span>
+<span class="sd">    boundary_datafields : dict</span>
+<span class="sd">        Mapping of GADM fields to standardized field names</span>
+<span class="sd">        </span>
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    get_country_boundary(country=None, force_update=False)</span>
+<span class="sd">        Download and process complete country GADM boundaries</span>
+<span class="sd">    get_regional_boundary(force_update=False)</span>
+<span class="sd">        Extract and process specific regional boundary</span>
+<span class="sd">    create_bounding_box(geometry, buffer_degrees=0.1)</span>
+<span class="sd">        Generate bounding box for spatial extent calculations</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Extract British Columbia boundaries:</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; from RES.boundaries import GADMBoundaries</span>
+<span class="sd">    &gt;&gt;&gt; boundaries = GADMBoundaries(</span>
+<span class="sd">    ...     config_file_path=&quot;config/config_BC.yaml&quot;,</span>
+<span class="sd">    ...     region_short_code=&quot;BC&quot;,</span>
+<span class="sd">    ...     resource_type=&quot;wind&quot;</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; bc_boundary = boundaries.get_regional_boundary()</span>
+<span class="sd">    &gt;&gt;&gt; country_bounds = boundaries.get_country_boundary(&quot;Canada&quot;)</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Uses pygadm package for GADM data access and download</span>
+<span class="sd">    - Automatically handles data caching to avoid repeated downloads</span>
+<span class="sd">    - Processes boundaries into GeoJSON format for efficient storage</span>
+<span class="sd">    - Standardizes field names for consistent downstream processing</span>
+<span class="sd">    - Administrative level 2 chosen to balance spatial resolution with data availability</span>
+<span class="sd">    - All geometries maintained in WGS84 (EPSG:4326) for global compatibility</span>
+<span class="sd">    </span>
+<span class="sd">    Dependencies</span>
+<span class="sd">    ------------</span>
+<span class="sd">    - pygadm: GADM data access and processing</span>
+<span class="sd">    - geopandas: Spatial data manipulation</span>
+<span class="sd">    - shapely: Geometric operations</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

@@ -36,56 +36,104 @@ print_level_base=1
 
 class RESources_builder(AttributesParser):  
     """
-    RESources_builder is a class that builds the resources for a given region and resource type (solar or wind).
-    It initializes various components such as grid cells, timeseries, data handler, cell capacity processor, coders data, ERA5 cutout, and cell scorer.
-    
-    Attributes:
-        config_file_path (str): Path to the configuration file.
-        region_short_code (str): Short code for the region.
-        resource_type (str): Type of resource ('solar' or 'wind').
-        store (Path): Path to the storage directory.
-        units (Units): Instance of Units class for handling units.
-        gridcells (GridCells): Instance of GridCells class for handling grid cells.
-        timeseries (Timeseries): Instance of Timeseries class for handling timeseries data.
-        datahandler (DataHandler): Instance of DataHandler class for managing data storage and retrieval.
-        cell_processor (CellCapacityProcessor): Instance of CellCapacityProcessor class for processing cell capacity.
-        coders (CODERSData): Instance of CODERSData class for handling CODERS data.
-        era5_cutout (ERA5Cutout): Instance of ERA5Cutout class for handling ERA5 cutouts.
-        scorer (CellScorer): Instance of CellScorer class for scoring cells.
-        gwa_cells (GWACells): Instance of GWACells class for handling Global Wind Atlas cells.
-        results_save_to (Path): Path to save the results.
-        region_name (str): Name of the region.
+    Main orchestrator class for renewable energy resource assessment workflows.
+
+    __RESources_builder__ coordinates the complete workflow for assessing solar and wind potential at sub-national scales. It integrates spatial grid cell preparation, land availability analysis, weather data processing, economic evaluation, and site clustering into a unified framework.
+
+    This class implements a modular architecture where each assessment step is handled by specialized components, enabling reproducible, scalable, and transparent renewable energy assessments.
+
+    Parameters
+    ----------
+    config_file_path : str or Path
+        Path to the YAML configuration file containing project settings
+    region_short_code : str
+        ISO or custom short code for the target region (e.g., 'BC' for British Columbia)
+    resource_type : {'solar', 'wind'}
+        Type of renewable energy resource to assess
         
-    Methods:
-        __post_init__(): Initializes the RESources_builder instance and its components.
-        get_grid_cells(): Retrieves the default grid cells for the region.
-        get_cell_capacity(force_update=False): Retrieves the potential capacity of the cells based on land availability and land-use intensity.
-        extract_weather_data(): Extracts weather data for the cells (e.g. windspeed, solar influx).
-        update_gwa_scaled_params(memory_resource_limitation=False): Updates Global Wind Atlas scaled parameters for wind resources.
-        get_CF_timeseries(cells=None, force_update=False): Extracts timeseries information for the Cells' e.g. static CF (yearly mean) and timeseries (hourly).
-        find_grid_nodes(cells=None, use_pypsa_buses=False): Finds the grid nodes for the given cells.
-        score_cells(cells=None): Scores the Cells based on calculated LCOE ($/MWh).
-        get_clusters(scored_cells=None, wcss_tolerance=0.05): Gets clusters of resources based on scored cells.
-        get_cluster_timeseries(clusters=None, dissolved_indices=None, cells_timeseries=None): Gets representative timeseries of the clusterized sites.
-        build(select_top_sites=True, use_pypsa_buses=True, memory_resource_limitation=True): Executes the specific module logic for the given resource type ('solar' or 'wind').
-        export_results(resource_type, resource_clusters, cluster_timeseries, save_to=Path('results')): Exports processed resource cluster results to standard datafield csvs as input for downstream models.
-        create_summary_info(resource_type, sites, timeseries): Creates summary information to be exported alongside results data.
-        dump_export_metadata(info: str, save_to: Optional[Path] = 'results/linking'): Dumps the metadata summary information to a file.
-        select_top_sites(sites:Union[gpd.GeoDataFrame,gpd.GeoSeries],timeseries:pd.DataFrame,resource_max_capacity=10)->tuple: Selects top sites based on resource capacity and returns a namedtuple with selected sites and their timeseries data.
-    Notes:
-        - The class is designed to handle both solar and wind resources.
-        - It uses various external classes to manage different aspects of the resource building process.
-        - The methods are designed to be modular and can be extended for future enhancements.
-        - The class inherits from AttributesParser to handle configuration and attributes parsing.
-        - The class is initialized with a configuration file path, region short code, and resource type.
-        - The __post_init__ method is called after the instance is created to initialize various components and load the snapshot of the resource data.
-        - The class provides methods to retrieve grid cells, calculate cell capacity, extract weather data, update Global Wind Atlas parameters, get CF timeseries, find grid nodes, score cells, get clusters, and get cluster timeseries.
-        - The build method orchestrates the entire process of building resources, including preparing grid cells, calculating land availability, extracting weather data, scoring cells, and selecting top sites.
-        - The export_results method exports the processed resource cluster results to standard datafield csvs for downstream models.
-        - The create_summary_info method generates a summary of the resource data, including total capacity and number of sites.
-        - The dump_export_metadata method saves the summary information to a file for future reference.
-        - The select_top_sites method selects the top sites based on potential capacity and returns a namedtuple with selected sites and their timeseries data.
-    ____________________________________________________________________________________________________________________________________________
+    Attributes
+    ----------
+    store : Path
+        Root directory for data storage (HDF5 file) and caching.
+    units : Units
+        Handler for unit conversions and standardization
+    gridcells : GridCells
+        Spatial grid generation and management
+    timeseries : Timeseries
+        Climate data processing and capacity factor calculations
+    datahandler : DataHandler
+        HDF5-based data storage and retrieval interface
+    cell_processor : CellCapacityProcessor
+        Land availability and capacity potential calculations
+    coders : CODERSData
+        Canadian power system data integration (substations, transmission lines).
+    era5_cutout : ERA5Cutout
+        ERA5 climate data cutout management
+    scorer : CellScorer
+        Economic scoring and LCOE calculations
+    gwa_cells : GWACells
+        Global Wind Atlas data integration (wind resources only)
+    results_save_to : Path
+        Output directory for assessment results
+    region_name : str
+        Full name of the assessed region
+        
+    Methods
+    -------
+    get_grid_cells()
+        Generate spatial grid cells covering the region boundary
+    get_cell_capacity(force_update=False)
+        Calculate potential capacity based on land availability constraints
+    extract_weather_data()
+        Process climate data for capacity factor calculations
+    update_gwa_scaled_params(memory_resource_limitation=False)
+        Integrate Global Wind Atlas wind speed corrections (wind only)
+    get_CF_timeseries(cells=None, force_update=False)
+        Generate hourly capacity factor time series
+    find_grid_nodes(cells=None, use_pypsa_buses=False)
+        Identify nearest electrical grid connection points
+    score_cells(cells=None)
+        Calculate economic scores based on LCOE methodology
+    get_clusters(scored_cells=None, wcss_tolerance=0.05)
+        Perform spatial clustering of viable sites
+    get_cluster_timeseries(clusters=None, dissolved_indices=None, cells_timeseries=None)
+        Generate representative time series for each cluster
+    build(select_top_sites=True, use_pypsa_buses=True, memory_resource_limitation=True)
+        Execute complete assessment workflow
+    export_results(resource_type, resource_clusters, cluster_timeseries, save_to=Path('results'))
+        Export results in standardized format for downstream models
+    select_top_sites(sites, timeseries, resource_max_capacity=10)
+        Filter results to highest-potential sites within capacity constraints
+        
+    Examples
+    --------
+    Basic wind assessment workflow:
+    
+    >>> from RES.RESources import RESources_builder
+    >>> builder = RESources_builder(
+    ...     config_file_path="config/config_BC.yaml",
+    ...     region_short_code="BC", 
+    ...     resource_type="wind"
+    ... )
+    >>> results = builder.build()
+    >>> builder.export_results(*results)
+    
+    Step-by-step workflow with intermediate inspection:
+    
+    >>> builder = RESources_builder("config/config.yaml", "AB", "solar")
+    >>> cells = builder.get_grid_cells()
+    >>> cells_with_capacity = builder.get_cell_capacity()
+    >>> scored_cells = builder.score_cells(cells_with_capacity)
+    >>> clusters = builder.get_clusters(scored_cells)
+    
+    Notes
+    -----
+    - Inherits configuration parsing capabilities from AttributesParser
+    - Uses HDF5 storage for efficient handling of large geospatial datasets
+    - Implements caching mechanisms to avoid redundant computations
+    - Supports both solar PV and onshore wind technologies
+    - Economic calculations follow NREL LCOE methodology
+    - Clustering uses k-means with automatic cluster number optimization
     """
     def __post_init__(self):
         # Call the parent class __post_init__ to initialize inherited attributes

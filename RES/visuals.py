@@ -1,3 +1,32 @@
+"""
+Visualization and plotting utilities for renewable energy resource assessment.
+
+This module provides comprehensive visualization tools for displaying renewable energy
+assessment results including spatial maps, time series plots, capacity distributions,
+economic analysis charts, and interactive dashboards. It supports both static 
+publication-quality figures and interactive web-based visualizations.
+
+The visualization tools are designed to facilitate analysis interpretation, result
+communication, and workflow debugging through clear, informative graphics that
+highlight spatial patterns, temporal variations, and economic trade-offs in
+renewable energy development potential.
+
+Key Functions:
+    - Spatial mapping: Choropleth maps of resource potential and constraints
+    - Time series visualization: Capacity factor profiles and seasonal patterns  
+    - Economic analysis: LCOE distributions and cost component breakdowns
+    - Cluster visualization: Site groupings and representative characteristics
+    - Interactive dashboards: Web-based exploration interfaces
+    - Export utilities: High-resolution figure generation for publications
+
+Dependencies:
+    - matplotlib/seaborn: Static plotting and publication graphics
+    - plotly: Interactive visualizations and dashboards  
+    - folium: Web-based interactive maps
+    - geopandas: Spatial data visualization
+    - xarray: Multi-dimensional data plotting
+"""
+
 import os
 from pathlib import Path
 import folium
@@ -27,6 +56,30 @@ import RES.lands as lands
 from atlite import ExclusionContainer
 
 def size_for_legend(mw):
+    """
+    Calculate bubble size for capacity-based map legends.
+    
+    Converts megawatt capacity values to appropriate bubble sizes for
+    proportional symbol maps, ensuring visual clarity and proper scaling
+    across different capacity ranges.
+    
+    Parameters
+    ----------
+    mw : float
+        Capacity value in megawatts
+        
+    Returns
+    -------
+    float
+        Scaled bubble size for mapping visualization
+        
+    Examples
+    --------
+    >>> size_for_legend(100)  # 100 MW site
+    50.0
+    >>> size_for_legend(500)  # 500 MW site  
+    150.0
+    """
     """Calculate the size of the bubble for the legend based on megawatts (MW).
     Args:
         mw (float): The megawatt value to convert to bubble size.

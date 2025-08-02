@@ -1,9 +1,26 @@
-# Script for Utility Functions for all modules
+"""
+Utility functions and helper methods for RESource renewable energy assessment framework.
 
-# Prepared by : Md Eliasinul Islam
-# Affiliation : Delta E+ lab, Simon Fraser University
-# Version : 1.0
-# Dev_year : 2024-2025
+This module provides common functionality used across the RESource workflow including
+configuration management, data I/O operations, coordinate transformations, logging
+utilities, and validation functions. It serves as a central repository for shared
+code that supports the modular architecture of the assessment framework.
+
+Key Functions:
+    - Configuration parsing and validation
+    - File I/O operations (YAML, JSON, pickle, geospatial formats)
+    - Coordinate system transformations and spatial utilities
+    - Logging and progress reporting with hierarchical message levels
+    - Data validation and error handling
+    - URL downloading and caching mechanisms
+    - String formatting and output styling
+
+Author: Md Eliasinul Islam
+Affiliation: Delta E+ lab, Simon Fraser University  
+Version: 1.0
+Development Year: 2024-2025
+"""
+
 import yaml
 import os
 import requests

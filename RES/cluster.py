@@ -1,4 +1,30 @@
 
+"""
+Spatial clustering and site aggregation module for renewable energy resource assessment.
+
+This module provides functionality for clustering renewable energy sites based on
+spatial proximity, resource characteristics, and economic metrics. It implements
+k-means clustering with automatic cluster number optimization and provides tools
+for generating representative time series profiles for clustered sites.
+
+The clustering approach balances spatial coherence with resource similarity to create
+meaningful site groupings that maintain resource diversity while reducing computational
+complexity for downstream energy system modeling.
+
+Functions:
+    assign_cluster_id: Generate unique identifiers for grid cells
+    determine_elbow_optimal_clusters: Find optimal cluster count using elbow method
+    cluster_sites: Perform spatial clustering with economic weighting
+    get_representative_timeseries: Generate cluster-representative time series
+    visualize_clusters: Create cluster visualization plots
+
+Dependencies:
+    - scikit-learn: K-means clustering and preprocessing
+    - geopandas: Spatial data manipulation
+    - matplotlib: Cluster visualization
+    - numpy/pandas: Data processing and analysis
+"""
+
 import pandas as pd
 from sklearn.cluster import KMeans
 import geopandas as gpd
@@ -15,15 +41,58 @@ def assign_cluster_id(cells: gpd.GeoDataFrame,
                   source_column: str = 'Region', 
                   index_name: str = 'cell') -> gpd.GeoDataFrame:
     """
-    Assigns unique cell IDs to each region in the specified GeoDataFrame.
-
-    Parameters:
-    cells (gpd.GeoDataFrame): Input GeoDataFrame containing spatial data with 'x' and 'y' coordinates.
-    source_column (str): Column name in the GeoDataFrame that contains regional names.
-    index_name (str): Name for the new index column to be created.
-
-    Returns:
-    gpd.GeoDataFrame: GeoDataFrame with a new column of unique cell IDs for each region.
+    Generate unique identifiers for grid cells based on region and coordinates.
+    
+    Creates standardized cell identifiers that combine regional information
+    with spatial coordinates to ensure uniqueness across the entire assessment
+    domain. These identifiers serve as primary keys for data linking and
+    result tracking throughout the assessment workflow.
+    
+    Parameters
+    ----------
+    cells : gpd.GeoDataFrame
+        Input GeoDataFrame containing spatial data with 'x', 'y' coordinates
+        and regional classification information
+    source_column : str, default 'Region'
+        Column name containing regional classification (e.g., province, state)
+    index_name : str, default 'cell'
+        Name for the new unique identifier column
+        
+    Returns
+    -------
+    gpd.GeoDataFrame
+        GeoDataFrame with new unique cell identifier column set as index
+        
+    Examples
+    --------
+    Basic cell ID assignment:
+    
+    >>> cells_with_ids = assign_cluster_id(
+    ...     cells=grid_cells,
+    ...     source_column='Province',
+    ...     index_name='cell_id'
+    ... )
+    >>> print(cells_with_ids.index.name)  # 'cell_id'
+    
+    Custom identifier format:
+    
+    >>> # Creates IDs like: "BC_-123.5_49.2"
+    >>> cells = assign_cluster_id(cells, 'Province', 'unique_cell')
+    
+    Raises
+    ------
+    ValueError
+        If source_column doesn't exist in the GeoDataFrame
+    ValueError  
+        If required coordinate columns 'x', 'y' are missing
+        
+    Notes
+    -----
+    - Removes spaces from region names for consistent formatting
+    - ID format: "{region}_{x_coord}_{y_coord}"
+    - Coordinates maintain original decimal precision
+    - Sets generated IDs as DataFrame index for efficient lookups
+    - Essential for linking spatial analysis results across workflow steps
     """
     # Ensure the source column exists
     if source_column not in cells.columns:

@@ -156,10 +156,12 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES API References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
@@ -299,6 +301,92 @@ document.write(`
 <div class="viewcode-block" id="GridCells">
 <a class="viewcode-back" href="../../notes/api.html#RES.cell.GridCells">[docs]</a>
 <span class="k">class</span> <span class="nc">GridCells</span><span class="p">(</span><span class="n">ERA5Cutout</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Spatial grid cell generator for renewable energy resource assessment.</span>
+<span class="sd">    </span>
+<span class="sd">    This class creates a regular spatial grid covering a specified region for </span>
+<span class="sd">    discretized renewable energy potential analysis. It inherits from ERA5Cutout</span>
+<span class="sd">    to maintain consistency with climate data spatial resolution and coordinate systems.</span>
+<span class="sd">    </span>
+<span class="sd">    Grid cells serve as the fundamental spatial units for capacity calculations,</span>
+<span class="sd">    land availability analysis, and resource aggregation. Each cell represents</span>
+<span class="sd">    a homogeneous area with uniform resource characteristics and constraints.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    config_file_path : str or Path</span>
+<span class="sd">        Path to configuration file containing grid settings</span>
+<span class="sd">    region_short_code : str</span>
+<span class="sd">        Region identifier for boundary definition</span>
+<span class="sd">    resource_type : str</span>
+<span class="sd">        Resource type (&#39;solar&#39; or &#39;wind&#39;)</span>
+<span class="sd">        </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    datahandler : DataHandler</span>
+<span class="sd">        HDF5 data storage interface for grid persistence</span>
+<span class="sd">    crs : str</span>
+<span class="sd">        Coordinate reference system (&#39;EPSG:4326&#39;)</span>
+<span class="sd">    resolution : dict</span>
+<span class="sd">        Grid resolution with &#39;dx&#39; and &#39;dy&#39; keys (decimal degrees)</span>
+<span class="sd">    bounding_box : dict</span>
+<span class="sd">        Spatial extent with &#39;minx&#39;, &#39;maxx&#39;, &#39;miny&#39;, &#39;maxy&#39;</span>
+<span class="sd">    actual_boundary : GeoDataFrame</span>
+<span class="sd">        Precise regional boundary geometry</span>
+<span class="sd">    coords : dict</span>
+<span class="sd">        Grid coordinate arrays {&#39;x&#39;: array, &#39;y&#39;: array}</span>
+<span class="sd">    shape : tuple</span>
+<span class="sd">        Grid dimensions (rows, columns)</span>
+<span class="sd">        </span>
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    generate_coords()</span>
+<span class="sd">        Create coordinate arrays based on resolution and boundary</span>
+<span class="sd">    __get_grid__()</span>
+<span class="sd">        Generate complete grid with cell geometries</span>
+<span class="sd">    get_default_cells()</span>
+<span class="sd">        Create grid cells intersecting with regional boundary</span>
+<span class="sd">    apply_boundary_mask(cells)</span>
+<span class="sd">        Filter cells to those within regional boundary</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Generate grid for British Columbia wind assessment:</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; from RES.cell import GridCells</span>
+<span class="sd">    &gt;&gt;&gt; grid = GridCells(</span>
+<span class="sd">    ...     config_file_path=&quot;config/config_BC.yaml&quot;,</span>
+<span class="sd">    ...     region_short_code=&quot;BC&quot;,</span>
+<span class="sd">    ...     resource_type=&quot;wind&quot;</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; cells = grid.get_default_cells()</span>
+<span class="sd">    &gt;&gt;&gt; print(f&quot;Generated {len(cells)} grid cells&quot;)</span>
+<span class="sd">    </span>
+<span class="sd">    Custom resolution grid:</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; # Resolution defined in configuration file</span>
+<span class="sd">    &gt;&gt;&gt; # grid_cell_resolution:</span>
+<span class="sd">    &gt;&gt;&gt; #   dx: 0.25  # 0.25 degrees longitude</span>
+<span class="sd">    &gt;&gt;&gt; #   dy: 0.25  # 0.25 degrees latitude</span>
+<span class="sd">    &gt;&gt;&gt; cells = grid.get_default_cells()</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Default resolution matches ERA5 climate data (0.25° x 0.25°)</span>
+<span class="sd">    - Grid cells are represented as square polygons with centroid coordinates</span>
+<span class="sd">    - Inherits climate data cutout functionality from ERA5Cutout</span>
+<span class="sd">    - Uses HDF5 storage for efficient caching of large grid datasets</span>
+<span class="sd">    - Grid generation respects regional boundaries to avoid unnecessary cells</span>
+<span class="sd">    - Resolution warnings issued if finer than climate data resolution</span>
+<span class="sd">    - Coordinate system maintained as WGS84 for global compatibility</span>
+<span class="sd">    </span>
+<span class="sd">    Resolution Considerations</span>
+<span class="sd">    -------------------------</span>
+<span class="sd">    - Minimum recommended: 0.25° (matching ERA5 resolution)</span>
+<span class="sd">    - Finer resolutions require interpolation of climate data</span>
+<span class="sd">    - Coarser resolutions may miss local variations in resource quality</span>
+<span class="sd">    - Square cells assumed (dx = dy) for geometric consistency</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -354,6 +442,8 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_values</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_values</span><span class="p">))</span>  <span class="c1"># shape as (rows, columns)</span></div>
 
 
+<div class="viewcode-block" id="GridCells.__get_grid__">
+<a class="viewcode-back" href="../../notes/api.html#RES.cell.GridCells.__get_grid__">[docs]</a>
     <span class="k">def</span> <span class="nf">__get_grid__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Grid with coordinates and geometries.</span>
@@ -383,7 +473,8 @@ document.write(`
             <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="c1"># Return GeoDataFrame with centroids and grid cells</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box_grid</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box_grid</span></div>
+
     
 <div class="viewcode-block" id="GridCells.get_custom_grid">
 <a class="viewcode-back" href="../../notes/api.html#RES.cell.GridCells.get_custom_grid">[docs]</a>

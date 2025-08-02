@@ -8,6 +8,92 @@ from RES import utility as utils
 from RES.era5_cutout import ERA5Cutout
 
 class GridCells(ERA5Cutout):
+    """
+    Spatial grid cell generator for renewable energy resource assessment.
+    
+    This class creates a regular spatial grid covering a specified region for 
+    discretized renewable energy potential analysis. It inherits from ERA5Cutout
+    to maintain consistency with climate data spatial resolution and coordinate systems.
+    
+    Grid cells serve as the fundamental spatial units for capacity calculations,
+    land availability analysis, and resource aggregation. Each cell represents
+    a homogeneous area with uniform resource characteristics and constraints.
+    
+    Parameters
+    ----------
+    config_file_path : str or Path
+        Path to configuration file containing grid settings
+    region_short_code : str
+        Region identifier for boundary definition
+    resource_type : str
+        Resource type ('solar' or 'wind')
+        
+    Attributes
+    ----------
+    datahandler : DataHandler
+        HDF5 data storage interface for grid persistence
+    crs : str
+        Coordinate reference system ('EPSG:4326')
+    resolution : dict
+        Grid resolution with 'dx' and 'dy' keys (decimal degrees)
+    bounding_box : dict
+        Spatial extent with 'minx', 'maxx', 'miny', 'maxy'
+    actual_boundary : GeoDataFrame
+        Precise regional boundary geometry
+    coords : dict
+        Grid coordinate arrays {'x': array, 'y': array}
+    shape : tuple
+        Grid dimensions (rows, columns)
+        
+    Methods
+    -------
+    generate_coords()
+        Create coordinate arrays based on resolution and boundary
+    __get_grid__()
+        Generate complete grid with cell geometries
+    get_default_cells()
+        Create grid cells intersecting with regional boundary
+    apply_boundary_mask(cells)
+        Filter cells to those within regional boundary
+        
+    Examples
+    --------
+    Generate grid for British Columbia wind assessment:
+    
+    >>> from RES.cell import GridCells
+    >>> grid = GridCells(
+    ...     config_file_path="config/config_BC.yaml",
+    ...     region_short_code="BC",
+    ...     resource_type="wind"
+    ... )
+    >>> cells = grid.get_default_cells()
+    >>> print(f"Generated {len(cells)} grid cells")
+    
+    Custom resolution grid:
+    
+    >>> # Resolution defined in configuration file
+    >>> # grid_cell_resolution:
+    >>> #   dx: 0.25  # 0.25 degrees longitude
+    >>> #   dy: 0.25  # 0.25 degrees latitude
+    >>> cells = grid.get_default_cells()
+    
+    Notes
+    -----
+    - Default resolution matches ERA5 climate data (0.25° x 0.25°)
+    - Grid cells are represented as square polygons with centroid coordinates
+    - Inherits climate data cutout functionality from ERA5Cutout
+    - Uses HDF5 storage for efficient caching of large grid datasets
+    - Grid generation respects regional boundaries to avoid unnecessary cells
+    - Resolution warnings issued if finer than climate data resolution
+    - Coordinate system maintained as WGS84 for global compatibility
+    
+    Resolution Considerations
+    -------------------------
+    - Minimum recommended: 0.25° (matching ERA5 resolution)
+    - Finer resolutions require interpolation of climate data
+    - Coarser resolutions may miss local variations in resource quality
+    - Square cells assumed (dx = dy) for geometric consistency
+    """
     
     def __post_init__(self):
         """
