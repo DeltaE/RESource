@@ -6,6 +6,96 @@ print_level_base=2
 
 @dataclass
 class CellScorer(AttributesParser):
+    """
+    Economic evaluation and scoring system for renewable energy grid cells.
+    
+    This class implements Levelized Cost of Energy (LCOE) calculations to economically
+    rank and score potential renewable energy sites. It integrates capital costs,
+    operational expenses, grid connection costs, and capacity factors to provide
+    comprehensive economic metrics for site comparison and selection.
+    
+    The scoring methodology follows NREL LCOE documentation and incorporates
+    distance-based grid connection costs, technology-specific capital expenditures,
+    and site-specific capacity factors to generate comparable economic indicators
+    across different locations and technologies.
+    
+    Parameters
+    ----------
+    config_file_path : str or Path
+        Configuration file containing economic parameters and assumptions
+    region_short_code : str
+        Region identifier for localized cost parameters
+    resource_type : {'solar', 'wind'}
+        Technology type for appropriate cost parameter selection
+        
+    Attributes
+    ----------
+    Inherits configuration parsing capabilities from AttributesParser
+    
+    Methods
+    -------
+    get_CRF(r, N)
+        Calculate Capital Recovery Factor for annualized cost calculations
+    calculate_total_cost(distance_to_grid_km, grid_connection_cost_per_km, 
+                        tx_line_rebuild_cost, capex_tech, potential_capacity_mw)
+        Compute total project costs including CAPEX and grid connection
+    calculate_score(row, CF_column, CRF)
+        Generate LCOE score for individual grid cells
+    score_cells(cells_with_cf)
+        Apply economic scoring to entire dataset of grid cells
+    get_economic_rankings(scored_cells, top_percentile=10)
+        Rank and filter cells by economic attractiveness
+        
+    Examples
+    --------
+    Basic economic scoring workflow:
+    
+    >>> from RES.score import CellScorer  
+    >>> scorer = CellScorer(
+    ...     config_file_path="config/config_BC.yaml",
+    ...     region_short_code="BC",
+    ...     resource_type="wind"
+    ... )
+    >>> scored_cells = scorer.score_cells(cells_with_capacity_factors)
+    >>> top_sites = scorer.get_economic_rankings(scored_cells, top_percentile=15)
+    
+    Custom economic analysis:
+    
+    >>> # Calculate CRF for different financial scenarios
+    >>> crf_conservative = scorer.get_CRF(r=0.08, N=25)  # 8% discount, 25 year life
+    >>> crf_aggressive = scorer.get_CRF(r=0.06, N=30)    # 6% discount, 30 year life
+    >>> 
+    >>> # Apply scoring with custom parameters
+    >>> for idx, row in cells.iterrows():
+    ...     lcoe = scorer.calculate_score(row, 'CF_mean', crf_conservative)
+    
+    Notes
+    -----
+    LCOE Calculation Methodology:
+    - Follows NREL Simple LCOE calculation framework
+    - LCOE = (CAPEX × CRF + OPEX) / Annual Energy Production
+    - Includes distance-based grid connection costs
+    - Uses technology-specific cost parameters from configuration
+    
+    Cost Components:
+    - Technology CAPEX ($/MW installed capacity)
+    - Grid connection costs ($/km distance to transmission)
+    - Transmission line rebuild costs ($/km)
+    - Annual O&M expenses (% of CAPEX)
+    - Financial parameters (discount rate, project lifetime)
+    
+    Economic Parameters:
+    - Capital Recovery Factor (CRF) for cost annualization
+    - Technology-specific cost assumptions
+    - Regional cost multipliers and adjustments
+    - Grid connection distance penalties
+    
+    Limitations:
+    - Simplified LCOE model without detailed financial modeling
+    - Grid connection costs based on straight-line distances
+    - Does not account for economies of scale in large projects
+    - Static cost assumptions without temporal price variations
+    """
     
     def __post_init__(self):
         super().__post_init__()

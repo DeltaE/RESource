@@ -13,12 +13,79 @@ print_level_base=4
 
 class GADMBoundaries(AttributesParser):
     """
-    A class to process GADM country files and extract specific regional boundaries at a given administrative level.
+    GADM (Global Administrative Areas) boundary processor for regional analysis.
     
-    :Dependency for core data:
-        pygadm
-    :crs:
-        EPSG:4326
+    This class handles the retrieval, processing, and management of administrative
+    boundaries from the GADM dataset. It provides functionality to extract specific
+    regional boundaries at administrative level 2 (typically states/provinces/districts)
+    for renewable energy resource assessment areas.
+    
+    The class automatically downloads and caches GADM data, processes it into
+    standardized formats, and provides region-specific boundary extractions
+    that serve as the spatial basis for grid cell generation and analysis.
+    
+    Parameters
+    ----------
+    config_file_path : str or Path
+        Path to configuration file containing GADM settings
+    region_short_code : str
+        Short code identifying the target region within the country
+    resource_type : str
+        Resource type (passed through from parent workflow)
+        
+    Attributes
+    ----------
+    admin_level : int
+        GADM administrative level (fixed at 2 for regional districts)
+    gadm_root : Path
+        Root directory for GADM data storage
+    gadm_processed : Path
+        Directory for processed regional boundary files
+    crs : str
+        Coordinate reference system ('EPSG:4326')
+    country : str
+        Country name extracted from configuration
+    region_file : Path
+        Path to processed regional boundary file
+    boundary_datafields : dict
+        Mapping of GADM fields to standardized field names
+        
+    Methods
+    -------
+    get_country_boundary(country=None, force_update=False)
+        Download and process complete country GADM boundaries
+    get_regional_boundary(force_update=False)
+        Extract and process specific regional boundary
+    create_bounding_box(geometry, buffer_degrees=0.1)
+        Generate bounding box for spatial extent calculations
+        
+    Examples
+    --------
+    Extract British Columbia boundaries:
+    
+    >>> from RES.boundaries import GADMBoundaries
+    >>> boundaries = GADMBoundaries(
+    ...     config_file_path="config/config_BC.yaml",
+    ...     region_short_code="BC",
+    ...     resource_type="wind"
+    ... )
+    >>> bc_boundary = boundaries.get_regional_boundary()
+    >>> country_bounds = boundaries.get_country_boundary("Canada")
+    
+    Notes
+    -----
+    - Uses pygadm package for GADM data access and download
+    - Automatically handles data caching to avoid repeated downloads
+    - Processes boundaries into GeoJSON format for efficient storage
+    - Standardizes field names for consistent downstream processing
+    - Administrative level 2 chosen to balance spatial resolution with data availability
+    - All geometries maintained in WGS84 (EPSG:4326) for global compatibility
+    
+    Dependencies
+    ------------
+    - pygadm: GADM data access and processing
+    - geopandas: Spatial data manipulation
+    - shapely: Geometric operations
     """
     
     def __post_init__(self):

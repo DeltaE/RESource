@@ -156,10 +156,12 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES API References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
@@ -297,6 +299,96 @@ document.write(`
 <a class="viewcode-back" href="../../notes/api.html#RES.score.CellScorer">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">CellScorer</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Economic evaluation and scoring system for renewable energy grid cells.</span>
+<span class="sd">    </span>
+<span class="sd">    This class implements Levelized Cost of Energy (LCOE) calculations to economically</span>
+<span class="sd">    rank and score potential renewable energy sites. It integrates capital costs,</span>
+<span class="sd">    operational expenses, grid connection costs, and capacity factors to provide</span>
+<span class="sd">    comprehensive economic metrics for site comparison and selection.</span>
+<span class="sd">    </span>
+<span class="sd">    The scoring methodology follows NREL LCOE documentation and incorporates</span>
+<span class="sd">    distance-based grid connection costs, technology-specific capital expenditures,</span>
+<span class="sd">    and site-specific capacity factors to generate comparable economic indicators</span>
+<span class="sd">    across different locations and technologies.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    config_file_path : str or Path</span>
+<span class="sd">        Configuration file containing economic parameters and assumptions</span>
+<span class="sd">    region_short_code : str</span>
+<span class="sd">        Region identifier for localized cost parameters</span>
+<span class="sd">    resource_type : {&#39;solar&#39;, &#39;wind&#39;}</span>
+<span class="sd">        Technology type for appropriate cost parameter selection</span>
+<span class="sd">        </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Inherits configuration parsing capabilities from AttributesParser</span>
+<span class="sd">    </span>
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    get_CRF(r, N)</span>
+<span class="sd">        Calculate Capital Recovery Factor for annualized cost calculations</span>
+<span class="sd">    calculate_total_cost(distance_to_grid_km, grid_connection_cost_per_km, </span>
+<span class="sd">                        tx_line_rebuild_cost, capex_tech, potential_capacity_mw)</span>
+<span class="sd">        Compute total project costs including CAPEX and grid connection</span>
+<span class="sd">    calculate_score(row, CF_column, CRF)</span>
+<span class="sd">        Generate LCOE score for individual grid cells</span>
+<span class="sd">    score_cells(cells_with_cf)</span>
+<span class="sd">        Apply economic scoring to entire dataset of grid cells</span>
+<span class="sd">    get_economic_rankings(scored_cells, top_percentile=10)</span>
+<span class="sd">        Rank and filter cells by economic attractiveness</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Basic economic scoring workflow:</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; from RES.score import CellScorer  </span>
+<span class="sd">    &gt;&gt;&gt; scorer = CellScorer(</span>
+<span class="sd">    ...     config_file_path=&quot;config/config_BC.yaml&quot;,</span>
+<span class="sd">    ...     region_short_code=&quot;BC&quot;,</span>
+<span class="sd">    ...     resource_type=&quot;wind&quot;</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; scored_cells = scorer.score_cells(cells_with_capacity_factors)</span>
+<span class="sd">    &gt;&gt;&gt; top_sites = scorer.get_economic_rankings(scored_cells, top_percentile=15)</span>
+<span class="sd">    </span>
+<span class="sd">    Custom economic analysis:</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; # Calculate CRF for different financial scenarios</span>
+<span class="sd">    &gt;&gt;&gt; crf_conservative = scorer.get_CRF(r=0.08, N=25)  # 8% discount, 25 year life</span>
+<span class="sd">    &gt;&gt;&gt; crf_aggressive = scorer.get_CRF(r=0.06, N=30)    # 6% discount, 30 year life</span>
+<span class="sd">    &gt;&gt;&gt; </span>
+<span class="sd">    &gt;&gt;&gt; # Apply scoring with custom parameters</span>
+<span class="sd">    &gt;&gt;&gt; for idx, row in cells.iterrows():</span>
+<span class="sd">    ...     lcoe = scorer.calculate_score(row, &#39;CF_mean&#39;, crf_conservative)</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    LCOE Calculation Methodology:</span>
+<span class="sd">    - Follows NREL Simple LCOE calculation framework</span>
+<span class="sd">    - LCOE = (CAPEX × CRF + OPEX) / Annual Energy Production</span>
+<span class="sd">    - Includes distance-based grid connection costs</span>
+<span class="sd">    - Uses technology-specific cost parameters from configuration</span>
+<span class="sd">    </span>
+<span class="sd">    Cost Components:</span>
+<span class="sd">    - Technology CAPEX ($/MW installed capacity)</span>
+<span class="sd">    - Grid connection costs ($/km distance to transmission)</span>
+<span class="sd">    - Transmission line rebuild costs ($/km)</span>
+<span class="sd">    - Annual O&amp;M expenses (% of CAPEX)</span>
+<span class="sd">    - Financial parameters (discount rate, project lifetime)</span>
+<span class="sd">    </span>
+<span class="sd">    Economic Parameters:</span>
+<span class="sd">    - Capital Recovery Factor (CRF) for cost annualization</span>
+<span class="sd">    - Technology-specific cost assumptions</span>
+<span class="sd">    - Regional cost multipliers and adjustments</span>
+<span class="sd">    - Grid connection distance penalties</span>
+<span class="sd">    </span>
+<span class="sd">    Limitations:</span>
+<span class="sd">    - Simplified LCOE model without detailed financial modeling</span>
+<span class="sd">    - Grid connection costs based on straight-line distances</span>
+<span class="sd">    - Does not account for economies of scale in large projects</span>
+<span class="sd">    - Static cost assumptions without temporal price variations</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__post_init__</span><span class="p">()</span>

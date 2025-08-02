@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>RES APIs &#8212; RESource 2025.07 documentation</title>
+    <title>RES API References &#8212; RESource 2025.07 documentation</title>
   
   
   
@@ -45,7 +45,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Data Sources and Supply Chain" href="data.html" />
-    <link rel="prev" title="Conda Environment Setup for RESource" href="environment_setup.html" />
+    <link rel="prev" title="RESource Builder Module" href="resource_builder.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="Python"/>
   </head>
@@ -157,10 +157,10 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="environment_setup.html">Conda Environment Setup for RESource</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">RES APIs</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">RES API References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
@@ -325,7 +325,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>RES APIs</h1>
+    <h1>RES API References</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -335,25 +335,29 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resource-builder">RESource Builder</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#annual-technology-baseline-atb">Annual Technology Baseline (ATB)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#administrative-boundaries">Administrative Boundaries</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spatial-grid-cell-processor">Spatial Grid Cell Processor</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.cell.GridCells"><code class="docutils literal notranslate"><span class="pre">GridCells</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.cell.GridCells.generate_coords"><code class="docutils literal notranslate"><span class="pre">GridCells.generate_coords()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.cell.GridCells.get_custom_grid"><code class="docutils literal notranslate"><span class="pre">GridCells.get_custom_grid()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.cell.GridCells.get_default_grid"><code class="docutils literal notranslate"><span class="pre">GridCells.get_default_grid()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-workflow-classes">Core Workflow Classes</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resource-builder">RESource Builder</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spatial-grid-management">Spatial Grid Management</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#administrative-boundaries">Administrative Boundaries</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#climate-data-processing">Climate Data Processing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#economic-evaluation">Economic Evaluation</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor.get_capacity"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor.get_capacity()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor.load_cost"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor.load_cost()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor.plot_ERAF5_grid_land_availability"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor.plot_ERAF5_grid_land_availability()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor.plot_excluder_land_availability"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor.plot_excluder_land_availability()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specialized-modules">Specialized Modules</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#annual-technology-baseline-atb">Annual Technology Baseline (ATB)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustering-and-aggregation">Clustering and Aggregation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-tools">Visualization Tools</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#utility-functions">Utility Functions</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-management">Configuration Management</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-storage">Data Storage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-assessment-workflow">Basic Assessment Workflow</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-by-step-analysis">Step-by-Step Analysis</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notes">Notes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#global-land-cover">Global Land Cover</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#global-wind-atlas">Global Wind Atlas</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization">Visualization</a></li>
@@ -389,18 +393,1477 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="res-apis">
-<h1>RES APIs<a class="headerlink" href="#res-apis" title="Link to this heading">#</a></h1>
+  <section id="res-api-references">
+<h1>RES API References<a class="headerlink" href="#res-api-references" title="Link to this heading">#</a></h1>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This page is under heavy development</p>
+<p>This page is under heavy development - Additional modules and methods will be documented as the API stabilizes.</p>
+</div>
+<p>RESource provides a comprehensive API for variable renewable energy (VRE) resource assessment through a modular architecture. This reference documents the main classes and methods available for building custom assessment workflows.</p>
+<section id="core-workflow-classes">
+<h2>Core Workflow Classes<a class="headerlink" href="#core-workflow-classes" title="Link to this heading">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Class documentation shows only docstrings without individual method details for cleaner overview. Individual methods are not displayed (<code class="docutils literal notranslate"><span class="pre">:members:</span></code> directive omitted).</p>
 </div>
 <section id="resource-builder">
-<h2>RESource Builder<a class="headerlink" href="#resource-builder" title="Link to this heading">#</a></h2>
-<p><strong>Main class for the RESource framework providing renewable energy resource assessment capabilities.</strong></p>
+<h3>RESource Builder<a class="headerlink" href="#resource-builder" title="Link to this heading">#</a></h3>
+<p><strong>Main orchestrator class for renewable energy resource assessments.</strong></p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.RESources.</span></span><span class="sig-name descname"><span class="pre">RESources_builder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'config/config.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_short_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'BC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'None'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AttributesParser</span></code></p>
+<p>Main orchestrator class for renewable energy resource assessment workflows.</p>
+<p>__RESources_builder__ coordinates the complete workflow for assessing solar and wind potential at sub-national scales. It integrates spatial grid cell preparation, land availability analysis, weather data processing, economic evaluation, and site clustering into a unified framework.</p>
+<p>This class implements a modular architecture where each assessment step is handled by specialized components, enabling reproducible, scalable, and transparent renewable energy assessments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config_file_path</strong> (<em>str</em><em> or </em><em>Path</em>) -- Path to the YAML configuration file containing project settings</p></li>
+<li><p><strong>region_short_code</strong> (<em>str</em>) -- ISO or custom short code for the target region (e.g., 'BC' for British Columbia)</p></li>
+<li><p><strong>resource_type</strong> (<em>{'solar'</em><em>, </em><em>'wind'}</em>) -- Type of renewable energy resource to assess</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">store</span></span></dt>
+<dd><p>Root directory for data storage (HDF5 file) and caching.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">units</span></span></dt>
+<dd><p>Handler for unit conversions and standardization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#RES.units.Units" title="RES.units.Units">Units</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gridcells</span></span></dt>
+<dd><p>Spatial grid generation and management</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>GridCells</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">timeseries</span></span></dt>
+<dd><p>Climate data processing and capacity factor calculations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Timeseries</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">datahandler</span></span></dt>
+<dd><p>HDF5-based data storage and retrieval interface</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataHandler</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">cell_processor</span></span></dt>
+<dd><p>Land availability and capacity potential calculations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>CellCapacityProcessor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">coders</span></span></dt>
+<dd><p>Canadian power system data integration (substations, transmission lines).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>CODERSData</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">era5_cutout</span></span></dt>
+<dd><p>ERA5 climate data cutout management</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ERA5Cutout</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">scorer</span></span></dt>
+<dd><p>Economic scoring and LCOE calculations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>CellScorer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gwa_cells</span></span></dt>
+<dd><p>Global Wind Atlas data integration (wind resources only)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>GWACells</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">results_save_to</span></span></dt>
+<dd><p>Output directory for assessment results</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">region_name</span></span></dt>
+<dd><p>Full name of the assessed region</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_grid_cells</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.get_grid_cells"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Generate spatial grid cells covering the region boundary</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_cell_capacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.get_cell_capacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate potential capacity based on land availability constraints</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">extract_weather_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.extract_weather_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Process climate data for capacity factor calculations</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">update_gwa_scaled_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">memory_resource_limitation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.update_gwa_scaled_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Integrate Global Wind Atlas wind speed corrections (wind only)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_CF_timeseries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.get_CF_timeseries"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Generate hourly capacity factor time series</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">find_grid_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_pypsa_buses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.find_grid_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Identify nearest electrical grid connection points</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">score_cells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.score_cells"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate economic scores based on LCOE methodology</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scored_cells</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcss_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.get_clusters"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Perform spatial clustering of viable sites</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_cluster_timeseries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dissolved_indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cells_timeseries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.get_cluster_timeseries"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Generate representative time series for each cluster</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">select_top_sites</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_pypsa_buses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory_resource_limitation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Execute complete assessment workflow</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">export_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_clusters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_timeseries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Path('results')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.export_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Export results in standardized format for downstream models</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">select_top_sites</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sites</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeseries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_max_capacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.select_top_sites"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Filter results to highest-potential sites within capacity constraints</p>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<p>Basic wind assessment workflow:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">RES.RESources</span> <span class="kn">import</span> <span class="n">RESources_builder</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">builder</span> <span class="o">=</span> <span class="n">RESources_builder</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">config_file_path</span><span class="o">=</span><span class="s2">&quot;config/config_BC.yaml&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">region_short_code</span><span class="o">=</span><span class="s2">&quot;BC&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">resource_type</span><span class="o">=</span><span class="s2">&quot;wind&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">builder</span><span class="o">.</span><span class="n">export_results</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Step-by-step workflow with intermediate inspection:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">builder</span> <span class="o">=</span> <span class="n">RESources_builder</span><span class="p">(</span><span class="s2">&quot;config/config.yaml&quot;</span><span class="p">,</span> <span class="s2">&quot;AB&quot;</span><span class="p">,</span> <span class="s2">&quot;solar&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cells</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">get_grid_cells</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cells_with_capacity</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">get_cell_capacity</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scored_cells</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">score_cells</span><span class="p">(</span><span class="n">cells_with_capacity</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clusters</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">get_clusters</span><span class="p">(</span><span class="n">scored_cells</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Inherits configuration parsing capabilities from AttributesParser</p></li>
+<li><p>Uses HDF5 storage for efficient handling of large geospatial datasets</p></li>
+<li><p>Implements caching mechanisms to avoid redundant computations</p></li>
+<li><p>Supports both solar PV and onshore wind technologies</p></li>
+<li><p>Economic calculations follow NREL LCOE methodology</p></li>
+<li><p>Clustering uses k-means with automatic cluster number optimization</p></li>
+</ul>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">select_top_sites</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_pypsa_buses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory_resource_limitation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Execute the specific module logic for the given resource type ('solar' or 'wind').</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_summary_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sites</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeseries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.create_summary_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Creates summary information to be exported alongside results data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dump_export_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'results/linking'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.dump_export_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Dumps the metadata summary information to a file. If the file already exists,
+it prepends the new info at the top of the file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">export_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_clusters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_timeseries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('results')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.export_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Export processed resource cluster results (geodataframe) to standard datafield csvs as input for downstream models.
+### Args
+- <strong>resource_type</strong>: The type of resource ('solar' or 'wind').
+- <strong>resource_clusters</strong>: A DataFrame containing resource cluster information.
+- <strong>output_dir</strong> [optional]: The directory to save the output files. Default to : 'results/<a href="#id1"><span class="problematic" id="id2">*</span></a>.csv'</p>
+<p>&gt; Currently supports: CLEWs, PyPSA</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">extract_weather_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.extract_weather_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Extracts weather data for the cells (e.g. windspeed, solar influx).
+This method retrieves the ERA5 cutout and extracts windspeed data for the cells.
+If the windspeed data is already present in the stored dataset, it skips the extraction from the source.
+If the resource type is 'wind', it extracts the 'windspeed_ERA5' from the cutout and updates the cells GeoDataFrame.
+If the resource type is 'solar', it currently does not support extraction from the Global Solar Atlas data.
+:param None:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Currently active for windspeed only due to significant contrast with high resolution data.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">find_grid_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_pypsa_buses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.find_grid_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Find the grid nodes for the given cells.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cells</strong> (<em>gpd.GeoDataFrame</em><em>, </em><em>optional</em>) -- Cells with their coordinates, geometry, and unique cell ids. Defaults to None.</p></li>
+<li><p><strong>use_pypsa_buses</strong> (<em>bool</em><em>, </em><em>optional</em>) -- Whether to use PyPSA buses as preferred nodes for resource connection. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>_type_</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Could be parallelized with Step 1B/C.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_CF_timeseries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.get_CF_timeseries"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Extract timeseries information for the Cells' e.g. static CF (yearly mean) and timeseries (hourly).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cells</strong> (<em>gpd.GeoDataFrame</em>) -- Cells with their coordinates, geometry, and unique cell ids.</p></li>
+<li><p><strong>force_update</strong> (<em>bool</em>) -- If True, forces the update of the CF timeseries data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A namedtuple containing the cells with their timeseries data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>The method uses the <cite>Timeseries</cite> class to retrieve the timeseries data for the cells.</p></li>
+<li><p>The timeseries data is retrieved based on the resource type (e.g., 'solar' or 'wind').</p></li>
+<li><p>If the <cite>cells</cite> argument is not provided, it retrieves the cells from the data handler.</p></li>
+<li><p>Could be parallelized with Step 2B/2C</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_cell_capacity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.get_cell_capacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Retrieves the potential capacity of the cells based on land availability and land-use intensity.
+:param force_update: If True, forces the update of the cell capacity data.
+:type force_update: bool</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A namedtuple containing the cells GeoDataFrame and a capacity matrix.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>The capacity matrix is a 2D array where each row corresponds to a cell and each column corresponds to a time step.</p></li>
+<li><dl class="simple">
+<dt>The potential capacity is calculated as:</dt><dd><ul>
+<li><p>Potential capacity (MW) = available land (%) x land-use intensity (MW/sq.km) x Area of a cell (sq. km)</p></li>
+<li><p>The method uses the <cite>CellCapacityProcessor</cite> class to process the capacity data.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>The method returns a namedtuple with two attributes: <cite>data</cite> (the cells GeoDataFrame) and <cite>matrix</cite> (the capacity matrix).</p></li>
+<li><p>Could be parallelized with Step 2A/2C.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_cluster_timeseries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clusters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dissolved_indices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cells_timeseries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.get_cluster_timeseries"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scored_cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcss_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.get_clusters"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><dl class="simple">
+<dt>### Args:</dt><dd><ul class="simple">
+<li><p><strong>WCSS (Within-cluster Sum of Square) tolerance</strong>. Higher tolerance gives , more simplification and less number of clusters.</p></li>
+<li><p><strong>Default set to 0.05</strong>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_grid_cells</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GeoDataFrame</span></span></span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.get_grid_cells"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Retrieves the default grid cells for the region.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None</strong></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A GeoDataFrame containing the grid cells with their coordinates, geometry, and unique cell ids.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gpd.GeoDataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>The <cite>get_default_grid()</cite> method creates several attributes, such as the atlite <cite>cutout</cite> object and the <cite>region_boundary</cite>.</p></li>
+<li><p>Uses the <cite>cutout.grid</cite> attribute to create the analysis grid cells (GeoDataFrame).</p></li>
+</ul>
+<blockquote>
+<div><dl class="simple">
+<dt>Step 0: Set-up the Grid Cells and their Unique Indices to populate incremental datafields and to easy navigation to cells</dt><dd><ul class="simple">
+<li><p>Step to create the Cells with unique indices generated from their x,y (centroids).</p></li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">score_cells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.score_cells"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Scores the Cells based on calculated LCOE ($/MWh). &lt;/br&gt;
+Wrapper of the _.get_cell_score()_ method of <strong>_CellScorer_</strong> object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">select_top_sites</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sites</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sites_timeseries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_max_capacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">GeoDataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.select_top_sites"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">update_gwa_scaled_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">memory_resource_limitation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.update_gwa_scaled_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<p>The <code class="docutils literal notranslate"><span class="pre">RESources_builder</span></code> class coordinates the complete assessment workflow including spatial grid generation, land availability analysis, weather data processing, economic evaluation, and site clustering.</p>
+<p><strong>Key Methods:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">get_grid_cells()</span></code>: Generate spatial grid covering region</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_cell_capacity()</span></code>: Calculate land-constrained potential capacity</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_CF_timeseries()</span></code>: Generate capacity factor time series</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">score_cells()</span></code>: Economic evaluation using LCOE methodology</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_clusters()</span></code>: Spatial clustering of viable sites</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">build()</span></code>: Execute complete assessment workflow</p></li>
+</ul>
 </section>
+<section id="spatial-grid-management">
+<h3>Spatial Grid Management<a class="headerlink" href="#spatial-grid-management" title="Link to this heading">#</a></h3>
+<p><strong>Grid cell generation and spatial discretization.</strong></p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.cell.</span></span><span class="sig-name descname"><span class="pre">GridCells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'config/config.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_short_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'BC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'None'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/cell.html#GridCells"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ERA5Cutout</span></code></p>
+<p>Spatial grid cell generator for renewable energy resource assessment.</p>
+<p>This class creates a regular spatial grid covering a specified region for
+discretized renewable energy potential analysis. It inherits from ERA5Cutout
+to maintain consistency with climate data spatial resolution and coordinate systems.</p>
+<p>Grid cells serve as the fundamental spatial units for capacity calculations,
+land availability analysis, and resource aggregation. Each cell represents
+a homogeneous area with uniform resource characteristics and constraints.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config_file_path</strong> (<em>str</em><em> or </em><em>Path</em>) -- Path to configuration file containing grid settings</p></li>
+<li><p><strong>region_short_code</strong> (<em>str</em>) -- Region identifier for boundary definition</p></li>
+<li><p><strong>resource_type</strong> (<em>str</em>) -- Resource type ('solar' or 'wind')</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">datahandler</span></span></dt>
+<dd><p>HDF5 data storage interface for grid persistence</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataHandler</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">crs</span></span></dt>
+<dd><p>Coordinate reference system ('EPSG:4326')</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">resolution</span></span></dt>
+<dd><p>Grid resolution with 'dx' and 'dy' keys (decimal degrees)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">bounding_box</span></span></dt>
+<dd><p>Spatial extent with 'minx', 'maxx', 'miny', 'maxy'</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">actual_boundary</span></span></dt>
+<dd><p>Precise regional boundary geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">coords</span></span></dt>
+<dd><p>Grid coordinate arrays {'x': array, 'y': array}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">shape</span></span></dt>
+<dd><p>Grid dimensions (rows, columns)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">generate_coords</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/cell.html#GridCells.generate_coords"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Create coordinate arrays based on resolution and boundary</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__get_grid__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/cell.html#GridCells.__get_grid__"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Generate complete grid with cell geometries</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_default_cells</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd><p>Create grid cells intersecting with regional boundary</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">apply_boundary_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Filter cells to those within regional boundary</p>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<p>Generate grid for British Columbia wind assessment:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">RES.cell</span> <span class="kn">import</span> <span class="n">GridCells</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grid</span> <span class="o">=</span> <span class="n">GridCells</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">config_file_path</span><span class="o">=</span><span class="s2">&quot;config/config_BC.yaml&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">region_short_code</span><span class="o">=</span><span class="s2">&quot;BC&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">resource_type</span><span class="o">=</span><span class="s2">&quot;wind&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cells</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_default_cells</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generated </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span><span class="si">}</span><span class="s2"> grid cells&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Custom resolution grid:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Resolution defined in configuration file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># grid_cell_resolution:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#   dx: 0.25  # 0.25 degrees longitude</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#   dy: 0.25  # 0.25 degrees latitude</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cells</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_default_cells</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Default resolution matches ERA5 climate data (0.25° x 0.25°)</p></li>
+<li><p>Grid cells are represented as square polygons with centroid coordinates</p></li>
+<li><p>Inherits climate data cutout functionality from ERA5Cutout</p></li>
+<li><p>Uses HDF5 storage for efficient caching of large grid datasets</p></li>
+<li><p>Grid generation respects regional boundaries to avoid unnecessary cells</p></li>
+<li><p>Resolution warnings issued if finer than climate data resolution</p></li>
+<li><p>Coordinate system maintained as WGS84 for global compatibility</p></li>
+</ul>
+<section id="resolution-considerations">
+<h4>Resolution Considerations<a class="headerlink" href="#resolution-considerations" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Minimum recommended: 0.25° (matching ERA5 resolution)</p></li>
+<li><p>Finer resolutions require interpolation of climate data</p></li>
+<li><p>Coarser resolutions may miss local variations in resource quality</p></li>
+<li><p>Square cells assumed (dx = dy) for geometric consistency</p></li>
+</ul>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">generate_coords</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/cell.html#GridCells.generate_coords"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_custom_grid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/cell.html#GridCells.get_custom_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_default_grid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/cell.html#GridCells.get_default_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+<p>Handles creation of regular spatial grids for renewable energy assessment with configurable resolution and boundary constraints.</p>
+</section>
+<section id="administrative-boundaries">
+<h3>Administrative Boundaries<a class="headerlink" href="#administrative-boundaries" title="Link to this heading">#</a></h3>
+<p><strong>GADM boundary processor for regional analysis.</strong></p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.boundaries.</span></span><span class="sig-name descname"><span class="pre">GADMBoundaries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'config/config.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_short_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'BC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'None'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/boundaries.html#GADMBoundaries"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AttributesParser</span></code></p>
+<p>GADM (Global Administrative Areas) boundary processor for regional analysis.</p>
+<p>This class handles the retrieval, processing, and management of administrative
+boundaries from the GADM dataset. It provides functionality to extract specific
+regional boundaries at administrative level 2 (typically states/provinces/districts)
+for renewable energy resource assessment areas.</p>
+<p>The class automatically downloads and caches GADM data, processes it into
+standardized formats, and provides region-specific boundary extractions
+that serve as the spatial basis for grid cell generation and analysis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config_file_path</strong> (<em>str</em><em> or </em><em>Path</em>) -- Path to configuration file containing GADM settings</p></li>
+<li><p><strong>region_short_code</strong> (<em>str</em>) -- Short code identifying the target region within the country</p></li>
+<li><p><strong>resource_type</strong> (<em>str</em>) -- Resource type (passed through from parent workflow)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">admin_level</span></span></dt>
+<dd><p>GADM administrative level (fixed at 2 for regional districts)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gadm_root</span></span></dt>
+<dd><p>Root directory for GADM data storage</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gadm_processed</span></span></dt>
+<dd><p>Directory for processed regional boundary files</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">crs</span></span></dt>
+<dd><p>Coordinate reference system ('EPSG:4326')</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">country</span></span></dt>
+<dd><p>Country name extracted from configuration</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">region_file</span></span></dt>
+<dd><p>Path to processed regional boundary file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">boundary_datafields</span></span></dt>
+<dd><p>Mapping of GADM fields to standardized field names</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_country_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">country</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/boundaries.html#GADMBoundaries.get_country_boundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Download and process complete country GADM boundaries</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_regional_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Extract and process specific regional boundary</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">create_bounding_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geometry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_degrees</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Generate bounding box for spatial extent calculations</p>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<p>Extract British Columbia boundaries:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">RES.boundaries</span> <span class="kn">import</span> <span class="n">GADMBoundaries</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">boundaries</span> <span class="o">=</span> <span class="n">GADMBoundaries</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">config_file_path</span><span class="o">=</span><span class="s2">&quot;config/config_BC.yaml&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">region_short_code</span><span class="o">=</span><span class="s2">&quot;BC&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">resource_type</span><span class="o">=</span><span class="s2">&quot;wind&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bc_boundary</span> <span class="o">=</span> <span class="n">boundaries</span><span class="o">.</span><span class="n">get_regional_boundary</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">country_bounds</span> <span class="o">=</span> <span class="n">boundaries</span><span class="o">.</span><span class="n">get_country_boundary</span><span class="p">(</span><span class="s2">&quot;Canada&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Uses pygadm package for GADM data access and download</p></li>
+<li><p>Automatically handles data caching to avoid repeated downloads</p></li>
+<li><p>Processes boundaries into GeoJSON format for efficient storage</p></li>
+<li><p>Standardizes field names for consistent downstream processing</p></li>
+<li><p>Administrative level 2 chosen to balance spatial resolution with data availability</p></li>
+<li><p>All geometries maintained in WGS84 (EPSG:4326) for global compatibility</p></li>
+</ul>
+<section id="dependencies">
+<h4>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>pygadm: GADM data access and processing</p></li>
+<li><p>geopandas: Spatial data manipulation</p></li>
+<li><p>shapely: Geometric operations</p></li>
+</ul>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_bounding_box</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../_modules/RES/boundaries.html#GADMBoundaries.get_bounding_box"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>This method loads the region boundary using <cite>get_region_boundary()</cite> method and gets Minimum Bounding Rectangle (MBR).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple containing the dictionary of bounding box coordinates, and the actual boundary GeoDataFrame for the specified region.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Purpose:</dt><dd><p>To be used internally to get the bounding box of the region to set ERA5 cutout boundaries.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_country_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">country</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GeoDataFrame</span></span></span><a class="reference internal" href="../_modules/RES/boundaries.html#GADMBoundaries.get_country_boundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Retrieves and prepares the GADM boundaries dataset for the specified country (Administrative Level 2).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>country</strong> (<em>str</em>) -- The name of the country to fetch GADM data for. If None, extracts the country from the user config file.</p></li>
+<li><p><strong>force_update</strong> (<em>bool</em>) -- If True, re-fetch the GADM data even if a local file exists.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>GeoDataFrame of the country's GADM regions in crs '4326'</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gpd.GeoDataFrame</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Dependency:</dt><dd><p>Depends on pygadm package to fetch the GADM data.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ValueError</strong> -- If the country is not found in the GADM dataset.</p></li>
+<li><p><strong>Exception</strong> -- If there is an error fetching or loading the GADM data.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_region_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">region_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GeoDataFrame</span></span></span><a class="reference internal" href="../_modules/RES/boundaries.html#GADMBoundaries.get_region_boundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Prepares the boundaries for the specified region within the country. The defaults datafields (e.g. NAME_0, NAME_1, NAME_2) gets modified to match the user config file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>force_update</strong> (<em>bool</em>) -- To force update the data and formatting.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>GeoDataFrame of the region boundaries.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gpd.GeoDataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> -- If the region code is invalid or no data is found for the specified region</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/boundaries.html#GADMBoundaries.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Executes the process of extracting boundaries and creating an interactive map.
+To be used as a main method to run the class's sequential tasks.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">show_regions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">basemap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'CartoDB</span> <span class="pre">positron'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'vis/regions'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/boundaries.html#GADMBoundaries.show_regions"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Create and save an interactive map for the specified region.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>basemap</strong> (<em>str</em>) -- The basemap to use (default is 'CartoDB positron').</p></li>
+<li><p><strong>save_path</strong> (<em>str</em>) -- The path to save the HTML map. The default is given.</p></li>
+<li><p><strong>save</strong> (<em>bool</em>) -- If the user want's to skip saving as local file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An interactive map object showing the region boundaries.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>folium.Map</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the above documentation doesn't render properly due to geospatial dependency issues, the GADMBoundaries class provides:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">get_country_boundary(country,</span> <span class="pre">force_update=False)</span></code>: Download complete country boundaries</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_regional_boundary(force_update=False)</span></code>: Extract specific regional boundary</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">create_bounding_box(geometry,</span> <span class="pre">buffer_degrees=0.1)</span></code>: Generate spatial extent calculations</p></li>
+</ul>
+</div>
+<p>Downloads and processes administrative boundaries from the Global Administrative Areas (GADM) dataset for spatial analysis scope definition.</p>
+</section>
+<section id="climate-data-processing">
+<h3>Climate Data Processing<a class="headerlink" href="#climate-data-processing" title="Link to this heading">#</a></h3>
+<p><strong>Weather data processing and capacity factor calculations.</strong></p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.timeseries.</span></span><span class="sig-name descname"><span class="pre">Timeseries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'config/config.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_short_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'BC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'None'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/timeseries.html#Timeseries"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ERA5Cutout</span></code></p>
+<p>Climate data processor and capacity factor calculator for renewable energy resources.</p>
+<p>This class handles the extraction, processing, and analysis of meteorological time series
+data to generate capacity factor profiles for solar and wind resources. It integrates
+with the Atlite library for climate data processing and provides technology-specific
+capacity factor calculations based on configurable turbine and panel specifications.</p>
+<p>The class processes hourly weather data into capacity factors that represent the
+fraction of nameplate capacity that can be generated under specific meteorological
+conditions, accounting for technology performance curves and environmental constraints.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config_file_path</strong> (<em>str</em><em> or </em><em>Path</em>) -- Path to configuration file containing resource and technology settings</p></li>
+<li><p><strong>region_short_code</strong> (<em>str</em>) -- Region identifier for spatial data coordination</p></li>
+<li><p><strong>resource_type</strong> (<em>{'solar'</em><em>, </em><em>'wind'}</em>) -- Type of renewable resource for capacity factor calculation</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">resource_disaggregation_config</span></span></dt>
+<dd><p>Technology-specific configuration parameters from config file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">datahandler</span></span></dt>
+<dd><p>HDF5 interface for time series data storage and retrieval</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataHandler</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gwa_cells</span></span></dt>
+<dd><p>Global Wind Atlas integration for wind resource bias correction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>GWACells</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">sites_profile</span></span></dt>
+<dd><p>Raw capacity factor time series for all grid cells</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray.DataArray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">_CF_ts_df_</span></span></dt>
+<dd><p>Processed time series with cells as columns, time as index</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_timeseries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/timeseries.html#Timeseries.get_timeseries"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Generate capacity factor time series for specified grid cells</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__process_PV_timeseries__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/timeseries.html#Timeseries.__process_PV_timeseries__"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate solar PV capacity factors using irradiance and temperature</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__process_WIND_timeseries__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">turbine_database</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">turbine_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/timeseries.html#Timeseries.__process_WIND_timeseries__"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate wind capacity factors using wind speeds and power curves</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">plot_timeseries_comparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells_sample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Generate comparative plots of capacity factor profiles</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_annual_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells_timeseries</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Calculate annual capacity factor statistics and metrics</p>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<p>Generate solar PV time series:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">RES.timeseries</span> <span class="kn">import</span> <span class="n">Timeseries</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ts_processor</span> <span class="o">=</span> <span class="n">Timeseries</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">config_file_path</span><span class="o">=</span><span class="s2">&quot;config/config_BC.yaml&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">region_short_code</span><span class="o">=</span><span class="s2">&quot;BC&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">resource_type</span><span class="o">=</span><span class="s2">&quot;solar&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cells</span> <span class="o">=</span> <span class="n">get_grid_cells</span><span class="p">()</span>  <span class="c1"># From previous workflow step</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">ts_processor</span><span class="o">.</span><span class="n">get_timeseries</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cf_timeseries</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">timeseries_df</span>
+</pre></div>
+</div>
+<p>Wind resource processing with turbine selection:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_processor</span> <span class="o">=</span> <span class="n">Timeseries</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">config_file_path</span><span class="o">=</span><span class="s2">&quot;config/config.yaml&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">region_short_code</span><span class="o">=</span><span class="s2">&quot;AB&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">resource_type</span><span class="o">=</span><span class="s2">&quot;wind&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Turbine parameters defined in configuration</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">ts_processor</span><span class="o">.</span><span class="n">get_timeseries</span><span class="p">(</span><span class="n">wind_cells</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Time series analysis and visualization:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">annual_stats</span> <span class="o">=</span> <span class="n">ts_processor</span><span class="o">.</span><span class="n">get_annual_statistics</span><span class="p">(</span><span class="n">cf_timeseries</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ts_processor</span><span class="o">.</span><span class="n">plot_timeseries_comparison</span><span class="p">(</span><span class="n">sample_cells</span><span class="p">,</span> <span class="s2">&quot;output/plots/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Uses Atlite library for meteorological data processing</p></li>
+<li><p>Solar calculations account for panel orientation, tilt, and temperature effects</p></li>
+<li><p>Wind calculations use power curves from turbine databases (OEDB, manufacturer specs)</p></li>
+<li><p>Time series generated at hourly resolution for full assessment years</p></li>
+<li><p>Global Wind Atlas corrections applied for improved wind speed accuracy</p></li>
+<li><p>Results cached in HDF5 format for efficient reuse and large dataset handling</p></li>
+<li><p>Supports both fixed-tilt and tracking solar PV configurations</p></li>
+<li><p>Wind power curves interpolated for continuous wind speed ranges</p></li>
+</ul>
+<section id="technology-integration">
+<h4>Technology Integration<a class="headerlink" href="#technology-integration" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>Solar PV:</dt><dd><ul class="simple">
+<li><p>Irradiance-based capacity factor calculation</p></li>
+<li><p>Temperature derating effects</p></li>
+<li><p>Configurable panel specifications (efficiency, temperature coefficients)</p></li>
+<li><p>Support for fixed tilt and single-axis tracking</p></li>
+</ul>
+</dd>
+<dt>Wind:</dt><dd><ul class="simple">
+<li><p>Power curve-based capacity factor calculation</p></li>
+<li><p>Hub height wind speed extrapolation</p></li>
+<li><p>Turbine database integration (OEDB standard)</p></li>
+<li><p>Wake effects and array losses configurable</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="data-dependencies">
+<h4>Data Dependencies<a class="headerlink" href="#data-dependencies" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>ERA5 reanalysis data for meteorological variables</p></li>
+<li><p>Global Wind Atlas for wind speed bias correction (wind only)</p></li>
+<li><p>Technology databases for turbine and panel specifications</p></li>
+</ul>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_cluster_timeseries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_clusters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cells_timeseries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dissolved_indices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/timeseries.html#Timeseries.get_cluster_timeseries"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_gwa_geogson_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gwa_geojson_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/timeseries.html#Timeseries.get_gwa_geogson_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Loads Global Wind Atlas (GWA) GeoJSON data from the specified file path.
+If no file path is provided, a default path to 'data/downloaded_data/GWA/canada.geojson'
+is used. If the file does not exist at the specified or default location, a message
+is printed to inform the user to download the required GIS map data.
+:param gwa_geojson_file_path: The file path to the GWA GeoJSON file.</p>
+<blockquote>
+<div><p>Defaults to None, which uses the predefined default path ('data/downloaded_data/GWA/canada.geojson').</p>
+</div></blockquote>
+<dl class="field-list simple">
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gwa_geojson_data</span></span></dt>
+<dd><p>The loaded GeoJSON data from the specified file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> -- If the specified or default GeoJSON file does not exist.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>The Global Wind Atlas GIS map data can be downloaded from:</dt><dd><p><a class="reference external" href="https://globalwindatlas.info/en/download/maps-country-and-region">https://globalwindatlas.info/en/download/maps-country-and-region</a></p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_timeseries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../_modules/RES/timeseries.html#Timeseries.get_timeseries"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Retrieves the capacity factor (CF) timeseries for the cells.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cells</strong> (<em>gpd.GeoDataFrame</em>) -- Cells with their coordinates, geometry, and unique cell ids.</p></li>
+<li><p><strong>force_update</strong> (<em>bool</em>) -- If True, forces the update of the CF timeseries data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A namedtuple containing the cells with their timeseries data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Jobs:</dt><dd><ul class="simple">
+<li><p>Extract timeseries information for the Cells' e.g. static CF (yearly mean) and timeseries (hourly).</p></li>
+<li><p>The timeseries data is generated using the atlite library's cutout methods for solar and wind resources.</p></li>
+<li><p>The method processes the timeseries data for the specified resource type (solar or wind) and stores it in a pandas DataFrame.</p></li>
+</ul>
+</dd>
+<dt>Notes</dt><dd><p>Plug-in multiple sources to fit timeseries data e.g. [NSRDB, NREL](<a class="reference external" href="https://nsrdb.nrel.gov/data-sets/how-to-access-data">https://nsrdb.nrel.gov/data-sets/how-to-access-data</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_windatlas_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gwa_windspeed_raster_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/timeseries.html#Timeseries.get_windatlas_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Retrieves wind atlas data from a specified raster file or a default path.</p>
+<p>If a raster file path is not provided, a default path is used. If the file
+does not exist at the default path, it prepares the necessary data. The
+method then loads and returns the wind speed data from the raster file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>gwa_windspeed_raster_path</strong> (<em>str</em><em> | </em><em>Path</em><em>, </em><em>optional</em>) -- The file path to the
+wind speed raster file. Defaults to None.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The loaded wind speed data from the raster file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_windspeed_rescaling_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../_modules/RES/timeseries.html#Timeseries.get_windspeed_rescaling_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Retrieves wind speed rescaling data, including wind atlas data and
+geographical wind data in GeoJSON format.
+:returns:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>A tuple containing:</dt><dd><ul class="simple">
+<li><p>wind_atlas (type depends on <cite>get_windatlas_data</cite> method): The wind atlas data.</p></li>
+<li><p>wind_geojson (type depends on <cite>get_gwa_geogson_data</cite> method): The gis wind data in GeoJSON format.</p></li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<p>Integrates with Atlite library for climate data processing and generates technology-specific capacity factor time series from meteorological data.</p>
+</section>
+<section id="economic-evaluation">
+<h3>Economic Evaluation<a class="headerlink" href="#economic-evaluation" title="Link to this heading">#</a></h3>
+<p><strong>LCOE-based economic scoring and site ranking.</strong></p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.score.</span></span><span class="sig-name descname"><span class="pre">CellScorer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'config/config.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_short_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'BC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'None'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/score.html#CellScorer"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AttributesParser</span></code></p>
+<p>Economic evaluation and scoring system for renewable energy grid cells.</p>
+<p>This class implements Levelized Cost of Energy (LCOE) calculations to economically
+rank and score potential renewable energy sites. It integrates capital costs,
+operational expenses, grid connection costs, and capacity factors to provide
+comprehensive economic metrics for site comparison and selection.</p>
+<p>The scoring methodology follows NREL LCOE documentation and incorporates
+distance-based grid connection costs, technology-specific capital expenditures,
+and site-specific capacity factors to generate comparable economic indicators
+across different locations and technologies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config_file_path</strong> (<em>str</em><em> or </em><em>Path</em>) -- Configuration file containing economic parameters and assumptions</p></li>
+<li><p><strong>region_short_code</strong> (<em>str</em>) -- Region identifier for localized cost parameters</p></li>
+<li><p><strong>resource_type</strong> (<em>{'solar'</em><em>, </em><em>'wind'}</em>) -- Technology type for appropriate cost parameter selection</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Inherits</span> <span class="pre">configuration</span> <span class="pre">parsing</span> <span class="pre">capabilities</span> <span class="pre">from</span> <span class="pre">AttributesParser</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_CRF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.get_CRF"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate Capital Recovery Factor for annualized cost calculations</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_total_cost(distance_to_grid_km,</span> <span class="pre">grid_connection_cost_per_km,</span></span></dt>
+<dd><blockquote>
+<div><p>tx_line_rebuild_cost, capex_tech, potential_capacity_mw)</p>
+</div></blockquote>
+<p>Compute total project costs including CAPEX and grid connection</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CF_column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CRF</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Generate LCOE score for individual grid cells</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">score_cells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells_with_cf</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Apply economic scoring to entire dataset of grid cells</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_economic_rankings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scored_cells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_percentile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Rank and filter cells by economic attractiveness</p>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<p>Basic economic scoring workflow:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">RES.score</span> <span class="kn">import</span> <span class="n">CellScorer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scorer</span> <span class="o">=</span> <span class="n">CellScorer</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">config_file_path</span><span class="o">=</span><span class="s2">&quot;config/config_BC.yaml&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">region_short_code</span><span class="o">=</span><span class="s2">&quot;BC&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">resource_type</span><span class="o">=</span><span class="s2">&quot;wind&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scored_cells</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">score_cells</span><span class="p">(</span><span class="n">cells_with_capacity_factors</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">top_sites</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">get_economic_rankings</span><span class="p">(</span><span class="n">scored_cells</span><span class="p">,</span> <span class="n">top_percentile</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Custom economic analysis:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Calculate CRF for different financial scenarios</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crf_conservative</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">get_CRF</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mf">0.08</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>  <span class="c1"># 8% discount, 25 year life</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crf_aggressive</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">get_CRF</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>    <span class="c1"># 6% discount, 30 year life</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Apply scoring with custom parameters</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">cells</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="n">lcoe</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">calculate_score</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="s1">&#39;CF_mean&#39;</span><span class="p">,</span> <span class="n">crf_conservative</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>LCOE Calculation Methodology:
+- Follows NREL Simple LCOE calculation framework
+- LCOE = (CAPEX × CRF + OPEX) / Annual Energy Production
+- Includes distance-based grid connection costs
+- Uses technology-specific cost parameters from configuration</p>
+<p>Cost Components:
+- Technology CAPEX ($/MW installed capacity)
+- Grid connection costs ($/km distance to transmission)
+- Transmission line rebuild costs ($/km)
+- Annual O&amp;M expenses (% of CAPEX)
+- Financial parameters (discount rate, project lifetime)</p>
+<p>Economic Parameters:
+- Capital Recovery Factor (CRF) for cost annualization
+- Technology-specific cost assumptions
+- Regional cost multipliers and adjustments
+- Grid connection distance penalties</p>
+<p>Limitations:
+- Simplified LCOE model without detailed financial modeling
+- Grid connection costs based on straight-line distances
+- Does not account for economies of scale in large projects
+- Static cost assumptions without temporal price variations</p>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calc_LCOE_lambda_m1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calc_LCOE_lambda_m1"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p># Method:
+LCOE = [(FCR x TCC + FOC + GCC + TRC) / AEP + VOC)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Total Capital cost, $ (TCC)</p></li>
+<li><p>Fixed annual operating cost, $ (FOC)</p></li>
+<li><p>Variable operating cost, $/kWh (VOC)</p></li>
+<li><p>Fixed charge rate (FCR)</p></li>
+<li><p>Annual electricity production, kWh (AEP)</p></li>
+<li><p>Grid Connection Cost (GCC)</p></li>
+<li><p>Transmission Line Rebuild Cost (TRC)</p></li>
+</ul>
+</div></blockquote>
+<p>### Ref:
+- <a class="reference external" href="https://atb.nrel.gov/electricity/2024/equations_&amp;_variables">https://atb.nrel.gov/electricity/2024/equations_&amp;_variables</a>
+- <a class="reference external" href="https://sam.nrel.gov/financial-models/lcoe-calculator.html">https://sam.nrel.gov/financial-models/lcoe-calculator.html</a>
+- <a class="reference external" href="https://www.nrel.gov/docs/legosti/old/5173.pdf">https://www.nrel.gov/docs/legosti/old/5173.pdf</a>
+- <a class="reference external" href="https://www.nrel.gov/docs/fy07osti/40566.pdf">https://www.nrel.gov/docs/fy07osti/40566.pdf</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calc_LCOE_lambda_m2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calc_LCOE_lambda_m2"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p># Method:
+LCOE = [{(FCR x CAPEX) + FOM ) /  (CF x 8760) } + VOM + Fuel - PTC)</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>Fixed charge rate (FCR) :</dt><dd><ul>
+<li><p>Amount of revenue per dollar of investment required that must be collected annually from customers to pay the carrying charges on that investment.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>CAPEX (m$)</dt><dd><ul>
+<li><p>expenditures required to achieve commercial operation of the generation plant.</p></li>
+<li><dl class="simple">
+<dt>ConFinFactor x (OCC +GCC)</dt><dd><ul>
+<li><dl class="simple">
+<dt>ConFinFactor: Conversion Factor for Capital Recovery.</dt><dd><ul>
+<li><p>The portion of all-in capital cost associated with construction period financing;</p></li>
+<li><p>ConFinFactor = Σ(y=0 t0 C-1) FC-y x AI_y</p></li>
+<li><p>assumed to be 1.0 for simplification</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>OCC ($/kW) : Overnight Capital Cost CAPEX if plant could be constructed overnight (i.e., excludes construction period financing); includes on-site electrical equipment (e.g., switchyard), a nominal-distance spur line (&lt;1 mi), and necessary upgrades at a transmission substation. ($/kW)</p></li>
+<li><p>GCC ($/kW): Grid Connection Cost</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>CF: Capacity Factor</p></li>
+<li><p>Variable operation and maintenance (VOM), $/MWh (VOC)</p></li>
+<li><dl class="simple">
+<dt>Fuel:</dt><dd><ul>
+<li><p>Fuel costs, converted to $/MWh, using heat rates.</p></li>
+<li><p>Heat rate (MMBtu/MWh) * Fuel Costs($/MMBtu)</p></li>
+<li><p>Zero for VREs</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>PTC ($/MWh)<span class="classifier">Production Tax Credit</span></dt><dd><ul>
+<li><p>a before-tax credit that reduces LCOE; credits are available for 10 years, so it must be adjusted for a 10-year CRF relative to the full CRF of the project.</p></li>
+<li><p>This formulation of the PTC accounts for a pre-tax LCOE and aligns with the equation used for the ProFinFactor.</p></li>
+<li><dl class="simple">
+<dt>PTC= {PTC_full/(1-TR)}x(CRF/CRF_10yrs)</dt><dd><ul>
+<li><p>TR: Tax Rate</p></li>
+<li><dl class="simple">
+<dt>CRF: Capital Recovery Factor</dt><dd><ul>
+<li><p>ratio of a constant annuity to the present value of receiving that annuity for a given length of time</p></li>
+<li><dl class="simple">
+<dt>CRF = WACC x[1/(1-(1+WACC)^-t)]</dt><dd><ul>
+<li><dl class="simple">
+<dt>WACC: Weighted Average Cost of Capital</dt><dd><ul>
+<li><p>average expected rate that is paid to finance assets</p></li>
+<li><p>WACC = [ 1+ [1-DF] x [(1+RROE)(1=i)-1] + DF x [(1+IR)(1+i)-1] x [1-TR] ]/(1+i) -1</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p>### Ref:
+- <a class="reference external" href="https://atb.nrel.gov/electricity/2024/equations_&amp;_variables">https://atb.nrel.gov/electricity/2024/equations_&amp;_variables</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CF_column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CRF</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate the potential LCOE score for each cell in the dataframe,
+reading cost parameters directly from the DataFrame.</p>
+<p>## Args:
+- <strong>row</strong> : A single row of the DataFrame.</p>
+<p>## Returns:
+- <strong>float</strong> : The calculated LCOE value for the row.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_total_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance_to_grid_km</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_connection_cost_per_km</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_line_rebuild_cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capex_tech</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">potential_capacity_mw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_total_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate the total cost, which includes the CAPEX and distance-based grid connection costs.
+Method: Simple Levelized Cost of Energy Calculation (<a class="reference external" href="https://www.nrel.gov/analysis/tech-lcoe-documentation.html">https://www.nrel.gov/analysis/tech-lcoe-documentation.html</a>)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_CRF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.get_CRF"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_cell_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CF_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interest_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.03</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.get_cell_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate the potential LCOE score for each cell in the dataframe,
+reading cost parameters directly from the DataFrame.</p>
+<p>## Args:
+- <strong>Cells</strong> : Pandas DataFrame of grid cells.
+- <strong>CF_column</strong>: Column name from which Capacity Factor (CF) will be used to calculated Annual. Avg. Energy (MWh). User can have multiple CF_mean columns sourced from different data sources.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p>Implements Levelized Cost of Energy calculations following NREL methodology, incorporating capital costs, grid connection expenses, and capacity factors.</p>
+</section>
+</section>
+<section id="specialized-modules">
+<h2>Specialized Modules<a class="headerlink" href="#specialized-modules" title="Link to this heading">#</a></h2>
 <section id="annual-technology-baseline-atb">
-<h2>Annual Technology Baseline (ATB)<a class="headerlink" href="#annual-technology-baseline-atb" title="Link to this heading">#</a></h2>
+<h3>Annual Technology Baseline (ATB)<a class="headerlink" href="#annual-technology-baseline-atb" title="Link to this heading">#</a></h3>
 <p><strong>Processor for NREL's Annual Technology Baseline data.</strong></p>
 <dl class="py class">
 <dt class="sig sig-object py">
@@ -610,236 +2073,118 @@ and stores it in the data handler.</p>
 </dd></dl>
 
 <blockquote>
-<div><p>ℹ️ The ATB data source and configuration may change annually. Ensure you are referencing the correct year and dataset for your analysis.</p>
-<ul class="simple">
-<li><p>Currently configured for 2024 ATB.</p></li>
-<li><p>Please review and update configuration if using for a different year or context.</p></li>
-</ul>
+<div><p>ℹ️ <strong>Version Notice</strong>: Currently configured for 2024 ATB data. Review and update configuration when using different years or datasets.</p>
 </div></blockquote>
 </section>
-<section id="administrative-boundaries">
-<h2>Administrative Boundaries<a class="headerlink" href="#administrative-boundaries" title="Link to this heading">#</a></h2>
-<p><strong>Handler for GADM administrative boundary data.</strong></p>
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.boundaries.</span></span><span class="sig-name descname"><span class="pre">GADMBoundaries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'config/config.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_short_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'BC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'None'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/boundaries.html#GADMBoundaries"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AttributesParser</span></code></p>
-<p>A class to process GADM country files and extract specific regional boundaries at a given administrative level.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Dependency for core data<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pygadm</p>
-</dd>
-<dt class="field-even">Crs<span class="colon">:</span></dt>
-<dd class="field-even"><p>EPSG:4326</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">get_bounding_box</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../_modules/RES/boundaries.html#GADMBoundaries.get_bounding_box"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>This method loads the region boundary using <cite>get_region_boundary()</cite> method and gets Minimum Bounding Rectangle (MBR).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A tuple containing the dictionary of bounding box coordinates, and the actual boundary GeoDataFrame for the specified region.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>Purpose:</dt><dd><p>To be used internally to get the bounding box of the region to set ERA5 cutout boundaries.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">get_country_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">country</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GeoDataFrame</span></span></span><a class="reference internal" href="../_modules/RES/boundaries.html#GADMBoundaries.get_country_boundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Retrieves and prepares the GADM boundaries dataset for the specified country (Administrative Level 2).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>country</strong> (<em>str</em>) -- The name of the country to fetch GADM data for. If None, extracts the country from the user config file.</p></li>
-<li><p><strong>force_update</strong> (<em>bool</em>) -- If True, re-fetch the GADM data even if a local file exists.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>GeoDataFrame of the country's GADM regions in crs '4326'</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>gpd.GeoDataFrame</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>Dependency:</dt><dd><p>Depends on pygadm package to fetch the GADM data.</p>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ValueError</strong> -- If the country is not found in the GADM dataset.</p></li>
-<li><p><strong>Exception</strong> -- If there is an error fetching or loading the GADM data.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">get_region_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">region_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GeoDataFrame</span></span></span><a class="reference internal" href="../_modules/RES/boundaries.html#GADMBoundaries.get_region_boundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Prepares the boundaries for the specified region within the country. The defaults datafields (e.g. NAME_0, NAME_1, NAME_2) gets modified to match the user config file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>force_update</strong> (<em>bool</em>) -- To force update the data and formatting.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>GeoDataFrame of the region boundaries.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>gpd.GeoDataFrame</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> -- If the region code is invalid or no data is found for the specified region</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/boundaries.html#GADMBoundaries.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Executes the process of extracting boundaries and creating an interactive map.
-To be used as a main method to run the class's sequential tasks.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">show_regions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">basemap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'CartoDB</span> <span class="pre">positron'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'vis/regions'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/boundaries.html#GADMBoundaries.show_regions"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Create and save an interactive map for the specified region.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>basemap</strong> (<em>str</em>) -- The basemap to use (default is 'CartoDB positron').</p></li>
-<li><p><strong>save_path</strong> (<em>str</em>) -- The path to save the HTML map. The default is given.</p></li>
-<li><p><strong>save</strong> (<em>bool</em>) -- If the user want's to skip saving as local file.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>An interactive map object showing the region boundaries.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>folium.Map</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If the above documentation doesn't render properly, this indicates import issues with heavy geospatial dependencies. The GADMBoundaries class provides:</p>
+<section id="clustering-and-aggregation">
+<h3>Clustering and Aggregation<a class="headerlink" href="#clustering-and-aggregation" title="Link to this heading">#</a></h3>
+<p><strong>Spatial clustering utilities for site aggregation.</strong></p>
+<p>Key functions from <code class="docutils literal notranslate"><span class="pre">RES.cluster</span></code>:</p>
 <ul class="simple">
-<li><p><strong>download_boundaries(country_code)</strong>: Downloads boundary data for the specified country</p></li>
-<li><p><strong>get_regions()</strong>: Retrieves available administrative regions</p></li>
-<li><p><strong>process_boundaries()</strong>: Processes and validates boundary data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">assign_cluster_id()</span></code>: Generate unique cell identifiers</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">determine_elbow_optimal_clusters()</span></code>: Automatic cluster number optimization</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cluster_sites()</span></code>: K-means clustering with economic weighting</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_representative_timeseries()</span></code>: Cluster-representative time series generation</p></li>
 </ul>
+</section>
+<section id="visualization-tools">
+<h3>Visualization Tools<a class="headerlink" href="#visualization-tools" title="Link to this heading">#</a></h3>
+<p><strong>Comprehensive plotting and mapping utilities.</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">RES.visuals</span></code> module provides:</p>
+<ul class="simple">
+<li><p>Spatial mapping with choropleth visualization</p></li>
+<li><p>Time series plotting and seasonal analysis</p></li>
+<li><p>Economic analysis charts and distributions</p></li>
+<li><p>Interactive web-based dashboards</p></li>
+<li><p>Publication-quality figure export</p></li>
+</ul>
+</section>
+<section id="utility-functions">
+<h3>Utility Functions<a class="headerlink" href="#utility-functions" title="Link to this heading">#</a></h3>
+<p><strong>Common helper functions and data operations.</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">RES.utility</span></code> module includes:</p>
+<ul class="simple">
+<li><p>Configuration file parsing and validation</p></li>
+<li><p>Data I/O operations (YAML, JSON, geospatial formats)</p></li>
+<li><p>Coordinate transformations and spatial utilities</p></li>
+<li><p>Hierarchical logging and progress reporting</p></li>
+<li><p>URL downloading and caching mechanisms</p></li>
+</ul>
+</section>
+</section>
+<section id="configuration-management">
+<h2>Configuration Management<a class="headerlink" href="#configuration-management" title="Link to this heading">#</a></h2>
+<p>All classes inherit configuration parsing capabilities from <code class="docutils literal notranslate"><span class="pre">AttributesParser</span></code>, enabling:</p>
+<ul class="simple">
+<li><p>YAML-based configuration management</p></li>
+<li><p>Parameter validation and default value handling</p></li>
+<li><p>Environment-specific settings (development, production)</p></li>
+<li><p>Technology-specific parameter sets</p></li>
+</ul>
+</section>
+<section id="data-storage">
+<h2>Data Storage<a class="headerlink" href="#data-storage" title="Link to this heading">#</a></h2>
+<p>The framework uses HDF5-based storage through <code class="docutils literal notranslate"><span class="pre">DataHandler</span></code> for:</p>
+<ul class="simple">
+<li><p>Efficient large dataset management</p></li>
+<li><p>Automated caching to avoid redundant computations</p></li>
+<li><p>Cross-platform compatibility</p></li>
+<li><p>Hierarchical data organization</p></li>
+</ul>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
+<section id="basic-assessment-workflow">
+<h3>Basic Assessment Workflow<a class="headerlink" href="#basic-assessment-workflow" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">RES.RESources</span> <span class="kn">import</span> <span class="n">RESources_builder</span>
+
+<span class="c1"># Initialize assessment</span>
+<span class="n">builder</span> <span class="o">=</span> <span class="n">RESources_builder</span><span class="p">(</span>
+    <span class="n">config_file_path</span><span class="o">=</span><span class="s2">&quot;config/config_BC.yaml&quot;</span><span class="p">,</span>
+    <span class="n">region_short_code</span><span class="o">=</span><span class="s2">&quot;BC&quot;</span><span class="p">,</span>
+    <span class="n">resource_type</span><span class="o">=</span><span class="s2">&quot;wind&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Execute complete workflow</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">(</span>
+    <span class="n">select_top_sites</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">use_pypsa_buses</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+    <span class="n">memory_resource_limitation</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="c1"># Export results</span>
+<span class="n">builder</span><span class="o">.</span><span class="n">export_results</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">,</span> <span class="n">save_to</span><span class="o">=</span><span class="s2">&quot;output/BC_wind/&quot;</span><span class="p">)</span>
+</pre></div>
 </div>
-<blockquote>
-<div><p>ℹ️ <code class="docutils literal notranslate"><span class="pre">RES.boundaries.GADMBoundaries</span></code> is to be used for standalone data download/validation purposes.</p>
-</div></blockquote>
 </section>
-<section id="spatial-grid-cell-processor">
-<h2>Spatial Grid Cell Processor<a class="headerlink" href="#spatial-grid-cell-processor" title="Link to this heading">#</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="RES.cell.GridCells">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.cell.</span></span><span class="sig-name descname"><span class="pre">GridCells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'config/config.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_short_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'BC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'None'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/cell.html#GridCells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.cell.GridCells" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ERA5Cutout</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.cell.GridCells.generate_coords">
-<span class="sig-name descname"><span class="pre">generate_coords</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/cell.html#GridCells.generate_coords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.cell.GridCells.generate_coords" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.cell.GridCells.get_custom_grid">
-<span class="sig-name descname"><span class="pre">get_custom_grid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/cell.html#GridCells.get_custom_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.cell.GridCells.get_custom_grid" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.cell.GridCells.get_default_grid">
-<span class="sig-name descname"><span class="pre">get_default_grid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/cell.html#GridCells.get_default_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.cell.GridCells.get_default_grid" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="RES.CellCapacityProcessor.CellCapacityProcessor">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.CellCapacityProcessor.</span></span><span class="sig-name descname"><span class="pre">CellCapacityProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'config/config.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_short_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'BC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'None'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/CellCapacityProcessor.html#CellCapacityProcessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.CellCapacityProcessor.CellCapacityProcessor" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">LandContainer</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ERA5Cutout</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.CellCapacityProcessor.CellCapacityProcessor.get_capacity">
-<span class="sig-name descname"><span class="pre">get_capacity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../_modules/RES/CellCapacityProcessor.html#CellCapacityProcessor.get_capacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.CellCapacityProcessor.CellCapacityProcessor.get_capacity" title="Link to this definition">#</a></dt>
-<dd><p>This method processes the capacity of the resources based on the availability matrix and other parameters.
-It calculates the potential capacity for each cell in the region and returns a named tuple containing the
-processed data and the capacity matrix.
-:returns: A named tuple containing the processed <cite>data</cite> and the capacity <cite>matrix</cite>. Can be accessed as:</p>
-<blockquote>
-<div><p><cite>&lt;self.resources_nt&gt;.data</cite> and <cite>&lt;self.resources_nt&gt;.matrix</cite></p>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>namedtuple</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.CellCapacityProcessor.CellCapacityProcessor.load_cost">
-<span class="sig-name descname"><span class="pre">load_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource_atb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/CellCapacityProcessor.html#CellCapacityProcessor.load_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.CellCapacityProcessor.CellCapacityProcessor.load_cost" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.CellCapacityProcessor.CellCapacityProcessor.plot_ERAF5_grid_land_availability">
-<span class="sig-name descname"><span class="pre">plot_ERAF5_grid_land_availability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">region_boundary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Availability_matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataArray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(8,</span> <span class="pre">6)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_box_x_y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(1.2,</span> <span class="pre">1)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/CellCapacityProcessor.html#CellCapacityProcessor.plot_ERAF5_grid_land_availability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.CellCapacityProcessor.CellCapacityProcessor.plot_ERAF5_grid_land_availability" title="Link to this definition">#</a></dt>
-<dd><p>Plots the land availability based on the ERA5 grid cells.
-:param region_boundary: The region boundary to plot. If</p>
-<blockquote>
-<div><p>not provided, the default region boundary will be used.</p>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>Availability_matrix</strong> (<em>xr.DataArray</em><em>, </em><em>optional</em>) -- The availability matrix to plot.
-If not provided, the default Availability matrix will be used.</p></li>
-<li><p><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) -- The size of the figure to create. Defaults to (8, 6).</p></li>
-<li><p><strong>legend_box_x_y</strong> (<em>tuple</em><em>, </em><em>optional</em>) -- The position of the legend box in the plot.
-Defaults to (1.2, 1).</p></li>
+<section id="step-by-step-analysis">
+<h3>Step-by-Step Analysis<a class="headerlink" href="#step-by-step-analysis" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Manual workflow control</span>
+<span class="n">cells</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">get_grid_cells</span><span class="p">()</span>
+<span class="n">cells_with_capacity</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">get_cell_capacity</span><span class="p">()</span>
+<span class="n">cells_with_timeseries</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">get_CF_timeseries</span><span class="p">(</span><span class="n">cells_with_capacity</span><span class="p">)</span>
+<span class="n">scored_cells</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">score_cells</span><span class="p">(</span><span class="n">cells_with_timeseries</span><span class="p">)</span> 
+<span class="n">clusters</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">get_clusters</span><span class="p">(</span><span class="n">scored_cells</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>All spatial data maintained in WGS84 (EPSG:4326) coordinate system</p></li>
+<li><p>Time series generated at hourly resolution for full assessment years</p></li>
+<li><p>Economic calculations follow NREL LCOE methodology</p></li>
+<li><p>Clustering uses k-means with automatic optimization</p></li>
+<li><p>Caching mechanisms minimize redundant computation</p></li>
+<li><p>Modular design enables workflow customization
+:show-inheritance:</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The figure object containing the plot.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>fig (matplotlib.figure.Figure)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="RES.CellCapacityProcessor.CellCapacityProcessor.plot_excluder_land_availability">
-<span class="sig-name descname"><span class="pre">plot_excluder_land_availability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">excluder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExclusionContainer</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/CellCapacityProcessor.html#CellCapacityProcessor.plot_excluder_land_availability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#RES.CellCapacityProcessor.CellCapacityProcessor.plot_excluder_land_availability" title="Link to this definition">#</a></dt>
-<dd><p>Plots the land availability based on the excluder resolution.
-:param excluder: The excluder to use for plotting
-:type excluder: ExclusionContainer, optional</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The figure object containing the plot</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>fig (matplotlib.figure.Figure)</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```{eval-rst}
+.. autoclass:: RES.CellCapacityProcessor.CellCapacityProcessor
+   :show-inheritance:
+</pre></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If the above documentation doesn't render, these classes provide grid cell processing capabilities for spatial analysis.</p>
@@ -908,6 +2253,34 @@ Returns a cleaned DataArray with relevant data.</p>
 </section>
 <section id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Link to this heading">#</a></h2>
+<p>Visualization and plotting utilities for renewable energy resource assessment.</p>
+<p>This module provides comprehensive visualization tools for displaying renewable energy
+assessment results including spatial maps, time series plots, capacity distributions,
+economic analysis charts, and interactive dashboards. It supports both static
+publication-quality figures and interactive web-based visualizations.</p>
+<p>The visualization tools are designed to facilitate analysis interpretation, result
+communication, and workflow debugging through clear, informative graphics that
+highlight spatial patterns, temporal variations, and economic trade-offs in
+renewable energy development potential.</p>
+<dl class="simple">
+<dt>Key Functions:</dt><dd><ul class="simple">
+<li><p>Spatial mapping: Choropleth maps of resource potential and constraints</p></li>
+<li><p>Time series visualization: Capacity factor profiles and seasonal patterns</p></li>
+<li><p>Economic analysis: LCOE distributions and cost component breakdowns</p></li>
+<li><p>Cluster visualization: Site groupings and representative characteristics</p></li>
+<li><p>Interactive dashboards: Web-based exploration interfaces</p></li>
+<li><p>Export utilities: High-resolution figure generation for publications</p></li>
+</ul>
+</dd>
+<dt>Dependencies:</dt><dd><ul class="simple">
+<li><p>matplotlib/seaborn: Static plotting and publication graphics</p></li>
+<li><p>plotly: Interactive visualizations and dashboards</p></li>
+<li><p>folium: Web-based interactive maps</p></li>
+<li><p>geopandas: Spatial data visualization</p></li>
+<li><p>xarray: Multi-dimensional data plotting</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">add_compass_arrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#add_compass_arrow"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
@@ -1212,17 +2585,28 @@ for renewable energy resources (solar or wind). The plot highlights clusters of 
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">size_for_legend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#size_for_legend"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Calculate the size of the bubble for the legend based on megawatts (MW).
-:param mw: The megawatt value to convert to bubble size.
-:type mw: float</p>
+<dd><p>Calculate bubble size for capacity-based map legends.</p>
+<p>Converts megawatt capacity values to appropriate bubble sizes for
+proportional symbol maps, ensuring visual clarity and proper scaling
+across different capacity ranges.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The size of the bubble in points.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mw</strong> (<em>float</em>) -- Capacity value in megawatts</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>float</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Scaled bubble size for mapping visualization</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">size_for_legend</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>  <span class="c1"># 100 MW site</span>
+<span class="go">50.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">size_for_legend</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>  <span class="c1"># 500 MW site</span>
+<span class="go">150.0</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -1242,8 +2626,108 @@ for renewable energy resources (solar or wind). The plot highlights clusters of 
 <h2>Scorer<a class="headerlink" href="#scorer" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.score.</span></span><span class="sig-name descname"><span class="pre">CellScorer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'config/config.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_short_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'BC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'None'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/score.html#CellScorer"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.score.</span></span><span class="sig-name descname"><span class="pre">CellScorer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'config/config.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_short_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'BC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'None'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/score.html#CellScorer"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AttributesParser</span></code></p>
+<p>Economic evaluation and scoring system for renewable energy grid cells.</p>
+<p>This class implements Levelized Cost of Energy (LCOE) calculations to economically
+rank and score potential renewable energy sites. It integrates capital costs,
+operational expenses, grid connection costs, and capacity factors to provide
+comprehensive economic metrics for site comparison and selection.</p>
+<p>The scoring methodology follows NREL LCOE documentation and incorporates
+distance-based grid connection costs, technology-specific capital expenditures,
+and site-specific capacity factors to generate comparable economic indicators
+across different locations and technologies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config_file_path</strong> (<em>str</em><em> or </em><em>Path</em>) -- Configuration file containing economic parameters and assumptions</p></li>
+<li><p><strong>region_short_code</strong> (<em>str</em>) -- Region identifier for localized cost parameters</p></li>
+<li><p><strong>resource_type</strong> (<em>{'solar'</em><em>, </em><em>'wind'}</em>) -- Technology type for appropriate cost parameter selection</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Inherits</span> <span class="pre">configuration</span> <span class="pre">parsing</span> <span class="pre">capabilities</span> <span class="pre">from</span> <span class="pre">AttributesParser</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_CRF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.get_CRF"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate Capital Recovery Factor for annualized cost calculations</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_total_cost(distance_to_grid_km,</span> <span class="pre">grid_connection_cost_per_km,</span></span></dt>
+<dd><blockquote>
+<div><p>tx_line_rebuild_cost, capex_tech, potential_capacity_mw)</p>
+</div></blockquote>
+<p>Compute total project costs including CAPEX and grid connection</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CF_column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CRF</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Generate LCOE score for individual grid cells</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">score_cells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells_with_cf</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Apply economic scoring to entire dataset of grid cells</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_economic_rankings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scored_cells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_percentile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Rank and filter cells by economic attractiveness</p>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<p>Basic economic scoring workflow:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">RES.score</span> <span class="kn">import</span> <span class="n">CellScorer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scorer</span> <span class="o">=</span> <span class="n">CellScorer</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">config_file_path</span><span class="o">=</span><span class="s2">&quot;config/config_BC.yaml&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">region_short_code</span><span class="o">=</span><span class="s2">&quot;BC&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">resource_type</span><span class="o">=</span><span class="s2">&quot;wind&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scored_cells</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">score_cells</span><span class="p">(</span><span class="n">cells_with_capacity_factors</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">top_sites</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">get_economic_rankings</span><span class="p">(</span><span class="n">scored_cells</span><span class="p">,</span> <span class="n">top_percentile</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Custom economic analysis:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Calculate CRF for different financial scenarios</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crf_conservative</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">get_CRF</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mf">0.08</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>  <span class="c1"># 8% discount, 25 year life</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crf_aggressive</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">get_CRF</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>    <span class="c1"># 6% discount, 30 year life</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Apply scoring with custom parameters</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">cells</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="n">lcoe</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">calculate_score</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="s1">&#39;CF_mean&#39;</span><span class="p">,</span> <span class="n">crf_conservative</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>LCOE Calculation Methodology:
+- Follows NREL Simple LCOE calculation framework
+- LCOE = (CAPEX × CRF + OPEX) / Annual Energy Production
+- Includes distance-based grid connection costs
+- Uses technology-specific cost parameters from configuration</p>
+<p>Cost Components:
+- Technology CAPEX ($/MW installed capacity)
+- Grid connection costs ($/km distance to transmission)
+- Transmission line rebuild costs ($/km)
+- Annual O&amp;M expenses (% of CAPEX)
+- Financial parameters (discount rate, project lifetime)</p>
+<p>Economic Parameters:
+- Capital Recovery Factor (CRF) for cost annualization
+- Technology-specific cost assumptions
+- Regional cost multipliers and adjustments
+- Grid connection distance penalties</p>
+<p>Limitations:
+- Simplified LCOE model without detailed financial modeling
+- Grid connection costs based on straight-line distances
+- Does not account for economies of scale in large projects
+- Static cost assumptions without temporal price variations</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">calc_LCOE_lambda_m1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calc_LCOE_lambda_m1"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
@@ -1400,16 +2884,84 @@ reading cost parameters directly from the DataFrame.</p>
 </section>
 <section id="clustering">
 <h2>Clustering<a class="headerlink" href="#clustering" title="Link to this heading">#</a></h2>
+<p>Spatial clustering and site aggregation module for renewable energy resource assessment.</p>
+<p>This module provides functionality for clustering renewable energy sites based on
+spatial proximity, resource characteristics, and economic metrics. It implements
+k-means clustering with automatic cluster number optimization and provides tools
+for generating representative time series profiles for clustered sites.</p>
+<p>The clustering approach balances spatial coherence with resource similarity to create
+meaningful site groupings that maintain resource diversity while reducing computational
+complexity for downstream energy system modeling.</p>
+<dl class="simple">
+<dt>Functions:</dt><dd><p>assign_cluster_id: Generate unique identifiers for grid cells
+determine_elbow_optimal_clusters: Find optimal cluster count using elbow method
+cluster_sites: Perform spatial clustering with economic weighting
+get_representative_timeseries: Generate cluster-representative time series
+visualize_clusters: Create cluster visualization plots</p>
+</dd>
+<dt>Dependencies:</dt><dd><ul class="simple">
+<li><p>scikit-learn: K-means clustering and preprocessing</p></li>
+<li><p>geopandas: Spatial data manipulation</p></li>
+<li><p>matplotlib: Cluster visualization</p></li>
+<li><p>numpy/pandas: Data processing and analysis</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">RES.cluster.</span></span><span class="sig-name descname"><span class="pre">assign_cluster_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Region'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cell'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GeoDataFrame</span></span></span><a class="reference internal" href="../_modules/RES/cluster.html#assign_cluster_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Assigns unique cell IDs to each region in the specified GeoDataFrame.</p>
-<p>Parameters:
-cells (gpd.GeoDataFrame): Input GeoDataFrame containing spatial data with 'x' and 'y' coordinates.
-source_column (str): Column name in the GeoDataFrame that contains regional names.
-index_name (str): Name for the new index column to be created.</p>
-<p>Returns:
-gpd.GeoDataFrame: GeoDataFrame with a new column of unique cell IDs for each region.</p>
+<dd><p>Generate unique identifiers for grid cells based on region and coordinates.</p>
+<p>Creates standardized cell identifiers that combine regional information
+with spatial coordinates to ensure uniqueness across the entire assessment
+domain. These identifiers serve as primary keys for data linking and
+result tracking throughout the assessment workflow.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cells</strong> (<em>gpd.GeoDataFrame</em>) -- Input GeoDataFrame containing spatial data with 'x', 'y' coordinates
+and regional classification information</p></li>
+<li><p><strong>source_column</strong> (<em>str</em><em>, </em><em>default 'Region'</em>) -- Column name containing regional classification (e.g., province, state)</p></li>
+<li><p><strong>index_name</strong> (<em>str</em><em>, </em><em>default 'cell'</em>) -- Name for the new unique identifier column</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>GeoDataFrame with new unique cell identifier column set as index</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gpd.GeoDataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Basic cell ID assignment:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cells_with_ids</span> <span class="o">=</span> <span class="n">assign_cluster_id</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">cells</span><span class="o">=</span><span class="n">grid_cells</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">source_column</span><span class="o">=</span><span class="s1">&#39;Province&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;cell_id&#39;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">cells_with_ids</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># &#39;cell_id&#39;</span>
+</pre></div>
+</div>
+<p>Custom identifier format:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Creates IDs like: &quot;BC_-123.5_49.2&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cells</span> <span class="o">=</span> <span class="n">assign_cluster_id</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span> <span class="s1">&#39;Province&#39;</span><span class="p">,</span> <span class="s1">&#39;unique_cell&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ValueError</strong> -- If source_column doesn't exist in the GeoDataFrame</p></li>
+<li><p><strong>ValueError</strong> -- If required coordinate columns 'x', 'y' are missing</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Removes spaces from region names for consistent formatting</p></li>
+<li><p>ID format: &quot;{region}_{x_coord}_{y_coord}&quot;</p></li>
+<li><p>Coordinates maintain original decimal precision</p></li>
+<li><p>Sets generated IDs as DataFrame index for efficient lookups</p></li>
+<li><p>Essential for linking spatial analysis results across workflow steps</p></li>
+</ul>
 </dd></dl>
 
 <dl class="py function">
@@ -1607,12 +3159,12 @@ as a DataFrame in HDF5 format, and exports to Excel.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="environment_setup.html"
+       href="resource_builder.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Conda Environment Setup for RESource</p>
+        <p class="prev-next-title">RESource Builder Module</p>
       </div>
     </a>
     <a class="right-next"
@@ -1640,25 +3192,29 @@ as a DataFrame in HDF5 format, and exports to Excel.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resource-builder">RESource Builder</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#annual-technology-baseline-atb">Annual Technology Baseline (ATB)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#administrative-boundaries">Administrative Boundaries</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spatial-grid-cell-processor">Spatial Grid Cell Processor</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.cell.GridCells"><code class="docutils literal notranslate"><span class="pre">GridCells</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.cell.GridCells.generate_coords"><code class="docutils literal notranslate"><span class="pre">GridCells.generate_coords()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.cell.GridCells.get_custom_grid"><code class="docutils literal notranslate"><span class="pre">GridCells.get_custom_grid()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.cell.GridCells.get_default_grid"><code class="docutils literal notranslate"><span class="pre">GridCells.get_default_grid()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-workflow-classes">Core Workflow Classes</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resource-builder">RESource Builder</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spatial-grid-management">Spatial Grid Management</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#administrative-boundaries">Administrative Boundaries</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#climate-data-processing">Climate Data Processing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#economic-evaluation">Economic Evaluation</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor.get_capacity"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor.get_capacity()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor.load_cost"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor.load_cost()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor.plot_ERAF5_grid_land_availability"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor.plot_ERAF5_grid_land_availability()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.CellCapacityProcessor.CellCapacityProcessor.plot_excluder_land_availability"><code class="docutils literal notranslate"><span class="pre">CellCapacityProcessor.plot_excluder_land_availability()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specialized-modules">Specialized Modules</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#annual-technology-baseline-atb">Annual Technology Baseline (ATB)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustering-and-aggregation">Clustering and Aggregation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-tools">Visualization Tools</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#utility-functions">Utility Functions</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-management">Configuration Management</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-storage">Data Storage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-assessment-workflow">Basic Assessment Workflow</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-by-step-analysis">Step-by-Step Analysis</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notes">Notes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#global-land-cover">Global Land Cover</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#global-wind-atlas">Global Wind Atlas</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization">Visualization</a></li>

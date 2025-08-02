@@ -156,10 +156,10 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/environment_setup.html">Conda Environment Setup for RESource</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES API References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
@@ -289,7 +289,36 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for RES.visuals</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Visualization and plotting utilities for renewable energy resource assessment.</span>
+
+<span class="sd">This module provides comprehensive visualization tools for displaying renewable energy</span>
+<span class="sd">assessment results including spatial maps, time series plots, capacity distributions,</span>
+<span class="sd">economic analysis charts, and interactive dashboards. It supports both static </span>
+<span class="sd">publication-quality figures and interactive web-based visualizations.</span>
+
+<span class="sd">The visualization tools are designed to facilitate analysis interpretation, result</span>
+<span class="sd">communication, and workflow debugging through clear, informative graphics that</span>
+<span class="sd">highlight spatial patterns, temporal variations, and economic trade-offs in</span>
+<span class="sd">renewable energy development potential.</span>
+
+<span class="sd">Key Functions:</span>
+<span class="sd">    - Spatial mapping: Choropleth maps of resource potential and constraints</span>
+<span class="sd">    - Time series visualization: Capacity factor profiles and seasonal patterns  </span>
+<span class="sd">    - Economic analysis: LCOE distributions and cost component breakdowns</span>
+<span class="sd">    - Cluster visualization: Site groupings and representative characteristics</span>
+<span class="sd">    - Interactive dashboards: Web-based exploration interfaces</span>
+<span class="sd">    - Export utilities: High-resolution figure generation for publications</span>
+
+<span class="sd">Dependencies:</span>
+<span class="sd">    - matplotlib/seaborn: Static plotting and publication graphics</span>
+<span class="sd">    - plotly: Interactive visualizations and dashboards  </span>
+<span class="sd">    - folium: Web-based interactive maps</span>
+<span class="sd">    - geopandas: Spatial data visualization</span>
+<span class="sd">    - xarray: Multi-dimensional data plotting</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">folium</span>
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
@@ -320,6 +349,30 @@ document.write(`
 <div class="viewcode-block" id="size_for_legend">
 <a class="viewcode-back" href="../../notes/api.html#RES.visuals.size_for_legend">[docs]</a>
 <span class="k">def</span> <span class="nf">size_for_legend</span><span class="p">(</span><span class="n">mw</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate bubble size for capacity-based map legends.</span>
+<span class="sd">    </span>
+<span class="sd">    Converts megawatt capacity values to appropriate bubble sizes for</span>
+<span class="sd">    proportional symbol maps, ensuring visual clarity and proper scaling</span>
+<span class="sd">    across different capacity ranges.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mw : float</span>
+<span class="sd">        Capacity value in megawatts</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        Scaled bubble size for mapping visualization</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; size_for_legend(100)  # 100 MW site</span>
+<span class="sd">    50.0</span>
+<span class="sd">    &gt;&gt;&gt; size_for_legend(500)  # 500 MW site  </span>
+<span class="sd">    150.0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the size of the bubble for the legend based on megawatts (MW).</span>
 <span class="sd">    Args:</span>
 <span class="sd">        mw (float): The megawatt value to convert to bubble size.</span>

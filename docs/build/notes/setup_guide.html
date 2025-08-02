@@ -1,0 +1,950 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>RESource Project - Complete Setup &amp; Development Guide &#8212; RESource 2025.07 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=e9b82cb4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notes/setup_guide';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Documentation Build Guide" href="documentation_guide.html" />
+    <link rel="prev" title="RESource" href="../index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/RESource_logo_2025.07.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../_static/RESource_logo_2025.07.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">Documentation Build Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">RES API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Store_explorer.html">Explore data store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notes/setup_guide.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>RESource Project - Complete Setup & Development Guide</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-new-users">🎯 Quick Start (New Users)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clone-and-navigate">1. Clone and Navigate</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-one-command">2. Environment Setup (One Command)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-management">🛠️ Environment Management</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-make-commands">Available Make Commands</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-management">Environment Setup &amp; Management</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#running-code">Running Code</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#utilities">Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-specific-setup">🐧 Platform-Specific Setup</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#windows-users-wsl2-required">Windows Users (WSL2 Required)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linux-macos-users">Linux/macOS Users</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-details">📦 Environment Details</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-dependencies">Core Dependencies</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#daily-development-workflow">🚀 Daily Development Workflow</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#activate-environment">1. Activate Environment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-resource">2. Run RESource</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-development">3. Documentation Development</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">🔧 Troubleshooting</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-issues">Environment Issues</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-environment-health">Check Environment Health</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#export-current-environment">Export Current Environment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wsl2-specific-issues">WSL2 Specific Issues</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-checklist">📋 Development Checklist</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#new-developer-setup">New Developer Setup</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-committing-code">Before Committing Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-deployment">Before Deployment</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-deployment">🌐 Documentation Deployment</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-development">Local Development</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#github-pages-deployment">GitHub Pages Deployment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-structure">Documentation Structure</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tips-best-practices">💡 Tips &amp; Best Practices</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Environment Management</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development">Development</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collaboration">Collaboration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-help">🆘 Getting Help</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-status">Check Status</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-issues">Common Issues</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="resource-project-complete-setup-development-guide">
+<h1>RESource Project - Complete Setup &amp; Development Guide<a class="headerlink" href="#resource-project-complete-setup-development-guide" title="Link to this heading">#</a></h1>
+<section id="quick-start-new-users">
+<h2>🎯 Quick Start (New Users)<a class="headerlink" href="#quick-start-new-users" title="Link to this heading">#</a></h2>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Python 3.11+</strong></p></li>
+<li><p><strong>Git</strong></p></li>
+<li><p><strong>Conda or Miniconda</strong> (strongly recommended for better package management)</p></li>
+<li><p><strong>Linux environment</strong> (native Linux, WSL2 on Windows, or macOS)</p></li>
+</ul>
+</section>
+<section id="clone-and-navigate">
+<h3>1. Clone and Navigate<a class="headerlink" href="#clone-and-navigate" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/DeltaE/RESource.git
+<span class="nb">cd</span><span class="w"> </span>RESource
+</pre></div>
+</div>
+</section>
+<section id="environment-setup-one-command">
+<h3>2. Environment Setup (One Command)<a class="headerlink" href="#environment-setup-one-command" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create conda environment with all dependencies</span>
+make<span class="w"> </span>setup-conda
+
+<span class="c1"># Activate environment</span>
+conda<span class="w"> </span>activate<span class="w"> </span>RES
+
+<span class="c1"># Test installation</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import RES; print(&#39;✅ RESource is ready!&#39;)&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="environment-management">
+<h2>🛠️ Environment Management<a class="headerlink" href="#environment-management" title="Link to this heading">#</a></h2>
+<section id="available-make-commands">
+<h3>Available Make Commands<a class="headerlink" href="#available-make-commands" title="Link to this heading">#</a></h3>
+<section id="environment-setup-management">
+<h4>Environment Setup &amp; Management<a class="headerlink" href="#environment-setup-management" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>setup-conda<span class="w">       </span><span class="c1"># Create/update conda environment &#39;RES&#39;</span>
+make<span class="w"> </span>conda-status<span class="w">      </span><span class="c1"># Check environment health and packages</span>
+make<span class="w"> </span>clean-conda<span class="w">       </span><span class="c1"># Remove conda environment</span>
+make<span class="w"> </span>export-env<span class="w">        </span><span class="c1"># Export environment to env/environment_exported.yml</span>
+</pre></div>
+</div>
+</section>
+<section id="running-code">
+<h4>Running Code<a class="headerlink" href="#running-code" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>run-res<span class="w">           </span><span class="c1"># Run main RESource module</span>
+make<span class="w"> </span>run-conda<span class="w"> </span><span class="nv">SCRIPT</span><span class="o">=</span>path/to/script.py<span class="w"> </span><span class="o">[</span><span class="nv">ARGS</span><span class="o">=</span><span class="s1">&#39;arg1 arg2&#39;</span><span class="o">]</span><span class="w">  </span><span class="c1"># Run custom scripts</span>
+make<span class="w"> </span>jupyter<span class="w">           </span><span class="c1"># Start Jupyter Lab with conda environment</span>
+</pre></div>
+</div>
+</section>
+<section id="documentation">
+<h4>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>docs-build<span class="w">        </span><span class="c1"># Build documentation only</span>
+make<span class="w"> </span>docs-conda<span class="w">        </span><span class="c1"># Build and deploy documentation</span>
+make<span class="w"> </span>deploy<span class="w">            </span><span class="c1"># Deploy documentation to GitHub Pages</span>
+make<span class="w"> </span>sync-notebooks<span class="w">    </span><span class="c1"># Sync notebooks to docs</span>
+make<span class="w"> </span>autobuild<span class="w">         </span><span class="c1"># Live rebuild documentation with auto-reload</span>
+</pre></div>
+</div>
+</section>
+<section id="utilities">
+<h4>Utilities<a class="headerlink" href="#utilities" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nb">help</span><span class="w">             </span><span class="c1"># Show all available commands</span>
+make<span class="w"> </span>clean-docs<span class="w">       </span><span class="c1"># Clean documentation build files</span>
+make<span class="w"> </span>clean-all<span class="w">        </span><span class="c1"># Clean all build files and environments</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="platform-specific-setup">
+<h2>🐧 Platform-Specific Setup<a class="headerlink" href="#platform-specific-setup" title="Link to this heading">#</a></h2>
+<section id="windows-users-wsl2-required">
+<h3>Windows Users (WSL2 Required)<a class="headerlink" href="#windows-users-wsl2-required" title="Link to this heading">#</a></h3>
+<p>RESource is designed for Linux environments. Windows users must use WSL2:</p>
+<ol class="arabic">
+<li><p><strong>Install WSL2:</strong></p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="c"># In PowerShell (as Administrator)</span>
+<span class="n">wsl</span> <span class="p">-</span><span class="n">-install</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Install Ubuntu distribution:</strong></p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="c"># Check available distributions</span>
+<span class="n">wsl</span> <span class="p">-</span><span class="n">-list</span> <span class="p">-</span><span class="n">-online</span>
+
+<span class="c"># Install Ubuntu (recommended)</span>
+<span class="n">wsl</span> <span class="p">-</span><span class="n">-install</span> <span class="n">-d</span> <span class="n">Ubuntu</span><span class="p">-</span><span class="n">22</span><span class="p">.</span><span class="n">04</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Install Miniconda in WSL2:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># In WSL2 terminal</span>
+wget<span class="w"> </span>https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash<span class="w"> </span>Miniconda3-latest-Linux-x86_64.sh
+<span class="nb">source</span><span class="w"> </span>~/.bashrc
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="linux-macos-users">
+<h3>Linux/macOS Users<a class="headerlink" href="#linux-macos-users" title="Link to this heading">#</a></h3>
+<p>Install Miniconda directly:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Linux</span>
+wget<span class="w"> </span>https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash<span class="w"> </span>Miniconda3-latest-Linux-x86_64.sh
+
+<span class="c1"># macOS</span>
+wget<span class="w"> </span>https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+bash<span class="w"> </span>Miniconda3-latest-MacOSX-x86_64.sh
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="environment-details">
+<h2>📦 Environment Details<a class="headerlink" href="#environment-details" title="Link to this heading">#</a></h2>
+<section id="core-dependencies">
+<h3>Core Dependencies<a class="headerlink" href="#core-dependencies" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">env/environment.yml</span></code> includes:</p>
+<p><strong>Scientific Computing:</strong></p>
+<ul class="simple">
+<li><p>Python 3.11, NumPy, Pandas, SciPy, XArray</p></li>
+</ul>
+<p><strong>Geospatial:</strong></p>
+<ul class="simple">
+<li><p>GeoPandas, Rasterio, Shapely, Fiona, PyProj, Cartopy</p></li>
+</ul>
+<p><strong>Energy Modeling:</strong></p>
+<ul class="simple">
+<li><p>Atlite (wind/solar resource assessment)</p></li>
+<li><p>CDS API (climate data)</p></li>
+</ul>
+<p><strong>Visualization:</strong></p>
+<ul class="simple">
+<li><p>Matplotlib, Seaborn, Plotly, Folium</p></li>
+</ul>
+<p><strong>Development:</strong></p>
+<ul class="simple">
+<li><p>Jupyter Lab, Sphinx (documentation), pytest</p></li>
+</ul>
+<p><strong>Full list:</strong> See <code class="docutils literal notranslate"><span class="pre">env/environment.yml</span></code> for complete dependency specification.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="daily-development-workflow">
+<h2>🚀 Daily Development Workflow<a class="headerlink" href="#daily-development-workflow" title="Link to this heading">#</a></h2>
+<section id="activate-environment">
+<h3>1. Activate Environment<a class="headerlink" href="#activate-environment" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>RES
+<span class="c1"># Your prompt should show: (RES) $</span>
+</pre></div>
+</div>
+</section>
+<section id="run-resource">
+<h3>2. Run RESource<a class="headerlink" href="#run-resource" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Main module</span>
+make<span class="w"> </span>run-res
+
+<span class="c1"># Custom scripts</span>
+make<span class="w"> </span>run-conda<span class="w"> </span><span class="nv">SCRIPT</span><span class="o">=</span>workflow/scripts/your_script.py
+
+<span class="c1"># Interactive development</span>
+make<span class="w"> </span>jupyter
+</pre></div>
+</div>
+</section>
+<section id="documentation-development">
+<h3>3. Documentation Development<a class="headerlink" href="#documentation-development" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Live rebuild (recommended for doc development)</span>
+make<span class="w"> </span>autobuild
+<span class="c1"># Opens http://localhost:8000 with auto-reload</span>
+
+<span class="c1"># Build only</span>
+make<span class="w"> </span>docs-build
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="troubleshooting">
+<h2>🔧 Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">#</a></h2>
+<section id="environment-issues">
+<h3>Environment Issues<a class="headerlink" href="#environment-issues" title="Link to this heading">#</a></h3>
+<p><strong>Problem:</strong> Double environment prompts <code class="docutils literal notranslate"><span class="pre">(RES)</span> <span class="pre">(base)</span> <span class="pre">$</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solution: Disable auto-activation of base</span>
+conda<span class="w"> </span>config<span class="w"> </span>--set<span class="w"> </span>auto_activate_base<span class="w"> </span><span class="nb">false</span>
+<span class="nb">source</span><span class="w"> </span>~/.bashrc
+</pre></div>
+</div>
+<p><strong>Problem:</strong> &quot;Environment 'RES' not found&quot;</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solution: Recreate environment</span>
+make<span class="w"> </span>clean-conda
+make<span class="w"> </span>setup-conda
+</pre></div>
+</div>
+<p><strong>Problem:</strong> Package conflicts or broken environment</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solution: Clean rebuild</span>
+make<span class="w"> </span>clean-conda
+conda<span class="w"> </span>clean<span class="w"> </span>--all
+make<span class="w"> </span>setup-conda
+</pre></div>
+</div>
+<p><strong>Problem:</strong> Import errors for pandas/geopandas after atlite installation</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solution: Reinstall conflicting packages through conda</span>
+conda<span class="w"> </span>activate<span class="w"> </span>RES
+conda<span class="w"> </span>update<span class="w"> </span>pandas<span class="w"> </span>geopandas
+<span class="c1"># Or clean reinstall:</span>
+make<span class="w"> </span>clean-conda<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>setup-conda
+</pre></div>
+</div>
+<p><strong>Problem:</strong> Local package not updating after code changes</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solution: Reinstall in development mode</span>
+conda<span class="w"> </span>activate<span class="w"> </span>RES
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+<section id="check-environment-health">
+<h3>Check Environment Health<a class="headerlink" href="#check-environment-health" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>conda-status
+<span class="c1"># Shows: environment status, Python version, key packages, RESource module availability</span>
+</pre></div>
+</div>
+</section>
+<section id="export-current-environment">
+<h3>Export Current Environment<a class="headerlink" href="#export-current-environment" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>export-env
+<span class="c1"># Creates env/environment_exported.yml with exact versions</span>
+</pre></div>
+</div>
+</section>
+<section id="wsl2-specific-issues">
+<h3>WSL2 Specific Issues<a class="headerlink" href="#wsl2-specific-issues" title="Link to this heading">#</a></h3>
+<p><strong>Problem:</strong> Conda commands not found in WSL2</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solution: Ensure conda is in PATH</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;export PATH=&quot;$HOME/miniconda3/bin:$PATH&quot;&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc
+<span class="nb">source</span><span class="w"> </span>~/.bashrc
+</pre></div>
+</div>
+<p><strong>Problem:</strong> Permission issues in WSL2</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solution: Fix file permissions</span>
+sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span><span class="nv">$USER</span>:<span class="nv">$USER</span><span class="w"> </span>/path/to/RESource
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="development-checklist">
+<h2>📋 Development Checklist<a class="headerlink" href="#development-checklist" title="Link to this heading">#</a></h2>
+<section id="new-developer-setup">
+<h3>New Developer Setup<a class="headerlink" href="#new-developer-setup" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>[ ] Clone repository: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/DeltaE/RESource.git</span></code></p></li>
+<li><p>[ ] Install Conda/Miniconda</p></li>
+<li><p>[ ] Run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">setup-conda</span></code></p></li>
+<li><p>[ ] Test: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-c</span> <span class="pre">&quot;import</span> <span class="pre">RES;</span> <span class="pre">print('✅</span> <span class="pre">RESource</span> <span class="pre">is</span> <span class="pre">ready!')&quot;</span></code></p></li>
+<li><p>[ ] Test Jupyter: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">jupyter</span></code></p></li>
+</ul>
+</section>
+<section id="before-committing-code">
+<h3>Before Committing Code<a class="headerlink" href="#before-committing-code" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>[ ] Environment is clean: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">conda-status</span></code></p></li>
+<li><p>[ ] Code runs: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">run-res</span></code></p></li>
+<li><p>[ ] Documentation builds: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">docs-build</span></code></p></li>
+<li><p>[ ] Export environment if dependencies changed: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">export-env</span></code></p></li>
+</ul>
+</section>
+<section id="before-deployment">
+<h3>Before Deployment<a class="headerlink" href="#before-deployment" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>[ ] Documentation is current: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">docs-conda</span></code></p></li>
+<li><p>[ ] All notebooks sync: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">sync-notebooks</span></code></p></li>
+<li><p>[ ] Environment is exportable: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">export-env</span></code></p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="documentation-deployment">
+<h2>🌐 Documentation Deployment<a class="headerlink" href="#documentation-deployment" title="Link to this heading">#</a></h2>
+<section id="local-development">
+<h3>Local Development<a class="headerlink" href="#local-development" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Live reload during development</span>
+make<span class="w"> </span>autobuild
+<span class="c1"># Visit: http://localhost:8000</span>
+</pre></div>
+</div>
+</section>
+<section id="github-pages-deployment">
+<h3>GitHub Pages Deployment<a class="headerlink" href="#github-pages-deployment" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build and deploy to GitHub Pages</span>
+make<span class="w"> </span>deploy
+<span class="c1"># Visit: https://deltae.github.io/RESource/</span>
+</pre></div>
+</div>
+</section>
+<section id="documentation-structure">
+<h3>Documentation Structure<a class="headerlink" href="#documentation-structure" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docs/
+├── source/           # Source files
+│   ├── index.md     # Main page
+│   ├── notes/       # Documentation pages
+│   └── notebooks/   # Jupyter notebooks
+└── build/           # Generated HTML (auto-created)
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="tips-best-practices">
+<h2>💡 Tips &amp; Best Practices<a class="headerlink" href="#tips-best-practices" title="Link to this heading">#</a></h2>
+<section id="id1">
+<h3>Environment Management<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Always use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">setup-conda</span></code> instead of manual conda commands</p></li>
+<li><p>Keep <code class="docutils literal notranslate"><span class="pre">env/environment.yml</span></code> updated when adding dependencies</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">export-env</span></code> to document exact working environment</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">conda-status</span></code> to check environment health regularly</p></li>
+</ul>
+</section>
+<section id="development">
+<h3>Development<a class="headerlink" href="#development" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">run-conda</span> <span class="pre">SCRIPT=...</span></code> for testing scripts with proper environment</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">jupyter</span></code> for interactive development (ensures correct kernel)</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">autobuild</span></code> for documentation development with live reload</p></li>
+</ul>
+</section>
+<section id="collaboration">
+<h3>Collaboration<a class="headerlink" href="#collaboration" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Always commit updated <code class="docutils literal notranslate"><span class="pre">env/environment.yml</span></code> when dependencies change</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">export-env</span></code> to share exact working environment</p></li>
+<li><p>Document any platform-specific setup requirements</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="getting-help">
+<h2>🆘 Getting Help<a class="headerlink" href="#getting-help" title="Link to this heading">#</a></h2>
+<section id="check-status">
+<h3>Check Status<a class="headerlink" href="#check-status" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>conda-status<span class="w">    </span><span class="c1"># Environment health check</span>
+make<span class="w"> </span><span class="nb">help</span><span class="w">           </span><span class="c1"># Show all available commands</span>
+</pre></div>
+</div>
+</section>
+<section id="common-issues">
+<h3>Common Issues<a class="headerlink" href="#common-issues" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Import errors:</strong> Usually environment not activated or packages missing</p></li>
+<li><p><strong>Jupyter kernel issues:</strong> Use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">jupyter</span></code> instead of direct jupyter commands</p></li>
+<li><p><strong>Documentation build fails:</strong> Check Sphinx dependencies with <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">conda-status</span></code></p></li>
+<li><p><strong>Platform issues on Windows:</strong> Ensure using WSL2, not native Windows</p></li>
+</ol>
+</section>
+<section id="resources">
+<h3>Resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/DeltaE/RESource">RESource GitHub Repository</a></p></li>
+<li><p><a class="reference external" href="https://deltae.github.io/RESource/">Documentation</a></p></li>
+<li><p><a class="reference external" href="https://github.com/DeltaE/RESource/issues">Issue Tracker</a></p></li>
+</ul>
+<hr class="docutils" />
+<p><em>This guide covers the complete setup and development workflow for RESource. All commands are tested and maintained through the project Makefile.</em></p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">RESource</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="documentation_guide.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Documentation Build Guide</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-new-users">🎯 Quick Start (New Users)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clone-and-navigate">1. Clone and Navigate</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-one-command">2. Environment Setup (One Command)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-management">🛠️ Environment Management</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-make-commands">Available Make Commands</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-management">Environment Setup &amp; Management</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#running-code">Running Code</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#utilities">Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-specific-setup">🐧 Platform-Specific Setup</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#windows-users-wsl2-required">Windows Users (WSL2 Required)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linux-macos-users">Linux/macOS Users</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-details">📦 Environment Details</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-dependencies">Core Dependencies</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#daily-development-workflow">🚀 Daily Development Workflow</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#activate-environment">1. Activate Environment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-resource">2. Run RESource</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-development">3. Documentation Development</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">🔧 Troubleshooting</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-issues">Environment Issues</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-environment-health">Check Environment Health</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#export-current-environment">Export Current Environment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wsl2-specific-issues">WSL2 Specific Issues</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-checklist">📋 Development Checklist</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#new-developer-setup">New Developer Setup</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-committing-code">Before Committing Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-deployment">Before Deployment</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-deployment">🌐 Documentation Deployment</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-development">Local Development</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#github-pages-deployment">GitHub Pages Deployment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-structure">Documentation Structure</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tips-best-practices">💡 Tips &amp; Best Practices</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Environment Management</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development">Development</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collaboration">Collaboration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-help">🆘 Getting Help</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-status">Check Status</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-issues">Common Issues</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

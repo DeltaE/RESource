@@ -19,6 +19,113 @@ print_level_base=1
 
 @dataclass
 class Timeseries(ERA5Cutout):
+    """
+    Climate data processor and capacity factor calculator for renewable energy resources.
+    
+    This class handles the extraction, processing, and analysis of meteorological time series
+    data to generate capacity factor profiles for solar and wind resources. It integrates
+    with the Atlite library for climate data processing and provides technology-specific
+    capacity factor calculations based on configurable turbine and panel specifications.
+    
+    The class processes hourly weather data into capacity factors that represent the
+    fraction of nameplate capacity that can be generated under specific meteorological
+    conditions, accounting for technology performance curves and environmental constraints.
+    
+    Parameters
+    ----------
+    config_file_path : str or Path
+        Path to configuration file containing resource and technology settings
+    region_short_code : str
+        Region identifier for spatial data coordination
+    resource_type : {'solar', 'wind'}
+        Type of renewable resource for capacity factor calculation
+        
+    Attributes
+    ----------
+    resource_disaggregation_config : dict
+        Technology-specific configuration parameters from config file
+    datahandler : DataHandler
+        HDF5 interface for time series data storage and retrieval
+    gwa_cells : GWACells
+        Global Wind Atlas integration for wind resource bias correction
+    sites_profile : xarray.DataArray
+        Raw capacity factor time series for all grid cells
+    _CF_ts_df_ : pandas.DataFrame
+        Processed time series with cells as columns, time as index
+        
+    Methods
+    -------
+    get_timeseries(cells)
+        Generate capacity factor time series for specified grid cells
+    __process_PV_timeseries__(cells)
+        Calculate solar PV capacity factors using irradiance and temperature
+    __process_WIND_timeseries__(cells, turbine_database, turbine_id)
+        Calculate wind capacity factors using wind speeds and power curves
+    plot_timeseries_comparison(cells_sample, save_path=None)
+        Generate comparative plots of capacity factor profiles
+    get_annual_statistics(cells_timeseries)
+        Calculate annual capacity factor statistics and metrics
+        
+    Examples
+    --------
+    Generate solar PV time series:
+    
+    >>> from RES.timeseries import Timeseries
+    >>> ts_processor = Timeseries(
+    ...     config_file_path="config/config_BC.yaml",
+    ...     region_short_code="BC",
+    ...     resource_type="solar"
+    ... )
+    >>> cells = get_grid_cells()  # From previous workflow step
+    >>> results = ts_processor.get_timeseries(cells)
+    >>> cf_timeseries = results.timeseries_df
+    
+    Wind resource processing with turbine selection:
+    
+    >>> ts_processor = Timeseries(
+    ...     config_file_path="config/config.yaml", 
+    ...     region_short_code="AB",
+    ...     resource_type="wind"
+    ... )
+    >>> # Turbine parameters defined in configuration
+    >>> results = ts_processor.get_timeseries(wind_cells)
+    
+    Time series analysis and visualization:
+    
+    >>> annual_stats = ts_processor.get_annual_statistics(cf_timeseries)
+    >>> ts_processor.plot_timeseries_comparison(sample_cells, "output/plots/")
+    
+    Notes
+    -----
+    - Uses Atlite library for meteorological data processing
+    - Solar calculations account for panel orientation, tilt, and temperature effects
+    - Wind calculations use power curves from turbine databases (OEDB, manufacturer specs)
+    - Time series generated at hourly resolution for full assessment years
+    - Global Wind Atlas corrections applied for improved wind speed accuracy
+    - Results cached in HDF5 format for efficient reuse and large dataset handling
+    - Supports both fixed-tilt and tracking solar PV configurations
+    - Wind power curves interpolated for continuous wind speed ranges
+    
+    Technology Integration
+    ----------------------
+    Solar PV:
+        - Irradiance-based capacity factor calculation
+        - Temperature derating effects
+        - Configurable panel specifications (efficiency, temperature coefficients)
+        - Support for fixed tilt and single-axis tracking
+        
+    Wind:
+        - Power curve-based capacity factor calculation  
+        - Hub height wind speed extrapolation
+        - Turbine database integration (OEDB standard)
+        - Wake effects and array losses configurable
+        
+    Data Dependencies
+    -----------------
+    - ERA5 reanalysis data for meteorological variables
+    - Global Wind Atlas for wind speed bias correction (wind only)
+    - Technology databases for turbine and panel specifications
+    """
     
     def __post_init__(self):
         super().__post_init__()
