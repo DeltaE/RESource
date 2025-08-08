@@ -299,11 +299,10 @@ document.write(`
 <span class="c1"># Import local packages</span>
 <span class="kn">from</span> <span class="nn">RES.AttributesParser</span> <span class="kn">import</span> <span class="n">AttributesParser</span>
 <span class="kn">import</span> <span class="nn">RES.utility</span> <span class="k">as</span> <span class="nn">utils</span>
-<span class="n">print_level_base</span><span class="o">=</span><span class="mi">4</span>
+<span class="n">PRINT_LEVEL_BASE</span><span class="o">=</span><span class="mi">4</span>
 <div class="viewcode-block" id="GADMBoundaries">
 <a class="viewcode-back" href="../../notes/api.html#RES.boundaries.GADMBoundaries">[docs]</a>
 <span class="nd">@dataclass</span>
-
 <span class="k">class</span> <span class="nc">GADMBoundaries</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    GADM (Global Administrative Areas) boundary processor for regional analysis.</span>
@@ -313,9 +312,28 @@ document.write(`
 <span class="sd">    regional boundaries at administrative level 2 (typically states/provinces/districts)</span>
 <span class="sd">    for renewable energy resource assessment areas.</span>
 <span class="sd">    </span>
-<span class="sd">    The class automatically downloads and caches GADM data, processes it into</span>
-<span class="sd">    standardized formats, and provides region-specific boundary extractions</span>
-<span class="sd">    that serve as the spatial basis for grid cell generation and analysis.</span>
+<span class="sd">    INHERITED METHODS FROM AttributesParser:</span>
+<span class="sd">    ----------------------------------------</span>
+<span class="sd">    - get_gadm_config() -&gt; Dict[str, dict]: Get GADM configuration from config file</span>
+<span class="sd">    - get_default_crs() -&gt; str: Get default coordinate reference system (&#39;EPSG:4326&#39;)</span>
+<span class="sd">    - get_country() -&gt; str: Get country name from config file</span>
+<span class="sd">    - get_region_name() -&gt; str: Get region name from config file using region_short_code</span>
+<span class="sd">    - get_region_mapping() -&gt; Dict[str, dict]: Get region mapping dictionary</span>
+<span class="sd">    - is_region_code_valid() -&gt; bool: Validate region short code</span>
+<span class="sd">    - load_config() -&gt; Dict[str, dict]: Load YAML configuration file</span>
+<span class="sd">    - get_excluder_crs() -&gt; int: Get recommended CRS for excluder operations</span>
+<span class="sd">    - get_vis_dir() -&gt; Path: Get visualization directory path</span>
+<span class="sd">    - region_code_validity (property): Boolean property for region code validation</span>
+<span class="sd">    - Plus other utility methods for config access</span>
+<span class="sd">    </span>
+<span class="sd">    OWN METHODS DEFINED IN THIS CLASS:</span>
+<span class="sd">    ----------------------------------</span>
+<span class="sd">    - get_country_boundary(country=None, force_update=False): Download and process complete country GADM boundaries</span>
+<span class="sd">    - get_region_boundary(region_name=None, force_update=False): Extract and process specific regional boundary  </span>
+<span class="sd">    - get_bounding_box(): Generate minimum bounding rectangle for region</span>
+<span class="sd">    - show_regions(basemap=&#39;CartoDB positron&#39;, save_path=&#39;vis/regions&#39;, save=False): Create interactive map visualization</span>
+<span class="sd">    - run(): Execute complete boundary processing workflow</span>
+
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -342,15 +360,29 @@ document.write(`
 <span class="sd">        Path to processed regional boundary file</span>
 <span class="sd">    boundary_datafields : dict</span>
 <span class="sd">        Mapping of GADM fields to standardized field names</span>
+<span class="sd">    country_file : Path</span>
+<span class="sd">        Path to country-level GADM boundary file</span>
+<span class="sd">    boundary_country : gpd.GeoDataFrame</span>
+<span class="sd">        GeoDataFrame containing country-level boundaries</span>
+<span class="sd">    boundary_region : gpd.GeoDataFrame</span>
+<span class="sd">        GeoDataFrame containing region-specific boundaries</span>
+<span class="sd">    actual_boundary : gpd.GeoDataFrame</span>
+<span class="sd">        GeoDataFrame containing the actual regional boundary geometry</span>
+<span class="sd">    bounding_box : dict</span>
+<span class="sd">        Dictionary containing bounding box coordinates (minx, maxx, miny, maxy)</span>
 <span class="sd">        </span>
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
-<span class="sd">    get_country_boundary(country=None, force_update=False)</span>
-<span class="sd">        Download and process complete country GADM boundaries</span>
-<span class="sd">    get_regional_boundary(force_update=False)</span>
-<span class="sd">        Extract and process specific regional boundary</span>
-<span class="sd">    create_bounding_box(geometry, buffer_degrees=0.1)</span>
-<span class="sd">        Generate bounding box for spatial extent calculations</span>
+<span class="sd">    get_country_boundary(country=None, force_update=False) -&gt; gpd.GeoDataFrame</span>
+<span class="sd">        Download and process complete country GADM boundaries at administrative level 2</span>
+<span class="sd">    get_region_boundary(region_name=None, force_update=False) -&gt; gpd.GeoDataFrame</span>
+<span class="sd">        Extract and process specific regional boundary with standardized field names</span>
+<span class="sd">    get_bounding_box() -&gt; tuple</span>
+<span class="sd">        Generate minimum bounding rectangle for region and return (bounding_box_dict, boundary_gdf)</span>
+<span class="sd">    show_regions(basemap=&#39;CartoDB positron&#39;, save_path=&#39;vis/regions&#39;, save=False) -&gt; folium.Map</span>
+<span class="sd">        Create interactive folium map visualization of regional boundaries</span>
+<span class="sd">    run() -&gt; gpd.GeoDataFrame or None</span>
+<span class="sd">        Execute complete boundary processing workflow and return regional boundary GeoDataFrame</span>
 <span class="sd">        </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -362,8 +394,11 @@ document.write(`
 <span class="sd">    ...     region_short_code=&quot;BC&quot;,</span>
 <span class="sd">    ...     resource_type=&quot;wind&quot;</span>
 <span class="sd">    ... )</span>
-<span class="sd">    &gt;&gt;&gt; bc_boundary = boundaries.get_regional_boundary()</span>
+<span class="sd">    &gt;&gt;&gt; bc_boundary = boundaries.get_region_boundary()</span>
 <span class="sd">    &gt;&gt;&gt; country_bounds = boundaries.get_country_boundary(&quot;Canada&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; bbox, actual_boundary = boundaries.get_bounding_box()</span>
+<span class="sd">    &gt;&gt;&gt; interactive_map = boundaries.show_regions(save=True)</span>
+<span class="sd">    &gt;&gt;&gt; result = boundaries.run()  # Execute full workflow</span>
 <span class="sd">    </span>
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
@@ -373,12 +408,24 @@ document.write(`
 <span class="sd">    - Standardizes field names for consistent downstream processing</span>
 <span class="sd">    - Administrative level 2 chosen to balance spatial resolution with data availability</span>
 <span class="sd">    - All geometries maintained in WGS84 (EPSG:4326) for global compatibility</span>
+<span class="sd">    - Region validation is performed using inherited region_code_validity property</span>
+<span class="sd">    - Interactive maps are created using folium with optional save functionality</span>
 <span class="sd">    </span>
 <span class="sd">    Dependencies</span>
 <span class="sd">    ------------</span>
 <span class="sd">    - pygadm: GADM data access and processing</span>
 <span class="sd">    - geopandas: Spatial data manipulation</span>
-<span class="sd">    - shapely: Geometric operations</span>
+<span class="sd">    - folium: Interactive map visualization (via geopandas.explore())</span>
+<span class="sd">    - pathlib: Path handling</span>
+<span class="sd">    - RES.AttributesParser: Parent class for configuration management</span>
+<span class="sd">    - RES.utility: Utility functions for logging and updates</span>
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the country is not found in the GADM dataset or if region code is invalid</span>
+<span class="sd">    Exception</span>
+<span class="sd">        If there is an error fetching or loading the GADM data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -386,23 +433,28 @@ document.write(`
      <span class="c1"># Call the parent class __post_init__ to initialize inherited attributes</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__post_init__</span><span class="p">()</span>
         
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_args</span> <span class="o">=</span> <span class="p">{</span>   <span class="c1">#order doesn&#39;t matter</span>
+            <span class="s2">&quot;config_file_path&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_file_path</span><span class="p">,</span>
+            <span class="s2">&quot;region_short_code&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="p">,</span>
+            <span class="s2">&quot;resource_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span>
+        <span class="p">}</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">admin_level</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span> <span class="mi">2</span> <span class="c1"># hardcoded to keep the workflow intact. The workflow has dependency on Regional District name i.e. level 2 boundaries.</span>
 
         <span class="c1"># Setup paths and ensure directories exist</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gadm_config</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_gadm_config</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gadm_config</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_gadm_config</span><span class="p">()</span>  <span class="c1"># INHERITED METHOD from AttributesParser</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">gadm_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gadm_config</span><span class="p">[</span><span class="s1">&#39;root&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gadm_root</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Creates parent directories if not exists.</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">gadm_processed</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gadm_config</span><span class="p">[</span><span class="s1">&#39;processed&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gadm_processed</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Creates parent directories if not exists.</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_default_crs</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_country</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boundary_datafields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gadm_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;datafield_mapping&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">=</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_default_crs</span><span class="p">()</span>  <span class="c1"># INHERITED METHOD from AttributesParser</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="o">=</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_country</span><span class="p">()</span>  <span class="c1"># INHERITED METHOD from AttributesParser</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">region_file</span><span class="p">:</span><span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gadm_processed</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s1">&#39;gadm41_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="si">}</span><span class="s1">_L</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">admin_level</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="si">}</span><span class="s1">.geojson&#39;</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">boundary_datafields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gadm_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;datafield_mapping&#39;</span><span class="p">)</span>
         
     <span class="c1"># Define a function to create bounding boxes (of cell) directly from coordinates (x, y) and resolution</span>
     
@@ -429,38 +481,36 @@ document.write(`
 <span class="sd">        :raises Exception: If there is an error fetching or loading the GADM data.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> | Country Selected: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> | Country Selected: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
         
         <span class="c1"># store the user input (via method args)</span>
         <span class="k">if</span> <span class="n">country</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">country</span> <span class="o">=</span> <span class="n">country</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
-            
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> | Country Selected: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> | Country Selected: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">country_file</span><span class="p">:</span><span class="n">Path</span><span class="o">=</span><span class="n">Path</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gadm_root</span><span class="p">)</span> <span class="o">/</span>  <span class="sa">f</span><span class="s1">&#39;gadm41_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="si">}</span><span class="s1">_L</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">admin_level</span><span class="si">}</span><span class="s1">.geojson&#39;</span>  
         
         <span class="k">try</span><span class="p">:</span>
-            <span class="c1"># country_gadm_regions_file_path = Path (self.gadm_root)/ f&#39;gadm41_{self.country}_L{self.admin_level}.geojson&#39;</span>
-
             <span class="c1"># Load or fetch data</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">country_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">force_update</span><span class="p">:</span> <span class="c1"># load the country gdf from local file</span>
-                <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> | Loading GADM data for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="si">}</span><span class="s2"> from local datafile </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country_file</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> | Loading GADM data for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="si">}</span><span class="s2"> from local datafile </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country_file</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">boundary_country</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">country_file</span><span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># Fetch and save data if file does not exist or force_update is True</span>
-                <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> | Fetching GADM data for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="si">}</span><span class="s2"> at Administrative Level </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">admin_level</span><span class="si">}</span><span class="s2">....from source: https://gadm.org/data.html&quot;</span><span class="p">)</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> | Fetching GADM data for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="si">}</span><span class="s2"> at Administrative Level </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">admin_level</span><span class="si">}</span><span class="s2">....from source: https://gadm.org/data.html&quot;</span><span class="p">)</span>
                 
                 <span class="n">_country_gdf_</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span> <span class="o">=</span> <span class="n">pygadm</span><span class="o">.</span><span class="n">AdmItems</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="p">,</span> <span class="n">content_level</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">admin_level</span><span class="p">)</span>
                 <span class="n">_country_gdf_</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">boundary_country</span><span class="o">=</span><span class="n">_country_gdf_</span>
                 <span class="c1"># save to local file</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">boundary_country</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">country_file</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s1">&#39;GeoJSON&#39;</span><span class="p">)</span>
-                <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> | GADM data saved to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country_file</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> | GADM data saved to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country_file</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
                 
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_country</span>
 
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> | Error fetching or loading GADM data: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> | Error fetching or loading GADM data: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">raise</span></div>
 
 
@@ -482,14 +532,15 @@ document.write(`
 <span class="sd">            ValueError: If the region code is invalid or no data is found for the specified region</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        
         <span class="k">if</span> <span class="n">region_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span> <span class="o">=</span> <span class="n">region_name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">region_name</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_region_name</span><span class="p">()</span>
-        
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">region_name</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_region_name</span><span class="p">()</span>  <span class="c1"># INHERITED METHOD from AttributesParser</span>
+
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Region Set to &gt;&gt; Short Code : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="si">}</span><span class="s2">, Name: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2">).&quot;</span><span class="p">)</span>
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Collecting regional boundary...&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_code_validity</span><span class="p">:</span>
@@ -497,18 +548,25 @@ document.write(`
             <span class="c1"># It should be saved in processed because the column names have been modified from source.</span>
             
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">force_update</span><span class="p">:</span> <span class="c1"># There is a local file and no update required</span>
-                <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Loading GADM boundaries (Sub-provincial | level =2) for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2"> from local file </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_file</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Loading GADM boundaries (Sub-provincial | level =2) for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2"> from local file </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_file</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
                 
                 <span class="bp">self</span><span class="o">.</span><span class="n">boundary_region</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region_file</span><span class="p">)</span>
             
             <span class="k">else</span><span class="p">:</span> <span class="c1"># When the local file for region doesn&#39;t exist, Filter region data from country file and save locally</span>
-    
-                <span class="n">_boundary_country</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_country_boundary</span><span class="p">(</span><span class="n">force_update</span><span class="p">)</span>
-                <span class="n">_boundary_region_</span> <span class="o">=</span> <span class="n">_boundary_country</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">boundary_country</span><span class="p">[</span><span class="s1">&#39;NAME_1&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="p">]</span>
+                
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">multi_country_flag</span><span class="p">:</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> | Processing the Boundaries for Multi-Country Region : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                    
+                    <span class="n">_boundary_country</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_country_boundary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="p">,</span><span class="n">force_update</span><span class="p">)</span>
+                    <span class="n">_boundary_region_</span> <span class="o">=</span> <span class="n">_boundary_country</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">_boundary_country</span><span class="p">[</span><span class="s1">&#39;NAME_0&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="p">]</span>
+                    
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_boundary_country</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_country_boundary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="p">,</span><span class="n">force_update</span><span class="p">)</span>
+                    <span class="n">_boundary_region_</span> <span class="o">=</span> <span class="n">_boundary_country</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">boundary_country</span><span class="p">[</span><span class="s1">&#39;NAME_1&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="p">]</span>
 
                 <span class="k">if</span> <span class="n">_boundary_region_</span><span class="o">.</span><span class="n">empty</span> <span class="p">:</span> 
-                    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">|  No data found for region &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
-                    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| | @ LINE | Consider revising &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2">&#39; to match source (e.g. https://gadm.org/maps.html); Select &#39;show sub-divisions&#39; to get the list of Supported Regional Names&quot;</span><span class="p">)</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">|  No data found for region &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| | @ LINE | Consider revising &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2">&#39; to match source (e.g. https://gadm.org/maps.html); Select &#39;show sub-divisions&#39; to get the list of Supported Regional Names&quot;</span><span class="p">)</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> | @ LINE </span><span class="si">{</span><span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_lineno</span><span class="si">}</span><span class="s2"> | No data found for region &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">_boundary_region_</span> <span class="o">=</span> <span class="n">_boundary_region_</span><span class="p">[[</span><span class="s1">&#39;NAME_0&#39;</span><span class="p">,</span> <span class="s1">&#39;NAME_1&#39;</span><span class="p">,</span> <span class="s1">&#39;NAME_2&#39;</span><span class="p">,</span> <span class="s1">&#39;geometry&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span>
@@ -518,7 +576,7 @@ document.write(`
       
                 
                 <span class="bp">self</span><span class="o">.</span><span class="n">boundary_region</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region_file</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s1">&#39;GeoJSON&#39;</span><span class="p">)</span>
-                <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| GADM data for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2"> saved to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_file</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| GADM data for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2"> saved to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_file</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_region</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> | @ LINE </span><span class="si">{</span><span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_lineno</span><span class="si">}</span><span class="s2"> Invalid region code: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
@@ -538,12 +596,12 @@ document.write(`
 <span class="sd">            To be used internally to get the bounding box of the region to set ERA5 cutout boundaries.</span>
 <span class="sd">            </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Processing regional bounding box...&quot;</span><span class="p">)</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">actual_boundary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_region_boundary</span><span class="p">()</span>
         
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Setting up the Minimum Bounding Region (MBR) for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Setting up the Minimum Bounding Region (MBR) for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
         <span class="n">min_x</span><span class="p">,</span> <span class="n">min_y</span><span class="p">,</span> <span class="n">max_x</span><span class="p">,</span> <span class="n">max_y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actual_boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">total_bounds</span>
 
         
@@ -565,7 +623,7 @@ document.write(`
 <a class="viewcode-back" href="../../notes/api.html#RES.boundaries.GADMBoundaries.show_regions">[docs]</a>
     <span class="k">def</span> <span class="nf">show_regions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
                     <span class="n">basemap</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;CartoDB positron&#39;</span><span class="p">,</span> 
-                    <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;vis/regions&#39;</span><span class="p">,</span>
+                    <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;vis/regions&#39;</span><span class="p">,</span>
                     <span class="n">save</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create and save an interactive map for the specified region.</span>
@@ -588,10 +646,10 @@ document.write(`
                 <span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">save_path</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="si">}</span><span class="s2">.html&quot;</span>
                 <span class="n">file_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="n">m</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
-                <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Interactive map for &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="si">}</span><span class="s2">&#39; saved to </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
                                   <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Skipping the save to local directories as &#39;save&#39; is set to False.&quot;</span><span class="p">)</span>
         
         <span class="k">return</span> <span class="n">m</span></div>
@@ -610,7 +668,7 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">show_regions</span><span class="p">()</span>
             <span class="k">return</span> <span class="n">region_gadm_gdf</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Region code is not valid.&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">region_code_validity</span>
             <span class="k">return</span> <span class="kc">None</span></div>

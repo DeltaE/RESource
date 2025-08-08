@@ -391,6 +391,7 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__post_init__</span><span class="p">()</span>
         
 <div class="viewcode-block" id="CellScorer.get_CRF">
@@ -398,6 +399,29 @@ document.write(`
     <span class="k">def</span> <span class="nf">get_CRF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                 <span class="n">r</span><span class="p">,</span> 
                 <span class="n">N</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate Capital Recovery Factor (CRF) for annualized cost calculations.</span>
+<span class="sd">        </span>
+<span class="sd">        The CRF converts a present-value capital cost into a stream of equal</span>
+<span class="sd">        annual payments over the project lifetime. This is essential for LCOE</span>
+<span class="sd">        calculations as it allows comparison of projects with different capital</span>
+<span class="sd">        costs and lifetimes on an annualized basis.</span>
+<span class="sd">        </span>
+<span class="sd">        Formula: CRF = [r × (1 + r)^N] / [(1 + r)^N - 1]</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            r (float): Discount rate (as decimal, e.g., 0.08 for 8%)</span>
+<span class="sd">            N (int): Project lifetime in years</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Capital Recovery Factor</span>
+<span class="sd">            </span>
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; scorer = CellScorer(**config)</span>
+<span class="sd">            &gt;&gt;&gt; crf = scorer.get_CRF(r=0.07, N=25)  # 7% discount, 25 years</span>
+<span class="sd">            &gt;&gt;&gt; print(f&quot;CRF: {crf:.4f}&quot;)</span>
+<span class="sd">            CRF: 0.0858</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">**</span> <span class="n">N</span><span class="p">)</span> <span class="o">/</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">**</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">N</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span></div>
 
         
@@ -410,8 +434,35 @@ document.write(`
                              <span class="n">capex_tech</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                              <span class="n">potential_capacity_mw</span><span class="p">:</span><span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculate the total cost, which includes the CAPEX and distance-based grid connection costs.</span>
-<span class="sd">        Method: Simple Levelized Cost of Energy Calculation (https://www.nrel.gov/analysis/tech-lcoe-documentation.html)</span>
+<span class="sd">        Calculate total project cost including CAPEX and distance-based grid connection costs.</span>
+<span class="sd">        </span>
+<span class="sd">        This method implements the cost calculation framework following NREL&#39;s Simple </span>
+<span class="sd">        Levelized Cost of Energy methodology. It combines technology capital expenditures</span>
+<span class="sd">        with grid integration costs that scale with distance to existing transmission</span>
+<span class="sd">        infrastructure.</span>
+<span class="sd">        </span>
+<span class="sd">        Cost Components:</span>
+<span class="sd">        1. Technology CAPEX: Base capital cost for renewable energy installation</span>
+<span class="sd">        2. Grid Connection Cost: Cost to connect to nearest transmission point</span>
+<span class="sd">        3. Transmission Rebuild Cost: Infrastructure upgrade costs for grid integration</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            distance_to_grid_km (float): Distance to nearest grid connection point (km)</span>
+<span class="sd">            grid_connection_cost_per_km (float): Cost per km for grid connection (M$/km)</span>
+<span class="sd">            tx_line_rebuild_cost (float): Transmission line rebuild cost (M$/km)</span>
+<span class="sd">            capex_tech (float): Technology-specific capital expenditure (M$/MW)</span>
+<span class="sd">            potential_capacity_mw (float): Potential installed capacity (MW)</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Total project cost in millions of dollars (M$)</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Converts km to miles for cost calculations (US-based cost data)</span>
+<span class="sd">            - Grid connection costs scale linearly with distance</span>
+<span class="sd">            - Method follows NREL Simple LCOE documentation framework</span>
+<span class="sd">            </span>
+<span class="sd">        Reference:</span>
+<span class="sd">            https://www.nrel.gov/analysis/tech-lcoe-documentation.html</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Calculate distance-based cost</span>
         <span class="n">add_to_grid_cost</span> <span class="o">=</span> <span class="p">(</span><span class="n">distance_to_grid_km</span> <span class="o">*</span> <span class="n">grid_connection_cost_per_km</span> <span class="o">/</span> <span class="mf">1.60934</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">tx_line_rebuild_cost</span> <span class="o">/</span> <span class="mf">1.60934</span><span class="p">)</span>  <span class="c1"># Convert to miles as our costs are given in $/miles (USA study)</span>
@@ -429,14 +480,45 @@ document.write(`
                         <span class="n">CF_column</span><span class="p">,</span>
                         <span class="n">CRF</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculate the potential LCOE score for each cell in the dataframe,</span>
-<span class="sd">        reading cost parameters directly from the DataFrame.</span>
+<span class="sd">        Calculate the Levelized Cost of Energy (LCOE) score for an individual grid cell.</span>
 <span class="sd">        </span>
-<span class="sd">        ## Args:</span>
-<span class="sd">        - **row** : A single row of the DataFrame.</span>
+<span class="sd">        This method computes the LCOE using the simplified NREL methodology, combining</span>
+<span class="sd">        annualized capital costs with operational expenses and dividing by annual energy</span>
+<span class="sd">        production. The resulting LCOE provides a standardized metric for comparing</span>
+<span class="sd">        the economic attractiveness of different renewable energy sites.</span>
 <span class="sd">        </span>
-<span class="sd">        ## Returns:</span>
-<span class="sd">        - **float** : The calculated LCOE value for the row.</span>
+<span class="sd">        LCOE Formula:</span>
+<span class="sd">        LCOE = (Total Cost × CRF + OPEX) / Annual Energy Production</span>
+<span class="sd">        </span>
+<span class="sd">        Where:</span>
+<span class="sd">        - Total Cost includes CAPEX and grid connection costs</span>
+<span class="sd">        - CRF converts capital costs to annual payments</span>
+<span class="sd">        - Annual Energy = 8760 hours × Capacity Factor × Installed Capacity</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            row (pd.Series): DataFrame row containing cell-specific data including:</span>
+<span class="sd">                - nearest_station_distance_km: Distance to grid connection</span>
+<span class="sd">                - grid_connection_cost_per_km_{resource_type}: Grid connection cost</span>
+<span class="sd">                - tx_line_rebuild_cost_{resource_type}: Transmission rebuild cost</span>
+<span class="sd">                - capex_{resource_type}: Technology capital expenditure</span>
+<span class="sd">                - potential_capacity_{resource_type}: Installable capacity</span>
+<span class="sd">                - CF_column value: Capacity factor for the cell</span>
+<span class="sd">            CF_column (str): Column name containing capacity factor data</span>
+<span class="sd">            CRF (float): Capital Recovery Factor for cost annualization</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: LCOE in $/MWh, or 999 if annual energy production is zero</span>
+<span class="sd">            </span>
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; # Calculate LCOE for a single grid cell</span>
+<span class="sd">            &gt;&gt;&gt; crf = scorer.get_CRF(r=0.07, N=25)</span>
+<span class="sd">            &gt;&gt;&gt; lcoe = scorer.calculate_score(grid_cell, &#39;CF_mean&#39;, crf)</span>
+<span class="sd">            &gt;&gt;&gt; print(f&quot;LCOE: ${lcoe:.2f}/MWh&quot;)</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Returns high penalty value (999) for cells with zero energy production</span>
+<span class="sd">            - Converts from M$/MWh to $/MWh for standard reporting units</span>
+<span class="sd">            - Incorporates site-specific capacity factors and grid integration costs</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Calculate the total cost</span>
         <span class="n">total_cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_total_cost</span><span class="p">(</span>
@@ -464,41 +546,90 @@ document.write(`
                     <span class="n">cells</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                     <span class="n">CF_column</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
                     <span class="n">interest_rate</span><span class="o">=</span><span class="mf">0.03</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Calculate the potential LCOE score for each cell in the dataframe,</span>
-<span class="sd">            reading cost parameters directly from the DataFrame.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate LCOE scores for all grid cells in a DataFrame and return ranked results.</span>
+<span class="sd">        </span>
+<span class="sd">        This method applies economic scoring to an entire dataset of potential renewable</span>
+<span class="sd">        energy sites, calculating LCOE for each cell and sorting results by economic</span>
+<span class="sd">        attractiveness. It serves as the primary interface for batch economic analysis</span>
+<span class="sd">        of renewable energy development opportunities.</span>
+<span class="sd">        </span>
+<span class="sd">        Processing Steps:</span>
+<span class="sd">        1. Calculate Capital Recovery Factor from financial parameters</span>
+<span class="sd">        2. Apply LCOE calculation to each grid cell</span>
+<span class="sd">        3. Sort results by LCOE (ascending = most economically attractive first)</span>
+<span class="sd">        4. Return scored and ranked DataFrame</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            cells (pd.DataFrame): DataFrame containing grid cells with required columns:</span>
+<span class="sd">                - nearest_station_distance_km: Distance to transmission (km)</span>
+<span class="sd">                - grid_connection_cost_per_km_{resource_type}: Connection cost (M$/km)</span>
+<span class="sd">                - tx_line_rebuild_cost_{resource_type}: Rebuild cost (M$/km)</span>
+<span class="sd">                - capex_{resource_type}: Technology CAPEX (M$/MW)</span>
+<span class="sd">                - potential_capacity_{resource_type}: Installable capacity (MW)</span>
+<span class="sd">                - Operational_life_{resource_type}: Project lifetime (years)</span>
+<span class="sd">            CF_column (str): Column name containing capacity factor data</span>
+<span class="sd">                          (e.g., &#39;CF_mean&#39;, &#39;wind_CF_mean&#39;, &#39;solar_CF_mean&#39;)</span>
+<span class="sd">            interest_rate (float, optional): Discount rate for CRF calculation.</span>
+<span class="sd">                                           Defaults to 0.03 (3%)</span>
+<span class="sd">                                           </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: Input DataFrame with added LCOE column, sorted by economic</span>
+<span class="sd">                         attractiveness (lowest LCOE first). Column name format:</span>
+<span class="sd">                         &#39;lcoe_{resource_type}&#39; with values in $/MWh</span>
+<span class="sd">                         </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            KeyError: If required columns are missing from input DataFrame</span>
+<span class="sd">            ValueError: If capacity factors or operational life contain invalid values</span>
 <span class="sd">            </span>
-<span class="sd">            ## Args:</span>
-<span class="sd">            - **Cells** : Pandas DataFrame of grid cells.</span>
-<span class="sd">            - **CF_column**: Column name from which Capacity Factor (CF) will be used to calculated Annual. Avg. Energy (MWh). User can have multiple CF_mean columns sourced from different data sources.</span>
-<span class="sd">           </span>
-<span class="sd">            &quot;&quot;&quot;</span>
-            <span class="n">dataframe</span> <span class="o">=</span> <span class="n">cells</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># Use the input DataFrame for calculations</span>
-            <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
-                           <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Calculating score for cells...&quot;</span><span class="p">)</span> 
-            
-            <span class="c1"># Calculate the LCOE for each cell</span>
-            <span class="n">N</span><span class="o">=</span><span class="n">cells</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Operational_life_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">CRF</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_CRF</span><span class="p">(</span><span class="n">interest_rate</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-            <span class="n">dataframe</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
-                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_total_cost</span><span class="p">(</span>
-                    <span class="n">x</span><span class="p">[</span><span class="s1">&#39;nearest_station_distance_km&#39;</span><span class="p">],</span> <span class="c1"># km</span>
-                    <span class="n">x</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;grid_connection_cost_per_km_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>  <span class="c1"># m$/km</span>
-                    <span class="n">x</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;tx_line_rebuild_cost_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>  <span class="c1"># m$/km</span>
-                    <span class="n">x</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;capex_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>
-                    <span class="n">x</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span><span class="c1"># m$</span>
-                <span class="p">)</span><span class="o">*</span><span class="n">CRF</span> <span class="o">/</span> <span class="p">(</span><span class="mi">8760</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">CF_column</span><span class="p">]</span><span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="p">(</span><span class="mi">8760</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">CF_column</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">),</span>  <span class="c1"># LCOE = Total Cost / Total Energy Produced</span>
-                <span class="n">axis</span><span class="o">=</span><span class="mi">1</span> <span class="c1"># LCOE in M$/MWh;</span>
-            <span class="p">)</span>  
-            
-            <span class="c1"># dataframe[f&#39;lcoe_{self.resource_type}&#39;]=dataframe[f&#39;lcoe_{self.resource_type}&#39;]*1E3 # LCOE in $/kWh; lower lcoe indicates better cells</span>
-            <span class="n">dataframe</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_score</span><span class="p">(</span><span class="n">row</span><span class="p">,</span><span class="n">CF_column</span><span class="p">,</span><span class="n">CRF</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># LCOE in $/MWh  # adopting NREL&#39;s method + some added costs</span>
-            <span class="n">scored_dataframe</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># Lower LCOE is better</span>
-            
-            <span class="c1"># dataframe[f&#39;LCOE_{self.resource_type}&#39;] = dataframe.apply(lambda row: self.calc_LCOE_lambda_m2(row), axis=1) # LCOE in $/MWh  # adopting NREL&#39;s method + some added costs</span>
-            <span class="c1"># scored_dataframe = dataframe.sort_values(by=f&#39;LCOE_{self.resource_type}&#39;, ascending=False).copy()  # Lower LCOE is better</span>
-            
-            <span class="k">return</span> <span class="n">scored_dataframe</span></div>
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; # Score wind energy sites using mean capacity factors</span>
+<span class="sd">            &gt;&gt;&gt; wind_cells = scorer.get_cell_score(</span>
+<span class="sd">            ...     cells=grid_data, </span>
+<span class="sd">            ...     CF_column=&#39;wind_CF_mean&#39;,</span>
+<span class="sd">            ...     interest_rate=0.07</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; print(f&quot;Best site LCOE: ${wind_cells.iloc[0][&#39;lcoe_wind&#39;]:.2f}/MWh&quot;)</span>
+<span class="sd">            </span>
+<span class="sd">            &gt;&gt;&gt; # Score solar sites with conservative financial assumptions  </span>
+<span class="sd">            &gt;&gt;&gt; solar_cells = scorer.get_cell_score(</span>
+<span class="sd">            ...     cells=grid_data,</span>
+<span class="sd">            ...     CF_column=&#39;solar_CF_mean&#39;, </span>
+<span class="sd">            ...     interest_rate=0.08</span>
+<span class="sd">            ... )</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Cells with zero annual energy production receive infinite LCOE values</span>
+<span class="sd">            - Results are sorted ascending (lowest LCOE = most attractive)</span>
+<span class="sd">            - Method handles edge cases like zero capacity factors gracefully</span>
+<span class="sd">            - LCOE values are in $/MWh for standard industry comparison</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dataframe</span> <span class="o">=</span> <span class="n">cells</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># Use the input DataFrame for calculations</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
+                       <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Calculating score for cells...&quot;</span><span class="p">)</span> 
+        
+        <span class="c1"># Calculate the LCOE for each cell</span>
+        <span class="n">N</span><span class="o">=</span><span class="n">cells</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Operational_life_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">CRF</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_CRF</span><span class="p">(</span><span class="n">interest_rate</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">dataframe</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_total_cost</span><span class="p">(</span>
+                <span class="n">x</span><span class="p">[</span><span class="s1">&#39;nearest_station_distance_km&#39;</span><span class="p">],</span> <span class="c1"># km</span>
+                <span class="n">x</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;grid_connection_cost_per_km_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>  <span class="c1"># m$/km</span>
+                <span class="n">x</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;tx_line_rebuild_cost_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>  <span class="c1"># m$/km</span>
+                <span class="n">x</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;capex_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>
+                <span class="n">x</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span><span class="c1"># m$</span>
+            <span class="p">)</span><span class="o">*</span><span class="n">CRF</span> <span class="o">/</span> <span class="p">(</span><span class="mi">8760</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">CF_column</span><span class="p">]</span><span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="p">(</span><span class="mi">8760</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">CF_column</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">),</span>  <span class="c1"># LCOE = Total Cost / Total Energy Produced</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">1</span> <span class="c1"># LCOE in M$/MWh;</span>
+        <span class="p">)</span>  
+        
+        <span class="c1"># dataframe[f&#39;lcoe_{self.resource_type}&#39;]=dataframe[f&#39;lcoe_{self.resource_type}&#39;]*1E3 # LCOE in $/kWh; lower lcoe indicates better cells</span>
+        <span class="n">dataframe</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_score</span><span class="p">(</span><span class="n">row</span><span class="p">,</span><span class="n">CF_column</span><span class="p">,</span><span class="n">CRF</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># LCOE in $/MWh  # adopting NREL&#39;s method + some added costs</span>
+        <span class="n">scored_dataframe</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># Lower LCOE is better</span>
+        
+        <span class="c1"># dataframe[f&#39;LCOE_{self.resource_type}&#39;] = dataframe.apply(lambda row: self.calc_LCOE_lambda_m2(row), axis=1) # LCOE in $/MWh  # adopting NREL&#39;s method + some added costs</span>
+        <span class="c1"># scored_dataframe = dataframe.sort_values(by=f&#39;LCOE_{self.resource_type}&#39;, ascending=False).copy()  # Lower LCOE is better</span>
+        
+        <span class="k">return</span> <span class="n">scored_dataframe</span></div>
 
 
 <div class="viewcode-block" id="CellScorer.calc_LCOE_lambda_m1">
