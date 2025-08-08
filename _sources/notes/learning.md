@@ -46,3 +46,17 @@ For British Columbia (BC), the map on the right displays IEC turbine classes for
 > The _Ruggedness Index_ (as shown in in left map), also known as the _Terrain Ruggedness Index (TRI)_, quantitatively measures terrain heterogeneity by assessing elevation changes across the landscape. This index helps explain IEC Class variations in specific areas and supports informed decisions regarding IEC Class selection.
 
 > **Data Source:** Global Wind Atlas (GWA) <sub>v3.4</sub>
+
+## Selecting Solar PV Panels
+
+We use the *[atlite.pv](https://atlite.readthedocs.io/en/master/ref_api.html#atlite.convert.pv)* conversion functionality to translate surface solar irradiance (direct + diffuse) and ambient temperature into photovoltaic (PV) power output. Internally, this module relies on a detailed panel model that incorporates parameters such as panel efficiency and temperature-dependent performance losses. 
+
+- Users can specify panel orientation (e.g., fixed tilt or azimuth) or tracking configurations (e.g., single-axis tracking). The “optimal” tilt—commonly based on latitude—or active tracking improves alignment with the sun, enhancing overall energy yield. 
+    > For Optimal slope of the panels, atlite uses the formula documented in [solarpaneltilt: Optimum Tilt of Solar Panels](http://www.solarpaneltilt.com/#fixed)
+
+- Currently, panel configuration options are limited to crystalline silicon (c-Si), cadmium telluride (CdTe), and Kaneka (amorphous silicon) technologies. The configurations and assumptions underlying the pv panel models can be found at [atlite/resources/solarpanel](https://github.com/PyPSA/atlite/tree/master/atlite/resources/solarpanel)
+
+### Panel Attribute Configurations:
+- Higher-efficiency panels and improved orientation directly increase generation under identical irradiance conditions. If you do not want to explicitly define panel orientation, use __tracking: 'dual'__ and we have defaulted the ['orientation': "latitude_optimal"](https://github.com/DeltaE/RESource/blob/1d9c0672bd924d2b7aae6b571709aee2eb1dd6f9/RES/timeseries.py#L253) at [_timeseries_](https://github.com/DeltaE/RESource/blob/main/RES/timeseries.py) module.
+    > Examples regarding custom orientation configuration is provided here: [atlite PV examples](https://atlite.readthedocs.io/en/master/examples/historic-comparison-germany.html)
+- We configure the pv panels' attributes at ['capacity_disaggregation/solar'](https://github.com/DeltaE/RESource/blob/1d9c0672bd924d2b7aae6b571709aee2eb1dd6f9/config/config_CAN.yaml#L371) key of the config file.

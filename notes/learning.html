@@ -347,6 +347,10 @@ document.write(`
 </li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-solar-pv-panels">Selecting Solar PV Panels</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#panel-attribute-configurations">Panel Attribute Configurations:</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -470,6 +474,29 @@ document.write(`
 </section>
 </section>
 </section>
+<section id="selecting-solar-pv-panels">
+<h2>Selecting Solar PV Panels<a class="headerlink" href="#selecting-solar-pv-panels" title="Link to this heading">#</a></h2>
+<p>We use the <em><a class="reference external" href="https://atlite.readthedocs.io/en/master/ref_api.html#atlite.convert.pv">atlite.pv</a></em> conversion functionality to translate surface solar irradiance (direct + diffuse) and ambient temperature into photovoltaic (PV) power output. Internally, this module relies on a detailed panel model that incorporates parameters such as panel efficiency and temperature-dependent performance losses.</p>
+<ul>
+<li><p>Users can specify panel orientation (e.g., fixed tilt or azimuth) or tracking configurations (e.g., single-axis tracking). The “optimal” tilt—commonly based on latitude—or active tracking improves alignment with the sun, enhancing overall energy yield.</p>
+<blockquote>
+<div><p>For Optimal slope of the panels, atlite uses the formula documented in <a class="reference external" href="http://www.solarpaneltilt.com/#fixed">solarpaneltilt: Optimum Tilt of Solar Panels</a></p>
+</div></blockquote>
+</li>
+<li><p>Currently, panel configuration options are limited to crystalline silicon (c-Si), cadmium telluride (CdTe), and Kaneka (amorphous silicon) technologies. The configurations and assumptions underlying the pv panel models can be found at <a class="reference external" href="https://github.com/PyPSA/atlite/tree/master/atlite/resources/solarpanel">atlite/resources/solarpanel</a></p></li>
+</ul>
+<section id="panel-attribute-configurations">
+<h3>Panel Attribute Configurations:<a class="headerlink" href="#panel-attribute-configurations" title="Link to this heading">#</a></h3>
+<ul>
+<li><p>Higher-efficiency panels and improved orientation directly increase generation under identical irradiance conditions. If you do not want to explicitly define panel orientation, use <strong>tracking: 'dual'</strong> and we have defaulted the <a class="reference external" href="https://github.com/DeltaE/RESource/blob/1d9c0672bd924d2b7aae6b571709aee2eb1dd6f9/RES/timeseries.py#L253">'orientation': &quot;latitude_optimal&quot;</a> at <a class="reference external" href="https://github.com/DeltaE/RESource/blob/main/RES/timeseries.py"><em>timeseries</em></a> module.</p>
+<blockquote>
+<div><p>Examples regarding custom orientation configuration is provided here: <a class="reference external" href="https://atlite.readthedocs.io/en/master/examples/historic-comparison-germany.html">atlite PV examples</a></p>
+</div></blockquote>
+</li>
+<li><p>We configure the pv panels' attributes at <a class="reference external" href="https://github.com/DeltaE/RESource/blob/1d9c0672bd924d2b7aae6b571709aee2eb1dd6f9/config/config_CAN.yaml#L371">'capacity_disaggregation/solar'</a> key of the config file.</p></li>
+</ul>
+</section>
+</section>
 </section>
 
 
@@ -526,6 +553,10 @@ document.write(`
 </li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-solar-pv-panels">Selecting Solar PV Panels</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#panel-attribute-configurations">Panel Attribute Configurations:</a></li>
 </ul>
 </li>
 </ul>
