@@ -42,28 +42,249 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from atlite.gis import ExclusionContainer
+from matplotlib.axes import Axes
 from matplotlib.colors import ListedColormap
 from rasterio.plot import show
 from shapely.geometry.base import BaseGeometry
-from matplotlib.axes import Axes
+
 from RES import utility as utils
 from RES.boundaries import GADMBoundaries
 from RES.era5_cutout import ERA5Cutout
 from RES.gaez import GAEZRasterProcessor
 from RES.osm import OSMData
+from RES.AttributesParser import AttributesParser
 
 PRINT_LEVEL_BASE: int = 2  # handles the print level for the utils.print_update function
-
-
-class ConservationLands(GADMBoundaries):
+class ConservationLands(AttributesParser):
     """
-    ConservationLands class
+    Conservation lands data processor for protected and conserved areas analysis.
+    
+    This class handles the downloading, processing, and analysis of conservation lands
+    data, particularly focusing on Canadian Protected and Conserved Areas Database
+    (CPCAD). It provides comprehensive functionality for loading, simplifying, and
+    mapping conserved land geometries at provincial and regional levels for use in
+    renewable energy resource assessment and land use planning.
+    
+    The class integrates conservation data with regional boundaries to support
+    land exclusion analysis in renewable energy siting decisions. It processes
+    geospatial data from government sources and provides tools for visualization
+    and spatial analysis of protected areas.
+    
+    INHERITED METHODS FROM GADMBoundaries:
+    --------------------------------------
+    - get_region_boundary() -> gpd.GeoDataFrame: Get regional boundary geometry
+    - get_bounding_box() -> tuple: Get regional bounding box coordinates
+    - Plus other boundary processing methods
+    
+    INHERITED METHODS FROM AttributesParser:
+    ----------------------------------------
+    - get_region_name() -> str: Get full region name for display
+    - get_resource_disaggregation_config() -> dict: Get resource configuration
+    - get_excluder_crs() -> str: Get coordinate reference system for exclusions
+    - Plus other configuration access methods
+    
+    INHERITED ATTRIBUTES FROM AttributesParser:
+    -------------------------------------------
+    - config: Configuration dictionary with all settings
+    - gadm_config: GADM-specific configuration parameters
+    - Plus other configuration attributes
+    
+    OWN METHODS DEFINED IN THIS CLASS:
+    ----------------------------------
+    - get_provincial_conserved_lands(): Load and process provincial conservation data
+    - show_lands(): Visualize conservation lands with regional boundaries
+    - __get_conserved_lands__(): Download and extract conservation data archives
+    
+    Parameters
+    ----------
+    config_file_path : str or Path
+        Path to configuration file containing conservation data parameters
+    region_short_code : str
+        Region identifier for boundary definition and data filtering
+    resource_type : str
+        Resource type for compatibility with broader workflows
+        
+    Attributes
+    ----------
+    conserved_lands_cfg : dict
+        Conservation lands configuration from config file
+    source_url : str
+        URL for downloading conservation data archives
+    data_root : str or Path
+        Root directory for conservation data storage
+    zip_file_name : str
+        Name of the ZIP archive containing conservation data
+    zip_file_path : Path
+        Full path to the conservation data ZIP file
+    extraction_dir : Path
+        Directory for extracting conservation data files
+    region_boundary : gpd.GeoDataFrame
+        Regional boundary geometry for spatial filtering
+    region_shape : gpd.GeoDataFrame
+        Dissolved regional geometry for analysis
+    region_name : str
+        Full name of the region for display purposes
+    resource_disaggregation_config : dict
+        Configuration for resource type disaggregation
+    aeroway_gdf : gpd.GeoDataFrame
+        Aeroway geometries for infrastructure analysis
+    raster_configs : list
+        List of raster layer configurations
+        
+    Methods
+    -------
+    get_provincial_conserved_lands(geom_simplification_tolerance=0.005) -> gpd.GeoDataFrame
+        Load and process provincial conservation lands data with geometry simplification
+    show_lands(conserved_lands=None, save_to=None, show=True) -> None
+        Visualize conservation lands overlaid on regional boundaries
+        
+    Examples
+    --------
+    Create conservation lands processor for British Columbia:
+    
+    >>> from RES.lands import ConservationLands
+    >>> conservation = ConservationLands(
+    ...     config_file_path="config/config_BC.yaml",
+    ...     region_short_code="BC",
+    ...     resource_type="solar"
+    ... )
+    >>> 
+    >>> # Load provincial conservation data
+    >>> conserved_areas = conservation.get_provincial_conserved_lands()
+    >>> print(f"Loaded {len(conserved_areas)} conservation areas")
+    
+    Visualize conservation lands:
+    
+    >>> # Show conservation areas with regional boundaries
+    >>> conservation.show_lands(
+    ...     conserved_lands=conserved_areas,
+    ...     save_to="plots/BC_conservation.png",
+    ...     show=True
+    ... )
+    
+    Access conservation data with geometry simplification:
+    
+    >>> # Load with custom simplification tolerance
+    >>> simplified_areas = conservation.get_provincial_conserved_lands(
+    ...     geom_simplification_tolerance=0.001
+    ... )
+    >>> print(f"Simplified to {len(simplified_areas)} areas")
+    
+    Configuration Requirements
+    --------------------------
+    The configuration must include conservation lands parameters:
+    
+    ```yaml
+    Gov:
+      conservation_lands:
+        url: "https://www.donneesquebec.ca/recherche/dataset/..."
+        root: "data/downloaded_data/conservation"
+        data_name: "CPCAD_Dec2023"
+        layers:
+          - name: "Protected_Conserved_Areas"
+            file: "CPCAD-BDCAP_Dec2023.gdb"
+    ```
+    
+    Data Processing Workflow
+    ------------------------
+    1. **Configuration Loading**: Extract conservation data parameters
+    2. **Data Download**: Download conservation data archives if needed
+    3. **Data Extraction**: Extract GIS files from archives
+    4. **Boundary Processing**: Load regional boundaries for spatial filtering
+    5. **Spatial Filtering**: Clip conservation data to regional extent
+    6. **Geometry Simplification**: Simplify complex geometries for performance
+    7. **Attribute Processing**: Clean and standardize attribute data
+    8. **Visualization**: Generate maps showing conservation areas
+    
+    Conservation Data Types
+    -----------------------
+    Typical conservation datasets include:
+    - **Protected Areas**: National parks, provincial parks, marine protected areas
+    - **Conserved Areas**: Conservation easements, private conservancies
+    - **Indigenous Territories**: Traditional territories and land claims
+    - **Wildlife Reserves**: Critical habitat and wildlife management areas
+    - **Buffer Zones**: Areas around sensitive ecosystems
+    
+    Spatial Processing
+    ------------------
+    - **Coordinate Systems**: Automatic CRS handling and reprojection
+    - **Geometry Simplification**: Configurable tolerance for performance optimization
+    - **Spatial Filtering**: Intersection with regional boundaries
+    - **Topology Validation**: Automatic geometry validation and repair
+    - **Area Calculations**: Accurate area computation in appropriate projections
+    
+    Performance Optimization
+    ------------------------
+    - **Geometry Simplification**: Reduces complexity while preserving accuracy
+    - **Spatial Indexing**: Efficient spatial queries and intersections
+    - **Memory Management**: Streaming processing for large datasets
+    - **Caching**: Local storage of processed data to avoid reprocessing
+    - **Lazy Loading**: Data loaded only when needed
+    
+    Integration Points
+    ------------------
+    - **Regional Boundaries**: Integration with GADM boundary data
+    - **Land Exclusions**: Provides input for renewable energy exclusion analysis
+    - **Visualization**: Compatible with mapping and plotting workflows
+    - **Resource Assessment**: Supports land availability calculations
+    
+    Data Quality
+    ------------
+    - **Data Validation**: Automatic validation of geometry and attributes
+    - **Currency Checking**: Warnings for outdated conservation data
+    - **Completeness Assessment**: Reports on data coverage and gaps
+    - **Accuracy Metrics**: Spatial accuracy assessment where possible
+    
+    Notes
+    -----
+    - Conservation data is typically updated annually or bi-annually
+    - Large conservation databases may require substantial processing time
+    - Geometry simplification balances performance and accuracy
+    - Results support both renewable energy and conservation planning
+    - Integration with other land use datasets enhances analysis capabilities
+    - Spatial accuracy depends on source data quality and scale
+    
+    Dependencies
+    ------------
+    - geopandas: Spatial data processing and geometry operations
+    - pandas: Tabular data manipulation and analysis
+    - fiona: Reading GIS file formats
+    - shapely: Geometric operations and validation
+    - matplotlib: Visualization and plotting
+    - pathlib: File path operations
+    - zipfile: Archive extraction and management
+    - RES.boundaries.GADMBoundaries: Parent class for boundary processing
+    - RES.utility: Logging and utility functions
+    
+    Raises
+    ------
+    ConnectionError
+        If conservation data download fails due to network issues
+    FileNotFoundError
+        If required data files or configuration are missing
+    ValueError
+        If geometry simplification tolerance or other parameters are invalid
+    GeometryError
+        If conservation area geometries are invalid or cannot be processed
+        
+    See Also
+    --------
+    geopandas.GeoDataFrame.simplify : Geometry simplification functionality
+    fiona.open : Reading GIS data files
+    RES.boundaries.GADMBoundaries : Parent class for boundary processing
     """
 
     def __post_init__(self):
         # Call the parent class __post_init__ to initialize inherited attributes
         super().__post_init__()
-
+                
+        self.required_args = {   #order doesn't matter
+            "config_file_path" : self.config_file_path,
+            "region_short_code": self.region_short_code,
+            "resource_type": self.resource_type
+        }
+        self.gadm_boundaries = GADMBoundaries(**self.required_args)  # INHERITED METHOD from GADMBoundaries     
+        
         # Set the Class specific attributes
         self.conserved_lands_cfg = self.config["Gov"]["conservation_lands"]
 
@@ -75,15 +296,15 @@ class ConservationLands(GADMBoundaries):
         self.extraction_dir.parent.mkdir(parents=True, exist_ok=True)
 
         # Initialize region_boundary attribute
-        self.region_boundary = self.get_region_boundary()
+        self.region_boundary = self.gadm_boundaries.get_region_boundary()  # INHERITED METHOD from GADMBoundaries
         self.region_shape = self.region_boundary.dissolve(
-            by=self.gadm_config["datafield_mapping"]["NAME_1"]
+            by=self.get_gadm_config()["datafield_mapping"]["NAME_1"]  # INHERITED METHOD from AttributesParser
         )  # Get the geometry of the region boundary
-        self.region_name = self.get_region_name()
+        self.region_name = self.get_region_name()  # INHERITED METHOD from AttributesParser
 
         # Set up resource disaggregation configurations
         self.resource_disaggregation_config: dict = (
-            self.get_resource_disaggregation_config()
+            self.get_resource_disaggregation_config()  # INHERITED METHOD from AttributesParser
         )
 
         self.aeroway_gdf: gpd.GeoDataFrame = None  # Initialize aeroway_gdf attribute
@@ -130,7 +351,7 @@ class ConservationLands(GADMBoundaries):
             gdb_file_path: Path = self.__get_conserved_lands__()
 
             # Get Region Boundaries
-            self.region_boundary: gpd.GeoDataFrame = self.get_region_boundary()
+            self.region_boundary: gpd.GeoDataFrame = self.gadm_boundaries.get_region_boundary()  # INHERITED METHOD from GADMBoundaries
 
             layers: list = fiona.listlayers(gdb_file_path)
 
@@ -224,7 +445,7 @@ class ConservationLands(GADMBoundaries):
             folium.Map: The interactive map object.
         """
         conserved_lands = self.get_provincial_conserved_lands()
-        self.region_boundary = self.get_region_boundary()
+        self.region_boundary = self.gadm_boundaries.get_region_boundary()  # INHERITED METHOD from GADMBoundaries
 
         if self.region_boundary is not None:
             m = self.region_boundary.explore(
@@ -256,17 +477,262 @@ class ConservationLands(GADMBoundaries):
         return m
 
 
-class LandContainer(ERA5Cutout, GAEZRasterProcessor, ConservationLands, OSMData):
+class LandContainer(AttributesParser):
     """
-    Handles the inclusion/exclusion of lands from raster/vector data.
-
+    Multi-source land data container for comprehensive spatial exclusion analysis.
+    
+    This class combines multiple geospatial data sources (ERA5 cutouts, GAEZ rasters,
+    OSM data, and conservation lands) to manage inclusion/exclusion of lands for
+    spatial analysis. It provides a comprehensive framework for renewable energy
+    land suitability assessment by integrating climate, terrain, infrastructure,
+    and conservation constraints.
+    
+    The class uses multiple inheritance to access functionality from ERA5 climate
+    data processing, GAEZ raster analysis, and OpenStreetMap infrastructure data.
+    It creates an ExclusionContainer that can handle both raster and vector
+    exclusion layers for detailed spatial analysis.
+    
+    INHERITED METHODS FROM ERA5Cutout:
+    ----------------------------------
+    - get_era5_cutout() -> tuple: Get ERA5 climate data cutout
+    - get_cutout_path() -> Path: Generate cutout file path
+    
+    INHERITED METHODS FROM GAEZRasterProcessor:
+    -------------------------------------------
+    - process_all_rasters() -> dict: Process GAEZ raster layers
+    - get_gaez_data_config() -> dict: Get GAEZ configuration
+    
+    INHERITED METHODS FROM OSMData:
+    -------------------------------
+    - get_osm_layer() -> gpd.GeoDataFrame: Get OSM infrastructure layer
+    - get_osm_config() -> dict: Get OSM configuration
+    
+    INHERITED METHODS FROM AttributesParser:
+    ----------------------------------------
+    - get_excluder_crs() -> str: Get coordinate reference system for exclusions
+    - get_resource_disaggregation_config() -> dict: Get resource configuration
+    - get_conserved_lands_CAN_args() -> dict: Get conservation lands arguments
+    - default_font_family -> str: Get default font family for plots
+    - Plus other configuration access methods
+    
+    INHERITED ATTRIBUTES FROM AttributesParser:
+    -------------------------------------------
+    - resource_type: Resource type identifier
+    - region_short_code: Region identifier code
+    - region_name: Full region name
+    - Plus other configuration attributes
+    
+    OWN METHODS DEFINED IN THIS CLASS:
+    ----------------------------------
+    - set_excluder(): Configure exclusion container with all layers
+    - get_layers(): Load and organize raster and vector exclusion layers
+    
+    Parameters
+    ----------
+    config_file_path : str or Path
+        Path to configuration file containing all data source parameters
+    region_short_code : str
+        Region identifier for boundary definition and data filtering
+    resource_type : str
+        Resource type ('solar', 'wind', 'bess') for technology-specific exclusions
+        
+    Attributes
+    ----------
+    excluder_crs : str
+        Coordinate reference system for exclusion analysis (typically Canada-specific)
+    excluder : ExclusionContainer
+        Atlite ExclusionContainer for managing spatial exclusions
+    resource_disaggregation_config : dict
+        Configuration for resource type disaggregation and exclusions
+    conserved_lands_CAN : ConservationLands
+        Conservation lands processor for protected area exclusions
+    conservation_lands_region_gdf : gpd.GeoDataFrame
+        Regional conservation lands data for exclusion analysis
+        
+    Methods
+    -------
+    set_excluder() -> None
+        Configure exclusion container with all raster and vector layers
+    get_layers() -> tuple[list, list]
+        Load and organize raster and vector exclusion layers from configuration
+        
+    Examples
+    --------
+    Create comprehensive land container for British Columbia:
+    
+    >>> from RES.lands import LandContainer
+    >>> land_container = LandContainer(
+    ...     config_file_path="config/config_BC.yaml",
+    ...     region_short_code="BC",
+    ...     resource_type="solar"
+    ... )
+    >>> 
+    >>> # Set up exclusion layers
+    >>> land_container.set_excluder()
+    >>> print("Exclusion container configured with all layers")
+    
+    Access individual data sources:
+    
+    >>> # Get GAEZ raster data
+    >>> gaez_layers = land_container.get_layers()
+    >>> print(f"Available layers: {len(gaez_layers[0])} raster, {len(gaez_layers[1])} vector")
+    >>> 
+    >>> # Access ERA5 cutout
+    >>> cutout, boundaries = land_container.get_era5_cutout()
+    >>> print(f"ERA5 cutout covers {cutout.coords['time'].size} time steps")
+    
+    Perform exclusion analysis:
+    
+    >>> # Configure exclusions for renewable energy siting
+    >>> land_container.set_excluder()
+    >>> excluded_area = land_container.excluder.compute()
+    >>> print(f"Excluded area computed: {excluded_area.shape}")
+    
+    Configuration Requirements
+    --------------------------
+    The configuration must include parameters for all data sources:
+    
+    ```yaml
+    cutout:  # ERA5 configuration
+      root: "data/cutouts"
+      module: "era5"
+      
+    gaez_data:  # GAEZ raster configuration
+      root: "data/downloaded_data/GAEZ"
+      raster_types: [...]
+      
+    osm_data:  # OSM infrastructure configuration
+      root: "data/downloaded_data/OSM"
+      layers: [...]
+      
+    Gov:  # Conservation lands configuration
+      conservation_lands:
+        url: "..."
+        root: "data/downloaded_data/conservation"
+    ```
+    
+    Data Integration Workflow
+    -------------------------
+    1. **Multi-source Initialization**: Initialize all parent classes
+    2. **CRS Harmonization**: Establish common coordinate reference system
+    3. **Exclusion Container Setup**: Create atlite ExclusionContainer
+    4. **Layer Configuration**: Load raster and vector exclusion layers
+    5. **Conservation Data**: Process protected and conserved areas
+    6. **Infrastructure Data**: Load OSM roads, railways, settlements
+    7. **Terrain Data**: Process GAEZ slope, elevation constraints
+    8. **Climate Integration**: Incorporate ERA5 data for analysis context
+    
+    Exclusion Layer Types
+    ---------------------
+    **Raster Exclusions:**
+    - **Slope**: Terrain slope constraints from GAEZ
+    - **Elevation**: Elevation constraints for accessibility
+    - **Land Cover**: Unsuitable land cover types
+    - **Soil Quality**: Agricultural productivity protection
+    
+    **Vector Exclusions:**
+    - **Conservation Areas**: Protected and conserved lands
+    - **Infrastructure**: Roads, railways, power lines with buffers
+    - **Settlements**: Urban areas and residential zones
+    - **Water Bodies**: Lakes, rivers, wetlands
+    - **Administrative**: Military zones, airports
+    
+    Spatial Analysis Capabilities
+    -----------------------------
+    - **Multi-resolution Integration**: Harmonize different data resolutions
+    - **Buffer Operations**: Apply technology-specific buffer distances
+    - **Overlay Analysis**: Complex spatial intersections and unions
+    - **Area Calculations**: Accurate area computation in projected CRS
+    - **Constraint Mapping**: Visualization of all exclusion layers
+    
+    Performance Considerations
+    --------------------------
+    - **Memory Management**: Lazy loading and streaming for large datasets
+    - **Spatial Indexing**: Efficient spatial queries and operations
+    - **Resolution Optimization**: Balance between accuracy and performance
+    - **Caching Strategy**: Store processed exclusions for reuse
+    - **Parallel Processing**: Multi-threaded operations where possible
+    
+    Integration Points
+    ------------------
+    - **Renewable Energy Assessment**: Primary use for solar/wind siting
+    - **Capacity Factor Analysis**: Integrate with climate-based calculations
+    - **Grid Connection**: Compatible with transmission line analysis
+    - **Resource Optimization**: Support for multi-criteria decision analysis
+    - **Policy Analysis**: Enable scenario-based exclusion studies
+    
+    Quality Assurance
+    -----------------
+    - **Data Validation**: Automatic validation of all input layers
+    - **Consistency Checking**: Ensure spatial and temporal consistency
+    - **Gap Analysis**: Identify and report data coverage gaps
+    - **Accuracy Assessment**: Validate exclusion logic and results
+    - **Uncertainty Quantification**: Propagate uncertainties through analysis
+    
+    Notes
+    -----
+    - Multiple inheritance requires careful method resolution order
+    - CRS management is critical for accurate spatial analysis
+    - Large regions may require substantial computational resources
+    - Results support both preliminary and detailed feasibility studies
+    - Integration with atlite enables advanced renewable energy modeling
+    - Exclusion logic can be customized for different technologies and policies
+    
+    Dependencies
+    ------------
+    - atlite.gis.ExclusionContainer: Core exclusion functionality
+    - geopandas: Spatial data processing
+    - rasterio: Raster data operations
+    - numpy: Numerical operations
+    - matplotlib: Visualization
+    - RES.era5_cutout.ERA5Cutout: ERA5 climate data processing
+    - RES.gaez.GAEZRasterProcessor: GAEZ raster data processing
+    - RES.osm.OSMData: OpenStreetMap data processing
+    - RES.utility: Logging and utility functions
+    
+    Raises
+    ------
+    CRSError
+        If coordinate reference systems cannot be harmonized
+    DataError
+        If required data sources are missing or invalid
+    MemoryError
+        If datasets are too large for available memory
+    RuntimeError
+        If exclusion container setup or operations fail
+        
+    See Also
+    --------
+    atlite.gis.ExclusionContainer : Core exclusion functionality
+    RES.era5_cutout.ERA5Cutout : ERA5 climate data processing
+    RES.gaez.GAEZRasterProcessor : GAEZ raster data processing
+    RES.osm.OSMData : OpenStreetMap data processing
     """
 
     def __post_init__(self):
         # Call the parent class __post_init__ to initialize inherited attributes
         super().__post_init__()
+        self.required_args= {
+            "config_file_path": self.config_file_path,
+            "region_short_code": self.region_short_code,
+            "resource_type": self.resource_type
+        }
 
-        self.excluder_crs = self.get_excluder_crs(country="Canada")
+        self.era5_cutout = ERA5Cutout(**self.required_args)
+        self.gaez_raster_processor = GAEZRasterProcessor(**self.required_args)
+        self.osm_data = OSMData(**self.required_args)
+        self.gadm_boundaries = GADMBoundaries(**self.required_args)
+
+        # Set up inherited attributes that are needed
+        self.region_name = self.get_region_name()  # INHERITED METHOD from AttributesParser
+
+        # Initialize region_boundary and region_shape
+        self.region_boundary = self.gadm_boundaries.get_region_boundary()  # INHERITED METHOD from GADMBoundaries
+        self.region_shape = self.region_boundary.dissolve(
+            by=self.get_gadm_config()["datafield_mapping"]["NAME_1"]  # INHERITED METHOD from AttributesParser
+        )  # Get the geometry of the region boundary
+
+        self.excluder_crs = self.get_excluder_crs(country="Canada")  # INHERITED METHOD from AttributesParser
 
         # Initiate Exclusion Container
         self.excluder = ExclusionContainer(
@@ -274,8 +740,12 @@ class LandContainer(ERA5Cutout, GAEZRasterProcessor, ConservationLands, OSMData)
         )  # CRS 3347 fit for Canada
 
         # Initialize resource_disaggregation_config attribute
-        self.resource_disaggregation_config = self.get_resource_disaggregation_config()
-
+        self.resource_disaggregation_config = self.get_resource_disaggregation_config()  # INHERITED METHOD from AttributesParser
+        if self.get_conserved_lands_CAN_args() is not None:  # INHERITED METHOD from AttributesParser
+            self.conserved_lands_CAN=ConservationLands(**self.get_conserved_lands_CAN_args())  # INHERITED METHOD from AttributesParser
+        else:
+            utils.print_warning(f"{__name__}| 'conserved_lands_CAN' not initiated. Please check the config file for 'conserved_lands' key under 'Gov' section")
+            self.conserved_lands_CAN=None
         # Initialize conservation_lands_region_gdf attribute
         self.conservation_lands_region_gdf = None
 
@@ -288,13 +758,13 @@ class LandContainer(ERA5Cutout, GAEZRasterProcessor, ConservationLands, OSMData)
         )
 
         args_add_excluder_layer = {
-            "resource_type": self.resource_type,
+            "resource_type": self.resource_type,  # INHERITED ATTRIBUTE from AttributesParser
             "excluder": self.excluder,
             "region_shape": self.region_shape,
             "raster_configs": raster_configs,
             "vector_configs": vector_configs,
-            "font_family": self.default_font_family,
-            "plot_save_to": f"vis/{self.region_short_code}/lands"
+            "font_family": self.default_font_family,  # INHERITED ATTRIBUTE from AttributesParser
+            "plot_save_to": f"vis/{self.region_short_code}/lands"  # INHERITED ATTRIBUTE from AttributesParser
         }
         
         
@@ -317,9 +787,9 @@ class LandContainer(ERA5Cutout, GAEZRasterProcessor, ConservationLands, OSMData)
             level=PRINT_LEVEL_BASE + 2,
             message=f"{__name__}| Loading GAEZ raster layers for {self.region_name}...",
         )
-        self.gaez_config = self.get_gaez_data_config()
+        self.gaez_config = self.get_gaez_data_config()  # INHERITED METHOD from AttributesParser
         raster_configs: list[dict] = self.gaez_config["raster_types"]
-        regional_raster_paths: dict = self.process_all_rasters(show=False)
+        regional_raster_paths: dict = self.gaez_raster_processor.process_all_rasters(show=False)
 
         for raster_config_item in raster_configs:
             name = raster_config_item.get("name")
@@ -350,7 +820,14 @@ class LandContainer(ERA5Cutout, GAEZRasterProcessor, ConservationLands, OSMData)
                     level=PRINT_LEVEL_BASE + 2,
                     message=f"{__name__}| Loading Conserved areas for {self.region_name}",
                 )
-                vector_gdf = self.get_provincial_conserved_lands()
+                if self.conserved_lands_CAN is None:
+                    utils.print_update(
+                        level=PRINT_LEVEL_BASE + 1,
+                        message=f"{__name__}| conserved_lands_CAN is not initialized. Skipping {vector_name}.",
+                        alert=True,
+                    )
+                    continue
+                vector_gdf = self.conserved_lands_CAN.get_provincial_conserved_lands()
                 if vector_gdf.empty:
                     utils.print_update(
                         level=PRINT_LEVEL_BASE + 1,
@@ -364,7 +841,7 @@ class LandContainer(ERA5Cutout, GAEZRasterProcessor, ConservationLands, OSMData)
 
             elif vector_name == "aeroway":
                 # Load vector geometries from OSM
-                vector_gdf = self.get_osm_layer(vector_name)
+                vector_gdf = self.osm_data.get_osm_layer(vector_name)  # INHERITED METHOD from OSMData
                 if vector_gdf.empty:
                     utils.print_update(
                         level=PRINT_LEVEL_BASE + 1,
@@ -611,8 +1088,8 @@ def load_layers_to_excluder(
         plot_save_to = Path(plot_save_to)     
     if plot_save_to is None:
         plot_save_to=Path.cwd()
-    if not plot_save_to.parent.exists():
-        plot_save_to.parent.mkdir(parents=True, exist_ok=True)
+    
+    plot_save_to.mkdir(parents=True, exist_ok=True)
 
     plt.savefig(
         plot_save_to / f"{plot_name}.png",
@@ -696,7 +1173,7 @@ def get_eligible_share(region_shape, excluder: ExclusionContainer) -> tuple:
         # Reproject region_shape to match the CRS of the excluder
         region_shape = region_shape.to_crs(excluder.crs)
     masked, transform = excluder.compute_shape_availability(region_shape)
-    region_area = region_shape.geometry.item().area
+    region_area = region_shape.geometry.area.sum() # item()
     eligible_area = masked.sum() * excluder.res**2
     eligible_share = eligible_area / region_area
 

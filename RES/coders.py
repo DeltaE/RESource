@@ -1,19 +1,27 @@
+# for CANADian power system data only.
 
-from dataclasses import dataclass, field
+import os
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+
+import geopandas as gpd
 import pandas as pd
 import requests
-import geopandas as gpd
 from shapely.geometry import Point
-from pathlib import Path
+
+from RES import utility as utils
 from RES.AttributesParser import AttributesParser
 from RES import utility as utils
-import sys
-import os
+
+PRINT_LEVEL_BASE=3
+
 # Ensure the script runs from the project root directory
 project_root = Path(__file__).resolve().parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 os.chdir(project_root)
+
 default_coders_cfg_file_path="data/downloaded_data/CODERS/coders_api.yaml"
 
 def load_api_key(file_path=default_coders_cfg_file_path):
@@ -70,7 +78,7 @@ def load_api_key(file_path=default_coders_cfg_file_path):
 
 api_key,user = load_api_key(default_coders_cfg_file_path)
 if api_key is None:
-    utils.print_update(message="No API key found. Please ensure you have a valid API key in the configuration file.",
+    utils.print_update(level=PRINT_LEVEL_BASE,message="No API key found. Please ensure you have a valid API key in the configuration file.",
                        alert=True)
 else:
     utils.print_update(level=2,message=f"CODERS API key loaded from: {default_coders_cfg_file_path}")
@@ -79,7 +87,104 @@ else:
 
 @dataclass
 class CODERSData(AttributesParser):
+    """
+    Canadian power system data processor using the CODERS API.
+    
+    This class provides comprehensive access to Canadian power system infrastructure
+    data through the CODERS (Canadian Open Data Exchange for Renewable Energy Systems)
+    API. It enables retrieval, caching, and processing of transmission lines,
+    substations, generators, and other power system components for renewable energy
+    integration analysis.
+    
+    Key Functionality:
+    - API-based data retrieval from CODERS database
+    - Local data caching and persistence for improved performance
+    - Provincial and national data filtering capabilities
+    - Geographic data processing with GeoDataFrame support
+    - Data validation and error handling for API operations
+    
+    Data Sources Available:
+    - Power generation facilities (generators)
+    - Transmission infrastructure (lines, substations)
+    - Regional power system characteristics
+    - Provincial energy system data
+    
+    Inherits from:
+        AttributesParser: Base class providing configuration management and regional attributes
+        
+    Attributes:
+        coders_data_config (dict): CODERS-specific configuration parameters
+        url (str): Base URL for CODERS API endpoints
+        api_user (str): API authentication key for CODERS access
+        query (str): Formatted query string with authentication
+        data_pull (dict): Configuration for data retrieval and storage
+        table_list (list): Available data tables from configuration
+        region_data (pd.DataFrame/gpd.GeoDataFrame): Filtered regional data
+        
+    API Requirements:
+        - Valid CODERS API key (stored in coders_api.yaml)
+        - Network connectivity for data retrieval
+        - Proper authentication configuration
+        
+    Example:
+        >>> coders = CODERSData(
+        ...     config_file_path="config/config_BC.yaml",
+        ...     region_short_code="BC"
+        ... )
+        >>> 
+        >>> # Get provincial transmission data
+        >>> bc_substations = coders.get_table_provincial('substations')
+        >>> 
+        >>> # Get national generator data with forced update
+        >>> generators_df, generators_gdf = coders.get_table_canada(
+        ...     'generators', 
+        ...     force_update=True
+        ... )
+        
+    Data Persistence:
+        - Automatic local caching reduces API calls
+        - Pickle format for efficient data storage
+        - Configurable data refresh policies
+        - Regional data filtering and storage
+        
+    Notes:
+        - Requires active internet connection for initial data retrieval
+        - API rate limits may apply for excessive requests
+        - Local data cache improves performance for repeated analyses
+        - Geographic data automatically converted to EPSG:4326 projection
+        
+    References:
+        - CODERS API Documentation: https://sesit.dev/api/docs
+        - Canadian power system data standards and formats
+    """
+    
     def __post_init__(self):
+        """
+        Initialize inherited attributes and CODERS API configuration.
+        
+        This method:
+        1. Calls parent __post_init__ to inherit configuration and regional attributes
+        2. Loads CODERS-specific configuration from config files
+        3. Sets up API authentication and connection parameters
+        4. Initializes data retrieval and storage configuration
+        5. Prepares table list and query formatting
+        
+        Inherited attributes from AttributesParser:
+        - Configuration file parsing and validation
+        - Regional identification (region_short_code, region_code_validity)
+        - Data storage paths and directory management
+        
+        CODERS Configuration:
+        - API endpoint URLs and authentication
+        - Data table specifications and requirements
+        - Local storage paths and file naming conventions
+        - Regional filtering and validation parameters
+        
+        Raises:
+            ConfigurationError: If CODERS configuration is missing or invalid
+            AuthenticationError: If API key is not properly configured
+            NetworkError: If API connectivity cannot be established
+        """
         
         # Call the parent class __post_init__ to initialize inherited attributes
         super().__post_init__()
@@ -94,18 +199,69 @@ class CODERSData(AttributesParser):
         self.table_list = list(self.coders_data_config['data_pull'].keys())
 
     def is_table_name_required(self, table_name: str):
+        """
+        Validate if a specified table name is configured and required for analysis.
+        
+        This method checks whether a requested data table is included in the
+        configured list of required tables for the current analysis. It serves
+        as a validation gate to prevent unnecessary API calls and ensure only
+        relevant data is processed.
+        
+        Args:
+            table_name (str): Name of the data table to validate
+                            (e.g., 'generators', 'substations', 'transmission_lines')
+                            
+        Returns:
+            bool: True if table is configured and required, False otherwise
+            
+        Example:
+            >>> coders = CODERSData(**config)
+            >>> if coders.is_table_name_required('generators'):
+            ...     data = coders.get_table_provincial('generators')
+        """
         if table_name in self.table_list:
             return True
     
     def show_list(self, source: str = "cef") -> list:
         """
-        Fetch and print the available tables from the CODERS API for a specified data source.
+        Fetch and display available data tables from the CODERS API for a specified source.
+        
+        This method queries the CODERS API to retrieve and display the complete list
+        of available data tables for a given data source. It provides users with
+        an inventory of accessible datasets and helps identify appropriate table
+        names for data retrieval operations.
+        
+        Data Sources:
+        - 'cef': Canadian Energy Facts data tables
+        - 'coders': Core CODERS power system infrastructure tables
         
         Args:
-            source (str): Data source type, either 'cef' or 'coders'.
+            source (str, optional): Data source identifier. Defaults to "cef".
+                                  Valid options: 'cef', 'coders'
         
         Returns:
-            List of available tables.
+            list: List of available table names for the specified source.
+                 Returns empty list if API request fails.
+        
+        Raises:
+            RuntimeError: If API returns non-200 status code
+            requests.RequestException: If network connectivity issues occur
+            
+        Example:
+            >>> coders = CODERSData(**config)
+            >>> 
+            >>> # List Canadian Energy Facts tables
+            >>> cef_tables = coders.show_list('cef')
+            >>> print(f"Available CEF tables: {cef_tables}")
+            >>> 
+            >>> # List core CODERS infrastructure tables
+            >>> coders_tables = coders.show_list('coders')
+            >>> print(f"Available CODERS tables: {coders_tables}")
+            
+        Notes:
+            - Requires active internet connection and valid API authentication
+            - Table availability may vary based on data source updates
+            - Use returned table names for subsequent data retrieval calls
         """
         print(f">> Fetching the list of data tables from {source}")
         try:
@@ -124,7 +280,35 @@ class CODERSData(AttributesParser):
     def fetch_data(self, 
                    table_name: str) -> pd.DataFrame:
         """
-        Fetch data from the CODERS API for the specified table.
+        Retrieve data from the CODERS API for a specified table.
+        
+        This method performs direct API calls to fetch power system data from
+        the CODERS database. It handles HTTP requests, response validation,
+        and data format conversion to return structured pandas DataFrames
+        suitable for analysis.
+        
+        Args:
+            table_name (str): Name of the data table to retrieve from CODERS API
+                            (e.g., 'generators', 'substations', 'transmission_lines')
+                            
+        Returns:
+            pd.DataFrame: Structured data from the specified CODERS table
+            
+        Raises:
+            RuntimeError: If API returns non-200 status code or request fails
+            requests.RequestException: If network connectivity issues occur
+            JSONDecodeError: If API response cannot be parsed as valid JSON
+            
+        Example:
+            >>> coders = CODERSData(**config)
+            >>> generators_data = coders.fetch_data('generators')
+            >>> print(f"Retrieved {len(generators_data)} generator records")
+            
+        Notes:
+            - Requires valid API authentication and network connectivity
+            - Raw data retrieval without local caching or persistence
+            - Use get_table_canada() or get_table_provincial() for cached access
+            - Response data automatically converted to pandas DataFrame format
         """
         response = requests.get(f"{self.url}/{table_name}{self.query}")
         
@@ -149,10 +333,10 @@ class CODERSData(AttributesParser):
         file_path.mkdir(parents=True, exist_ok=True)  # Creates parent directories if not exists.
 
         if file_path.is_file():
-            self.log.info(f">> Loading data from local file: {file_path}")
+            utils.print_update(level=PRINT_LEVEL_BASE, message=f">> Loading data from local file: {file_path}")
             return pd.read_pickle(file_path)
         else:
-            self.log.warning(f">> No local file found at: {file_path}")
+            utils.print_warning(f">> No local file found at: {file_path}")
             return None  # Return None if the file does not exist
 
     def save_data(self, 
@@ -165,7 +349,7 @@ class CODERSData(AttributesParser):
         file_path = Path(self.data_pull['root']) / self.data_pull.get(table_name)/file_name
         
         data.to_pickle(file_path)
-        self.log.info(f"{table_name} data saved to:\n {file_path}")
+        utils.print_update(level=PRINT_LEVEL_BASE, message=f"{table_name} data saved to:\n {file_path}")
 
     def create_gdf(self, df: pd.DataFrame) -> gpd.GeoDataFrame:
         """Create a GeoDataFrame from the given DataFrame."""
@@ -194,11 +378,11 @@ class CODERSData(AttributesParser):
         # Check if the data file exists locally and if force_update is not set
         if file_path.is_file() and not force_update:
             data = pd.read_pickle(file_path)  # Load from local CSV
-            self.log.info(f"Loaded {table_name} data from local file: {file_path}")
+            utils.print_update(level=PRINT_LEVEL_BASE, message=f"Loaded {table_name} data from local file: {file_path}")
         else:
             # Fetch data from API if not found locally or if force_update is set
             data = self.fetch_data(table_name)
-            self.log.info(f">> Data pulled {table_name} from [source checked: CODERS(https://sesit.dev/api/docs)]")
+            utils.print_update(level=PRINT_LEVEL_BASE, message=f">> Data pulled {table_name} from [source checked: CODERS(https://sesit.dev/api/docs)]")
             self.save_data(data, table_name)
             
         df=data
@@ -242,6 +426,6 @@ class CODERSData(AttributesParser):
             else:
                 return self.region_code_validity
         else:
-                self.log.warning(f"Table: '{table_name}' is not required for this tool and is not configured to work properly.\n Configured/required tables >>>> {self.table_list[1:]}")
-                
+                utils.print_update(level=PRINT_LEVEL_BASE, message=f"Table: '{table_name}' is not required for this tool and is not configured to work properly.\n Configured/required tables >>>> {self.table_list[1:]}")
+
 

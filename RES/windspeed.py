@@ -1,11 +1,14 @@
-import geopandas as gpd
+import inspect
+
 import atlite
-from RES import utility
+import geopandas as gpd
 import numpy as np
 import pandas as pd
+
 import RES.utility as utils
-import inspect
-print_level_base=3
+from RES import utility
+
+PRINT_LEVEL_BASE=3
 
 def impute_ERA5_windspeed_to_Cells(
         cutout:atlite.Cutout, 
@@ -14,7 +17,7 @@ def impute_ERA5_windspeed_to_Cells(
         For each grid cells, this function finds the yearly mean windspeed from the windspeed timeseries and imputes to the cell dataframe.
         """
         
-        utils.print_update(level=print_level_base+1,message=f"{__name__}| Calculating yearly mean windspeed and imputing to provincial Grid Cells named as 'windspeed_ERA5'")
+        utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| Calculating yearly mean windspeed and imputing to provincial Grid Cells named as 'windspeed_ERA5'")
 
         # Calculate yearly mean windspeed
         wnd_ymean_df = cutout.data.wnd100m.groupby('time.year').mean('time').to_dataframe(name='windspeed_ERA5').reset_index()
@@ -35,7 +38,6 @@ def impute_ERA5_windspeed_to_Cells(
         # Resetting index to ensure unique index after join
         region_grid_cells = region_grid_cells.reset_index(drop=True)
         region_grid_cells = region_grid_cells.drop_duplicates(subset=['geometry'])
-        region_grid_cells=utility.assign_cell_id(region_grid_cells)
 
         return region_grid_cells
 

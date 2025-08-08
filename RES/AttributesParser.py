@@ -12,14 +12,12 @@
     Type hints enhance code readability and help with type checking tools.
 """
 
-import yaml
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict
-import logging as log
 
-# Logging Configuration
-log.basicConfig(level=log.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+import yaml
+
 
 @dataclass
 class AttributesParser:
@@ -28,9 +26,9 @@ class AttributesParser:
     """
     # Attributes that are required as Args.
     
-    config_file_path: Path =field(default='config/config.yaml')
-    region_short_code: str=field(default= 'BC')
-    resource_type: str = field(default='None')
+    config_file_path: Path = field(default=None)
+    region_short_code: str = field(default=None)
+    resource_type: str = field(default=None)
     
     def __post_init__(self):
         self.site_index='cell'
@@ -40,14 +38,18 @@ class AttributesParser:
         self.store.parent.mkdir(parents=True, exist_ok=True)
 
         # Convert region_short_code to uppercase to handle user types regarding case-sensitive letter inputs.
-        self.region_short_code = self.region_short_code.upper()
+        if self.region_short_code is not None:
+            self.region_short_code = self.region_short_code.upper()
+        else:
+            raise ValueError("region_short_code is required and cannot be None")
         
         # Load the user configuration master file by using the method
         self.config:Dict[str,dict] = self.load_config(self.config_file_path)
         self.disaggregation_config:Dict[str,dict] = self.config.get('capacity_disaggregation','')
         self.region_code_validity=self.is_region_code_valid()
-        self.log = log.getLogger(__name__)
-        
+
+        self.multi_country_flag = self.get_multi_country_flag  # This will set the multi_country_flag based on the config file.
+
     def load_config(self,config_file_path):
         """ 
         Loads the yaml file as dictionary and extracts the attributes to pass on child classes. 
@@ -55,7 +57,16 @@ class AttributesParser:
         with open(config_file_path, 'r') as file:
             data = yaml.safe_load(file)
         return data
-
+    
+    @property
+    def get_multi_country_flag(self) -> bool:
+        """
+        Returns True if the 'country' represents a multi-country region and 'regions' are nations, 
+        False if it is a single country and 'regions' are sub-nations.
+        """
+        return self.config.get('multi_country_flag', False)
+    
+    
     def is_region_code_valid(self)-> bool:
         """
         Args:
@@ -68,7 +79,7 @@ class AttributesParser:
         
         if self.region_short_code not in self.region_mapping:
             print(f"!!! ERROR !!! \nRecheck the region code.\n{60 * '_'}")
-            print(f"\nPlease provide a CANADIAN region CODE (2 letters) from the following list: \n ")
+            print("\nPlease provide a CANADIAN region CODE (2 letters) from the following list: \n ")
             # display(self.region_mapping.keys())
             for key, value in self.region_mapping.items():
                 # Assuming you want to show the first item in the value (e.g., the first name or detail)
@@ -83,6 +94,17 @@ class AttributesParser:
         end_date = self.config.get('cutout', {}).get('snapshots', {}).get('end', [[]])[0]
         return start_date, end_date
     
+    def get_conserved_lands_CAN_args(self)->dict:
+        if self.get_country()=='Canada':
+            return {
+            "config_file_path": self.config_file_path,
+            "region_short_code": self.region_short_code,
+            "resource_type": self.resource_type
+            }
+        else:
+            print("Conservation Lands data supply chain is configured for Canada only")
+            return None
+
     @property
     def default_font_size(self):
         return 14
@@ -134,7 +156,7 @@ class AttributesParser:
         return self.config.get('GADM', {})
     
     def get_country(self)-> str:
-        return self.config.get('country', "Canada") # If NONE, default is Canada
+        return self.config.get('country', None)
     
     def get_default_crs(self)->str:
         return 'EPSG:4326'

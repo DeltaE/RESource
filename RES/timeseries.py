@@ -1,24 +1,26 @@
-import atlite
-import xarray as xr
-from dataclasses import dataclass
-import pandas as pd
 from collections import namedtuple
+from dataclasses import dataclass
 from pathlib import Path
-import geopandas as gpd
-import plotly.graph_objects as go
 
-# from RES
+import atlite
+import geopandas as gpd
+import pandas as pd
+import plotly.graph_objects as go
+import xarray as xr
+
+
 import RES.windspeed as windspeed
-from RES.hdf5_handler import DataHandler
-from RES.tech import OEDBTurbines
+from RES import utility as utils
+from RES.AttributesParser import AttributesParser
 from RES.era5_cutout import ERA5Cutout
 from RES.gwa import GWACells
-import RES.utility as utils
+from RES.hdf5_handler import DataHandler
+from RES.tech import OEDBTurbines
 
-print_level_base=1
+PRINT_LEVEL_BASE=1
 
 @dataclass
-class Timeseries(ERA5Cutout):
+class Timeseries(AttributesParser):
     """
     Climate data processor and capacity factor calculator for renewable energy resources.
     
@@ -130,6 +132,13 @@ class Timeseries(ERA5Cutout):
     def __post_init__(self):
         super().__post_init__()
 
+        self.required_args = {
+            "config_file_path": self.config_file_path,
+            "region_short_code": self.region_short_code,
+            "resource_type": self.resource_type
+        }
+        
+        self.ERA5Cutout = ERA5Cutout(**self.required_args)
         # Fetch the disaggregation configuration based on the resource type
         self.resource_disaggregation_config=self.get_resource_disaggregation_config()
         
@@ -141,6 +150,8 @@ class Timeseries(ERA5Cutout):
             "resource_type": self.resource_type
         }
         self.gwa_cells=GWACells(**self.required_args)
+        self.region_name=self.get_region_name()
+        self.region_timezone=self.get_region_timezone()
     
     def get_timeseries(self,
                        cells:gpd.GeoDataFrame)-> tuple:
@@ -198,10 +209,10 @@ class Timeseries(ERA5Cutout):
         # - This step needs to be tailored by the user to harmonize the timeseries with other operational data.
 
         # Step 4: Calculate the mean capacity factor (CF) for each cell and store it in 'CF_mean'
-        utils.print_update(level=print_level_base+1,message=f"{__name__}| Calculating CF mean from the {len(self.CF_ts_df)} data points for each Cell ...")
-        utils.print_update(level=print_level_base+2,message=f"{__name__}| Total Grid Cells: {len(cells)}")
-        utils.print_update(level=print_level_base+2,message=f"{__name__}| Timeseries Generated for: {len(self.CF_ts_df.columns)}")
-        utils.print_update(level=print_level_base+2,message=f"{__name__}| Matched Sites: {self.CF_ts_df[cells.index].shape}")
+        utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| Calculating CF mean from the {len(self.CF_ts_df)} data points for each Cell ...")
+        utils.print_update(level=PRINT_LEVEL_BASE+2,message=f"{__name__}| Total Grid Cells: {len(cells)}")
+        utils.print_update(level=PRINT_LEVEL_BASE+2,message=f"{__name__}| Timeseries Generated for: {len(self.CF_ts_df.columns)}")
+        utils.print_update(level=PRINT_LEVEL_BASE+2,message=f"{__name__}| Matched Sites: {self.CF_ts_df[cells.index].shape}")
         
         cells[f'{self.resource_type}_CF_mean'] = self.CF_ts_df.mean(axis=0) # Mean of all rows (Hours)
  
@@ -224,7 +235,7 @@ class Timeseries(ERA5Cutout):
         """
         
         # Step 1.1: Get the Atlite's Cutout Object loaded
-        self.cutout,self.region_boundary=self.get_era5_cutout()
+        self.cutout,self.region_boundary=self.ERA5Cutout.get_era5_cutout()
         
         ## Only,if cells are not processed already
         # self.region_grid_cells = self.cutout.grid.overlay(self.region_boundary, how='intersection',keep_geom_type=True)
@@ -235,7 +246,7 @@ class Timeseries(ERA5Cutout):
         self.datahandler=DataHandler(self.store)
         # self.region_grid_cells_store=self.datahandler.from_store('cells')
 
-        utils.print_update(level=print_level_base+1,message=f"{__name__}| Loading technology attributes...")
+        utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| Loading technology attributes...")
         # Step 1.3: Set arguments for the atlite cutout's pv method
         pv_args = {
             'panel': self.resource_disaggregation_config['atlite_panel'],
@@ -263,7 +274,7 @@ class Timeseries(ERA5Cutout):
         }
 
         # Step 1.4: Generate PV timeseries profile using the atlite's cutout
-        utils.print_update(level=print_level_base+1,message=f"{__name__}| ⚠️ Processing timeseries from ERA5 cutout, may take a while...")
+        utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| ⚠️ Processing timeseries from ERA5 cutout, may take a while...")
         self.pv_profile: xr.DataArray = self.cutout.pv(**pv_args).rename(self.resource_type)
         
         return self.pv_profile
@@ -347,13 +358,13 @@ class Timeseries(ERA5Cutout):
         """
         
         # Step 1.1: Get the Atlite's Cutout Object loaded
-        self.log.info(">> Loading ERA5 Cutout")
+        utils.print_update(level=PRINT_LEVEL_BASE,message=">> Loading ERA5 Cutout")
         
         # self.gwa_cells=GWACells(region_short_code=self.region_short_code,
         #                         resource_type=self.resource_type)
         
-        self.cutout,self.region_boundary=self.get_era5_cutout()
-        self.log.info(f">> {len(cells)} Grid Cells from Store Cutout")
+        self.cutout,self.region_boundary=self.ERA5Cutout.get_era5_cutout()
+        utils.print_update(level=PRINT_LEVEL_BASE,message=f">> {len(cells)} Grid Cells from Store Cutout")
         
         # Only,if cells are not processed already
         # self.region_grid_cells = self.cutout.grid.overlay(self.region_boundary, how='intersection',keep_geom_type=True)
@@ -367,20 +378,20 @@ class Timeseries(ERA5Cutout):
                                                                                wind_geojson=self.wind_geojson)
         
         '''
-        utils.print_update(level=print_level_base+1,message=f'{__name__}| Rescaling ERA5 windspeed with GWA windspeed')
+        utils.print_update(level=PRINT_LEVEL_BASE+1,message=f'{__name__}| Rescaling ERA5 windspeed with GWA windspeed')
 
         self.cutout=windspeed.rescale_cutout_windspeed(self.cutout, cells)
         # Step 1.2: Get the region Grid Cells from Store. Ideally these cells should have same resolution as the Cutout (the indices are prepared from x,y coords and Region names)
         
         self.wind_turbine_config=self.get_turbines_config()
-        utils.print_update(level=print_level_base+1,message=f'{__name__}| Loading technology attributes...')
+        utils.print_update(level=PRINT_LEVEL_BASE+1,message=f'{__name__}| Loading technology attributes...')
         
         if turbine_model_source=='atlite':
             atlite_turbine_model:str=self.wind_turbine_config[turbine_model_source][model]['name'] # The default is set in Attributes parser's .get_turbine_config() method.
             hub_height_turbine=atlite.resource.get_windturbineconfig(atlite_turbine_model)['hub_height']
             
             self.turbine_config:dict = atlite.resource.get_windturbineconfig(atlite_turbine_model, {"hub_height": 100})
-            utils.print_update(level=print_level_base+2,message=f"{__name__}| Selected Wind Turbine  Model : {atlite_turbine_model} @ {hub_height_turbine}m Hub Height")
+            utils.print_update(level=PRINT_LEVEL_BASE+2,message=f"{__name__}| Selected Wind Turbine  Model : {atlite_turbine_model} @ {hub_height_turbine}m Hub Height")
             
         elif turbine_model_source=='OEDB':
             self.OEDB_config:dict=self.wind_turbine_config[turbine_model_source]
@@ -424,7 +435,7 @@ class Timeseries(ERA5Cutout):
         }
 
         # Step 1.4: Generate PV timeseries profile using the atlite's cutout
-        utils.print_update(level=print_level_base+1,message=f"{__name__}| ⚠️ Processing timeseries from ERA5 cutout, may take a while...")
+        utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| ⚠️ Processing timeseries from ERA5 cutout, may take a while...")
         self.wind_profile: xr.DataArray = self.cutout.wind(**wind_args).rename(self.resource_type)
         
         return self.wind_profile
@@ -435,7 +446,7 @@ class Timeseries(ERA5Cutout):
         This function converts the timeseries index with timezone information imputed conversion.<br>
         <b> Recommended timeseries index conversion method</b> in contrast to naive timestamp index reset method. 
         '''
-        utils.print_update(level=print_level_base+1,message=f'{__name__}| Harmonizing timezone for {self.region_name} with {self.region_timezone}')
+        utils.print_update(level=PRINT_LEVEL_BASE+1,message=f'{__name__}| Harmonizing timezone for {self.region_name} with {self.region_timezone}')
         # Localize to UTC (assuming your times are currently in UTC)
         df_index_utc = data.tz_localize('UTC')
 
@@ -475,7 +486,7 @@ class Timeseries(ERA5Cutout):
         if results:
             self.cluster_df = pd.concat(results, axis=1)
         else:
-            utils.print_update(level=print_level_base+1,message=f"{__name__}| ⚠️ No valid clusters to process for cluster {cluster}.")
+            utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| ⚠️ No valid clusters to process for cluster {cluster}.")
             self.cluster_df = pd.DataFrame()
             
         self.datahandler.to_store(self.cluster_df, f'timeseries/clusters/{self.resource_type}',force_update=True)# Hierarchical data of resources under kley 'timeseries' 
@@ -562,10 +573,10 @@ def get_timeseries_for_project_points(
     
     # Save the time series data as CSV files
     solar_ts.to_csv(solar_ts_save_to)
-    utils.print_update(level=print_level_base+1,message=f"{__name__}| Saved solar time series data to {solar_ts_save_to}")
+    utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| Saved solar time series data to {solar_ts_save_to}")
     
     wind_ts.to_csv(wind_ts_save_to)
-    utils.print_update(level=print_level_base+1,message=f"{__name__}| Saved wind time series data to {wind_ts_save_to}")
+    utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| Saved wind time series data to {wind_ts_save_to}")
 
     # Plotting the time series for Solar Projects
     fig_s = go.Figure()
@@ -579,7 +590,7 @@ def get_timeseries_for_project_points(
         legend_title="Sites"
     )
     fig_s.write_html(save_to / 'projects_solar_ts.html')
-    utils.print_update(level=print_level_base+1,message=f"{__name__}| Saved solar time series data to {save_to / 'projects_solar_ts.html'}")
+    utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| Saved solar time series data to {save_to / 'projects_solar_ts.html'}")
 
 
     
@@ -595,7 +606,7 @@ def get_timeseries_for_project_points(
         legend_title="Sites"
     )
     fig_w.write_html(save_to / 'projects_wind_ts.html')
-    utils.print_update(level=print_level_base+1,message=f"{__name__}| Saved wind time series data to {save_to / 'projects_wind_ts.html'}")
+    utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| Saved wind time series data to {save_to / 'projects_wind_ts.html'}")
     
     
     if show:

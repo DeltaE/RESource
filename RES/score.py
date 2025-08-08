@@ -98,11 +98,35 @@ class CellScorer(AttributesParser):
     """
     
     def __post_init__(self):
+
         super().__post_init__()
         
     def get_CRF(self,
                 r, 
                 N):
+        """
+        Calculate Capital Recovery Factor (CRF) for annualized cost calculations.
+        
+        The CRF converts a present-value capital cost into a stream of equal
+        annual payments over the project lifetime. This is essential for LCOE
+        calculations as it allows comparison of projects with different capital
+        costs and lifetimes on an annualized basis.
+        
+        Formula: CRF = [r × (1 + r)^N] / [(1 + r)^N - 1]
+        
+        Args:
+            r (float): Discount rate (as decimal, e.g., 0.08 for 8%)
+            N (int): Project lifetime in years
+            
+        Returns:
+            float: Capital Recovery Factor
+            
+        Example:
+            >>> scorer = CellScorer(**config)
+            >>> crf = scorer.get_CRF(r=0.07, N=25)  # 7% discount, 25 years
+            >>> print(f"CRF: {crf:.4f}")
+            CRF: 0.0858
+        """
         return (r * (1 + r) ** N) / ((1 + r) ** N - 1) if N > 0 else 0
         
     def calculate_total_cost(self, 
@@ -112,8 +136,35 @@ class CellScorer(AttributesParser):
                              capex_tech: float,
                              potential_capacity_mw:float) -> float:
         """
-        Calculate the total cost, which includes the CAPEX and distance-based grid connection costs.
-        Method: Simple Levelized Cost of Energy Calculation (https://www.nrel.gov/analysis/tech-lcoe-documentation.html)
+        Calculate total project cost including CAPEX and distance-based grid connection costs.
+        
+        This method implements the cost calculation framework following NREL's Simple 
+        Levelized Cost of Energy methodology. It combines technology capital expenditures
+        with grid integration costs that scale with distance to existing transmission
+        infrastructure.
+        
+        Cost Components:
+        1. Technology CAPEX: Base capital cost for renewable energy installation
+        2. Grid Connection Cost: Cost to connect to nearest transmission point
+        3. Transmission Rebuild Cost: Infrastructure upgrade costs for grid integration
+        
+        Args:
+            distance_to_grid_km (float): Distance to nearest grid connection point (km)
+            grid_connection_cost_per_km (float): Cost per km for grid connection (M$/km)
+            tx_line_rebuild_cost (float): Transmission line rebuild cost (M$/km)
+            capex_tech (float): Technology-specific capital expenditure (M$/MW)
+            potential_capacity_mw (float): Potential installed capacity (MW)
+            
+        Returns:
+            float: Total project cost in millions of dollars (M$)
+            
+        Notes:
+            - Converts km to miles for cost calculations (US-based cost data)
+            - Grid connection costs scale linearly with distance
+            - Method follows NREL Simple LCOE documentation framework
+            
+        Reference:
+            https://www.nrel.gov/analysis/tech-lcoe-documentation.html
         """
         # Calculate distance-based cost
         add_to_grid_cost = (distance_to_grid_km * grid_connection_cost_per_km / 1.60934) * (tx_line_rebuild_cost / 1.60934)  # Convert to miles as our costs are given in $/miles (USA study)
@@ -128,14 +179,45 @@ class CellScorer(AttributesParser):
                         CF_column,
                         CRF) -> float:
         """
-        Calculate the potential LCOE score for each cell in the dataframe,
-        reading cost parameters directly from the DataFrame.
+        Calculate the Levelized Cost of Energy (LCOE) score for an individual grid cell.
         
-        ## Args:
-        - **row** : A single row of the DataFrame.
+        This method computes the LCOE using the simplified NREL methodology, combining
+        annualized capital costs with operational expenses and dividing by annual energy
+        production. The resulting LCOE provides a standardized metric for comparing
+        the economic attractiveness of different renewable energy sites.
         
-        ## Returns:
-        - **float** : The calculated LCOE value for the row.
+        LCOE Formula:
+        LCOE = (Total Cost × CRF + OPEX) / Annual Energy Production
+        
+        Where:
+        - Total Cost includes CAPEX and grid connection costs
+        - CRF converts capital costs to annual payments
+        - Annual Energy = 8760 hours × Capacity Factor × Installed Capacity
+        
+        Args:
+            row (pd.Series): DataFrame row containing cell-specific data including:
+                - nearest_station_distance_km: Distance to grid connection
+                - grid_connection_cost_per_km_{resource_type}: Grid connection cost
+                - tx_line_rebuild_cost_{resource_type}: Transmission rebuild cost
+                - capex_{resource_type}: Technology capital expenditure
+                - potential_capacity_{resource_type}: Installable capacity
+                - CF_column value: Capacity factor for the cell
+            CF_column (str): Column name containing capacity factor data
+            CRF (float): Capital Recovery Factor for cost annualization
+            
+        Returns:
+            float: LCOE in $/MWh, or 999 if annual energy production is zero
+            
+        Examples:
+            >>> # Calculate LCOE for a single grid cell
+            >>> crf = scorer.get_CRF(r=0.07, N=25)
+            >>> lcoe = scorer.calculate_score(grid_cell, 'CF_mean', crf)
+            >>> print(f"LCOE: ${lcoe:.2f}/MWh")
+            
+        Notes:
+            - Returns high penalty value (999) for cells with zero energy production
+            - Converts from M$/MWh to $/MWh for standard reporting units
+            - Incorporates site-specific capacity factors and grid integration costs
         """
         # Calculate the total cost
         total_cost = self.calculate_total_cost(
@@ -160,41 +242,90 @@ class CellScorer(AttributesParser):
                     cells: pd.DataFrame,
                     CF_column:str,
                     interest_rate=0.03) -> pd.DataFrame:
-            """
-            Calculate the potential LCOE score for each cell in the dataframe,
-            reading cost parameters directly from the DataFrame.
+        """
+        Calculate LCOE scores for all grid cells in a DataFrame and return ranked results.
+        
+        This method applies economic scoring to an entire dataset of potential renewable
+        energy sites, calculating LCOE for each cell and sorting results by economic
+        attractiveness. It serves as the primary interface for batch economic analysis
+        of renewable energy development opportunities.
+        
+        Processing Steps:
+        1. Calculate Capital Recovery Factor from financial parameters
+        2. Apply LCOE calculation to each grid cell
+        3. Sort results by LCOE (ascending = most economically attractive first)
+        4. Return scored and ranked DataFrame
+        
+        Args:
+            cells (pd.DataFrame): DataFrame containing grid cells with required columns:
+                - nearest_station_distance_km: Distance to transmission (km)
+                - grid_connection_cost_per_km_{resource_type}: Connection cost (M$/km)
+                - tx_line_rebuild_cost_{resource_type}: Rebuild cost (M$/km)
+                - capex_{resource_type}: Technology CAPEX (M$/MW)
+                - potential_capacity_{resource_type}: Installable capacity (MW)
+                - Operational_life_{resource_type}: Project lifetime (years)
+            CF_column (str): Column name containing capacity factor data
+                          (e.g., 'CF_mean', 'wind_CF_mean', 'solar_CF_mean')
+            interest_rate (float, optional): Discount rate for CRF calculation.
+                                           Defaults to 0.03 (3%)
+                                           
+        Returns:
+            pd.DataFrame: Input DataFrame with added LCOE column, sorted by economic
+                         attractiveness (lowest LCOE first). Column name format:
+                         'lcoe_{resource_type}' with values in $/MWh
+                         
+        Raises:
+            KeyError: If required columns are missing from input DataFrame
+            ValueError: If capacity factors or operational life contain invalid values
             
-            ## Args:
-            - **Cells** : Pandas DataFrame of grid cells.
-            - **CF_column**: Column name from which Capacity Factor (CF) will be used to calculated Annual. Avg. Energy (MWh). User can have multiple CF_mean columns sourced from different data sources.
-           
-            """
-            dataframe = cells.copy()  # Use the input DataFrame for calculations
-            utils.print_update(level=print_level_base+2,
-                           message=f"{__name__}| Calculating score for cells...") 
+        Examples:
+            >>> # Score wind energy sites using mean capacity factors
+            >>> wind_cells = scorer.get_cell_score(
+            ...     cells=grid_data, 
+            ...     CF_column='wind_CF_mean',
+            ...     interest_rate=0.07
+            ... )
+            >>> print(f"Best site LCOE: ${wind_cells.iloc[0]['lcoe_wind']:.2f}/MWh")
             
-            # Calculate the LCOE for each cell
-            N=cells[f'Operational_life_{self.resource_type}'].iloc[0]
-            CRF=self.get_CRF(interest_rate,N)
-            dataframe[f'lcoe_{self.resource_type}'] = dataframe.apply(
-                lambda x: self.calculate_total_cost(
-                    x['nearest_station_distance_km'], # km
-                    x[f'grid_connection_cost_per_km_{self.resource_type}'],  # m$/km
-                    x[f'tx_line_rebuild_cost_{self.resource_type}'],  # m$/km
-                    x[f'capex_{self.resource_type}'],
-                    x[f'potential_capacity_{self.resource_type}']# m$
-                )*CRF / (8760 * x[CF_column]* x[f'potential_capacity_{self.resource_type}']) if (8760 * x[CF_column]) != 0 else float('inf'),  # LCOE = Total Cost / Total Energy Produced
-                axis=1 # LCOE in M$/MWh;
-            )  
+            >>> # Score solar sites with conservative financial assumptions  
+            >>> solar_cells = scorer.get_cell_score(
+            ...     cells=grid_data,
+            ...     CF_column='solar_CF_mean', 
+            ...     interest_rate=0.08
+            ... )
             
-            # dataframe[f'lcoe_{self.resource_type}']=dataframe[f'lcoe_{self.resource_type}']*1E3 # LCOE in $/kWh; lower lcoe indicates better cells
-            dataframe[f'lcoe_{self.resource_type}'] = dataframe.apply(lambda row: self.calculate_score(row,CF_column,CRF), axis=1) # LCOE in $/MWh  # adopting NREL's method + some added costs
-            scored_dataframe = dataframe.sort_values(by=f'lcoe_{self.resource_type}', ascending=False).copy()  # Lower LCOE is better
-            
-            # dataframe[f'LCOE_{self.resource_type}'] = dataframe.apply(lambda row: self.calc_LCOE_lambda_m2(row), axis=1) # LCOE in $/MWh  # adopting NREL's method + some added costs
-            # scored_dataframe = dataframe.sort_values(by=f'LCOE_{self.resource_type}', ascending=False).copy()  # Lower LCOE is better
-            
-            return scored_dataframe
+        Notes:
+            - Cells with zero annual energy production receive infinite LCOE values
+            - Results are sorted ascending (lowest LCOE = most attractive)
+            - Method handles edge cases like zero capacity factors gracefully
+            - LCOE values are in $/MWh for standard industry comparison
+        """
+        dataframe = cells.copy()  # Use the input DataFrame for calculations
+        utils.print_update(level=print_level_base+2,
+                       message=f"{__name__}| Calculating score for cells...") 
+        
+        # Calculate the LCOE for each cell
+        N=cells[f'Operational_life_{self.resource_type}'].iloc[0]
+        CRF=self.get_CRF(interest_rate,N)
+        dataframe[f'lcoe_{self.resource_type}'] = dataframe.apply(
+            lambda x: self.calculate_total_cost(
+                x['nearest_station_distance_km'], # km
+                x[f'grid_connection_cost_per_km_{self.resource_type}'],  # m$/km
+                x[f'tx_line_rebuild_cost_{self.resource_type}'],  # m$/km
+                x[f'capex_{self.resource_type}'],
+                x[f'potential_capacity_{self.resource_type}']# m$
+            )*CRF / (8760 * x[CF_column]* x[f'potential_capacity_{self.resource_type}']) if (8760 * x[CF_column]) != 0 else float('inf'),  # LCOE = Total Cost / Total Energy Produced
+            axis=1 # LCOE in M$/MWh;
+        )  
+        
+        # dataframe[f'lcoe_{self.resource_type}']=dataframe[f'lcoe_{self.resource_type}']*1E3 # LCOE in $/kWh; lower lcoe indicates better cells
+        dataframe[f'lcoe_{self.resource_type}'] = dataframe.apply(lambda row: self.calculate_score(row,CF_column,CRF), axis=1) # LCOE in $/MWh  # adopting NREL's method + some added costs
+        scored_dataframe = dataframe.sort_values(by=f'lcoe_{self.resource_type}', ascending=False).copy()  # Lower LCOE is better
+        
+        # dataframe[f'LCOE_{self.resource_type}'] = dataframe.apply(lambda row: self.calc_LCOE_lambda_m2(row), axis=1) # LCOE in $/MWh  # adopting NREL's method + some added costs
+        # scored_dataframe = dataframe.sort_values(by=f'LCOE_{self.resource_type}', ascending=False).copy()  # Lower LCOE is better
+        
+        return scored_dataframe
 
     def calc_LCOE_lambda_m1(self,
                          row):

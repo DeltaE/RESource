@@ -2,7 +2,7 @@
 Utility functions and helper methods for RESource renewable energy assessment framework.
 
 This module provides common functionality used across the RESource workflow including
-configuration management, data I/O operations, coordinate transformations, logging
+configuration management, data I/O operations, coordinate transformations
 utilities, and validation functions. It serves as a central repository for shared
 code that supports the modular architecture of the assessment framework.
 
@@ -10,7 +10,6 @@ Key Functions:
     - Configuration parsing and validation
     - File I/O operations (YAML, JSON, pickle, geospatial formats)
     - Coordinate system transformations and spatial utilities
-    - Logging and progress reporting with hierarchical message levels
     - Data validation and error handling
     - URL downloading and caching mechanisms
     - String formatting and output styling
@@ -28,7 +27,6 @@ from typing import Optional
 from colorama import Fore, Style
 import pandas as pd
 import geopandas as gpd 
-import logging as log
 import json
 import pickle
 import datetime
@@ -36,9 +34,7 @@ from pathlib import Path
 import geojson as gj
 import rasterio as rio
 import numpy as np
-from RES.logger import setup_logger
-import logging
-logger = setup_logger(__name__, level=logging.DEBUG)
+
 
 now = datetime.datetime.now()
 date_time_str = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -108,7 +104,7 @@ def load_geojson_file(geojson_file_path:str|Path)->list:
         
 # Function to generate a unique index from region name and coordinates
 def assign_cell_id(cells: gpd.GeoDataFrame, 
-                  source_column: str = 'Region', 
+                  source_column: str = None, 
                   index_name: str = 'cell') -> gpd.GeoDataFrame:
     """
     Assigns unique cell IDs to each region in the specified GeoDataFrame.
@@ -123,7 +119,6 @@ def assign_cell_id(cells: gpd.GeoDataFrame,
     """
     # Ensure the source column exists
     if source_column not in cells.columns:
-        print(f"'{source_column}' does not exist in the GeoDataFrame.")
         raise ValueError(f"'{source_column}' does not exist in the GeoDataFrame.")
 
     # Remove spaces in the region names for consistency
@@ -143,6 +138,9 @@ def assign_cell_id(cells: gpd.GeoDataFrame,
 
     # Set the index to the newly created column
     cells.set_index(index_name, inplace=True)
+    
+    # Remove duplicated index values, keeping the first occurrence
+    cells = cells[~cells.index.duplicated(keep='first')]
 
     return cells
 
@@ -246,7 +244,6 @@ def check_LocalCopy_and_run_function(
             print_update(level=2, message=f"{__name__}| Directory '{directory_path}' created.")
             return output
         else:
-            # log.info(f"Directory '{directory_path}' found locally.")
             print_update(level=2, message=f"{__name__}| Directory '{directory_path}' found locally.")
 
 # Function to Load User Configuration File

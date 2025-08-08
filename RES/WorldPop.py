@@ -2,8 +2,6 @@
 
 import RES.utility as utils
 import pandas as pd
-from shapely.geometry import box
-import geopandas as gpd
 from RES.AttributesParser import AttributesParser
 from RES.boundaries import GADMBoundaries
 from pathlib import Path

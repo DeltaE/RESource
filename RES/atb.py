@@ -51,7 +51,7 @@ class NREL_ATBProcessor:
     
     # Input parameters
     config_file_path: Path = field(default_factory=lambda: Path('config/config.yaml'))
-    region_short_code: str = field(default='BC')
+    region_short_code: str = field(default='None')
     resource_type: str = field(default='None')
     
     def __post_init__(self):
@@ -74,7 +74,6 @@ class NREL_ATBProcessor:
         - atb_file_path: Full path to the ATB data file.
         - datahandler: Instance of `DataHandler` initialized with the provided store.
         
-        NODOC
         """
         utils.print_update(level=print_level_base,message='NREL_ATBProcessor initiated...')
         
@@ -130,11 +129,12 @@ class NREL_ATBProcessor:
         f"ATB cost datafile: {self.atb_file_path.name} loaded"
         self.utility_pv_cost=self.__process_solar_cost(atb_cost)
         self.land_based_wind_cost=self.__process_wind_cost(atb_cost)
-        self.bess_cost=self.__process_bess_cost(atb_cost)
+        # self.bess_cost=self.__process_bess_cost(atb_cost)
         
         return (self.utility_pv_cost, 
                 self.land_based_wind_cost, 
-                self.bess_cost)
+                #self.bess_cost
+                )
 
     def __check_and_download_data(self):
         """

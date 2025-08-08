@@ -1,23 +1,29 @@
 
-import numpy as np
-import geopandas as gpd
-from shapely.geometry import box
 import warnings
-from RES.hdf5_handler import DataHandler
-from RES import utility as utils
-from RES.era5_cutout import ERA5Cutout
 
-class GridCells(ERA5Cutout):
+import geopandas as gpd
+import numpy as np
+from shapely.geometry import box
+
+from RES import utility as utils
+from RES.AttributesParser import AttributesParser
+from RES.boundaries import GADMBoundaries
+from RES.era5_cutout import ERA5Cutout
+from RES.hdf5_handler import DataHandler
+
+class GridCells(AttributesParser):
     """
     Spatial grid cell generator for renewable energy resource assessment.
     
     This class creates a regular spatial grid covering a specified region for 
-    discretized renewable energy potential analysis. It inherits from ERA5Cutout
-    to maintain consistency with climate data spatial resolution and coordinate systems.
+    discretized renewable energy potential analysis. It inherits from AttributesParser
+    for configuration management and integrates with ERA5Cutout and GADMBoundaries
+    to maintain consistency with climate data spatial resolution and regional boundaries.
     
     Grid cells serve as the fundamental spatial units for capacity calculations,
     land availability analysis, and resource aggregation. Each cell represents
     a homogeneous area with uniform resource characteristics and constraints.
+    
     
     Parameters
     ----------
@@ -30,6 +36,10 @@ class GridCells(ERA5Cutout):
         
     Attributes
     ----------
+    ERA5Cutout : ERA5Cutout
+        ERA5 climate data cutout handler instance
+    gadmBoundary : GADMBoundaries
+        GADM boundary processor instance
     datahandler : DataHandler
         HDF5 data storage interface for grid persistence
     crs : str
@@ -38,23 +48,35 @@ class GridCells(ERA5Cutout):
         Grid resolution with 'dx' and 'dy' keys (decimal degrees)
     bounding_box : dict
         Spatial extent with 'minx', 'maxx', 'miny', 'maxy'
-    actual_boundary : GeoDataFrame
+    actual_boundary : gpd.GeoDataFrame
         Precise regional boundary geometry
     coords : dict
         Grid coordinate arrays {'x': array, 'y': array}
     shape : tuple
         Grid dimensions (rows, columns)
+    bounding_box_grid : gpd.GeoDataFrame
+        Complete grid covering bounding box region
+    grid_cells : gpd.GeoDataFrame
+        Final grid cells intersecting with regional boundary (custom grid)
+    cutout : atlite.Cutout
+        ERA5 cutout object with climate data
+    region_boundary : gpd.GeoDataFrame
+        Regional boundary from ERA5 processing
+    resource_grid_cells : gpd.GeoDataFrame
+        Grid cells from default ERA5-based processing
         
     Methods
     -------
-    generate_coords()
+    generate_coords() -> None
         Create coordinate arrays based on resolution and boundary
-    __get_grid__()
-        Generate complete grid with cell geometries
-    get_default_cells()
-        Create grid cells intersecting with regional boundary
-    apply_boundary_mask(cells)
-        Filter cells to those within regional boundary
+    __get_grid__() -> gpd.GeoDataFrame
+        Generate complete grid with cell geometries (private method)
+    get_custom_grid() -> gpd.GeoDataFrame
+        Create custom grid cells intersecting with regional boundary
+    get_default_grid() -> gpd.GeoDataFrame
+        Create grid using ERA5 cutout methodology with climate data alignment
+    _check_resolution() -> None
+        Validate resolution settings and issue warnings (private method, not currently used)
         
     Examples
     --------
@@ -66,33 +88,66 @@ class GridCells(ERA5Cutout):
     ...     region_short_code="BC",
     ...     resource_type="wind"
     ... )
-    >>> cells = grid.get_default_cells()
-    >>> print(f"Generated {len(cells)} grid cells")
+    >>> # Using custom grid approach
+    >>> custom_cells = grid.get_custom_grid()
+    >>> print(f"Generated {len(custom_cells)} custom grid cells")
+    >>> 
+    >>> # Using default ERA5-aligned grid
+    >>> default_cells = grid.get_default_grid()
+    >>> print(f"Generated {len(default_cells)} ERA5-aligned grid cells")
     
-    Custom resolution grid:
+    Custom resolution configuration:
     
-    >>> # Resolution defined in configuration file
+    >>> # In configuration file (config_BC.yaml):
     >>> # grid_cell_resolution:
     >>> #   dx: 0.25  # 0.25 degrees longitude
     >>> #   dy: 0.25  # 0.25 degrees latitude
-    >>> cells = grid.get_default_cells()
+    >>> grid._check_resolution()  # Validate resolution settings
     
     Notes
     -----
     - Default resolution matches ERA5 climate data (0.25° x 0.25°)
     - Grid cells are represented as square polygons with centroid coordinates
-    - Inherits climate data cutout functionality from ERA5Cutout
+    - Inherits configuration management from AttributesParser
+    - Integrates with ERA5Cutout for climate data alignment
+    - Uses GADMBoundaries for precise regional boundary definition
     - Uses HDF5 storage for efficient caching of large grid datasets
     - Grid generation respects regional boundaries to avoid unnecessary cells
     - Resolution warnings issued if finer than climate data resolution
     - Coordinate system maintained as WGS84 for global compatibility
+    - Supports both custom grid generation and ERA5-aligned grid generation
+    
+    Grid Generation Approaches
+    --------------------------
+    1. Custom Grid (get_custom_grid()):
+       - Creates grid based on regional bounding box
+       - Intersects with precise regional boundaries
+       - Stores results in HDF5 with 'cells' key
+    
+    2. Default Grid (get_default_grid()):
+       - Uses ERA5 cutout grid as base
+       - Aligns with climate data resolution
+       - Overlays with regional boundaries
+       - Stores both 'cells' and 'boundary' in HDF5
     
     Resolution Considerations
     -------------------------
     - Minimum recommended: 0.25° (matching ERA5 resolution)
-    - Finer resolutions require interpolation of climate data
+    - Harmonized resolutions required for interpolation of climate data
     - Coarser resolutions may miss local variations in resource quality
     - Square cells assumed (dx = dy) for geometric consistency
+    - Resolution validation available via _check_resolution() method
+    
+    Dependencies
+    ------------
+    - geopandas: Spatial data manipulation
+    - numpy: Numerical operations for coordinate generation
+    - shapely.geometry.box: Grid cell geometry creation
+    - RES.AttributesParser: Parent class for configuration management
+    - RES.boundaries.GADMBoundaries: Regional boundary processing
+    - RES.era5_cutout.ERA5Cutout: Climate data cutout handling
+    - RES.hdf5_handler.DataHandler: HDF5 data storage interface
+    - RES.utility: Utility functions for cell ID assignment and logging
     """
     
     def __post_init__(self):
@@ -102,16 +157,26 @@ class GridCells(ERA5Cutout):
         """
         # Call the parent class __post_init__ to initialize inherited attributes
         super().__post_init__()
+        
+        # This dictionary will be used to pass arguments to external classes
+        self.required_args = { #order doesn't matter
+                "config_file_path": self.config_file_path,
+                "region_short_code": self.region_short_code,
+                "resource_type": self.resource_type
+            }
+        
+        self.ERA5Cutout=ERA5Cutout(**self.required_args)
+        self.gadmBoundary=GADMBoundaries(**self.required_args)
+
         ## Initiate the Store and Datahandler (interfacing with the Store)
         self.datahandler=DataHandler(self.store)
         self.crs=self.get_default_crs()
         
-
+    
     def _check_resolution(self): # not is use for now, future scope when user up/down scales the resolution
         """Check if the resolution meets the conditions and issue warnings."""
 
         self.resolution=self.get_cell_resolution()
-        self._check_resolution()
         # Default resolution if none provided
         if self.resolution is None:
             self.resolution = {'dx': 0.25, 'dy': 0.25}
@@ -130,8 +195,8 @@ class GridCells(ERA5Cutout):
 
     def generate_coords(self):
         # Get bounding box and actual boundary from parent class method
-        self.bounding_box, self.actual_boundary = self.get_bounding_box()
-        
+        self.bounding_box, self.actual_boundary = self.gadmBoundary.get_bounding_box()
+
         """Generate the coordinates for the grid points (centroids)."""
         minx, maxx = self.bounding_box['minx'], self.bounding_box['maxx']
         miny, maxy = self.bounding_box['miny'], self.bounding_box['maxy']
@@ -189,10 +254,11 @@ class GridCells(ERA5Cutout):
         return self.grid_cells
     
     def get_default_grid(self):
-        self.cutout,self.region_boundary=self.get_era5_cutout()
+        self.cutout,self.region_boundary=self.ERA5Cutout.get_era5_cutout()
         _era5_grid_cells_gdf_=self.cutout.grid
         _resource_grid_cells_gdf_=_era5_grid_cells_gdf_.overlay(self.region_boundary)
-        self.resource_grid_cells=utils.assign_cell_id(_resource_grid_cells_gdf_)
+        self.resource_grid_cells=utils.assign_cell_id(_resource_grid_cells_gdf_,
+            source_column=self.gadmBoundary.gadm_config['datafield_mapping']['NAME_2'])
         self.datahandler.to_store(self.resource_grid_cells,'cells')
         self.datahandler.to_store(self.region_boundary,'boundary')
         return self.resource_grid_cells
