@@ -1,24 +1,55 @@
-import pandas as pd
+import warnings
+from pathlib import Path
+from typing import Optional
+
 import geopandas as gpd
 import h5py
-from shapely.wkt import loads, dumps
-from shapely.geometry.base import BaseGeometry
-from pathlib import Path
-import warnings
+import pandas as pd
 from colorama import Fore, Style
-from typing import Optional
+from shapely.geometry.base import BaseGeometry
+from shapely.wkt import dumps, loads
+
 import RES.utility as utils
 
+
 class DataHandler:
+    """
+    A class to handle reading and writing data to an HDF5 file.
+    This class provides methods to save DataFrames or GeoDataFrames to an HDF5 file. This class is useful for managing large datasets efficiently, allowing for quick access and storage of structured data.
+    
+    Key Features:
+        - Save DataFrames or GeoDataFrames to an HDF5 file with optional geometry handling.
+        - Load data from the HDF5 file, converting WKT geometries back to GeoDataFrames.
+        - Manage the structure of the HDF5 file, including showing the tree structure and deleting keys.
+    Dependencies:
+        - pandas: For DataFrame operations
+        - geopandas: For GeoDataFrame operations
+        - h5py: For HDF5 file handling
+        - shapely: For geometry serialization and deserialization
+    Attributes:
+        store (Path): Path to the HDF5 file.
+        data_new (pd.DataFrame or gpd.GeoDataFrame): Data to be saved.
+        data_ext (pd.DataFrame or gpd.GeoDataFrame): Existing data from the store.
+        updated_data (pd.DataFrame or gpd.GeoDataFrame): Updated data after merging new data.
+    Methods:
+        __init__(hdf_file_path: Path, silent_initiation: Optional[bool] = True, show_structure: Optional[bool] = False):
+            Initializes the DataHandler with the file path.
+        to_store(data: pd.DataFrame or gpd.GeoDataFrame, key: str, hdf_file_path: Path = None, force_update: bool = False):
+            Saves the DataFrame or GeoDataFrame to the HDF5 file.
+        from_store(key: str):
+            Loads data from the HDF5 store and handles geometry conversion.
+        refresh():
+            Initializes a new DataHandler instance with the current store path.
+        show_tree(store_path: Path, show_dataset: bool = False):
+            Recursively prints the hierarchy of an HDF5 file.
+        del_key(store_path: Path, key_to_delete: str):
+            Deletes a specific key from the HDF5 file.
+    """
     def __init__(self,
                  hdf_file_path:Path=None,
                  silent_initiation:Optional[bool]=True,
                  show_structure:Optional[bool]=False):
-        """
-        Initialize the DataHandler with the file path.
 
-        :param store: Path to the HDF5 file.
-        """
         try:
             if hdf_file_path is None:
                 warnings.warn("⚠️  Store has not been set during initialization. Please define the store path during applying DataHandler methods")
@@ -40,9 +71,16 @@ class DataHandler:
         """
         Save the DataFrame or GeoDataFrame to an HDF5 file.
 
-        :param data: The DataFrame or GeoDataFrame to save.
-        :param key: Key for saving the DataFrame to the HDF5 file.
-        :param force_update: If True, force update the data even if it exists.
+        Parameters:
+            hdf_file_path (Path): Path to the HDF5 file. If None, it uses the existing store path.
+            data (pd.DataFrame or gpd.GeoDataFrame):
+                The DataFrame or GeoDataFrame to save.
+            key (str): Key for saving the DataFrame to the HDF5 file.
+            force_update (bool): If True, force update the data even if it exists.  
+        Raises:
+            TypeError: If the data is not a DataFrame or GeoDataFrame.
+            ValueError: If the key is empty.
+            
         """
         if hdf_file_path is not None:
             self.store = Path(hdf_file_path)
@@ -61,7 +99,9 @@ class DataHandler:
                 if 'geometry' in self.data_new.columns:
                     if isinstance(self.data_new['geometry'].iloc[0], BaseGeometry):
                         self.data_new['geometry'] = self.data_new['geometry'].apply(dumps)
-
+                if 'nearest_connection_point' in self.data_new.columns:
+                    if isinstance(self.data_new['nearest_connection_point'].iloc[0], BaseGeometry):
+                        self.data_new['nearest_connection_point'] = self.data_new['nearest_connection_point'].apply(dumps)
                 # Save the modified data to HDF5
                 self.data_new.to_hdf(self.store, key=key)
                 utils.print_update(level=3,message=f"{__name__}|💾 Data (GeoDataFrame/DataFrame) saved to {self.store} with key '{key}'")
@@ -79,6 +119,10 @@ class DataHandler:
                 if 'geometry' in self.updated_data.columns:
                     if isinstance(self.updated_data['geometry'].iloc[0], BaseGeometry):
                         self.updated_data['geometry'] = self.updated_data['geometry'].apply(dumps)
+                
+                if 'nearest_connection_point' in self.updated_data.columns:
+                    if isinstance(self.updated_data['nearest_connection_point'].iloc[0], BaseGeometry):
+                        self.updated_data['nearest_connection_point'] = self.updated_data['nearest_connection_point'].apply(dumps)
 
                 self.updated_data.to_hdf(self.store, key=key)
                 utils.print_update(level=3,message=f"{__name__}| 💾 Updated '{key}' saved to {self.store} with key '{key}'")
@@ -91,8 +135,13 @@ class DataHandler:
         """
         Load data from the HDF5 store and handle geometry conversion.
         
-        :param key: Key for loading the DataFrame or GeoDataFrame.
-        :return: DataFrame or GeoDataFrame based on the data loaded.
+        Parameters:
+            key (str): Key for loading the DataFrame or GeoDataFrame.
+        Returns:    
+            pd.DataFrame or gpd.GeoDataFrame: The loaded DataFrame or GeoDataFrame.
+        Raises:
+            FileNotFoundError: If the key is not found in the store.
+            TypeError: If the loaded data is not a DataFrame or GeoDataFrame.
         """
         
         with pd.HDFStore(self.store, 'r') as store:
@@ -116,16 +165,31 @@ class DataHandler:
 
     def refresh(self):
         """
-        Refresh the store path to the current store.
+        Initialize a new DataHandler instance with the current store path.
+        This method is useful for reloading the DataHandler with the same store path without needing to reinitialize the entire class.
+        
+        Parameters:
+            None
+            
+        Returns:
+            DataHandler: A new instance of DataHandler with the same store path.
         """
         return DataHandler(self.store, silent_initiation=True, show_structure=False)
+    
     @staticmethod
     def show_tree(store_path,
                   show_dataset:bool=False):
         """
-        Recursively print the hierarchy of an HDF5 file.
+        This method provides a structured view of the keys and datasets within the HDF5 file, allowing users to understand its organization.
+        
+        parameters:
+            store_path (Path): Path to the HDF5 file.   
+            show_dataset (bool): If True, also show datasets within the groups.
+        Raises:
+            Exception: If there is an error reading the file.
+        Returns:
+            None: This method prints the structure to the console.
 
-        :param file_path: Path to the HDF5 file.
         """
         def print_structure(name, obj, indent=""):
             """Helper function to recursively print the structure."""
@@ -152,6 +216,23 @@ class DataHandler:
     @staticmethod
     def del_key(store_path,
                 key_to_delete:str):
+        
+        """
+        Deletes a specific key from the HDF5 file.
+        
+        Parameters:
+
+            store_path (Path): Path to the HDF5 file.
+            key_to_delete (str): The key to delete from the HDF5 file.
+        Raises:
+            KeyError: If the key does not exist in the HDF5 file.
+        Returns:        
+            None: This method prints the status of the deletion operation.
+        Example:
+            >>> DataHandler.del_key(Path('data.h5'), 'my_key')
+            This will delete 'my_key' from the 'data.h5' file if it exists
+        """
+        
         # Open the HDF5 file in read/write mode
         with h5py.File(store_path, "r+") as hdf_file:
             # Check if the key exists in the file

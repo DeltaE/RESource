@@ -145,7 +145,8 @@ def plot_resources_scatter_metric_combined(
     save_to_root:str='vis',
     set_transparent:bool=False
 ):
-    """Plot combined scatter metrics for solar and wind resources.
+    """
+    Plot combined scatter metrics for solar and wind resources.
 
     Args:
         solar_clusters (pd.DataFrame): DataFrame containing solar cluster data.
@@ -156,9 +157,6 @@ def plot_resources_scatter_metric_combined(
         font_family (str, optional): Font family for the plot. Defaults to 'sans-serif'.
         save_to_root (str, optional): Directory to save the plot. Defaults to 'vis'.
         set_transparent (bool, optional): Whether to set the background transparent. Defaults to False.
-
-    Yields:
-        _type_: _description_
     """
 
 
@@ -723,7 +721,7 @@ def create_timeseries_plots_solar(cells_df,CF_timeseries_df, dissolved_indices,m
         solar_vis_directory (str): Directory to save the generated plots.
     """
 
-    print(f">>> Generating CF timeseries for TOP Sites for {max_solar_capacity} GW Capacity Investment in BC...")
+    print(f">>> Generating CF timeseries for TOP Sites for {max_solar_capacity} GW Capacity Investment ...")
     
     for _index,row in cells_df.iterrows():
         region = row['Region']
@@ -765,7 +763,7 @@ def create_timeseries_plots_solar(cells_df,CF_timeseries_df, dissolved_indices,m
         plt_name=f'Solar CF timeseries (Resample Span :{resample_span}) - {region}_{cluster_no}.png'
         plt.savefig(os.path.join(solar_vis_directory,'Site_timeseries',plt_name))
 
-    print(f">>> Plots generated for CF timeseries of TOP Sites for {max_solar_capacity} GW Capacity Investment in BC...")
+    print(f">>> Plots generated for CF timeseries of TOP Sites for {max_solar_capacity} GW Capacity Investment...")
     
 def create_timeseries_interactive_plots(
     ts_df:pd.DataFrame,
@@ -1308,8 +1306,8 @@ def get_stepwise_availability_plots(excluder:ExclusionContainer,
         )
 
     plt.tight_layout()
-    fig.suptitle("Land Availability for Exclusion/Inclusion Layers for BC", fontsize=16, y=1.05)
-    
+    fig.suptitle("Land Availability for Exclusion/Inclusion Layers", fontsize=16, y=1.05)
+
     # Save the figure
     if isinstance(save_to, str):
         save_to = Path(save_to)

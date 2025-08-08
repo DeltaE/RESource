@@ -1,14 +1,12 @@
-import yaml
-import logging
-from requests import get
 from pathlib import Path
 
-# Setup logging
-log = logging.getLogger(__name__)
-log.setLevel(logging.INFO)
+import yaml
+from requests import get
+from RES import utility as utils
+
+PRINT_LEVEL_BASE=3
 
 # * Check 'windpowerlib' package
-
 class OEDBTurbines:
     
     def __init__(self,
@@ -20,11 +18,14 @@ class OEDBTurbines:
         self.OEDB_config = OEDB_config
     
     def load_turbine_config(self):
+        """
+        Loads the turbine configuration from a YAML file.
+        """
         # Read the YAML file into a dictionary
-            with open(self.turbine_config_file, 'r') as file:
-                turbine_config:dict=yaml.safe_load(file)
-                print(f">> selected Wind Turbine  Model : {turbine_config['name']} @ {turbine_config['hub_height']}m Hub Height")
-                return turbine_config
+        with open(self.turbine_config_file, 'r') as file:
+            turbine_config:dict=yaml.safe_load(file)
+            utils.print_update(level=PRINT_LEVEL_BASE,message=f">> selected Wind Turbine  Model : {turbine_config['name']} @ {turbine_config['hub_height']}m Hub Height")
+            return turbine_config
                 
     def fetch_turbine_config(self, model):
         """
@@ -41,23 +42,23 @@ class OEDBTurbines:
         
         self.turbine_config_file = self.turbine_config_dir / f"{self.turbine_name}.yaml"
 
-        print(f"Fetching Turbine: '{self.turbine_name}' data from OEDB")
+        utils.print_update(level=PRINT_LEVEL_BASE,message=f"Fetching Turbine: '{self.turbine_name}' data from OEDB")
 
         # Check if the turbine config file already exists
         if self.turbine_config_file.exists():
             if self.turbine_config_file.is_file():
-                print(f">> Loading turbine config from: {self.turbine_config_file}")
+                utils.print_update(level=PRINT_LEVEL_BASE,message=f">> Loading turbine config from: {self.turbine_config_file}")
                 return self.load_turbine_config()
             else:
-                print(f">> Expected a file but found a directory: {self.turbine_config_file}")
+                utils.print_update(level=PRINT_LEVEL_BASE,message=f">> Expected a file but found a directory: {self.turbine_config_file}")
                 return None
 
         else:
-            print(f">> Fetching turbine config for: {self.turbine_name} from OEDB")
+            utils.print_update(level=PRINT_LEVEL_BASE,message=f">> Fetching turbine config for: {self.turbine_name} from OEDB")
             try:
                 OEDB_data = get(OEDB_source).json()
             except Exception as e:
-                logging.error(f">> !! Failed to fetch OEDB data from {OEDB_source}: {e}")
+                utils.print_update(level=PRINT_LEVEL_BASE,message=f">> !! Failed to fetch OEDB data from {OEDB_source}: {e}")
                 return None
         
         # Process fetched data
@@ -67,10 +68,10 @@ class OEDBTurbines:
                 self.format_and_save_turbine_config(turbine_data, self.turbine_config_file)
                 return self.load_turbine_config()
             except Exception as e:
-                logging.error(f">> !! Error saving turbine configuration: {e}")
+                utils.print_update(level=PRINT_LEVEL_BASE,message=f">> !! Error saving turbine configuration: {e}")
                 return None
         else:
-            print(f">> !! No data found for turbine ID {OEDB_id}")
+            utils.print_update(level=PRINT_LEVEL_BASE,message=f">> !! No data found for turbine ID {OEDB_id}")
             return None
 
 
@@ -132,7 +133,7 @@ class OEDBTurbines:
         with open(self.turbine_config_file, 'a') as file:
             yaml.dump(formatted_data, file, default_flow_style=False)
 
-        print(f">> {self.turbine_name} turbine config saved to '{self.turbine_config_file}'")
+        utils.print_update(level=PRINT_LEVEL_BASE,message=f">> {self.turbine_name} turbine config saved to '{self.turbine_config_file}'")
 
     def __create_blank_yaml__(self, 
                            filepath: Path):
