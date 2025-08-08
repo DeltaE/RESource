@@ -111,7 +111,7 @@ sync-notebooks:
 	@mkdir -p docs/source/notebooks
 	@cp notebooks/Store_explorer.ipynb docs/source/notebooks/ 2>/dev/null || echo "Store_explorer.ipynb not found, skipping..."
 	@cp notebooks/Visuals_BC.ipynb docs/source/notebooks/ 2>/dev/null || echo "Visuals_BC.ipynb not found, skipping..."
-	@cp resource_module_runner.ipynb docs/source/notebooks/ 2>/dev/null || echo "resource_module_runner.ipynb not found, skipping..."
+	@cp resource_module_runner_BC.ipynb docs/source/notebooks/ 2>/dev/null || echo "resource_module_runner_BC.ipynb not found, skipping..."
 	@echo "Notebooks synced successfully!"
 
 docs-build: sync-notebooks
