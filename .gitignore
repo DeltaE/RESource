@@ -1,8 +1,17 @@
-.snakemake/*
+# Temp and Garbage control
+.snakemake
+.github
+.vscode
+*/__pycache__
 archive
-build/*
+cache
+workflow/scripts/__pycache__
 
-#data
+
+# DATA related directories
+## CODERS API file
+data/downloaded_data/CODERS/coders_api.yaml 
+
 data/downloaded_data/CODERS/*
 data/downloaded_data/cutout/*
 data/downloaded_data/GADM/*
@@ -14,24 +23,16 @@ data/downloaded_data/lands
 # data/downloaded_data/OEDB        # This data stays to github as example
 data/downloaded_data/OSM/*
 data/store/*
-log/*
 
-scripts/__pycache__
-*/tests
-Archive
-RES/__pycache__/*
-workflow/log
+
+# RESULTS
 results/linking/*.html
 results/scenario_1
 results/scenario_2
 
 
-.github
-.vscode
-cache
-
-workflow/scripts/__pycache__
-
+# Docs/Page resources
+docs/build
 docs/*.html
 ROD_2024/*.xlsm
 ROD_2024/*.pkl
@@ -52,8 +53,10 @@ notebooks/*.png
 notebooks/*.html
 RES/__pycache__
 RES/__pycache__/AttributesParser.cpython-312.pyc
-data/downloaded_data/CODERS/coders_api.yaml
-docs/build/_static/locales
-docs_env
+
+docs/build/*
 
 ui
+vis/*/*/Regional_cluster_Elbow_Plots
+data/processed_data/lands
+docs/build/_modules
