@@ -355,7 +355,7 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">font_family</span><span class="o">=</span><span class="s1">&#39;serif&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">font_family</span><span class="o">=</span><span class="s1">&#39;sans-serif&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -373,7 +373,7 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">province_code</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">&#39;SK&#39;</span> <span class="c1"># The tool is designed to work for any province of CANADA.</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">province_code</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">&#39;BC&#39;</span> <span class="c1"># The tool is designed to work for any province of CANADA.</span>
 <span class="n">scenario</span><span class="o">=</span><span class="mf">1.2</span>
 <span class="n">legend_x_ax_offset</span><span class="o">=</span><span class="mf">0.92</span>
 <span class="n">legend_y_ax_offset</span><span class="o">=</span><span class="mf">0.82</span>
@@ -408,7 +408,7 @@ document.write(`
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-cyan-intense-fg">____________________________________________________________</span>
-<span class="ansi-green-intense-fg">     RES.hdf5_handler|🗄️ Structure of HDF5 file: ../data/store/resources_SK.h5</span>
+<span class="ansi-green-intense-fg">     RES.hdf5_handler|🗄️ Structure of HDF5 file: ../data/store/resources_BC.h5</span>
 <span class="ansi-cyan-intense-fg">____________________________________________________________</span>
 <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">boundary</span>
 <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cells</span>
@@ -417,7 +417,6 @@ document.write(`
   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">clusters/wind</span>
 <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost</span>
   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb</span>
-  └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb/bess</span>
   └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb/solar</span>
   └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb/wind</span>
 <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">dissolved_indices</span>
@@ -470,7 +469,7 @@ document.write(`
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| ❌ Error: Key &#39;lines&#39; not found in ../data/store/resources_SK.h5</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| ❌ Error: Key &#39;lines&#39; not found in ../data/store/resources_BC.h5</span>
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -621,7 +620,7 @@ document.write(`
 <span class="n">ax</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
 
 <span class="c1"># Shadow effect offset</span>
-<span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.008</span>
+<span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.002</span>
 
 <span class="c1"># Plot solar map on ax1</span>
 <span class="c1"># Add shadow effect for solar map</span>
@@ -703,7 +702,7 @@ document.write(`
 <span class="n">ax2</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
 
 <span class="c1"># Shadow effect offset</span>
-<span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.008</span>
+<span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.0001</span>
 
 <span class="c1"># Plot solar map on ax1</span>
 <span class="c1"># Add shadow effect for solar map</span>
@@ -730,7 +729,7 @@ document.write(`
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># Plot wind map on ax2</span>
 <span class="c1"># Add shadow effect for wind map</span>
-<span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">)</span>
+<span class="c1"># boundary.geometry = boundary.geometry.translate(xoff=shadow_offset, yoff=-shadow_offset)</span>
 <span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>  <span class="c1"># Shadow layer</span>
 <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">)</span>
 
@@ -762,11 +761,30 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/localhome/mei3/miniconda3/envs/RES/lib/python3.12/site-packages/geopandas/geodataframe.py:1819: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  super().__setitem__(key, value)
+/localhome/mei3/miniconda3/envs/RES/lib/python3.12/site-packages/geopandas/geodataframe.py:1819: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  super().__setitem__(key, value)
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Store_explorer_18_0.png" src="../_images/notebooks_Store_explorer_18_0.png" />
+<img alt="../_images/notebooks_Store_explorer_18_1.png" src="../_images/notebooks_Store_explorer_18_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -805,13 +823,13 @@ document.write(`
 <span class="n">vis</span><span class="o">.</span><span class="n">add_compass_to_plot</span><span class="p">(</span><span class="n">ax1</span><span class="p">)</span>
 <span class="n">vis</span><span class="o">.</span><span class="n">add_compass_to_plot</span><span class="p">(</span><span class="n">ax2</span><span class="p">)</span>
 <span class="c1"># Shadow effect offset</span>
-<span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.008</span>
+<span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.005</span>
 
 <span class="c1"># Plot solar map on ax1</span>
 <span class="c1"># Add shadow effect for solar map</span>
 <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">)</span>
 <span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>  <span class="c1"># Shadow layer</span>
-<span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">)</span>
+<span class="c1"># boundary.geometry = boundary.geometry.translate(xoff=-shadow_offset, yoff=shadow_offset)</span>
 
 <span class="c1"># Plot solar cells</span>
 <span class="n">cells</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;solar_category&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;YlOrRd&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
@@ -934,13 +952,13 @@ document.write(`
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/tmp/ipykernel_1247120/2995861738.py:6: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
+/tmp/ipykernel_2550534/2995861738.py:6: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
   solar_cmap = cm.get_cmap(&#39;YlOrRd&#39;, len(solar_labels))
-/tmp/ipykernel_1247120/2995861738.py:7: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
+/tmp/ipykernel_2550534/2995861738.py:7: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
   wind_cmap = cm.get_cmap(&#39;BuPu&#39;, len(wind_labels))
-/tmp/ipykernel_1247120/2995861738.py:14: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+/tmp/ipykernel_2550534/2995861738.py:14: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
   solar_capacity = cells.groupby(&#39;solar_category&#39;)[&#39;potential_capacity_solar&#39;].sum().div(1e3).reindex(solar_labels, fill_value=0)
-/tmp/ipykernel_1247120/2995861738.py:15: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+/tmp/ipykernel_2550534/2995861738.py:15: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
   wind_capacity = cells.groupby(&#39;wind_category&#39;)[&#39;potential_capacity_wind&#39;].sum().div(1e3).reindex(wind_labels, fill_value=0)
 </pre></div></div>
 </div>
@@ -1012,7 +1030,7 @@ document.write(`
 <span class="n">ax2</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
 
 <span class="c1"># Shadow effect offset</span>
-<span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.008</span>
+<span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.001</span>
 
 <span class="c1"># Plot solar map on ax1</span>
 <span class="c1"># Add shadow effect for solar map</span>
@@ -1039,9 +1057,9 @@ document.write(`
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># Plot wind map on ax2</span>
 <span class="c1"># Add shadow effect for wind map</span>
-<span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">)</span>
-<span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>  <span class="c1"># Shadow layer</span>
 <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">)</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>  <span class="c1"># Shadow layer</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">)</span>
 
 <span class="c1"># Plot wind cells</span>
 <span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;wind_category&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;summer&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>

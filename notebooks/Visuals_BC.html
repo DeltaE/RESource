@@ -497,13 +497,11 @@ SK: Saskatchewan
   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">clusters/wind</span>
 <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost</span>
   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb</span>
-  └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb/bess</span>
   └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb/solar</span>
   └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb/wind</span>
 <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">dissolved_indices</span>
   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">dissolved_indices/solar</span>
   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">dissolved_indices/wind</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">lines</span>
 <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">substations</span>
 <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries</span>
   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries/clusters</span>
@@ -520,7 +518,7 @@ SK: Saskatchewan
 </div>
 <section id="Load-dataframes-from-Store">
 <h2>Load dataframes from Store<a class="headerlink" href="#Load-dataframes-from-Store" title="Link to this heading">#</a></h2>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
@@ -535,6 +533,14 @@ SK: Saskatchewan
 <span class="n">clusters_wind</span><span class="o">=</span><span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;clusters/wind&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| ❌ Error: Key &#39;lines&#39; not found in ../data/store/resources_BC.h5</span>
+</pre></div></div>
 </div>
 </section>
 <section id="Create-Visuals">
@@ -553,16 +559,16 @@ SK: Saskatchewan
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Index([&#39;x_1&#39;, &#39;y_1&#39;, &#39;windspeed_gwa&#39;, &#39;CF_IEC2&#39;, &#39;CF_IEC3&#39;, &#39;x&#39;, &#39;y&#39;,
+Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Region&#39;, &#39;geometry&#39;,
        &#39;potential_capacity_wind&#39;, &#39;capex_wind&#39;, &#39;fom_wind&#39;, &#39;vom_wind&#39;,
        &#39;grid_connection_cost_per_km_wind&#39;, &#39;tx_line_rebuild_cost_wind&#39;,
-       &#39;Operational_life_wind&#39;, &#39;windspeed_ERA5&#39;, &#39;Country&#39;, &#39;Province&#39;,
-       &#39;Region&#39;, &#39;geometry&#39;, &#39;wind_CF_mean&#39;, &#39;nearest_station&#39;,
-       &#39;nearest_station_distance_km&#39;, &#39;lcoe_wind&#39;, &#39;potential_capacity_solar&#39;,
-       &#39;capex_solar&#39;, &#39;fom_solar&#39;, &#39;vom_solar&#39;,
-       &#39;grid_connection_cost_per_km_solar&#39;, &#39;tx_line_rebuild_cost_solar&#39;,
-       &#39;Operational_life_solar&#39;, &#39;solar_CF_mean&#39;, &#39;lcoe_solar&#39;, &#39;Province_1&#39;,
-       &#39;Province_2&#39;],
+       &#39;Operational_life_wind&#39;, &#39;windspeed_ERA5&#39;, &#39;x_1&#39;, &#39;y_1&#39;,
+       &#39;windspeed_gwa&#39;, &#39;CF_IEC2&#39;, &#39;CF_IEC3&#39;, &#39;IEC_Class_ExLoads&#39;,
+       &#39;wind_CF_mean&#39;, &#39;nearest_station&#39;, &#39;nearest_station_distance_km&#39;,
+       &#39;lcoe_wind&#39;, &#39;potential_capacity_solar&#39;, &#39;capex_solar&#39;, &#39;fom_solar&#39;,
+       &#39;vom_solar&#39;, &#39;grid_connection_cost_per_km_solar&#39;,
+       &#39;tx_line_rebuild_cost_solar&#39;, &#39;Operational_life_solar&#39;, &#39;solar_CF_mean&#39;,
+       &#39;lcoe_solar&#39;],
       dtype=&#39;object&#39;)
 </pre></div></div>
 </div>
@@ -580,35 +586,20 @@ Index([&#39;x_1&#39;, &#39;y_1&#39;, &#39;windspeed_gwa&#39;, &#39;CF_IEC2&#39;,
 </div>
 <section id="lines">
 <h3>lines<a class="headerlink" href="#lines" title="Link to this heading">#</a></h3>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vis</span><span class="o">.</span><span class="n">plot_grid_lines</span><span class="p">(</span>
-    <span class="n">region_code</span><span class="o">=</span><span class="n">region_code</span><span class="p">,</span>
-    <span class="n">region_name</span><span class="o">=</span><span class="n">region_name</span><span class="p">,</span>
-    <span class="n">lines</span><span class="o">=</span><span class="n">lines</span><span class="p">,</span>
-    <span class="n">boundary</span><span class="o">=</span><span class="n">boundary</span><span class="p">,</span>
-    <span class="n">save_to</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;vis/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-    <span class="n">font_family</span><span class="o">=</span><span class="n">font_family</span><span class="p">,</span>
-    <span class="n">show</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># vis.plot_grid_lines(</span>
+<span class="c1">#     region_code=region_code,</span>
+<span class="c1">#     region_name=region_name,</span>
+<span class="c1">#     lines=lines,</span>
+<span class="c1">#     boundary=boundary,</span>
+<span class="c1">#     save_to=f&quot;vis/{region_code}&quot;,</span>
+<span class="c1">#     font_family=font_family,</span>
+<span class="c1">#     show=True</span>
+<span class="c1"># )</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; Transmission Lines for British Columbia saved to vis/BC/transmission_lines_BC.png</span>
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_BC_17_1.png" src="../_images/notebooks_Visuals_BC_17_1.png" />
 </div>
 </div>
 </section>
@@ -669,17 +660,33 @@ Index([&#39;x_1&#39;, &#39;y_1&#39;, &#39;windspeed_gwa&#39;, &#39;CF_IEC2&#39;,
 <img alt="../_images/notebooks_Visuals_BC_23_2.png" src="../_images/notebooks_Visuals_BC_23_2.png" />
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># vis.get_data_in_map_plot(cells,</span>
-<span class="c1">#                 resource_type=&#39;wind&#39;,</span>
-<span class="c1">#                   datafield=&#39;CF&#39;,</span>
-<span class="c1">#                 title=f&quot;Wind Resources for {region_name}&quot;,</span>
-<span class="c1">#                 # ax=ax1,</span>
-<span class="c1">#                 show=False)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vis</span><span class="o">.</span><span class="n">get_data_in_map_plot</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span>
+                <span class="n">resource_type</span><span class="o">=</span><span class="s1">&#39;wind&#39;</span><span class="p">,</span>
+                  <span class="n">datafield</span><span class="o">=</span><span class="s1">&#39;CF&#39;</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Wind Resources for </span><span class="si">{</span><span class="n">region_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="c1"># ax=ax1,</span>
+                <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;Axes: title={&#39;center&#39;: &#39;Wind Resources for British Columbia&#39;}&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Visuals_BC_24_1.png" src="../_images/notebooks_Visuals_BC_24_1.png" />
 </div>
 </div>
 <ul class="simple">
@@ -1030,13 +1037,38 @@ Index([&#39;x_1&#39;, &#39;y_1&#39;, &#39;windspeed_gwa&#39;, &#39;CF_IEC2&#39;,
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clusters_solar</span><span class="o">.</span><span class="n">lcoe</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+count        62.000000
+mean     274306.811438
+std      449678.122985
+min          52.165096
+25%          56.574188
+50%          66.941436
+75%      999999.000000
+max      999999.000000
+Name: lcoe, dtype: float64
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example of correct argument dictionary (if you want to use kwargs)</span>
 <span class="n">scatter_plot_args</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;solar_clusters&quot;</span><span class="p">:</span> <span class="n">clusters_solar</span><span class="p">,</span>
     <span class="s2">&quot;wind_clusters&quot;</span><span class="p">:</span> <span class="n">clusters_wind</span><span class="p">,</span>
     <span class="s2">&quot;bubbles_GW&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="c1"># bubble sizes in GW</span>
     <span class="s2">&quot;bubbles_scale&quot;</span><span class="p">:</span> <span class="mf">0.025</span><span class="p">,</span> <span class="c1">#100 times smaller than the original scale</span>
-    <span class="s2">&quot;lcoe_threshold&quot;</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span> <span class="c1"># LCOE threshold in $/MWh</span>
+    <span class="s2">&quot;lcoe_threshold&quot;</span><span class="p">:</span> <span class="mi">120</span><span class="p">,</span> <span class="c1"># LCOE threshold in $/MWh</span>
     <span class="s2">&quot;font_family&quot;</span><span class="p">:</span><span class="n">font_family</span><span class="p">,</span>
     <span class="s2">&quot;save_to_root&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;vis/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
 <span class="p">}</span>
@@ -1058,7 +1090,7 @@ Index([&#39;x_1&#39;, &#39;y_1&#39;, &#39;windspeed_gwa&#39;, &#39;CF_IEC2&#39;,
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_BC_38_1.png" src="../_images/notebooks_Visuals_BC_38_1.png" />
+<img alt="../_images/notebooks_Visuals_BC_39_1.png" src="../_images/notebooks_Visuals_BC_39_1.png" />
 </div>
 </div>
 </section>
@@ -1067,7 +1099,7 @@ Index([&#39;x_1&#39;, &#39;y_1&#39;, &#39;windspeed_gwa&#39;, &#39;CF_IEC2&#39;,
 <section id="CF-checks">
 <h2>CF checks<a class="headerlink" href="#CF-checks" title="Link to this heading">#</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gwa_country_code</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;region_mapping&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">region_code</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;GWA_country_code&#39;</span><span class="p">)</span>
@@ -1088,7 +1120,7 @@ Index([&#39;x_1&#39;, &#39;y_1&#39;, &#39;windspeed_gwa&#39;, &#39;CF_IEC2&#39;,
 <section id="Wind">
 <h3>Wind<a class="headerlink" href="#Wind" title="Link to this heading">#</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get total bounds from boundary GeoDataFrame</span>
@@ -1122,7 +1154,7 @@ Index([&#39;x_1&#39;, &#39;y_1&#39;, &#39;windspeed_gwa&#39;, &#39;CF_IEC2&#39;,
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -1140,89 +1172,11 @@ Index([&#39;x_1&#39;, &#39;y_1&#39;, &#39;windspeed_gwa&#39;, &#39;CF_IEC2&#39;,
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_BC_44_0.png" src="../_images/notebooks_Visuals_BC_44_0.png" />
+<img alt="../_images/notebooks_Visuals_BC_45_0.png" src="../_images/notebooks_Visuals_BC_45_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CF_IEC2&#39;</span><span class="p">,</span> <span class="s1">&#39;CF_IEC3&#39;</span><span class="p">,</span> <span class="s1">&#39;wind_CF_mean&#39;</span><span class="p">]</span>
-<span class="n">cells</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Summary Statistics for GWA CF data and calibrated Wind CF_mean&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<style type="text/css">
-</style>
-<table id="T_a94ec">
-  <caption>Summary Statistics for GWA CF data and calibrated Wind CF_mean</caption>
-  <thead>
-    <tr>
-      <th class="blank level0" >&nbsp;</th>
-      <th id="T_a94ec_level0_col0" class="col_heading level0 col0" >CF_IEC2</th>
-      <th id="T_a94ec_level0_col1" class="col_heading level0 col1" >CF_IEC3</th>
-      <th id="T_a94ec_level0_col2" class="col_heading level0 col2" >wind_CF_mean</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th id="T_a94ec_level0_row0" class="row_heading level0 row0" >count</th>
-      <td id="T_a94ec_row0_col0" class="data row0 col0" >2948.00</td>
-      <td id="T_a94ec_row0_col1" class="data row0 col1" >2948.00</td>
-      <td id="T_a94ec_row0_col2" class="data row0 col2" >2948.00</td>
-    </tr>
-    <tr>
-      <th id="T_a94ec_level0_row1" class="row_heading level0 row1" >mean</th>
-      <td id="T_a94ec_row1_col0" class="data row1 col0" >0.26</td>
-      <td id="T_a94ec_row1_col1" class="data row1 col1" >0.29</td>
-      <td id="T_a94ec_row1_col2" class="data row1 col2" >0.26</td>
-    </tr>
-    <tr>
-      <th id="T_a94ec_level0_row2" class="row_heading level0 row2" >std</th>
-      <td id="T_a94ec_row2_col0" class="data row2 col0" >0.09</td>
-      <td id="T_a94ec_row2_col1" class="data row2 col1" >0.09</td>
-      <td id="T_a94ec_row2_col2" class="data row2 col2" >0.12</td>
-    </tr>
-    <tr>
-      <th id="T_a94ec_level0_row3" class="row_heading level0 row3" >min</th>
-      <td id="T_a94ec_row3_col0" class="data row3 col0" >0.06</td>
-      <td id="T_a94ec_row3_col1" class="data row3 col1" >0.07</td>
-      <td id="T_a94ec_row3_col2" class="data row3 col2" >0.02</td>
-    </tr>
-    <tr>
-      <th id="T_a94ec_level0_row4" class="row_heading level0 row4" >25%</th>
-      <td id="T_a94ec_row4_col0" class="data row4 col0" >0.20</td>
-      <td id="T_a94ec_row4_col1" class="data row4 col1" >0.22</td>
-      <td id="T_a94ec_row4_col2" class="data row4 col2" >0.17</td>
-    </tr>
-    <tr>
-      <th id="T_a94ec_level0_row5" class="row_heading level0 row5" >50%</th>
-      <td id="T_a94ec_row5_col0" class="data row5 col0" >0.25</td>
-      <td id="T_a94ec_row5_col1" class="data row5 col1" >0.28</td>
-      <td id="T_a94ec_row5_col2" class="data row5 col2" >0.24</td>
-    </tr>
-    <tr>
-      <th id="T_a94ec_level0_row6" class="row_heading level0 row6" >75%</th>
-      <td id="T_a94ec_row6_col0" class="data row6 col0" >0.32</td>
-      <td id="T_a94ec_row6_col1" class="data row6 col1" >0.35</td>
-      <td id="T_a94ec_row6_col2" class="data row6 col2" >0.33</td>
-    </tr>
-    <tr>
-      <th id="T_a94ec_level0_row7" class="row_heading level0 row7" >max</th>
-      <td id="T_a94ec_row7_col0" class="data row7 col0" >0.61</td>
-      <td id="T_a94ec_row7_col1" class="data row7 col1" >0.63</td>
-      <td id="T_a94ec_row7_col2" class="data row7 col2" >0.71</td>
-    </tr>
-  </tbody>
-</table></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vis</span><span class="o">.</span><span class="n">get_CF_wind_check_plot</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span>
@@ -1250,55 +1204,55 @@ Index([&#39;x_1&#39;, &#39;y_1&#39;, &#39;windspeed_gwa&#39;, &#39;CF_IEC2&#39;,
 <div class="output_area rendered_html docutils container">
 <style type="text/css">
 </style>
-<table id="T_e0815">
+<table id="T_04b17">
   <caption>Summary Statistics for CF_IEC3 and calibrated Wind CF_mean</caption>
   <thead>
     <tr>
       <th class="blank level0" >&nbsp;</th>
-      <th id="T_e0815_level0_col0" class="col_heading level0 col0" >CF_IEC3</th>
-      <th id="T_e0815_level0_col1" class="col_heading level0 col1" >wind_CF_mean</th>
+      <th id="T_04b17_level0_col0" class="col_heading level0 col0" >CF_IEC3</th>
+      <th id="T_04b17_level0_col1" class="col_heading level0 col1" >wind_CF_mean</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th id="T_e0815_level0_row0" class="row_heading level0 row0" >count</th>
-      <td id="T_e0815_row0_col0" class="data row0 col0" >2948.00</td>
-      <td id="T_e0815_row0_col1" class="data row0 col1" >2948.00</td>
+      <th id="T_04b17_level0_row0" class="row_heading level0 row0" >count</th>
+      <td id="T_04b17_row0_col0" class="data row0 col0" >2948.00</td>
+      <td id="T_04b17_row0_col1" class="data row0 col1" >2956.00</td>
     </tr>
     <tr>
-      <th id="T_e0815_level0_row1" class="row_heading level0 row1" >mean</th>
-      <td id="T_e0815_row1_col0" class="data row1 col0" >0.29</td>
-      <td id="T_e0815_row1_col1" class="data row1 col1" >0.26</td>
+      <th id="T_04b17_level0_row1" class="row_heading level0 row1" >mean</th>
+      <td id="T_04b17_row1_col0" class="data row1 col0" >0.29</td>
+      <td id="T_04b17_row1_col1" class="data row1 col1" >0.26</td>
     </tr>
     <tr>
-      <th id="T_e0815_level0_row2" class="row_heading level0 row2" >std</th>
-      <td id="T_e0815_row2_col0" class="data row2 col0" >0.09</td>
-      <td id="T_e0815_row2_col1" class="data row2 col1" >0.12</td>
+      <th id="T_04b17_level0_row2" class="row_heading level0 row2" >std</th>
+      <td id="T_04b17_row2_col0" class="data row2 col0" >0.09</td>
+      <td id="T_04b17_row2_col1" class="data row2 col1" >0.12</td>
     </tr>
     <tr>
-      <th id="T_e0815_level0_row3" class="row_heading level0 row3" >min</th>
-      <td id="T_e0815_row3_col0" class="data row3 col0" >0.07</td>
-      <td id="T_e0815_row3_col1" class="data row3 col1" >0.02</td>
+      <th id="T_04b17_level0_row3" class="row_heading level0 row3" >min</th>
+      <td id="T_04b17_row3_col0" class="data row3 col0" >0.07</td>
+      <td id="T_04b17_row3_col1" class="data row3 col1" >0.00</td>
     </tr>
     <tr>
-      <th id="T_e0815_level0_row4" class="row_heading level0 row4" >25%</th>
-      <td id="T_e0815_row4_col0" class="data row4 col0" >0.22</td>
-      <td id="T_e0815_row4_col1" class="data row4 col1" >0.17</td>
+      <th id="T_04b17_level0_row4" class="row_heading level0 row4" >25%</th>
+      <td id="T_04b17_row4_col0" class="data row4 col0" >0.22</td>
+      <td id="T_04b17_row4_col1" class="data row4 col1" >0.17</td>
     </tr>
     <tr>
-      <th id="T_e0815_level0_row5" class="row_heading level0 row5" >50%</th>
-      <td id="T_e0815_row5_col0" class="data row5 col0" >0.28</td>
-      <td id="T_e0815_row5_col1" class="data row5 col1" >0.24</td>
+      <th id="T_04b17_level0_row5" class="row_heading level0 row5" >50%</th>
+      <td id="T_04b17_row5_col0" class="data row5 col0" >0.28</td>
+      <td id="T_04b17_row5_col1" class="data row5 col1" >0.24</td>
     </tr>
     <tr>
-      <th id="T_e0815_level0_row6" class="row_heading level0 row6" >75%</th>
-      <td id="T_e0815_row6_col0" class="data row6 col0" >0.35</td>
-      <td id="T_e0815_row6_col1" class="data row6 col1" >0.33</td>
+      <th id="T_04b17_level0_row6" class="row_heading level0 row6" >75%</th>
+      <td id="T_04b17_row6_col0" class="data row6 col0" >0.35</td>
+      <td id="T_04b17_row6_col1" class="data row6 col1" >0.33</td>
     </tr>
     <tr>
-      <th id="T_e0815_level0_row7" class="row_heading level0 row7" >max</th>
-      <td id="T_e0815_row7_col0" class="data row7 col0" >0.63</td>
-      <td id="T_e0815_row7_col1" class="data row7 col1" >0.71</td>
+      <th id="T_04b17_level0_row7" class="row_heading level0 row7" >max</th>
+      <td id="T_04b17_row7_col0" class="data row7 col0" >0.63</td>
+      <td id="T_04b17_row7_col1" class="data row7 col1" >0.71</td>
     </tr>
   </tbody>
 </table></div>
@@ -1311,7 +1265,7 @@ Index([&#39;x_1&#39;, &#39;y_1&#39;, &#39;windspeed_gwa&#39;, &#39;CF_IEC2&#39;,
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
@@ -1375,7 +1329,7 @@ Index([&#39;x_1&#39;, &#39;y_1&#39;, &#39;windspeed_gwa&#39;, &#39;CF_IEC2&#39;,
 <section id="CLusters">
 <h3>CLusters<a class="headerlink" href="#CLusters" title="Link to this heading">#</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clusters_wind_f</span><span class="o">=</span><span class="n">clusters_wind</span><span class="p">[</span><span class="n">clusters_wind</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>
@@ -1384,7 +1338,7 @@ Index([&#39;x_1&#39;, &#39;y_1&#39;, &#39;windspeed_gwa&#39;, &#39;CF_IEC2&#39;,
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total sites </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">clusters_wind_f</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -1401,13 +1355,13 @@ Index([&#39;x_1&#39;, &#39;y_1&#39;, &#39;windspeed_gwa&#39;, &#39;CF_IEC2&#39;,
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Total sites 56
-Total Capacity 663 GW
-Top 5 sites (9% site) capacity 136 GW (21% of total capacity)
+Total sites 31
+Total Capacity 666 GW
+Top 5 sites (16% site) capacity 248 GW (37% of total capacity)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total sites </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">clusters_solar_f</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -1424,9 +1378,9 @@ Top 5 sites (9% site) capacity 136 GW (21% of total capacity)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Total sites 82
-Total Capacity 517 GW
-Top 5 sites (6% site) capacity 19 GW (4% of total capacity)
+Total sites 53
+Total Capacity 523 GW
+Top 5 sites (9% site) capacity 16 GW (3% of total capacity)
 </pre></div></div>
 </div>
 </section>
@@ -1435,7 +1389,7 @@ Top 5 sites (6% site) capacity 19 GW (4% of total capacity)
 <section id="Static-Plots">
 <h1>Static Plots<a class="headerlink" href="#Static-Plots" title="Link to this heading">#</a></h1>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aeroway</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../data/downloaded_data/OSM/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">_aeroway.geojson&#39;</span><span class="p">)</span>
@@ -1452,7 +1406,7 @@ Top 5 sites (6% site) capacity 19 GW (4% of total capacity)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -1497,7 +1451,7 @@ Top 5 sites (6% site) capacity 19 GW (4% of total capacity)
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -1546,7 +1500,7 @@ Top 5 sites (6% site) capacity 19 GW (4% of total capacity)
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import matplotlib.pyplot as plt</span>
@@ -1589,8 +1543,8 @@ Top 5 sites (6% site) capacity 19 GW (4% of total capacity)
 </section>
 <section id="Static-Data-Visuals-in-Interactive-Maps">
 <h1>Static Data Visuals in Interactive Maps<a class="headerlink" href="#Static-Data-Visuals-in-Interactive-Maps" title="Link to this heading">#</a></h1>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
@@ -1658,11 +1612,20 @@ Top 5 sites (6% site) capacity 19 GW (4% of total capacity)
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#34;\nimport hvplot.pandas\nimport holoviews as hv\nfrom holoviews import opts\nfrom bokeh.layouts import gridplot\nfrom bokeh.io import show\n\n# Initialize Holoviews extension\nhv.extension(&#39;bokeh&#39;)\n\n\n# Define a dictionary to map columns to specific colormaps\ncmap_mapping = {\n    &#39;lcoe_wind&#39;: &#39;cool&#39;,\n    &#39;potential_capacity_wind&#39;: &#39;Blues&#39;,\n    &#39;lcoe_solar&#39;: &#39;autumn&#39;,\n    &#39;CF_IEC2&#39;: &#39;RdYlGn&#39;,\n    &#39;wind_CF_mean&#39;: &#39;RdYlGn&#39;,\n    &#39;windspeed_ERA5&#39;: &#39;winter&#39;,\n    &#39;nearest_station_distance_km&#39;: &#39;Oranges&#39;,\n    &#39;potential_capacity_wind&#39;: &#39;Blues&#39;,\n    &#39;potential_capacity_solar&#39;: &#39;Oranges&#39;,\n}\n\n# Define a function to create individual plots\ndef create_plot(column_name, cmap):\n    return cells.hvplot(\n        color=column_name,\n        cmap=cmap,\n        geo=True,\n        tiles=&#39;CartoDark&#39;,  # Default base map\n        frame_width=300,  # Adjust the size of the plots\n        frame_height=300,  # Adjust the size of the plots\n        data_aspect=.5,\n        alpha=0.8,\n        line_color=&#39;None&#39;,\n        line_width=0.1,\n        hover_line_color=&#39;red&#39;\n    ).opts(title=column_name,\n            show_grid=True,\n            show_legend=True,\n            tools=[&#39;hover&#39;, &#39;pan&#39;, &#39;wheel_zoom&#39;,&#39;reset&#39;,&#39;box_select&#39;],\n            legend_position=&#39;top_right&#39;\n        )\n\n# Create a list of plots for each column\nplots = [create_plot(col, cmap) for col, cmap in cmap_mapping.items()]\n\n# Create a grid layout for the plots\ngrid = hv.Layout(plots).cols(3)  # Adjust the number of columns as needed\n\n# Show the layout\nhv.save(grid, &#39;docs/grid_plots.html&#39;)  # Save the grid layout as an HTML file\n\n\n\n# Render the layout as a Bokeh object\nbokeh_layout = hv.render(grid, backend=&#39;bokeh&#39;)\n\n# Show the layout\nshow(bokeh_layout)\n&#34;
+</pre></div></div>
+</div>
 </section>
 <section id="Timeseries-Plots">
 <h1>Timeseries Plots<a class="headerlink" href="#Timeseries-Plots" title="Link to this heading">#</a></h1>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import pandas as pd</span>
@@ -1735,7 +1698,7 @@ Top 5 sites (6% site) capacity 19 GW (4% of total capacity)
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import pandas as pd</span>
