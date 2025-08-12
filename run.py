@@ -58,7 +58,7 @@ from RES.hdf5_handler import DataHandler
 
 # Iterate over provinces for both solar and wind resources
 resource_types = ['wind','solar'] 
-provinces=['ON','NS','MB','QC']  # 'BC','QC','AB','SK','ON','NS','MB'
+provinces=['QC','AB','SK','ON','NS','MB']  # 'BC','QC','AB','SK','ON','NS','MB'
 for province_code in provinces:
     for resource_type in resource_types:
         required_args = {

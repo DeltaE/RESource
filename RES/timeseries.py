@@ -274,7 +274,7 @@ class Timeseries(AttributesParser):
         }
 
         # Step 1.4: Generate PV timeseries profile using the atlite's cutout
-        utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| ⚠️ Processing timeseries from ERA5 cutout, may take a while...")
+        utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| ⏳Processing timeseries from ERA5 cutout, may take a while...")
         self.pv_profile: xr.DataArray = self.cutout.pv(**pv_args).rename(self.resource_type)
         
         return self.pv_profile
@@ -435,7 +435,7 @@ class Timeseries(AttributesParser):
         }
 
         # Step 1.4: Generate PV timeseries profile using the atlite's cutout
-        utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| ⚠️ Processing timeseries from ERA5 cutout, may take a while...")
+        utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| ⏳Processing timeseries from ERA5 cutout, may take a while...")
         self.wind_profile: xr.DataArray = self.cutout.wind(**wind_args).rename(self.resource_type)
         
         return self.wind_profile

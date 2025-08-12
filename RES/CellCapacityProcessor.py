@@ -247,7 +247,6 @@ class CellCapacityProcessor(AttributesParser):
         # Load configuration attributes that were previously inherited
         self.cutout_config = super().get_cutout_config()  # INHERITED METHOD from AttributesParser
         self.gadm_config = super().get_gadm_config()  # INHERITED METHOD from AttributesParser
-        self.disaggregation_config = self.config.get('disaggregation', {})  # INHERITED ATTRIBUTE from AttributesParser
         self.region_name = super().get_region_name()  # INHERITED METHOD from AttributesParser
         
         (self.utility_pv_cost, 
@@ -272,11 +271,30 @@ class CellCapacityProcessor(AttributesParser):
     
     def load_cost(self,
                   resource_atb:pd.DataFrame):
+        """
+        Extracts cost parameters from the NREL ATB DataFrame and converts them to million $/MW.
+
+        Args:
+            resource_atb (pd.DataFrame): DataFrame containing NREL ATB cost data for the resource type.
+
+        Returns:
+            dict: A dictionary containing the following cost parameters:
+                - resource_capex: Capital expenditure in million $/MW
+                - resource_vom: Variable operation and maintenance cost in million $/MW
+                - resource_fom: Fixed operation and maintenance cost in million $/MW
+                - grid_connection_cost_per_km: Grid connection cost per kilometer in million $
+                - tx_line_rebuild_cost: Transmission line rebuild cost in million $
+        """
+        
         utils.print_update(level=PRINT_LEVEL_BASE+1,
                            message=f"{__name__}| Extracting cost attributes...")
+        self.transmission_config = self.config.get('capacity_disaggregation', {}).get('transmission', {}) # INHERITED ATTRIBUTE from AttributesParser
+        grid_connection_cost_per_km = self.transmission_config.get('grid_connection_cost_per_Km', 0)
+        utils.print_info(f"{__name__}| @ Line: {inspect.currentframe().f_lineno-1} | `grid_connection_cost_per_km` is set to {grid_connection_cost_per_km} million $/km. If this is not set in the config, it will be set to 0.")
         
-        grid_connection_cost_per_km = self.disaggregation_config.get('transmission', {}).get('grid_connection_cost_per_Km', 0)
         tx_line_rebuild_cost = self.disaggregation_config.get('transmission', {}).get('tx_line_rebuild_cost', 0)
+        utils.print_info(f"{__name__}| @ Line: {inspect.currentframe().f_lineno-1} | `grid_connection_cost_per_km` is set to {grid_connection_cost_per_km} million $/km. If this is not set in the config, it will be set to 0.")
+        
         
         self.ATB:Dict[str,dict]=super().get_atb_config()
         source_column:str= self.ATB.get('column',{})
@@ -288,8 +306,7 @@ class CellCapacityProcessor(AttributesParser):
         resource_fom:float=resource_atb[resource_atb[source_column]==cost_params_mapping.get('fom',{})].value.iloc[0] /1E3  # Convert to million $/MW
         
         # Initialize resource_vom based on the availability of 'vom' in cost_params_mapping
-        resource_vom: float = 0  # Default value if 'vom' is not found
-        
+        resource_vom = 0.0
 
         if cost_params_mapping.get('vom') is not None:
             # Check if the DataFrame 'utility_scale_cost' is not empty and get the value for 'vom'
@@ -297,12 +314,24 @@ class CellCapacityProcessor(AttributesParser):
                 vom_row = resource_atb[resource_atb[source_column] == cost_params_mapping['vom']]
                 if not vom_row.empty:
                     resource_vom = vom_row['value'].iloc[0] / 1E3  # Convert to million $/MW
-
-        return (resource_capex, # in million $/MW
-                resource_vom,   # in million $/MW
-                resource_fom,  # in million $/MW
-                grid_connection_cost_per_km,  # in million $
-                tx_line_rebuild_cost) # in million $
+        
+        cost_components:dict={
+            'resource_capex': resource_capex,                    # million $/MW
+            'resource_vom': resource_vom,                        # million $/MW
+            'resource_fom': resource_fom,                        # million $/MW
+            'grid_connection_cost_per_km': grid_connection_cost_per_km,  # million $
+            'tx_line_rebuild_cost': tx_line_rebuild_cost         # million $
+        }
+        
+        # Validation
+        expected_keys = ['resource_capex', 'resource_vom', 'resource_fom', 
+                        'grid_connection_cost_per_km', 'tx_line_rebuild_cost']
+        
+        assert all(key in cost_components for key in expected_keys), "Missing cost components"
+        assert all(isinstance(value, (int, float)) for value in cost_components.values()), "All values must be numeric"
+        
+        # Return as ordered dictionary
+        return cost_components
     
     # Define a function to create bounding boxes (of cell) directly from coordinates (x, y) and resolution
     def __create_cell_geom__(self,x, y):
@@ -334,20 +363,26 @@ class CellCapacityProcessor(AttributesParser):
         
         
     #d. Load costs (float)
-        (
-        self.resource_capex, 
-        self.resource_fom, 
-        self.resource_vom,
-        self.grid_connection_cost_per_km,
-        self.tx_line_rebuild_cost
-        ) = self.load_cost(
-                resource_atb=(
-                    self.utility_pv_cost if self.resource_type == 'solar' else
-                    self.land_based_wind_cost if self.resource_type == 'wind' else
-                    self.bess_cost if self.resource_type == 'bess' else
-                    None
-                    )
-                )
+    
+    # Load cost data as dictionary
+        cost_components:dict = self.load_cost(
+                                    resource_atb=(
+                                        self.utility_pv_cost if self.resource_type == 'solar' else
+                                        self.land_based_wind_cost if self.resource_type == 'wind' else
+                                        self.bess_cost if self.resource_type == 'bess' else
+                                        None
+                                    )
+                                )
+
+
+        # Assign to instance variables
+        self.resource_capex = cost_components['resource_capex']
+        self.resource_vom = cost_components['resource_vom'] 
+        self.resource_fom = cost_components['resource_fom']
+        self.grid_connection_cost_per_km = cost_components['grid_connection_cost_per_km']
+        self.tx_line_rebuild_cost = cost_components['tx_line_rebuild_cost']
+        utils.print_update(level=PRINT_LEVEL_BASE+2,
+                           message=f"{__name__}| ✓ Cost parameters loaded for {self.resource_type} resources.")
         
     ## 2.1 Compute availability Matrix
         self.region_shape= self.__get_unified_region_shape__() # we need to pass the unified region shape to the availability matrix calculation.
@@ -412,14 +447,13 @@ class CellCapacityProcessor(AttributesParser):
 
     ## 4 Trim the cells to sub-provincial boundaries instead of overlapping cell (boxes) in the regional boundaries.
         _provincial_cell_capacity_gdf=_provincial_cell_capacity_gdf.overlay(self.region_boundary)
-        print(_provincial_cell_capacity_gdf.columns) # debugging purpose
+        
+        # print(_provincial_cell_capacity_gdf.columns) # debugging purpose
+        
         self.provincial_cells=utils.assign_cell_id(cells=_provincial_cell_capacity_gdf,
             source_column=self.gadm_config['datafield_mapping'].get('NAME_2'))
 
-        # Define a namedtuple
-        # capacity_data = namedtuple('capacity_data', ['data','matrix'])
-        
-        # self.resources_nt=capacity_data(self.provincial_cells,capacity_matrix)
+
         cells_with_capacity = self.provincial_cells
         
         utils.print_update(level=PRINT_LEVEL_BASE+2,

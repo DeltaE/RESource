@@ -406,7 +406,7 @@ def find_optimal_K(
     # Ensure x-axis ticks are integers
     plt.xticks(range(1, min(max_k, len(data_for_clustering))))
 
-    plt.tight_layout()
+    # plt.tight_layout()
 
     # Print the optimal k
     print(f"Zone {region} - Optimal k for LCOE_{resource_type} based clustering: {optimal_k_data}\n")

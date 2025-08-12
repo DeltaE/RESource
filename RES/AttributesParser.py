@@ -15,6 +15,7 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict
+import RES.utility as utils
 
 import yaml
 
@@ -172,6 +173,9 @@ class AttributesParser:
     
     def get_cell_resolution(self):
         return self.config.get('grid_cell_resolution',{})
+    
+    def get_buses_path(self):
+        return utils.ensure_path('data/processed_data/network')
     
     def get_turbines_config(self):
         self.resource_disaggregation_config=self.get_resource_disaggregation_config()

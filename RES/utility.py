@@ -158,6 +158,7 @@ def ensure_path(save_to: str | Path) -> Path:
     if not isinstance(save_to, Path):
         Warning(f">> Given instance for 'destination (save_to)' is of type: {type(save_to)}. Converting it to a Path")
         save_to = Path(save_to)
+        save_to.mkdir(parents=True, exist_ok=True)
     return save_to
 
 

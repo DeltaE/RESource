@@ -6,8 +6,8 @@ from dataclasses import dataclass
 
 from RES.AttributesParser import AttributesParser
 from RES.osm import OSMData
-
-
+from RES import utility as utils
+PRINT_LEVEL_BASE=3
 @dataclass
 class GridNodeLocator(AttributesParser):
     """
@@ -260,7 +260,8 @@ class GridNodeLocator(AttributesParser):
     def find_grid_nodes_ERA5_cells(
         self, 
         buses_gdf: gpd.GeoDataFrame, 
-        cells_gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+        cells_gdf: gpd.GeoDataFrame,
+        apply_proximity_filter:bool=False) -> gpd.GeoDataFrame:
         """
         Identify nearest grid connection points for renewable energy sites with proximity filtering.
         
@@ -319,7 +320,7 @@ class GridNodeLocator(AttributesParser):
         buses_gdf.sindex  # Generate spatial index
         bus_tree = cKDTree(buses_gdf['geometry'].apply(lambda x: (x.x, x.y)).tolist())
         
-        log.info("> Calculating Nearest Grid Nodes for Grid Cells")
+        utils.print_update(level=PRINT_LEVEL_BASE,message="Calculating Nearest Grid Nodes for Grid Cells...")
         
 
         # Apply the find_nearest_station method using lambda to pass additional arguments
@@ -332,11 +333,15 @@ class GridNodeLocator(AttributesParser):
 
         # Filter cells based on proximity to grid nodes
         cells_gdf_with_station_data = cells_gdf.copy()
-        proximity_to_nodes_mask = cells_gdf_with_station_data['nearest_station_distance_km'] <= self.grid_node_proximity_filter
-        cells_within_proximity_gdf = cells_gdf_with_station_data[proximity_to_nodes_mask]
-
-        log.info(f"ERA5 Cells Filtered based on Proximity to Tx Nodes \n"
-                f"Size: {len(cells_within_proximity_gdf)}\n")
+        if apply_proximity_filter:
+            proximity_to_nodes_mask = cells_gdf_with_station_data['nearest_station_distance_km'] <= self.grid_node_proximity_filter
+            cells_gdf_with_station_data = cells_gdf_with_station_data[proximity_to_nodes_mask]
+         
+            utils.print_update(level=PRINT_LEVEL_BASE,message=f"Proximity filtering applied to ERA5 Cells based on proximity to Tx Nodes : {self.grid_node_proximity_filter} km")
+            utils.print_update(level=PRINT_LEVEL_BASE,message=f"ERA5 Cells Filtered based on Proximity to Tx Nodes . Size: {len(cells_gdf_with_station_data)}\n")
+        else:
+            utils.print_update(level=PRINT_LEVEL_BASE,message="Skipping proximity filtering, returning all cells with station data")
+            utils.print_info("Proximity filtering can be applied by enabling 'apply_proximity_filter'=True and setting 'proximity_filter' in the configuration.")
         
         return cells_gdf_with_station_data # cells_within_proximity_gdf
     

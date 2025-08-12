@@ -8,10 +8,6 @@ RESource provides a comprehensive API for variable renewable energy (VRE) resour
 
 ## Core Workflow Classes
 
-```{note}
-Class documentation shows only docstrings without individual method details for cleaner overview. Individual methods are not displayed (`:members:` directive omitted).
-```
-
 ### RESource Builder
 
 **Main orchestrator class for renewable energy resource assessments.**

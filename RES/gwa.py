@@ -431,7 +431,8 @@ class GWACells(AttributesParser):
  
         mask=(self.merged_df['windspeed_gwa'] >= windpseed_min) & (self.merged_df['windspeed_gwa'] <= windpseed_max)
         self.merged_df_f=self.merged_df[mask]
-        utils.print_update(level=print_level_base+1,message=f"{__name__}| {abs(len(self.merged_df_f) - self.merged_df.shape[0])} cells have been filtered due to Windspeed filter [{windpseed_min}-{windpseed_max} m/s].\n>>> Cleaned data loaded for {len(self.merged_df_f)} GWA cells")
+        utils.print_update(level=print_level_base+1,message=f"{__name__}| {abs(len(self.merged_df_f) - self.merged_df.shape[0])} cells have been filtered due to Windspeed filter [{windpseed_min}-{windpseed_max} m/s].")
+        utils.print_update(level=print_level_base,message=f"✔ Cleaned data loaded for {len(self.merged_df_f)} GWA cells")
         
         # class_mapping = {0: 'III', 1: 'II', 2: 'I', 3: 'T', 4: 'S'}
         # # Correctly modifying only one column
@@ -746,6 +747,6 @@ class GWACells(AttributesParser):
         # Concatenate all results into a single GeoDataFrame
         self.mapped_gwa_cells_aggr_df = pd.concat(results, axis=0)
     
-            
+
         # Store the aggregated data
-        self.datahandler.to_store(self.mapped_gwa_cells_aggr_df, 'cells',force_update=True)  
+        self.datahandler.to_store(self.mapped_gwa_cells_aggr_df, 'cells')  

@@ -752,9 +752,10 @@ class LandContainer(AttributesParser):
     def set_excluder(self):
         raster_configs, vector_configs = self.get_layers()
 
+        # Print hourglass emoji to indicate long-running process
         utils.print_update(
             level=PRINT_LEVEL_BASE + 1,
-            message=f"{__name__}| Loading layers to Excluder for {self.region_name}. This may take a while to compute and plot...",
+            message=f"{__name__}| ⏳ Loading layers to Excluder for {self.region_name}. This may take a while to compute and plot...",
         )
 
         args_add_excluder_layer = {
@@ -772,6 +773,11 @@ class LandContainer(AttributesParser):
         excluder_with_layers = load_layers_to_excluder(**args_add_excluder_layer)
         
         # for plotting purposes
+  
+        utils.print_update(
+            level=PRINT_LEVEL_BASE + 1,
+            message=f"{__name__}| ⏳ Plotting explicit impact of layers to Excluder for {self.region_name}. This may take a while to compute and plot...",
+        )
         load_layers_to_excluder(**args_add_excluder_layer,
                                 disregard_other_layers=True)
         
@@ -879,7 +885,7 @@ class LandContainer(AttributesParser):
         # We want to flat list of dictionaries without vector_name in the keys
         vector_configs = [list(d.values())[0] for d in vector_configs]
         utils.print_update(level=PRINT_LEVEL_BASE+3,
-                           message= f"{__name__}| Vector Layers Loaded")
+                           message= f"{__name__}|✓ Vector Layers Loaded")
 
         return raster_configs, vector_configs
 
@@ -1097,7 +1103,7 @@ def load_layers_to_excluder(
         dpi=300,
     )
     utils.print_update(
-        level=3, message=f"{__name__}| Stepwise Availability Plots saved to {plot_save_to}"
+        level=3, message=f"{__name__}|✓ Stepwise Availability Plots saved to {plot_save_to} "
     )
     if disregard_other_layers:
         utils.print_info(f"{__name__}| Please set the `disregard_other_layers` to False to get the ExclusionContainer with the cumulative impact of all layers")
