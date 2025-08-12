@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="Python" data-content_root="../" data-theme="light">
+<html lang="Python" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
@@ -13,8 +13,8 @@
   
   
   <script data-cfasync="false">
-    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
@@ -51,7 +51,7 @@
   </head>
   
   
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
   
   
@@ -120,17 +120,42 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/RESource_logo_2025.07.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../_static/RESource_logo_2025.07.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        
-        <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1">
-                <a class="reference internal" href="../index.html">
-                    RESource
-                </a>
-            </li>
-        </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="resource_builder.html">1. RESource Builder Module</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">2. RESource Project - Complete Setup &amp; Development Guide</a></li>
@@ -141,7 +166,7 @@
 <li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">7. Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/Store_explorer.html">Explore data store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
@@ -311,13 +336,13 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-new-users">2.1. 🎯 Quick Start (New Users)</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-new-users">2.1. 🎯 Quick Start (New Users)</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">2.1.1. Prerequisites</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clone-and-navigate">2.1.2. 1. Clone and Navigate</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-one-command">2.1.3. 2. Environment Setup (One Command)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-management">2.2. 🛠️ Environment Management</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-management">2.2. 🛠️ Environment Management</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-make-commands">2.2.1. Available Make Commands</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-management">2.2.1.1. Environment Setup &amp; Management</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#running-code">2.2.1.2. Running Code</a></li>
@@ -327,47 +352,47 @@ document.write(`
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-specific-setup">2.3. 🐧 Platform-Specific Setup</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-specific-setup">2.3. 🐧 Platform-Specific Setup</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#windows-users-wsl2-required">2.3.1. Windows Users (WSL2 Required)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linux-macos-users">2.3.2. Linux/macOS Users</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-details">2.4. 📦 Environment Details</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-details">2.4. 📦 Environment Details</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-dependencies">2.4.1. Core Dependencies</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#daily-development-workflow">2.5. 🚀 Daily Development Workflow</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#daily-development-workflow">2.5. 🚀 Daily Development Workflow</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#activate-environment">2.5.1. 1. Activate Environment</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-resource">2.5.2. 2. Run RESource</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-development">2.5.3. 3. Documentation Development</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">2.6. 🔧 Troubleshooting</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">2.6. 🔧 Troubleshooting</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-issues">2.6.1. Environment Issues</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-environment-health">2.6.2. Check Environment Health</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#export-current-environment">2.6.3. Export Current Environment</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wsl2-specific-issues">2.6.4. WSL2 Specific Issues</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-checklist">2.7. 📋 Development Checklist</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-checklist">2.7. 📋 Development Checklist</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#new-developer-setup">2.7.1. New Developer Setup</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-committing-code">2.7.2. Before Committing Code</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-deployment">2.7.3. Before Deployment</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-deployment">2.8. 🌐 Documentation Deployment</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-deployment">2.8. 🌐 Documentation Deployment</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-development">2.8.1. Local Development</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#github-pages-deployment">2.8.2. GitHub Pages Deployment</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-structure">2.8.3. Documentation Structure</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tips-best-practices">2.9. 💡 Tips &amp; Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tips-best-practices">2.9. 💡 Tips &amp; Best Practices</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">2.9.1. Environment Management</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development">2.9.2. Development</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collaboration">2.9.3. Collaboration</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-help">2.10. 🆘 Getting Help</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-help">2.10. 🆘 Getting Help</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-status">2.10.1. Check Status</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-issues">2.10.2. Common Issues</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">2.10.3. Resources</a></li>
@@ -807,13 +832,13 @@ make<span class="w"> </span><span class="nb">help</span><span class="w">        
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-new-users">2.1. 🎯 Quick Start (New Users)</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-new-users">2.1. 🎯 Quick Start (New Users)</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">2.1.1. Prerequisites</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clone-and-navigate">2.1.2. 1. Clone and Navigate</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-one-command">2.1.3. 2. Environment Setup (One Command)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-management">2.2. 🛠️ Environment Management</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-management">2.2. 🛠️ Environment Management</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-make-commands">2.2.1. Available Make Commands</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-management">2.2.1.1. Environment Setup &amp; Management</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#running-code">2.2.1.2. Running Code</a></li>
@@ -823,47 +848,47 @@ make<span class="w"> </span><span class="nb">help</span><span class="w">        
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-specific-setup">2.3. 🐧 Platform-Specific Setup</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-specific-setup">2.3. 🐧 Platform-Specific Setup</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#windows-users-wsl2-required">2.3.1. Windows Users (WSL2 Required)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linux-macos-users">2.3.2. Linux/macOS Users</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-details">2.4. 📦 Environment Details</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-details">2.4. 📦 Environment Details</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-dependencies">2.4.1. Core Dependencies</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#daily-development-workflow">2.5. 🚀 Daily Development Workflow</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#daily-development-workflow">2.5. 🚀 Daily Development Workflow</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#activate-environment">2.5.1. 1. Activate Environment</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-resource">2.5.2. 2. Run RESource</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-development">2.5.3. 3. Documentation Development</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">2.6. 🔧 Troubleshooting</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">2.6. 🔧 Troubleshooting</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-issues">2.6.1. Environment Issues</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-environment-health">2.6.2. Check Environment Health</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#export-current-environment">2.6.3. Export Current Environment</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wsl2-specific-issues">2.6.4. WSL2 Specific Issues</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-checklist">2.7. 📋 Development Checklist</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-checklist">2.7. 📋 Development Checklist</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#new-developer-setup">2.7.1. New Developer Setup</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-committing-code">2.7.2. Before Committing Code</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-deployment">2.7.3. Before Deployment</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-deployment">2.8. 🌐 Documentation Deployment</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-deployment">2.8. 🌐 Documentation Deployment</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-development">2.8.1. Local Development</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#github-pages-deployment">2.8.2. GitHub Pages Deployment</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-structure">2.8.3. Documentation Structure</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tips-best-practices">2.9. 💡 Tips &amp; Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tips-best-practices">2.9. 💡 Tips &amp; Best Practices</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">2.9.1. Environment Management</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development">2.9.2. Development</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collaboration">2.9.3. Collaboration</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-help">2.10. 🆘 Getting Help</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-help">2.10. 🆘 Getting Help</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-status">2.10.1. Check Status</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-issues">2.10.2. Common Issues</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">2.10.3. Resources</a></li>

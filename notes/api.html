@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="Python" data-content_root="../" data-theme="light">
+<html lang="Python" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
@@ -13,8 +13,8 @@
   
   
   <script data-cfasync="false">
-    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
@@ -51,7 +51,7 @@
   </head>
   
   
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
   
   
@@ -120,17 +120,42 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/RESource_logo_2025.07.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../_static/RESource_logo_2025.07.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        
-        <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1">
-                <a class="reference internal" href="../index.html">
-                    RESource
-                </a>
-            </li>
-        </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="resource_builder.html">1. RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup_guide.html">2. RESource Project - Complete Setup &amp; Development Guide</a></li>
@@ -141,7 +166,7 @@
 <li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">7. Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/Store_explorer.html">Explore data store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
@@ -311,7 +336,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-workflow-classes">5.1. Core Workflow Classes</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-workflow-classes">5.1. Core Workflow Classes</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resource-builder">5.1.1. RESource Builder</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spatial-grid-management">5.1.2. Spatial Grid Management</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#administrative-boundaries">5.1.3. Administrative Boundaries</a></li>
@@ -319,7 +344,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#economic-evaluation">5.1.5. Economic Evaluation</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specialized-modules">5.2. Specialized Modules</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specialized-modules">5.2. Specialized Modules</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#annual-technology-baseline-atb">5.2.1. Annual Technology Baseline (ATB)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustering-and-aggregation">5.2.2. Clustering and Aggregation</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-tools">5.2.3. Visualization Tools</a></li>
@@ -328,7 +353,7 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-management">5.3. Configuration Management</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-storage">5.4. Data Storage</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">5.5. Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">5.5. Examples</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-assessment-workflow">5.5.1. Basic Assessment Workflow</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-by-step-analysis">5.5.2. Step-by-Step Analysis</a></li>
 </ul>
@@ -338,7 +363,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#global-wind-atlas">5.8. Global Wind Atlas</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization">5.9. Visualization</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scorer">5.10. Scorer</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clustering">5.11. Clustering</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clustering">5.11. Clustering</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">5.11.1. Key Features</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">5.11.2. Functions</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustering-methodology">5.11.3. Clustering Methodology</a></li>
@@ -352,7 +377,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#local-data-store-with-hdf5-file">5.12. Local Data Store with HDF5 file</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#turbine-configuration">5.13. Turbine Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#turbine-configuration">5.13. Turbine Configuration</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.tech.OEDBTurbines"><code class="docutils literal notranslate"><span class="pre">OEDBTurbines</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.tech.OEDBTurbines.fetch_turbine_config"><code class="docutils literal notranslate"><span class="pre">OEDBTurbines.fetch_turbine_config()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.tech.OEDBTurbines.format_and_save_turbine_config"><code class="docutils literal notranslate"><span class="pre">OEDBTurbines.format_and_save_turbine_config()</span></code></a></li>
@@ -361,7 +386,7 @@ document.write(`
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#units">5.14. Units</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#units">5.14. Units</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.units.Units"><code class="docutils literal notranslate"><span class="pre">Units</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.units.Units.SAVE_TO_DIR"><code class="docutils literal notranslate"><span class="pre">Units.SAVE_TO_DIR</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.units.Units.EXCEL_FILENAME"><code class="docutils literal notranslate"><span class="pre">Units.EXCEL_FILENAME</span></code></a></li>
@@ -5721,7 +5746,7 @@ interpretation and reporting.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-workflow-classes">5.1. Core Workflow Classes</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-workflow-classes">5.1. Core Workflow Classes</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resource-builder">5.1.1. RESource Builder</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spatial-grid-management">5.1.2. Spatial Grid Management</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#administrative-boundaries">5.1.3. Administrative Boundaries</a></li>
@@ -5729,7 +5754,7 @@ interpretation and reporting.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#economic-evaluation">5.1.5. Economic Evaluation</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specialized-modules">5.2. Specialized Modules</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specialized-modules">5.2. Specialized Modules</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#annual-technology-baseline-atb">5.2.1. Annual Technology Baseline (ATB)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustering-and-aggregation">5.2.2. Clustering and Aggregation</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-tools">5.2.3. Visualization Tools</a></li>
@@ -5738,7 +5763,7 @@ interpretation and reporting.</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-management">5.3. Configuration Management</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-storage">5.4. Data Storage</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">5.5. Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">5.5. Examples</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-assessment-workflow">5.5.1. Basic Assessment Workflow</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-by-step-analysis">5.5.2. Step-by-Step Analysis</a></li>
 </ul>
@@ -5748,7 +5773,7 @@ interpretation and reporting.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#global-wind-atlas">5.8. Global Wind Atlas</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization">5.9. Visualization</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scorer">5.10. Scorer</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clustering">5.11. Clustering</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clustering">5.11. Clustering</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">5.11.1. Key Features</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">5.11.2. Functions</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustering-methodology">5.11.3. Clustering Methodology</a></li>
@@ -5762,7 +5787,7 @@ interpretation and reporting.</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#local-data-store-with-hdf5-file">5.12. Local Data Store with HDF5 file</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#turbine-configuration">5.13. Turbine Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#turbine-configuration">5.13. Turbine Configuration</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.tech.OEDBTurbines"><code class="docutils literal notranslate"><span class="pre">OEDBTurbines</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.tech.OEDBTurbines.fetch_turbine_config"><code class="docutils literal notranslate"><span class="pre">OEDBTurbines.fetch_turbine_config()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.tech.OEDBTurbines.format_and_save_turbine_config"><code class="docutils literal notranslate"><span class="pre">OEDBTurbines.format_and_save_turbine_config()</span></code></a></li>
@@ -5771,7 +5796,7 @@ interpretation and reporting.</p>
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#units">5.14. Units</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#units">5.14. Units</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.units.Units"><code class="docutils literal notranslate"><span class="pre">Units</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.units.Units.SAVE_TO_DIR"><code class="docutils literal notranslate"><span class="pre">Units.SAVE_TO_DIR</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#RES.units.Units.EXCEL_FILENAME"><code class="docutils literal notranslate"><span class="pre">Units.EXCEL_FILENAME</span></code></a></li>
