@@ -22,6 +22,7 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 
 
 ```{toctree}
+:caption: Contents
 :maxdepth: 1
 
 notes/resource_builder
@@ -32,6 +33,12 @@ notes/api
 notes/data.md
 notes/documentation_guide
 notes/developers
+```
+
+```{toctree}
+:caption: Notebooks
+:maxdepth: 1
+
 notebooks/Store_explorer
 notebooks/Visuals_BC
 ```
