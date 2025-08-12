@@ -113,16 +113,19 @@ class DataHandler:
                 for column in self.data_new.columns:
                     if not data.empty and column not in self.data_ext.columns:
                         self.data_ext[column] = self.data_new[column]
+                        utils.print_update(level=4,message=f"{__name__}| 💾 Updated key :'{key}' with column: {column} ")
 
                 # Update the existing DataFrame in HDF5
                 self.updated_data = self.data_ext
                 if 'geometry' in self.updated_data.columns:
                     if isinstance(self.updated_data['geometry'].iloc[0], BaseGeometry):
                         self.updated_data['geometry'] = self.updated_data['geometry'].apply(dumps)
+                        utils.print_update(level=4,message=f"{__name__}| 💾 Updated key :'{key}' with column: 'geometry'")
                 
                 if 'nearest_connection_point' in self.updated_data.columns:
                     if isinstance(self.updated_data['nearest_connection_point'].iloc[0], BaseGeometry):
                         self.updated_data['nearest_connection_point'] = self.updated_data['nearest_connection_point'].apply(dumps)
+                        utils.print_update(level=4,message=f"{__name__}| 💾 Updated key :'{key}' with column: 'nearest_connection_point'")
 
                 self.updated_data.to_hdf(self.store, key=key)
                 utils.print_update(level=3,message=f"{__name__}| 💾 Updated '{key}' saved to {self.store} with key '{key}'")

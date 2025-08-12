@@ -316,8 +316,8 @@ class RESources_builder(AttributesParser):
                                                self.store_grid_cells)
                 self.store_grid_cells_updated=utils.assign_cell_id(_store_grid_cells_updated_,self.gadmBoundary.boundary_datafields['NAME_2'])
                 self.datahandler.to_store(self.store_grid_cells_updated,'cells')
-                
-                self.store_grid_cells=self.store_grid_cells_updated
+                utils.print_update(level=PRINT_LEVEL_BASE+2,
+                           message=f"{__name__}| 'windspeed_ERA5' extraction completed and stored.")
                 return self.store_grid_cells_updated
             
         elif self.resource_type=='solar': 
@@ -351,6 +351,7 @@ class RESources_builder(AttributesParser):
             pass
         
         return self.store_grid_cells 
+    
     def get_CF_timeseries(self,
                           cells:gpd.GeoDataFrame=None,
                           force_update=False)->tuple:
@@ -378,7 +379,8 @@ class RESources_builder(AttributesParser):
 
     def find_grid_nodes(self,
                         cells:gpd.GeoDataFrame=None,
-                        use_pypsa_buses:bool=False):
+                        use_pypsa_buses:bool=False,
+                        apply_proximity_filter:bool=False) -> gpd.GeoDataFrame:
         """
         Find the grid nodes for the given cells.                            
 
@@ -404,10 +406,20 @@ class RESources_builder(AttributesParser):
                            message=f"{__name__}| Grid Node Location initiated...")
         
         if use_pypsa_buses:
+            
             utils.print_update(level=PRINT_LEVEL_BASE+3,
                            message=f"{__name__}| Using PyPSA nodes as preferred nodes for resource connection.")
-            buses_data_path=Path (self.config['output']['prepare_base_network']['folder'])/'buses.csv'
+            utils.print_info(f"{__name__}| PyPSA buses are configured in the config file under 'capacity\
+                             -disaggregation/transmission/buses'")
+            
+            buses_data_path=self.get_buses_path()
+            utils.print_update(level=PRINT_LEVEL_BASE+3,
+                           message=f"{__name__}| PyPSA buses loading from: {buses_data_path}")
+
             grid_ss_df=pd.read_csv(buses_data_path)
+            assert 'x' in grid_ss_df.columns and 'y' in grid_ss_df.columns, \
+                "The buses data must contain 'x' and 'y' columns for coordinates."
+            
             self.grid_ss = gpd.GeoDataFrame(
                 grid_ss_df,
                 geometry=gpd.points_from_xy(grid_ss_df['x'], grid_ss_df['y']),
@@ -416,8 +428,9 @@ class RESources_builder(AttributesParser):
             
             utils.print_update(level=PRINT_LEVEL_BASE+3,
                            message=f"{__name__}| Searching for nearest grid nodes for each cell...")
-            self.region_grid_cells_cap_with_nodes = self.grid.find_grid_nodes_ERA5_cells(self.grid_ss,
-                                                                                            self.store_grid_cells)
+            self.region_grid_cells_cap_with_nodes = self.gridNodesProcessor.find_grid_nodes_ERA5_cells(self.grid_ss,
+                                                                                            self.store_grid_cells,
+                                                                                            apply_proximity_filter=apply_proximity_filter)
             utils.print_update(level=PRINT_LEVEL_BASE+3,
                             message=f"{__name__}| ✔ Closest grid nodes and distance calculation completed.")
             
@@ -433,7 +446,8 @@ class RESources_builder(AttributesParser):
                 utils.print_update(level=PRINT_LEVEL_BASE+3,
                            message=f"{__name__}| Searching for nearest grid nodes for each cell...")
                 self.region_grid_cells_cap_with_nodes = self.gridNodesProcessor.find_grid_nodes_ERA5_cells(self.grid_ss,
-                                                                                                self.store_grid_cells)
+                                                                                                self.store_grid_cells,
+                                                                                                apply_proximity_filter=apply_proximity_filter)
                 utils.print_update(level=PRINT_LEVEL_BASE+3,
                                 message=f"{__name__}| ✔ Closest grid nodes and distance calculation completed.")
                 
@@ -504,6 +518,7 @@ class RESources_builder(AttributesParser):
         self.not_scored_cells=cells
         
         if self.not_scored_cells is None:    
+            self.datahandler.refresh()
             self.not_scored_cells=self.datahandler.from_store('cells')
             
         self.scored_cells = self.scorer.get_cell_score(self.not_scored_cells,f'{self.resource_type}_CF_mean') # 
@@ -638,7 +653,7 @@ class RESources_builder(AttributesParser):
 
     def build(self,
             select_top_sites:Optional[bool]=True,
-            use_pypsa_buses:Optional[bool]=True,
+            use_pypsa_buses:Optional[bool]=False,
             memory_resource_limitation:Optional[bool]=True):
         """
         Execute the specific module logic for the given resource type ('solar' or 'wind').
@@ -658,16 +673,16 @@ class RESources_builder(AttributesParser):
         self.update_gwa_scaled_params(self.memory_resource_limitation) # testing, 2025 04 21
         
         utils.print_banner("Step 4 : Create timeseries for Resources CF")
-        self.get_CF_timeseries(cells=self.store_grid_cells)
+        self.get_CF_timeseries()
         
         utils.print_banner("Step 5 : Find closed grid connection nodes")
         self.find_grid_nodes(use_pypsa_buses=use_pypsa_buses)
         
         utils.print_banner("Step 6 : Use capacity, energy yield and cost attributes to score each cell")
-        self.score_cells(cells=self.region_grid_cells_cap_with_nodes)
+        self.score_cells()
         
         utils.print_banner("Step 7.1 : Use score similarities to find clusterized representation (sites) of cells")
-        self.get_clusters(scored_cells=self.scored_cells)
+        self.get_clusters()
         
         utils.print_banner("Step 7.2 : Prepare representative timeseries of the clusterized sites")
         self.get_cluster_timeseries()
@@ -699,6 +714,7 @@ class RESources_builder(AttributesParser):
                             self.results_save_to)
         
         sites_summary:str=self.create_summary_info(self.resource_type,
+                                                   self.region_name,
                                                    resource_clusters,
                                                    cluster_timeseries)
         self.dump_export_metadata(sites_summary,
@@ -748,6 +764,7 @@ class RESources_builder(AttributesParser):
 
     @staticmethod
     def create_summary_info(resource_type:str,
+                            region:str,
                             sites:pd.DataFrame,
                             timeseries:pd.DataFrame)->str:
         
@@ -760,7 +777,7 @@ class RESources_builder(AttributesParser):
         info = (
             f"{'_'*25} Top Block Represents the latest results' summary <{'_'*25}\n"
             f"{'-'*100}\n"
-            f"* {resource_type.upper()} *\n"
+            f"* {resource_type.upper()} for {region.upper()}*\n"
             f"Total Capacity of the Sites: {sites['potential_capacity'].sum() / 1e3} GW\n"
             f">> No. of Sites (Clusters): {len(sites)}\n"
             f" >> Snapshot Points: {len(timeseries)}"
@@ -844,10 +861,11 @@ class RESources_builder(AttributesParser):
 
             if remaining_capacity > 0:
                 
-                # selected_additional_sites['capex'] = capex* remaining_capacity
-                print(f"\n!! Note: The Last cluster ({selected_additional_sites.index[-1]}) originally had {round(selected_additional_sites['potential_capacity'].iloc[0] / 1000,2)} GW potential capacity."
-                    f"To fit the maximum capacity investment of {resource_max_capacity} GW, it has been adjusted to {round(remaining_capacity / 1000,2)} GW\n")
-                
+                if len(selected_additional_sites) > 0:
+                    print(f"\n!! Note: The Last cluster ({selected_additional_sites.index[-1]}) originally had {round(selected_additional_sites['potential_capacity'].iloc[0] / 1000,2)} GW potential capacity."
+                        f"To fit the maximum capacity investment of {resource_max_capacity} GW, it has been adjusted to {round(remaining_capacity / 1000,2)} GW\n")
+                else:
+                    print(f"\n!! Note: No additional sites selected. Remaining capacity: {round(remaining_capacity / 1000,2)} GW\n")
                 selected_additional_sites['potential_capacity'] = remaining_capacity
             # Concatenate the DataFrames
             top_sites = pd.concat([top_sites, selected_additional_sites])
@@ -888,4 +906,4 @@ def build_resources(regions:list,
             resource_type=resource
         )
         RES_module.build(select_top_sites=True, 
-                            use_pypsa_buses=False)
+                         use_pypsa_buses=False)

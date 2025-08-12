@@ -25,12 +25,13 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 :caption: 'Contents:'
 :maxdepth: 1
 
-notes/setup_guide
-notes/documentation_guide
 notes/resource_builder
+notes/setup_guide
+notes/case_BC.md
+notes/learning.md
 notes/api
 notes/data.md
-notes/case_BC.md
+notes/documentation_guide
 notes/developers
 ```
 
