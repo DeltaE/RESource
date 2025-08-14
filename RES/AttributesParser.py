@@ -48,7 +48,7 @@ class AttributesParser:
         self.config:Dict[str,dict] = self.load_config(self.config_file_path)
         self.disaggregation_config:Dict[str,dict] = self.config.get('capacity_disaggregation','')
         self.region_code_validity=self.is_region_code_valid()
-        self.sub_national_unit_tag=self.get_gadm_config().get('datafield_mapping', {}).get('NAME_1', 'NAME_1')
+        self.sub_national_unit_tag=self.get_gadm_config().get('datafield_mapping', {}).get('NAME_2', 'NAME_2')
         self.multi_country_flag = self.get_multi_country_flag  # This will set the multi_country_flag based on the config file.
 
     def load_config(self,config_file_path):
