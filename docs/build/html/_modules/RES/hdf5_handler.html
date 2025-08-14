@@ -157,9 +157,12 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">Best Practices and Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES API References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
@@ -287,29 +290,60 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for RES.hdf5_handler</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 <span class="kn">import</span> <span class="nn">h5py</span>
-<span class="kn">from</span> <span class="nn">shapely.wkt</span> <span class="kn">import</span> <span class="n">loads</span><span class="p">,</span> <span class="n">dumps</span>
-<span class="kn">from</span> <span class="nn">shapely.geometry.base</span> <span class="kn">import</span> <span class="n">BaseGeometry</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">colorama</span> <span class="kn">import</span> <span class="n">Fore</span><span class="p">,</span> <span class="n">Style</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">shapely.geometry.base</span> <span class="kn">import</span> <span class="n">BaseGeometry</span>
+<span class="kn">from</span> <span class="nn">shapely.wkt</span> <span class="kn">import</span> <span class="n">dumps</span><span class="p">,</span> <span class="n">loads</span>
+
 <span class="kn">import</span> <span class="nn">RES.utility</span> <span class="k">as</span> <span class="nn">utils</span>
+
 
 <div class="viewcode-block" id="DataHandler">
 <a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler">[docs]</a>
 <span class="k">class</span> <span class="nc">DataHandler</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class to handle reading and writing data to an HDF5 file.</span>
+<span class="sd">    This class provides methods to save DataFrames or GeoDataFrames to an HDF5 file. This class is useful for managing large datasets efficiently, allowing for quick access and storage of structured data.</span>
+<span class="sd">    </span>
+<span class="sd">    Key Features:</span>
+<span class="sd">        - Save DataFrames or GeoDataFrames to an HDF5 file with optional geometry handling.</span>
+<span class="sd">        - Load data from the HDF5 file, converting WKT geometries back to GeoDataFrames.</span>
+<span class="sd">        - Manage the structure of the HDF5 file, including showing the tree structure and deleting keys.</span>
+<span class="sd">    Dependencies:</span>
+<span class="sd">        - pandas: For DataFrame operations</span>
+<span class="sd">        - geopandas: For GeoDataFrame operations</span>
+<span class="sd">        - h5py: For HDF5 file handling</span>
+<span class="sd">        - shapely: For geometry serialization and deserialization</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        store (Path): Path to the HDF5 file.</span>
+<span class="sd">        data_new (pd.DataFrame or gpd.GeoDataFrame): Data to be saved.</span>
+<span class="sd">        data_ext (pd.DataFrame or gpd.GeoDataFrame): Existing data from the store.</span>
+<span class="sd">        updated_data (pd.DataFrame or gpd.GeoDataFrame): Updated data after merging new data.</span>
+<span class="sd">    Methods:</span>
+<span class="sd">        __init__(hdf_file_path: Path, silent_initiation: Optional[bool] = True, show_structure: Optional[bool] = False):</span>
+<span class="sd">            Initializes the DataHandler with the file path.</span>
+<span class="sd">        to_store(data: pd.DataFrame or gpd.GeoDataFrame, key: str, hdf_file_path: Path = None, force_update: bool = False):</span>
+<span class="sd">            Saves the DataFrame or GeoDataFrame to the HDF5 file.</span>
+<span class="sd">        from_store(key: str):</span>
+<span class="sd">            Loads data from the HDF5 store and handles geometry conversion.</span>
+<span class="sd">        refresh():</span>
+<span class="sd">            Initializes a new DataHandler instance with the current store path.</span>
+<span class="sd">        show_tree(store_path: Path, show_dataset: bool = False):</span>
+<span class="sd">            Recursively prints the hierarchy of an HDF5 file.</span>
+<span class="sd">        del_key(store_path: Path, key_to_delete: str):</span>
+<span class="sd">            Deletes a specific key from the HDF5 file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">hdf_file_path</span><span class="p">:</span><span class="n">Path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">silent_initiation</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">show_structure</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize the DataHandler with the file path.</span>
 
-<span class="sd">        :param store: Path to the HDF5 file.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">hdf_file_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;⚠️  Store has not been set during initialization. Please define the store path during applying DataHandler methods&quot;</span><span class="p">)</span>
@@ -333,9 +367,16 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Save the DataFrame or GeoDataFrame to an HDF5 file.</span>
 
-<span class="sd">        :param data: The DataFrame or GeoDataFrame to save.</span>
-<span class="sd">        :param key: Key for saving the DataFrame to the HDF5 file.</span>
-<span class="sd">        :param force_update: If True, force update the data even if it exists.</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            hdf_file_path (Path): Path to the HDF5 file. If None, it uses the existing store path.</span>
+<span class="sd">            data (pd.DataFrame or gpd.GeoDataFrame):</span>
+<span class="sd">                The DataFrame or GeoDataFrame to save.</span>
+<span class="sd">            key (str): Key for saving the DataFrame to the HDF5 file.</span>
+<span class="sd">            force_update (bool): If True, force update the data even if it exists.  </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            TypeError: If the data is not a DataFrame or GeoDataFrame.</span>
+<span class="sd">            ValueError: If the key is empty.</span>
+<span class="sd">            </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">hdf_file_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">store</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">hdf_file_path</span><span class="p">)</span>
@@ -354,7 +395,9 @@ document.write(`
                 <span class="k">if</span> <span class="s1">&#39;geometry&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_new</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_new</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">BaseGeometry</span><span class="p">):</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">data_new</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_new</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">dumps</span><span class="p">)</span>
-
+                <span class="k">if</span> <span class="s1">&#39;nearest_connection_point&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_new</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_new</span><span class="p">[</span><span class="s1">&#39;nearest_connection_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">BaseGeometry</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">data_new</span><span class="p">[</span><span class="s1">&#39;nearest_connection_point&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_new</span><span class="p">[</span><span class="s1">&#39;nearest_connection_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">dumps</span><span class="p">)</span>
                 <span class="c1"># Save the modified data to HDF5</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">data_new</span><span class="o">.</span><span class="n">to_hdf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
                 <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">|💾 Data (GeoDataFrame/DataFrame) saved to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="si">}</span><span class="s2"> with key &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
@@ -366,12 +409,19 @@ document.write(`
                 <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_new</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">empty</span> <span class="ow">and</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_ext</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">data_ext</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_new</span><span class="p">[</span><span class="n">column</span><span class="p">]</span>
+                        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| 💾 Updated key :&#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; with column: </span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span>
 
                 <span class="c1"># Update the existing DataFrame in HDF5</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">updated_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_ext</span>
                 <span class="k">if</span> <span class="s1">&#39;geometry&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">updated_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updated_data</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">BaseGeometry</span><span class="p">):</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">updated_data</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">updated_data</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">dumps</span><span class="p">)</span>
+                        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| 💾 Updated key :&#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; with column: &#39;geometry&#39;&quot;</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="s1">&#39;nearest_connection_point&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">updated_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updated_data</span><span class="p">[</span><span class="s1">&#39;nearest_connection_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">BaseGeometry</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">updated_data</span><span class="p">[</span><span class="s1">&#39;nearest_connection_point&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">updated_data</span><span class="p">[</span><span class="s1">&#39;nearest_connection_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">dumps</span><span class="p">)</span>
+                        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| 💾 Updated key :&#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; with column: &#39;nearest_connection_point&#39;&quot;</span><span class="p">)</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">updated_data</span><span class="o">.</span><span class="n">to_hdf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
                 <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| 💾 Updated &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; saved to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="si">}</span><span class="s2"> with key &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
@@ -387,8 +437,13 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Load data from the HDF5 store and handle geometry conversion.</span>
 <span class="sd">        </span>
-<span class="sd">        :param key: Key for loading the DataFrame or GeoDataFrame.</span>
-<span class="sd">        :return: DataFrame or GeoDataFrame based on the data loaded.</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            key (str): Key for loading the DataFrame or GeoDataFrame.</span>
+<span class="sd">        Returns:    </span>
+<span class="sd">            pd.DataFrame or gpd.GeoDataFrame: The loaded DataFrame or GeoDataFrame.</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            FileNotFoundError: If the key is not found in the store.</span>
+<span class="sd">            TypeError: If the loaded data is not a DataFrame or GeoDataFrame.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">HDFStore</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">store</span><span class="p">:</span>
@@ -415,19 +470,34 @@ document.write(`
 <a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler.refresh">[docs]</a>
     <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Refresh the store path to the current store.</span>
+<span class="sd">        Initialize a new DataHandler instance with the current store path.</span>
+<span class="sd">        This method is useful for reloading the DataHandler with the same store path without needing to reinitialize the entire class.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            None</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            DataHandler: A new instance of DataHandler with the same store path.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">DataHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">,</span> <span class="n">silent_initiation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_structure</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
+    
 <div class="viewcode-block" id="DataHandler.show_tree">
 <a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler.show_tree">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">show_tree</span><span class="p">(</span><span class="n">store_path</span><span class="p">,</span>
                   <span class="n">show_dataset</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Recursively print the hierarchy of an HDF5 file.</span>
+<span class="sd">        This method provides a structured view of the keys and datasets within the HDF5 file, allowing users to understand its organization.</span>
+<span class="sd">        </span>
+<span class="sd">        parameters:</span>
+<span class="sd">            store_path (Path): Path to the HDF5 file.   </span>
+<span class="sd">            show_dataset (bool): If True, also show datasets within the groups.</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            Exception: If there is an error reading the file.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            None: This method prints the structure to the console.</span>
 
-<span class="sd">        :param file_path: Path to the HDF5 file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">def</span> <span class="nf">print_structure</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;Helper function to recursively print the structure.&quot;&quot;&quot;</span>
@@ -457,6 +527,23 @@ document.write(`
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">del_key</span><span class="p">(</span><span class="n">store_path</span><span class="p">,</span>
                 <span class="n">key_to_delete</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Deletes a specific key from the HDF5 file.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters:</span>
+
+<span class="sd">            store_path (Path): Path to the HDF5 file.</span>
+<span class="sd">            key_to_delete (str): The key to delete from the HDF5 file.</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            KeyError: If the key does not exist in the HDF5 file.</span>
+<span class="sd">        Returns:        </span>
+<span class="sd">            None: This method prints the status of the deletion operation.</span>
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; DataHandler.del_key(Path(&#39;data.h5&#39;), &#39;my_key&#39;)</span>
+<span class="sd">            This will delete &#39;my_key&#39; from the &#39;data.h5&#39; file if it exists</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
         <span class="c1"># Open the HDF5 file in read/write mode</span>
         <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">store_path</span><span class="p">,</span> <span class="s2">&quot;r+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">hdf_file</span><span class="p">:</span>
             <span class="c1"># Check if the key exists in the file</span>

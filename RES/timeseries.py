@@ -236,11 +236,7 @@ class Timeseries(AttributesParser):
         
         # Step 1.1: Get the Atlite's Cutout Object loaded
         self.cutout,self.region_boundary=self.ERA5Cutout.get_era5_cutout()
-        
-        ## Only,if cells are not processed already
-        # self.region_grid_cells = self.cutout.grid.overlay(self.region_boundary, how='intersection',keep_geom_type=True)
-        # self.region_grid_cells = utils.assign_cell_id(self.region_grid_cells,'Region',self.site_index)
-        
+
         # Step 1.2: Get the region Grid Cells from Store. Ideally these cells should have same resolution as the Cutout (the indices are prepared from x,y coords and Region names)
          # Initialize the local store for updated data
         self.datahandler=DataHandler(self.store)
@@ -365,11 +361,7 @@ class Timeseries(AttributesParser):
         
         self.cutout,self.region_boundary=self.ERA5Cutout.get_era5_cutout()
         utils.print_update(level=PRINT_LEVEL_BASE,message=f">> {len(cells)} Grid Cells from Store Cutout")
-        
-        # Only,if cells are not processed already
-        # self.region_grid_cells = self.cutout.grid.overlay(self.region_boundary, how='intersection',keep_geom_type=True)
-        # self.region_grid_cells = utils.assign_cell_id(self.region_grid_cells,'Region',self.site_index)
-
+    
         
         ''' preferably for project points applications
         self.wind_atlas,self.wind_geojson=self.get_windspeed_rescaling_data()
@@ -460,7 +452,8 @@ class Timeseries(AttributesParser):
     def get_cluster_timeseries(self,
                                all_clusters:pd.DataFrame,
                                cells_timeseries:pd.DataFrame,
-                               dissolved_indices:pd.DataFrame):
+                               dissolved_indices:pd.DataFrame,
+                               sub_national_unit_tag:str):
 
         # Initialize an empty list to store the results
         results = []
@@ -468,7 +461,7 @@ class Timeseries(AttributesParser):
         # Iterate through each cluster
         for cluster, row in all_clusters.iterrows():
             # Extract the cluster's region and cluster number
-            region = row['Region']
+            region = row[sub_national_unit_tag]
             cluster_no = row['Cluster_No']  # Dynamically fetch the cluster number from the row
             
             # Get the cell indices for the cluster based on the region and cluster number

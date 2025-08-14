@@ -156,12 +156,13 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">Best Practices and Guidelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES API References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
@@ -447,7 +448,8 @@ document.write(`
     <span class="n">save_to_root</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">&#39;vis&#39;</span><span class="p">,</span>
     <span class="n">set_transparent</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot combined scatter metrics for solar and wind resources.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot combined scatter metrics for solar and wind resources.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        solar_clusters (pd.DataFrame): DataFrame containing solar cluster data.</span>
@@ -458,9 +460,6 @@ document.write(`
 <span class="sd">        font_family (str, optional): Font family for the plot. Defaults to &#39;sans-serif&#39;.</span>
 <span class="sd">        save_to_root (str, optional): Directory to save the plot. Defaults to &#39;vis&#39;.</span>
 <span class="sd">        set_transparent (bool, optional): Whether to set the background transparent. Defaults to False.</span>
-
-<span class="sd">    Yields:</span>
-<span class="sd">        _type_: _description_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
@@ -1052,7 +1051,7 @@ document.write(`
 <span class="sd">        solar_vis_directory (str): Directory to save the generated plots.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; Generating CF timeseries for TOP Sites for </span><span class="si">{</span><span class="n">max_solar_capacity</span><span class="si">}</span><span class="s2"> GW Capacity Investment in BC...&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; Generating CF timeseries for TOP Sites for </span><span class="si">{</span><span class="n">max_solar_capacity</span><span class="si">}</span><span class="s2"> GW Capacity Investment ...&quot;</span><span class="p">)</span>
     
     <span class="k">for</span> <span class="n">_index</span><span class="p">,</span><span class="n">row</span> <span class="ow">in</span> <span class="n">cells_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
         <span class="n">region</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span>
@@ -1094,7 +1093,7 @@ document.write(`
         <span class="n">plt_name</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Solar CF timeseries (Resample Span :</span><span class="si">{</span><span class="n">resample_span</span><span class="si">}</span><span class="s1">) - </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">cluster_no</span><span class="si">}</span><span class="s1">.png&#39;</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">solar_vis_directory</span><span class="p">,</span><span class="s1">&#39;Site_timeseries&#39;</span><span class="p">,</span><span class="n">plt_name</span><span class="p">))</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; Plots generated for CF timeseries of TOP Sites for </span><span class="si">{</span><span class="n">max_solar_capacity</span><span class="si">}</span><span class="s2"> GW Capacity Investment in BC...&quot;</span><span class="p">)</span></div>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; Plots generated for CF timeseries of TOP Sites for </span><span class="si">{</span><span class="n">max_solar_capacity</span><span class="si">}</span><span class="s2"> GW Capacity Investment...&quot;</span><span class="p">)</span></div>
 
     
 <div class="viewcode-block" id="create_timeseries_interactive_plots">
@@ -1661,8 +1660,8 @@ document.write(`
         <span class="p">)</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Land Availability for Exclusion/Inclusion Layers for BC&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.05</span><span class="p">)</span>
-    
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Land Availability for Exclusion/Inclusion Layers&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.05</span><span class="p">)</span>
+
     <span class="c1"># Save the figure</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">save_to</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">save_to</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">save_to</span><span class="p">)</span>

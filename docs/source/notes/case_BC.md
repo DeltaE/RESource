@@ -27,13 +27,14 @@ Key parameters are configurable to reflect geographic constraints (e.g., slope, 
 
 <img src="../_static/GAEZ_layers_BC_2025.jpg" alt="GAEZ layers used in BC spatial screening showing land cover, slope, and exclusion zones" width="600"/>
 
-> For full details on the raster classes, refer to the [GAEZ_v4 documentation](https://doi.org/10.4060/cb4744en).
+
+
+> For full details on the raster classes, refer to the [Global Agro-Ecological Zones v4 – Model documentation](https://openknowledge.fao.org/items/039f7ec9-98af-49e1-8d24-850122c69bef).
 
 ```{tip}
+|chapter 2|
 page 17; Elevation and terrain-slope data 
-
 page 18; Land Cover data
-
 page 20; Exclusion zones
 ```
 

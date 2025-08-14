@@ -158,12 +158,13 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notes/documentation_guide.html">Documentation Build Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notes/api.html">RES API References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notes/data.html">Data Sources and Supply Chain</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/resource_builder.html">1. RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/setup_guide.html">2. RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">3. Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/learning.html">4. Best Practices and Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/api.html">5. RES API References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/data.html">6. Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/documentation_guide.html">7. Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
@@ -354,22 +355,8 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="n">title_fontsize</span> <span class="o">=</span> <span class="mi">12</span>
-<span class="n">axis_labelsize</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">tick_fontsize</span> <span class="o">=</span> <span class="mi">9</span>
-<span class="n">caption_fontsize</span> <span class="o">=</span> <span class="mi">9</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
-    <span class="s1">&#39;font.family&#39;</span><span class="p">:</span> <span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;font.size&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
-    <span class="s1">&#39;axes.titlesize&#39;</span><span class="p">:</span> <span class="n">title_fontsize</span><span class="p">,</span>
-    <span class="s1">&#39;axes.labelsize&#39;</span><span class="p">:</span> <span class="n">axis_labelsize</span><span class="p">,</span>
-    <span class="s1">&#39;xtick.labelsize&#39;</span><span class="p">:</span> <span class="n">tick_fontsize</span><span class="p">,</span>
-    <span class="s1">&#39;ytick.labelsize&#39;</span><span class="p">:</span> <span class="n">tick_fontsize</span><span class="p">,</span>
-<span class="p">})</span>
-<br/></pre></div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">font_family</span><span class="o">=</span><span class="s1">&#39;sans-serif&#39;</span>
+</pre></div>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -378,6 +365,7 @@ document.write(`
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">RES.hdf5_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
 <span class="kn">import</span> <span class="nn">RES.visuals</span> <span class="k">as</span> <span class="nn">vis</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 </pre></div>
 </div>
 </div>
@@ -429,13 +417,11 @@ document.write(`
   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">clusters/wind</span>
 <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost</span>
   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb</span>
-  └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb/bess</span>
   └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb/solar</span>
   └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb/wind</span>
 <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">dissolved_indices</span>
   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">dissolved_indices/solar</span>
   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">dissolved_indices/wind</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">lines</span>
 <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">substations</span>
 <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries</span>
   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries/clusters</span>
@@ -463,8 +449,8 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loading Grid Cells Geodataframe</span>
@@ -477,6 +463,14 @@ document.write(`
 <span class="n">substations</span><span class="o">=</span><span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;substations&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| ❌ Error: Key &#39;lines&#39; not found in ../data/store/resources_BC.h5</span>
+</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -572,7 +566,7 @@ document.write(`
 
 <span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
 
-<span class="n">fig</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <br/></pre></div>
@@ -585,37 +579,22 @@ document.write(`
 <img alt="../_images/notebooks_Store_explorer_15_0.png" src="../_images/notebooks_Store_explorer_15_0.png" />
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">RES</span> <span class="kn">import</span> <span class="n">visuals</span> <span class="k">as</span> <span class="n">vis</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># from RES import visuals as vis</span>
 
-<span class="n">vis</span><span class="o">.</span><span class="n">plot_grid_lines</span><span class="p">(</span><span class="n">province_code</span><span class="p">,</span>
-                    <span class="s1">&#39;BC&#39;</span><span class="p">,</span>
-                    <span class="n">lines</span><span class="p">,</span>
-                    <span class="n">boundary</span><span class="o">=</span><span class="n">boundary</span><span class="p">,</span>
-                    <span class="n">save_to</span><span class="o">=</span><span class="s1">&#39;../vis/&#39;</span> <span class="o">+</span> <span class="n">province_code</span> <span class="o">+</span> <span class="s1">&#39;/misc&#39;</span><span class="p">)</span>
+<span class="c1"># vis.plot_grid_lines(province_code,</span>
+<span class="c1">#                     &#39;BC&#39;,</span>
+<span class="c1">#                     lines,</span>
+<span class="c1">#                     boundary=boundary,</span>
+<span class="c1">#                     save_to=&#39;../vis/&#39; + province_code + &#39;/misc&#39;)</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; Transmission Lines for BC saved to ../vis/BC/misc/transmission_lines_BC.png</span>
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Store_explorer_16_1.png" src="../_images/notebooks_Store_explorer_16_1.png" />
-</div>
-</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -641,7 +620,7 @@ document.write(`
 <span class="n">ax</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
 
 <span class="c1"># Shadow effect offset</span>
-<span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.008</span>
+<span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.002</span>
 
 <span class="c1"># Plot solar map on ax1</span>
 <span class="c1"># Add shadow effect for solar map</span>
@@ -671,8 +650,9 @@ document.write(`
 <span class="c1"># Adjust layout for cleaner appearance</span>
 <span class="c1"># fig.patch.set_alpha(0)  # Make figure background transparent</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;../vis/</span><span class="si">{</span><span class="n">province_code</span><span class="si">}</span><span class="s2">/misc/Resources_proximity_to_grid_</span><span class="si">{</span><span class="n">province_code</span><span class="si">}</span><span class="s2">.jpg&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="n">save_to</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;../vis/</span><span class="si">{</span><span class="n">province_code</span><span class="si">}</span><span class="s2">/misc/Resources_proximity_to_grid_</span><span class="si">{</span><span class="n">province_code</span><span class="si">}</span><span class="s2">.jpg&quot;</span><span class="p">)</span>
+<span class="n">save_to</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Ensure the directory exists</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">save_to</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;../docs/source/_static/Resources_proximity_to_grid_</span><span class="si">{</span><span class="n">province_code</span><span class="si">}</span><span class="s2">.jpg&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -685,29 +665,7 @@ document.write(`
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In[20], line 3</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">RES</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> visuals <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> vis
-<span class="ansi-green-fg">----&gt; 3</span> <span class="ansi-yellow-bg">vis</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">plot_grid_lines</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">cells</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">boundary</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">province_code</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">scenario</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">scenario</span><span class="ansi-yellow-bg">)</span>
-
-<span class="ansi-red-fg">TypeError</span>: plot_grid_lines() got an unexpected keyword argument &#39;scenario&#39;
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -744,7 +702,7 @@ Cell <span class="ansi-green-fg">In[20], line 3</span>
 <span class="n">ax2</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
 
 <span class="c1"># Shadow effect offset</span>
-<span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.008</span>
+<span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.0001</span>
 
 <span class="c1"># Plot solar map on ax1</span>
 <span class="c1"># Add shadow effect for solar map</span>
@@ -771,7 +729,7 @@ Cell <span class="ansi-green-fg">In[20], line 3</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># Plot wind map on ax2</span>
 <span class="c1"># Add shadow effect for wind map</span>
-<span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">)</span>
+<span class="c1"># boundary.geometry = boundary.geometry.translate(xoff=shadow_offset, yoff=-shadow_offset)</span>
 <span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>  <span class="c1"># Shadow layer</span>
 <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">)</span>
 
@@ -803,15 +761,34 @@ Cell <span class="ansi-green-fg">In[20], line 3</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/localhome/mei3/miniconda3/envs/RES/lib/python3.12/site-packages/geopandas/geodataframe.py:1819: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  super().__setitem__(key, value)
+/localhome/mei3/miniconda3/envs/RES/lib/python3.12/site-packages/geopandas/geodataframe.py:1819: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  super().__setitem__(key, value)
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Store_explorer_19_0.png" src="../_images/notebooks_Store_explorer_19_0.png" />
+<img alt="../_images/notebooks_Store_explorer_18_1.png" src="../_images/notebooks_Store_explorer_18_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -846,13 +823,13 @@ Cell <span class="ansi-green-fg">In[20], line 3</span>
 <span class="n">vis</span><span class="o">.</span><span class="n">add_compass_to_plot</span><span class="p">(</span><span class="n">ax1</span><span class="p">)</span>
 <span class="n">vis</span><span class="o">.</span><span class="n">add_compass_to_plot</span><span class="p">(</span><span class="n">ax2</span><span class="p">)</span>
 <span class="c1"># Shadow effect offset</span>
-<span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.008</span>
+<span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.005</span>
 
 <span class="c1"># Plot solar map on ax1</span>
 <span class="c1"># Add shadow effect for solar map</span>
 <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">)</span>
 <span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>  <span class="c1"># Shadow layer</span>
-<span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">)</span>
+<span class="c1"># boundary.geometry = boundary.geometry.translate(xoff=-shadow_offset, yoff=shadow_offset)</span>
 
 <span class="c1"># Plot solar cells</span>
 <span class="n">cells</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;solar_category&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;YlOrRd&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
@@ -912,11 +889,11 @@ Cell <span class="ansi-green-fg">In[20], line 3</span>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Store_explorer_20_0.png" src="../_images/notebooks_Store_explorer_20_0.png" />
+<img alt="../_images/notebooks_Store_explorer_19_0.png" src="../_images/notebooks_Store_explorer_19_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -975,13 +952,13 @@ Cell <span class="ansi-green-fg">In[20], line 3</span>
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/tmp/ipykernel_1690921/2995861738.py:6: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
+/tmp/ipykernel_2550534/2995861738.py:6: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
   solar_cmap = cm.get_cmap(&#39;YlOrRd&#39;, len(solar_labels))
-/tmp/ipykernel_1690921/2995861738.py:7: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
+/tmp/ipykernel_2550534/2995861738.py:7: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
   wind_cmap = cm.get_cmap(&#39;BuPu&#39;, len(wind_labels))
-/tmp/ipykernel_1690921/2995861738.py:14: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+/tmp/ipykernel_2550534/2995861738.py:14: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
   solar_capacity = cells.groupby(&#39;solar_category&#39;)[&#39;potential_capacity_solar&#39;].sum().div(1e3).reindex(solar_labels, fill_value=0)
-/tmp/ipykernel_1690921/2995861738.py:15: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+/tmp/ipykernel_2550534/2995861738.py:15: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
   wind_capacity = cells.groupby(&#39;wind_category&#39;)[&#39;potential_capacity_wind&#39;].sum().div(1e3).reindex(wind_labels, fill_value=0)
 </pre></div></div>
 </div>
@@ -989,18 +966,18 @@ Cell <span class="ansi-green-fg">In[20], line 3</span>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Store_explorer_21_1.png" src="../_images/notebooks_Store_explorer_21_1.png" />
+<img alt="../_images/notebooks_Store_explorer_20_1.png" src="../_images/notebooks_Store_explorer_20_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Store_explorer_21_2.png" src="../_images/notebooks_Store_explorer_21_2.png" />
+<img alt="../_images/notebooks_Store_explorer_20_2.png" src="../_images/notebooks_Store_explorer_20_2.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_aggrs_region</span><span class="o">=</span><span class="n">cells</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Region&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">({</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">:</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span><span class="s1">&#39;potential_capacity_wind&#39;</span><span class="p">:</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span><span class="s1">&#39;nearest_station_distance_km&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span><span class="s1">&#39;solar_CF_mean&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span><span class="s1">&#39;wind_CF_mean&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span><span class="s1">&#39;lcoe_solar&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span><span class="s1">&#39;lcoe_wind&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">})</span>
@@ -1008,7 +985,7 @@ Cell <span class="ansi-green-fg">In[20], line 3</span>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Map Population and GDP to gdf using Region</span>
@@ -1023,7 +1000,7 @@ Cell <span class="ansi-green-fg">In[20], line 3</span>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -1053,7 +1030,7 @@ Cell <span class="ansi-green-fg">In[20], line 3</span>
 <span class="n">ax2</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
 
 <span class="c1"># Shadow effect offset</span>
-<span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.008</span>
+<span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.001</span>
 
 <span class="c1"># Plot solar map on ax1</span>
 <span class="c1"># Add shadow effect for solar map</span>
@@ -1080,9 +1057,9 @@ Cell <span class="ansi-green-fg">In[20], line 3</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># Plot wind map on ax2</span>
 <span class="c1"># Add shadow effect for wind map</span>
-<span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">)</span>
-<span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>  <span class="c1"># Shadow layer</span>
 <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">)</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>  <span class="c1"># Shadow layer</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">)</span>
 
 <span class="c1"># Plot wind cells</span>
 <span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;wind_category&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;summer&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -1114,7 +1091,7 @@ Cell <span class="ansi-green-fg">In[20], line 3</span>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Store_explorer_24_0.png" src="../_images/notebooks_Store_explorer_24_0.png" />
+<img alt="../_images/notebooks_Store_explorer_23_0.png" src="../_images/notebooks_Store_explorer_23_0.png" />
 </div>
 </div>
 </section>

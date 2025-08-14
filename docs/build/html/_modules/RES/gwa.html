@@ -157,9 +157,12 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">Best Practices and Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES API References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
@@ -287,29 +290,306 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for RES.gwa</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">rioxarray</span> <span class="k">as</span> <span class="nn">rxr</span>
 <span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
-<span class="kn">from</span> <span class="nn">RES.hdf5_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
-<span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
-<span class="kn">from</span> <span class="nn">RES.boundaries</span> <span class="kn">import</span> <span class="n">GADMBoundaries</span>
+
 <span class="kn">import</span> <span class="nn">RES.utility</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="kn">from</span> <span class="nn">RES.boundaries</span> <span class="kn">import</span> <span class="n">GADMBoundaries</span>
+<span class="kn">from</span> <span class="nn">RES.hdf5_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
+<span class="kn">from</span> <span class="nn">RES.AttributesParser</span> <span class="kn">import</span> <span class="n">AttributesParser</span>
+
 <span class="n">print_level_base</span><span class="o">=</span><span class="mi">3</span>
 
 <div class="viewcode-block" id="GWACells">
 <a class="viewcode-back" href="../../notes/api.html#RES.gwa.GWACells">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">GWACells</span><span class="p">(</span><span class="n">GADMBoundaries</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">GWACells</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Global Wind Atlas (GWA) data processor for high-resolution wind resource analysis.</span>
+<span class="sd">    </span>
+<span class="sd">    This class integrates Global Wind Atlas data with regional boundaries to provide</span>
+<span class="sd">    high-resolution wind resource assessment capabilities for renewable energy planning.</span>
+<span class="sd">    GWA provides detailed wind speed, wind power density, and wind class information</span>
+<span class="sd">    at much higher spatial resolution than ERA5 data, making it valuable for detailed</span>
+<span class="sd">    site assessment and resource characterization.</span>
+<span class="sd">    </span>
+<span class="sd">    The class handles downloading, processing, and spatial mapping of GWA raster data</span>
+<span class="sd">    to ERA5 grid cells, enabling multi-scale wind resource analysis. It processes</span>
+<span class="sd">    multiple GWA data layers including wind speed, wind power density, and IEC wind</span>
+<span class="sd">    class classifications to provide comprehensive wind resource information.</span>
+<span class="sd">    </span>
+<span class="sd">    INHERITED METHODS FROM GADMBoundaries:</span>
+<span class="sd">    --------------------------------------</span>
+<span class="sd">    - get_bounding_box() -&gt; tuple: Get regional bounding box for spatial clipping</span>
+<span class="sd">    - get_region_boundary() -&gt; gpd.GeoDataFrame: Get regional boundary geometry</span>
+<span class="sd">    - get_country_boundary() -&gt; gpd.GeoDataFrame: Get country-level boundary geometry</span>
+<span class="sd">    - Plus other boundary processing methods</span>
+<span class="sd">    </span>
+<span class="sd">    INHERITED METHODS FROM AttributesParser:</span>
+<span class="sd">    ----------------------------------------</span>
+<span class="sd">    - get_gwa_config() -&gt; dict: Get GWA data configuration parameters</span>
+<span class="sd">    - get_default_crs() -&gt; str: Get default coordinate reference system</span>
+<span class="sd">    - get_region_mapping() -&gt; Dict[str, dict]: Get region mapping configuration</span>
+<span class="sd">    - Plus other configuration access methods</span>
+<span class="sd">    </span>
+<span class="sd">    INHERITED ATTRIBUTES FROM AttributesParser:</span>
+<span class="sd">    -------------------------------------------</span>
+<span class="sd">    - region_short_code: Region identifier code</span>
+<span class="sd">    - region_mapping: Dictionary mapping region codes to configuration</span>
+<span class="sd">    - store: HDF5 data store path for processed results</span>
+<span class="sd">    - Plus other configuration attributes</span>
+<span class="sd">    </span>
+<span class="sd">    OWN METHODS DEFINED IN THIS CLASS:</span>
+<span class="sd">    ----------------------------------</span>
+<span class="sd">    - prepare_GWA_data(): Download and process GWA raster data for the region</span>
+<span class="sd">    - download_file(): Download individual files from remote sources</span>
+<span class="sd">    - load_gwa_cells(): Create GeoDataFrame of GWA cells with spatial geometry</span>
+<span class="sd">    - map_GWA_cells_to_ERA5(): Map high-resolution GWA data to ERA5 grid cells</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    config_file_path : str or Path</span>
+<span class="sd">        Path to configuration file containing GWA data parameters</span>
+<span class="sd">    region_short_code : str</span>
+<span class="sd">        Region identifier for boundary definition and data filtering</span>
+<span class="sd">    resource_type : str</span>
+<span class="sd">        Resource type (&#39;wind&#39;) for GWA wind resource analysis</span>
+<span class="sd">        </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    merged_data : xr.DataArray</span>
+<span class="sd">        Merged xarray DataArray containing all GWA data layers</span>
+<span class="sd">    gwa_config : dict</span>
+<span class="sd">        GWA configuration parameters from config file</span>
+<span class="sd">    datahandler : DataHandler</span>
+<span class="sd">        HDF5 data handler for storing processed results</span>
+<span class="sd">    gwa_datafields : dict</span>
+<span class="sd">        Field definitions for GWA data layers</span>
+<span class="sd">    gwa_rasters : dict</span>
+<span class="sd">        Raster file specifications for GWA data</span>
+<span class="sd">    gwa_sources : dict</span>
+<span class="sd">        Source URLs for downloading GWA data</span>
+<span class="sd">    gwa_root : Path</span>
+<span class="sd">        Root directory for GWA data storage</span>
+<span class="sd">    bounding_box : dict</span>
+<span class="sd">        Regional bounding box coordinates for spatial clipping</span>
+<span class="sd">    region_gwa_cells_df : pd.DataFrame</span>
+<span class="sd">        Processed GWA cells data as pandas DataFrame</span>
+<span class="sd">    gwa_cells_gdf : gpd.GeoDataFrame</span>
+<span class="sd">        GWA cells with spatial geometry for analysis</span>
+<span class="sd">    mapped_gwa_cells_aggr_df : pd.DataFrame</span>
+<span class="sd">        GWA data aggregated to ERA5 grid cell resolution</span>
+<span class="sd">        </span>
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    prepare_GWA_data(windspeed_min=10, windspeed_max=20, memory_resource_limitation=False) -&gt; pd.DataFrame</span>
+<span class="sd">        Download, process, and merge GWA raster data for the region</span>
+<span class="sd">    download_file(url, destination) -&gt; None</span>
+<span class="sd">        Download a file from URL to specified destination path</span>
+<span class="sd">    load_gwa_cells(memory_resource_limitation=False) -&gt; gpd.GeoDataFrame</span>
+<span class="sd">        Load GWA cells as GeoDataFrame with spatial geometry</span>
+<span class="sd">    map_GWA_cells_to_ERA5(memory_resource_limitation=False) -&gt; None</span>
+<span class="sd">        Map high-resolution GWA data to ERA5 grid cells for integration</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create GWA processor for British Columbia:</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; from RES.gwa import GWACells</span>
+<span class="sd">    &gt;&gt;&gt; gwa_processor = GWACells(</span>
+<span class="sd">    ...     config_file_path=&quot;config/config_BC.yaml&quot;,</span>
+<span class="sd">    ...     region_short_code=&quot;BC&quot;,</span>
+<span class="sd">    ...     resource_type=&quot;wind&quot;</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; </span>
+<span class="sd">    &gt;&gt;&gt; # Load high-resolution GWA cells</span>
+<span class="sd">    &gt;&gt;&gt; gwa_cells = gwa_processor.load_gwa_cells()</span>
+<span class="sd">    &gt;&gt;&gt; print(f&quot;Loaded {len(gwa_cells)} GWA cells&quot;)</span>
+<span class="sd">    </span>
+<span class="sd">    Process GWA data with wind speed filtering:</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; # Prepare data with wind speed constraints</span>
+<span class="sd">    &gt;&gt;&gt; gwa_data = gwa_processor.prepare_GWA_data(</span>
+<span class="sd">    ...     windspeed_min=12,</span>
+<span class="sd">    ...     windspeed_max=25,</span>
+<span class="sd">    ...     memory_resource_limitation=True</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; print(f&quot;Filtered to {len(gwa_data)} high-quality wind cells&quot;)</span>
+<span class="sd">    </span>
+<span class="sd">    Map GWA data to ERA5 grid:</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; # Map high-resolution GWA to ERA5 cells</span>
+<span class="sd">    &gt;&gt;&gt; gwa_processor.map_GWA_cells_to_ERA5(memory_resource_limitation=False)</span>
+<span class="sd">    &gt;&gt;&gt; print(&quot;GWA data mapped to ERA5 grid cells&quot;)</span>
+<span class="sd">    </span>
+<span class="sd">    Configuration Requirements</span>
+<span class="sd">    --------------------------</span>
+<span class="sd">    The GWA configuration must include:</span>
+<span class="sd">    </span>
+<span class="sd">    ```yaml</span>
+<span class="sd">    gwa_data:</span>
+<span class="sd">      root: &quot;data/downloaded_data/GWA&quot;  # Storage directory</span>
+<span class="sd">      datafields:</span>
+<span class="sd">        windspeed_gwa: &quot;Wind speed at 100m&quot;</span>
+<span class="sd">        windpower_gwa: &quot;Wind power density at 100m&quot;</span>
+<span class="sd">        IEC_Class_ExLoads: &quot;IEC wind class&quot;</span>
+<span class="sd">      rasters:</span>
+<span class="sd">        windspeed_gwa: &quot;GWA_country_code_windspeed.tif&quot;</span>
+<span class="sd">        windpower_gwa: &quot;GWA_country_code_windpower.tif&quot;</span>
+<span class="sd">        IEC_Class_ExLoads: &quot;GWA_country_code_iec.tif&quot;</span>
+<span class="sd">      sources:</span>
+<span class="sd">        windspeed_gwa: &quot;https://globalwindatlas.info/download/GWA_country_code_windspeed.tif&quot;</span>
+<span class="sd">        windpower_gwa: &quot;https://globalwindatlas.info/download/GWA_country_code_windpower.tif&quot;</span>
+<span class="sd">        IEC_Class_ExLoads: &quot;https://globalwindatlas.info/download/GWA_country_code_iec.tif&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    region_mapping:</span>
+<span class="sd">      BC:</span>
+<span class="sd">        GWA_country_code: &quot;CAN&quot;  # Country code for GWA data</span>
+<span class="sd">    ```</span>
+<span class="sd">    </span>
+<span class="sd">    Data Processing Workflow</span>
+<span class="sd">    ------------------------</span>
+<span class="sd">    1. **Configuration Loading**: Extract GWA parameters and region mapping</span>
+<span class="sd">    2. **Data Download**: Check for local data or download from GWA sources</span>
+<span class="sd">    3. **Raster Processing**: Load and clip raster data to regional boundaries</span>
+<span class="sd">    4. **Data Merging**: Combine multiple GWA layers into unified dataset</span>
+<span class="sd">    5. **Quality Filtering**: Apply wind speed and other quality constraints</span>
+<span class="sd">    6. **Spatial Conversion**: Convert raster data to point-based GeoDataFrame</span>
+<span class="sd">    7. **Grid Mapping**: Aggregate high-resolution GWA data to ERA5 grid cells</span>
+<span class="sd">    8. **Data Storage**: Store processed results in HDF5 format for reuse</span>
+<span class="sd">    </span>
+<span class="sd">    GWA Data Layers</span>
+<span class="sd">    ---------------</span>
+<span class="sd">    Typical GWA datasets include:</span>
+<span class="sd">    - **Wind Speed**: Mean wind speed at 100m height (m/s)</span>
+<span class="sd">    - **Wind Power Density**: Wind power density at 100m height (W/m²)</span>
+<span class="sd">    - **IEC Wind Class**: International Electrotechnical Commission wind classes</span>
+<span class="sd">    - **Capacity Factor**: Estimated capacity factors for different turbine types</span>
+<span class="sd">    - **Wind Direction**: Prevailing wind direction statistics</span>
+<span class="sd">    </span>
+<span class="sd">    Spatial Resolution</span>
+<span class="sd">    ------------------</span>
+<span class="sd">    - **GWA Resolution**: Typically 250m to 1km spatial resolution</span>
+<span class="sd">    - **ERA5 Resolution**: Approximately 25km spatial resolution</span>
+<span class="sd">    - **Aggregation Method**: Mean values for continuous variables</span>
+<span class="sd">    - **Coordinate System**: WGS84 (EPSG:4326) for global compatibility</span>
+<span class="sd">    - **Clipping Boundaries**: Regional boundaries from GADM database</span>
+<span class="sd">    </span>
+<span class="sd">    Quality Control</span>
+<span class="sd">    ---------------</span>
+<span class="sd">    - **Wind Speed Filtering**: Configurable minimum/maximum wind speed thresholds</span>
+<span class="sd">    - **Data Validation**: Automatic detection and handling of NoData values</span>
+<span class="sd">    - **Spatial Validation**: Clipping to valid regional boundaries</span>
+<span class="sd">    - **Memory Management**: Optional memory limitation for large datasets</span>
+<span class="sd">    - **Error Handling**: Graceful handling of download and processing errors</span>
+<span class="sd">    </span>
+<span class="sd">    Performance Considerations</span>
+<span class="sd">    --------------------------</span>
+<span class="sd">    - Download time depends on data availability and network speed</span>
+<span class="sd">    - Processing time scales with region size and data resolution</span>
+<span class="sd">    - Memory usage can be substantial for large regions</span>
+<span class="sd">    - Spatial overlay operations are computationally intensive</span>
+<span class="sd">    - HDF5 storage provides efficient data access for repeated analysis</span>
+<span class="sd">    </span>
+<span class="sd">    Integration Points</span>
+<span class="sd">    ------------------</span>
+<span class="sd">    - **ERA5 Data**: Integration with ERA5 climate data for multi-scale analysis</span>
+<span class="sd">    - **Boundary Data**: Uses GADM boundaries for regional definition</span>
+<span class="sd">    - **Capacity Analysis**: Provides high-resolution input for capacity factor calculations</span>
+<span class="sd">    - **Resource Assessment**: Supports detailed wind resource characterization</span>
+<span class="sd">    - **Grid Analysis**: Compatible with grid cell generation workflows</span>
+<span class="sd">    </span>
+<span class="sd">    Output Formats</span>
+<span class="sd">    --------------</span>
+<span class="sd">    - **DataFrame**: Tabular data with wind resource attributes</span>
+<span class="sd">    - **GeoDataFrame**: Spatial data with point geometries</span>
+<span class="sd">    - **HDF5 Storage**: Efficient storage for large datasets</span>
+<span class="sd">    - **Grid Mapping**: ERA5-compatible aggregated datasets</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - GWA data is provided by Technical University of Denmark (DTU)</span>
+<span class="sd">    - Global coverage with country-specific datasets</span>
+<span class="sd">    - Higher resolution than ERA5 for detailed site assessment</span>
+<span class="sd">    - Processing requires substantial computational resources for large regions</span>
+<span class="sd">    - Results integrate seamlessly with ERA5-based renewable energy workflows</span>
+<span class="sd">    - Data quality varies by region and local terrain complexity</span>
+<span class="sd">    - Regular updates are available from the Global Wind Atlas portal</span>
+<span class="sd">    </span>
+<span class="sd">    Dependencies</span>
+<span class="sd">    ------------</span>
+<span class="sd">    - geopandas: Spatial data processing and geometry operations</span>
+<span class="sd">    - pandas: Tabular data manipulation and analysis</span>
+<span class="sd">    - rioxarray: Raster data reading and spatial operations</span>
+<span class="sd">    - xarray: N-dimensional array operations and data merging</span>
+<span class="sd">    - requests: HTTP downloading of GWA datasets</span>
+<span class="sd">    - pathlib: File path operations and directory management</span>
+<span class="sd">    - RES.hdf5_handler.DataHandler: HDF5 data storage and retrieval</span>
+<span class="sd">    - RES.boundaries.GADMBoundaries: Parent class for boundary processing</span>
+<span class="sd">    - RES.utility: Logging and utility functions</span>
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ConnectionError</span>
+<span class="sd">        If GWA data download fails due to network issues</span>
+<span class="sd">    FileNotFoundError</span>
+<span class="sd">        If required configuration files or directories are missing</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If wind speed thresholds or other parameters are invalid</span>
+<span class="sd">    RuntimeError</span>
+<span class="sd">        If raster processing or spatial operations fail</span>
+<span class="sd">        </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    rioxarray.open_rasterio : Raster data reading functionality</span>
+<span class="sd">    geopandas.GeoDataFrame.overlay : Spatial overlay operations</span>
+<span class="sd">    RES.boundaries.GADMBoundaries : Parent class for boundary processing</span>
+<span class="sd">    RES.hdf5_handler.DataHandler : HDF5 data storage utilities</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">merged_data</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize GWA processor with configuration and data handler setup.</span>
+<span class="sd">        </span>
+<span class="sd">        Performs post-initialization setup including:</span>
+<span class="sd">        - Calling parent class initialization for boundary processing</span>
+<span class="sd">        - Loading GWA-specific configuration from config file</span>
+<span class="sd">        - Setting up HDF5 data handler for result storage</span>
+<span class="sd">        </span>
+<span class="sd">        This method is automatically called after dataclass initialization</span>
+<span class="sd">        to prepare the processor for GWA data operations.</span>
+<span class="sd">        </span>
+<span class="sd">        The initialization establishes the connection to configuration</span>
+<span class="sd">        parameters and prepares the data storage infrastructure needed</span>
+<span class="sd">        for GWA raster processing and ERA5 grid mapping operations.</span>
+<span class="sd">        </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        FileNotFoundError</span>
+<span class="sd">            If configuration file cannot be found or accessed</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If GWA configuration parameters are missing or invalid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__post_init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gwa_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_gwa_config</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span> <span class="o">=</span> <span class="n">DataHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_args</span><span class="o">=</span> <span class="p">{</span>   
+            <span class="s2">&quot;config_file_path&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_file_path</span><span class="p">,</span>
+            <span class="s2">&quot;region_short_code&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="p">,</span>
+            <span class="s2">&quot;resource_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gadmBoundaries</span> <span class="o">=</span> <span class="n">GADMBoundaries</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">required_args</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">gwa_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_gwa_config</span><span class="p">()</span>  <span class="c1"># INHERITED METHOD from AttributesParser</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span> <span class="o">=</span> <span class="n">DataHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">)</span>  <span class="c1"># INHERITED ATTRIBUTE from AttributesParser</span>
 
 <div class="viewcode-block" id="GWACells.prepare_GWA_data">
 <a class="viewcode-back" href="../../notes/api.html#RES.gwa.GWACells.prepare_GWA_data">[docs]</a>
@@ -318,9 +598,84 @@ document.write(`
                          <span class="n">windpseed_max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
                          <span class="n">memory_resource_limitation</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Prepares the Global Wind Atlas (GWA) data by loading and merging raster files.</span>
-<span class="sd">        Downloads files from sources if they do not exist.</span>
-<span class="sd">        Returns a cleaned DataArray with relevant data.</span>
+<span class="sd">        Download, process, and merge Global Wind Atlas raster data for the region.</span>
+<span class="sd">        </span>
+<span class="sd">        This method orchestrates the complete GWA data preparation workflow including:</span>
+<span class="sd">        downloading required raster files, loading and clipping them to regional</span>
+<span class="sd">        boundaries, merging multiple data layers, and applying quality filters.</span>
+<span class="sd">        The processed data is returned as a pandas DataFrame ready for analysis.</span>
+<span class="sd">        </span>
+<span class="sd">        The method handles multiple GWA data types (wind speed, power density,</span>
+<span class="sd">        IEC classes) and automatically downloads missing files from configured</span>
+<span class="sd">        sources. Spatial clipping ensures data is limited to the region of</span>
+<span class="sd">        interest, and wind speed filtering allows focus on viable wind resources.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        windpseed_min : float, default=10</span>
+<span class="sd">            Minimum wind speed threshold in m/s for filtering cells.</span>
+<span class="sd">            Cells with wind speeds below this value are excluded from results.</span>
+<span class="sd">        windpseed_max : float, default=20</span>
+<span class="sd">            Maximum wind speed threshold in m/s for filtering cells.</span>
+<span class="sd">            Cells with wind speeds above this value are excluded from results.</span>
+<span class="sd">        memory_resource_limitation : bool, default=False</span>
+<span class="sd">            Whether to enable memory-efficient processing for large datasets.</span>
+<span class="sd">            If True, applies wind speed filtering to reduce memory usage.</span>
+<span class="sd">            If False, uses full wind speed range (0-50 m/s) for processing.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            Processed GWA data as pandas DataFrame with columns:</span>
+<span class="sd">            - x, y: Spatial coordinates in regional CRS</span>
+<span class="sd">            - windspeed_gwa: Wind speed at 100m height (m/s)</span>
+<span class="sd">            - windpower_gwa: Wind power density at 100m height (W/m²)</span>
+<span class="sd">            - IEC_Class_ExLoads: IEC wind class classifications</span>
+<span class="sd">            - Additional fields as configured in GWA data configuration</span>
+<span class="sd">            </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Prepare data with default wind speed range:</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; gwa_data = processor.prepare_GWA_data()</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Loaded {len(gwa_data)} wind resource cells&quot;)</span>
+<span class="sd">        </span>
+<span class="sd">        Apply strict wind speed filtering for high-quality sites:</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; high_wind_data = processor.prepare_GWA_data(</span>
+<span class="sd">        ...     windpseed_min=15,</span>
+<span class="sd">        ...     windpseed_max=25,</span>
+<span class="sd">        ...     memory_resource_limitation=True</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;High-wind sites: {len(high_wind_data)} cells&quot;)</span>
+<span class="sd">        </span>
+<span class="sd">        Process full dataset without filtering:</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; all_data = processor.prepare_GWA_data(</span>
+<span class="sd">        ...     windpseed_min=0,</span>
+<span class="sd">        ...     windpseed_max=50,</span>
+<span class="sd">        ...     memory_resource_limitation=False</span>
+<span class="sd">        ... )</span>
+<span class="sd">            </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ConnectionError</span>
+<span class="sd">            If GWA data download fails due to network issues</span>
+<span class="sd">        FileNotFoundError</span>
+<span class="sd">            If GWA raster files cannot be found locally or remotely</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If wind speed thresholds are invalid (min &gt;= max)</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If raster processing or spatial operations fail</span>
+<span class="sd">            </span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        - Processing time depends on region size and number of data layers</span>
+<span class="sd">        - Downloaded files are cached locally to avoid repeated downloads</span>
+<span class="sd">        - Memory usage scales with region size and data resolution</span>
+<span class="sd">        - Wind speed filtering significantly reduces memory requirements</span>
+<span class="sd">        - Multiple raster files are automatically merged into unified dataset</span>
+<span class="sd">        - Spatial coordinates are preserved for subsequent spatial analysis</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">data_list</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -329,13 +684,13 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">gwa_rasters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gwa_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rasters&#39;</span><span class="p">,</span> <span class="p">{})</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gwa_sources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gwa_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sources&#39;</span><span class="p">,</span> <span class="p">{})</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gwa_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gwa_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="s1">&#39;data/downloaded_data/GWA&#39;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bounding_box</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gadmBoundaries</span><span class="o">.</span><span class="n">get_bounding_box</span><span class="p">()</span>  <span class="c1"># INHERITED METHOD from GADMBoundaries</span>
         <span class="c1"># Create the root directory if it doesn&#39;t exist</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gwa_root</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># Check for existence and download if necessary</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">raster_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gwa_rasters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">gwa_country_code</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">region_mapping</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;GWA_country_code&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gwa_country_code</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">region_mapping</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;GWA_country_code&#39;</span><span class="p">)</span>  <span class="c1"># INHERITED ATTRIBUTES from AttributesParser</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">raster_name</span><span class="o">=</span><span class="n">raster_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;GWA_country_code&quot;</span><span class="p">,</span>  <span class="bp">self</span><span class="o">.</span><span class="n">gwa_country_code</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gwa_root</span> <span class="o">/</span> <span class="n">raster_name</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
@@ -372,7 +727,8 @@ document.write(`
  
         <span class="n">mask</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span><span class="p">[</span><span class="s1">&#39;windspeed_gwa&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">windpseed_min</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span><span class="p">[</span><span class="s1">&#39;windspeed_gwa&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">windpseed_max</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">merged_df_f</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df_f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2"> cells have been filtered due to Windspeed filter [</span><span class="si">{</span><span class="n">windpseed_min</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">windpseed_max</span><span class="si">}</span><span class="s2"> m/s].</span><span class="se">\n</span><span class="s2">&gt;&gt;&gt; Cleaned data loaded for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df_f</span><span class="p">)</span><span class="si">}</span><span class="s2"> GWA cells&quot;</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df_f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2"> cells have been filtered due to Windspeed filter [</span><span class="si">{</span><span class="n">windpseed_min</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">windpseed_max</span><span class="si">}</span><span class="s2"> m/s].&quot;</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;✔ Cleaned data loaded for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df_f</span><span class="p">)</span><span class="si">}</span><span class="s2"> GWA cells&quot;</span><span class="p">)</span>
         
         <span class="c1"># class_mapping = {0: &#39;III&#39;, 1: &#39;II&#39;, 2: &#39;I&#39;, 3: &#39;T&#39;, 4: &#39;S&#39;}</span>
         <span class="c1"># # Correctly modifying only one column</span>
@@ -386,7 +742,64 @@ document.write(`
     <span class="k">def</span> <span class="nf">download_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                       <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> 
                       <span class="n">destination</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Downloads a file from a given URL to a specified destination.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Download a file from a remote URL to a specified local destination.</span>
+<span class="sd">        </span>
+<span class="sd">        Downloads GWA raster files from remote sources when they are not</span>
+<span class="sd">        available locally. The method handles HTTP requests with proper</span>
+<span class="sd">        error checking and provides detailed logging of download operations.</span>
+<span class="sd">        </span>
+<span class="sd">        Files are downloaded completely before being written to avoid</span>
+<span class="sd">        partial downloads. The destination directory is created automatically</span>
+<span class="sd">        if it doesn&#39;t exist, ensuring reliable file operations.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        url : str</span>
+<span class="sd">            Complete URL of the file to download.</span>
+<span class="sd">            Should be a valid HTTP/HTTPS URL pointing to a GWA raster file.</span>
+<span class="sd">        destination : Path</span>
+<span class="sd">            Local file path where the downloaded file should be saved.</span>
+<span class="sd">            Parent directories will be created automatically if needed.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            The method doesn&#39;t return a value but saves the file to disk.</span>
+<span class="sd">            </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Download a GWA wind speed raster:</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; url = &quot;https://globalwindatlas.info/download/CAN_windspeed.tif&quot;</span>
+<span class="sd">        &gt;&gt;&gt; destination = Path(&quot;data/GWA/CAN_windspeed.tif&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; processor.download_file(url, destination)</span>
+<span class="sd">        </span>
+<span class="sd">        Download with automatic path handling:</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; url = &quot;https://globalwindatlas.info/download/CAN_windpower.tif&quot;</span>
+<span class="sd">        &gt;&gt;&gt; destination = processor.gwa_root / &quot;CAN_windpower.tif&quot;</span>
+<span class="sd">        &gt;&gt;&gt; processor.download_file(url, destination)</span>
+<span class="sd">            </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        requests.RequestException</span>
+<span class="sd">            If the HTTP request fails due to network issues or server errors</span>
+<span class="sd">        requests.HTTPError</span>
+<span class="sd">            If the server returns an HTTP error status code</span>
+<span class="sd">        IOError</span>
+<span class="sd">            If the local file cannot be written due to permissions or disk space</span>
+<span class="sd">        FileNotFoundError</span>
+<span class="sd">            If the destination directory cannot be created</span>
+<span class="sd">            </span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        - Download progress is logged through utility print functions</span>
+<span class="sd">        - Network timeouts may occur for large files on slow connections</span>
+<span class="sd">        - Existing files are overwritten without warning</span>
+<span class="sd">        - File integrity is not verified after download</span>
+<span class="sd">        - Destination path is automatically converted to Path object if needed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="n">destination</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">ensure_path</span><span class="p">(</span><span class="n">destination</span><span class="p">)</span>
         
@@ -404,14 +817,85 @@ document.write(`
 <a class="viewcode-back" href="../../notes/api.html#RES.gwa.GWACells.load_gwa_cells">[docs]</a>
     <span class="k">def</span> <span class="nf">load_gwa_cells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                        <span class="n">memory_resource_limitation</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load GWA cells as a spatial GeoDataFrame with point geometries.</span>
+<span class="sd">        </span>
+<span class="sd">        Converts processed GWA tabular data into a spatial GeoDataFrame by</span>
+<span class="sd">        creating point geometries from coordinate information. The resulting</span>
+<span class="sd">        GeoDataFrame contains all wind resource attributes along with spatial</span>
+<span class="sd">        geometry suitable for spatial analysis and visualization.</span>
+<span class="sd">        </span>
+<span class="sd">        The method automatically clips the data to regional boundaries to</span>
+<span class="sd">        ensure results are geographically constrained to the area of interest.</span>
+<span class="sd">        This spatial filtering removes any cells that fall outside the defined</span>
+<span class="sd">        regional boundaries despite being within the bounding box.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        memory_resource_limitation : Optional[bool], default=False</span>
+<span class="sd">            Whether to enable memory-efficient processing for large datasets.</span>
+<span class="sd">            Passed through to prepare_GWA_data() method to control filtering.</span>
+<span class="sd">            If True, applies wind speed filtering to reduce memory usage.</span>
+<span class="sd">            If False, processes the full dataset without memory limitations.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        geopandas.GeoDataFrame</span>
+<span class="sd">            Spatial GeoDataFrame containing GWA cells with:</span>
+<span class="sd">            - Point geometries representing cell center coordinates</span>
+<span class="sd">            - Wind resource attributes (speed, power density, IEC class)</span>
+<span class="sd">            - Spatial reference system matching regional CRS</span>
+<span class="sd">            - Geographic clipping to regional boundaries</span>
+<span class="sd">            </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Load all GWA cells for the region:</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; gwa_cells = processor.load_gwa_cells()</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Loaded {len(gwa_cells)} spatial cells&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;CRS: {gwa_cells.crs}&quot;)</span>
+<span class="sd">        </span>
+<span class="sd">        Load with memory optimization:</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; gwa_cells = processor.load_gwa_cells(memory_resource_limitation=True)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Memory-optimized: {len(gwa_cells)} cells&quot;)</span>
+<span class="sd">        </span>
+<span class="sd">        Access spatial and attribute data:</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; # Spatial analysis</span>
+<span class="sd">        &gt;&gt;&gt; total_area = gwa_cells.total_bounds</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Spatial extent: {total_area}&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; </span>
+<span class="sd">        &gt;&gt;&gt; # Attribute analysis</span>
+<span class="sd">        &gt;&gt;&gt; mean_windspeed = gwa_cells[&#39;windspeed_gwa&#39;].mean()</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Average wind speed: {mean_windspeed:.2f} m/s&quot;)</span>
+<span class="sd">            </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If coordinate columns (x, y) are missing from the GWA data</span>
+<span class="sd">        GeometryError</span>
+<span class="sd">            If point geometries cannot be created from coordinates</span>
+<span class="sd">        CRSError</span>
+<span class="sd">            If the coordinate reference system is invalid or undefined</span>
+<span class="sd">            </span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        - Point geometries are created from x,y coordinate columns</span>
+<span class="sd">        - Spatial clipping ensures geographic consistency with boundaries</span>
+<span class="sd">        - CRS is inherited from the regional configuration</span>
+<span class="sd">        - Processing time scales with the number of GWA cells</span>
+<span class="sd">        - Memory usage depends on dataset size and attribute complexity</span>
+<span class="sd">        - Results are suitable for spatial overlay and intersection operations</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">region_gwa_cells_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_GWA_data</span><span class="p">(</span><span class="n">memory_resource_limitation</span><span class="p">)</span>
 
         <span class="c1"># Vectorized creation of geometries</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gwa_cells_gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">region_gwa_cells_df</span><span class="p">,</span>
             <span class="n">geometry</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region_gwa_cells_df</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_gwa_cells_df</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]),</span>
-            <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_default_crs</span><span class="p">()</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_region_boundary</span><span class="p">(),</span> <span class="n">keep_geom_type</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_default_crs</span><span class="p">()</span>  <span class="c1"># INHERITED METHOD from AttributesParser</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gadmBoundaries</span><span class="o">.</span><span class="n">get_region_boundary</span><span class="p">(),</span> <span class="n">keep_geom_type</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># INHERITED METHOD from GADMBoundaries</span>
 
         <span class="c1"># self.gwa_cells_gdf = self.calculate_common_parameters_GWA_cells()</span>
         <span class="c1"># self.gwa_cells_gdf = self.map_GWAcells_to_ERA5cells()</span>
@@ -424,11 +908,113 @@ document.write(`
 <div class="viewcode-block" id="GWACells.map_GWA_cells_to_ERA5">
 <a class="viewcode-back" href="../../notes/api.html#RES.gwa.GWACells.map_GWA_cells_to_ERA5">[docs]</a>
     <span class="k">def</span> <span class="nf">map_GWA_cells_to_ERA5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                              <span class="n">aggregation_level</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
                               <span class="n">memory_resource_limitation</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Maps the GWA high resolution cells to comparatively low resolution ERA5 Cells.</span>
+<span class="sd">        Map high-resolution GWA cells to coarser ERA5 grid cells for multi-scale analysis.</span>
+<span class="sd">        </span>
+<span class="sd">        This method performs spatial aggregation of high-resolution GWA wind data</span>
+<span class="sd">        (typically 250m-1km resolution) to ERA5 grid cells (approximately 25km resolution).</span>
+<span class="sd">        The aggregation process uses spatial overlay operations to determine which</span>
+<span class="sd">        GWA cells fall within each ERA5 cell, then computes mean values for all</span>
+<span class="sd">        wind resource attributes.</span>
+<span class="sd">        </span>
+<span class="sd">        The mapping enables integration of detailed GWA wind resource data with</span>
+<span class="sd">        ERA5-based renewable energy analysis workflows, providing enhanced spatial</span>
+<span class="sd">        detail while maintaining compatibility with ERA5 grid structures.</span>
+<span class="sd">        </span>
+<span class="sd">        Processing is performed on a region-by-region basis to optimize memory</span>
+<span class="sd">        usage and computational efficiency. Results are automatically stored</span>
+<span class="sd">        in the HDF5 data store for subsequent analysis operations.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        memory_resource_limitation : Optional[bool]</span>
+<span class="sd">            Whether to enable memory-efficient processing for large datasets.</span>
+<span class="sd">            Passed through to load_gwa_cells() and prepare_GWA_data() methods.</span>
+<span class="sd">            If True, applies filtering to reduce memory usage during processing.</span>
+<span class="sd">            If False, processes the complete dataset without memory limitations.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            The method doesn&#39;t return a value but stores results in the HDF5 store.</span>
+<span class="sd">            Aggregated data is accessible via self.mapped_gwa_cells_aggr_df attribute</span>
+<span class="sd">            and permanently stored in the &#39;cells&#39; store for future access.</span>
+<span class="sd">            </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Map GWA data to ERA5 grid with full dataset:</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; processor.map_GWA_cells_to_ERA5(memory_resource_limitation=False)</span>
+<span class="sd">        &gt;&gt;&gt; print(&quot;GWA data mapped to ERA5 grid cells&quot;)</span>
+<span class="sd">        </span>
+<span class="sd">        Map with memory optimization for large regions:</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; processor.map_GWA_cells_to_ERA5(memory_resource_limitation=True)</span>
+<span class="sd">        &gt;&gt;&gt; print(&quot;Memory-optimized mapping completed&quot;)</span>
+<span class="sd">        </span>
+<span class="sd">        Access mapped results:</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; # Results are stored in datahandler</span>
+<span class="sd">        &gt;&gt;&gt; era5_with_gwa = processor.datahandler.from_store(&#39;cells&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;ERA5 cells with GWA data: {len(era5_with_gwa)}&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Columns: {list(era5_with_gwa.columns)}&quot;)</span>
+<span class="sd">            </span>
+<span class="sd">        Processing Workflow</span>
+<span class="sd">        -------------------</span>
+<span class="sd">        1. **Data Loading**: Load ERA5 grid cells from HDF5 store</span>
+<span class="sd">        2. **GWA Loading**: Load high-resolution GWA cells as GeoDataFrame</span>
+<span class="sd">        3. **Spatial Overlay**: Perform intersection between GWA and ERA5 cells</span>
+<span class="sd">        4. **Coordinate Mapping**: Update coordinates to ERA5 cell centers</span>
+<span class="sd">        5. **Aggregation**: Compute mean values for numeric attributes by ERA5 cell</span>
+<span class="sd">        6. **Storage**: Store aggregated results in HDF5 store with forced update</span>
+<span class="sd">        </span>
+<span class="sd">        Spatial Operations</span>
+<span class="sd">        ------------------</span>
+<span class="sd">        - **Overlay Method**: Intersection overlay to find spatial relationships</span>
+<span class="sd">        - **Aggregation Function**: Mean aggregation for all numeric attributes</span>
+<span class="sd">        - **Coordinate Assignment**: ERA5 cell coordinates replace GWA coordinates</span>
+<span class="sd">        - **Regional Processing**: Separate processing by geographic regions</span>
+<span class="sd">        - **Memory Management**: Regional processing reduces peak memory usage</span>
+<span class="sd">        </span>
+<span class="sd">        Performance Considerations</span>
+<span class="sd">        --------------------------</span>
+<span class="sd">        - Processing time scales with number of GWA cells and ERA5 cells</span>
+<span class="sd">        - Memory usage peaks during spatial overlay operations</span>
+<span class="sd">        - Regional processing improves memory efficiency for large datasets</span>
+<span class="sd">        - Storage operations may take time for large aggregated datasets</span>
+<span class="sd">        - Spatial indexing improves performance for repeated operations</span>
+<span class="sd">            </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        FileNotFoundError</span>
+<span class="sd">            If ERA5 grid cells are not found in the HDF5 store</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If spatial overlay operations fail due to geometry issues</span>
+<span class="sd">        MemoryError</span>
+<span class="sd">            If dataset is too large for available memory (use memory limitation)</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If HDF5 storage operations fail</span>
+<span class="sd">            </span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        - Aggregation preserves all numeric wind resource attributes</span>
+<span class="sd">        - Categorical attributes (like IEC class) may require special handling</span>
+<span class="sd">        - Results overwrite existing data in the HDF5 store (force_update=True)</span>
+<span class="sd">        - Processing is optimized for typical renewable energy analysis workflows</span>
+<span class="sd">        - Spatial accuracy depends on the quality of ERA5 and GWA geometries</span>
+<span class="sd">        - Large regions may require substantial processing time and memory</span>
+<span class="sd">        - Results integrate seamlessly with ERA5-based capacity calculations</span>
+<span class="sd">        </span>
+<span class="sd">        Data Quality</span>
+<span class="sd">        ------------</span>
+<span class="sd">        - Mean aggregation is appropriate for continuous wind variables</span>
+<span class="sd">        - Statistical significance increases with more GWA cells per ERA5 cell</span>
+<span class="sd">        - Spatial representation accuracy depends on resolution differences</span>
+<span class="sd">        - Edge effects may occur at regional boundaries</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        
+        <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
         <span class="c1"># Load the grid cells and GWA cells as GeoDataFrames</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">store_grid_cells</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;cells&#39;</span><span class="p">)</span>
         
@@ -441,9 +1027,11 @@ document.write(`
         <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># List to store results for each region</span>
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Calculating aggregated values for ERA5 Cell&#39;s...&quot;</span><span class="p">)</span>
         
-        <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">_era5_cells_</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
-            <span class="n">_era5_cells_region</span> <span class="o">=</span> <span class="n">_era5_cells_</span><span class="p">[</span><span class="n">_era5_cells_</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">region</span><span class="p">]</span>
-            
+        
+        <span class="n">column_name</span><span class="o">=</span><span class="n">aggregation_level</span>
+        <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">_era5_cells_</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
+            <span class="n">_era5_cells_region</span> <span class="o">=</span> <span class="n">_era5_cells_</span><span class="p">[</span><span class="n">_era5_cells_</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span> <span class="o">==</span> <span class="n">region</span><span class="p">]</span>
+
             <span class="c1"># Perform overlay operation</span>
             <span class="n">_data_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gwa_cells_gdf</span><span class="o">.</span><span class="n">overlay</span><span class="p">(</span><span class="n">_era5_cells_region</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;intersection&#39;</span><span class="p">,</span> <span class="n">keep_geom_type</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             
@@ -464,9 +1052,9 @@ document.write(`
         <span class="c1"># Concatenate all results into a single GeoDataFrame</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mapped_gwa_cells_aggr_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     
-            
+
         <span class="c1"># Store the aggregated data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mapped_gwa_cells_aggr_df</span><span class="p">,</span> <span class="s1">&#39;cells&#39;</span><span class="p">,</span><span class="n">force_update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  </div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mapped_gwa_cells_aggr_df</span><span class="p">,</span> <span class="s1">&#39;cells&#39;</span><span class="p">)</span>  </div>
 </div>
 
 </pre></div>

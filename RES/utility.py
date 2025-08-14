@@ -111,7 +111,7 @@ def assign_cell_id(cells: gpd.GeoDataFrame,
 
     Parameters:
     cells (gpd.GeoDataFrame): Input GeoDataFrame containing spatial data with 'x' and 'y' coordinates.
-    source_column (str): Column name in the GeoDataFrame that contains regional names.
+    source_column (str): Sub-national unit named column to be used for generating unique IDs (e.g. Region, Municipality). To be configured in the config file under 'GADM' key
     index_name (str): Name for the new index column to be created.
 
     Returns:
@@ -143,6 +143,13 @@ def assign_cell_id(cells: gpd.GeoDataFrame,
     cells = cells[~cells.index.duplicated(keep='first')]
 
     return cells
+
+def get_available_column(dataframe:list, alternatives:list):
+    """Return the first column name that exists in the dataframe"""
+    for col in alternatives:
+        if col in dataframe.columns:
+            return col
+    return None
 
 def ensure_path(save_to: str | Path) -> Path:
     """

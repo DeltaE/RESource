@@ -251,16 +251,6 @@ CODERS:
     # the following mapping directs where to dump the datafile (.csvs)
     substations: network
     transmission_lines: network
-    # >>>> Not required (at this dev. stage)
-    # generation_generic: supply
-    # hydro_existing: supply
-    # generators: supply
-    # hydro_cascade: supply
-    # forecasted_peak_demand: demand
-    # forecasted_annual_demand: demand
-    # end_use_demand: demand
-    # transmission_generic : network
-    # --------------------------------------------------------------
 
 custom_land_layers:
   rasters:
@@ -285,24 +275,43 @@ GAEZ:
   raster_types:
   # list of dictionaries
 
+
+  # GAEZ v4 ‘exclusion’ layer of protected areas and land with high biodiversity values 
   - name: 'exclusion_areas'
     raster: "exclusion_2017.tif" # Exclusion areas defined by Int'l orgs ; 7 classes;
     zip_extract_direct: 'LR/excl'
     color_map: 'OrRd'
     stepwise_plot_title: "Excluding Global Exclusion Areas"
     class_exclusion:
+      # 1 : no exclusion
+      # 2 : IUCN category in WDPA
+      # 3 : WDPA, not an IUCN category
+      # 4 : KBA, outside protected areas
+      # 5 : GLWD-3 class 4-9, outside protected area and KBA polygons
+      # 6 : buffers around protected areas (30 arc sec buffer)
+      # 7 : water
       solar: [ 2, 3, 4, 5, 6, 7 ]
       wind: [ 2, 3, 4, 5, 6, 7 ]
       buffer:
         solar: 500 #m
         wind: 500 #m
 
+  # GAEZ v4 Median slope class compiled from 3 arc-second SRTM data 
   - name: 'terrain_resources'
     raster: "slpmed05.tif" # Median terrain slope classes; 8 classes ; (5 arc-minute)
     zip_extract_direct: 'LR/ter'
     color_map: 'terrain'
     stepwise_plot_title: "Excluding Terrain Slope"
     class_exclusion:
+      # 1 : flat (slope angle 0-0.5%)
+      # 2 : flat (slope angle 0.5-2%)
+      # 3 : low slope (slope angle 2-5%)
+      # 4 : low slope (slope angle 5-8%)
+      # 5 : moderate slope (slope angle 8-16%)
+      # 6 : moderate slope (slope angle 16-30%)
+      # 7 : high slope (slope angle 30-45%)
+      # 8 : high slope (slope angle >45%)
+      # 9 : Water
       solar: [ 9 ]
       wind: [ 7, 8, 9 ]
       buffer:
@@ -315,6 +324,17 @@ GAEZ:
     color_map: 'YlGn'
     stepwise_plot_title: "Excluding not-Suitable Landcovers"
     class_inclusion:
+      # 1 : artificial surfaces
+      # 2 : cropland
+      # 3 : grassland
+      # 4 : forest/ tree covered areas
+      # 5 : shrubs covered areas
+      # 6 : herbaceous vegetation,aquatic or regularly flooded areas
+      # 7 : mangroves        
+      # 8 : sparse vegetation
+      # 9 : bare soil
+      # 10: snow and glaciers
+      # 11: water bodies
       solar: [ 2, 3, 5, 8, 9 ]
       wind: [ 2, 3, 5, 8, 9 ]
 WorldPop:

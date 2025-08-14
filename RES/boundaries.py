@@ -156,6 +156,7 @@ class GADMBoundaries(AttributesParser):
         
         self.gadm_processed = Path(self.gadm_config['processed'])
         self.gadm_processed.mkdir(parents=True, exist_ok=True) # Creates parent directories if not exists.
+        
         self.boundary_datafields = self.gadm_config.get('datafield_mapping')
 
         self.crs=super().get_default_crs()  # INHERITED METHOD from AttributesParser

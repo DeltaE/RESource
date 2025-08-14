@@ -199,7 +199,7 @@ class RESources_builder(AttributesParser):
         self.units=Units(**self.required_args)
         self.gridcells=GridCells(**self.required_args)
         self.timeseries=Timeseries(**self.required_args)
-        self.gadmBoundary=GADMBoundaries(**self.required_args)
+        self.gadmBoundary=GADMBoundaries(**self.required_args)        
         self.datahandler=DataHandler(self.store)
         self.cell_processor=CellCapacityProcessor(**self.required_args)
         if self.country_name == 'Canada':
@@ -350,6 +350,8 @@ class RESources_builder(AttributesParser):
                            message=f"{__name__}| Global Solar Atlas data not yet supported for solar.")
             pass
         
+        self.datahandler.refresh()
+        self.store_grid_cells=self.datahandler.from_store('cells')
         return self.store_grid_cells 
     
     def get_CF_timeseries(self,
@@ -398,6 +400,7 @@ class RESources_builder(AttributesParser):
         
         # Initialize cells data
         if cells is None:
+            self.datahandler.refresh()
             self.store_grid_cells=self.datahandler.from_store('cells')
         else:
             self.store_grid_cells = cells.copy()
@@ -478,8 +481,6 @@ class RESources_builder(AttributesParser):
                 )
                 
                 self.store_grid_cells[["nearest_connection_point", "nearest_distance"]] = connection_results
-                
-                # self.store_grid_cells.drop(columns=["nearest_connection_point","centroid"], inplace=True) #temp
                 
                 utils.print_update(level=PRINT_LEVEL_BASE+3,
                                 message=f"{__name__}| ✔ Connection point analysis completed.")
@@ -567,6 +568,7 @@ class RESources_builder(AttributesParser):
         self.resource_disaggregation_config=self.get_resource_disaggregation_config()
         self.wcss_tolerance=wcss_tolerance
         self.scored_cells=scored_cells
+        self.gadm_config=self.get_gadm_config()
         
         # self.wcss_tolerance:float= self.resource_disaggregation_config['WCSS_tolerance']
         utils.print_update(level=PRINT_LEVEL_BASE+1,
@@ -587,13 +589,14 @@ class RESources_builder(AttributesParser):
         self.ERA5_cells_cluster_map, self.region_optimal_k_df = cluster.cells_to_cluster_mapping(self.scored_cells, 
                                                                                                  self.vis_dir, 
                                                                                                  self.wcss_tolerance,
+                                                                                                 self.sub_national_unit_tag,
                                                                                                  self.resource_type,
-                                                                                                #  [f'LCOE_{self.resource_type}', f'potential_capacity_{self.resource_type}']
                                                                                                  [f'lcoe_{self.resource_type}', f'potential_capacity_{self.resource_type}']
                                                                                                  )
         
         self.cell_cluster_gdf, self.dissolved_indices = cluster.create_cells_Union_in_clusters(self.ERA5_cells_cluster_map, 
                                                                                                self.region_optimal_k_df,
+                                                                                               self.sub_national_unit_tag,
                                                                                                self.resource_type)
         
         self.cell_cluster_gdf['Operational_life'] = self.resource_disaggregation_config.get('Operational_life', 20)
@@ -605,7 +608,7 @@ class RESources_builder(AttributesParser):
         # Corrected version of the code
         self.datahandler.to_store(self.cell_cluster_gdf,f'clusters/{self.resource_type}',force_update=True)
         self.dissolved_cell_indices_df=pd.DataFrame(self.dissolved_indices).T
-        self.dissolved_cell_indices_df.index.name='Region'
+        self.dissolved_cell_indices_df.index.name=self.sub_national_unit_tag
         self.datahandler.to_store(self.dissolved_cell_indices_df,f'dissolved_indices/{self.resource_type}',force_update=True)
         
         return self.clusters_nt
@@ -632,7 +635,7 @@ class RESources_builder(AttributesParser):
         self.cells_timeseries=cells_timeseries
         self.cell_cluster_gdf=clusters
         self.dissolved_cell_indices_df=dissolved_indices
-        
+
 
         if self.cells_timeseries is None:
             self.cells_timeseries=self.datahandler.from_store(F'timeseries/{self.resource_type}')
@@ -646,7 +649,8 @@ class RESources_builder(AttributesParser):
 
         self.cluster_ts_df=self.timeseries.get_cluster_timeseries(self.cell_cluster_gdf,
                                                                 self.cells_timeseries,
-                                                                self.dissolved_cell_indices_df)
+                                                                self.dissolved_cell_indices_df,
+                                                                self.sub_national_unit_tag)
         return self.cluster_ts_df
 
     # _________________________________________________________________________________

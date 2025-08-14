@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="Python" data-content_root="../" >
+<html lang="Python" data-content_root="../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
@@ -13,8 +13,8 @@
   
   
   <script data-cfasync="false">
-    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
@@ -44,14 +44,14 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'notes/setup_guide';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Documentation Build Guide" href="documentation_guide.html" />
-    <link rel="prev" title="RESource" href="../index.html" />
+    <link rel="next" title="Case study: VRE site selection in British Columbia" href="case_BC.html" />
+    <link rel="prev" title="RESource Builder Module" href="resource_builder.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="Python"/>
   </head>
   
   
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
 
   
   
@@ -120,52 +120,20 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-
-  
-    
-  
-
-<a class="navbar-brand logo" href="../index.html">
-  
-  
-  
-  
-  
-    
-    
-      
-    
-    
-    <img src="../_static/RESource_logo_2025.07.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
-    <script>document.write(`<img src="../_static/RESource_logo_2025.07.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
-  
-  
-</a></div>
-        <div class="sidebar-primary-item">
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">RESource Project - Complete Setup &amp; Development Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">RES API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">Best Practices and Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">RES API References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/Store_explorer.html">Explore data store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
@@ -335,13 +303,13 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-new-users">🎯 Quick Start (New Users)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-new-users">🎯 Quick Start (New Users)</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clone-and-navigate">1. Clone and Navigate</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-one-command">2. Environment Setup (One Command)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-management">🛠️ Environment Management</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-management">🛠️ Environment Management</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-make-commands">Available Make Commands</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-management">Environment Setup &amp; Management</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#running-code">Running Code</a></li>
@@ -351,47 +319,47 @@ document.write(`
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-specific-setup">🐧 Platform-Specific Setup</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-specific-setup">🐧 Platform-Specific Setup</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#windows-users-wsl2-required">Windows Users (WSL2 Required)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linux-macos-users">Linux/macOS Users</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-details">📦 Environment Details</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-details">📦 Environment Details</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-dependencies">Core Dependencies</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#daily-development-workflow">🚀 Daily Development Workflow</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#daily-development-workflow">🚀 Daily Development Workflow</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#activate-environment">1. Activate Environment</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-resource">2. Run RESource</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-development">3. Documentation Development</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">🔧 Troubleshooting</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">🔧 Troubleshooting</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-issues">Environment Issues</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-environment-health">Check Environment Health</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#export-current-environment">Export Current Environment</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wsl2-specific-issues">WSL2 Specific Issues</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-checklist">📋 Development Checklist</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-checklist">📋 Development Checklist</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#new-developer-setup">New Developer Setup</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-committing-code">Before Committing Code</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-deployment">Before Deployment</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-deployment">🌐 Documentation Deployment</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-deployment">🌐 Documentation Deployment</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-development">Local Development</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#github-pages-deployment">GitHub Pages Deployment</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-structure">Documentation Structure</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tips-best-practices">💡 Tips &amp; Best Practices</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tips-best-practices">💡 Tips &amp; Best Practices</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Environment Management</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development">Development</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collaboration">Collaboration</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-help">🆘 Getting Help</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-help">🆘 Getting Help</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-status">Check Status</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-issues">Common Issues</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
@@ -798,20 +766,20 @@ make<span class="w"> </span><span class="nb">help</span><span class="w">        
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../index.html"
+       href="resource_builder.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">RESource</p>
+        <p class="prev-next-title">RESource Builder Module</p>
       </div>
     </a>
     <a class="right-next"
-       href="documentation_guide.html"
+       href="case_BC.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Documentation Build Guide</p>
+        <p class="prev-next-title">Case study: VRE site selection in British Columbia</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -831,13 +799,13 @@ make<span class="w"> </span><span class="nb">help</span><span class="w">        
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-new-users">🎯 Quick Start (New Users)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-new-users">🎯 Quick Start (New Users)</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clone-and-navigate">1. Clone and Navigate</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-one-command">2. Environment Setup (One Command)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-management">🛠️ Environment Management</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-management">🛠️ Environment Management</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-make-commands">Available Make Commands</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-management">Environment Setup &amp; Management</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#running-code">Running Code</a></li>
@@ -847,47 +815,47 @@ make<span class="w"> </span><span class="nb">help</span><span class="w">        
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-specific-setup">🐧 Platform-Specific Setup</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-specific-setup">🐧 Platform-Specific Setup</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#windows-users-wsl2-required">Windows Users (WSL2 Required)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linux-macos-users">Linux/macOS Users</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-details">📦 Environment Details</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-details">📦 Environment Details</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-dependencies">Core Dependencies</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#daily-development-workflow">🚀 Daily Development Workflow</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#daily-development-workflow">🚀 Daily Development Workflow</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#activate-environment">1. Activate Environment</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-resource">2. Run RESource</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-development">3. Documentation Development</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">🔧 Troubleshooting</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">🔧 Troubleshooting</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-issues">Environment Issues</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-environment-health">Check Environment Health</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#export-current-environment">Export Current Environment</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wsl2-specific-issues">WSL2 Specific Issues</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-checklist">📋 Development Checklist</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-checklist">📋 Development Checklist</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#new-developer-setup">New Developer Setup</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-committing-code">Before Committing Code</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-deployment">Before Deployment</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-deployment">🌐 Documentation Deployment</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-deployment">🌐 Documentation Deployment</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-development">Local Development</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#github-pages-deployment">GitHub Pages Deployment</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-structure">Documentation Structure</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tips-best-practices">💡 Tips &amp; Best Practices</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tips-best-practices">💡 Tips &amp; Best Practices</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Environment Management</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development">Development</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collaboration">Collaboration</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-help">🆘 Getting Help</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-help">🆘 Getting Help</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-status">Check Status</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-issues">Common Issues</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>

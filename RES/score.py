@@ -182,6 +182,7 @@ class CellScorer(AttributesParser):
     
     def calculate_score(self,
                         row:pd.Series,
+                        node_distance_col:str,
                         CF_column:str,
                         CRF:float) -> float:
         """
@@ -225,22 +226,10 @@ class CellScorer(AttributesParser):
             - Converts from M$/MWh to $/MWh for standard reporting units
             - Incorporates site-specific capacity factors and grid integration costs
         """
-        required_columns = [
-            'nearest_station_distance_km',
-            f'grid_connection_cost_per_km_{self.resource_type}',
-            f'tx_line_rebuild_cost_{self.resource_type}',
-            f'capex_{self.resource_type}',
-            f'potential_capacity_{self.resource_type}',
-            f'fom_{self.resource_type}',
-            f'vom_{self.resource_type}',
-            CF_column
-        ]
-        for col in required_columns:
-            assert col in row, utils.print_update(level=2,message=f"Missing required column: {col}",alert=True)
-        
+
         # Calculate the total cost
         total_cost = self.calculate_total_cost(
-            row['nearest_station_distance_km'],  # km
+            row[node_distance_col],  # km
             row[f'grid_connection_cost_per_km_{self.resource_type}'],  # m$/km
             row[f'tx_line_rebuild_cost_{self.resource_type}'],  # m$/km
             row[f'capex_{self.resource_type}'],
@@ -322,8 +311,12 @@ class CellScorer(AttributesParser):
             - LCOE values are in $/MWh for standard industry comparison
         """
         dataframe = cells.copy()  # Use the input DataFrame for calculations
+
+        
+        node_distance_col = utils.get_available_column(dataframe, ['nearest_station_distance_km', 'nearest_distance'])
+        
         required_columns = [
-            'nearest_station_distance_km',
+            node_distance_col,
             f'grid_connection_cost_per_km_{self.resource_type}',
             f'tx_line_rebuild_cost_{self.resource_type}',
             f'capex_{self.resource_type}',
@@ -331,8 +324,10 @@ class CellScorer(AttributesParser):
             f'Operational_life_{self.resource_type}',
             CF_column
         ]
-        for col in required_columns:
-            assert col in dataframe.columns, utils.print_update(level=2,message=f"Missing required column: {col}",alert=True)
+        # Check that all required columns were found
+        missing_columns = [col for col in required_columns if col is None or col not in dataframe.columns]
+        if missing_columns:
+            raise AssertionError("Missing required columns or alternatives not found")
         
         utils.print_update(level=PRINT_LEVEL_BASE+2,
                        message=f"{__name__}| Calculating score for cells...") 
@@ -343,7 +338,7 @@ class CellScorer(AttributesParser):
         
         # Calculate LCOE using the dedicated calculate_score method
         dataframe[f'lcoe_{self.resource_type}'] = dataframe.apply(
-            lambda row: self.calculate_score(row, CF_column, CRF), 
+            lambda row: self.calculate_score(row, node_distance_col,CF_column, CRF), 
             axis=1
         )
         
@@ -355,7 +350,8 @@ class CellScorer(AttributesParser):
                message=f"{__name__}|✓ Scores calculated and sorted for {self.resource_type} resources in {len(scored_dataframe)} cells. ") 
         return scored_dataframe
 
- 
+
+
     # def calc_LCOE_lambda_m1(self,
     #                      row):
         
