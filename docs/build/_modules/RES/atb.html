@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="Python" data-content_root="../../" >
+<html lang="Python" data-content_root="../../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
@@ -12,8 +12,8 @@
   
   
   <script data-cfasync="false">
-    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
@@ -48,7 +48,7 @@
   </head>
   
   
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
 
   
   
@@ -119,50 +119,20 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-
-  
-    
-  
-
-<a class="navbar-brand logo" href="../../index.html">
-  
-  
-  
-  
-  
-    
-    
-      
-    
-    
-    <img src="../../_static/RESource_logo_2025.07.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
-    <script>document.write(`<img src="../../_static/RESource_logo_2025.07.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
-  
-  
-</a></div>
-        <div class="sidebar-primary-item">
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/case.html">Canadian Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">Best Practices and Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES API References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Store_explorer.html">Explore data store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
@@ -342,7 +312,7 @@ document.write(`
     
     <span class="c1"># Input parameters</span>
     <span class="n">config_file_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;config/config.yaml&#39;</span><span class="p">))</span>
-    <span class="n">region_short_code</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;BC&#39;</span><span class="p">)</span>
+    <span class="n">region_short_code</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">)</span>
     <span class="n">resource_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">)</span>
     
 <div class="viewcode-block" id="NREL_ATBProcessor.__post_init__">
@@ -367,7 +337,6 @@ document.write(`
 <span class="sd">        - atb_file_path: Full path to the ATB data file.</span>
 <span class="sd">        - datahandler: Instance of `DataHandler` initialized with the provided store.</span>
 <span class="sd">        </span>
-<span class="sd">        NODOC</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;NREL_ATBProcessor initiated...&#39;</span><span class="p">)</span>
         
@@ -426,11 +395,12 @@ document.write(`
         <span class="sa">f</span><span class="s2">&quot;ATB cost datafile: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">atb_file_path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> loaded&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">utility_pv_cost</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__process_solar_cost</span><span class="p">(</span><span class="n">atb_cost</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">land_based_wind_cost</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__process_wind_cost</span><span class="p">(</span><span class="n">atb_cost</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bess_cost</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__process_bess_cost</span><span class="p">(</span><span class="n">atb_cost</span><span class="p">)</span>
+        <span class="c1"># self.bess_cost=self.__process_bess_cost(atb_cost)</span>
         
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">utility_pv_cost</span><span class="p">,</span> 
                 <span class="bp">self</span><span class="o">.</span><span class="n">land_based_wind_cost</span><span class="p">,</span> 
-                <span class="bp">self</span><span class="o">.</span><span class="n">bess_cost</span><span class="p">)</span></div>
+                <span class="c1">#self.bess_cost</span>
+                <span class="p">)</span></div>
 
 
     <span class="k">def</span> <span class="nf">__check_and_download_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

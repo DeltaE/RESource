@@ -24,7 +24,7 @@ Key Features
 
 Functions
 ---------
-assign_cluster_id(cells, source_column='Region', index_name='cell')
+assign_cluster_id(cells, source_column=sub_national_unit_tag, index_name='cell')
     Generate unique identifiers for grid cells based on region and coordinates
     
 find_optimal_K(resource_type, data_for_clustering, region, wcss_tolerance, max_k)
@@ -103,7 +103,7 @@ The clustering functions expect GeoDataFrames with specific columns:
 
 Required Columns:
 - 'x', 'y': Grid cell centroid coordinates
-- 'Region': Administrative region classification
+- sub_national_unit_tag: Administrative region classification
 - 'lcoe_{resource_type}': Levelized cost of electricity
 - 'potential_capacity_{resource_type}': Maximum potential capacity
 - 'geometry': Spatial geometry (Polygon or Point)
@@ -196,7 +196,7 @@ import RES.utility as utils
 imputer = SimpleImputer(strategy="mean")  # Other strategies: "median",         "most_frequent"
 
 def assign_cluster_id(cells: gpd.GeoDataFrame, 
-                  source_column: str = 'Region', 
+                  source_column: str = None, 
                   index_name: str = 'cell') -> gpd.GeoDataFrame:
     """
     Generate unique identifiers for grid cells based on region and coordinates.
@@ -211,7 +211,7 @@ def assign_cluster_id(cells: gpd.GeoDataFrame,
     cells : gpd.GeoDataFrame
         Input GeoDataFrame containing spatial data with 'x', 'y' coordinates
         and regional classification information
-    source_column : str, default 'Region'
+    source_column : str, default None
         Column name containing regional classification (e.g., province, state)
     index_name : str, default 'cell'
         Name for the new unique identifier column
@@ -252,6 +252,9 @@ def assign_cluster_id(cells: gpd.GeoDataFrame,
     - Sets generated IDs as DataFrame index for efficient lookups
     - Essential for linking spatial analysis results across workflow steps
     """
+    
+    if source_column is None:
+        raise ValueError(f"'{source_column}' not defined for indexing. Please provide a valid source column name.")
     # Ensure the source column exists
     if source_column not in cells.columns:
         raise ValueError(f"'{source_column}' does not exist in the GeoDataFrame.")
@@ -417,6 +420,7 @@ def pre_process_cluster_mapping(
         cells_scored:pd.DataFrame,
         vis_directory:str,
         wcss_tolerance:float,
+        sub_national_unit_tag:str,
         resource_type:str)->tuple[pd.DataFrame, pd.DataFrame]:
     
     """
@@ -527,7 +531,7 @@ def pre_process_cluster_mapping(
     cells_to_cluster_mapping : Main clustering workflow function
     """
 
-    unique_regions = cells_scored['Region'].unique()
+    unique_regions = cells_scored[sub_national_unit_tag].unique()
     try:
         elbow_plot_directory = Path(vis_directory, 'Regional_cluster_Elbow_Plots')
         elbow_plot_directory.mkdir(parents=True, exist_ok=True)
@@ -548,7 +552,7 @@ def pre_process_cluster_mapping(
             print(f"Missing columns for clustering in region {region}. Skipping.")
             continue
 
-        data_for_clustering = cells_scored[cells_scored['Region'] == region][expected_cols]
+        data_for_clustering = cells_scored[cells_scored[sub_national_unit_tag] == region][expected_cols]
         
         # Replace inf/-inf with NaN so they can be imputed
         data_for_clustering.replace([np.inf, -np.inf], np.nan, inplace=True)
@@ -576,7 +580,7 @@ def pre_process_cluster_mapping(
         optimal_k = find_optimal_K(resource_type,data_for_clustering_cleaned, region, wcss_tolerance, max_k=15)
         
         # Append values to the list
-        region_optimal_k_list.append({'Region': region, 'Optimal_k': optimal_k})
+        region_optimal_k_list.append({sub_national_unit_tag: region, 'Optimal_k': optimal_k})
 
         # Save the elbow plot
         plot_name = f'elbow_plot_region_{region}.png'
@@ -594,8 +598,8 @@ def pre_process_cluster_mapping(
     NonZeroClustersmask=region_optimal_k_df['Optimal_k']!=0
     region_optimal_k_df=region_optimal_k_df[NonZeroClustersmask]
 
-    _x = cells_scored.merge(region_optimal_k_df, on='Region', how='left')
-    cells_scored = assign_cluster_id(_x,'Region', 'cell')#.set_index('cell')
+    _x = cells_scored.merge(region_optimal_k_df, on=sub_national_unit_tag, how='left')
+    cells_scored = assign_cluster_id(_x,sub_national_unit_tag, 'cell')#.set_index('cell')
     
 
     print(f"Optimal-k based on 'LCOE' clustering calculated for {len(unique_regions)} zones and saved to cell dataframe.\n")
@@ -607,6 +611,7 @@ def cells_to_cluster_mapping(
         cells_scored:pd.DataFrame,
         vis_directory:str,
         wcss_tolerance:float,
+        sub_national_unit_tag:str,
         resource_type:str,
         sort_columns:list)-> tuple[pd.DataFrame,pd.DataFrame]:
     """
@@ -708,7 +713,7 @@ def cells_to_cluster_mapping(
     - 'cell': Unique cell identifier (as index)
     
     optimal_k_df contains:
-    - 'Region': Administrative region name
+    - sub_national_unit_tag : Administrative region unit (e.g. Region or Municipality etc.)
     - 'Optimal_k': Optimal number of clusters determined for region
     
     Performance Considerations
@@ -748,18 +753,18 @@ def cells_to_cluster_mapping(
     create_cells_Union_in_clusters : Spatial union of clustered cells
     find_optimal_K : Core optimal cluster number determination
     """
-    dataframe,optimal_k_df=pre_process_cluster_mapping(cells_scored,vis_directory,wcss_tolerance,resource_type)
+    dataframe,optimal_k_df=pre_process_cluster_mapping(cells_scored,vis_directory,wcss_tolerance,sub_national_unit_tag,resource_type)
 
     utils.print_update(level=2,message="Mapping the Optimal Number of Clusters for Each region ...")
 
     clusters = []
-    dataframe_filtered=dataframe[dataframe['Region'].isin(list(optimal_k_df['Region']))]
+    dataframe_filtered=dataframe[dataframe[sub_national_unit_tag].isin(list(optimal_k_df[sub_national_unit_tag]))]
     
-    for region, group in dataframe_filtered.groupby('Region'):
+    for region, group in dataframe_filtered.groupby(sub_national_unit_tag):
         group = group.sort_values(by=sort_columns, ascending=True)
         region_rows = len(group)
         
-        optimal_k = optimal_k_df[optimal_k_df['Region'] == region]['Optimal_k'].iloc[0]
+        optimal_k = optimal_k_df[optimal_k_df[sub_national_unit_tag] == region]['Optimal_k'].iloc[0]
         region_step_size = region_rows // optimal_k
         
         clusters.extend([group.iloc[i:i+region_step_size].copy() for i in range(0, region_rows, region_step_size)])
@@ -778,6 +783,7 @@ def cells_to_cluster_mapping(
 def create_cells_Union_in_clusters(
         cluster_map_gdf:gpd.GeoDataFrame, 
         region_optimal_k_df:pd.DataFrame,
+        sub_national_unit_tag:str,
         resource_type:str
             )->tuple[pd.DataFrame,dict]:
 
@@ -797,10 +803,10 @@ def create_cells_Union_in_clusters(
     ----------
     cluster_map_gdf : gpd.GeoDataFrame
         Grid cells with cluster assignments from cells_to_cluster_mapping
-        Must contain 'Region', 'Cluster_No', and geometric attributes
+        Must contain defined sub_national_unit_tag, 'Cluster_No', and geometric attributes
     region_optimal_k_df : pd.DataFrame
         Summary of optimal cluster numbers by region
-        Contains 'Region' and 'Optimal_k' columns
+        Contains defined sub_national_unit_tag and 'Optimal_k' columns
     resource_type : str
         Resource type identifier ('solar', 'wind', 'bess')
         Used for column naming and aggregation rules
@@ -853,7 +859,7 @@ def create_cells_Union_in_clusters(
     ----------------
     dissolved_gdf contains unified clusters with:
     - 'cluster_id': Unique cluster identifier (as index)
-    - 'Region': Administrative region name
+    -  sub_national_unit_tag: Administrative region unit (e.g., Region or Municipality)
     - 'Cluster_No': Sequential cluster number within region
     - 'Rank': Cluster ranking based on LCOE (ascending)
     - Economic attributes: Aggregated costs and performance metrics
@@ -927,7 +933,9 @@ def create_cells_Union_in_clusters(
     gpd.GeoDataFrame.dissolve : Core spatial dissolve operation
     """
     utils.print_update(level=1,message=" Preparing Clusters...")
-    
+    node_distance_col = utils.get_available_column(cluster_map_gdf, ['nearest_station_distance_km', 'nearest_distance'])
+    grid_node_col = utils.get_available_column(cluster_map_gdf, ['nearest_station', 'nearest_connection_point'])
+        
     # Initialize an aggregation dictionary
     agg_dict = {#f'LCOE_{resource_type}': lambda x: x.iloc[len(x) // 2], 
                 f'lcoe_{resource_type}': lambda x: x.iloc[len(x) // 2], 
@@ -937,9 +945,9 @@ def create_cells_Union_in_clusters(
                 f'{resource_type}_CF_mean':'mean',
                 'Cluster_No':'first',
                 f'potential_capacity_{resource_type}': 'sum',
-                'Region': 'first',
-                'nearest_station':'first',
-                'nearest_station_distance_km':'first'}
+                sub_national_unit_tag: 'first',
+                grid_node_col:'first',
+                node_distance_col:'first'}
 
     # Initialize an empty list to store the dissolved results
     dissolved_gdf_list = []
@@ -948,10 +956,10 @@ def create_cells_Union_in_clusters(
     dissolved_indices = {}
     i=0
     # Loop through each region
-    for region in region_optimal_k_df['Region']:
+    for region in region_optimal_k_df[sub_national_unit_tag]:
         i+=1
-        log.info(f" Creating cluster for {region} {i}/{len(region_optimal_k_df['Region'])}")
-        region_mask = cluster_map_gdf['Region'] == region
+        log.info(f" Creating cluster for {region} {i}/{len(region_optimal_k_df[sub_national_unit_tag])}")
+        region_mask = cluster_map_gdf[sub_national_unit_tag] == region
         region_cells = cluster_map_gdf[region_mask]
 
         # Initialize dictionary for the current region
@@ -970,12 +978,8 @@ def create_cells_Union_in_clusters(
 
         # Concatenate all GeoDataFrames in the list
         dissolved_gdf = pd.concat(dissolved_gdf_list, ignore_index=True)
-        
-        # Keep only the specified columns
-        # columns_to_keep = ['Region','Region','Cluster_No', 'capex', 'potential_capacity','lcoe','nearest_station','nearest_station_distance_km','geometry' ]
-        # dissolved_gdf = dissolved_gdf[columns_to_keep]
 
-        dissolved_gdf=utils.assign_regional_cell_ids(dissolved_gdf,'Region','cluster_id')
+        dissolved_gdf=utils.assign_regional_cell_ids(dissolved_gdf,sub_national_unit_tag,'cluster_id')
 
         dissolved_gdf['Cluster_No'] = dissolved_gdf['Cluster_No'].astype(int)
         dissolved_gdf.sort_values(by=f'lcoe_{resource_type}', ascending=True, inplace=True)

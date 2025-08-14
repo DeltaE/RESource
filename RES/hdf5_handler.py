@@ -55,6 +55,7 @@ class DataHandler:
                 warnings.warn("⚠️  Store has not been set during initialization. Please define the store path during applying DataHandler methods")
             else:
                 self.store = Path(hdf_file_path)
+                self.geom_columns = ['geometry', 'nearest_connection_point','centroid']
                 if not silent_initiation:
                     utils.print_update(level=2,message=f"🗄️ Store initialized with the given path: {hdf_file_path}")
                 if show_structure:
@@ -82,6 +83,7 @@ class DataHandler:
             ValueError: If the key is empty.
             
         """
+        
         if hdf_file_path is not None:
             self.store = Path(hdf_file_path)
         
@@ -113,19 +115,15 @@ class DataHandler:
                 for column in self.data_new.columns:
                     if not data.empty and column not in self.data_ext.columns:
                         self.data_ext[column] = self.data_new[column]
-                        utils.print_update(level=4,message=f"{__name__}| 💾 Updated key :'{key}' with column: {column} ")
 
                 # Update the existing DataFrame in HDF5
                 self.updated_data = self.data_ext
-                if 'geometry' in self.updated_data.columns:
-                    if isinstance(self.updated_data['geometry'].iloc[0], BaseGeometry):
-                        self.updated_data['geometry'] = self.updated_data['geometry'].apply(dumps)
-                        utils.print_update(level=4,message=f"{__name__}| 💾 Updated key :'{key}' with column: 'geometry'")
-                
-                if 'nearest_connection_point' in self.updated_data.columns:
-                    if isinstance(self.updated_data['nearest_connection_point'].iloc[0], BaseGeometry):
-                        self.updated_data['nearest_connection_point'] = self.updated_data['nearest_connection_point'].apply(dumps)
-                        utils.print_update(level=4,message=f"{__name__}| 💾 Updated key :'{key}' with column: 'nearest_connection_point'")
+                for geom_col in self.geom_columns:
+                    if geom_col in self.updated_data.columns:
+                        if isinstance(self.updated_data[geom_col].iloc[0], BaseGeometry):
+                            self.updated_data[geom_col] = self.updated_data[geom_col].apply(dumps)
+                            utils.print_update(level=4,message=f"{__name__}| 💾 Updated key :'{key}' with column: '{geom_col}'")
+                    
 
                 self.updated_data.to_hdf(self.store, key=key)
                 utils.print_update(level=3,message=f"{__name__}| 💾 Updated '{key}' saved to {self.store} with key '{key}'")
@@ -156,9 +154,10 @@ class DataHandler:
             self.data = pd.read_hdf(self.store, key)
 
             # Rename 'geometry' back to 'geometry' and convert WKT to geometry if applicable
-            if 'geometry' in self.data.columns:
-                self.data['geometry'] = self.data['geometry'].apply(loads)
-                return gpd.GeoDataFrame(self.data, geometry='geometry', crs='EPSG:4326')
+            for geom_col in self.geom_columns:
+                if geom_col in self.data.columns:
+                    self.data[geom_col] = self.data[geom_col].apply(loads)
+                    return gpd.GeoDataFrame(self.data, geometry='geometry', crs='EPSG:4326')
 
             # If not geometry, return the regular DataFrame
             if key == 'timeseries':

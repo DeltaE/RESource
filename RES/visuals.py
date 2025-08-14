@@ -29,9 +29,11 @@ Dependencies:
 
 import os
 from pathlib import Path
+
 import folium
 import geopandas as gpd
 import matplotlib as mpl
+import matplotlib.cm as cm
 import matplotlib.colors as mcolors
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
@@ -42,18 +44,21 @@ import plotly.graph_objects as go
 import rasterio
 import seaborn as sns
 import xarray
+from atlite import ExclusionContainer
 from IPython.display import display
 from matplotlib import lines as mlines
+from matplotlib.colors import BoundaryNorm, ListedColormap
 from matplotlib.font_manager import FontProperties
 from matplotlib.gridspec import GridSpec
 from matplotlib.lines import Line2D
 from matplotlib.patches import RegularPolygon
 from matplotlib.ticker import FuncFormatter, MultipleLocator
-import matplotlib.cm as cm
 from plotly.subplots import make_subplots
-import RES.utility as utils
+from rasterio.warp import Resampling, calculate_default_transform, reproject
+
 import RES.lands as lands
-from atlite import ExclusionContainer
+import RES.utility as utils
+
 
 def size_for_legend(mw):
     """
@@ -1315,3 +1320,107 @@ def get_stepwise_availability_plots(excluder:ExclusionContainer,
         save_to.parent.mkdir(parents=True, exist_ok=True)
     plt.savefig(save_to, bbox_inches='tight', dpi=300)
     utils.print_update(level=3, message=f"Stepwise Availability Plots saved to {save_to}")
+
+
+def plot_gaez_raster_with_boundary(raster_path, legend_csv, gdf_path,
+                                   dst_crs="EPSG:4326", figsize=(12, 7),compass_length=0.1,
+                                   font_family='serif',
+                                   title=None,
+                                   plot_save_to=None):
+    """
+    Plot a GAEZ categorical raster with a shadowed boundary layer using colors from CSV.
+    """
+    plt.rcParams['font.family'] = font_family
+    # Load legend and exclude class 0
+    legend_df = pd.read_csv(legend_csv)
+    legend_df = legend_df[legend_df['class'] != 0]
+    class_map = dict(zip(legend_df['class'], legend_df['description']))
+    
+    # Create a ListedColormap from the CSV colors
+    cmap = ListedColormap(legend_df['color'].tolist())
+    
+    # Load and reproject GeoDataFrame
+    gdf = gpd.read_file(gdf_path)
+    gdf = gdf.to_crs(dst_crs)
+    
+    # Open and reproject raster
+    with rasterio.open(raster_path) as src:
+        transform, width, height = calculate_default_transform(
+            src.crs, dst_crs, src.width, src.height, *src.bounds
+        )
+        kwargs = src.meta.copy()
+        kwargs.update({
+            "crs": dst_crs,
+            "transform": transform,
+            "width": width,
+            "height": height
+        })
+
+        data_reproj = np.empty((height, width), dtype=src.dtypes[0])
+
+        reproject(
+            source=rasterio.band(src, 1),
+            destination=data_reproj,
+            src_transform=src.transform,
+            src_crs=src.crs,
+            dst_transform=transform,
+            dst_crs=dst_crs,
+            resampling=Resampling.nearest
+        )
+
+    # Mask NoData and class 0
+    nodata_val = kwargs.get("nodata", None)
+    data_masked = np.ma.masked_equal(data_reproj, nodata_val) if nodata_val is not None else np.ma.masked_invalid(data_reproj)
+    data_masked = np.ma.masked_equal(data_masked, 0)
+    
+    # Normalization
+    bounds = np.arange(0.5, len(class_map) + 1.5, 1)
+    norm = BoundaryNorm(bounds, cmap.N)
+    
+
+
+    fig, ax = plt.subplots(figsize=figsize)
+
+    
+    # Shadow layer (thicker light grey)
+    gdf.boundary.plot(ax=ax, edgecolor='grey', linewidth=1, zorder=0)
+    
+    extent = (
+        kwargs["transform"][2],
+        kwargs["transform"][2] + kwargs["transform"][0] * kwargs["width"],
+        kwargs["transform"][5] + kwargs["transform"][4] * kwargs["height"],
+        kwargs["transform"][5]
+    )
+    
+    # Plot raster
+    im = ax.imshow(data_masked, cmap=cmap, norm=norm, extent=extent)
+    
+    # Overlay actual boundaries (thin black line)
+    gdf.boundary.plot(ax=ax, edgecolor='k', linewidth=0.2)
+    
+
+    # Colorbar
+    cbar = plt.colorbar(im, ticks=range(1, len(class_map) + 1), shrink=0.5)
+    cbar.ax.set_yticklabels([f"{v}: {class_map.get(v, 'Unknown')}" for v in range(1, len(class_map) + 1)],
+                        fontsize=8.5)
+    
+    # Remove axes
+    ax.set_axis_off()
+    
+    # Title
+    if title is None:
+        ax.set_title(f"GAEZ Raster: {raster_path.split('/')[-1]}", fontsize=14, fontweight="bold", pad=15)
+    
+    else:
+        ax.set_title(title, fontsize=14, fontweight="bold", pad=15)
+    
+    # vis.add_compass_arrow(ax,length=compass_length)
+    plt.tight_layout()
+    
+    if plot_save_to is None:
+        utils.print_update(level=2,message="No path provided to save the plot. Displaying the plot instead.")
+    else:
+        plot_save_to=Path(plot_save_to)
+        plot_save_to.parent.mkdir(parents=True, exist_ok=True)
+        plt.savefig(plot_save_to,dpi=300)
+        utils.print_update(level=2,message=f"GAEZ Raster plot saved to {plot_save_to}")
