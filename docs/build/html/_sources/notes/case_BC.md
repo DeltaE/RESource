@@ -100,7 +100,7 @@ Despite this theoretical potential, regulatory and physical constraints signific
 
 Figure 9 presents two maps of BC, illustrating the theoretical capacity potential for solar and wind energy, where the map colors represent the score, with lighter shades indicating better economic feasibility and darker shades denoting expensive sites. The left map illustrates better feasible sites with lighter yellow areas in the southern and eastern interior regions suggesting higher potential and lower costs. The right map uses a green-to-blue gradient for wind site scoring, with lighter green areas along the coastal and northern regions indicating better economic viability. The distribution at the bottom of each map highlights the available potential across these score ranges. 
 
-<img src="../_static/Resources_combined_SCORE.png" alt="Final results for BC rescaled to ERA5 Resolution" width="800"/>
+<img src="../_static/Resources_combined_SCORE.png" alt="Final results for BC rescaled to ERA5 Resolution" width="1000"/>
 
 Building on the spatial insights from scores and potential capacity distributions, Figure 10 offers a complementary capacity-focused view that further clarifies how these site scores translate into aggregated development potential. Figure 10 shows a scatter plot illustrating the theoretical capacity potential, with bubble sizes representing clustered site’s capacity levels and colors reflecting solar and wind site scores. Lighter shades (orange for solar, blue for wind) indicate lower costs. The scoring, calculated to reflect the dollar investment per unit of energy yield (MWh), identifies clusters of larger bubbles as high-potential areas, with two boxed regions emphasizing concentrated zones of solar and wind capacity. Together, these outputs enable the identification of high-value locations where resource quality, land availability, and proximity to grid access align, supporting informed decision-making for VRE deployment.
 
@@ -110,7 +110,64 @@ Building on the spatial insights from scores and potential capacity distribution
 To translate spatial availability into investment prioritization, RESource ranks sites using a simplified levelized cost of energy (LCOE) metric that includes proximity to the transmission grid. We named this as score for the sites acknowledging that the market competitiveness and incentives are needed to be adjusted to reflect a competitive benchmark for the sites and that these are not directly translatable to the cost of energy from any given site. VRE sites owners and utilities might plug in their internal costs (Utility energy costs) to account project implementation and operation overheads. Such ranking is especially useful for planning under infrastructure or policy constraints.
 
 ### Ranking and prioritization
-XXXX
+RESource ranks and prioritizes renewable energy sites using the `score_cells()` [method](https://deltae.github.io/RESource/notes/resource_builder.html#step-6-scoring-metric-to-rank-the-sites), which calculates a Levelized Cost of Energy (LCOE) score for each grid cell. This score incorporates:
+
+- Technology capital expenditure (CAPEX)
+- Grid connection and transmission upgrade costs (sensitive to closest node distance)
+- Fixed and variable operational costs (OPEX)
+- Site-specific annual energy production (based on capacity factor)
+- Financial parameters (discount rate, project lifetime)
+
+**Scoring metric:**
+
+ __Score (simplified LCOE) = (Total Cost × CRF + OPEX) / Annual Energy Production__
+
+Where:
+- **Total Cost** = CAPEX + (distance to grid × grid connection cost per km × transmission rebuild cost)
+- **CRF** (Capital Recovery Factor) = [r × (1 + r)<sup>N</sup>] / [(1 + r)<sup>N</sup> - 1], with r = discount rate and N = project lifetime
+- **Annual Energy Production** = 8760 × Capacity Factor × Installed Capacity
+- **OPEX** = Fixed O&M + Variable O&M
+
+Cells with zero annual energy production receive a high penalty score and are deprioritized. The resulting Score values (in $/MWh) allow direct comparison and ranking of sites for investment prioritization, with lower Score indicating higher economic attractiveness.
+
+
+# Example Policy Impact on Sub-national Resource Potentials:
+| Scenario Name                        | Configuration File                  | Buffer Applied                | Buffer Distance(s) | Description                                                                 |
+|--------------------------------------|-------------------------------|-------------------------------|--------------------|------------------------------------------------------------------------------|
+| Baseline                            | config_BC_default.yaml         | None                          | N/A                | Baseline scenario; no additional buffer zones around protected areas or aeroways. |
+| Policy: Aeroway & CPCAD Buffers      | config_BC_policy_aeroway_CPCAD_buffer.yaml | Aeroway & CPCAD Buffers       | >> see below           | Policy scenario; buffer zones applied around global exclusion areas, high slope lands, aeroway lands and CPCAD areas, restricting resource siting. |
+
+**Scenario Name:** `policy_aeroway_CPCAD_buffer`  
+**Buffer Applied:** GAEZ global exclusions, high slope areas, Aeroway and CPCAD Buffers
+
+**Buffer Distances (meters):**
+> Explicitly for this scenario study
+>
+| Buffer Type                              | Category/Layer                        | Solar Buffer (meters) | Wind Buffer (meters) |
+|------------------------------------------|---------------------------------------|-----------------------|----------------------|
+| **Aeroway Buffers**                      | Aerodrome                             | 1,000                 | 10,000               |
+|                                          | Runway                                | 500                   | 100                  |
+|                                          | Taxiway/Helipad/Apron/Gate            | 100                   | 100                  |
+| **Canadian Conservation and Protected Lands** | Strict Nature Reserve              | 2,000                 | 10,000               |
+|                                          | Wilderness Area                       | 2,000                 | 10,000               |
+|                                          | National Park                         | 0                     | 5,000                |
+|                                          | Natural Monument/Feature              | 0                     | 500                  |
+|                                          | Habitat/Species Management Area       | 1,000                 | 2,000                |
+|                                          | Protected Landscape/Seascape          | 500                   | 2,000                |
+|                                          | Protected Area w/ Sustainable Use     | 500                   | 1,000                |
+|                                          | Interim Sites/OECM                    | 0                     | 500                  |
+| **GAEZ Layers**                          | exclusion_areas                       | 500                   | 500                  |
+|                                          | terrain_resources                     | 0                     | 500                  |
+
+**Notes:**
+- "Aeroway & CPCAD Buffers" means buffer distances (e.g., 1km, 5km) are set around airports and protected/conserved lands.
+- The policy scenario reduces available land for renewable resource development compared to the default.
+
+## Impact due to the land-use policy:
+
+<img src="../_static/potential_capacity_lost_default_vs_policy_aeroway_CPCAD_buffer.png" alt="Final results for BC rescaled to ERA5 Resolution" width="1000"/>
+
+
 
 ---
 
