@@ -44,6 +44,7 @@ import plotly.graph_objects as go
 import rasterio
 import seaborn as sns
 import xarray
+
 from atlite import ExclusionContainer
 from IPython.display import display
 from matplotlib import lines as mlines
@@ -59,6 +60,7 @@ from rasterio.warp import Resampling, calculate_default_transform, reproject
 import RES.lands as lands
 import RES.utility as utils
 
+plt.style.use('../RES/visual_styles/elsevier.mplstyle') # Custom style for publication quality figures
 
 def size_for_legend(mw):
     """
@@ -146,7 +148,9 @@ def plot_resources_scatter_metric_combined(
     bubbles_GW:list= [1, 5, 10],
     bubbles_scale:float= 0.4,
     lcoe_threshold:float= 200,
-    font_family='sans-serif',
+    font_family=None,
+    figsize=(3.5, 2.5),
+    dpi= 1000, # this falls under lineart
     save_to_root:str='vis',
     set_transparent:bool=False
 ):
@@ -164,12 +168,15 @@ def plot_resources_scatter_metric_combined(
         set_transparent (bool, optional): Whether to set the background transparent. Defaults to False.
     """
 
-
+    plt.style.use('../RES/visual_styles/elsevier.mplstyle')  
+    if font_family is not None:  
+     plt.rcParams['font.family'] = font_family
+     
     # Filter by LCOE threshold
     solar = solar_clusters[solar_clusters['lcoe'] <= lcoe_threshold]
     wind = wind_clusters[wind_clusters['lcoe'] <= lcoe_threshold]
 
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=figsize,dpi=dpi)
 
     # Solar scatter
     ax.scatter(
@@ -197,7 +204,7 @@ def plot_resources_scatter_metric_combined(
 
     ax.set_xlabel('Average Capacity Factor', fontweight='bold')
     ax.set_ylabel('Score ($/MWh)', fontweight='bold')
-    ax.set_title('CF vs Score for Solar and Wind resources', fontweight='bold', fontsize=16)
+    ax.set_title('CF vs Score for Solar and Wind resources', fontweight='bold')
 
     ax.xaxis.set_major_locator(MultipleLocator(0.02))
     ax.xaxis.set_minor_locator(MultipleLocator(0.01))
@@ -220,20 +227,24 @@ def plot_resources_scatter_metric_combined(
         mlines.Line2D([], [], color='purple', marker='o', linestyle='None', label='Wind')
     ]
 
-    ax.legend(handles=legend_handles + resource_handles, loc='upper right', framealpha=0, prop={'size': 12, 'weight': 'bold'})
+    ax.legend(handles=legend_handles + resource_handles, loc='upper right', framealpha=0,)
 
     ax.grid(True, ls=":", linewidth=0.3)
-    fig.text(0.5, -0.04,
-         "Note: The Scoring is calculated to reflect Dollar investment required to get an unit of Energy yield (MWh). "
-         "\nTo reflect market competitiveness and incentives, the Score ($/MWh) needs financial adjustment factors to be considered on top of it.",
-         ha='center', va='center', fontsize=9.5, color='gray', bbox=dict(facecolor='None', linewidth=0.2, edgecolor='grey', boxstyle='round,pad=0.5'))
-    plt.rcParams['font.family'] = font_family
+    # Add note below axes using figtext
+    fig.text(0.5, -0.03,
+            "Note: The Scoring is calculated to reflect Dollar investment required to get an unit of Energy yield (MWh). "
+            "\nTo reflect market competitiveness and incentives, the Score ($/MWh) needs financial adjustment factors to be considered on top of it.",
+            ha='center', va='bottom', fontsize=7, color='gray',
+            wrap=True,
+            bbox=dict(facecolor='None', linewidth=0.2, edgecolor='grey', boxstyle='round,pad=0.3'))
+
+
     plt.tight_layout()
         
     save_to_root = Path(save_to_root)
     save_to_root.mkdir(parents=True, exist_ok=True)
     file_path = save_to_root / "Resources_CF_vs_LCOE_combined.png"
-    plt.savefig(file_path, dpi=600, transparent=set_transparent)
+    plt.savefig(file_path,transparent=set_transparent)
     utils.print_update(level=1, message=f"Combined CF vs LCOE plot created and saved to: {file_path}")
     # return fig
 
@@ -852,7 +863,7 @@ def get_data_in_map_plot(cells,
                     title:str=None,
                     ax=None,
                     compass_size:float=10,
-                    font_family:str='sans-serif',
+                    font_family:str=None,
                     discalimers:bool=False,
                     show=True):
     
@@ -871,6 +882,11 @@ def get_data_in_map_plot(cells,
     Returns:
         ax (matplotlib.axes.Axes): The axes with the plotted map.
     """
+    
+    plt.style.use('../RES/visual_styles/elsevier.mplstyle')  
+    if font_family is not None:  
+     plt.rcParams['font.family'] = font_family
+     
     column_keyword=datafield.upper()
     resource_type = resource_type.lower()
     
@@ -942,9 +958,8 @@ def get_data_in_map_plot(cells,
                 )
             if show:
                 plt.show()
-            # Set font family for all text in the plot
-            plt.rcParams['font.family'] = font_family
-            add_compass_to_plot(ax, size=compass_size, triangle_size=0.014)
+
+            # add_compass_to_plot(ax, size=compass_size, triangle_size=0.014)
         
     return ax
 
