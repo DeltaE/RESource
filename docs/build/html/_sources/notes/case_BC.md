@@ -27,13 +27,13 @@ Key parameters are configurable to reflect geographic constraints (e.g., slope, 
 
 <img src="../_static/GAEZ_layers_BC_2025.jpg" alt="GAEZ layers used in BC spatial screening showing land cover, slope, and exclusion zones" width="600"/>
 
-> For full details on the raster classes, refer to the [GAEZ_v4 documentation](https://doi.org/10.4060/cb4744en).
+
+> For full details on the raster classes, refer to the [Global Agro-Ecological Zones v4 – Model documentation](https://openknowledge.fao.org/items/039f7ec9-98af-49e1-8d24-850122c69bef).
 
 ```{tip}
+|chapter 2|
 page 17; Elevation and terrain-slope data 
-
 page 18; Land Cover data
-
 page 20; Exclusion zones
 ```
 
@@ -53,8 +53,10 @@ Spatial screening revealed that roughly 64% of BC’s land is unsuitable for VRE
 
 
   - __Rescaling the land availability map to the ERA5 grid resolution__.
-  
-    <img src="../_static/ERA5_availability.jpg" alt="Final results for BC rescaled to ERA5 Resolution" width="800"/>
+    
+    <img src="../_static/landAvailability_100m.jpg" alt="Final results for BC rescaled to ERA5 Resolution" width="800"/>
+
+    <img src="../_static/landAvailability_ERA5.jpg" alt="Final results for BC rescaled to ERA5 Resolution" width="800"/>
 
   > The rescaled land availability map for BC, showing the eligible areas aligned with the ERA5 grid resolution. This step ensures that the spatial data is compatible with the weather-driven modeling inputs used in subsequent analyses.
 
@@ -102,7 +104,8 @@ Figure 9 presents two maps of BC, illustrating the theoretical capacity potentia
 
 Building on the spatial insights from scores and potential capacity distributions, Figure 10 offers a complementary capacity-focused view that further clarifies how these site scores translate into aggregated development potential. Figure 10 shows a scatter plot illustrating the theoretical capacity potential, with bubble sizes representing clustered site’s capacity levels and colors reflecting solar and wind site scores. Lighter shades (orange for solar, blue for wind) indicate lower costs. The scoring, calculated to reflect the dollar investment per unit of energy yield (MWh), identifies clusters of larger bubbles as high-potential areas, with two boxed regions emphasizing concentrated zones of solar and wind capacity. Together, these outputs enable the identification of high-value locations where resource quality, land availability, and proximity to grid access align, supporting informed decision-making for VRE deployment.
 
-<img src="../_static/Resources_CF_vs_LCOE_combined.png" alt="Final results for BC rescaled to ERA5 Resolution" width="800"/>
+<img src="../_static/Resources_CF_vs_LCOE_combined.png" alt="Final results for BC rescaled to ERA5 Resolution" width="1000"/>
+
 
 To translate spatial availability into investment prioritization, RESource ranks sites using a simplified levelized cost of energy (LCOE) metric that includes proximity to the transmission grid. We named this as score for the sites acknowledging that the market competitiveness and incentives are needed to be adjusted to reflect a competitive benchmark for the sites and that these are not directly translatable to the cost of energy from any given site. VRE sites owners and utilities might plug in their internal costs (Utility energy costs) to account project implementation and operation overheads. Such ranking is especially useful for planning under infrastructure or policy constraints.
 

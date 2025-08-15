@@ -1076,14 +1076,14 @@ def load_layers_to_excluder(
     plt.tight_layout()
     if disregard_other_layers:
         fig.suptitle(
-            f"Land Availability impact for each Exclusion/Inclusion Layers for {resource_type} resource at BC", 
+            f"Land Availability impact for each Exclusion/Inclusion Layers for {resource_type} resource", 
             fontsize=24, 
             y=1.05
         )
         plot_name:str=f"individual_layers_impact_land_availability_plot_{resource_type}"
     else:
         fig.suptitle(
-            f"Stepwise Land Availability for Exclusion/Inclusion Layers for {resource_type} resource at BC",
+            f"Stepwise Land Availability for Exclusion/Inclusion Layers for {resource_type} resource",
             fontsize=24,
             y=1.05,
         )
