@@ -10,9 +10,8 @@ description: |+
 
 
 Scenario:
-  1:
-    Name: Reference
-    Description: A base scenario with reasonable assumptions.
+  run_id: default # use this to find run results in the results directory
+  Description: Baseline scenario; no additional buffer zones around protected areas or aeroways.
 
 country: Canada
 
@@ -293,8 +292,8 @@ GAEZ:
       solar: [ 2, 3, 4, 5, 6, 7 ]
       wind: [ 2, 3, 4, 5, 6, 7 ]
       buffer:
-        solar: 500 #m
-        wind: 500 #m
+        solar: 0 #m
+        wind: 0 #m
 
   # GAEZ v4 Median slope class compiled from 3 arc-second SRTM data 
   - name: 'terrain_resources'
@@ -316,7 +315,7 @@ GAEZ:
       wind: [ 7, 8, 9 ]
       buffer:
         solar: 0 #m
-        wind: 500 #m
+        wind: 0 #m
 
   - name: 'land_cover'
     raster: "faocmb_2010.tif" # Dominant land cover/use ; 11 classes; (5 arc-minute)
@@ -378,7 +377,7 @@ GWA:
     IEC_Class_ExLoads: 'CAN.IEC-class-extreme-loads.tif'
   filter:
     windspeed_low: 7 # meter/s
-    windspeed_high: 40 # meter/s
+    windspeed_high: 45 # meter/s
 
 capacity_disaggregation:
   solar:
@@ -392,32 +391,32 @@ capacity_disaggregation:
     tracking: 'dual' # None, horizontal,tilted_horizontal,vertical,dual
     cell_static_CF_tolerance: 0.16
     cell_capacity_tolerance: 1 #MW
-    WCSS_tolerance: 0.005 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
+    WCSS_tolerance: 0.003 # Within-cluster Sum of Square # Bigger number denotes bigger tolerance, hence reduced number of clusters
     vector_buffers:
     #list of dictionaries
     - aeroway:
         buffer_mapping_key: 'aeroway'
         buffer_mapping_key_buffers:
           # Buffer distances in meters for each aeroway type
-          aerodrome: 500 # m
-          runway: 500 # m
-          taxiway: 100 # m
-          helipad: 100 # m
-          apron: 100 # m
-          gate: 100 # m
+          aerodrome: 0 # m
+          runway: 0 # m
+          taxiway: 0 # m
+          helipad: 0 # m
+          apron: 0 # m
+          gate: 0 # m
     - conserved_lands:
         buffer_mapping_key: 'IUCN_CAT_desc'
         buffer_mapping_key_buffers:
           # Buffer distances in meters for each IUCN category
-          'Strict Nature Reserve': 1000 # IUCN Category 1
-          'Wilderness Area': 1000 # IUCN Category 2
-          'National Park': 1000 # IUCN Category 3
-          'Natural Monument or Feature': 500 # IUCN Category 4
-          'Habitat/Species Management Area': 500 # IUCN Category 5
-          'Protected Landscape/Seascape': 500 # IUCN Category 6
-          'Protected Area with Sustainable Use of Natural Resources': 500 # IUCN Category 7
-          'Interim Sites (unknown specifics)': 500 # IUCN Category 8
-          'OECM areas': 500 # IUCN Category 9
+          'Strict Nature Reserve': 0 # IUCN Category 1
+          'Wilderness Area': 0 # IUCN Category 2
+          'National Park': 0 # IUCN Category 3
+          'Natural Monument or Feature': 0 # IUCN Category 4
+          'Habitat/Species Management Area': 0 # IUCN Category 5
+          'Protected Landscape/Seascape': 0 # IUCN Category 6
+          'Protected Area with Sustainable Use of Natural Resources': 0 # IUCN Category 7
+          'Interim Sites (unknown specifics)': 0 # IUCN Category 8
+          'OECM areas': 0 # IUCN Category 9
 
   wind:
     max_capacity: 15 # GW
@@ -461,25 +460,25 @@ capacity_disaggregation:
         buffer_mapping_key: 'aeroway'
         buffer_mapping_key_buffers:
           # Buffer distances in meters for each aeroway type
-          aerodrome: 5000 # m
-          runway: 100 # m
-          taxiway: 100 # m
-          helipad: 100 # m
-          apron: 100 # m
-          gate: 100 # m
+          aerodrome: 0 # m
+          runway: 0 # m
+          taxiway: 0 # m
+          helipad: 0 # m
+          apron: 0 # m
+          gate: 0 # m
     - conserved_lands:
         buffer_mapping_key: 'IUCN_CAT_desc'
         buffer_mapping_key_buffers:
           # Buffer distances in meters for each IUCN category
-          'Strict Nature Reserve': 5000 # IUCN Category 1
-          'Wilderness Area': 5000 # IUCN Category 2
-          'National Park': 5000 # IUCN Category 3
-          'Natural Monument or Feature': 500 # IUCN Category 4
-          'Habitat/Species Management Area': 500 # IUCN Category 5
-          'Protected Landscape/Seascape': 500 # IUCN Category 6
-          'Protected Area with Sustainable Use of Natural Resources': 1000 # IUCN Category 7
-          'Interim Sites (unknown specifics)': 500 # IUCN Category 8
-          'OECM areas': 1000 # IUCN Category 9
+          'Strict Nature Reserve': 0 # IUCN Category 1
+          'Wilderness Area': 0 # IUCN Category 2
+          'National Park': 0 # IUCN Category 3
+          'Natural Monument or Feature': 0 # IUCN Category 4
+          'Habitat/Species Management Area': 0 # IUCN Category 5
+          'Protected Landscape/Seascape': 0 # IUCN Category 6
+          'Protected Area with Sustainable Use of Natural Resources': 0 # IUCN Category 7
+          'Interim Sites (unknown specifics)': 0 # IUCN Category 8
+          'OECM areas': 0 # IUCN Category 9
   bess:
     max_capacity: 10 #GW
     cost_data: 'data/processed_data/bess/bess_LI_6hr_cost_moderate_NREL_ATB2024.csv'
