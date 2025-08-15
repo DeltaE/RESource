@@ -161,6 +161,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../notes/resource_builder.html">1. RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/setup_guide.html">2. RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../notes/learning.html">4. Best Practices and Guidelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/api.html">RES API References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/data.html">6. Data Sources and Supply Chain</a></li>
@@ -338,7 +339,9 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#What's-inside-the-Store-?">What’s inside the Store ?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Define-Province-specific-attributes">Define Province specific attributes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Define-run/scenario">Define run/scenario</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Load-Store">Load Store</a></li>
 </ul>
             </nav>
         </div>
@@ -352,27 +355,31 @@ document.write(`
                   
   <section id="Explore-data-store">
 <h1>Explore data store<a class="headerlink" href="#Explore-data-store" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p>import packages</p></li>
+</ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">RES</span> <span class="kn">import</span> <span class="n">utility</span> <span class="k">as</span> <span class="n">utils</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">import</span> <span class="nn">RES.visuals</span> <span class="k">as</span> <span class="nn">vis</span>
+<span class="kn">from</span> <span class="nn">RES.hdf5_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
+
 <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;../RES/visual_styles/elsevier.mplstyle&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+<section id="Define-Province-specific-attributes">
+<h2>Define Province specific attributes<a class="headerlink" href="#Define-Province-specific-attributes" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><p>for locating data and plot styling</p>
+</div></blockquote>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">RES.hdf5_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
-<span class="kn">import</span> <span class="nn">RES.visuals</span> <span class="k">as</span> <span class="nn">vis</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">province_code</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">&#39;BC&#39;</span> <span class="c1"># The tool is designed to work for any province of CANADA.</span>
@@ -382,25 +389,63 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<ul class="simple">
-<li><p>Define Province Code</p></li>
-</ul>
 <div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># Define the directory and search pattern</span>
+<span class="n">data_store_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;../data/store/&quot;</span><span class="p">)</span>
+<span class="n">search_keyword</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;resources_</span><span class="si">{</span><span class="n">province_code</span><span class="si">}</span><span class="s2">_&quot;</span>
+
+<span class="c1"># List files containing the search pattern</span>
+<span class="n">matching_files</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">data_store_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">search_keyword</span><span class="si">}</span><span class="s2">*&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">is_file</span><span class="p">()]</span>
+
+<span class="c1"># Extract run IDs from matching_files</span>
+<span class="n">run_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">data_store_dir</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">search_keyword</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.h5&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">matching_files</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Define-run/scenario">
+<h2>Define run/scenario<a class="headerlink" href="#Define-run/scenario" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">store</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;../data/store/resources_</span><span class="si">{</span><span class="n">province_code</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="c1"># f&quot;../data/store/resources_{province_code}.h5&quot;</span>
-<span class="n">res_data</span><span class="o">=</span><span class="n">DataHandler</span><span class="p">(</span><span class="n">store</span><span class="p">)</span> <span class="c1"># the DataHandler object could be initiated without the store definition as well.</span>
-<br/></pre></div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ipywidgets</span> <span class="k">as</span> <span class="nn">widgets</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span>
+
+<span class="n">RUN_ID</span><span class="o">=</span><span class="s2">&quot;default&quot;</span>
+
+<span class="c1"># Create dropdown widget</span>
+<span class="n">run_id_dropdown</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
+    <span class="n">options</span><span class="o">=</span><span class="n">run_ids</span><span class="p">,</span>
+    <span class="n">value</span><span class="o">=</span><span class="n">RUN_ID</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Run ID:&#39;</span><span class="p">,</span>
+    <span class="n">disabled</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">run_id_dropdown</span><span class="p">)</span>
+</pre></div>
 </div>
 </div>
-<section id="What's-inside-the-Store-?">
-<h2>What’s inside the Store ?<a class="headerlink" href="#What's-inside-the-Store-?" title="Link to this heading">#</a></h2>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f659df298dba4e8bb1eafec6ed40c6ae", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+<section id="Load-Store">
+<h2>Load Store<a class="headerlink" href="#Load-Store" title="Link to this heading">#</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res_data</span><span class="o">.</span><span class="n">show_tree</span><span class="p">(</span><span class="n">store</span><span class="p">)</span> <span class="c1"># Shows the hierarchical data inside the store</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">store</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;../data/store/resources_</span><span class="si">{</span><span class="n">province_code</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">RUN_ID</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="c1"># f&quot;../data/store/resources_{province_code}.h5&quot;</span>
+<span class="n">res_data</span><span class="o">=</span><span class="n">DataHandler</span><span class="p">(</span><span class="n">store</span><span class="p">,</span><span class="n">show_structure</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># the DataHandler object could be initiated without the store definition as well.</span>
 </pre></div>
 </div>
 </div>
@@ -410,7 +455,7 @@ document.write(`
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-cyan-intense-fg">____________________________________________________________</span>
-<span class="ansi-green-intense-fg">     RES.hdf5_handler|🗄️ Structure of HDF5 file: ../data/store/resources_BC.h5</span>
+<span class="ansi-green-intense-fg">     RES.hdf5_handler|🗄️ Structure of HDF5 file: ../data/store/resources_BC_default.h5</span>
 <span class="ansi-cyan-intense-fg">____________________________________________________________</span>
 <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">boundary</span>
 <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cells</span>
@@ -441,18 +486,8 @@ document.write(`
 <ul class="simple">
 <li><p>Load Data from Store</p></li>
 </ul>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import pandas as pd</span>
-<span class="c1"># atb=pd.read_parquet(&#39;../data/downloaded_data/NREL/ATB/ATBe.parquet&#39;)</span>
-<span class="c1"># atb.core_metric_parameter.unique()</span>
-</pre></div>
-</div>
-</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loading Grid Cells Geodataframe</span>
@@ -471,11 +506,11 @@ document.write(`
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| ❌ Error: Key &#39;lines&#39; not found in ../data/store/resources_BC.h5</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| ❌ Error: Key &#39;lines&#39; not found in ../data/store/resources_BC_default.h5</span>
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># vis.get_selected_vs_missed_visuals(cells,&#39;BC&#39;,&#39;solar&#39;,10,0.15,100)</span>
@@ -483,7 +518,7 @@ document.write(`
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># vis.get_selected_vs_missed_visuals(cells,&#39;BC&#39;,&#39;wind&#39;,10,0.15,100)</span>
@@ -491,19 +526,19 @@ document.write(`
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># cells[cells[&#39;potential_capacity_solar&#39;]==0].explore()</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="c1"># Ensure &#39;Region&#39; is in the columns for both boundary and cells</span>
@@ -574,15 +609,8 @@ document.write(`
 <br/></pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Store_explorer_15_0.png" src="../_images/notebooks_Store_explorer_15_0.png" />
-</div>
-</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># from RES import visuals as vis</span>
@@ -595,12 +623,12 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="c1"># Ensure &#39;Region&#39; is in the columns for both boundary and cells</span>
@@ -659,19 +687,12 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Store_explorer_17_0.png" src="../_images/notebooks_Store_explorer_17_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="c1"># Ensure &#39;Region&#39; is in the columns for both boundary and cells</span>
@@ -763,38 +784,12 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/localhome/mei3/miniconda3/envs/RES/lib/python3.12/site-packages/geopandas/geodataframe.py:1819: SettingWithCopyWarning:
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  super().__setitem__(key, value)
-/localhome/mei3/miniconda3/envs/RES/lib/python3.12/site-packages/geopandas/geodataframe.py:1819: SettingWithCopyWarning:
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  super().__setitem__(key, value)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Store_explorer_18_1.png" src="../_images/notebooks_Store_explorer_18_1.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="c1"># Ensure &#39;Region&#39; is in the columns for both boundary and cells</span>
@@ -887,20 +882,13 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Store_explorer_19_0.png" src="../_images/notebooks_Store_explorer_19_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="k">as</span> <span class="nn">cm</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="k">as</span> <span class="nn">cm</span>
 <span class="kn">import</span> <span class="nn">matplotlib.colors</span> <span class="k">as</span> <span class="nn">mcolors</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="c1"># Define colormaps</span>
 <span class="n">solar_cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;YlOrRd&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">solar_labels</span><span class="p">))</span>
@@ -949,45 +937,46 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/tmp/ipykernel_2550534/2995861738.py:6: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
-  solar_cmap = cm.get_cmap(&#39;YlOrRd&#39;, len(solar_labels))
-/tmp/ipykernel_2550534/2995861738.py:7: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
-  wind_cmap = cm.get_cmap(&#39;BuPu&#39;, len(wind_labels))
-/tmp/ipykernel_2550534/2995861738.py:14: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  solar_capacity = cells.groupby(&#39;solar_category&#39;)[&#39;potential_capacity_solar&#39;].sum().div(1e3).reindex(solar_labels, fill_value=0)
-/tmp/ipykernel_2550534/2995861738.py:15: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  wind_capacity = cells.groupby(&#39;wind_category&#39;)[&#39;potential_capacity_wind&#39;].sum().div(1e3).reindex(wind_labels, fill_value=0)
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Store_explorer_20_1.png" src="../_images/notebooks_Store_explorer_20_1.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Store_explorer_20_2.png" src="../_images/notebooks_Store_explorer_20_2.png" />
-</div>
-</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_aggrs_region</span><span class="o">=</span><span class="n">cells</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Region&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">({</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">:</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span><span class="s1">&#39;potential_capacity_wind&#39;</span><span class="p">:</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span><span class="s1">&#39;nearest_station_distance_km&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span><span class="s1">&#39;solar_CF_mean&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span><span class="s1">&#39;wind_CF_mean&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span><span class="s1">&#39;lcoe_solar&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span><span class="s1">&#39;lcoe_wind&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">})</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_aggrs_region</span><span class="o">=</span><span class="n">cells</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Region&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">({</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">:</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span><span class="s1">&#39;potential_capacity_wind&#39;</span><span class="p">:</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span><span class="s1">&#39;solar_CF_mean&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span><span class="s1">&#39;wind_CF_mean&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">})</span>
+
+<span class="n">cells_aggrs_region</span><span class="p">[[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">,</span> <span class="s1">&#39;potential_capacity_wind&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">cells_aggrs_region</span><span class="p">[[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">,</span> <span class="s1">&#39;potential_capacity_wind&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">cells_aggrs_region</span>
+<span class="n">cells_aggrs_region</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../results/cells_aggregated_region_</span><span class="si">{</span><span class="n">province_code</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">RUN_ID</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_aggrs_region_default</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../results/cells_aggregated_region_</span><span class="si">{</span><span class="n">province_code</span><span class="si">}</span><span class="s1">_default.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">cells_aggrs_region_default</span><span class="p">[[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">,</span> <span class="s1">&#39;potential_capacity_wind&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">cells_aggrs_region_default</span><span class="p">[[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">,</span> <span class="s1">&#39;potential_capacity_wind&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">delta_cells_aggrs_region</span><span class="o">=</span><span class="n">cells_aggrs_region_default</span><span class="o">-</span><span class="n">cells_aggrs_region</span>
+<span class="n">delta_cells_aggrs_region</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_aggrs_region</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Map Population and GDP to gdf using Region</span>
@@ -1001,12 +990,12 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="c1"># Ensure &#39;Region&#39; is in the columns for both boundary and cells</span>
@@ -1089,13 +1078,6 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Store_explorer_23_0.png" src="../_images/notebooks_Store_explorer_23_0.png" />
-</div>
-</div>
 </section>
 </section>
 
@@ -1144,7 +1126,9 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#What's-inside-the-Store-?">What’s inside the Store ?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Define-Province-specific-attributes">Define Province specific attributes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Define-run/scenario">Define run/scenario</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Load-Store">Load Store</a></li>
 </ul>
   </nav></div>
 

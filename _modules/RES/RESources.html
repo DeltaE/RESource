@@ -159,6 +159,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">1. RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">2. RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">4. Best Practices and Guidelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES API References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">6. Data Sources and Supply Chain</a></li>
@@ -503,7 +504,6 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">scorer</span><span class="o">=</span><span class="n">CellScorer</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">required_args</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gwa_cells</span><span class="o">=</span><span class="n">GWACells</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">required_args</span><span class="p">)</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">results_save_to</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;results/RESource&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_region_name</span><span class="p">()</span>
         
         
@@ -518,6 +518,10 @@ document.write(`
         <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_snapshot</span><span class="p">()</span>
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Snapshot for Resources: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">start_date</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">end_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Save the configuration to the results directory</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Saving configuration to results directory...&quot;</span><span class="p">)</span>                
+        <span class="n">utils</span><span class="o">.</span><span class="n">save_to_yaml</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_save_to</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="o">/</span><span class="sa">f</span><span class="s1">&#39;config_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">RUN_ID</span><span class="si">}</span><span class="s1">.yaml&#39;</span><span class="p">)</span>
         
 
 <div class="viewcode-block" id="RESources_builder.get_grid_cells">
@@ -559,10 +563,9 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieves the potential capacity of the cells based on land availability and land-use intensity.</span>
 <span class="sd">        Args:   </span>
-
 <span class="sd">            force_update (bool): If True, forces the update of the cell capacity data.</span>
 <span class="sd">        Returns:</span>
-<span class="sd">            tuple: A namedtuple containing the cells GeoDataFrame and a capacity matrix.</span>
+<span class="sd">            tuple: A namedtuple containing the cells with their potential capacity and the capacity matrix.</span>
 <span class="sd">        Notes:</span>
 <span class="sd">            - The capacity matrix is a 2D array where each row corresponds to a cell and each column corresponds to a time step.</span>
 <span class="sd">            - The potential capacity is calculated as:</span>
@@ -575,15 +578,15 @@ document.write(`
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Preparing Cells&#39; capacity...&quot;</span><span class="p">)</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">cells_with_cap_nt</span><span class="p">:</span><span class="nb">tuple</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_processor</span><span class="o">.</span><span class="n">get_capacity</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cells_with_capacity</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity_matrix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_processor</span><span class="o">.</span><span class="n">get_capacity</span><span class="p">()</span>
         
                 
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Cells&#39; capacity updated.&quot;</span><span class="p">)</span>
         
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells_with_cap_nt</span> <span class="c1"># returns a namedtuple with `data` and `matrix attributes</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells_with_capacity</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity_matrix</span> <span class="c1"># returns a namedtuple with `data` and `matrix attributes</span></div>
 
-
+    
 <div class="viewcode-block" id="RESources_builder.extract_weather_data">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.extract_weather_data">[docs]</a>
     <span class="k">def</span> <span class="nf">extract_weather_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

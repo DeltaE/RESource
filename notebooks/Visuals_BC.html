@@ -160,6 +160,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../notes/resource_builder.html">1. RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/setup_guide.html">2. RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../notes/learning.html">4. Best Practices and Guidelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/api.html">RES API References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/data.html">6. Data Sources and Supply Chain</a></li>
@@ -380,7 +381,15 @@ document.write(`
                 <article class="bd-article">
                   
   <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RUN_ID</span><span class="o">=</span><span class="s2">&quot;buffer_policy_aeroway_CPCAD&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -394,7 +403,7 @@ document.write(`
 <li><p>load packages</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">RES.hdf5_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
@@ -411,7 +420,7 @@ document.write(`
 <li><p>Load Config</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">colorama</span> <span class="kn">import</span> <span class="n">Fore</span><span class="p">,</span> <span class="n">Style</span>
@@ -450,7 +459,7 @@ SK: Saskatchewan
 <li><p>Set Region</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The tool is designed to work for WB6 regions</span>
@@ -474,7 +483,7 @@ SK: Saskatchewan
 <li><p>Load store (hdf5 file)</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><span></span><span class="n">store</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;../data/store/resources_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">.h5&quot;</span>
@@ -492,39 +501,39 @@ SK: Saskatchewan
 <span class="ansi-green-intense-fg ansi-bold">**************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">Store loaded for British Columbia (BC)</span>
 <span class="ansi-green-intense-fg ansi-bold">**************************************</span>
-<span class="ansi-cyan-intense-fg">____________________________________________________________</span>
-<span class="ansi-green-intense-fg">     RES.hdf5_handler|🗄️ Structure of HDF5 file: ../data/store/resources_BC.h5</span>
-<span class="ansi-cyan-intense-fg">____________________________________________________________</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">boundary</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cells</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">clusters</span>
-  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">clusters/solar</span>
-  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">clusters/wind</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost</span>
-  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb</span>
-  └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb/solar</span>
-  └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb/wind</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">dissolved_indices</span>
-  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">dissolved_indices/solar</span>
-  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">dissolved_indices/wind</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">substations</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries</span>
-  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries/clusters</span>
-  └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries/clusters/solar</span>
-  └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries/clusters/wind</span>
-  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries/solar</span>
-  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries/wind</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">units</span>
-
-
-<span class="ansi-yellow-fg">└&gt; To access the data : </span>
-<span class="ansi-cyan-fg"> └&gt; &lt;datahandler instance&gt;.from_store(&#39;&lt;key&gt;&#39;)</span>
+<span class="ansi-red-fg"> └ ❌ &gt; RES.hdf5_handler|  ❌ Error reading file: [Errno 2] Unable to synchronously open file (unable to open file: name = &#39;../data/store/resources_BC.h5&#39;, errno = 2, error message = &#39;No such file or directory&#39;, flags = 0, o_flags = 0)</span>
 </pre></div></div>
 </div>
 <section id="Load-dataframes-from-Store">
 <h2>Load dataframes from Store<a class="headerlink" href="#Load-dataframes-from-Store" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">RES</span> <span class="kn">import</span> <span class="n">utility</span> <span class="k">as</span> <span class="n">utils</span>
+
+<span class="n">cfg</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="s1">&#39;../config/config_CAN.yaml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">utils</span><span class="o">.</span><span class="n">save_to_yaml</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;../results/config_CAN_</span><span class="si">{</span><span class="n">RUN_ID</span><span class="si">}</span><span class="s1">.yaml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-black-intense-fg ansi-bold">ℹ️  RES.utility| A copy of the dictionary saved to : &#39;../results/config_CAN_buffer_policy_aeroway_CPCAD.yaml&#39;</span>
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loading dataframes</span>
@@ -544,14 +553,72 @@ SK: Saskatchewan
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| ❌ Error: Key &#39;lines&#39; not found in ../data/store/resources_BC.h5</span>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[9], line 2</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span style="color: rgb(95,135,135)"># Loading dataframes</span>
+<span class="ansi-green-fg">----&gt; 2</span> cells<span style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">res_data</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">from_store</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">cells</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> boundary<span style="color: rgb(98,98,98)">=</span>res_data<span style="color: rgb(98,98,98)">.</span>from_store(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">boundary</span><span style="color: rgb(175,0,0)">&#39;</span>)
+<span class="ansi-green-intense-fg ansi-bold">      4</span> lines<span style="color: rgb(98,98,98)">=</span>res_data<span style="color: rgb(98,98,98)">.</span>from_store(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">lines</span><span style="color: rgb(175,0,0)">&#39;</span>)
+
+File <span class="ansi-green-fg">/local-scratch/localhome/mei3/eliasinul/work/RESource/RES/hdf5_handler.py:148</span>, in <span class="ansi-cyan-fg">DataHandler.from_store</span><span class="ansi-blue-fg">(self, key)</span>
+<span class="ansi-green-intense-fg ansi-bold">    134</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">from_store</span>(<span style="color: rgb(0,135,0)">self</span>,
+<span class="ansi-green-intense-fg ansi-bold">    135</span>                key: <span style="color: rgb(0,135,0)">str</span>):
+<span class="ansi-green-intense-fg ansi-bold">    136</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">    137</span> <span style="color: rgb(175,0,0)">    Load data from the HDF5 store and handle geometry conversion.</span>
+<span class="ansi-green-intense-fg ansi-bold">    138</span> <span style="color: rgb(175,0,0)">    </span>
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-intense-fg ansi-bold">    145</span> <span style="color: rgb(175,0,0)">        TypeError: If the loaded data is not a DataFrame or GeoDataFrame.</span>
+<span class="ansi-green-intense-fg ansi-bold">    146</span> <span style="color: rgb(175,0,0)">    &#34;&#34;&#34;</span>
+<span class="ansi-green-fg">--&gt; 148</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">with</span> <span class="ansi-yellow-bg">pd</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">HDFStore</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">store</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">r</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg">)</span> <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> store:
+<span class="ansi-green-intense-fg ansi-bold">    149</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> key <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> store:
+<span class="ansi-green-intense-fg ansi-bold">    150</span>             utils<span style="color: rgb(98,98,98)">.</span>print_update(level<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">3</span>,message<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#34;</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span><span style="color: rgb(0,0,135)">__name__</span><span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">| ❌ Error: Key </span><span style="color: rgb(175,0,0)">&#39;</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>key<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)"> not found in </span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>store<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">&#34;</span>)
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/pandas/io/pytables.py:585</span>, in <span class="ansi-cyan-fg">HDFStore.__init__</span><span class="ansi-blue-fg">(self, path, mode, complevel, complib, fletcher32, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    583</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_fletcher32 <span style="color: rgb(98,98,98)">=</span> fletcher32
+<span class="ansi-green-intense-fg ansi-bold">    584</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_filters <span style="color: rgb(98,98,98)">=</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>
+<span class="ansi-green-fg">--&gt; 585</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">open</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">mode</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">mode</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/pandas/io/pytables.py:745</span>, in <span class="ansi-cyan-fg">HDFStore.open</span><span class="ansi-blue-fg">(self, mode, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    739</span>     msg <span style="color: rgb(98,98,98)">=</span> (
+<span class="ansi-green-intense-fg ansi-bold">    740</span>         <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Cannot open HDF5 file, which is already opened, </span><span style="color: rgb(175,0,0)">&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">    741</span>         <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">even in read-only mode.</span><span style="color: rgb(175,0,0)">&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">    742</span>     )
+<span class="ansi-green-intense-fg ansi-bold">    743</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ValueError</span>(msg)
+<span class="ansi-green-fg">--&gt; 745</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_handle <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">tables</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">open_file</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_path</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_mode</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/tables/file.py:296</span>, in <span class="ansi-cyan-fg">open_file</span><span class="ansi-blue-fg">(filename, mode, title, root_uep, filters, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    291</span>             <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ValueError</span>(
+<span class="ansi-green-intense-fg ansi-bold">    292</span>                 <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">The file </span><span style="color: rgb(175,0,0)">&#39;</span><span class="ansi-bold" style="color: rgb(175,95,135)">%s</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)"> is already opened.  Please </span><span style="color: rgb(175,0,0)">&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">    293</span>                 <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">close it before reopening in write mode.</span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">%</span> filename)
+<span class="ansi-green-intense-fg ansi-bold">    295</span> <span style="color: rgb(95,135,135)"># Finally, create the File instance, and return it</span>
+<span class="ansi-green-fg">--&gt; 296</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">File</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">filename</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">mode</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">title</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">root_uep</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">filters</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/tables/file.py:746</span>, in <span class="ansi-cyan-fg">File.__init__</span><span class="ansi-blue-fg">(self, filename, mode, title, root_uep, filters, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    743</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>params <span style="color: rgb(98,98,98)">=</span> params
+<span class="ansi-green-intense-fg ansi-bold">    745</span> <span style="color: rgb(95,135,135)"># Now, it is time to initialize the File extension</span>
+<span class="ansi-green-fg">--&gt; 746</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_g_new</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">filename</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">mode</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">params</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    748</span> <span style="color: rgb(95,135,135)"># Check filters and set PyTables format version for new files.</span>
+<span class="ansi-green-intense-fg ansi-bold">    749</span> new <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_v_new
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/tables/hdf5extension.pyx:396</span>, in <span class="ansi-cyan-fg">tables.hdf5extension.File._g_new</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">~/miniconda3/envs/RES/lib/python3.12/site-packages/tables/utils.py:166</span>, in <span class="ansi-cyan-fg">check_file_access</span><span class="ansi-blue-fg">(filename, mode)</span>
+<span class="ansi-green-intense-fg ansi-bold">    163</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> mode <span style="color: rgb(98,98,98)">==</span> <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">r</span><span style="color: rgb(175,0,0)">&#39;</span>:
+<span class="ansi-green-intense-fg ansi-bold">    164</span>     <span style="color: rgb(95,135,135)"># The file should be readable.</span>
+<span class="ansi-green-intense-fg ansi-bold">    165</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> os<span style="color: rgb(98,98,98)">.</span>access(path, os<span style="color: rgb(98,98,98)">.</span>F_OK):
+<span class="ansi-green-fg">--&gt; 166</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">FileNotFoundError</span>(<span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">``</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>path<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">`` does not exist</span><span style="color: rgb(175,0,0)">&#34;</span>)
+<span class="ansi-green-intense-fg ansi-bold">    167</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> path<span style="color: rgb(98,98,98)">.</span>is_file():
+<span class="ansi-green-intense-fg ansi-bold">    168</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">IsADirectoryError</span>(<span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">``</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>path<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">`` is not a regular file</span><span style="color: rgb(175,0,0)">&#34;</span>)
+
+<span class="ansi-red-fg">FileNotFoundError</span>: ``/local-scratch/localhome/mei3/eliasinul/work/RESource/data/store/resources_BC.h5`` does not exist
 </pre></div></div>
 </div>
 </section>
 <section id="Create-Visuals">
 <h2>Create Visuals<a class="headerlink" href="#Create-Visuals" title="Link to this heading">#</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><span></span><span class="n">cells</span><span class="o">.</span><span class="n">columns</span>
@@ -559,8 +626,7 @@ SK: Saskatchewan
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
@@ -582,7 +648,7 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Reg
 <section id="Exclusion-Layers">
 <h1>Exclusion Layers<a class="headerlink" href="#Exclusion-Layers" title="Link to this heading">#</a></h1>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">RES</span> <span class="kn">import</span> <span class="n">visuals</span> <span class="k">as</span> <span class="n">vis</span>
@@ -634,27 +700,27 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Reg
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_BC_15_1.png" src="../_images/notebooks_Visuals_BC_15_1.png" />
+<img alt="../_images/notebooks_Visuals_BC_18_1.png" src="../_images/notebooks_Visuals_BC_18_1.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_BC_15_2.png" src="../_images/notebooks_Visuals_BC_15_2.png" />
+<img alt="../_images/notebooks_Visuals_BC_18_2.png" src="../_images/notebooks_Visuals_BC_18_2.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_BC_15_3.png" src="../_images/notebooks_Visuals_BC_15_3.png" />
+<img alt="../_images/notebooks_Visuals_BC_18_3.png" src="../_images/notebooks_Visuals_BC_18_3.png" />
 </div>
 </div>
 <section id="Grid">
 <h2>Grid<a class="headerlink" href="#Grid" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for columns in lines.columns:</span>
@@ -665,7 +731,7 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Reg
 <section id="lines">
 <h3>lines<a class="headerlink" href="#lines" title="Link to this heading">#</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># vis.plot_grid_lines(</span>
@@ -684,7 +750,7 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Reg
 <section id="Substations">
 <h3>Substations<a class="headerlink" href="#Substations" title="Link to this heading">#</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;code&gt;</span>
@@ -701,7 +767,7 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Reg
 <li><p>Individual Maps</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vis</span><span class="o">.</span><span class="n">get_data_in_map_plot</span><span class="p">(</span><span class="n">cells</span><span class="o">=</span><span class="n">cells</span><span class="p">,</span>
@@ -723,8 +789,7 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Reg
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
@@ -735,11 +800,11 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Reg
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_BC_25_2.png" src="../_images/notebooks_Visuals_BC_25_2.png" />
+<img alt="../_images/notebooks_Visuals_BC_28_2.png" src="../_images/notebooks_Visuals_BC_28_2.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vis</span><span class="o">.</span><span class="n">get_data_in_map_plot</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span>
@@ -752,8 +817,7 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Reg
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
@@ -764,14 +828,14 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Reg
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_BC_26_1.png" src="../_images/notebooks_Visuals_BC_26_1.png" />
+<img alt="../_images/notebooks_Visuals_BC_29_1.png" src="../_images/notebooks_Visuals_BC_29_1.png" />
 </div>
 </div>
 <ul class="simple">
 <li><p>Combined Map</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -810,14 +874,14 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Reg
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_BC_28_1.png" src="../_images/notebooks_Visuals_BC_28_1.png" />
+<img alt="../_images/notebooks_Visuals_BC_31_1.png" src="../_images/notebooks_Visuals_BC_31_1.png" />
 </div>
 </div>
 </section>
 <section id="Capacity">
 <h3>Capacity<a class="headerlink" href="#Capacity" title="Link to this heading">#</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># vis.get_data_in_map_plot(cells,</span>
@@ -829,7 +893,7 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Reg
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -869,14 +933,14 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Reg
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_BC_31_1.png" src="../_images/notebooks_Visuals_BC_31_1.png" />
+<img alt="../_images/notebooks_Visuals_BC_34_1.png" src="../_images/notebooks_Visuals_BC_34_1.png" />
 </div>
 </div>
 </section>
 <section id="Score">
 <h3>Score<a class="headerlink" href="#Score" title="Link to this heading">#</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># vis.get_data_in_map_plot(cells,</span>
@@ -888,7 +952,7 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Reg
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -933,7 +997,7 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Reg
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_BC_34_1.png" src="../_images/notebooks_Visuals_BC_34_1.png" />
+<img alt="../_images/notebooks_Visuals_BC_37_1.png" src="../_images/notebooks_Visuals_BC_37_1.png" />
 </div>
 </div>
 <section id="Capacity-Plot-(bins)">
@@ -942,7 +1006,7 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Reg
 <li><p>Not required for now</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import matplotlib.pyplot as plt</span>
@@ -1052,7 +1116,7 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Reg
 <li><p>Not required for now</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import matplotlib.pyplot as plt</span>
@@ -1119,7 +1183,7 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Reg
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clusters_solar</span><span class="o">.</span><span class="n">lcoe</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
@@ -1127,8 +1191,7 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Province&#39;, &#39;Reg
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
@@ -1144,7 +1207,7 @@ Name: lcoe, dtype: float64
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example of correct argument dictionary (if you want to use kwargs)</span>
@@ -1176,7 +1239,7 @@ Name: lcoe, dtype: float64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_BC_41_1.png" src="../_images/notebooks_Visuals_BC_41_1.png" />
+<img alt="../_images/notebooks_Visuals_BC_44_1.png" src="../_images/notebooks_Visuals_BC_44_1.png" />
 </div>
 </div>
 </section>
@@ -1185,7 +1248,7 @@ Name: lcoe, dtype: float64
 <section id="CF-checks">
 <h2>CF checks<a class="headerlink" href="#CF-checks" title="Link to this heading">#</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gwa_country_code</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;region_mapping&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">region_code</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;GWA_country_code&#39;</span><span class="p">)</span>
@@ -1206,7 +1269,7 @@ Name: lcoe, dtype: float64
 <section id="Wind">
 <h3>Wind<a class="headerlink" href="#Wind" title="Link to this heading">#</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get total bounds from boundary GeoDataFrame</span>
@@ -1223,7 +1286,7 @@ Name: lcoe, dtype: float64
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">rioxarray</span> <span class="k">as</span> <span class="nn">rxr</span>
@@ -1240,7 +1303,7 @@ Name: lcoe, dtype: float64
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -1258,11 +1321,11 @@ Name: lcoe, dtype: float64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_BC_47_0.png" src="../_images/notebooks_Visuals_BC_47_0.png" />
+<img alt="../_images/notebooks_Visuals_BC_50_0.png" src="../_images/notebooks_Visuals_BC_50_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vis</span><span class="o">.</span><span class="n">get_CF_wind_check_plot</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span>
@@ -1295,7 +1358,7 @@ Cell <span class="ansi-green-fg">In[21], line 2</span>
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
@@ -1349,7 +1412,7 @@ Cell <span class="ansi-green-fg">In[21], line 2</span>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_BC_49_0.png" src="../_images/notebooks_Visuals_BC_49_0.png" />
+<img alt="../_images/notebooks_Visuals_BC_52_0.png" src="../_images/notebooks_Visuals_BC_52_0.png" />
 </div>
 </div>
 <ul class="simple">
@@ -1359,7 +1422,7 @@ Cell <span class="ansi-green-fg">In[21], line 2</span>
 <section id="CLusters">
 <h3>CLusters<a class="headerlink" href="#CLusters" title="Link to this heading">#</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clusters_wind_f</span><span class="o">=</span><span class="n">clusters_wind</span><span class="p">[</span><span class="n">clusters_wind</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>
@@ -1368,7 +1431,7 @@ Cell <span class="ansi-green-fg">In[21], line 2</span>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total sites </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">clusters_wind_f</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -1391,7 +1454,7 @@ Top 5 sites (16% site) capacity 248 GW (37% of total capacity)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total sites </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">clusters_solar_f</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -1419,7 +1482,7 @@ Top 5 sites (9% site) capacity 16 GW (3% of total capacity)
 <section id="Static-Plots">
 <h1>Static Plots<a class="headerlink" href="#Static-Plots" title="Link to this heading">#</a></h1>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aeroway</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../data/downloaded_data/OSM/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">_aeroway.geojson&#39;</span><span class="p">)</span>
@@ -1436,7 +1499,7 @@ Top 5 sites (9% site) capacity 16 GW (3% of total capacity)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[73]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -1478,11 +1541,11 @@ Top 5 sites (9% site) capacity 16 GW (3% of total capacity)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_BC_57_0.png" src="../_images/notebooks_Visuals_BC_57_0.png" />
+<img alt="../_images/notebooks_Visuals_BC_60_0.png" src="../_images/notebooks_Visuals_BC_60_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[81]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -1529,7 +1592,7 @@ Top 5 sites (9% site) capacity 16 GW (3% of total capacity)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_BC_58_0.png" src="../_images/notebooks_Visuals_BC_58_0.png" />
+<img alt="../_images/notebooks_Visuals_BC_61_0.png" src="../_images/notebooks_Visuals_BC_61_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
