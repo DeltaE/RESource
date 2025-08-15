@@ -156,19 +156,20 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">1. RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">2. RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">Best Practices and Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">4. Best Practices and Guidelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES API References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">Documentation Build Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">6. Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">7. Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Store_explorer.html">Explore data store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
+
 
 
 
@@ -316,7 +317,7 @@ document.write(`
 
 <span class="sd">Functions</span>
 <span class="sd">---------</span>
-<span class="sd">assign_cluster_id(cells, source_column=&#39;Region&#39;, index_name=&#39;cell&#39;)</span>
+<span class="sd">assign_cluster_id(cells, source_column=sub_national_unit_tag, index_name=&#39;cell&#39;)</span>
 <span class="sd">    Generate unique identifiers for grid cells based on region and coordinates</span>
 <span class="sd">    </span>
 <span class="sd">find_optimal_K(resource_type, data_for_clustering, region, wcss_tolerance, max_k)</span>
@@ -395,7 +396,7 @@ document.write(`
 
 <span class="sd">Required Columns:</span>
 <span class="sd">- &#39;x&#39;, &#39;y&#39;: Grid cell centroid coordinates</span>
-<span class="sd">- &#39;Region&#39;: Administrative region classification</span>
+<span class="sd">- sub_national_unit_tag: Administrative region classification</span>
 <span class="sd">- &#39;lcoe_{resource_type}&#39;: Levelized cost of electricity</span>
 <span class="sd">- &#39;potential_capacity_{resource_type}&#39;: Maximum potential capacity</span>
 <span class="sd">- &#39;geometry&#39;: Spatial geometry (Polygon or Point)</span>
@@ -490,7 +491,7 @@ document.write(`
 <div class="viewcode-block" id="assign_cluster_id">
 <a class="viewcode-back" href="../../notes/api.html#RES.cluster.assign_cluster_id">[docs]</a>
 <span class="k">def</span> <span class="nf">assign_cluster_id</span><span class="p">(</span><span class="n">cells</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> 
-                  <span class="n">source_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;Region&#39;</span><span class="p">,</span> 
+                  <span class="n">source_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
                   <span class="n">index_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;cell&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate unique identifiers for grid cells based on region and coordinates.</span>
@@ -505,7 +506,7 @@ document.write(`
 <span class="sd">    cells : gpd.GeoDataFrame</span>
 <span class="sd">        Input GeoDataFrame containing spatial data with &#39;x&#39;, &#39;y&#39; coordinates</span>
 <span class="sd">        and regional classification information</span>
-<span class="sd">    source_column : str, default &#39;Region&#39;</span>
+<span class="sd">    source_column : str, default None</span>
 <span class="sd">        Column name containing regional classification (e.g., province, state)</span>
 <span class="sd">    index_name : str, default &#39;cell&#39;</span>
 <span class="sd">        Name for the new unique identifier column</span>
@@ -546,6 +547,9 @@ document.write(`
 <span class="sd">    - Sets generated IDs as DataFrame index for efficient lookups</span>
 <span class="sd">    - Essential for linking spatial analysis results across workflow steps</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="n">source_column</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">source_column</span><span class="si">}</span><span class="s2">&#39; not defined for indexing. Please provide a valid source column name.&quot;</span><span class="p">)</span>
     <span class="c1"># Ensure the source column exists</span>
     <span class="k">if</span> <span class="n">source_column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cells</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">source_column</span><span class="si">}</span><span class="s2">&#39; does not exist in the GeoDataFrame.&quot;</span><span class="p">)</span>
@@ -717,6 +721,7 @@ document.write(`
         <span class="n">cells_scored</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
         <span class="n">vis_directory</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
         <span class="n">wcss_tolerance</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span>
+        <span class="n">sub_national_unit_tag</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
         <span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
 <span class="w">    </span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -827,7 +832,7 @@ document.write(`
 <span class="sd">    cells_to_cluster_mapping : Main clustering workflow function</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">unique_regions</span> <span class="o">=</span> <span class="n">cells_scored</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+    <span class="n">unique_regions</span> <span class="o">=</span> <span class="n">cells_scored</span><span class="p">[</span><span class="n">sub_national_unit_tag</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">elbow_plot_directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">vis_directory</span><span class="p">,</span> <span class="s1">&#39;Regional_cluster_Elbow_Plots&#39;</span><span class="p">)</span>
         <span class="n">elbow_plot_directory</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -848,7 +853,7 @@ document.write(`
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing columns for clustering in region </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2">. Skipping.&quot;</span><span class="p">)</span>
             <span class="k">continue</span>
 
-        <span class="n">data_for_clustering</span> <span class="o">=</span> <span class="n">cells_scored</span><span class="p">[</span><span class="n">cells_scored</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">region</span><span class="p">][</span><span class="n">expected_cols</span><span class="p">]</span>
+        <span class="n">data_for_clustering</span> <span class="o">=</span> <span class="n">cells_scored</span><span class="p">[</span><span class="n">cells_scored</span><span class="p">[</span><span class="n">sub_national_unit_tag</span><span class="p">]</span> <span class="o">==</span> <span class="n">region</span><span class="p">][</span><span class="n">expected_cols</span><span class="p">]</span>
         
         <span class="c1"># Replace inf/-inf with NaN so they can be imputed</span>
         <span class="n">data_for_clustering</span><span class="o">.</span><span class="n">replace</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -876,7 +881,7 @@ document.write(`
         <span class="n">optimal_k</span> <span class="o">=</span> <span class="n">find_optimal_K</span><span class="p">(</span><span class="n">resource_type</span><span class="p">,</span><span class="n">data_for_clustering_cleaned</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">wcss_tolerance</span><span class="p">,</span> <span class="n">max_k</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
         
         <span class="c1"># Append values to the list</span>
-        <span class="n">region_optimal_k_list</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;Region&#39;</span><span class="p">:</span> <span class="n">region</span><span class="p">,</span> <span class="s1">&#39;Optimal_k&#39;</span><span class="p">:</span> <span class="n">optimal_k</span><span class="p">})</span>
+        <span class="n">region_optimal_k_list</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">sub_national_unit_tag</span><span class="p">:</span> <span class="n">region</span><span class="p">,</span> <span class="s1">&#39;Optimal_k&#39;</span><span class="p">:</span> <span class="n">optimal_k</span><span class="p">})</span>
 
         <span class="c1"># Save the elbow plot</span>
         <span class="n">plot_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;elbow_plot_region_</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s1">.png&#39;</span>
@@ -894,8 +899,8 @@ document.write(`
     <span class="n">NonZeroClustersmask</span><span class="o">=</span><span class="n">region_optimal_k_df</span><span class="p">[</span><span class="s1">&#39;Optimal_k&#39;</span><span class="p">]</span><span class="o">!=</span><span class="mi">0</span>
     <span class="n">region_optimal_k_df</span><span class="o">=</span><span class="n">region_optimal_k_df</span><span class="p">[</span><span class="n">NonZeroClustersmask</span><span class="p">]</span>
 
-    <span class="n">_x</span> <span class="o">=</span> <span class="n">cells_scored</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">region_optimal_k_df</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;Region&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
-    <span class="n">cells_scored</span> <span class="o">=</span> <span class="n">assign_cluster_id</span><span class="p">(</span><span class="n">_x</span><span class="p">,</span><span class="s1">&#39;Region&#39;</span><span class="p">,</span> <span class="s1">&#39;cell&#39;</span><span class="p">)</span><span class="c1">#.set_index(&#39;cell&#39;)</span>
+    <span class="n">_x</span> <span class="o">=</span> <span class="n">cells_scored</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">region_optimal_k_df</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">sub_national_unit_tag</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+    <span class="n">cells_scored</span> <span class="o">=</span> <span class="n">assign_cluster_id</span><span class="p">(</span><span class="n">_x</span><span class="p">,</span><span class="n">sub_national_unit_tag</span><span class="p">,</span> <span class="s1">&#39;cell&#39;</span><span class="p">)</span><span class="c1">#.set_index(&#39;cell&#39;)</span>
     
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Optimal-k based on &#39;LCOE&#39; clustering calculated for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">unique_regions</span><span class="p">)</span><span class="si">}</span><span class="s2"> zones and saved to cell dataframe.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -910,6 +915,7 @@ document.write(`
         <span class="n">cells_scored</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
         <span class="n">vis_directory</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
         <span class="n">wcss_tolerance</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span>
+        <span class="n">sub_national_unit_tag</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
         <span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
         <span class="n">sort_columns</span><span class="p">:</span><span class="nb">list</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1011,7 +1017,7 @@ document.write(`
 <span class="sd">    - &#39;cell&#39;: Unique cell identifier (as index)</span>
 <span class="sd">    </span>
 <span class="sd">    optimal_k_df contains:</span>
-<span class="sd">    - &#39;Region&#39;: Administrative region name</span>
+<span class="sd">    - sub_national_unit_tag : Administrative region unit (e.g. Region or Municipality etc.)</span>
 <span class="sd">    - &#39;Optimal_k&#39;: Optimal number of clusters determined for region</span>
 <span class="sd">    </span>
 <span class="sd">    Performance Considerations</span>
@@ -1051,18 +1057,18 @@ document.write(`
 <span class="sd">    create_cells_Union_in_clusters : Spatial union of clustered cells</span>
 <span class="sd">    find_optimal_K : Core optimal cluster number determination</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dataframe</span><span class="p">,</span><span class="n">optimal_k_df</span><span class="o">=</span><span class="n">pre_process_cluster_mapping</span><span class="p">(</span><span class="n">cells_scored</span><span class="p">,</span><span class="n">vis_directory</span><span class="p">,</span><span class="n">wcss_tolerance</span><span class="p">,</span><span class="n">resource_type</span><span class="p">)</span>
+    <span class="n">dataframe</span><span class="p">,</span><span class="n">optimal_k_df</span><span class="o">=</span><span class="n">pre_process_cluster_mapping</span><span class="p">(</span><span class="n">cells_scored</span><span class="p">,</span><span class="n">vis_directory</span><span class="p">,</span><span class="n">wcss_tolerance</span><span class="p">,</span><span class="n">sub_national_unit_tag</span><span class="p">,</span><span class="n">resource_type</span><span class="p">)</span>
 
     <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;Mapping the Optimal Number of Clusters for Each region ...&quot;</span><span class="p">)</span>
 
     <span class="n">clusters</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">dataframe_filtered</span><span class="o">=</span><span class="n">dataframe</span><span class="p">[</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">optimal_k_df</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]))]</span>
+    <span class="n">dataframe_filtered</span><span class="o">=</span><span class="n">dataframe</span><span class="p">[</span><span class="n">dataframe</span><span class="p">[</span><span class="n">sub_national_unit_tag</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">optimal_k_df</span><span class="p">[</span><span class="n">sub_national_unit_tag</span><span class="p">]))]</span>
     
-    <span class="k">for</span> <span class="n">region</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">dataframe_filtered</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Region&#39;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">region</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">dataframe_filtered</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">sub_national_unit_tag</span><span class="p">):</span>
         <span class="n">group</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">sort_columns</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">region_rows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
         
-        <span class="n">optimal_k</span> <span class="o">=</span> <span class="n">optimal_k_df</span><span class="p">[</span><span class="n">optimal_k_df</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">region</span><span class="p">][</span><span class="s1">&#39;Optimal_k&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">optimal_k</span> <span class="o">=</span> <span class="n">optimal_k_df</span><span class="p">[</span><span class="n">optimal_k_df</span><span class="p">[</span><span class="n">sub_national_unit_tag</span><span class="p">]</span> <span class="o">==</span> <span class="n">region</span><span class="p">][</span><span class="s1">&#39;Optimal_k&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">region_step_size</span> <span class="o">=</span> <span class="n">region_rows</span> <span class="o">//</span> <span class="n">optimal_k</span>
         
         <span class="n">clusters</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">group</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">region_step_size</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">region_rows</span><span class="p">,</span> <span class="n">region_step_size</span><span class="p">)])</span>
@@ -1084,6 +1090,7 @@ document.write(`
 <span class="k">def</span> <span class="nf">create_cells_Union_in_clusters</span><span class="p">(</span>
         <span class="n">cluster_map_gdf</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> 
         <span class="n">region_optimal_k_df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">sub_national_unit_tag</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
         <span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span>
             <span class="p">)</span><span class="o">-&gt;</span><span class="nb">tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span><span class="nb">dict</span><span class="p">]:</span>
 
@@ -1103,10 +1110,10 @@ document.write(`
 <span class="sd">    ----------</span>
 <span class="sd">    cluster_map_gdf : gpd.GeoDataFrame</span>
 <span class="sd">        Grid cells with cluster assignments from cells_to_cluster_mapping</span>
-<span class="sd">        Must contain &#39;Region&#39;, &#39;Cluster_No&#39;, and geometric attributes</span>
+<span class="sd">        Must contain defined sub_national_unit_tag, &#39;Cluster_No&#39;, and geometric attributes</span>
 <span class="sd">    region_optimal_k_df : pd.DataFrame</span>
 <span class="sd">        Summary of optimal cluster numbers by region</span>
-<span class="sd">        Contains &#39;Region&#39; and &#39;Optimal_k&#39; columns</span>
+<span class="sd">        Contains defined sub_national_unit_tag and &#39;Optimal_k&#39; columns</span>
 <span class="sd">    resource_type : str</span>
 <span class="sd">        Resource type identifier (&#39;solar&#39;, &#39;wind&#39;, &#39;bess&#39;)</span>
 <span class="sd">        Used for column naming and aggregation rules</span>
@@ -1159,7 +1166,7 @@ document.write(`
 <span class="sd">    ----------------</span>
 <span class="sd">    dissolved_gdf contains unified clusters with:</span>
 <span class="sd">    - &#39;cluster_id&#39;: Unique cluster identifier (as index)</span>
-<span class="sd">    - &#39;Region&#39;: Administrative region name</span>
+<span class="sd">    -  sub_national_unit_tag: Administrative region unit (e.g., Region or Municipality)</span>
 <span class="sd">    - &#39;Cluster_No&#39;: Sequential cluster number within region</span>
 <span class="sd">    - &#39;Rank&#39;: Cluster ranking based on LCOE (ascending)</span>
 <span class="sd">    - Economic attributes: Aggregated costs and performance metrics</span>
@@ -1233,7 +1240,9 @@ document.write(`
 <span class="sd">    gpd.GeoDataFrame.dissolve : Core spatial dissolve operation</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot; Preparing Clusters...&quot;</span><span class="p">)</span>
-    
+    <span class="n">node_distance_col</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_available_column</span><span class="p">(</span><span class="n">cluster_map_gdf</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;nearest_station_distance_km&#39;</span><span class="p">,</span> <span class="s1">&#39;nearest_distance&#39;</span><span class="p">])</span>
+    <span class="n">grid_node_col</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_available_column</span><span class="p">(</span><span class="n">cluster_map_gdf</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;nearest_station&#39;</span><span class="p">,</span> <span class="s1">&#39;nearest_connection_point&#39;</span><span class="p">])</span>
+        
     <span class="c1"># Initialize an aggregation dictionary</span>
     <span class="n">agg_dict</span> <span class="o">=</span> <span class="p">{</span><span class="c1">#f&#39;LCOE_{resource_type}&#39;: lambda x: x.iloc[len(x) // 2], </span>
                 <span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">],</span> 
@@ -1243,9 +1252,9 @@ document.write(`
                 <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">_CF_mean&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span>
                 <span class="s1">&#39;Cluster_No&#39;</span><span class="p">:</span><span class="s1">&#39;first&#39;</span><span class="p">,</span>
                 <span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;Region&#39;</span><span class="p">:</span> <span class="s1">&#39;first&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;nearest_station&#39;</span><span class="p">:</span><span class="s1">&#39;first&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;nearest_station_distance_km&#39;</span><span class="p">:</span><span class="s1">&#39;first&#39;</span><span class="p">}</span>
+                <span class="n">sub_national_unit_tag</span><span class="p">:</span> <span class="s1">&#39;first&#39;</span><span class="p">,</span>
+                <span class="n">grid_node_col</span><span class="p">:</span><span class="s1">&#39;first&#39;</span><span class="p">,</span>
+                <span class="n">node_distance_col</span><span class="p">:</span><span class="s1">&#39;first&#39;</span><span class="p">}</span>
 
     <span class="c1"># Initialize an empty list to store the dissolved results</span>
     <span class="n">dissolved_gdf_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1254,10 +1263,10 @@ document.write(`
     <span class="n">dissolved_indices</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
     <span class="c1"># Loop through each region</span>
-    <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">region_optimal_k_df</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">region_optimal_k_df</span><span class="p">[</span><span class="n">sub_national_unit_tag</span><span class="p">]:</span>
         <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; Creating cluster for </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">region_optimal_k_df</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">region_mask</span> <span class="o">=</span> <span class="n">cluster_map_gdf</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">region</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; Creating cluster for </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">region_optimal_k_df</span><span class="p">[</span><span class="n">sub_national_unit_tag</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">region_mask</span> <span class="o">=</span> <span class="n">cluster_map_gdf</span><span class="p">[</span><span class="n">sub_national_unit_tag</span><span class="p">]</span> <span class="o">==</span> <span class="n">region</span>
         <span class="n">region_cells</span> <span class="o">=</span> <span class="n">cluster_map_gdf</span><span class="p">[</span><span class="n">region_mask</span><span class="p">]</span>
 
         <span class="c1"># Initialize dictionary for the current region</span>
@@ -1276,12 +1285,8 @@ document.write(`
 
         <span class="c1"># Concatenate all GeoDataFrames in the list</span>
         <span class="n">dissolved_gdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dissolved_gdf_list</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        
-        <span class="c1"># Keep only the specified columns</span>
-        <span class="c1"># columns_to_keep = [&#39;Region&#39;,&#39;Region&#39;,&#39;Cluster_No&#39;, &#39;capex&#39;, &#39;potential_capacity&#39;,&#39;lcoe&#39;,&#39;nearest_station&#39;,&#39;nearest_station_distance_km&#39;,&#39;geometry&#39; ]</span>
-        <span class="c1"># dissolved_gdf = dissolved_gdf[columns_to_keep]</span>
 
-        <span class="n">dissolved_gdf</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">assign_regional_cell_ids</span><span class="p">(</span><span class="n">dissolved_gdf</span><span class="p">,</span><span class="s1">&#39;Region&#39;</span><span class="p">,</span><span class="s1">&#39;cluster_id&#39;</span><span class="p">)</span>
+        <span class="n">dissolved_gdf</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">assign_regional_cell_ids</span><span class="p">(</span><span class="n">dissolved_gdf</span><span class="p">,</span><span class="n">sub_national_unit_tag</span><span class="p">,</span><span class="s1">&#39;cluster_id&#39;</span><span class="p">)</span>
 
         <span class="n">dissolved_gdf</span><span class="p">[</span><span class="s1">&#39;Cluster_No&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dissolved_gdf</span><span class="p">[</span><span class="s1">&#39;Cluster_No&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
         <span class="n">dissolved_gdf</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>

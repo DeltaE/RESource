@@ -156,19 +156,20 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">1. RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">2. RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">Best Practices and Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">4. Best Practices and Guidelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES API References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">Documentation Build Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">6. Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">7. Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Store_explorer.html">Explore data store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
+
 
 
 
@@ -493,7 +494,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">=</span><span class="n">Units</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">required_args</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gridcells</span><span class="o">=</span><span class="n">GridCells</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">required_args</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">timeseries</span><span class="o">=</span><span class="n">Timeseries</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">required_args</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gadmBoundary</span><span class="o">=</span><span class="n">GADMBoundaries</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">required_args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gadmBoundary</span><span class="o">=</span><span class="n">GADMBoundaries</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">required_args</span><span class="p">)</span>        
         <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">=</span><span class="n">DataHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_processor</span><span class="o">=</span><span class="n">CellCapacityProcessor</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">required_args</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">country_name</span> <span class="o">==</span> <span class="s1">&#39;Canada&#39;</span><span class="p">:</span>
@@ -655,6 +656,8 @@ document.write(`
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Global Solar Atlas data not yet supported for solar.&quot;</span><span class="p">)</span>
             <span class="k">pass</span>
         
+        <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">store_grid_cells</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;cells&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">store_grid_cells</span> </div>
 
     
@@ -709,6 +712,7 @@ document.write(`
         
         <span class="c1"># Initialize cells data</span>
         <span class="k">if</span> <span class="n">cells</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">store_grid_cells</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;cells&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">store_grid_cells</span> <span class="o">=</span> <span class="n">cells</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -789,8 +793,6 @@ document.write(`
                 <span class="p">)</span>
                 
                 <span class="bp">self</span><span class="o">.</span><span class="n">store_grid_cells</span><span class="p">[[</span><span class="s2">&quot;nearest_connection_point&quot;</span><span class="p">,</span> <span class="s2">&quot;nearest_distance&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">connection_results</span>
-                
-                <span class="c1"># self.store_grid_cells.drop(columns=[&quot;nearest_connection_point&quot;,&quot;centroid&quot;], inplace=True) #temp</span>
                 
                 <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span>
                                 <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| ✔ Connection point analysis completed.&quot;</span><span class="p">)</span>
@@ -884,6 +886,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">resource_disaggregation_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_resource_disaggregation_config</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wcss_tolerance</span><span class="o">=</span><span class="n">wcss_tolerance</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scored_cells</span><span class="o">=</span><span class="n">scored_cells</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gadm_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_gadm_config</span><span class="p">()</span>
         
         <span class="c1"># self.wcss_tolerance:float= self.resource_disaggregation_config[&#39;WCSS_tolerance&#39;]</span>
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
@@ -904,13 +907,14 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">ERA5_cells_cluster_map</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_optimal_k_df</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">cells_to_cluster_mapping</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scored_cells</span><span class="p">,</span> 
                                                                                                  <span class="bp">self</span><span class="o">.</span><span class="n">vis_dir</span><span class="p">,</span> 
                                                                                                  <span class="bp">self</span><span class="o">.</span><span class="n">wcss_tolerance</span><span class="p">,</span>
+                                                                                                 <span class="bp">self</span><span class="o">.</span><span class="n">sub_national_unit_tag</span><span class="p">,</span>
                                                                                                  <span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="p">,</span>
-                                                                                                <span class="c1">#  [f&#39;LCOE_{self.resource_type}&#39;, f&#39;potential_capacity_{self.resource_type}&#39;]</span>
                                                                                                  <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
                                                                                                  <span class="p">)</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_cluster_gdf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dissolved_indices</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">create_cells_Union_in_clusters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ERA5_cells_cluster_map</span><span class="p">,</span> 
                                                                                                <span class="bp">self</span><span class="o">.</span><span class="n">region_optimal_k_df</span><span class="p">,</span>
+                                                                                               <span class="bp">self</span><span class="o">.</span><span class="n">sub_national_unit_tag</span><span class="p">,</span>
                                                                                                <span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="p">)</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_cluster_gdf</span><span class="p">[</span><span class="s1">&#39;Operational_life&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_disaggregation_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Operational_life&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
@@ -922,7 +926,7 @@ document.write(`
         <span class="c1"># Corrected version of the code</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_cluster_gdf</span><span class="p">,</span><span class="sa">f</span><span class="s1">&#39;clusters/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">force_update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dissolved_cell_indices_df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dissolved_indices</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dissolved_cell_indices_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Region&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dissolved_cell_indices_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sub_national_unit_tag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dissolved_cell_indices_df</span><span class="p">,</span><span class="sa">f</span><span class="s1">&#39;dissolved_indices/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">force_update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clusters_nt</span></div>
@@ -952,7 +956,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">cells_timeseries</span><span class="o">=</span><span class="n">cells_timeseries</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_cluster_gdf</span><span class="o">=</span><span class="n">clusters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dissolved_cell_indices_df</span><span class="o">=</span><span class="n">dissolved_indices</span>
-        
+
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells_timeseries</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cells_timeseries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="sa">F</span><span class="s1">&#39;timeseries/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -966,7 +970,8 @@ document.write(`
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cluster_ts_df</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeseries</span><span class="o">.</span><span class="n">get_cluster_timeseries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_cluster_gdf</span><span class="p">,</span>
                                                                 <span class="bp">self</span><span class="o">.</span><span class="n">cells_timeseries</span><span class="p">,</span>
-                                                                <span class="bp">self</span><span class="o">.</span><span class="n">dissolved_cell_indices_df</span><span class="p">)</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">dissolved_cell_indices_df</span><span class="p">,</span>
+                                                                <span class="bp">self</span><span class="o">.</span><span class="n">sub_national_unit_tag</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_ts_df</span></div>
 
 

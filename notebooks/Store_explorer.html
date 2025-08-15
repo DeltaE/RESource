@@ -160,9 +160,9 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../notes/resource_builder.html">1. RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/setup_guide.html">2. RESource Project - Complete Setup &amp; Development Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">3. Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/learning.html">4. Best Practices and Guidelines</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notes/api.html">5. RES API References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/api.html">RES API References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/data.html">6. Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/documentation_guide.html">7. Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/developers.html">Contributing Developers</a></li>
@@ -171,6 +171,7 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Explore data store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Visuals_BC.html">Example Visuals for BC</a></li>
+
 
 
 
@@ -355,7 +356,8 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">font_family</span><span class="o">=</span><span class="s1">&#39;sans-serif&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;../RES/visual_styles/elsevier.mplstyle&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -497,7 +499,7 @@ document.write(`
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -540,9 +542,9 @@ document.write(`
         <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s2">&quot;Solar&quot;</span><span class="p">,</span>
         <span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper right&#39;</span><span class="p">,</span>
         <span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">legend_x_ax_offset</span><span class="p">,</span> <span class="n">legend_y_ax_offset</span><span class="p">),</span>
-        <span class="s1">&#39;fontsize&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+        <span class="s1">&#39;fontsize&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
         <span class="s1">&#39;frameon&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s1">&#39;title_fontsize&#39;</span><span class="p">:</span> <span class="mi">14</span>
+        <span class="s1">&#39;title_fontsize&#39;</span><span class="p">:</span> <span class="mi">18</span>
     <span class="p">}</span>
 <span class="p">)</span>
 
@@ -558,9 +560,9 @@ document.write(`
     <span class="n">legend_kwds</span><span class="o">=</span><span class="p">{</span>
         <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s2">&quot;Wind&quot;</span><span class="p">,</span>
         <span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">legend_x_ax_offset</span><span class="p">,</span> <span class="n">legend_y_ax_offset</span><span class="p">),</span>
-        <span class="s1">&#39;fontsize&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
-        <span class="s1">&#39;frameon&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s1">&#39;title_fontsize&#39;</span><span class="p">:</span> <span class="mi">14</span>
+    <span class="c1">#     &#39;fontsize&#39;: 14,</span>
+    <span class="c1">#     &#39;frameon&#39;: False,</span>
+    <span class="c1">#     &#39;title_fontsize&#39;: 18</span>
     <span class="p">}</span>
 <span class="p">)</span>
 

@@ -156,19 +156,20 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">1. RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">2. RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">Best Practices and Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">4. Best Practices and Guidelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES API References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">Documentation Build Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">6. Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">7. Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Store_explorer.html">Explore data store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
+
 
 
 
@@ -484,6 +485,7 @@ document.write(`
 <a class="viewcode-back" href="../../notes/api.html#RES.score.CellScorer.calculate_score">[docs]</a>
     <span class="k">def</span> <span class="nf">calculate_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                         <span class="n">row</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span>
+                        <span class="n">node_distance_col</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
                         <span class="n">CF_column</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
                         <span class="n">CRF</span><span class="p">:</span><span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -527,22 +529,10 @@ document.write(`
 <span class="sd">            - Converts from M$/MWh to $/MWh for standard reporting units</span>
 <span class="sd">            - Incorporates site-specific capacity factors and grid integration costs</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">required_columns</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s1">&#39;nearest_station_distance_km&#39;</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s1">&#39;grid_connection_cost_per_km_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s1">&#39;tx_line_rebuild_cost_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s1">&#39;capex_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s1">&#39;fom_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s1">&#39;vom_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
-            <span class="n">CF_column</span>
-        <span class="p">]</span>
-        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">required_columns</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">row</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Missing required column: </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">alert</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        
+
         <span class="c1"># Calculate the total cost</span>
         <span class="n">total_cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_total_cost</span><span class="p">(</span>
-            <span class="n">row</span><span class="p">[</span><span class="s1">&#39;nearest_station_distance_km&#39;</span><span class="p">],</span>  <span class="c1"># km</span>
+            <span class="n">row</span><span class="p">[</span><span class="n">node_distance_col</span><span class="p">],</span>  <span class="c1"># km</span>
             <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;grid_connection_cost_per_km_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>  <span class="c1"># m$/km</span>
             <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;tx_line_rebuild_cost_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>  <span class="c1"># m$/km</span>
             <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;capex_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>
@@ -627,8 +617,12 @@ document.write(`
 <span class="sd">            - LCOE values are in $/MWh for standard industry comparison</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dataframe</span> <span class="o">=</span> <span class="n">cells</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># Use the input DataFrame for calculations</span>
+
+        
+        <span class="n">node_distance_col</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_available_column</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;nearest_station_distance_km&#39;</span><span class="p">,</span> <span class="s1">&#39;nearest_distance&#39;</span><span class="p">])</span>
+        
         <span class="n">required_columns</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s1">&#39;nearest_station_distance_km&#39;</span><span class="p">,</span>
+            <span class="n">node_distance_col</span><span class="p">,</span>
             <span class="sa">f</span><span class="s1">&#39;grid_connection_cost_per_km_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
             <span class="sa">f</span><span class="s1">&#39;tx_line_rebuild_cost_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
             <span class="sa">f</span><span class="s1">&#39;capex_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
@@ -636,8 +630,10 @@ document.write(`
             <span class="sa">f</span><span class="s1">&#39;Operational_life_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
             <span class="n">CF_column</span>
         <span class="p">]</span>
-        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">required_columns</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Missing required column: </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">alert</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Check that all required columns were found</span>
+        <span class="n">missing_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">required_columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">missing_columns</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;Missing required columns or alternatives not found&quot;</span><span class="p">)</span>
         
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
                        <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Calculating score for cells...&quot;</span><span class="p">)</span> 
@@ -648,7 +644,7 @@ document.write(`
         
         <span class="c1"># Calculate LCOE using the dedicated calculate_score method</span>
         <span class="n">dataframe</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
-            <span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_score</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">CF_column</span><span class="p">,</span> <span class="n">CRF</span><span class="p">),</span> 
+            <span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_score</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">node_distance_col</span><span class="p">,</span><span class="n">CF_column</span><span class="p">,</span> <span class="n">CRF</span><span class="p">),</span> 
             <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
         <span class="p">)</span>
         
@@ -662,7 +658,8 @@ document.write(`
 </div>
 
 
- 
+
+
     <span class="c1"># def calc_LCOE_lambda_m1(self,</span>
     <span class="c1">#                      row):</span>
         

@@ -156,19 +156,20 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">1. RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">2. RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">Best Practices and Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">4. Best Practices and Guidelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES API References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">Documentation Build Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">6. Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">7. Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Store_explorer.html">Explore data store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
+
 
 
 
@@ -545,19 +546,16 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box_grid</span></div>
 
     
-<div class="viewcode-block" id="GridCells.get_custom_grid">
-<a class="viewcode-back" href="../../notes/api.html#RES.cell.GridCells.get_custom_grid">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_custom_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box_grid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__get_grid__</span><span class="p">()</span>
-        <span class="n">_grid_cells_</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">boundary_region</span><span class="o">.</span><span class="n">overlay</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounding_box_grid</span><span class="p">,</span><span class="n">how</span><span class="o">=</span><span class="s1">&#39;intersection&#39;</span><span class="p">,</span><span class="n">keep_geom_type</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">grid_cells</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">assign_cell_id</span><span class="p">(</span><span class="n">_grid_cells_</span><span class="p">)</span>
+    <span class="c1"># def get_custom_grid(self):</span>
+    <span class="c1">#     self.bounding_box_grid=self.__get_grid__()</span>
+    <span class="c1">#     _grid_cells_=self.boundary_region.overlay(self.bounding_box_grid,how=&#39;intersection&#39;,keep_geom_type=True)</span>
+    <span class="c1">#     self.grid_cells=utils.assign_cell_id(_grid_cells_)</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid_cells</span><span class="p">,</span><span class="s1">&#39;cells&#39;</span><span class="p">,</span><span class="n">force_update_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1">#     self.datahandler.to_store(self.grid_cells,&#39;cells&#39;,force_update_key=True)</span>
         
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid_cells</span><span class="p">)</span><span class="si">}</span><span class="s2"> Grid Cells prepared for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="c1">#     utils.print_update(level=2,message=f&quot;{len(self.grid_cells)} Grid Cells prepared for {self.region_short_code}.&quot;)</span>
                                   
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_cells</span></div>
-
+    <span class="c1">#     return self.grid_cells</span>
     
 <div class="viewcode-block" id="GridCells.get_default_grid">
 <a class="viewcode-back" href="../../notes/api.html#RES.cell.GridCells.get_default_grid">[docs]</a>
@@ -566,7 +564,7 @@ document.write(`
         <span class="n">_era5_grid_cells_gdf_</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="o">.</span><span class="n">grid</span>
         <span class="n">_resource_grid_cells_gdf_</span><span class="o">=</span><span class="n">_era5_grid_cells_gdf_</span><span class="o">.</span><span class="n">overlay</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resource_grid_cells</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">assign_cell_id</span><span class="p">(</span><span class="n">_resource_grid_cells_gdf_</span><span class="p">,</span>
-            <span class="n">source_column</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gadmBoundary</span><span class="o">.</span><span class="n">gadm_config</span><span class="p">[</span><span class="s1">&#39;datafield_mapping&#39;</span><span class="p">][</span><span class="s1">&#39;NAME_2&#39;</span><span class="p">])</span>
+            <span class="n">source_column</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gadmBoundary</span><span class="o">.</span><span class="n">sub_national_unit_tag</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_grid_cells</span><span class="p">,</span><span class="s1">&#39;cells&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="p">,</span><span class="s1">&#39;boundary&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_grid_cells</span></div>

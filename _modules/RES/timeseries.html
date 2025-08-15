@@ -156,19 +156,20 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">1. RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">2. RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">Best Practices and Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">4. Best Practices and Guidelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES API References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">Documentation Build Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">6. Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/documentation_guide.html">7. Documentation Build Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Store_explorer.html">Explore data store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
+
 
 
 
@@ -535,11 +536,7 @@ document.write(`
         
         <span class="c1"># Step 1.1: Get the Atlite&#39;s Cutout Object loaded</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ERA5Cutout</span><span class="o">.</span><span class="n">get_era5_cutout</span><span class="p">()</span>
-        
-        <span class="c1">## Only,if cells are not processed already</span>
-        <span class="c1"># self.region_grid_cells = self.cutout.grid.overlay(self.region_boundary, how=&#39;intersection&#39;,keep_geom_type=True)</span>
-        <span class="c1"># self.region_grid_cells = utils.assign_cell_id(self.region_grid_cells,&#39;Region&#39;,self.site_index)</span>
-        
+
         <span class="c1"># Step 1.2: Get the region Grid Cells from Store. Ideally these cells should have same resolution as the Cutout (the indices are prepared from x,y coords and Region names)</span>
          <span class="c1"># Initialize the local store for updated data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">=</span><span class="n">DataHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">)</span>
@@ -676,11 +673,7 @@ document.write(`
         
         <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ERA5Cutout</span><span class="o">.</span><span class="n">get_era5_cutout</span><span class="p">()</span>
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt; </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span><span class="si">}</span><span class="s2"> Grid Cells from Store Cutout&quot;</span><span class="p">)</span>
-        
-        <span class="c1"># Only,if cells are not processed already</span>
-        <span class="c1"># self.region_grid_cells = self.cutout.grid.overlay(self.region_boundary, how=&#39;intersection&#39;,keep_geom_type=True)</span>
-        <span class="c1"># self.region_grid_cells = utils.assign_cell_id(self.region_grid_cells,&#39;Region&#39;,self.site_index)</span>
-
+<span class="w">    </span>
 <span class="w">        </span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39; preferably for project points applications</span>
 <span class="sd">        self.wind_atlas,self.wind_geojson=self.get_windspeed_rescaling_data()</span>
@@ -774,7 +767,8 @@ document.write(`
     <span class="k">def</span> <span class="nf">get_cluster_timeseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                <span class="n">all_clusters</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                                <span class="n">cells_timeseries</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-                               <span class="n">dissolved_indices</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+                               <span class="n">dissolved_indices</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                               <span class="n">sub_national_unit_tag</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
 
         <span class="c1"># Initialize an empty list to store the results</span>
         <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
@@ -782,7 +776,7 @@ document.write(`
         <span class="c1"># Iterate through each cluster</span>
         <span class="k">for</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">all_clusters</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
             <span class="c1"># Extract the cluster&#39;s region and cluster number</span>
-            <span class="n">region</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span>
+            <span class="n">region</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="n">sub_national_unit_tag</span><span class="p">]</span>
             <span class="n">cluster_no</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;Cluster_No&#39;</span><span class="p">]</span>  <span class="c1"># Dynamically fetch the cluster number from the row</span>
             
             <span class="c1"># Get the cell indices for the cluster based on the region and cluster number</span>
