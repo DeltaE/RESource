@@ -34,9 +34,6 @@ class AttributesParser:
     def __post_init__(self):
         self.site_index='cell'
 
-        # Define the path and filename
-        self.store = Path(f"data/store/resources_{self.region_short_code}.h5")
-        self.store.parent.mkdir(parents=True, exist_ok=True)
 
         # Convert region_short_code to uppercase to handle user types regarding case-sensitive letter inputs.
         if self.region_short_code is not None:
@@ -50,7 +47,14 @@ class AttributesParser:
         self.region_code_validity=self.is_region_code_valid()
         self.sub_national_unit_tag=self.get_gadm_config().get('datafield_mapping', {}).get('NAME_2', 'NAME_2')
         self.multi_country_flag = self.get_multi_country_flag  # This will set the multi_country_flag based on the config file.
+        self.RUN_ID=self.get_RUN_ID() 
+        self.results_save_to=self.get_results_save_to_path()
+        
 
+        # Define the store file path and filename
+        self.store = Path(f"data/store/resources_{self.region_short_code}_{self.RUN_ID}.h5")
+        self.store.parent.mkdir(parents=True, exist_ok=True)
+    
     def load_config(self,config_file_path):
         """ 
         Loads the yaml file as dictionary and extracts the attributes to pass on child classes. 
@@ -58,6 +62,15 @@ class AttributesParser:
         with open(config_file_path, 'r') as file:
             data = yaml.safe_load(file)
         return data
+    
+    def get_results_save_to_path(self):
+        """
+        Returns the path where results will be saved.
+        """
+        results_save_to=Path('results/RESources')
+        results_save_to.mkdir(parents=True, exist_ok=True)
+        
+        return results_save_to
     
     @property
     def get_multi_country_flag(self) -> bool:
@@ -90,6 +103,13 @@ class AttributesParser:
         else:
             return True
 
+    def get_RUN_ID(self)-> str:
+        """
+        The RUN_ID is used to identify the specific run of the scenario.
+        It is typically used to differentiate between different runs of the same scenario, especially when multiple runs are performed with different parameters or configurations.
+        """
+        return self.config.get('Scenario').get('run_id')
+    
     def load_snapshot(self)->tuple:
         start_date = self.config.get('cutout', {}).get('snapshots', {}).get('start', [[]])[0]
         end_date = self.config.get('cutout', {}).get('snapshots', {}).get('end', [[]])[0]

@@ -208,7 +208,6 @@ class RESources_builder(AttributesParser):
         self.scorer=CellScorer(**self.required_args)
         self.gwa_cells=GWACells(**self.required_args)
         
-        self.results_save_to=Path('results/RESource')
         self.region_name=self.get_region_name()
         
         
@@ -223,6 +222,10 @@ class RESources_builder(AttributesParser):
         ) = self.load_snapshot()
         utils.print_update(level=PRINT_LEVEL_BASE+1,
                            message=f"Snapshot for Resources: {self.start_date} to {self.end_date}")
+        
+        # Save the configuration to the results directory
+        utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| Saving configuration to results directory...")                
+        utils.save_to_yaml(self.config, self.results_save_to/self.region_short_code/f'config_{self.region_short_code}_{self.RUN_ID}.yaml')
         
 
     def get_grid_cells(self)->gpd.GeoDataFrame:
@@ -259,10 +262,9 @@ class RESources_builder(AttributesParser):
         """
         Retrieves the potential capacity of the cells based on land availability and land-use intensity.
         Args:   
-
             force_update (bool): If True, forces the update of the cell capacity data.
         Returns:
-            tuple: A namedtuple containing the cells GeoDataFrame and a capacity matrix.
+            tuple: A namedtuple containing the cells with their potential capacity and the capacity matrix.
         Notes:
             - The capacity matrix is a 2D array where each row corresponds to a cell and each column corresponds to a time step.
             - The potential capacity is calculated as:
@@ -275,14 +277,14 @@ class RESources_builder(AttributesParser):
         utils.print_update(level=PRINT_LEVEL_BASE+1,
                            message=f"{__name__}| Preparing Cells' capacity...")
         
-        self.cells_with_cap_nt:tuple=self.cell_processor.get_capacity()
+        self.cells_with_capacity,self.capacity_matrix=self.cell_processor.get_capacity()
         
                 
         utils.print_update(level=PRINT_LEVEL_BASE+2,
                            message=f"{__name__}| Cells' capacity updated.")
         
-        return self.cells_with_cap_nt # returns a namedtuple with `data` and `matrix attributes
-
+        return self.cells_with_capacity,self.capacity_matrix # returns a namedtuple with `data` and `matrix attributes
+    
     def extract_weather_data(self):
         """Extracts weather data for the cells (e.g. windspeed, solar influx).
         This method retrieves the ERA5 cutout and extracts windspeed data for the cells.

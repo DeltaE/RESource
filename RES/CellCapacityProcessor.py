@@ -1,5 +1,6 @@
 import inspect
 from typing import Dict
+from pathlib import Path
 
 import geopandas as gpd
 import matplotlib.pyplot as plt
@@ -465,7 +466,9 @@ class CellCapacityProcessor(AttributesParser):
         self.datahandler.to_store(self.provincial_cells,'cells')
      
         return cells_with_capacity,capacity_matrix
-
+    
+    
+    
 ## Visuals 
     def plot_ERAF5_grid_land_availability(self,
                                           region_boundary:gpd.GeoDataFrame=None,
@@ -582,3 +585,21 @@ class CellCapacityProcessor(AttributesParser):
         plt.savefig(f'vis/misc/land_availability_excluderResolution_{self.region_name}.png',dpi=300)
         utils.print_update(level=PRINT_LEVEL_BASE+3,message=f"{__name__}|Land availability map (excluder resolution) saved at vis/misc/land_availability_excluderResolution_{self.region_name}.png")
         return fig
+    
+@staticmethod
+def get_sub_nationally_aggregated_capacity(cells_with_capacity:gpd.GeoDataFrame=None,
+                                           sub_national_unit_tag:str=None):
+    
+    if cells_with_capacity is None or not isinstance(cells_with_capacity, gpd.GeoDataFrame):
+        raise ValueError("The input must be a valid GeoDataFrame with capacity data.")
+    if 'potential_capacity_solar' not in cells_with_capacity.columns or 'potential_capacity_wind' not in cells_with_capacity.columns:
+        raise ValueError("The input GeoDataFrame must contain 'potential_capacity_solar' and 'potential_capacity_wind' columns.")
+    if sub_national_unit_tag is None or sub_national_unit_tag not in cells_with_capacity.columns:
+        raise ValueError("The input GeoDataFrame must contain 'sub_national_unit_tag' column for aggregation.")
+    
+        
+    cells_aggr=cells_with_capacity.groupby(sub_national_unit_tag).aggregate({'potential_capacity_solar':'sum','potential_capacity_wind':'sum'})
+
+    cells_aggr[['potential_capacity_solar', 'potential_capacity_wind']] = cells_aggr[['potential_capacity_solar', 'potential_capacity_wind']].round().astype(int)
+
+    return cells_aggr
