@@ -95,7 +95,16 @@ def size_for_legend(mw):
     """
     return np.sqrt(mw / 100)  # since s = mw / 100 in scatter
 
-def add_compass_arrow(ax, x=0.9, y=0.9, length=0.05, text_offset=0.01):
+def add_compass_arrow(ax, 
+                      x:float=0.9, 
+                      y:float=0.9,  
+                      fontsize:float=9, 
+                      color:str='grey',
+                      length:float=0.05, 
+                      text_offset:float=0.01,
+                      arrow_head_width:float=6,
+                      arrow_width=1.5
+                      ):
     """
     Adds a simple north arrow to the plot.
     Parameters:
@@ -105,12 +114,62 @@ def add_compass_arrow(ax, x=0.9, y=0.9, length=0.05, text_offset=0.01):
         length (float): Length of the arrow in axes fraction units.
         text_offset (float): Offset for the 'N' label below the arrow.
     """
-    ax.annotate('', xy=(x, y), xytext=(x, y - length),
-                xycoords='axes fraction',
-                arrowprops=dict(facecolor='black', width=1.5, headwidth=6))
+    ax.annotate(
+        '', 
+        xy=(x, y), 
+        xytext=(x, y - length),
+        xycoords='axes fraction',
+        arrowprops=dict(
+            facecolor=color,         # Fill color of the arrow head
+            edgecolor=color,         # Edge color of the arrow
+            width=arrow_width,       # Width of the arrow shaft
+            headwidth=arrow_head_width, # Width of the arrow head
+            headlength=arrow_head_width * 1.5, # Length of the arrow head
+            shrink=0,                # Do not shrink the arrow
+            lw=0.5,                  # Line width of the arrow edge
+            alpha=0.8,               # Transparency
+            linestyle='-',           # Line style
+            arrowstyle='|>',        # Arrow style
+            mutation_scale=12        # Scale of the arrow head
+        )
+    )
     ax.text(x, y - length - text_offset, 'N', transform=ax.transAxes,
-            ha='center', va='top', fontsize=12, fontweight='bold', color='black')
-
+            ha='center', va='top', fontsize=fontsize, fontweight='bold', color=color)
+def add_compass_arrow_custom(ax, 
+                            x: float = 0.9, 
+                            y: float = 0.9,  
+                            fontsize: float = 9, 
+                            color: str = 'grey',
+                            length: float = 0.01, 
+                            text_offset: float = 0.01,
+                            arrow_head_width: float = 6,
+                            arrow_border_width: float = 0.5,
+                            text: str = 'N'
+                            ):
+    """
+    Alternative version with more arrow head customization.
+    Uses the older arrow method for more control over head dimensions.
+    """
+    # Option 2: Without arrowstyle (allows headwidth/headlength parameters)
+    ax.annotate(
+        '', 
+        xy=(x, y), 
+        xytext=(x, y - length),
+        xycoords='axes fraction',
+        arrowprops=dict(
+            facecolor=color,
+            edgecolor='k',
+            headwidth=arrow_head_width,
+            headlength=arrow_head_width * 1.5,
+            shrink=0,
+            lw=arrow_border_width,
+            alpha=0.8,
+        )
+    )
+    # Add the text
+    ax.text(x, y - length - text_offset, text, transform=ax.transAxes,
+            ha='center', va='top', fontsize=fontsize, fontweight='bold', color=color)
+    
 def add_compass_to_plot(ax, x_offset=0.76, y_offset=0.92, size=14, triangle_size=0.02):
     """
     Adds a simple upward-pointing triangle with an 'N' label below it as a North indicator.
@@ -327,7 +386,7 @@ def get_CF_wind_check_plot(cells: gpd.GeoDataFrame,
     # Unified colorbar
     norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
     sm = mpl.cm.ScalarMappable(cmap='BuPu', norm=norm)
-    cbar = fig.colorbar(sm, ax=axes, orientation='vertical', fraction=0.025, pad=0.02)
+    cbar = fig.colorbar(sm, ax=axes, orientation='vertical', fraction=0.025, pad=0.02,shrink=0.6)
     cbar.set_label('Capacity Factor', fontsize=11)
 
     # Title and notes

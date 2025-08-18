@@ -227,6 +227,35 @@ def load_dict_datafile(json_file_path:str)->dict:
     with open(json_file_path,'r') as json_file:
         dictionary_:dict=json.load(json_file)
         return dictionary_
+    
+
+def save_to_yaml(data: dict, 
+                 file_path: str | Path, 
+                 default_name: str = "config.yaml"):
+    """
+    Saves a dictionary to a YAML file.
+
+    If file_path is a directory, saves to default_name inside that directory.
+
+    Parameters:
+        data (dict): The dictionary to save.
+        file_path (str|Path): Path to the YAML file or directory.
+        default_name (str): Default filename if a directory is given.
+    """
+    file_path = Path(file_path)
+
+    # If path is a directory, append default filename
+    if file_path.exists() and file_path.is_dir():
+        file_path = file_path / default_name
+
+    # Ensure parent directories exist
+    file_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Save YAML
+    with open(file_path, 'w', encoding='utf-8') as f:
+        yaml.dump(data, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
+    print_info(f"{__name__}| A copy of the dictionary saved to : '{file_path}'")
+
 
 def check_LocalCopy_and_run_function(
         directory_path:str, 
