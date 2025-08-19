@@ -398,7 +398,7 @@ def find_optimal_K(
     plt.plot(range(1, min(max_k, len(data_for_clustering))), wcss_data, marker='o', linestyle='-', label=f'lcoe_{resource_type}')
     if optimal_k_data is not None:
         plt.axvline(x=optimal_k_data, color='r', linestyle='--',
-                    label=f"Optimal k = {optimal_k_data}; K-means with {round(wcss_tolerance*100)}% of WCSS")
+                    label=f"Optimal k = {optimal_k_data}; K-means with {round(wcss_tolerance*100,3)}% of WCSS")
 
     plt.title(f"Elbow plot of K-means Clustering with 'LCOE_{resource_type}' for Region-{region}")
     plt.xlabel('Number of Clusters (k)')

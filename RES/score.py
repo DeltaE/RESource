@@ -173,7 +173,7 @@ class CellScorer(AttributesParser):
         """
         
         # Calculate distance-based cost
-        add_to_grid_cost = (distance_to_grid_km * grid_connection_cost_per_km ) * (tx_line_rebuild_cost) 
+        add_to_grid_cost = (distance_to_grid_km * grid_connection_cost_per_km ) + tx_line_rebuild_cost
 
         # Total cost is CAPEX plus distance cost
         total_cost:float = capex_tech*potential_capacity_mw + add_to_grid_cost  # in M$
@@ -244,7 +244,7 @@ class CellScorer(AttributesParser):
             return float('999999')  # handle the error 
         else:
             # Calculate the LCOE
-            lcoe = ((total_cost * CRF+fom) / annual_energy)+ vom  #  m$/MWh
+            lcoe = (((total_cost * CRF)+fom) / annual_energy)+ vom  #  m$/MWh
         
             return lcoe * 1E6 # m$/MWh → $/MWh
         

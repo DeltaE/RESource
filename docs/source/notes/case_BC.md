@@ -86,8 +86,9 @@ While temporal profiles provide critical insight into seasonal and diurnal gener
 ##	 Impact of grid accessibility
 Following the assessment of temporal generation dynamics, we turn to a key economic driver of project feasibility: the spatial relationship between candidate sites and existing grid infrastructure. We map the centroid of each grid cell to the nearest substation for proximity analysis. RESource enables the site ranking sensitive to the proximity of existing infrastructure and provides a scalable approximation of grid connectivity costs. This helps prioritize sites where renewable generation can be integrated with minimal new infrastructure. shows the spatial distribution of grid substations and their proximity to each cell. Sites located closer to existing substations are inherently more attractive due to reduced transmission upgrade costs. In BC, where much of the terrain is remote or rugged, distance to infrastructure can outweigh resource quality in project feasibility. We also show the grid lines map (right side of Figure 8) to demonstrate that RESource can perform proximity analysis for both substations and the nearest connection points on explicitly rated lines. These spatial-economic filters feed directly into site scoring and prioritization workflows within RESource. 
 
-<img src="../_static/Resources_proximity_to_grid_BC.jpg" alt="Heatmap of substation proximity in BC" height="400"/>
-<img src="../_static/transmission_lines_BC.png" alt="Heatmap of substation proximity in BC" height="400"/>
+
+<img src="../_static/Grid_proximity.jpg" alt="Heatmap of substation proximity in BC" height="auto"/>
+
 
 > Grid data shown above is sourced from Open-streetmap.
 
@@ -173,6 +174,16 @@ Cells with zero annual energy production receive a high penalty score and are de
 <img src="../_static/potential_capacity_lost_default_vs_policy_aeroway_CPCAD_buffer.png" alt="Final results for BC rescaled to ERA5 Resolution" width="1000"/>
 
 
+## Clusterized Representation:
+For each regional district, we cluster the cells to reasonably represent the sites based on their scoring. Our scoring is already sensitive to distance to grid node, energy yield and capacity size. We use the _score_, apply k-means clustering with configurable wcss tolerance to find-out how many clusters are a reasonable representation of the regional district cells. To find the optimal clusters we use elbow charts.
+
+  > In **k-means clustering**, **WCSS** (Within-Cluster Sum of Squares) measures the compactness of clusters by summing the squared distances between each point and its cluster centroid. The **WCSS tolerance** is a stopping criterion that defines the minimum change in WCSS required between iterations for the algorithm to continue. Formally, if the change in WCSS between consecutive iterations $|WCSS_t - WCSS_{t-1}|$ falls below a small positive threshold $\epsilon$, the algorithm assumes convergence and stops. Choosing a smaller tolerance increases precision but may require more iterations, while a larger tolerance speeds up convergence at the cost of slightly less accurate centroids.
+
+Here are examples of some clusters' profile (representative profile of all cells that scored alike) with standard deviations from the actual ERA5 cells' timeseries.
+
+<img src="../_static/wind_cluster_PeaceRiver_1_vs_cells_profile.png" alt="Final results for BC rescaled to ERA5 Resolution" width="1000"/>
+
+<img src="../_static/solar_cluster_EastKootenay_1_vs_cells_profile.png" alt="Final results for BC rescaled to ERA5 Resolution" width="1000"/>
 
 ---
 
