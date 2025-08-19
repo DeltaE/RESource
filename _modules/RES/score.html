@@ -159,6 +159,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">1. RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">2. RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">4. Best Practices and Guidelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/api.html">RES API References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">6. Data Sources and Supply Chain</a></li>
@@ -473,7 +474,7 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="c1"># Calculate distance-based cost</span>
-        <span class="n">add_to_grid_cost</span> <span class="o">=</span> <span class="p">(</span><span class="n">distance_to_grid_km</span> <span class="o">*</span> <span class="n">grid_connection_cost_per_km</span> <span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">tx_line_rebuild_cost</span><span class="p">)</span> 
+        <span class="n">add_to_grid_cost</span> <span class="o">=</span> <span class="p">(</span><span class="n">distance_to_grid_km</span> <span class="o">*</span> <span class="n">grid_connection_cost_per_km</span> <span class="p">)</span> <span class="o">+</span> <span class="n">tx_line_rebuild_cost</span>
 
         <span class="c1"># Total cost is CAPEX plus distance cost</span>
         <span class="n">total_cost</span><span class="p">:</span><span class="nb">float</span> <span class="o">=</span> <span class="n">capex_tech</span><span class="o">*</span><span class="n">potential_capacity_mw</span> <span class="o">+</span> <span class="n">add_to_grid_cost</span>  <span class="c1"># in M$</span>
@@ -547,7 +548,7 @@ document.write(`
             <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;999999&#39;</span><span class="p">)</span>  <span class="c1"># handle the error </span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Calculate the LCOE</span>
-            <span class="n">lcoe</span> <span class="o">=</span> <span class="p">((</span><span class="n">total_cost</span> <span class="o">*</span> <span class="n">CRF</span><span class="o">+</span><span class="n">fom</span><span class="p">)</span> <span class="o">/</span> <span class="n">annual_energy</span><span class="p">)</span><span class="o">+</span> <span class="n">vom</span>  <span class="c1">#  m$/MWh</span>
+            <span class="n">lcoe</span> <span class="o">=</span> <span class="p">(((</span><span class="n">total_cost</span> <span class="o">*</span> <span class="n">CRF</span><span class="p">)</span><span class="o">+</span><span class="n">fom</span><span class="p">)</span> <span class="o">/</span> <span class="n">annual_energy</span><span class="p">)</span><span class="o">+</span> <span class="n">vom</span>  <span class="c1">#  m$/MWh</span>
         
             <span class="k">return</span> <span class="n">lcoe</span> <span class="o">*</span> <span class="mf">1E6</span> <span class="c1"># m$/MWh → $/MWh</span></div>
 

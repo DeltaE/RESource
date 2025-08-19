@@ -878,7 +878,7 @@ document.write(`
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.get_clusters">[docs]</a>
     <span class="k">def</span> <span class="nf">get_clusters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                      <span class="n">scored_cells</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">wcss_tolerance</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+                     <span class="n">wcss_tolerance</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ### Args:</span>
 <span class="sd">         - **WCSS (Within-cluster Sum of Square) tolerance**. Higher tolerance gives , more simplification and less number of clusters. </span>
@@ -887,7 +887,7 @@ document.write(`
  
         
         <span class="bp">self</span><span class="o">.</span><span class="n">resource_disaggregation_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_resource_disaggregation_config</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wcss_tolerance</span><span class="o">=</span><span class="n">wcss_tolerance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wcss_tolerance</span><span class="o">=</span><span class="n">wcss_tolerance</span> <span class="k">if</span> <span class="n">wcss_tolerance</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_wcss_tolerance</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scored_cells</span><span class="o">=</span><span class="n">scored_cells</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gadm_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_gadm_config</span><span class="p">()</span>
         
@@ -1094,7 +1094,7 @@ document.write(`
         <span class="n">resource_clusters_excld_geom</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">save_to</span><span class="o">/</span><span class="sa">f</span><span class="s1">&#39;resource_options_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">cluster_timeseries</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">save_to</span><span class="o">/</span><span class="sa">f</span><span class="s1">&#39;resource_options_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s1">_timeseries.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s2"> clusters exported to :</span><span class="si">{</span><span class="n">save_to</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s2"> clusters exported to :</span><span class="si">{</span><span class="n">save_to</span><span class="o">/</span><span class="sa">f</span><span class="s1">&#39;resource_options_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s1">_timeseries.csv&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="RESources_builder.create_summary_info">

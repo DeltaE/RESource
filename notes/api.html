@@ -808,7 +808,7 @@ If the resource type is 'solar', it currently does not support extraction from t
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">get_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scored_cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcss_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.get_clusters"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">get_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scored_cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcss_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.get_clusters"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><dl class="simple">
 <dt>### Args:</dt><dd><ul class="simple">
 <li><p><strong>WCSS (Within-cluster Sum of Square) tolerance</strong>. Higher tolerance gives , more simplification and less number of clusters.</p></li>
@@ -3699,6 +3699,370 @@ If False, uses full wind speed range (0-50 m/s) for processing.</p></li>
 </section>
 <section id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Link to this heading">#</a></h2>
+<p>Visualization and plotting utilities for renewable energy resource assessment.</p>
+<p>This module provides comprehensive visualization tools for displaying renewable energy
+assessment results including spatial maps, time series plots, capacity distributions,
+economic analysis charts, and interactive dashboards. It supports both static
+publication-quality figures and interactive web-based visualizations.</p>
+<p>The visualization tools are designed to facilitate analysis interpretation, result
+communication, and workflow debugging through clear, informative graphics that
+highlight spatial patterns, temporal variations, and economic trade-offs in
+renewable energy development potential.</p>
+<dl class="simple">
+<dt>Key Functions:</dt><dd><ul class="simple">
+<li><p>Spatial mapping: Choropleth maps of resource potential and constraints</p></li>
+<li><p>Time series visualization: Capacity factor profiles and seasonal patterns</p></li>
+<li><p>Economic analysis: LCOE distributions and cost component breakdowns</p></li>
+<li><p>Cluster visualization: Site groupings and representative characteristics</p></li>
+<li><p>Interactive dashboards: Web-based exploration interfaces</p></li>
+<li><p>Export utilities: High-resolution figure generation for publications</p></li>
+</ul>
+</dd>
+<dt>Dependencies:</dt><dd><ul class="simple">
+<li><p>matplotlib/seaborn: Static plotting and publication graphics</p></li>
+<li><p>plotly: Interactive visualizations and dashboards</p></li>
+<li><p>folium: Web-based interactive maps</p></li>
+<li><p>geopandas: Spatial data visualization</p></li>
+<li><p>xarray: Multi-dimensional data plotting</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">add_compass_arrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'grey'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arrow_head_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arrow_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#add_compass_arrow"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Adds a simple north arrow to the plot.
+:param ax: The plot axes to annotate.
+:type ax: matplotlib.axes.Axes
+:param x: X position in axes fraction coordinates.
+:type x: float
+:param y: Y position in axes fraction coordinates.
+:type y: float
+:param length: Length of the arrow in axes fraction units.
+:type length: float
+:param text_offset: Offset for the 'N' label below the arrow.
+:type text_offset: float</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">add_compass_arrow_custom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'grey'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arrow_head_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arrow_border_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'N'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#add_compass_arrow_custom"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Alternative version with more arrow head customization.
+Uses the older arrow method for more control over head dimensions.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">add_compass_to_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.76</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.92</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">triangle_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.02</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#add_compass_to_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Adds a simple upward-pointing triangle with an 'N' label below it as a North indicator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>matplotlib.axes.Axes</em>) -- The plot axes to annotate.</p></li>
+<li><p><strong>x_offset</strong> (<em>float</em>) -- X position in axes fraction coordinates.</p></li>
+<li><p><strong>y_offset</strong> (<em>float</em>) -- Y position in axes fraction coordinates.</p></li>
+<li><p><strong>size</strong> (<em>int</em>) -- Font size for the 'N' label.</p></li>
+<li><p><strong>triangle_size</strong> (<em>float</em>) -- Radius of the triangle (in axes fraction units).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">create_key_data_map_interactive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">province_gadm_regions_gdf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provincial_conservation_protected_lands</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aeroway_with_buffer_solar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aeroway_with_buffer_wind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aeroway</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provincial_bus_gdf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_region</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">about_OSM_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">map_html_save_to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#create_key_data_map_interactive"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Creates an interactive map with key data for a specific province, including regions, conservation lands, aeroways, and bus nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>province_gadm_regions_gdf</strong> (<em>gpd.GeoDataFrame</em>) -- GeoDataFrame containing the province's administrative regions.</p></li>
+<li><p><strong>provincial_conservation_protected_lands</strong> (<em>gpd.GeoDataFrame</em>) -- GeoDataFrame containing conservation and protected lands.</p></li>
+<li><p><strong>aeroway_with_buffer_solar</strong> (<em>gpd.GeoDataFrame</em>) -- GeoDataFrame containing solar aeroways with buffer zones.</p></li>
+<li><p><strong>aeroway_with_buffer_wind</strong> (<em>gpd.GeoDataFrame</em>) -- GeoDataFrame containing wind aeroways with buffer zones.</p></li>
+<li><p><strong>aeroway</strong> (<em>gpd.GeoDataFrame</em>) -- GeoDataFrame containing aeroways.</p></li>
+<li><p><strong>provincial_bus_gdf</strong> (<em>gpd.GeoDataFrame</em>) -- GeoDataFrame containing provincial bus routes.</p></li>
+<li><p><strong>current_region</strong> (<em>dict</em>) -- Dictionary containing information about the current region.</p></li>
+<li><p><strong>about_OSM_data</strong> (<em>dict</em><em>[</em><em>dict</em><em>]</em>) -- Dictionary containing information about OSM data.</p></li>
+<li><p><strong>map_html_save_to</strong> (<em>str</em>) -- _description_</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">create_raster_image_with_legend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raster</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_save_to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#create_raster_image_with_legend"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Creates a raster image with a legend for land classes.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">create_sites_ts_plots_all_sites</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CF_ts_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_to_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#create_sites_ts_plots_all_sites"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Creates an interactive timeseries plot for the top sites of a given resource type.
+:param resource_type: The type of resource (e.g., 'solar', 'wind').
+:type resource_type: str
+:param CF_ts_df: DataFrame containing the capacity factor timeseries data.
+:type CF_ts_df: pd.DataFrame
+:param save_to_dir: Directory to save the plot.
+:type save_to_dir: str</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">create_sites_ts_plots_all_sites_2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CF_ts_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_to_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#create_sites_ts_plots_all_sites_2"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">create_timeseries_interactive_plots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_to_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#create_timeseries_interactive_plots"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">create_timeseries_plots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CF_timeseries_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_resource_capacity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dissolved_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">representative_color_palette</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std_deviation_gradient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vis_directory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#create_timeseries_plots"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">create_timeseries_plots_solar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CF_timeseries_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dissolved_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_solar_capacity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solar_vis_directory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#create_timeseries_plots_solar"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Generates time series plots for solar capacity factor (CF) data.
+:param cells_df: DataFrame containing cell information.
+:type cells_df: pd.DataFrame
+:param CF_timeseries_df: DataFrame containing capacity factor time series data.
+:type CF_timeseries_df: pd.DataFrame
+:param dissolved_indices: Dictionary mapping regions and cluster numbers to indices in CF_timeseries_df.
+:type dissolved_indices: dict
+:param max_solar_capacity: Maximum solar capacity for investment.
+:type max_solar_capacity: float
+:param resampling: Resampling frequency for the time series data.
+:type resampling: str
+:param solar_vis_directory: Directory to save the generated plots.
+:type solar_vis_directory: str</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">get_CF_wind_check_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gwa_raster_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_family</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'sans-serif'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#get_CF_wind_check_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Plots GWA benchmark (left), CF_IEC3 (middle), and wind_CF_mean (right).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">get_conservation_lands_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CPCAD_actual</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CPCAD_with_buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_family</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'sans-serif'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#get_conservation_lands_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Creates a plot comparing original and buffered conservation lands.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">get_data_in_map_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datafield</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compass_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_family</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discalimers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#get_data_in_map_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Plots a map of renewable energy resources (solar or wind) with capacity factor, potential capacity, or LCOE.
+:param cells: GeoDataFrame containing the resource data.
+:type cells: gpd.GeoDataFrame
+:param resource_type: Type of renewable resource ('solar' or 'wind'). Defaults to None.
+:type resource_type: str, optional
+:param datafield: Data field to plot ('CF', 'CAPACITY', or 'SCORE'). Defaults to None.
+:type datafield: str, optional
+:param title: Title for the plot. Defaults to None.
+:type title: str, optional
+:param ax: Axes to plot on. If None, a new figure and axes are created. Defaults to None.
+:type ax: matplotlib.axes.Axes, optional
+:param compass_size: Size of the compass in the plot. Defaults to 10.
+:type compass_size: float, optional
+:param font_family: Font family for text in the plot. Defaults to 'sans-serif'.
+:type font_family: str, optional
+:param discalimers: Whether to include disclaimers in the plot. Defaults to False.
+:type discalimers: bool, optional
+:param show: Whether to display the plot. Defaults to True.
+:type show: bool, optional</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The axes with the plotted map.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>ax (matplotlib.axes.Axes)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">get_selected_vs_missed_visuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">province_short_code</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lcoe_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CF_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capacity_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_box_x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_box_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(12,</span> <span class="pre">7)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#get_selected_vs_missed_visuals"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Generate visualizations for selected vs missed cells.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cells</strong> (<em>gpd.GeoDataFrame</em>) -- GeoDataFrame containing cell data.</p></li>
+<li><p><strong>province_short_code</strong> (<em>str</em>) -- Short code for the province.</p></li>
+<li><p><strong>resource_type</strong> (<em>str</em>) -- Type of renewable resource (e.g., 'solar', 'wind').</p></li>
+<li><p><strong>lcoe_threshold</strong> (<em>float</em>) -- _description_</p></li>
+<li><p><strong>CF_threshold</strong> (<em>float</em>) -- _description_</p></li>
+<li><p><strong>capacity_threshold</strong> (<em>float</em>) -- _description_</p></li>
+<li><p><strong>text_box_x</strong> (<em>float</em><em>, </em><em>optional</em>) -- _description_. Defaults to .4.</p></li>
+<li><p><strong>text_box_y</strong> (<em>float</em><em>, </em><em>optional</em>) -- _description_. Defaults to .95.</p></li>
+<li><p><strong>title_y</strong> (<em>int</em><em>, </em><em>optional</em>) -- _description_. Defaults to 1.</p></li>
+<li><p><strong>title_x</strong> (<em>float</em><em>, </em><em>optional</em>) -- _description_. Defaults to 0.6.</p></li>
+<li><p><strong>font_size</strong> (<em>int</em><em>, </em><em>optional</em>) -- _description_. Defaults to 10.</p></li>
+<li><p><strong>dpi</strong> (<em>int</em><em>, </em><em>optional</em>) -- _description_. Defaults to 1000.</p></li>
+<li><p><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) -- _description_. Defaults to (12, 7).</p></li>
+<li><p><strong>save</strong> (<em>bool</em><em>, </em><em>optional</em>) -- _description_. Defaults to False.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">get_stepwise_availability_plots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">excluder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExclusionContainer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raster_configs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector_configs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#get_stepwise_availability_plots"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">plot_data_in_GADM_regions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_column_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gadm_regions_gdf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plt_title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plt_file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vis_directory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#plot_data_in_GADM_regions"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Plots data from a DataFrame on GADM regions using GeoPandas and Matplotlib.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataframe</strong> (<em>pd.DataFrame</em>) -- DataFrame containing the data to plot.</p></li>
+<li><p><strong>data_column_df</strong> (<em>str</em>) -- Name of the column in the DataFrame to plot.</p></li>
+<li><p><strong>gadm_regions_gdf</strong> (<em>gpd.GeoDataFrame</em>) -- GeoDataFrame containing the GADM regions.</p></li>
+<li><p><strong>color_map</strong> (<em>str</em>) -- Name of the color map to use for the plot.</p></li>
+<li><p><strong>dpi</strong> (<em>int</em>) -- Dots per inch for the plot.</p></li>
+<li><p><strong>plt_title</strong> (<em>str</em>) -- Title of the plot.</p></li>
+<li><p><strong>plt_file_name</strong> (<em>str</em>) -- File name for saving the plot.</p></li>
+<li><p><strong>vis_directory</strong> (<em>str</em>) -- Directory for saving the visualization.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">plot_gaez_raster_with_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raster_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_csv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdf_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_crs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EPSG:4326'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(12,</span> <span class="pre">7)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compass_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_family</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'serif'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_save_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#plot_gaez_raster_with_boundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Plot a GAEZ categorical raster with a shadowed boundary layer using colors from CSV.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">plot_grid_lines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">region_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_family</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(10,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#plot_grid_lines"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Plots transmission lines with binned voltage levels in a specified region.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">plot_resources_scatter_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clusters_resources</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lcoe_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">999</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_to_root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'vis'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#plot_resources_scatter_metric"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Generate a scatter plot visualizing the relationship between Capacity Factor (CF) and Levelized Cost of Energy (LCOE)
+for renewable energy resources (solar or wind). The plot highlights clusters of resources based on their potential capacity.
+:param resource_type: The type of renewable resource to plot. Must be either 'solar' or 'wind'.
+:type resource_type: str
+:param clusters_resources: A GeoDataFrame containing resource cluster data.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>Expected columns include:</dt><dd><ul class="simple">
+<li><p>'CF_mean': Average capacity factor of the resource cluster.</p></li>
+<li><p>'lcoe': Levelized Cost of Energy for the resource cluster.</p></li>
+<li><p>'potential_capacity': Potential capacity of the resource cluster (used for bubble size).</p></li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lcoe_threshold</strong> (<em>float</em>) -- The maximum LCOE value to include in the plot. Clusters with LCOE above this threshold are excluded.</p></li>
+<li><p><strong>color</strong> (<em>optional</em>) -- Custom color for the scatter plot bubbles. Defaults to 'darkorange' for solar and 'navy' for wind.</p></li>
+<li><p><strong>save_to_root</strong> (<em>str</em><em> | </em><em>Path</em><em>, </em><em>optional</em>) -- Directory path where the plot image will be saved. Defaults to 'vis'.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The function saves the generated plot as a PNG image in the specified directory.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>The size of the bubbles in the scatter plot represents the potential capacity of the resource clusters.</p></li>
+<li><p>The x-axis (CF_mean) is formatted as percentages for better readability.</p></li>
+<li><p>A legend is included to indicate the bubble sizes in gigawatts (GW).</p></li>
+<li><p>The plot includes an annotation explaining the scoring methodology for LCOE.</p></li>
+<li><p>The plot is saved as a transparent PNG image with a resolution of 600 dpi.</p></li>
+</ul>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plot_resources_scatter_metric</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">resource_type</span><span class="o">=</span><span class="s1">&#39;solar&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">clusters_resources</span><span class="o">=</span><span class="n">solar_clusters_gdf</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">lcoe_threshold</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">save_to_root</span><span class="o">=</span><span class="s1">&#39;output/plots&#39;</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">plot_resources_scatter_metric_combined</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solar_clusters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wind_clusters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bubbles_GW</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[1,</span> <span class="pre">5,</span> <span class="pre">10]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bubbles_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lcoe_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_family</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(3.5,</span> <span class="pre">2.5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_to_root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'vis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_transparent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#plot_resources_scatter_metric_combined"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Plot combined scatter metrics for solar and wind resources.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>solar_clusters</strong> (<em>pd.DataFrame</em>) -- DataFrame containing solar cluster data.</p></li>
+<li><p><strong>wind_clusters</strong> (<em>pd.DataFrame</em>) -- DataFrame containing wind cluster data.</p></li>
+<li><p><strong>bubbles_GW</strong> (<em>list</em><em>, </em><em>optional</em>) -- List of bubble sizes in GW. Defaults to [1, 5, 10].</p></li>
+<li><p><strong>bubbles_scale</strong> (<em>float</em><em>, </em><em>optional</em>) -- Scaling factor for bubble sizes. Defaults to 0.4.</p></li>
+<li><p><strong>lcoe_threshold</strong> (<em>float</em><em>, </em><em>optional</em>) -- LCOE threshold for filtering. Defaults to 200.</p></li>
+<li><p><strong>font_family</strong> (<em>str</em><em>, </em><em>optional</em>) -- Font family for the plot. Defaults to 'sans-serif'.</p></li>
+<li><p><strong>save_to_root</strong> (<em>str</em><em>, </em><em>optional</em>) -- Directory to save the plot. Defaults to 'vis'.</p></li>
+<li><p><strong>set_transparent</strong> (<em>bool</em><em>, </em><em>optional</em>) -- Whether to set the background transparent. Defaults to False.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">plot_with_matched_cells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filtered_cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_cell_linewidth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_cells_linewidth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">9</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#plot_with_matched_cells"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Helper function to plot cells with matched cells overlay.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">size_for_legend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#size_for_legend"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate bubble size for capacity-based map legends.</p>
+<p>Converts megawatt capacity values to appropriate bubble sizes for
+proportional symbol maps, ensuring visual clarity and proper scaling
+across different capacity ranges.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mw</strong> (<em>float</em>) -- Capacity value in megawatts</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Scaled bubble size for mapping visualization</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">size_for_legend</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>  <span class="c1"># 100 MW site</span>
+<span class="go">50.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">size_for_legend</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>  <span class="c1"># 500 MW site</span>
+<span class="go">150.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">RES.visuals.</span></span><span class="sig-name descname"><span class="pre">visualize_ss_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">substations_gdf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provincem_gadm_regions_gdf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/visuals.html#visualize_ss_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Visualizes transmission nodes (buses) on a map with different colors based on substation types.</p>
+<p>Parameters:
+- gadm_regions_gdf (GeoDataFrame): GeoDataFrame containing base regions to plot.
+- buses_gdf (GeoDataFrame): GeoDataFrame containing buses with 'substation_type' column.
+- plot_name (str): File path to save the plot image.</p>
+<p>Returns:
+- None</p>
+</dd></dl>
+
 </section>
 <section id="scorer">
 <h2>Scorer<a class="headerlink" href="#scorer" title="Link to this heading">#</a></h2>
