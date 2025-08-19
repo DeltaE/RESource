@@ -559,7 +559,7 @@ class RESources_builder(AttributesParser):
     '''
     def get_clusters(self,
                      scored_cells:gpd.GeoDataFrame=None,
-                     wcss_tolerance=0.05):
+                     wcss_tolerance=None):
         """
         ### Args:
          - **WCSS (Within-cluster Sum of Square) tolerance**. Higher tolerance gives , more simplification and less number of clusters. 
@@ -568,7 +568,7 @@ class RESources_builder(AttributesParser):
  
         
         self.resource_disaggregation_config=self.get_resource_disaggregation_config()
-        self.wcss_tolerance=wcss_tolerance
+        self.wcss_tolerance=wcss_tolerance if wcss_tolerance else self.get_wcss_tolerance()
         self.scored_cells=scored_cells
         self.gadm_config=self.get_gadm_config()
         
@@ -766,7 +766,7 @@ class RESources_builder(AttributesParser):
         resource_clusters_excld_geom.to_csv(save_to/f'resource_options_{resource_type}_{region}.csv', index=True)
         cluster_timeseries.to_csv(save_to/f'resource_options_{resource_type}_{region}_timeseries.csv', index=True)
 
-        utils.print_update(level=2, message=f"{resource_type} clusters exported to :{save_to}")
+        utils.print_update(level=2, message=f"{resource_type} clusters exported to :{save_to/f'resource_options_{resource_type}_{region}_timeseries.csv'}")
 
     @staticmethod
     def create_summary_info(resource_type:str,

@@ -54,19 +54,15 @@ Version: 1
 """
 
 import RES.RESources as RES
-import RES.utility as utils
-from RES.CellCapacityProcessor import get_sub_nationally_aggregated_capacity
 
 # Iterate over provinces for both solar and wind resources
 resource_types = ['wind','solar'] 
-provinces=['AB']  # 'BC','QC','AB','SK','ON','NS','MB'
-scenario= 'policy_aeroway_CPCAD_buffer'  # 'default','policy_aeroway_CPCAD_buffer'
-
+provinces=['BC']  # 'BC','QC','AB','SK','ON','NS','MB'
 
 for province_code in provinces:
     for resource_type in resource_types:
         required_args = {
-            "config_file_path": f'config/config_CAN_{scenario}.yaml',
+            "config_file_path": 'config/config_CAN.yaml',
             "region_short_code": province_code,
             "resource_type": resource_type
         }

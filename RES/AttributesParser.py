@@ -54,6 +54,7 @@ class AttributesParser:
         # Define the store file path and filename
         self.store = Path(f"data/store/resources_{self.region_short_code}_{self.RUN_ID}.h5")
         self.store.parent.mkdir(parents=True, exist_ok=True)
+       
     
     def load_config(self,config_file_path):
         """ 
@@ -207,3 +208,7 @@ class AttributesParser:
     def get_resource_landuse_intensity(self):
         self.resource_disaggregation_config:dict=self.get_resource_disaggregation_config()
         return self.resource_disaggregation_config['landuse_intensity']
+    
+    def get_wcss_tolerance(self):
+        self.resource_disaggregation_config:dict=self.get_resource_disaggregation_config()
+        return self.resource_disaggregation_config.get('WCSS_tolerance',0.01)

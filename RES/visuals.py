@@ -59,8 +59,10 @@ from rasterio.warp import Resampling, calculate_default_transform, reproject
 
 import RES.lands as lands
 import RES.utility as utils
+import RES.visual_styles as styles
+style_path = Path(styles.__file__).parent / "elsevier.mplstyle"
+plt.style.use(style_path)# Custom style for publication quality figures
 
-plt.style.use('../RES/visual_styles/elsevier.mplstyle') # Custom style for publication quality figures
 
 def size_for_legend(mw):
     """
@@ -211,7 +213,8 @@ def plot_resources_scatter_metric_combined(
     figsize=(3.5, 2.5),
     dpi= 1000, # this falls under lineart
     save_to_root:str='vis',
-    set_transparent:bool=False
+    set_transparent:bool=False,
+    
 ):
     """
     Plot combined scatter metrics for solar and wind resources.
@@ -227,7 +230,7 @@ def plot_resources_scatter_metric_combined(
         set_transparent (bool, optional): Whether to set the background transparent. Defaults to False.
     """
 
-    plt.style.use('../RES/visual_styles/elsevier.mplstyle')  
+    plt.style.use(style_path)  
     if font_family is not None:  
      plt.rcParams['font.family'] = font_family
      
@@ -942,7 +945,7 @@ def get_data_in_map_plot(cells,
         ax (matplotlib.axes.Axes): The axes with the plotted map.
     """
     
-    plt.style.use('../RES/visual_styles/elsevier.mplstyle')  
+    plt.style.use(style_path)  
     if font_family is not None:  
      plt.rcParams['font.family'] = font_family
      
@@ -1023,75 +1026,69 @@ def get_data_in_map_plot(cells,
     return ax
 
 def plot_grid_lines(
-    region_code:str,
-    region_name:str,
-    lines:gpd.GeoDataFrame,
-    boundary:gpd.GeoDataFrame,
-    font_family:str='sans-serif',
-    figsize:tuple=(10, 8),
-    save_to:str|Path=None,
-    show:bool=True,
+    region_code: str,
+    region_name: str,
+    lines: gpd.GeoDataFrame,
+    boundary: gpd.GeoDataFrame,
+    font_family: str = None,
+    figsize: tuple = (10, 8),
+    dpi=500,
+    save_to: str | Path = None,
+    show: bool = True,
 ):
     """
-    Plots transmission lines with voltage levels in a specified region.
-
-    Args:
-        region_code (str): The code of the region to plot.
-        region_name (str): The name of the region to plot.
-        lines (gpd.GeoDataFrame): GeoDataFrame containing the transmission lines.       
-        boundary (gpd.GeoDataFrame): _description_
-        font_family (str, optional): _description_. Defaults to 'sans-serif'.
-        figsize (tuple, optional): _description_. Defaults to (10, 8).
-        save_to (str | Path, optional): _description_. Defaults to None.
-        show (bool, optional): _description_. Defaults to True.
+    Plots transmission lines with binned voltage levels in a specified region.
     """
 
-    fig, ax = plt.subplots(figsize=(10, 8))
-    plt.rcParams['font.family'] = font_family
+    fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
+    fig.suptitle("Transmission Lines by Voltage Levels", fontsize=16, fontweight='bold')
+    plt.style.use(style_path)
+    if font_family is not None:
+        plt.rcParams['font.family'] = font_family
+
     boundary.plot(ax=ax, facecolor='grey', edgecolor='black', linewidth=1, alpha=0.1)
 
     if 'voltage' in lines.columns:
-        # Convert to numeric and drop NaNs
-        voltages = pd.to_numeric(lines['voltage'], errors='coerce').dropna().unique()
-        voltages.sort()
-        
-        # Convert to kilovolts (kV)
-        voltages_kv = voltages / 1000
+        # Convert to numeric
+        lines['voltage_kv'] = pd.to_numeric(lines['voltage'], errors='coerce') / 1000
 
-        # Use a qualitative color map with enough distinct colors
-        cmap = plt.cm.get_cmap('Dark2', len(voltages_kv))  # tab20 has 20 distinct colors
+        # Define voltage bins
+        bins = [0, 12, 25, 132, 220, float("inf")]
+        labels = ["<12 kV", "12–25 kV", "25–132 kV", "132–220 kV", "≥220 kV"]
+        lines['voltage_class'] = pd.cut(lines['voltage_kv'], bins=bins, labels=labels, right=False)
 
-        color_map = {v_orig: cmap(i) for i, v_orig in enumerate(voltages)}
+        # Color map (enough distinct colors)
+        cmap = plt.colormaps.get_cmap('tab10')
+        colors = [cmap(i) for i in range(len(labels))]
+        color_map = {label: colors[i] for i, label in enumerate(labels)}
 
-        # Plot each voltage level with its unique color
-        for v_orig in voltages:
-            color = color_map[v_orig]
-            mask = pd.to_numeric(lines['voltage'], errors='coerce') == v_orig
-            lines[mask].plot(ax=ax, color=color, linewidth=1.5, alpha=0.8)
 
-        # Create legend patches
-        legend_patches = [
-            mpatches.Patch(color=color_map[v], label=f"{int(v / 1000)} kV") for v in voltages
-        ]
-        ax.legend(handles=legend_patches, title='Voltage', frameon=False, fontsize=10, loc='upper right')
-        ax.set_title(f'Transmission Lines by Voltage (kV) for {region_name}', fontsize=14)
+        # Plot by class
+        for label in labels:
+            mask = lines['voltage_class'] == label
+            if mask.any():
+                lines[mask].plot(ax=ax, color=color_map[label], linewidth=1, alpha=0.8)
+
+        # Legend
+        legend_patches = [mpatches.Patch(color=color_map[label], label=label) for label in labels if label in lines['voltage_class'].unique()]
+        ax.legend(handles=legend_patches, frameon=False, fontsize=11, loc='upper right')
 
     else:
-        lines.plot(ax=ax, color='blue', linewidth=1)
-        ax.set_title('Transmission Lines', fontsize=14)
+        lines.plot(ax=ax, color='blue', linewidth=1,alpha=0.7)
 
     ax.set_axis_off()
     plt.tight_layout()
-    
+
     if save_to is None:
         save_to = Path("vis") / region_code / "network"
     else:
-        save_to=Path(save_to)
-        
+        save_to = Path(save_to)
+    
     save_to.mkdir(parents=True, exist_ok=True)
     save_to_file = save_to / f"transmission_lines_{region_code}.png"
     plt.savefig(save_to_file, bbox_inches='tight', dpi=300)
-    utils.print_update(level=2,message=f"Transmission Lines for {region_name} saved to {save_to_file}")
+    
+    utils.print_update(level=2, message=f"Transmission Lines for {region_name} saved to {save_to_file}")
     if show:
         plt.show()
 

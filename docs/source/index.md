@@ -15,10 +15,10 @@ This library is under heavy development
 
 RESource is developed to enable reproducible, adaptable assessments of VRE potential that are sensitive to local constraints and planning priorities. We developed a structured, modular workflow that integrates geospatial, temporal, economic, and regulatory data to evaluate site suitability for solar and wind energy development. This structured methodology ensures transparency and transferability, allowing RESource to be adapted for different regions and scaled for long-term strategic energy planning.
 
-<img src="_static/assessment_steps.jpg" alt="assessment_steps" width="500"/>
+<img src="_static/Assessment_steps_highLevel.jpg" alt="assessment_steps" width="500"/>
 
 ## Workflow overview
-<img src="_static/high_level_workflow.jpg" alt="high_level_workflow" width="900"/>
+<img src="_static/Workflow.jpg" alt="high_level_workflow" width="1000"/>
 
 
 ```{toctree}
