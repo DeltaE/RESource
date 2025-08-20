@@ -1,0 +1,1167 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>How to use the CONFIG &#8212; RESource 2025.07 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=e9b82cb4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notes/config';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. Best Practices and Guidelines" href="learning.html" />
+    <link rel="prev" title="Case study: VRE site selection in British Columbia" href="case_BC.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/RESource_logo_2025.07.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../_static/RESource_logo_2025.07.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="resource_builder.html">1. RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup_guide.html">2. RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">How to use the CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">4. Best Practices and Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">RES API References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">6. Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">7. Documentation Build Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Store_explorer.html">Explore data store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
+
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notes/config.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>How to use the CONFIG</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-information">General Information</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-configuration">Basic Configuration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scenario-settings">Scenario Settings</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-mapping">Regional Mapping</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#province-territory-details">Province/Territory Details</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#special-configuration-for-british-columbia">Special Configuration for British Columbia</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-sources">Data Sources</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gadm-global-administrative-areas">GADM (Global Administrative Areas)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#government-of-canada-data-sources">Government of Canada Data Sources</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conservation-lands">Conservation Lands</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#iucn-category-mapping">IUCN Category Mapping</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#location-mapping">Location Mapping</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#land-ownership-mapping">Land Ownership Mapping</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#population-data">Population Data</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#community-energy-and-emissions-inventory-ceei">Community Energy and Emissions Inventory (CEEI)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nrel-annual-technology-baseline-atb">NREL Annual Technology Baseline (ATB)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#openstreetmap-osm-data">OpenStreetMap (OSM) Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coders-canadian-open-data-for-electricity-research">CODERS (Canadian Open Data for Electricity Research)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaez-global-agro-ecological-zones">GAEZ (Global Agro-Ecological Zones)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#raster-types">Raster Types</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#exclusion-areas-exclusion-2017-tif">1. Exclusion Areas (<code class="docutils literal notranslate"><span class="pre">exclusion_2017.tif</span></code>)</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#terrain-resources-slpmed05-tif">2. Terrain Resources (<code class="docutils literal notranslate"><span class="pre">slpmed05.tif</span></code>)</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#land-cover-faocmb-2010-tif">3. Land Cover (<code class="docutils literal notranslate"><span class="pre">faocmb_2010.tif</span></code>)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#worldpop">WorldPop</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#climate-data-cutout">Climate Data (Cutout)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-wind-atlas-gwa">Global Wind Atlas (GWA)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#capacity-disaggregation">Capacity Disaggregation</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solar-configuration">Solar Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#buffer-zones-solar">Buffer Zones (Solar)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wind-configuration">Wind Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#turbine-models">Turbine Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#nrel-atb-turbines">NREL ATB Turbines</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#oedb-turbines">OEDB Turbines</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#buffer-zones-wind">Buffer Zones (Wind)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#battery-energy-storage-system-bess">Battery Energy Storage System (BESS)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#capacity-estimates-per-energy-unit">Capacity Estimates per Energy Unit</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transmission">Transmission</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-configurations">Custom Configurations</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-land-layers">Custom Land Layers</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-notes">Usage Notes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#file-locations">File Locations</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="how-to-use-the-config">
+<h1>How to use the CONFIG<a class="headerlink" href="#how-to-use-the-config" title="Link to this heading">#</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This library is under heavy development</p>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>An <strong>interactive user interface is under development</strong> to replace this config and improve the user experience of the input configuration.</p>
+</div>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>This document provides comprehensive documentation for the RESource tool configuration file (example provided for the Canadian config file <a class="reference external" href="https://github.com/DeltaE/RESource/blob/main/config/config_CAN.yaml"><code class="docutils literal notranslate"><span class="pre">config_CAN.yaml</span></code></a>).</p>
+<p><strong>Version:</strong> 1.0<br />
+<strong>Release Year:</strong> 2025</p>
+</section>
+<section id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#general-information"><span class="std std-ref">General Information</span></a></p></li>
+<li><p><a class="reference internal" href="#regional-mapping"><span class="std std-ref">Regional Mapping</span></a></p></li>
+<li><p><a class="reference internal" href="#data-sources"><span class="std std-ref">Data Sources</span></a></p></li>
+<li><p><a class="reference internal" href="#capacity-disaggregation"><span class="std std-ref">Capacity Disaggregation</span></a></p></li>
+<li><p><a class="reference internal" href="#custom-configurations"><span class="std std-ref">Custom Configurations</span></a></p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="general-information">
+<h2>General Information<a class="headerlink" href="#general-information" title="Link to this heading">#</a></h2>
+<section id="basic-configuration">
+<h3>Basic Configuration<a class="headerlink" href="#basic-configuration" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Title:</strong> User Configuration for RESource Tool</p></li>
+<li><p><strong>Country:</strong> Canada</p></li>
+<li><p><strong>Purpose:</strong> Configuration file containing quantitative parameters that module results rely on</p></li>
+</ul>
+</section>
+<section id="scenario-settings">
+<h3>Scenario Settings<a class="headerlink" href="#scenario-settings" title="Link to this heading">#</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">Scenario</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">run_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="w">  </span><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Baseline scenario; no additional buffer zones around protected areas or aeroways.</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>A copy of the config file will be saved to 'results/RESources/Region <sub-national-unit name>' for each run of the tool. Each config files will have the 'Scenario' name as a suffix.</p>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="regional-mapping">
+<h2>Regional Mapping<a class="headerlink" href="#regional-mapping" title="Link to this heading">#</a></h2>
+<p>The configuration includes detailed mapping for all Canadian provinces and territories with the following information for each region:</p>
+<section id="province-territory-details">
+<h3>Province/Territory Details<a class="headerlink" href="#province-territory-details" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Code</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Land Area (km²)</p></th>
+<th class="head"><p>Land Area (mi²)</p></th>
+<th class="head"><p>National %</p></th>
+<th class="head"><p>Timezone</p></th>
+<th class="head"><p>GWA Code</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AB</p></td>
+<td><p>Alberta</p></td>
+<td><p>642,317</p></td>
+<td><p>275,000</p></td>
+<td><p>7.1%</p></td>
+<td><p>Etc/GMT-7</p></td>
+<td><p>CAN</p></td>
+</tr>
+<tr class="row-odd"><td><p>BC</p></td>
+<td><p>British Columbia</p></td>
+<td><p>925,186</p></td>
+<td><p>357,216</p></td>
+<td><p>10.4%</p></td>
+<td><p>Etc/GMT+7</p></td>
+<td><p>CAN</p></td>
+</tr>
+<tr class="row-even"><td><p>MB</p></td>
+<td><p>Manitoba</p></td>
+<td><p>553,556</p></td>
+<td><p>213,733</p></td>
+<td><p>6.1%</p></td>
+<td><p>Etc/GMT-6</p></td>
+<td><p>CAN</p></td>
+</tr>
+<tr class="row-odd"><td><p>NB</p></td>
+<td><p>New Brunswick</p></td>
+<td><p>71,450</p></td>
+<td><p>27,587</p></td>
+<td><p>0.8%</p></td>
+<td><p>Etc/GMT-4</p></td>
+<td><p>CAN</p></td>
+</tr>
+<tr class="row-even"><td><p>NL</p></td>
+<td><p>Newfoundland and Labrador</p></td>
+<td><p>373,872</p></td>
+<td><p>144,355</p></td>
+<td><p>4.1%</p></td>
+<td><p>Etc/GMT-3.5</p></td>
+<td><p>CAN</p></td>
+</tr>
+<tr class="row-odd"><td><p>NS</p></td>
+<td><p>Nova Scotia</p></td>
+<td><p>53,338</p></td>
+<td><p>20,594</p></td>
+<td><p>0.6%</p></td>
+<td><p>Etc/GMT-4</p></td>
+<td><p>CAN</p></td>
+</tr>
+<tr class="row-even"><td><p>ON</p></td>
+<td><p>Ontario</p></td>
+<td><p>917,741</p></td>
+<td><p>354,348</p></td>
+<td><p>10.1%</p></td>
+<td><p>Etc/GMT-5</p></td>
+<td><p>CAN</p></td>
+</tr>
+<tr class="row-odd"><td><p>PE</p></td>
+<td><p>Prince Edward Island</p></td>
+<td><p>5,660</p></td>
+<td><p>2,185</p></td>
+<td><p>0.1%</p></td>
+<td><p>Etc/GMT-4</p></td>
+<td><p>CAN</p></td>
+</tr>
+<tr class="row-even"><td><p>QC</p></td>
+<td><p>Québec</p></td>
+<td><p>1,365,128</p></td>
+<td><p>527,088</p></td>
+<td><p>15.0%</p></td>
+<td><p>Etc/GMT-5</p></td>
+<td><p>CAN</p></td>
+</tr>
+<tr class="row-odd"><td><p>SK</p></td>
+<td><p>Saskatchewan</p></td>
+<td><p>591,670</p></td>
+<td><p>228,449</p></td>
+<td><p>6.5%</p></td>
+<td><p>Etc/GMT-6</p></td>
+<td><p>CAN</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="special-configuration-for-british-columbia">
+<h3>Special Configuration for British Columbia<a class="headerlink" href="#special-configuration-for-british-columbia" title="Link to this heading">#</a></h3>
+<p>BC includes additional snapshot timezone configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">snapshots_tz_BC</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">start</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;2021-01-01</span><span class="nv"> </span><span class="s">00:00:00&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">end</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;2021-12-31</span><span class="nv"> </span><span class="s">23:00:00&#39;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="data-sources">
+<h2>Data Sources<a class="headerlink" href="#data-sources" title="Link to this heading">#</a></h2>
+<section id="gadm-global-administrative-areas">
+<h3>GADM (Global Administrative Areas)<a class="headerlink" href="#gadm-global-administrative-areas" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/GADM</span></code></p></li>
+<li><p><strong>Processed Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/processed_data/regions</span></code></p></li>
+<li><p><strong>Field Mapping:</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">NAME_0</span></code>: Country</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NAME_1</span></code>: Province</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NAME_2</span></code>: Region</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="government-of-canada-data-sources">
+<h3>Government of Canada Data Sources<a class="headerlink" href="#government-of-canada-data-sources" title="Link to this heading">#</a></h3>
+<section id="conservation-lands">
+<h4>Conservation Lands<a class="headerlink" href="#conservation-lands" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>URL:</strong> <a class="reference external" href="https://data-donnees.az.ec.gc.ca/api/file?path=%2Fspecies%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FDatabases%2FProtectedConservedArea_2023.zip">Canadian Protected and Conserved Areas Database</a></p></li>
+<li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/Gov/Conservation_Lands</span></code></p></li>
+<li><p><strong>Data Name:</strong> ProtectedConservedArea</p></li>
+<li><p><strong>GDB Layer:</strong> ProtectedConservedArea_2023</p></li>
+</ul>
+<section id="iucn-category-mapping">
+<h5>IUCN Category Mapping<a class="headerlink" href="#iucn-category-mapping" title="Link to this heading">#</a></h5>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Code</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Strict Nature Reserve</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Wilderness Area</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>National Park</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Natural Monument or Feature</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Habitat/Species Management Area</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>Protected Landscape/Seascape</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>Protected Area with Sustainable Use of Natural Resources</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>Interim Sites (unknown specifics)</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>OECM areas</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="location-mapping">
+<h5>Location Mapping<a class="headerlink" href="#location-mapping" title="Link to this heading">#</a></h5>
+<p>Canadian provinces and territories are mapped to numeric codes (1-21), including marine areas.</p>
+</section>
+<section id="land-ownership-mapping">
+<h5>Land Ownership Mapping<a class="headerlink" href="#land-ownership-mapping" title="Link to this heading">#</a></h5>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Code</p></th>
+<th class="head"><p>Owner Type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Federal Govt.</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Provincial / territorial Govt</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Municipal government</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Indigenous Community/People</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Communal ownership</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>Individual landowners</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>For-profit organizations</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>Non-profit organizations</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>Joint ownership</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>Multiple ownership</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>Contested Ownership</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>not known or reported</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="population-data">
+<h4>Population Data<a class="headerlink" href="#population-data" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/Gov/Population</span></code></p></li>
+<li><p><strong>Data File:</strong> Population_Projections.csv</p></li>
+<li><p><strong>Skip Rows:</strong> 6</p></li>
+</ul>
+</section>
+<section id="community-energy-and-emissions-inventory-ceei">
+<h4>Community Energy and Emissions Inventory (CEEI)<a class="headerlink" href="#community-energy-and-emissions-inventory-ceei" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/Gov/CEEI</span></code></p></li>
+<li><p><strong>Data Files:</strong></p>
+<ul>
+<li><p>Buildings: <code class="docutils literal notranslate"><span class="pre">bc_utilities_energy_and_emissions_data_at_the_community_level.xlsx</span></code></p></li>
+<li><p>Transportation: <code class="docutils literal notranslate"><span class="pre">bc_on_road_transportation_data_at_the_community_level.xlsx</span></code></p></li>
+<li><p>Waste: <code class="docutils literal notranslate"><span class="pre">bc_municipal_solid_waste_data_at_the_community_level.xlsx</span></code></p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="nrel-annual-technology-baseline-atb">
+<h3>NREL Annual Technology Baseline (ATB)<a class="headerlink" href="#nrel-annual-technology-baseline-atb" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/NREL/ATB</span></code></p></li>
+<li><p><strong>Sources:</strong></p>
+<ul>
+<li><p>CSV: <a class="reference external" href="https://oedi-data-lake.s3.amazonaws.com/ATB/electricity/csv/2024/ATBe.csv">ATBe.csv</a></p></li>
+<li><p>Parquet: <a class="reference external" href="https://oedi-data-lake.s3.amazonaws.com/ATB/electricity/parquet/2024/v3.0.0/ATBe.parquet">ATBe.parquet</a></p></li>
+</ul>
+</li>
+<li><p><strong>About:</strong> <a class="reference external" href="https://atb.nrel.gov/electricity/2024/technologies">NREL ATB 2024</a></p></li>
+<li><p><strong>Cost Parameters:</strong></p>
+<ul>
+<li><p>CAPEX: OCC</p></li>
+<li><p>Fixed O&amp;M: Fixed O&amp;M</p></li>
+<li><p>Variable O&amp;M: None</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="openstreetmap-osm-data">
+<h3>OpenStreetMap (OSM) Data<a class="headerlink" href="#openstreetmap-osm-data" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/OSM</span></code></p></li>
+<li><p><strong>Key Categories:</strong></p>
+<ul>
+<li><p><strong>Aeroway:</strong> aerodrome, runway, taxiway, helipad, apron, gate</p></li>
+<li><p><strong>Power:</strong> line, cable, minor_line, substation, tower, pole, generator, plant, terminal</p></li>
+<li><p><strong>Substation:</strong> transmission, distribution, minor_distribution, industrial</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="coders-canadian-open-data-for-electricity-research">
+<h3>CODERS (Canadian Open Data for Electricity Research)<a class="headerlink" href="#coders-canadian-open-data-for-electricity-research" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>URLs:</strong></p>
+<ul>
+<li><p>Primary: <a class="reference external" href="https://sesit.dev/">https://sesit.dev/</a></p></li>
+<li><p>Secondary: <a class="reference external" href="http://206.12.95.102/">http://206.12.95.102/</a></p></li>
+</ul>
+</li>
+<li><p><strong>API Documentation:</strong> <a class="reference external" href="https://sesit.dev/api/docs">https://sesit.dev/api/docs</a></p></li>
+<li><p><strong>Data Types:</strong> network (substations and transmission lines)</p></li>
+</ul>
+</section>
+<section id="gaez-global-agro-ecological-zones">
+<h3>GAEZ (Global Agro-Ecological Zones)<a class="headerlink" href="#gaez-global-agro-ecological-zones" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/GAEZ</span></code></p></li>
+<li><p><strong>Source:</strong> <a class="reference external" href="https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip">LR.zip</a></p></li>
+</ul>
+<section id="raster-types">
+<h4>Raster Types<a class="headerlink" href="#raster-types" title="Link to this heading">#</a></h4>
+<section id="exclusion-areas-exclusion-2017-tif">
+<h5>1. Exclusion Areas (<code class="docutils literal notranslate"><span class="pre">exclusion_2017.tif</span></code>)<a class="headerlink" href="#exclusion-areas-exclusion-2017-tif" title="Link to this heading">#</a></h5>
+<ul class="simple">
+<li><p><strong>Color Map:</strong> OrRd</p></li>
+<li><p><strong>Title:</strong> Excluding Global Exclusion Areas</p></li>
+<li><p><strong>Class Exclusions:</strong></p>
+<ul>
+<li><p>Solar: Classes 2-7</p></li>
+<li><p>Wind: Classes 2-7</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="terrain-resources-slpmed05-tif">
+<h5>2. Terrain Resources (<code class="docutils literal notranslate"><span class="pre">slpmed05.tif</span></code>)<a class="headerlink" href="#terrain-resources-slpmed05-tif" title="Link to this heading">#</a></h5>
+<ul class="simple">
+<li><p><strong>Color Map:</strong> terrain</p></li>
+<li><p><strong>Title:</strong> Excluding Terrain Slope</p></li>
+<li><p><strong>Class Exclusions:</strong></p>
+<ul>
+<li><p>Solar: Class 9</p></li>
+<li><p>Wind: Classes 7-9</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="land-cover-faocmb-2010-tif">
+<h5>3. Land Cover (<code class="docutils literal notranslate"><span class="pre">faocmb_2010.tif</span></code>)<a class="headerlink" href="#land-cover-faocmb-2010-tif" title="Link to this heading">#</a></h5>
+<ul class="simple">
+<li><p><strong>Color Map:</strong> YlGn</p></li>
+<li><p><strong>Title:</strong> Excluding not-Suitable Landcovers</p></li>
+<li><p><strong>Class Inclusions:</strong></p>
+<ul>
+<li><p>Solar: Classes 2, 3, 5, 8, 9</p></li>
+<li><p>Wind: Classes 2, 3, 5, 8, 9</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="worldpop">
+<h3>WorldPop<a class="headerlink" href="#worldpop" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/WorldPop</span></code></p></li>
+<li><p><strong>Data Sources:</strong></p>
+<ul>
+<li><p>Population Density (Canada)</p></li>
+<li><p>Population Count (Canada)</p></li>
+<li><p>Weighted Population Density (Global)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="climate-data-cutout">
+<h3>Climate Data (Cutout)<a class="headerlink" href="#climate-data-cutout" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/cutout/</span></code></p></li>
+<li><p><strong>Module:</strong> era5</p></li>
+<li><p><strong>Resolution:</strong> 0.25° x 0.25°</p></li>
+<li><p><strong>Time Period:</strong> 2023-01-01 07:00:00 to 2024-01-01 06:00:00</p></li>
+</ul>
+</section>
+<section id="global-wind-atlas-gwa">
+<h3>Global Wind Atlas (GWA)<a class="headerlink" href="#global-wind-atlas-gwa" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/GWA</span></code></p></li>
+<li><p><strong>Data Fields:</strong></p>
+<ul>
+<li><p>Wind Speed at 100m</p></li>
+<li><p>Capacity Factor IEC Class 2</p></li>
+<li><p>Capacity Factor IEC Class 3</p></li>
+<li><p>IEC Class Extreme Loads</p></li>
+</ul>
+</li>
+<li><p><strong>Filters:</strong></p>
+<ul>
+<li><p>Low Wind Speed: 7 m/s</p></li>
+<li><p>High Wind Speed: 45 m/s</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="capacity-disaggregation">
+<h2>Capacity Disaggregation<a class="headerlink" href="#capacity-disaggregation" title="Link to this heading">#</a></h2>
+<section id="solar-configuration">
+<h3>Solar Configuration<a class="headerlink" href="#solar-configuration" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Max Capacity:</strong> 5 MW</p></li>
+<li><p><strong>Land Use Intensity:</strong> 1.45 MW/km²</p></li>
+<li><p><strong>Cost Data:</strong> <code class="docutils literal notranslate"><span class="pre">data/processed_data/solar/utility_PV_Class5_cost_moderate_NREL_ATB2024.csv</span></code></p></li>
+<li><p><strong>Technology:</strong> UtilityPV Class5</p></li>
+<li><p><strong>Panel Type:</strong> CSi (Crystalline Silicon)</p></li>
+<li><p><strong>Tracking:</strong> Dual-axis</p></li>
+<li><p><strong>Tolerances:</strong></p>
+<ul>
+<li><p>Static CF: 0.16</p></li>
+<li><p>Capacity: 1</p></li>
+<li><p>WCSS: 0.01</p></li>
+</ul>
+</li>
+</ul>
+<section id="buffer-zones-solar">
+<h4>Buffer Zones (Solar)<a class="headerlink" href="#buffer-zones-solar" title="Link to this heading">#</a></h4>
+<p>All aeroway and conserved land features have 0m buffer zones in the baseline scenario.</p>
+</section>
+</section>
+<section id="wind-configuration">
+<h3>Wind Configuration<a class="headerlink" href="#wind-configuration" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Max Capacity:</strong> 15 MW</p></li>
+<li><p><strong>Land Use Intensity:</strong> 3 MW/km²</p></li>
+<li><p><strong>Cost Data:</strong> <code class="docutils literal notranslate"><span class="pre">data/processed_data/wind/land_based_wind_T3_cost_moderate_NREL_ATB2024.csv</span></code></p></li>
+<li><p><strong>Technology:</strong> Land-based Wind Turbine Technology 3</p></li>
+<li><p><strong>Capacity Factor Range:</strong> 0.2 - 1.0</p></li>
+<li><p><strong>WCSS Tolerance:</strong> 0.01</p></li>
+</ul>
+<section id="turbine-models">
+<h4>Turbine Models<a class="headerlink" href="#turbine-models" title="Link to this heading">#</a></h4>
+<section id="nrel-atb-turbines">
+<h5>NREL ATB Turbines<a class="headerlink" href="#nrel-atb-turbines" title="Link to this heading">#</a></h5>
+<ol class="arabic simple">
+<li><p><strong>Enercon E82 3000kW</strong> - 3 MW</p></li>
+<li><p><strong>Vestas V90 3MW</strong> - 3 MW</p></li>
+</ol>
+</section>
+<section id="oedb-turbines">
+<h5>OEDB Turbines<a class="headerlink" href="#oedb-turbines" title="Link to this heading">#</a></h5>
+<ol class="arabic simple">
+<li><p><strong>GE2.75_120</strong> (ID: 116) - 2.75 MW, GE Wind</p></li>
+<li><p><strong>3.2M114_NES</strong> (ID: 93) - 3.2 MW, Senvion/REpower</p></li>
+</ol>
+</section>
+</section>
+<section id="buffer-zones-wind">
+<h4>Buffer Zones (Wind)<a class="headerlink" href="#buffer-zones-wind" title="Link to this heading">#</a></h4>
+<p>All aeroway and conserved land features have 0m buffer zones in the baseline scenario.</p>
+</section>
+</section>
+<section id="battery-energy-storage-system-bess">
+<h3>Battery Energy Storage System (BESS)<a class="headerlink" href="#battery-energy-storage-system-bess" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Max Capacity:</strong> 10 MW</p></li>
+<li><p><strong>Cost Data:</strong> <code class="docutils literal notranslate"><span class="pre">data/processed_data/bess/bess_LI_6hr_cost_moderate_NREL_ATB2024.csv</span></code></p></li>
+<li><p><strong>Type:</strong> 6Hr Battery Storage (Lithium-ion)</p></li>
+<li><p><strong>Variable O&amp;M:</strong> 0</p></li>
+<li><p><strong>Unit Size:</strong> 60 MWh</p></li>
+<li><p><strong>Storage Duration:</strong> 5.5 hours</p></li>
+</ul>
+<section id="capacity-estimates-per-energy-unit">
+<h4>Capacity Estimates per Energy Unit<a class="headerlink" href="#capacity-estimates-per-energy-unit" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Conservative:</strong> 0.01</p></li>
+<li><p><strong>Moderate:</strong> 0.05</p></li>
+<li><p><strong>Optimistic:</strong> 0.1</p></li>
+</ul>
+</section>
+</section>
+<section id="transmission">
+<h3>Transmission<a class="headerlink" href="#transmission" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Grid Connection Cost:</strong> $1.616M per km</p></li>
+<li><p><strong>Transmission Line Rebuild Cost:</strong> $0.348M per km</p></li>
+<li><p><strong>Grid Proximity Limit:</strong> 100 km</p></li>
+<li><p><strong>Bus Data:</strong> <code class="docutils literal notranslate"><span class="pre">data/processed_data/buses.csv</span></code></p></li>
+<li><p><strong>Line Data:</strong> <code class="docutils literal notranslate"><span class="pre">data/processed_data/lines.csv</span></code></p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="custom-configurations">
+<h2>Custom Configurations<a class="headerlink" href="#custom-configurations" title="Link to this heading">#</a></h2>
+<section id="custom-land-layers">
+<h3>Custom Land Layers<a class="headerlink" href="#custom-land-layers" title="Link to this heading">#</a></h3>
+<p>The configuration supports custom raster and vector layers for specialized land use constraints:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">custom_land_layers</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">rasters</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">raster_1</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">raster</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+<span class="w">      </span><span class="nt">class_exclusion</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+<span class="w">      </span><span class="nt">buffer</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+<span class="w">      </span><span class="nt">invert</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;False&#39;</span>
+<span class="w">  </span><span class="nt">vectors</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">vector_1</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">geometry</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+<span class="w">      </span><span class="nt">buffer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">      </span><span class="nt">invert</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;False&#39;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="usage-notes">
+<h2>Usage Notes<a class="headerlink" href="#usage-notes" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Buffer Zones:</strong> In the baseline scenario, all buffer zones are set to 0m around protected areas and aeroways.</p></li>
+<li><p><strong>Technology Selection:</strong> The configuration uses moderate cost scenarios from NREL ATB 2024.</p></li>
+<li><p><strong>Data Sources:</strong> All data sources include proper attribution and licensing information.</p></li>
+<li><p><strong>Regional Customization:</strong> Each province/territory can be configured with specific parameters through the sub_region_mapping field.</p></li>
+<li><p><strong>Time Series:</strong> Climate data and capacity factor calculations use 2023 data with hourly resolution.</p></li>
+<li><p><strong>Quality Control:</strong> Multiple tolerance parameters ensure data quality and consistency across different analysis modules.</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="file-locations">
+<h2>File Locations<a class="headerlink" href="#file-locations" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Configuration File:</strong> <code class="docutils literal notranslate"><span class="pre">config/config_CAN.yaml</span></code></p></li>
+<li><p><strong>Data Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/</span></code></p></li>
+<li><p><strong>Results Directory:</strong> <code class="docutils literal notranslate"><span class="pre">results/</span></code></p></li>
+<li><p><strong>Documentation:</strong> <code class="docutils literal notranslate"><span class="pre">docs/</span></code></p></li>
+</ul>
+<p>For more information about the RESource tool, contact the developer or refer to the project documentation.</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="case_BC.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Case study: VRE site selection in British Columbia</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="learning.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">4. </span>Best Practices and Guidelines</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-information">General Information</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-configuration">Basic Configuration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scenario-settings">Scenario Settings</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-mapping">Regional Mapping</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#province-territory-details">Province/Territory Details</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#special-configuration-for-british-columbia">Special Configuration for British Columbia</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-sources">Data Sources</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gadm-global-administrative-areas">GADM (Global Administrative Areas)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#government-of-canada-data-sources">Government of Canada Data Sources</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conservation-lands">Conservation Lands</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#iucn-category-mapping">IUCN Category Mapping</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#location-mapping">Location Mapping</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#land-ownership-mapping">Land Ownership Mapping</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#population-data">Population Data</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#community-energy-and-emissions-inventory-ceei">Community Energy and Emissions Inventory (CEEI)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nrel-annual-technology-baseline-atb">NREL Annual Technology Baseline (ATB)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#openstreetmap-osm-data">OpenStreetMap (OSM) Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coders-canadian-open-data-for-electricity-research">CODERS (Canadian Open Data for Electricity Research)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaez-global-agro-ecological-zones">GAEZ (Global Agro-Ecological Zones)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#raster-types">Raster Types</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#exclusion-areas-exclusion-2017-tif">1. Exclusion Areas (<code class="docutils literal notranslate"><span class="pre">exclusion_2017.tif</span></code>)</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#terrain-resources-slpmed05-tif">2. Terrain Resources (<code class="docutils literal notranslate"><span class="pre">slpmed05.tif</span></code>)</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#land-cover-faocmb-2010-tif">3. Land Cover (<code class="docutils literal notranslate"><span class="pre">faocmb_2010.tif</span></code>)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#worldpop">WorldPop</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#climate-data-cutout">Climate Data (Cutout)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-wind-atlas-gwa">Global Wind Atlas (GWA)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#capacity-disaggregation">Capacity Disaggregation</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solar-configuration">Solar Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#buffer-zones-solar">Buffer Zones (Solar)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wind-configuration">Wind Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#turbine-models">Turbine Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#nrel-atb-turbines">NREL ATB Turbines</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#oedb-turbines">OEDB Turbines</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#buffer-zones-wind">Buffer Zones (Wind)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#battery-energy-storage-system-bess">Battery Energy Storage System (BESS)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#capacity-estimates-per-energy-unit">Capacity Estimates per Energy Unit</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transmission">Transmission</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-configurations">Custom Configurations</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-land-layers">Custom Land Layers</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-notes">Usage Notes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#file-locations">File Locations</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

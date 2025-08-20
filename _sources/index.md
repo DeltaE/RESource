@@ -27,10 +27,11 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 
 notes/resource_builder
 notes/setup_guide
-notes/case_BC.md
+notes/case_BC
+notes/config
 notes/learning.md
 notes/api
-notes/data.md
+notes/data
 notes/documentation_guide
 notes/developers
 ```

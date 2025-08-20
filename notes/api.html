@@ -161,6 +161,7 @@
 <li class="toctree-l1"><a class="reference internal" href="setup_guide.html">2. RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 
+<li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learning.html">4. Best Practices and Guidelines</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">RES API References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data.html">6. Data Sources and Supply Chain</a></li>
@@ -724,7 +725,7 @@ If the resource type is 'solar', it currently does not support extraction from t
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">find_grid_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_pypsa_buses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_proximity_filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GeoDataFrame</span></span></span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.find_grid_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">find_grid_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_pypsa_buses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GeoDataFrame</span></span></span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.find_grid_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Find the grid nodes for the given cells.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -808,7 +809,7 @@ If the resource type is 'solar', it currently does not support extraction from t
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">get_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scored_cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcss_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.get_clusters"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">get_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scored_cells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcss_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.get_clusters"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><dl class="simple">
 <dt>### Args:</dt><dd><ul class="simple">
 <li><p><strong>WCSS (Within-cluster Sum of Square) tolerance</strong>. Higher tolerance gives , more simplification and less number of clusters.</p></li>
@@ -1965,64 +1966,67 @@ across different locations and technologies.</p>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">calculate_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_distance_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CF_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CRF</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Calculate the Levelized Cost of Energy (LCOE) score for an individual grid cell.</p>
-<p>This method computes the LCOE using the simplified NREL methodology, combining
-annualized capital costs with operational expenses and dividing by annual energy
-production. The resulting LCOE provides a standardized metric for comparing
-the economic attractiveness of different renewable energy sites.</p>
 <p>LCOE Formula:
-LCOE = (Total Cost × CRF + OPEX) / Annual Energy Production</p>
-<p>Where:
-- Total Cost includes CAPEX and grid connection costs
-- CRF converts capital costs to annual payments
-- Annual Energy = 8760 hours × Capacity Factor × Installed Capacity</p>
+LCOE = (CAPEX × CRF + FOM + VOM × Annual_Energy) / Annual_Energy</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>row</strong> (<em>pd.Series</em>) -- DataFrame row containing cell-specific data including:
-- nearest_station_distance_km: Distance to grid connection
-- grid_connection_cost_per_km_{resource_type}: Grid connection cost
-- tx_line_rebuild_cost_{resource_type}: Transmission rebuild cost
-- capex_{resource_type}: Technology capital expenditure
-- potential_capacity_{resource_type}: Installable capacity
-- CF_column value: Capacity factor for the cell</p></li>
+<li><p><strong>row</strong> (<em>pd.Series</em>) -- DataFrame row containing cell-specific data</p></li>
+<li><p><strong>node_distance_col</strong> (<em>str</em>) -- Column name for distance to grid connection</p></li>
 <li><p><strong>CF_column</strong> (<em>str</em>) -- Column name containing capacity factor data</p></li>
 <li><p><strong>CRF</strong> (<em>float</em>) -- Capital Recovery Factor for cost annualization</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>LCOE in $/MWh, or 999 if annual energy production is zero</p>
+<dd class="field-even"><p>LCOE in $/MWh, or 999999 if annual energy production is zero</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Calculate LCOE for a single grid cell</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">crf</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">get_CRF</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mf">0.07</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lcoe</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">calculate_score</span><span class="p">(</span><span class="n">grid_cell</span><span class="p">,</span> <span class="s1">&#39;CF_mean&#39;</span><span class="p">,</span> <span class="n">crf</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LCOE: $</span><span class="si">{</span><span class="n">lcoe</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">/MWh&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p class="rubric">Notes</p>
-<ul class="simple">
-<li><p>Returns high penalty value (999) for cells with zero energy production</p></li>
-<li><p>Converts from M$/MWh to $/MWh for standard reporting units</p></li>
-<li><p>Incorporates site-specific capacity factors and grid integration costs</p></li>
-</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_score_debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_distance_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CF_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CRF</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_score_debug"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Debug version that returns breakdown of LCOE components.
+Use this to identify why larger sites get lower scores.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_score_normalized</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_distance_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CF_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CRF</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_capacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_score_normalized"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate LCOE using a normalized capacity for fair comparison in clustering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reference_capacity</strong> (<em>float</em>) -- Fixed capacity to use for cost calculations (MW)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_score_per_mw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_distance_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CF_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CRF</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_score_per_mw"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate LCOE per MW for capacity-independent comparison.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">calculate_total_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance_to_grid_km</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_connection_cost_per_km</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_line_rebuild_cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capex_tech</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">potential_capacity_mw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_total_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Calculate total project cost including CAPEX and distance-based grid connection costs.</p>
-<p>This method implements the cost calculation framework following NREL's Simple
-Levelized Cost of Energy methodology. It combines technology capital expenditures
-with grid integration costs that scale with distance to existing transmission
-infrastructure.</p>
-<p>Cost Components:
-1. Technology CAPEX: Base capital cost for renewable energy installation
-2. Grid Connection Cost: Cost to connect to nearest transmission point
-3. Transmission Rebuild Cost: Infrastructure upgrade costs for grid integration</p>
+<dd><p>Calculate total project cost with economies of scale for grid connection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_total_cost_shared_infrastructure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance_to_grid_km</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_connection_cost_per_km</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_line_rebuild_cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capex_tech</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">potential_capacity_mw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nearby_projects_mw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_total_cost_shared_infrastructure"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate total cost considering potential for shared transmission infrastructure.
+This is most relevant for clustering applications.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_total_cost_smooth_scaling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance_to_grid_km</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_connection_cost_per_km</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_line_rebuild_cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capex_tech</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">potential_capacity_MW</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_capacity_MW</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling_exponent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.8</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_total_cost_smooth_scaling"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate total cost with smooth economies of scale for grid connection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2030,8 +2034,9 @@ infrastructure.</p>
 <li><p><strong>grid_connection_cost_per_km</strong> (<em>float</em>) -- Cost per km for grid connection (M$/km)</p></li>
 <li><p><strong>tx_line_rebuild_cost</strong> (<em>float</em>) -- Transmission line rebuild cost (M$/km)</p></li>
 <li><p><strong>capex_tech</strong> (<em>float</em>) -- Technology-specific capital expenditure (M$/MW)</p></li>
-<li><p><strong>potential_capacity_mw</strong> (<em>float</em>) -- Potential installed capacity (MW)</p></li>
-<li><p><strong>miles_flag</strong> (<em>bool</em><em>, </em><em>optional</em>) -- If True, converts costs to miles. Defaults to True.</p></li>
+<li><p><strong>potential_capacity_MW</strong> (<em>float</em>) -- Potential installed capacity (MW)</p></li>
+<li><p><strong>reference_capacity_MW</strong> (<em>float</em><em>, </em><em>optional</em>) -- Reference capacity for scaling. Defaults to 100 MW.</p></li>
+<li><p><strong>scaling_exponent</strong> (<em>float</em><em>, </em><em>optional</em>) -- Exponent for scaling economies e.g. &lt;1 means economies of scale. Defaults to 0.8.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -2041,16 +2046,13 @@ infrastructure.</p>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<ul class="simple">
-<li><p>Converts km to miles for cost calculations (US-based cost data)</p></li>
-<li><p>Grid connection costs scale linearly with distance</p></li>
-<li><p>Method follows NREL Simple LCOE documentation framework</p></li>
-</ul>
-<dl class="simple">
-<dt>Reference:</dt><dd><p><a class="reference external" href="https://www.nrel.gov/analysis/tech-lcoe-documentation.html">https://www.nrel.gov/analysis/tech-lcoe-documentation.html</a></p>
-</dd>
-</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_total_cost_transmission_sizing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance_to_grid_km</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_connection_cost_per_km</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_line_rebuild_cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capex_tech</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">potential_capacity_mw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_total_cost_transmission_sizing"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate total cost with transmission line sizing based on capacity.
+More realistic approach considering actual transmission requirements.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -4181,64 +4183,67 @@ across different locations and technologies.</p>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">calculate_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_distance_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CF_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CRF</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Calculate the Levelized Cost of Energy (LCOE) score for an individual grid cell.</p>
-<p>This method computes the LCOE using the simplified NREL methodology, combining
-annualized capital costs with operational expenses and dividing by annual energy
-production. The resulting LCOE provides a standardized metric for comparing
-the economic attractiveness of different renewable energy sites.</p>
 <p>LCOE Formula:
-LCOE = (Total Cost × CRF + OPEX) / Annual Energy Production</p>
-<p>Where:
-- Total Cost includes CAPEX and grid connection costs
-- CRF converts capital costs to annual payments
-- Annual Energy = 8760 hours × Capacity Factor × Installed Capacity</p>
+LCOE = (CAPEX × CRF + FOM + VOM × Annual_Energy) / Annual_Energy</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>row</strong> (<em>pd.Series</em>) -- DataFrame row containing cell-specific data including:
-- nearest_station_distance_km: Distance to grid connection
-- grid_connection_cost_per_km_{resource_type}: Grid connection cost
-- tx_line_rebuild_cost_{resource_type}: Transmission rebuild cost
-- capex_{resource_type}: Technology capital expenditure
-- potential_capacity_{resource_type}: Installable capacity
-- CF_column value: Capacity factor for the cell</p></li>
+<li><p><strong>row</strong> (<em>pd.Series</em>) -- DataFrame row containing cell-specific data</p></li>
+<li><p><strong>node_distance_col</strong> (<em>str</em>) -- Column name for distance to grid connection</p></li>
 <li><p><strong>CF_column</strong> (<em>str</em>) -- Column name containing capacity factor data</p></li>
 <li><p><strong>CRF</strong> (<em>float</em>) -- Capital Recovery Factor for cost annualization</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>LCOE in $/MWh, or 999 if annual energy production is zero</p>
+<dd class="field-even"><p>LCOE in $/MWh, or 999999 if annual energy production is zero</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Calculate LCOE for a single grid cell</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">crf</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">get_CRF</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mf">0.07</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lcoe</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">calculate_score</span><span class="p">(</span><span class="n">grid_cell</span><span class="p">,</span> <span class="s1">&#39;CF_mean&#39;</span><span class="p">,</span> <span class="n">crf</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LCOE: $</span><span class="si">{</span><span class="n">lcoe</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">/MWh&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p class="rubric">Notes</p>
-<ul class="simple">
-<li><p>Returns high penalty value (999) for cells with zero energy production</p></li>
-<li><p>Converts from M$/MWh to $/MWh for standard reporting units</p></li>
-<li><p>Incorporates site-specific capacity factors and grid integration costs</p></li>
-</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_score_debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_distance_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CF_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CRF</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_score_debug"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Debug version that returns breakdown of LCOE components.
+Use this to identify why larger sites get lower scores.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_score_normalized</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_distance_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CF_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CRF</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_capacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_score_normalized"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate LCOE using a normalized capacity for fair comparison in clustering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reference_capacity</strong> (<em>float</em>) -- Fixed capacity to use for cost calculations (MW)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_score_per_mw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_distance_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CF_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CRF</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_score_per_mw"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate LCOE per MW for capacity-independent comparison.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">calculate_total_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance_to_grid_km</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_connection_cost_per_km</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_line_rebuild_cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capex_tech</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">potential_capacity_mw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_total_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Calculate total project cost including CAPEX and distance-based grid connection costs.</p>
-<p>This method implements the cost calculation framework following NREL's Simple
-Levelized Cost of Energy methodology. It combines technology capital expenditures
-with grid integration costs that scale with distance to existing transmission
-infrastructure.</p>
-<p>Cost Components:
-1. Technology CAPEX: Base capital cost for renewable energy installation
-2. Grid Connection Cost: Cost to connect to nearest transmission point
-3. Transmission Rebuild Cost: Infrastructure upgrade costs for grid integration</p>
+<dd><p>Calculate total project cost with economies of scale for grid connection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_total_cost_shared_infrastructure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance_to_grid_km</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_connection_cost_per_km</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_line_rebuild_cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capex_tech</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">potential_capacity_mw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nearby_projects_mw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_total_cost_shared_infrastructure"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate total cost considering potential for shared transmission infrastructure.
+This is most relevant for clustering applications.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_total_cost_smooth_scaling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance_to_grid_km</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_connection_cost_per_km</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_line_rebuild_cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capex_tech</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">potential_capacity_MW</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_capacity_MW</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling_exponent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.8</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_total_cost_smooth_scaling"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate total cost with smooth economies of scale for grid connection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -4246,8 +4251,9 @@ infrastructure.</p>
 <li><p><strong>grid_connection_cost_per_km</strong> (<em>float</em>) -- Cost per km for grid connection (M$/km)</p></li>
 <li><p><strong>tx_line_rebuild_cost</strong> (<em>float</em>) -- Transmission line rebuild cost (M$/km)</p></li>
 <li><p><strong>capex_tech</strong> (<em>float</em>) -- Technology-specific capital expenditure (M$/MW)</p></li>
-<li><p><strong>potential_capacity_mw</strong> (<em>float</em>) -- Potential installed capacity (MW)</p></li>
-<li><p><strong>miles_flag</strong> (<em>bool</em><em>, </em><em>optional</em>) -- If True, converts costs to miles. Defaults to True.</p></li>
+<li><p><strong>potential_capacity_MW</strong> (<em>float</em>) -- Potential installed capacity (MW)</p></li>
+<li><p><strong>reference_capacity_MW</strong> (<em>float</em><em>, </em><em>optional</em>) -- Reference capacity for scaling. Defaults to 100 MW.</p></li>
+<li><p><strong>scaling_exponent</strong> (<em>float</em><em>, </em><em>optional</em>) -- Exponent for scaling economies e.g. &lt;1 means economies of scale. Defaults to 0.8.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -4257,16 +4263,13 @@ infrastructure.</p>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<ul class="simple">
-<li><p>Converts km to miles for cost calculations (US-based cost data)</p></li>
-<li><p>Grid connection costs scale linearly with distance</p></li>
-<li><p>Method follows NREL Simple LCOE documentation framework</p></li>
-</ul>
-<dl class="simple">
-<dt>Reference:</dt><dd><p><a class="reference external" href="https://www.nrel.gov/analysis/tech-lcoe-documentation.html">https://www.nrel.gov/analysis/tech-lcoe-documentation.html</a></p>
-</dd>
-</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_total_cost_transmission_sizing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance_to_grid_km</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_connection_cost_per_km</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_line_rebuild_cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capex_tech</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">potential_capacity_mw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/RES/score.html#CellScorer.calculate_total_cost_transmission_sizing"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate total cost with transmission line sizing based on capacity.
+More realistic approach considering actual transmission requirements.</p>
 </dd></dl>
 
 <dl class="py method">
