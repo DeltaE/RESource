@@ -212,3 +212,9 @@ class AttributesParser:
     def get_wcss_tolerance(self):
         self.resource_disaggregation_config:dict=self.get_resource_disaggregation_config()
         return self.resource_disaggregation_config.get('WCSS_tolerance',0.01)
+    
+    def get_grid_proximity_km(self):
+        """
+        Returns the grid proximity in kilometers.
+        """
+        return self.config.get('capacity_disaggregation').get('transmission', {}).get('grid_proximity_km', 100)

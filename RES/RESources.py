@@ -27,8 +27,6 @@ from RES.units import Units
 from RES import utility as utils
 
 
-
-    
 # Get the current local time
 current_local_time = datetime.now()
 warnings.filterwarnings("ignore")
@@ -199,7 +197,8 @@ class RESources_builder(AttributesParser):
         self.units=Units(**self.required_args)
         self.gridcells=GridCells(**self.required_args)
         self.timeseries=Timeseries(**self.required_args)
-        self.gadmBoundary=GADMBoundaries(**self.required_args)        
+        self.gadmBoundary=GADMBoundaries(**self.required_args)
+        self.gridNodesProcessor=GridNodeLocator(**self.required_args)        
         self.datahandler=DataHandler(self.store)
         self.cell_processor=CellCapacityProcessor(**self.required_args)
         if self.country_name == 'Canada':
@@ -383,8 +382,7 @@ class RESources_builder(AttributesParser):
 
     def find_grid_nodes(self,
                         cells:gpd.GeoDataFrame=None,
-                        use_pypsa_buses:bool=False,
-                        apply_proximity_filter:bool=False) -> gpd.GeoDataFrame:
+                        use_pypsa_buses:bool=False) -> gpd.GeoDataFrame:
         """
         Find the grid nodes for the given cells.                            
 
@@ -397,7 +395,7 @@ class RESources_builder(AttributesParser):
             Could be parallelized with Step 1B/C.
         """
 
-        self.gridNodesProcessor=GridNodeLocator(**self.required_args)
+        
         self.cutout,self.region_boundary=self.era5_cutout.get_era5_cutout()
         
         # Initialize cells data
@@ -434,8 +432,7 @@ class RESources_builder(AttributesParser):
             utils.print_update(level=PRINT_LEVEL_BASE+3,
                            message=f"{__name__}| Searching for nearest grid nodes for each cell...")
             self.region_grid_cells_cap_with_nodes = self.gridNodesProcessor.find_grid_nodes_ERA5_cells(self.grid_ss,
-                                                                                            self.store_grid_cells,
-                                                                                            apply_proximity_filter=apply_proximity_filter)
+                                                                                            self.store_grid_cells)
             utils.print_update(level=PRINT_LEVEL_BASE+3,
                             message=f"{__name__}| ✔ Closest grid nodes and distance calculation completed.")
             
@@ -451,8 +448,7 @@ class RESources_builder(AttributesParser):
                 utils.print_update(level=PRINT_LEVEL_BASE+3,
                            message=f"{__name__}| Searching for nearest grid nodes for each cell...")
                 self.region_grid_cells_cap_with_nodes = self.gridNodesProcessor.find_grid_nodes_ERA5_cells(self.grid_ss,
-                                                                                                self.store_grid_cells,
-                                                                                                apply_proximity_filter=apply_proximity_filter)
+                                                                                                self.store_grid_cells)
                 utils.print_update(level=PRINT_LEVEL_BASE+3,
                                 message=f"{__name__}| ✔ Closest grid nodes and distance calculation completed.")
                 
@@ -559,6 +555,7 @@ class RESources_builder(AttributesParser):
     '''
     def get_clusters(self,
                      scored_cells:gpd.GeoDataFrame=None,
+                     score_tolerance:float=200,
                      wcss_tolerance=None):
         """
         ### Args:
@@ -572,6 +569,7 @@ class RESources_builder(AttributesParser):
         self.scored_cells=scored_cells
         self.gadm_config=self.get_gadm_config()
         
+
         # self.wcss_tolerance:float= self.resource_disaggregation_config['WCSS_tolerance']
         utils.print_update(level=PRINT_LEVEL_BASE+1,
                            
@@ -583,12 +581,22 @@ class RESources_builder(AttributesParser):
             utils.print_update(level=PRINT_LEVEL_BASE+3,
                            message=f"{__name__}| 'lcoe_{self.resource_type}' not found in available datafields...") 
             self.scored_cells = self.score_cells()
+        
+               
+        utils.print_warning(f"{__name__}| Filtering scored cells with score tolerance <= {score_tolerance} $/MWh and grid proximity threshold <= {self.get_grid_proximity_km()} km")
+        
+        node_distance_col:str = utils.get_available_column(self.scored_cells, ['nearest_station_distance_km', 'nearest_distance'])
+        self.scored_cells_FILTERED = self.scored_cells[
+            (self.scored_cells[f'lcoe_{self.resource_type}'] <= score_tolerance) &
+            (self.scored_cells[node_distance_col] <= self.gridNodesProcessor.grid_proximity_threshold_km)
+        ]
             
 
         
         self.vis_dir=self.get_vis_dir()
+      
         
-        self.ERA5_cells_cluster_map, self.region_optimal_k_df = cluster.cells_to_cluster_mapping(self.scored_cells, 
+        self.ERA5_cells_cluster_map, self.region_optimal_k_df = cluster.cells_to_cluster_mapping(self.scored_cells_FILTERED, 
                                                                                                  self.vis_dir, 
                                                                                                  self.wcss_tolerance,
                                                                                                  self.sub_national_unit_tag,
