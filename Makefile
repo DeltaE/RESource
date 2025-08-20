@@ -22,7 +22,9 @@ help:
 	@echo "  docs-build           - Build documentation only"
 	@echo "  deploy               - Deploy documentation to GitHub Pages"
 	@echo "  sync-notebooks       - Sync notebooks to docs"
-	@echo "  autobuild            - Live rebuild documentation with auto-reload"
+	@echo "  autobuild            - Live rebuild documentation with auto-reload (port 8000)"
+	@echo "  autobuild-alt        - Live rebuild documentation on alternative port (8001)"
+	@echo "  autobuild-remote     - Live rebuild with remote development instructions"
 
 # Environment Management
 setup-conda:
@@ -150,8 +152,47 @@ autobuild: sync-notebooks
 		echo "🔄 Auto-building documentation with live reload..."; \
 		echo "📂 Source: docs/source"; \
 		echo "🌐 Build: docs/build"; \
-		echo "🔗 Open http://localhost:8000 in your browser"; \
-		conda run -n RES sphinx-autobuild docs/source docs/build; \
+		echo "🔗 Server starting on http://127.0.0.1:8000"; \
+		echo "🌐 For remote access: VS Code will auto-forward port 8000"; \
+		echo "📝 Check VS Code's 'PORTS' tab to see the forwarded URL"; \
+		echo "⚡ Live reload enabled - changes will auto-refresh"; \
+		conda run -n RES sphinx-autobuild docs/source docs/build --host 127.0.0.1 --port 8000; \
+	else \
+		echo "❌ Conda environment 'RES' not found. Run 'make setup-conda' first."; \
+		exit 1; \
+	fi
+
+# Auto-rebuild on alternative port (if 8000 is busy)
+autobuild-alt: sync-notebooks
+	@echo "Starting live documentation rebuild on alternative port..."
+	@if conda env list | grep -q "^RES "; then \
+		echo "🔄 Auto-building documentation with live reload on port 8001..."; \
+		echo "📂 Source: docs/source"; \
+		echo "🌐 Build: docs/build"; \
+		echo "🔗 Server starting on http://127.0.0.1:8001"; \
+		echo "🌐 For remote access: VS Code will auto-forward port 8001"; \
+		echo "📝 Check VS Code's 'PORTS' tab to see the forwarded URL"; \
+		conda run -n RES sphinx-autobuild docs/source docs/build --host 127.0.0.1 --port 8001; \
+	else \
+		echo "❌ Conda environment 'RES' not found. Run 'make setup-conda' first."; \
+		exit 1; \
+	fi
+
+# Auto-rebuild with explicit remote setup instructions
+autobuild-remote: sync-notebooks
+	@echo "🌐 Starting documentation server for REMOTE development..."
+	@if conda env list | grep -q "^RES "; then \
+		echo "📡 Remote Setup Instructions:"; \
+		echo "   1. VS Code will automatically forward port 8000"; \
+		echo "   2. Look for 'PORTS' tab in VS Code terminal panel"; \
+		echo "   3. Click on the forwarded URL to open in browser"; \
+		echo "   4. Or use Command Palette: 'Ports: Focus on Ports View'"; \
+		echo ""; \
+		echo "🔄 Starting sphinx-autobuild on 127.0.0.1:8000..."; \
+		echo "📂 Source: docs/source → Build: docs/build"; \
+		echo "⚡ Live reload enabled - edit files and see changes instantly!"; \
+		echo ""; \
+		conda run -n RES sphinx-autobuild docs/source docs/build --host 127.0.0.1 --port 8000; \
 	else \
 		echo "❌ Conda environment 'RES' not found. Run 'make setup-conda' first."; \
 		exit 1; \
