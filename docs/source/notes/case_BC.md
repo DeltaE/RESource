@@ -140,8 +140,8 @@ Cells with zero annual energy production receive a high penalty score and are de
 # Example Policy Impact on Sub-national Resource Potentials:
 | Scenario Name                        | Configuration File                  | Buffer Applied                | Buffer Distance(s) | Description                                                                 |
 |--------------------------------------|-------------------------------|-------------------------------|--------------------|------------------------------------------------------------------------------|
-| Baseline                            | config_BC_default.yaml         | None                          | N/A                | Baseline scenario; no additional buffer zones around protected areas or aeroways. |
-| Policy: Aeroway & CPCAD Buffers      | config_BC_policy_aeroway_CPCAD_buffer.yaml | Aeroway & CPCAD Buffers       | >> see below           | Policy scenario; buffer zones applied around global exclusion areas, high slope lands, aeroway lands and CPCAD areas, restricting resource siting. |
+| Baseline                            | [default](https://github.com/DeltaE/RESource/blob/main/results/RESources/BC/config_BC_default.yaml)         | None                          | N/A                | Baseline scenario; no additional buffer zones around protected areas or aeroways. |
+| Policy: Aeroway & CPCAD Buffers      | [policy](https://github.com/DeltaE/RESource/blob/main/results/RESources/BC/config_BC_policy_aeroway_CPCAD_buffer.yaml) | Aeroway & CPCAD Buffers       | >> see below           | Policy scenario; buffer zones applied around global exclusion areas,high slope lands, aeroway lands <br> and CPCAD areas, restricting resource siting. |
 
 **Scenario Name:** `policy_aeroway_CPCAD_buffer`  
 **Buffer Applied:** GAEZ global exclusions, high slope areas, Aeroway and CPCAD Buffers
