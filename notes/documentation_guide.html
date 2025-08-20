@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>7. Documentation Build Guide &#8212; RESource 2025.07 documentation</title>
+    <title>2. Documentation Build Guide &#8212; RESource 2025.07 documentation</title>
   
   
   
@@ -44,8 +44,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'notes/documentation_guide';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Contributing Developers" href="developers.html" />
-    <link rel="prev" title="6. Data Sources and Supply Chain" href="data.html" />
+    <link rel="prev" title="1. RES API References" href="api.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="Python"/>
   </head>
@@ -156,23 +155,29 @@
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="resource_builder.html">1. RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup_guide.html">2. RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case_BC.html">3. Case study: VRE site selection in British Columbia</a></li>
-<li class="toctree-l1"><a class="reference internal" href="learning.html">4. Best Practices and Guidelines</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">5. RES API References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data.html">6. Data Sources and Supply Chain</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">7. Documentation Build Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="config.html">5. How to use the CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">6. Best Practices and Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">7. Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">8. Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/Store_explorer.html">Explore data store</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Store_explorer.html">1. Explore data store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Visuals_BC.html">2. Example Visuals for BC</a></li>
 
 
 
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="api.html">1. RES API References</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">2. Documentation Build Guide</a></li>
 </ul>
 
     </div>
@@ -336,59 +341,59 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">7.1. 🚀 Quick Start</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-documentation-locally">7.1.1. Build Documentation Locally</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#live-development">7.1.2. Live Development</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">2.1. 🚀 Quick Start</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-documentation-locally">2.1.1. Build Documentation Locally</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#live-development">2.1.2. Live Development</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-commands">7.2. 📖 Documentation Commands</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#building">7.2.1. Building</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development">7.2.2. Development</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deployment">7.2.3. Deployment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-commands">2.2. 📖 Documentation Commands</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#building">2.2.1. Building</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development">2.2.2. Development</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deployment">2.2.3. Deployment</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-structure">7.3. 📁 Documentation Structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sphinx-configuration">7.4. 🔧 Sphinx Configuration</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-settings-docs-source-conf-py">7.4.1. Key Settings (docs/source/conf.py)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">7.4.2. Dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-structure">2.3. 📁 Documentation Structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sphinx-configuration">2.4. 🔧 Sphinx Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-settings-docs-source-conf-py">2.4.1. Key Settings (docs/source/conf.py)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">2.4.2. Dependencies</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notebook-integration">7.5. 📓 Notebook Integration</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automatic-sync">7.5.1. Automatic Sync</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-sync">7.5.2. Manual Sync</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-new-notebooks">7.5.3. Adding New Notebooks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notebook-integration">2.5. 📓 Notebook Integration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automatic-sync">2.5.1. Automatic Sync</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-sync">2.5.2. Manual Sync</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-new-notebooks">2.5.3. Adding New Notebooks</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#github-pages-deployment">7.6. 🌐 GitHub Pages Deployment</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automated-deployment">7.6.1. Automated Deployment</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-github-pages-setup">7.6.2. Manual GitHub Pages Setup</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jekyll-bypass">7.6.3. Jekyll Bypass</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#github-pages-deployment">2.6. 🌐 GitHub Pages Deployment</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automated-deployment">2.6.1. Automated Deployment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-github-pages-setup">2.6.2. Manual GitHub Pages Setup</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jekyll-bypass">2.6.3. Jekyll Bypass</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-documentation">7.7. ✍️ Writing Documentation</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#myst-markdown-syntax">7.7.1. MyST Markdown Syntax</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-documentation">2.7. ✍️ Writing Documentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#myst-markdown-syntax">2.7.1. MyST Markdown Syntax</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-workflow">7.8. 🔍 Development Workflow</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#live-development-recommended">7.8.1. Live Development (Recommended)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-and-check">7.8.2. Build and Check</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deploy-changes">7.8.3. Deploy Changes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-workflow">2.8. 🔍 Development Workflow</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#live-development-recommended">2.8.1. Live Development (Recommended)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-and-check">2.8.2. Build and Check</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deploy-changes">2.8.3. Deploy Changes</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">7.9. 🐛 Troubleshooting</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-issues">7.9.1. Common Issues</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#debug-commands">7.9.2. Debug Commands</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">2.9. 🐛 Troubleshooting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-issues">2.9.1. Common Issues</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#debug-commands">2.9.2. Debug Commands</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-checklist">7.10. 📋 Documentation Checklist</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-committing">7.10.1. Before Committing</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-release">7.10.2. Before Release</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-checklist">2.10. 📋 Documentation Checklist</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-committing">2.10.1. Before Committing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-release">2.10.2. Before Release</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">7.11. 💡 Best Practices</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#content-organization">7.11.1. Content Organization</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-style">7.11.2. Writing Style</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maintenance">7.11.3. Maintenance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">2.11. 💡 Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#content-organization">2.11.1. Content Organization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-style">2.11.2. Writing Style</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maintenance">2.11.3. Maintenance</a></li>
 </ul>
 </li>
 </ul>
@@ -403,12 +408,12 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="documentation-build-guide">
-<h1>Documentation Build Guide<a class="headerlink" href="#documentation-build-guide" title="Link to this heading">#</a></h1>
+<h1><span class="section-number">2. </span>Documentation Build Guide<a class="headerlink" href="#documentation-build-guide" title="Link to this heading">#</a></h1>
 <p>This guide covers building, developing, and deploying RESource documentation using Sphinx.</p>
 <section id="quick-start">
-<h2>🚀 Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.1. </span>🚀 Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h2>
 <section id="build-documentation-locally">
-<h3>Build Documentation Locally<a class="headerlink" href="#build-documentation-locally" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.1.1. </span>Build Documentation Locally<a class="headerlink" href="#build-documentation-locally" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build documentation (includes notebook sync)</span>
 make<span class="w"> </span>docs-build
 
@@ -419,7 +424,7 @@ xdg-open<span class="w"> </span>docs/build/html/index.html<span class="w">  </sp
 </div>
 </section>
 <section id="live-development">
-<h3>Live Development<a class="headerlink" href="#live-development" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.1.2. </span>Live Development<a class="headerlink" href="#live-development" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start live rebuild server (recommended for development)</span>
 make<span class="w"> </span>autobuild
 
@@ -431,9 +436,9 @@ make<span class="w"> </span>autobuild
 </section>
 <hr class="docutils" />
 <section id="documentation-commands">
-<h2>📖 Documentation Commands<a class="headerlink" href="#documentation-commands" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.2. </span>📖 Documentation Commands<a class="headerlink" href="#documentation-commands" title="Link to this heading">#</a></h2>
 <section id="building">
-<h3>Building<a class="headerlink" href="#building" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.2.1. </span>Building<a class="headerlink" href="#building" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>docs-build<span class="w">        </span><span class="c1"># Build documentation only</span>
 make<span class="w"> </span>sync-notebooks<span class="w">    </span><span class="c1"># Sync notebooks from root to docs/source/notebooks/</span>
 make<span class="w"> </span>docs-conda<span class="w">        </span><span class="c1"># Build and deploy to GitHub Pages</span>
@@ -441,14 +446,14 @@ make<span class="w"> </span>docs-conda<span class="w">        </span><span class
 </div>
 </section>
 <section id="development">
-<h3>Development<a class="headerlink" href="#development" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.2.2. </span>Development<a class="headerlink" href="#development" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>autobuild<span class="w">         </span><span class="c1"># Live rebuild with auto-reload server</span>
 make<span class="w"> </span>clean-docs<span class="w">        </span><span class="c1"># Clean build files</span>
 </pre></div>
 </div>
 </section>
 <section id="deployment">
-<h3>Deployment<a class="headerlink" href="#deployment" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.2.3. </span>Deployment<a class="headerlink" href="#deployment" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>deploy<span class="w">            </span><span class="c1"># Deploy to GitHub Pages</span>
 </pre></div>
 </div>
@@ -456,7 +461,7 @@ make<span class="w"> </span>clean-docs<span class="w">        </span><span class
 </section>
 <hr class="docutils" />
 <section id="documentation-structure">
-<h2>📁 Documentation Structure<a class="headerlink" href="#documentation-structure" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.3. </span>📁 Documentation Structure<a class="headerlink" href="#documentation-structure" title="Link to this heading">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docs/
 ├── source/                    # Source files
 │   ├── index.md              # Main documentation page
@@ -480,9 +485,9 @@ make<span class="w"> </span>clean-docs<span class="w">        </span><span class
 </section>
 <hr class="docutils" />
 <section id="sphinx-configuration">
-<h2>🔧 Sphinx Configuration<a class="headerlink" href="#sphinx-configuration" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.4. </span>🔧 Sphinx Configuration<a class="headerlink" href="#sphinx-configuration" title="Link to this heading">#</a></h2>
 <section id="key-settings-docs-source-conf-py">
-<h3>Key Settings (docs/source/conf.py)<a class="headerlink" href="#key-settings-docs-source-conf-py" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.4.1. </span>Key Settings (docs/source/conf.py)<a class="headerlink" href="#key-settings-docs-source-conf-py" title="Link to this heading">#</a></h3>
 <p>The documentation uses:</p>
 <ul class="simple">
 <li><p><strong>Theme:</strong> <code class="docutils literal notranslate"><span class="pre">sphinx-book-theme</span></code> (modern, responsive)</p></li>
@@ -498,7 +503,7 @@ make<span class="w"> </span>clean-docs<span class="w">        </span><span class
 </ul>
 </section>
 <section id="dependencies">
-<h3>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.4.2. </span>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">#</a></h3>
 <p>Documentation dependencies are managed through the main conda environment:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># In env/environment.yml</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sphinx</span>
@@ -514,9 +519,9 @@ make<span class="w"> </span>clean-docs<span class="w">        </span><span class
 </section>
 <hr class="docutils" />
 <section id="notebook-integration">
-<h2>📓 Notebook Integration<a class="headerlink" href="#notebook-integration" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.5. </span>📓 Notebook Integration<a class="headerlink" href="#notebook-integration" title="Link to this heading">#</a></h2>
 <section id="automatic-sync">
-<h3>Automatic Sync<a class="headerlink" href="#automatic-sync" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.5.1. </span>Automatic Sync<a class="headerlink" href="#automatic-sync" title="Link to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">docs-build</span></code> command automatically syncs notebooks:</p>
 <p><strong>Source Locations → Documentation:</strong></p>
 <ul class="simple">
@@ -526,13 +531,13 @@ make<span class="w"> </span>clean-docs<span class="w">        </span><span class
 </ul>
 </section>
 <section id="manual-sync">
-<h3>Manual Sync<a class="headerlink" href="#manual-sync" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.5.2. </span>Manual Sync<a class="headerlink" href="#manual-sync" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>sync-notebooks
 </pre></div>
 </div>
 </section>
 <section id="adding-new-notebooks">
-<h3>Adding New Notebooks<a class="headerlink" href="#adding-new-notebooks" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.5.3. </span>Adding New Notebooks<a class="headerlink" href="#adding-new-notebooks" title="Link to this heading">#</a></h3>
 <ol class="arabic">
 <li><p>Add notebook to root <code class="docutils literal notranslate"><span class="pre">notebooks/</span></code> directory</p></li>
 <li><p>Update sync command in Makefile:</p>
@@ -554,9 +559,9 @@ notebooks/your_new_notebook
 </section>
 <hr class="docutils" />
 <section id="github-pages-deployment">
-<h2>🌐 GitHub Pages Deployment<a class="headerlink" href="#github-pages-deployment" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.6. </span>🌐 GitHub Pages Deployment<a class="headerlink" href="#github-pages-deployment" title="Link to this heading">#</a></h2>
 <section id="automated-deployment">
-<h3>Automated Deployment<a class="headerlink" href="#automated-deployment" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.6.1. </span>Automated Deployment<a class="headerlink" href="#automated-deployment" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>deploy
 </pre></div>
 </div>
@@ -569,7 +574,7 @@ notebooks/your_new_notebook
 </ol>
 </section>
 <section id="manual-github-pages-setup">
-<h3>Manual GitHub Pages Setup<a class="headerlink" href="#manual-github-pages-setup" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.6.2. </span>Manual GitHub Pages Setup<a class="headerlink" href="#manual-github-pages-setup" title="Link to this heading">#</a></h3>
 <p>If setting up for first time:</p>
 <ol class="arabic simple">
 <li><p>Go to repository Settings → Pages</p></li>
@@ -579,7 +584,7 @@ notebooks/your_new_notebook
 </ol>
 </section>
 <section id="jekyll-bypass">
-<h3>Jekyll Bypass<a class="headerlink" href="#jekyll-bypass" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.6.3. </span>Jekyll Bypass<a class="headerlink" href="#jekyll-bypass" title="Link to this heading">#</a></h3>
 <p>The build process creates these files to bypass Jekyll processing:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">.nojekyll</span></code> - Disables Jekyll</p></li>
@@ -590,9 +595,9 @@ notebooks/your_new_notebook
 </section>
 <hr class="docutils" />
 <section id="writing-documentation">
-<h2>✍️ Writing Documentation<a class="headerlink" href="#writing-documentation" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.7. </span>✍️ Writing Documentation<a class="headerlink" href="#writing-documentation" title="Link to this heading">#</a></h2>
 <section id="myst-markdown-syntax">
-<h3>MyST Markdown Syntax<a class="headerlink" href="#myst-markdown-syntax" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.7.1. </span>MyST Markdown Syntax<a class="headerlink" href="#myst-markdown-syntax" title="Link to this heading">#</a></h3>
 <p>Documentation uses MyST (Markedly Structured Text) which extends Markdown:</p>
 <p><strong>Basic MyST:</strong></p>
 <div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gh"># Page Title</span>
@@ -637,9 +642,9 @@ df = pd.DataFrame({&#39;col&#39;: [1, 2, 3]})
 </section>
 <hr class="docutils" />
 <section id="development-workflow">
-<h2>🔍 Development Workflow<a class="headerlink" href="#development-workflow" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.8. </span>🔍 Development Workflow<a class="headerlink" href="#development-workflow" title="Link to this heading">#</a></h2>
 <section id="live-development-recommended">
-<h3>Live Development (Recommended)<a class="headerlink" href="#live-development-recommended" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.8.1. </span>Live Development (Recommended)<a class="headerlink" href="#live-development-recommended" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start live reload server</span>
 make<span class="w"> </span>autobuild
 
@@ -650,7 +655,7 @@ make<span class="w"> </span>autobuild
 </div>
 </section>
 <section id="build-and-check">
-<h3>Build and Check<a class="headerlink" href="#build-and-check" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.8.2. </span>Build and Check<a class="headerlink" href="#build-and-check" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build documentation</span>
 make<span class="w"> </span>docs-build
 
@@ -660,7 +665,7 @@ make<span class="w"> </span>docs-build
 </div>
 </section>
 <section id="deploy-changes">
-<h3>Deploy Changes<a class="headerlink" href="#deploy-changes" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.8.3. </span>Deploy Changes<a class="headerlink" href="#deploy-changes" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build and deploy to GitHub Pages</span>
 make<span class="w"> </span>deploy
 
@@ -671,9 +676,9 @@ make<span class="w"> </span>deploy
 </section>
 <hr class="docutils" />
 <section id="troubleshooting">
-<h2>🐛 Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.9. </span>🐛 Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">#</a></h2>
 <section id="common-issues">
-<h3>Common Issues<a class="headerlink" href="#common-issues" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.9.1. </span>Common Issues<a class="headerlink" href="#common-issues" title="Link to this heading">#</a></h3>
 <p><strong>Build Errors:</strong></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check environment has Sphinx dependencies</span>
 make<span class="w"> </span>conda-status
@@ -704,7 +709,7 @@ make<span class="w"> </span>sync-notebooks
 </ul>
 </section>
 <section id="debug-commands">
-<h3>Debug Commands<a class="headerlink" href="#debug-commands" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.9.2. </span>Debug Commands<a class="headerlink" href="#debug-commands" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Verbose build</span>
 sphinx-build<span class="w"> </span>-v<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>docs/source<span class="w"> </span>docs/build/html
 
@@ -719,9 +724,9 @@ python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;f
 </section>
 <hr class="docutils" />
 <section id="documentation-checklist">
-<h2>📋 Documentation Checklist<a class="headerlink" href="#documentation-checklist" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.10. </span>📋 Documentation Checklist<a class="headerlink" href="#documentation-checklist" title="Link to this heading">#</a></h2>
 <section id="before-committing">
-<h3>Before Committing<a class="headerlink" href="#before-committing" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.10.1. </span>Before Committing<a class="headerlink" href="#before-committing" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>[ ] Documentation builds without errors: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">docs-build</span></code></p></li>
 <li><p>[ ] Live reload works: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">autobuild</span></code></p></li>
@@ -731,7 +736,7 @@ python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;f
 </ul>
 </section>
 <section id="before-release">
-<h3>Before Release<a class="headerlink" href="#before-release" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.10.2. </span>Before Release<a class="headerlink" href="#before-release" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>[ ] All documentation is current</p></li>
 <li><p>[ ] API documentation is updated</p></li>
@@ -743,9 +748,9 @@ python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;f
 </section>
 <hr class="docutils" />
 <section id="best-practices">
-<h2>💡 Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.11. </span>💡 Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h2>
 <section id="content-organization">
-<h3>Content Organization<a class="headerlink" href="#content-organization" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.11.1. </span>Content Organization<a class="headerlink" href="#content-organization" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Keep setup/installation info in <code class="docutils literal notranslate"><span class="pre">setup_guide.md</span></code></p></li>
 <li><p>API documentation in <code class="docutils literal notranslate"><span class="pre">api.md</span></code></p></li>
@@ -754,7 +759,7 @@ python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;f
 </ul>
 </section>
 <section id="writing-style">
-<h3>Writing Style<a class="headerlink" href="#writing-style" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.11.2. </span>Writing Style<a class="headerlink" href="#writing-style" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Use MyST admonitions (<code class="docutils literal notranslate"><span class="pre">{note}</span></code>, <code class="docutils literal notranslate"><span class="pre">{warning}</span></code>) for callouts</p></li>
 <li><p>Include code examples with proper syntax highlighting</p></li>
@@ -763,7 +768,7 @@ python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;f
 </ul>
 </section>
 <section id="maintenance">
-<h3>Maintenance<a class="headerlink" href="#maintenance" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.11.3. </span>Maintenance<a class="headerlink" href="#maintenance" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update documentation with code changes</p></li>
 <li><p>Test all code examples</p></li>
@@ -788,22 +793,13 @@ python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;f
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="data.html"
+       href="api.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">6. </span>Data Sources and Supply Chain</p>
+        <p class="prev-next-title"><span class="section-number">1. </span>RES API References</p>
       </div>
-    </a>
-    <a class="right-next"
-       href="developers.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Contributing Developers</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -821,59 +817,59 @@ python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;f
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">7.1. 🚀 Quick Start</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-documentation-locally">7.1.1. Build Documentation Locally</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#live-development">7.1.2. Live Development</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">2.1. 🚀 Quick Start</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-documentation-locally">2.1.1. Build Documentation Locally</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#live-development">2.1.2. Live Development</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-commands">7.2. 📖 Documentation Commands</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#building">7.2.1. Building</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development">7.2.2. Development</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deployment">7.2.3. Deployment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-commands">2.2. 📖 Documentation Commands</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#building">2.2.1. Building</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development">2.2.2. Development</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deployment">2.2.3. Deployment</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-structure">7.3. 📁 Documentation Structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sphinx-configuration">7.4. 🔧 Sphinx Configuration</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-settings-docs-source-conf-py">7.4.1. Key Settings (docs/source/conf.py)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">7.4.2. Dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-structure">2.3. 📁 Documentation Structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sphinx-configuration">2.4. 🔧 Sphinx Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-settings-docs-source-conf-py">2.4.1. Key Settings (docs/source/conf.py)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">2.4.2. Dependencies</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notebook-integration">7.5. 📓 Notebook Integration</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automatic-sync">7.5.1. Automatic Sync</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-sync">7.5.2. Manual Sync</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-new-notebooks">7.5.3. Adding New Notebooks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notebook-integration">2.5. 📓 Notebook Integration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automatic-sync">2.5.1. Automatic Sync</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-sync">2.5.2. Manual Sync</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-new-notebooks">2.5.3. Adding New Notebooks</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#github-pages-deployment">7.6. 🌐 GitHub Pages Deployment</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automated-deployment">7.6.1. Automated Deployment</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-github-pages-setup">7.6.2. Manual GitHub Pages Setup</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jekyll-bypass">7.6.3. Jekyll Bypass</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#github-pages-deployment">2.6. 🌐 GitHub Pages Deployment</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automated-deployment">2.6.1. Automated Deployment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-github-pages-setup">2.6.2. Manual GitHub Pages Setup</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jekyll-bypass">2.6.3. Jekyll Bypass</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-documentation">7.7. ✍️ Writing Documentation</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#myst-markdown-syntax">7.7.1. MyST Markdown Syntax</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-documentation">2.7. ✍️ Writing Documentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#myst-markdown-syntax">2.7.1. MyST Markdown Syntax</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-workflow">7.8. 🔍 Development Workflow</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#live-development-recommended">7.8.1. Live Development (Recommended)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-and-check">7.8.2. Build and Check</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deploy-changes">7.8.3. Deploy Changes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-workflow">2.8. 🔍 Development Workflow</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#live-development-recommended">2.8.1. Live Development (Recommended)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-and-check">2.8.2. Build and Check</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deploy-changes">2.8.3. Deploy Changes</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">7.9. 🐛 Troubleshooting</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-issues">7.9.1. Common Issues</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#debug-commands">7.9.2. Debug Commands</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">2.9. 🐛 Troubleshooting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-issues">2.9.1. Common Issues</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#debug-commands">2.9.2. Debug Commands</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-checklist">7.10. 📋 Documentation Checklist</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-committing">7.10.1. Before Committing</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-release">7.10.2. Before Release</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-checklist">2.10. 📋 Documentation Checklist</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-committing">2.10.1. Before Committing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-release">2.10.2. Before Release</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">7.11. 💡 Best Practices</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#content-organization">7.11.1. Content Organization</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-style">7.11.2. Writing Style</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maintenance">7.11.3. Maintenance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">2.11. 💡 Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#content-organization">2.11.1. Content Organization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-style">2.11.2. Writing Style</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maintenance">2.11.3. Maintenance</a></li>
 </ul>
 </li>
 </ul>

@@ -40,6 +40,20 @@ The `RESources_builder` class coordinates the complete assessment workflow inclu
 
 Handles creation of regular spatial grids for renewable energy assessment with configurable resolution and boundary constraints.
 
+### Cell Capacity Processing
+
+**Grid cell processing capabilities for spatial analysis.**
+
+```{eval-rst}
+.. autoclass:: RES.CellCapacityProcessor.CellCapacityProcessor
+   :show-inheritance:
+   :noindex:
+```
+
+```{note}
+If the above documentation doesn't render, this class provides grid cell processing capabilities for spatial analysis.
+```
+
 ### Administrative Boundaries
 
 **GADM boundary processor for regional analysis.**
@@ -98,9 +112,59 @@ Implements Levelized Cost of Energy calculations following NREL methodology, inc
 
 > ℹ️ **Version Notice**: Currently configured for 2024 ATB data. Review and update configuration when using different years or datasets.
 
+### Global Land Cover
+
+**Handler for GAEZ raster data processing.**
+
+```{eval-rst}
+.. autoclass:: RES.gaez.GAEZRasterProcessor
+   :show-inheritance:
+   :noindex:
+```
+
+### Global Wind Atlas 
+
+**Handler for Global Wind Atlas data processing.**
+
+```{eval-rst}
+.. autoclass:: RES.gwa.GWACells
+   :show-inheritance:
+   :noindex:
+```
+
+### Turbine Configuration
+
+**Turbine database and configuration management.**
+
+```{eval-rst}
+.. autoclass:: RES.tech.OEDBTurbines
+   :show-inheritance:
+   :noindex:
+```
+
+### Units Management
+
+**Unit conversion and management utilities.**
+
+```{eval-rst}
+.. autoclass:: RES.units.Units
+   :show-inheritance:
+   :noindex:
+```
+
 ### Clustering and Aggregation
 
 **Spatial clustering utilities for site aggregation.**
+
+```{eval-rst}
+.. automodule:: RES.cluster
+   :show-inheritance:
+   :noindex:
+```
+
+```{note}
+If the above documentation doesn't render properly, this module provides clustering algorithms for renewable energy resource grouping and analysis.
+```
 
 Key functions from `RES.cluster`:
 - `assign_cluster_id()`: Generate unique cell identifiers
@@ -112,12 +176,32 @@ Key functions from `RES.cluster`:
 
 **Comprehensive plotting and mapping utilities.**
 
+```{eval-rst}
+.. automodule:: RES.visuals
+   :show-inheritance:
+   :noindex:
+```
+
 The `RES.visuals` module provides:
 - Spatial mapping with choropleth visualization
 - Time series plotting and seasonal analysis  
 - Economic analysis charts and distributions
 - Interactive web-based dashboards
 - Publication-quality figure export
+
+### Local Data Store with HDF5 file
+
+**HDF5-based data storage and retrieval.**
+
+```{eval-rst}
+.. autoclass:: RES.hdf5_handler.DataHandler
+   :show-inheritance:
+   :noindex:
+```
+
+```{note}
+If the above documentation doesn't render, this class provides HDF5-based data storage and retrieval capabilities for the RESource framework.
+```
 
 ### Utility Functions
 
@@ -190,90 +274,6 @@ clusters = builder.get_clusters(scored_cells)
 - Clustering uses k-means with automatic optimization
 - Caching mechanisms minimize redundant computation
 - Modular design enables workflow customization
-   :show-inheritance:
-```
-```{eval-rst}
-.. autoclass:: RES.CellCapacityProcessor.CellCapacityProcessor
-   :show-inheritance:
-```
-
-```{note}
-If the above documentation doesn't render, these classes provide grid cell processing capabilities for spatial analysis.
-```
-
-## Global Land Cover
-```{eval-rst}
-.. autoclass:: RES.gaez.GAEZRasterProcessor
-   :show-inheritance:
-   :noindex:
-```
-
-## Global Wind Atlas 
-
-**Handler for Global Wind Atlas data processing.**
-
-```{eval-rst}
-.. autoclass:: RES.gwa.GWACells
-   :show-inheritance:
-   :noindex:
-```
-## Visualization
-
-```{eval-rst}
-.. automodule:: RES.visuals
-   :show-inheritance:
-   :noindex:
-```
-
-## Scorer
-
-```{eval-rst}
-.. autoclass:: RES.score.CellScorer
-   :show-inheritance:
-   :noindex:
-```
-
-```{note}
-If the above documentation doesn't render, this class provides cell scoring capabilities for renewable energy site assessment.
-```
-
-## Clustering
-
-```{eval-rst}
-.. automodule:: RES.cluster
-   :show-inheritance:
-   :noindex:
-```
-
-```{note}
-If the above documentation doesn't render properly, this module provides clustering algorithms for renewable energy resource grouping and analysis.
-```
-
-## Local Data Store with HDF5 file
-
-```{eval-rst}
-.. autoclass:: RES.hdf5_handler.DataHandler
-   :show-inheritance:
-   :noindex:
-```
-
-```{note}
-If the above documentation doesn't render, this class provides HDF5-based data storage and retrieval capabilities for the RESource framework.
-```
-
-## Turbine Configuration
-
-```{eval-rst}
-.. autoclass:: RES.tech.OEDBTurbines
-   :show-inheritance:
-```
-
-## Units
-
-```{eval-rst}
-.. autoclass:: RES.units.Units
-   :show-inheritance:
-```
 
 ---
 ```{warning}

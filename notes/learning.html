@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>4. Best Practices and Guidelines &#8212; RESource 2025.07 documentation</title>
+    <title>6. Best Practices and Guidelines &#8212; RESource 2025.07 documentation</title>
   
   
   
@@ -44,8 +44,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'notes/learning';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="5. RES API References" href="api.html" />
-    <link rel="prev" title="3. Case study: VRE site selection in British Columbia" href="case_BC.html" />
+    <link rel="next" title="7. Data Sources and Supply Chain" href="data.html" />
+    <link rel="prev" title="5. How to use the CONFIG" href="config.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="Python"/>
   </head>
@@ -160,19 +160,25 @@
 <li class="toctree-l1"><a class="reference internal" href="resource_builder.html">1. RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup_guide.html">2. RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case_BC.html">3. Case study: VRE site selection in British Columbia</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">4. Best Practices and Guidelines</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">5. RES API References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data.html">6. Data Sources and Supply Chain</a></li>
-<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">7. Documentation Build Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="config.html">5. How to use the CONFIG</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">6. Best Practices and Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">7. Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">8. Contributing Developers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/Store_explorer.html">Explore data store</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Store_explorer.html">1. Explore data store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Visuals_BC.html">2. Example Visuals for BC</a></li>
 
 
 
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="api.html">1. RES API References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">2. Documentation Build Guide</a></li>
 </ul>
 
     </div>
@@ -336,19 +342,27 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-wind-turbines">4.1. Selecting Wind Turbines</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#iec-class-selection">4.1.1. IEC Class Selection</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#iec-class-layer-mapping-to-select-turbine-technologies-for-wind-energy-estimation">4.1.1.1. IEC Class Layer Mapping to Select Turbine Technologies for Wind Energy Estimation</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">4.1.1.2. Best Practices</a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example">4.1.1.2.1. Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-wind-turbines">6.1. Selecting Wind Turbines</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#iec-class-selection">6.1.1. IEC Class Selection</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#iec-class-layer-mapping-to-select-turbine-technologies-for-wind-energy-estimation">6.1.1.1. IEC Class Layer Mapping to Select Turbine Technologies for Wind Energy Estimation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">6.1.1.2. Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example">6.1.1.2.1. Example</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-solar-pv-panels">4.2. Selecting Solar PV Panels</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#panel-attribute-configurations">4.2.1. Panel Attribute Configurations:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-solar-pv-panels">6.2. Selecting Solar PV Panels</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#panel-attribute-configurations">6.2.1. Panel Attribute Configurations:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#land-availability-calculation-from-vector-vs-raster-data">6.3. Land Availability Calculation from Vector vs Raster Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open-street-map-osm-data">6.4. Open Street Map (OSM) Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#goal">6.4.1. Goal:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-in-resource-linking-tool">6.4.2. Usage in RESource (Linking Tool):</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tool">6.4.3. Tool :</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#method">6.4.4. Method:</a></li>
 </ul>
 </li>
 </ul>
@@ -363,11 +377,11 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="best-practices-and-guidelines">
-<h1>Best Practices and Guidelines<a class="headerlink" href="#best-practices-and-guidelines" title="Link to this heading">#</a></h1>
+<h1><span class="section-number">6. </span>Best Practices and Guidelines<a class="headerlink" href="#best-practices-and-guidelines" title="Link to this heading">#</a></h1>
 <section id="selecting-wind-turbines">
-<h2>Selecting Wind Turbines<a class="headerlink" href="#selecting-wind-turbines" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">6.1. </span>Selecting Wind Turbines<a class="headerlink" href="#selecting-wind-turbines" title="Link to this heading">#</a></h2>
 <section id="iec-class-selection">
-<h3>IEC Class Selection<a class="headerlink" href="#iec-class-selection" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">6.1.1. </span>IEC Class Selection<a class="headerlink" href="#iec-class-selection" title="Link to this heading">#</a></h3>
 <p>As recommended in <em><a class="reference external" href="https://orbit.dtu.dk/en/publications/the-global-atlas-for-siting-parameters-project-extreme-wind-turbu">The Global Atlas for Siting Parameters (GASP) project: Extreme wind,turbulence, and turbine classes</a></em>, the parameter values applied at hub height 100m for different IEC classes are listed below. Suitability for a wind turbine depends on crucial factors like mean wind speed, turbulence, extreme wind speed, and air density in high winds. It is important to select the site-specific appropriate turbine class.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -423,7 +437,7 @@ document.write(`
 <div><p><strong>Note</strong>: V<sub>ave</sub> is the annual average wind speed; V<sub>ref</sub> is the reference wind speed average over 10 min; V<sub>ref</sub>,T is the reference wind speed average over 10 min applicable for areas subject to tropical cyclones. A+ designates the category for remarkably high turbulence characteristics; A for higher turbulence characteristics; B for medium turbulence characteristics; C for lower turbulence characteristics and I<sub>ref</sub> is a reference value of the turbulence intensity.</p>
 </div></blockquote>
 <section id="iec-class-layer-mapping-to-select-turbine-technologies-for-wind-energy-estimation">
-<h4>IEC Class Layer Mapping to Select Turbine Technologies for Wind Energy Estimation<a class="headerlink" href="#iec-class-layer-mapping-to-select-turbine-technologies-for-wind-energy-estimation" title="Link to this heading">#</a></h4>
+<h4><span class="section-number">6.1.1.1. </span>IEC Class Layer Mapping to Select Turbine Technologies for Wind Energy Estimation<a class="headerlink" href="#iec-class-layer-mapping-to-select-turbine-technologies-for-wind-energy-estimation" title="Link to this heading">#</a></h4>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Layer Name</p></th>
@@ -449,7 +463,7 @@ document.write(`
 <p>This involves prioritizing the highest wind turbine class from the GWA's IEC Class layers prior to converting the wind resource potential to energy yield parameters. GWA includes three different IEC Class layers (under the Wind Energy Layers), mapping IEC wind turbine classes for 100m wind turbine hub height. Any wind turbine, regardless of its class, usually needs validation with the manufacturer specific to the site. GWA provides rasterized data to map wind turbine class recommendations for different load scenarios. For resource estimation studies, it is typically essential to evaluate the highest wind turbine class from the IEC Class layers in the GWA.</p>
 </section>
 <section id="best-practices">
-<h4>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h4>
+<h4><span class="section-number">6.1.1.2. </span>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h4>
 <ol class="arabic simple">
 <li><p><strong>Layer Selection:</strong> Choose the most relevant GWA IEC Class layer (Fatigue Loads, Fatigue Loads incl. Wake, or Extreme Loads) based on your scenario/project’s objectives and local wind conditions.</p>
 <ul class="simple">
@@ -461,7 +475,7 @@ document.write(`
 <li><p><strong>Documentation:</strong> Reference authoritative sources (e.g., GWA, IEC standards) and document all assumptions and data sources used in the selection process.</p></li>
 </ol>
 <section id="example">
-<h5>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h5>
+<h5><span class="section-number">6.1.1.2.1. </span>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h5>
 <p>For British Columbia (BC), the map on the right displays IEC turbine classes for the <em>IEC Class - Extreme Loads</em> layer. The analysis shows that <strong>IEC Class III turbines</strong> are most representative for this region under extreme load conditions. Areas marked in red indicates <em>IEC Class II</em>, likely due to significant terrain transitions such as mountainous slopes.</p>
 <img src="../_static/Ruggedness_IEC_classmap_BC_GWA.jpg" alt="Ruggedness_IEC_class_map_BC_GWA" width="900"/>
 <blockquote>
@@ -475,7 +489,7 @@ document.write(`
 </section>
 </section>
 <section id="selecting-solar-pv-panels">
-<h2>Selecting Solar PV Panels<a class="headerlink" href="#selecting-solar-pv-panels" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">6.2. </span>Selecting Solar PV Panels<a class="headerlink" href="#selecting-solar-pv-panels" title="Link to this heading">#</a></h2>
 <p>We use the <em><a class="reference external" href="https://atlite.readthedocs.io/en/master/ref_api.html#atlite.convert.pv">atlite.pv</a></em> conversion functionality to translate surface solar irradiance (direct + diffuse) and ambient temperature into photovoltaic (PV) power output. Internally, this module relies on a detailed panel model that incorporates parameters such as panel efficiency and temperature-dependent performance losses.</p>
 <ul>
 <li><p>Users can specify panel orientation (e.g., fixed tilt or azimuth) or tracking configurations (e.g., single-axis tracking). The “optimal” tilt—commonly based on latitude—or active tracking improves alignment with the sun, enhancing overall energy yield.</p>
@@ -486,7 +500,7 @@ document.write(`
 <li><p>Currently, panel configuration options are limited to crystalline silicon (c-Si), cadmium telluride (CdTe), and Kaneka (amorphous silicon) technologies. The configurations and assumptions underlying the pv panel models can be found at <a class="reference external" href="https://github.com/PyPSA/atlite/tree/master/atlite/resources/solarpanel">atlite/resources/solarpanel</a></p></li>
 </ul>
 <section id="panel-attribute-configurations">
-<h3>Panel Attribute Configurations:<a class="headerlink" href="#panel-attribute-configurations" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">6.2.1. </span>Panel Attribute Configurations:<a class="headerlink" href="#panel-attribute-configurations" title="Link to this heading">#</a></h3>
 <ul>
 <li><p>Higher-efficiency panels and improved orientation directly increase generation under identical irradiance conditions. If you do not want to explicitly define panel orientation, use <strong>tracking: 'dual'</strong> and we have defaulted the <a class="reference external" href="https://github.com/DeltaE/RESource/blob/1d9c0672bd924d2b7aae6b571709aee2eb1dd6f9/RES/timeseries.py#L253">'orientation': &quot;latitude_optimal&quot;</a> at <a class="reference external" href="https://github.com/DeltaE/RESource/blob/main/RES/timeseries.py"><em>timeseries</em></a> module.</p>
 <blockquote>
@@ -495,6 +509,113 @@ document.write(`
 </li>
 <li><p>We configure the pv panels' attributes at <a class="reference external" href="https://github.com/DeltaE/RESource/blob/1d9c0672bd924d2b7aae6b571709aee2eb1dd6f9/config/config_CAN.yaml#L371">'capacity_disaggregation/solar'</a> key of the config file.</p></li>
 </ul>
+</section>
+</section>
+<section id="land-availability-calculation-from-vector-vs-raster-data">
+<h2><span class="section-number">6.3. </span>Land Availability Calculation from Vector vs Raster Data<a class="headerlink" href="#land-availability-calculation-from-vector-vs-raster-data" title="Link to this heading">#</a></h2>
+<p>Vector and raster data are two fundamental ways of representing spatial information on computers. They each have their strengths and weaknesses, so the best choice depends on what you're trying to achieve.</p>
+<p><strong>Vector data</strong> is like a map made with geometric shapes. It uses points, lines, and polygons (areas) defined by mathematical coordinates to represent features. Imagine a map of a city with parks drawn as green polygons, streets as lines, and important buildings as points. This allows for sharp, clean lines and makes it easy to scale the map without losing quality. Vector data is also efficient for storing information about the features, like names, descriptions, or even photos.</p>
+<p><strong>Raster data</strong>, on the other hand, is like a photograph of the real world. It breaks down space into a grid of tiny squares, like pixels in a digital image. Each square holds a value that represents what's there, such as a color or an elevation level. Satellite imagery and scanned maps are common examples of raster data. Raster data excels at capturing continuous variation and is often simpler to process for certain analyses. However, it can become bulky for large areas and lose detail when zoomed in.</p>
+<p>Here's a table summarizing the key differences:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature</p></th>
+<th class="head"><p>Vector Data</p></th>
+<th class="head"><p>Raster Data</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Representation</p></td>
+<td><p>Points, lines, and polygons</p></td>
+<td><p>Grid of squares (pixels)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Detail at high zoom</p></td>
+<td><p>Crisp and clear</p></td>
+<td><p>Can appear blocky or pixelated</p></td>
+</tr>
+<tr class="row-even"><td><p>Scalability</p></td>
+<td><p>Excellent, maintains quality when zoomed</p></td>
+<td><p>Loses detail when zoomed in</p></td>
+</tr>
+<tr class="row-odd"><td><p>File size</p></td>
+<td><p>Smaller for similar detail</p></td>
+<td><p>Larger for continuous variation</p></td>
+</tr>
+<tr class="row-even"><td><p>Feature information</p></td>
+<td><p>Can store additional data about features</p></td>
+<td><p>Limited to data represented by pixel values</p></td>
+</tr>
+<tr class="row-odd"><td><p>Common uses</p></td>
+<td><p>Maps, logos, illustrations</p></td>
+<td><p>Satellite imagery, photographs, elevation data</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Ultimately, the choice between vector and raster data depends on analysis specific needs. If you need precise shapes and sharp lines, vector data is the way to go. But if you're working with continuous data or imagery, raster data might be a better fit.</p>
+</section>
+<section id="open-street-map-osm-data">
+<h2><span class="section-number">6.4. </span>Open Street Map (OSM) Data<a class="headerlink" href="#open-street-map-osm-data" title="Link to this heading">#</a></h2>
+<section id="goal">
+<h3><span class="section-number">6.4.1. </span>Goal:<a class="headerlink" href="#goal" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>To create <strong>vector data</strong> with targeted <strong>landuse</strong>.
+e.g. we have used 'aeroway' vector data in this analysis.</p></li>
+</ul>
+<blockquote>
+<div><p><a class="reference external" href="https://wiki.openstreetmap.org/wiki/Aeroways">What is 'aeroway'?</a></p>
+</div></blockquote>
+</section>
+<section id="usage-in-resource-linking-tool">
+<h3><span class="section-number">6.4.2. </span>Usage in RESource (Linking Tool):<a class="headerlink" href="#usage-in-resource-linking-tool" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><ol class="arabic simple">
+<li><p>We can filter the type of aeroway landuse that we want to disregard as a potential site.</p></li>
+</ol>
+</li>
+<li><ol class="arabic simple" start="2">
+<li><p>We will create a union geometry of all aeroway area, and later can add buffer area around surrounding this geometry. The Buffer radius can be configured via the user configuration file.</p></li>
+</ol>
+</li>
+<li><ol class="arabic simple" start="3">
+<li><p>We will exclude this final geometry [aeroway union+buffer] from our Cutout Grid Cells during land availability calculations for potential VRE sites.</p></li>
+</ol>
+</li>
+</ul>
+</section>
+<section id="tool">
+<h3><span class="section-number">6.4.3. </span>Tool :<a class="headerlink" href="#tool" title="Link to this heading">#</a></h3>
+<p>We used <a class="reference external" href="https://pyrosm.readthedocs.io/en/latest/">pyrosm</a> to extract OSM data via python API.</p>
+<blockquote>
+<div><p><a class="reference external" href="https://pyrosm.readthedocs.io/en/latest/#when-should-i-use-pyrosm">why pyrosm?</a></p>
+</div></blockquote>
+</section>
+<section id="method">
+<h3><span class="section-number">6.4.4. </span>Method:<a class="headerlink" href="#method" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>We created an OSM 'object' which has various attributes. One of the attributes is 'point of interests (<em>get_pois</em>)'.</p></li>
+<li><p>Each attribute has several 'keys'. We used '<em>get_pois</em>' method to extract one of the available 'keys' (e.g. 'aeroway')</p></li>
+<li><p>Each OSM key has several tags associated e.g.</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">from pyrosm.config import Conf</span>
+<span class="go">print(&quot;All available OSM keys&quot;, Conf.tags.available)</span>
+<span class="go">print(&quot;\n&quot;)</span>
+<span class="go">print(&quot;Typical tags associated with Aeroway:&quot;, Conf.tags.aeroway)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">All</span> <span class="n">available</span> <span class="n">OSM</span> <span class="n">keys</span> <span class="p">[</span><span class="s1">&#39;aerialway&#39;</span><span class="p">,</span> <span class="s1">&#39;aeroway&#39;</span><span class="p">,</span> <span class="s1">&#39;amenity&#39;</span><span class="p">,</span> <span class="s1">&#39;boundary&#39;</span><span class="p">,</span> <span class="s1">&#39;building&#39;</span><span class="p">,</span> <span class="s1">&#39;craft&#39;</span><span class="p">,</span> <span class="s1">&#39;emergency&#39;</span><span class="p">,</span> <span class="s1">&#39;geological&#39;</span><span class="p">,</span> <span class="s1">&#39;highway&#39;</span><span class="p">,</span> <span class="s1">&#39;historic&#39;</span><span class="p">,</span> <span class="s1">&#39;landuse&#39;</span><span class="p">,</span> <span class="s1">&#39;leisure&#39;</span><span class="p">,</span> <span class="s1">&#39;natural&#39;</span><span class="p">,</span> <span class="s1">&#39;office&#39;</span><span class="p">,</span> <span class="s1">&#39;power&#39;</span><span class="p">,</span> <span class="s1">&#39;public_transport&#39;</span><span class="p">,</span> <span class="s1">&#39;railway&#39;</span><span class="p">,</span> <span class="s1">&#39;route&#39;</span><span class="p">,</span> <span class="s1">&#39;place&#39;</span><span class="p">,</span> <span class="s1">&#39;shop&#39;</span><span class="p">,</span> <span class="s1">&#39;tourism&#39;</span><span class="p">,</span> <span class="s1">&#39;waterway&#39;</span><span class="p">]</span>
+
+<span class="n">Typical</span> <span class="n">tags</span> <span class="n">associated</span> <span class="k">with</span> <span class="n">Aeroway</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;aerodrome&#39;</span><span class="p">,</span> <span class="s1">&#39;aeroway&#39;</span><span class="p">,</span> <span class="s1">&#39;apron&#39;</span><span class="p">,</span> <span class="s1">&#39;control_tower&#39;</span><span class="p">,</span> <span class="s1">&#39;control_center&#39;</span><span class="p">,</span> <span class="s1">&#39;gate&#39;</span><span class="p">,</span> <span class="s1">&#39;hangar&#39;</span><span class="p">,</span> <span class="s1">&#39;helipad&#39;</span><span class="p">,</span> <span class="s1">&#39;heliport&#39;</span><span class="p">,</span> <span class="s1">&#39;navigationaid&#39;</span><span class="p">,</span> <span class="s1">&#39;beacon&#39;</span><span class="p">,</span> <span class="s1">&#39;runway&#39;</span><span class="p">,</span> <span class="s1">&#39;taxilane&#39;</span><span class="p">,</span> <span class="s1">&#39;taxiway&#39;</span><span class="p">,</span> <span class="s1">&#39;terminal&#39;</span><span class="p">,</span> <span class="s1">&#39;windsock&#39;</span><span class="p">,</span> <span class="s1">&#39;highway_strip&#39;</span><span class="p">]</span>
+
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>We used custom filters to extract data for our target key 'aeroway'</p></li>
+</ul>
+<blockquote>
+<div><p><a class="reference external" href="https://pyrosm.readthedocs.io/en/latest/basics.html#read-points-of-interest">How to read and visualize Point of Interests?</a>
+<a class="reference external" href="https://pyrosm.readthedocs.io/en/latest/basics.html#read-osm-data-with-custom-filter">How to custom filter OSM data</a></p>
+</div></blockquote>
 </section>
 </section>
 </section>
@@ -511,20 +632,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="case_BC.html"
+       href="config.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">3. </span>Case study: VRE site selection in British Columbia</p>
+        <p class="prev-next-title"><span class="section-number">5. </span>How to use the CONFIG</p>
       </div>
     </a>
     <a class="right-next"
-       href="api.html"
+       href="data.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">5. </span>RES API References</p>
+        <p class="prev-next-title"><span class="section-number">7. </span>Data Sources and Supply Chain</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -544,19 +665,27 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-wind-turbines">4.1. Selecting Wind Turbines</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#iec-class-selection">4.1.1. IEC Class Selection</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#iec-class-layer-mapping-to-select-turbine-technologies-for-wind-energy-estimation">4.1.1.1. IEC Class Layer Mapping to Select Turbine Technologies for Wind Energy Estimation</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">4.1.1.2. Best Practices</a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example">4.1.1.2.1. Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-wind-turbines">6.1. Selecting Wind Turbines</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#iec-class-selection">6.1.1. IEC Class Selection</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#iec-class-layer-mapping-to-select-turbine-technologies-for-wind-energy-estimation">6.1.1.1. IEC Class Layer Mapping to Select Turbine Technologies for Wind Energy Estimation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">6.1.1.2. Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example">6.1.1.2.1. Example</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-solar-pv-panels">4.2. Selecting Solar PV Panels</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#panel-attribute-configurations">4.2.1. Panel Attribute Configurations:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-solar-pv-panels">6.2. Selecting Solar PV Panels</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#panel-attribute-configurations">6.2.1. Panel Attribute Configurations:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#land-availability-calculation-from-vector-vs-raster-data">6.3. Land Availability Calculation from Vector vs Raster Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open-street-map-osm-data">6.4. Open Street Map (OSM) Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#goal">6.4.1. Goal:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-in-resource-linking-tool">6.4.2. Usage in RESource (Linking Tool):</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tool">6.4.3. Tool :</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#method">6.4.4. Method:</a></li>
 </ul>
 </li>
 </ul>
