@@ -1,11 +1,3 @@
-# Configuration file for the Sphinx documentation builder.
-#
-# For the full list of built-in configuration values, see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
-
-# -- Project information -----------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-
 import os
 import sys
 
@@ -31,9 +23,6 @@ project = 'RESource'
 copyright = '2025, Md Eliasinul Islam'
 author = 'Md Eliasinul Islam'
 release = '2025.07'
-
-# -- General configuration ---------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
     "myst_parser",  # For Markdown support - must be first
@@ -73,7 +62,7 @@ html_theme = 'sphinx_book_theme'  # Furo is a modern, responsive theme
 
 # Force light mode by default (for themes that support it)
 html_theme_options = {
-    "show_toc_level": 2,
+    "show_toc_level": 1,
     "repository_url": "https://github.com/DeltaE/RESource",
     "use_repository_button": True,
     "use_download_button": True,

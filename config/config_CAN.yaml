@@ -354,7 +354,7 @@ capacity_disaggregation:
     tracking: dual
     cell_static_CF_tolerance: 0.16
     cell_capacity_tolerance: 1
-    WCSS_tolerance: 0.0001
+    WCSS_tolerance: 0.01
     vector_buffers:
     - aeroway:
         buffer_mapping_key: aeroway
@@ -381,7 +381,7 @@ capacity_disaggregation:
     max_capacity: 15
     landuse_intensity: 3
     cost_data: data/processed_data/wind/land_based_wind_T3_cost_moderate_NREL_ATB2024.csv
-    WCSS_tolerance: 0.0005
+    WCSS_tolerance: 0.01
     CF_low: 0.2
     CF_high: 1
     NREL_ATB_technology: LandbasedWind
@@ -448,6 +448,6 @@ capacity_disaggregation:
   transmission:
     grid_connection_cost_per_Km: 1.616
     tx_line_rebuild_cost: 0.348
-    proximity_filter: 100
+    grid_proximity_km: 100 #km
     buses: data/processed_data/buses.csv
     lines: data/processed_data/lines.csv
