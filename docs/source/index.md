@@ -6,7 +6,7 @@ __One of the many solutions ?__
 <!-- <img src="_static/RESource_logo_2025.07.jpg" alt="RESource logo" width="200"/> -->
 
 <!-- # RESource  -->
-<img src="_static/RES_banner_2.jpg" alt="assessment_steps" height="200"/>
+<img src="_static/RES_banner_202508.jpg" alt="assessment_steps" width="500"/>
 
 __A Modular and Transparent Open-Source Framework for Sub-National Assessment of Solar and Land-based Wind Potential.__
 
@@ -25,7 +25,6 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 ```{toctree}
 :caption: 'Contents:'
 :maxdepth: 1
-:numbered:
 :titlesonly:
 
 notes/resource_builder
@@ -40,7 +39,6 @@ notes/developers
 ```{toctree}
 :caption: 'Notebooks:'
 :maxdepth: 1
-:numbered:
 :titlesonly:
 
 notebooks/Store_explorer
@@ -50,7 +48,6 @@ notebooks/Visuals_BC
 ```{toctree}
 :caption: 'for Developers:'
 :maxdepth: 1
-:numbered:
 :titlesonly:
 
 notes/api
