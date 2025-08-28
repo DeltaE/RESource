@@ -44,7 +44,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'notes/setup_guide';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="3. Case study: VRE site selection in British Columbia" href="case_BC.html" />
+    <link rel="next" title="Case study: VRE site selection in British Columbia" href="case_BC.html" />
     <link rel="prev" title="1. RESource Builder Module" href="resource_builder.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="Python"/>
@@ -137,8 +137,8 @@
       
     
     
-    <img src="../_static/RESource_logo_2025.07.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
-    <script>document.write(`<img src="../_static/RESource_logo_2025.07.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+    <img src="../_static/RES_logo_v2_2025.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../_static/RES_logo_v2_2025.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -159,7 +159,7 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="resource_builder.html">1. RESource Builder Module</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">2. RESource Project - Complete Setup &amp; Development Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="case_BC.html">3. Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="config.html">5. How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learning.html">6. Best Practices and Guidelines</a></li>
@@ -416,11 +416,11 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="resource-project-complete-setup-development-guide">
-<h1><span class="section-number">2. </span>RESource Project - Complete Setup &amp; Development Guide<a class="headerlink" href="#resource-project-complete-setup-development-guide" title="Link to this heading">#</a></h1>
+<h1>RESource Project - Complete Setup &amp; Development Guide<a class="headerlink" href="#resource-project-complete-setup-development-guide" title="Link to this heading">#</a></h1>
 <section id="quick-start-new-users">
-<h2><span class="section-number">2.1. </span>🎯 Quick Start (New Users)<a class="headerlink" href="#quick-start-new-users" title="Link to this heading">#</a></h2>
+<h2>🎯 Quick Start (New Users)<a class="headerlink" href="#quick-start-new-users" title="Link to this heading">#</a></h2>
 <section id="prerequisites">
-<h3><span class="section-number">2.1.1. </span>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h3>
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Python 3.11+</strong></p></li>
 <li><p><strong>Git</strong></p></li>
@@ -429,14 +429,14 @@ document.write(`
 </ul>
 </section>
 <section id="clone-and-navigate">
-<h3><span class="section-number">2.1.2. </span>1. Clone and Navigate<a class="headerlink" href="#clone-and-navigate" title="Link to this heading">#</a></h3>
+<h3>1. Clone and Navigate<a class="headerlink" href="#clone-and-navigate" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/DeltaE/RESource.git
 <span class="nb">cd</span><span class="w"> </span>RESource
 </pre></div>
 </div>
 </section>
 <section id="environment-setup-one-command">
-<h3><span class="section-number">2.1.3. </span>2. Environment Setup (One Command)<a class="headerlink" href="#environment-setup-one-command" title="Link to this heading">#</a></h3>
+<h3>2. Environment Setup (One Command)<a class="headerlink" href="#environment-setup-one-command" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create conda environment with all dependencies</span>
 make<span class="w"> </span>setup-conda
 
@@ -451,11 +451,11 @@ python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;i
 </section>
 <hr class="docutils" />
 <section id="environment-management">
-<h2><span class="section-number">2.2. </span>🛠️ Environment Management<a class="headerlink" href="#environment-management" title="Link to this heading">#</a></h2>
+<h2>🛠️ Environment Management<a class="headerlink" href="#environment-management" title="Link to this heading">#</a></h2>
 <section id="available-make-commands">
-<h3><span class="section-number">2.2.1. </span>Available Make Commands<a class="headerlink" href="#available-make-commands" title="Link to this heading">#</a></h3>
+<h3>Available Make Commands<a class="headerlink" href="#available-make-commands" title="Link to this heading">#</a></h3>
 <section id="environment-setup-management">
-<h4><span class="section-number">2.2.1.1. </span>Environment Setup &amp; Management<a class="headerlink" href="#environment-setup-management" title="Link to this heading">#</a></h4>
+<h4>Environment Setup &amp; Management<a class="headerlink" href="#environment-setup-management" title="Link to this heading">#</a></h4>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>setup-conda<span class="w">       </span><span class="c1"># Create/update conda environment &#39;RES&#39;</span>
 make<span class="w"> </span>conda-status<span class="w">      </span><span class="c1"># Check environment health and packages</span>
 make<span class="w"> </span>clean-conda<span class="w">       </span><span class="c1"># Remove conda environment</span>
@@ -464,7 +464,7 @@ make<span class="w"> </span>export-env<span class="w">        </span><span class
 </div>
 </section>
 <section id="running-code">
-<h4><span class="section-number">2.2.1.2. </span>Running Code<a class="headerlink" href="#running-code" title="Link to this heading">#</a></h4>
+<h4>Running Code<a class="headerlink" href="#running-code" title="Link to this heading">#</a></h4>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>run-res<span class="w">           </span><span class="c1"># Run main RESource module</span>
 make<span class="w"> </span>run-conda<span class="w"> </span><span class="nv">SCRIPT</span><span class="o">=</span>path/to/script.py<span class="w"> </span><span class="o">[</span><span class="nv">ARGS</span><span class="o">=</span><span class="s1">&#39;arg1 arg2&#39;</span><span class="o">]</span><span class="w">  </span><span class="c1"># Run custom scripts</span>
 make<span class="w"> </span>jupyter<span class="w">           </span><span class="c1"># Start Jupyter Lab with conda environment</span>
@@ -472,7 +472,7 @@ make<span class="w"> </span>jupyter<span class="w">           </span><span class
 </div>
 </section>
 <section id="documentation">
-<h4><span class="section-number">2.2.1.3. </span>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h4>
+<h4>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h4>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>docs-build<span class="w">        </span><span class="c1"># Build documentation only</span>
 make<span class="w"> </span>docs-conda<span class="w">        </span><span class="c1"># Build and deploy documentation</span>
 make<span class="w"> </span>deploy<span class="w">            </span><span class="c1"># Deploy documentation to GitHub Pages</span>
@@ -482,7 +482,7 @@ make<span class="w"> </span>autobuild<span class="w">         </span><span class
 </div>
 </section>
 <section id="utilities">
-<h4><span class="section-number">2.2.1.4. </span>Utilities<a class="headerlink" href="#utilities" title="Link to this heading">#</a></h4>
+<h4>Utilities<a class="headerlink" href="#utilities" title="Link to this heading">#</a></h4>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nb">help</span><span class="w">             </span><span class="c1"># Show all available commands</span>
 make<span class="w"> </span>clean-docs<span class="w">       </span><span class="c1"># Clean documentation build files</span>
 make<span class="w"> </span>clean-all<span class="w">        </span><span class="c1"># Clean all build files and environments</span>
@@ -493,9 +493,9 @@ make<span class="w"> </span>clean-all<span class="w">        </span><span class=
 </section>
 <hr class="docutils" />
 <section id="platform-specific-setup">
-<h2><span class="section-number">2.3. </span>🐧 Platform-Specific Setup<a class="headerlink" href="#platform-specific-setup" title="Link to this heading">#</a></h2>
+<h2>🐧 Platform-Specific Setup<a class="headerlink" href="#platform-specific-setup" title="Link to this heading">#</a></h2>
 <section id="windows-users-wsl2-required">
-<h3><span class="section-number">2.3.1. </span>Windows Users (WSL2 Required)<a class="headerlink" href="#windows-users-wsl2-required" title="Link to this heading">#</a></h3>
+<h3>Windows Users (WSL2 Required)<a class="headerlink" href="#windows-users-wsl2-required" title="Link to this heading">#</a></h3>
 <p>RESource is designed for Linux environments. Windows users must use WSL2:</p>
 <ol class="arabic">
 <li><p><strong>Install WSL2:</strong></p>
@@ -524,7 +524,7 @@ bash<span class="w"> </span>Miniconda3-latest-Linux-x86_64.sh
 </ol>
 </section>
 <section id="linux-macos-users">
-<h3><span class="section-number">2.3.2. </span>Linux/macOS Users<a class="headerlink" href="#linux-macos-users" title="Link to this heading">#</a></h3>
+<h3>Linux/macOS Users<a class="headerlink" href="#linux-macos-users" title="Link to this heading">#</a></h3>
 <p>Install Miniconda directly:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Linux</span>
 wget<span class="w"> </span>https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
@@ -539,9 +539,9 @@ bash<span class="w"> </span>Miniconda3-latest-MacOSX-x86_64.sh
 </section>
 <hr class="docutils" />
 <section id="environment-details">
-<h2><span class="section-number">2.4. </span>📦 Environment Details<a class="headerlink" href="#environment-details" title="Link to this heading">#</a></h2>
+<h2>📦 Environment Details<a class="headerlink" href="#environment-details" title="Link to this heading">#</a></h2>
 <section id="core-dependencies">
-<h3><span class="section-number">2.4.1. </span>Core Dependencies<a class="headerlink" href="#core-dependencies" title="Link to this heading">#</a></h3>
+<h3>Core Dependencies<a class="headerlink" href="#core-dependencies" title="Link to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">env/environment.yml</span></code> includes:</p>
 <p><strong>Scientific Computing:</strong></p>
 <ul class="simple">
@@ -569,16 +569,16 @@ bash<span class="w"> </span>Miniconda3-latest-MacOSX-x86_64.sh
 </section>
 <hr class="docutils" />
 <section id="daily-development-workflow">
-<h2><span class="section-number">2.5. </span>🚀 Daily Development Workflow<a class="headerlink" href="#daily-development-workflow" title="Link to this heading">#</a></h2>
+<h2>🚀 Daily Development Workflow<a class="headerlink" href="#daily-development-workflow" title="Link to this heading">#</a></h2>
 <section id="activate-environment">
-<h3><span class="section-number">2.5.1. </span>1. Activate Environment<a class="headerlink" href="#activate-environment" title="Link to this heading">#</a></h3>
+<h3>1. Activate Environment<a class="headerlink" href="#activate-environment" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>RES
 <span class="c1"># Your prompt should show: (RES) $</span>
 </pre></div>
 </div>
 </section>
 <section id="run-resource">
-<h3><span class="section-number">2.5.2. </span>2. Run RESource<a class="headerlink" href="#run-resource" title="Link to this heading">#</a></h3>
+<h3>2. Run RESource<a class="headerlink" href="#run-resource" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Main module</span>
 make<span class="w"> </span>run-res
 
@@ -591,7 +591,7 @@ make<span class="w"> </span>jupyter
 </div>
 </section>
 <section id="documentation-development">
-<h3><span class="section-number">2.5.3. </span>3. Documentation Development<a class="headerlink" href="#documentation-development" title="Link to this heading">#</a></h3>
+<h3>3. Documentation Development<a class="headerlink" href="#documentation-development" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Live rebuild (recommended for doc development)</span>
 make<span class="w"> </span>autobuild
 <span class="c1"># Opens http://localhost:8000 with auto-reload</span>
@@ -604,9 +604,9 @@ make<span class="w"> </span>docs-build
 </section>
 <hr class="docutils" />
 <section id="troubleshooting">
-<h2><span class="section-number">2.6. </span>🔧 Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">#</a></h2>
+<h2>🔧 Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">#</a></h2>
 <section id="environment-issues">
-<h3><span class="section-number">2.6.1. </span>Environment Issues<a class="headerlink" href="#environment-issues" title="Link to this heading">#</a></h3>
+<h3>Environment Issues<a class="headerlink" href="#environment-issues" title="Link to this heading">#</a></h3>
 <p><strong>Problem:</strong> Double environment prompts <code class="docutils literal notranslate"><span class="pre">(RES)</span> <span class="pre">(base)</span> <span class="pre">$</span></code></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solution: Disable auto-activation of base</span>
 conda<span class="w"> </span>config<span class="w"> </span>--set<span class="w"> </span>auto_activate_base<span class="w"> </span><span class="nb">false</span>
@@ -642,21 +642,21 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 </div>
 </section>
 <section id="check-environment-health">
-<h3><span class="section-number">2.6.2. </span>Check Environment Health<a class="headerlink" href="#check-environment-health" title="Link to this heading">#</a></h3>
+<h3>Check Environment Health<a class="headerlink" href="#check-environment-health" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>conda-status
 <span class="c1"># Shows: environment status, Python version, key packages, RESource module availability</span>
 </pre></div>
 </div>
 </section>
 <section id="export-current-environment">
-<h3><span class="section-number">2.6.3. </span>Export Current Environment<a class="headerlink" href="#export-current-environment" title="Link to this heading">#</a></h3>
+<h3>Export Current Environment<a class="headerlink" href="#export-current-environment" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>export-env
 <span class="c1"># Creates env/environment_exported.yml with exact versions</span>
 </pre></div>
 </div>
 </section>
 <section id="wsl2-specific-issues">
-<h3><span class="section-number">2.6.4. </span>WSL2 Specific Issues<a class="headerlink" href="#wsl2-specific-issues" title="Link to this heading">#</a></h3>
+<h3>WSL2 Specific Issues<a class="headerlink" href="#wsl2-specific-issues" title="Link to this heading">#</a></h3>
 <p><strong>Problem:</strong> Conda commands not found in WSL2</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solution: Ensure conda is in PATH</span>
 <span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;export PATH=&quot;$HOME/miniconda3/bin:$PATH&quot;&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc
@@ -672,9 +672,9 @@ sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </sp
 </section>
 <hr class="docutils" />
 <section id="development-checklist">
-<h2><span class="section-number">2.7. </span>📋 Development Checklist<a class="headerlink" href="#development-checklist" title="Link to this heading">#</a></h2>
+<h2>📋 Development Checklist<a class="headerlink" href="#development-checklist" title="Link to this heading">#</a></h2>
 <section id="new-developer-setup">
-<h3><span class="section-number">2.7.1. </span>New Developer Setup<a class="headerlink" href="#new-developer-setup" title="Link to this heading">#</a></h3>
+<h3>New Developer Setup<a class="headerlink" href="#new-developer-setup" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>[ ] Clone repository: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/DeltaE/RESource.git</span></code></p></li>
 <li><p>[ ] Install Conda/Miniconda</p></li>
@@ -684,7 +684,7 @@ sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </sp
 </ul>
 </section>
 <section id="before-committing-code">
-<h3><span class="section-number">2.7.2. </span>Before Committing Code<a class="headerlink" href="#before-committing-code" title="Link to this heading">#</a></h3>
+<h3>Before Committing Code<a class="headerlink" href="#before-committing-code" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>[ ] Environment is clean: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">conda-status</span></code></p></li>
 <li><p>[ ] Code runs: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">run-res</span></code></p></li>
@@ -693,7 +693,7 @@ sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </sp
 </ul>
 </section>
 <section id="before-deployment">
-<h3><span class="section-number">2.7.3. </span>Before Deployment<a class="headerlink" href="#before-deployment" title="Link to this heading">#</a></h3>
+<h3>Before Deployment<a class="headerlink" href="#before-deployment" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>[ ] Documentation is current: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">docs-conda</span></code></p></li>
 <li><p>[ ] All notebooks sync: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">sync-notebooks</span></code></p></li>
@@ -703,9 +703,9 @@ sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </sp
 </section>
 <hr class="docutils" />
 <section id="documentation-deployment">
-<h2><span class="section-number">2.8. </span>🌐 Documentation Deployment<a class="headerlink" href="#documentation-deployment" title="Link to this heading">#</a></h2>
+<h2>🌐 Documentation Deployment<a class="headerlink" href="#documentation-deployment" title="Link to this heading">#</a></h2>
 <section id="local-development">
-<h3><span class="section-number">2.8.1. </span>Local Development<a class="headerlink" href="#local-development" title="Link to this heading">#</a></h3>
+<h3>Local Development<a class="headerlink" href="#local-development" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Live reload during development</span>
 make<span class="w"> </span>autobuild
 <span class="c1"># Visit: http://localhost:8000</span>
@@ -713,7 +713,7 @@ make<span class="w"> </span>autobuild
 </div>
 </section>
 <section id="github-pages-deployment">
-<h3><span class="section-number">2.8.2. </span>GitHub Pages Deployment<a class="headerlink" href="#github-pages-deployment" title="Link to this heading">#</a></h3>
+<h3>GitHub Pages Deployment<a class="headerlink" href="#github-pages-deployment" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build and deploy to GitHub Pages</span>
 make<span class="w"> </span>deploy
 <span class="c1"># Visit: https://deltae.github.io/RESource/</span>
@@ -721,7 +721,7 @@ make<span class="w"> </span>deploy
 </div>
 </section>
 <section id="documentation-structure">
-<h3><span class="section-number">2.8.3. </span>Documentation Structure<a class="headerlink" href="#documentation-structure" title="Link to this heading">#</a></h3>
+<h3>Documentation Structure<a class="headerlink" href="#documentation-structure" title="Link to this heading">#</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docs/
 ├── source/           # Source files
 │   ├── index.md     # Main page
@@ -734,9 +734,9 @@ make<span class="w"> </span>deploy
 </section>
 <hr class="docutils" />
 <section id="tips-best-practices">
-<h2><span class="section-number">2.9. </span>💡 Tips &amp; Best Practices<a class="headerlink" href="#tips-best-practices" title="Link to this heading">#</a></h2>
+<h2>💡 Tips &amp; Best Practices<a class="headerlink" href="#tips-best-practices" title="Link to this heading">#</a></h2>
 <section id="id1">
-<h3><span class="section-number">2.9.1. </span>Environment Management<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<h3>Environment Management<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Always use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">setup-conda</span></code> instead of manual conda commands</p></li>
 <li><p>Keep <code class="docutils literal notranslate"><span class="pre">env/environment.yml</span></code> updated when adding dependencies</p></li>
@@ -745,7 +745,7 @@ make<span class="w"> </span>deploy
 </ul>
 </section>
 <section id="development">
-<h3><span class="section-number">2.9.2. </span>Development<a class="headerlink" href="#development" title="Link to this heading">#</a></h3>
+<h3>Development<a class="headerlink" href="#development" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">run-conda</span> <span class="pre">SCRIPT=...</span></code> for testing scripts with proper environment</p></li>
 <li><p>Use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">jupyter</span></code> for interactive development (ensures correct kernel)</p></li>
@@ -753,7 +753,7 @@ make<span class="w"> </span>deploy
 </ul>
 </section>
 <section id="collaboration">
-<h3><span class="section-number">2.9.3. </span>Collaboration<a class="headerlink" href="#collaboration" title="Link to this heading">#</a></h3>
+<h3>Collaboration<a class="headerlink" href="#collaboration" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Always commit updated <code class="docutils literal notranslate"><span class="pre">env/environment.yml</span></code> when dependencies change</p></li>
 <li><p>Use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">export-env</span></code> to share exact working environment</p></li>
@@ -763,16 +763,16 @@ make<span class="w"> </span>deploy
 </section>
 <hr class="docutils" />
 <section id="getting-help">
-<h2><span class="section-number">2.10. </span>🆘 Getting Help<a class="headerlink" href="#getting-help" title="Link to this heading">#</a></h2>
+<h2>🆘 Getting Help<a class="headerlink" href="#getting-help" title="Link to this heading">#</a></h2>
 <section id="check-status">
-<h3><span class="section-number">2.10.1. </span>Check Status<a class="headerlink" href="#check-status" title="Link to this heading">#</a></h3>
+<h3>Check Status<a class="headerlink" href="#check-status" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>conda-status<span class="w">    </span><span class="c1"># Environment health check</span>
 make<span class="w"> </span><span class="nb">help</span><span class="w">           </span><span class="c1"># Show all available commands</span>
 </pre></div>
 </div>
 </section>
 <section id="common-issues">
-<h3><span class="section-number">2.10.2. </span>Common Issues<a class="headerlink" href="#common-issues" title="Link to this heading">#</a></h3>
+<h3>Common Issues<a class="headerlink" href="#common-issues" title="Link to this heading">#</a></h3>
 <ol class="arabic simple">
 <li><p><strong>Import errors:</strong> Usually environment not activated or packages missing</p></li>
 <li><p><strong>Jupyter kernel issues:</strong> Use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">jupyter</span></code> instead of direct jupyter commands</p></li>
@@ -781,7 +781,7 @@ make<span class="w"> </span><span class="nb">help</span><span class="w">        
 </ol>
 </section>
 <section id="resources">
-<h3><span class="section-number">2.10.3. </span>Resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h3>
+<h3>Resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/DeltaE/RESource">RESource GitHub Repository</a></p></li>
 <li><p><a class="reference external" href="https://deltae.github.io/RESource/">Documentation</a></p></li>
@@ -818,7 +818,7 @@ make<span class="w"> </span><span class="nb">help</span><span class="w">        
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">3. </span>Case study: VRE site selection in British Columbia</p>
+        <p class="prev-next-title">Case study: VRE site selection in British Columbia</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
