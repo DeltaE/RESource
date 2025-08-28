@@ -2,6 +2,8 @@
 This library is under heavy development
 ```
 
+<img src="../_static/RES__BC_banner_202508.jpg" alt="assessment_steps" width="800"/>
+
 # Case study: VRE site selection in British Columbia
 For more on this case study, please refer to the open-access publication [here](https://www.example.com).
 
