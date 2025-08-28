@@ -1,11 +1,11 @@
-```{warning}
-This library is under heavy development
-```
-
 <img src="../_static/RES__BC_banner_202508.jpg" alt="assessment_steps" width="800"/>
 
 # Case study: VRE site selection in British Columbia
 > publication under review.
+
+```{warning}
+This library is under heavy development
+```
 
 To demonstrate RESource's practical utility, we apply the framework to the Canadian province of British Columbia (BC). BC presents an ideal testbed due to its varied geography—coastal areas, rugged mountains, and interior plateaus—and a favorable policy environment, including the [Clean Energy Act](https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/10022_01), [expedited permitting processes for wind projects](https://news.gov.bc.ca/releases/2025ECS0006-000100) and renewable energy targeted call for power [2024](https://www.bchydro.com/work-with-us/selling-clean-energy/2024-call-for-power.html), [2025](https://www.bchydro.com/work-with-us/selling-clean-energy/2025-call-for-power.html) by BC Hydro. These characteristics offer a rich context for testing spatial, technical, and regulatory dimensions of VRE siting.
 
