@@ -3,9 +3,10 @@
 
 __One of the many solutions ?__
 
-<img src="_static/RESource_logo_2025.07.jpg" alt="RESource logo" width="200"/>
+<!-- <img src="_static/RESource_logo_2025.07.jpg" alt="RESource logo" width="200"/> -->
 
-# RESource 
+<!-- # RESource  -->
+<img src="_static/RES_banner.jpg" alt="assessment_steps" width="800"/>
 
 __A Modular and Transparent Open-Source Framework for Sub-National Assessment of Solar and Land-based Wind Potential.__
 
