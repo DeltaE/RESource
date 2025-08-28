@@ -15,4 +15,9 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 ## Workflow overview
 <img src="docs/source/_static/Workflow.jpg" alt="high_level_workflow" width="1000"/>
 
-for more - [RESource-documentation](https://deltae.github.io/RESource/)
+------
+
+**for more**
+
+- [BC Case Study](https://deltae.github.io/RESource/notes/case_BC.html)
+- [RESource-documentation](https://deltae.github.io/RESource/)
