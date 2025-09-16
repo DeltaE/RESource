@@ -526,7 +526,23 @@ document.write(`
             <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">|  ❌ Error reading file: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">alert</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 
-            
+<div class="viewcode-block" id="DataHandler.clean_store">
+<a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler.clean_store">[docs]</a>
+    <span class="k">def</span> <span class="nf">clean_store</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Cleans the HDF5 store by removing all keys and datasets.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Remove all keys and datasets from the HDF5 store</span>
+        <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">hdf_file</span><span class="p">:</span>
+            <span class="n">keys_to_delete</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">hdf_file</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys_to_delete</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">hdf_file</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">|🗑️ All keys have been deleted from the store: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    
 <div class="viewcode-block" id="DataHandler.del_key">
 <a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler.del_key">[docs]</a>
     <span class="nd">@staticmethod</span>

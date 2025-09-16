@@ -525,7 +525,28 @@ document.write(`
         <span class="c1"># Save the configuration to the results directory</span>
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Saving configuration to results directory...&quot;</span><span class="p">)</span>                
         <span class="n">utils</span><span class="o">.</span><span class="n">save_to_yaml</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_save_to</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="o">/</span><span class="sa">f</span><span class="s1">&#39;config_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">RUN_ID</span><span class="si">}</span><span class="s1">.yaml&#39;</span><span class="p">)</span>
-        
+    
+<div class="viewcode-block" id="RESources_builder.clean_data_store">
+<a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.clean_data_store">[docs]</a>
+    <span class="k">def</span> <span class="nf">clean_data_store</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Cleans the HDF5 data store by removing all stored datasets.</span>
+<span class="sd">        </span>
+<span class="sd">        This method deletes all datasets stored in the HDF5 file associated with the current region and resource type. It is useful for resetting the data store before re-running analyses or when starting fresh with new data.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            StorageError: If there is an issue accessing or modifying the HDF5 store.</span>
+<span class="sd">        </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Use with caution as this will permanently delete all stored data.</span>
+<span class="sd">            - After cleaning, the data store will be empty and ready for new data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+                           <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Cleaning data store...&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">clean_store</span><span class="p">()</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+                           <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Data store cleaned.&quot;</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="RESources_builder.get_grid_cells">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.get_grid_cells">[docs]</a>
@@ -623,7 +644,7 @@ document.write(`
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Extracting &#39;windspeed_ERA5&#39; from cutout.&quot;</span><span class="p">)</span>
                 <span class="n">_store_grid_cells_updated_</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">=</span><span class="n">wind</span><span class="o">.</span><span class="n">impute_ERA5_windspeed_to_Cells</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="p">,</span>
                                                <span class="bp">self</span><span class="o">.</span><span class="n">store_grid_cells</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">store_grid_cells_updated</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">assign_cell_id</span><span class="p">(</span><span class="n">_store_grid_cells_updated_</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">gadmBoundary</span><span class="o">.</span><span class="n">boundary_datafields</span><span class="p">[</span><span class="s1">&#39;NAME_2&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">store_grid_cells_updated</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">assign_cell_id</span><span class="p">(</span><span class="n">_store_grid_cells_updated_</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sub_national_unit_tag</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store_grid_cells_updated</span><span class="p">,</span><span class="s1">&#39;cells&#39;</span><span class="p">)</span>
                 <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| &#39;windspeed_ERA5&#39; extraction completed and stored.&quot;</span><span class="p">)</span>
@@ -653,7 +674,7 @@ document.write(`
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span>
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Data extracting from source: &#39;CF_IEC2&#39;, &#39;CF_IEC3&#39;, &#39;windspeed_gwa&#39; &quot;</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">gwa_cells</span><span class="o">.</span><span class="n">map_GWA_cells_to_ERA5</span><span class="p">(</span><span class="n">aggregation_level</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gadmBoundary</span><span class="o">.</span><span class="n">boundary_datafields</span><span class="p">[</span><span class="s1">&#39;NAME_2&#39;</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">gwa_cells</span><span class="o">.</span><span class="n">map_GWA_cells_to_ERA5</span><span class="p">(</span><span class="n">aggregation_level</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sub_national_unit_tag</span><span class="p">,</span>
                                                      <span class="n">memory_resource_limitation</span><span class="o">=</span><span class="n">memory_resource_limitation</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="o">==</span><span class="s1">&#39;solar&#39;</span><span class="p">:</span> 
@@ -995,8 +1016,9 @@ document.write(`
 <div class="viewcode-block" id="RESources_builder.build">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.build">[docs]</a>
     <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-            <span class="n">select_top_sites</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">select_top_sites</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">use_pypsa_buses</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">get_clusters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">memory_resource_limitation</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Execute the specific module logic for the given resource type (&#39;solar&#39; or &#39;wind&#39;).</span>
@@ -1024,11 +1046,12 @@ document.write(`
         <span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="s2">&quot;Step 6 : Use capacity, energy yield and cost attributes to score each cell&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">score_cells</span><span class="p">()</span>
         
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="s2">&quot;Step 7.1 : Use score similarities to find clusterized representation (sites) of cells&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">get_clusters</span><span class="p">()</span>
-        
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="s2">&quot;Step 7.2 : Prepare representative timeseries of the clusterized sites&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">get_cluster_timeseries</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">get_clusters</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="s2">&quot;Step 7.1 : Use score similarities to find clusterized representation (sites) of cells&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_clusters</span><span class="p">()</span>
+            
+            <span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="s2">&quot;Step 7.2 : Prepare representative timeseries of the clusterized sites&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_cluster_timeseries</span><span class="p">()</span>
         
         <span class="n">utils</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;To avoid confusion, Units dictionary method should be updated if any units are changed across modules. However, units dictionary is for documentation purposes only. It doesn&#39;t have any calculation impacts on any of the methods.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">create_units_dictionary</span><span class="p">()</span>
@@ -1043,30 +1066,28 @@ document.write(`
                
             <span class="n">utils</span><span class="o">.</span><span class="n">print_module_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Top Sites(clusters) from </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s2"> module saved to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_region_name</span><span class="p">()</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
             
-        <span class="k">else</span><span class="p">:</span> <span class="c1"># When user wants all of the sites</span>
-            <span class="n">resource_clusters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_clusters</span><span class="p">()</span><span class="o">.</span><span class="n">clusters</span><span class="p">,</span>
-            <span class="n">cluster_timeseries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_cluster_timeseries</span><span class="p">(),</span>
+        <span class="c1"># else: # When user wants all of the sites</span>
+        <span class="c1">#     resource_clusters=self.get_clusters().clusters,</span>
+        <span class="c1">#     cluster_timeseries=self.get_cluster_timeseries(),</span>
     
-            <span class="n">utils</span><span class="o">.</span><span class="n">print_module_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;All Sites (clusters) from </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s2"> module saved to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_region_name</span><span class="p">()</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
-   
+        <span class="c1">#     utils.print_module_title(f&quot;All Sites (clusters) from {self.resource_type} module saved to {self.store} for {self.get_region_name()}...&quot;)</span>
+    
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">export_results</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="p">,</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="p">,</span>
+                                <span class="n">resource_clusters</span><span class="p">,</span>
+                                <span class="n">cluster_timeseries</span><span class="p">,</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">results_save_to</span><span class="p">)</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_results</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="p">,</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="p">,</span>
-                            <span class="n">resource_clusters</span><span class="p">,</span>
-                            <span class="n">cluster_timeseries</span><span class="p">,</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">results_save_to</span><span class="p">)</span>
-        
-        <span class="n">sites_summary</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">create_summary_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="p">,</span>
-                                                   <span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="p">,</span>
-                                                   <span class="n">resource_clusters</span><span class="p">,</span>
-                                                   <span class="n">cluster_timeseries</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dump_export_metadata</span><span class="p">(</span><span class="n">sites_summary</span><span class="p">,</span>
-                                  <span class="bp">self</span><span class="o">.</span><span class="n">results_save_to</span><span class="p">)</span></div>
+            <span class="n">sites_summary</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">create_summary_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="p">,</span>
+                                                    <span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="p">,</span>
+                                                    <span class="n">resource_clusters</span><span class="p">,</span>
+                                                    <span class="n">cluster_timeseries</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dump_export_metadata</span><span class="p">(</span><span class="n">sites_summary</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">results_save_to</span><span class="p">)</span></div>
 
 
 
-
-       
 <div class="viewcode-block" id="RESources_builder.export_results">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.export_results">[docs]</a>
     <span class="nd">@staticmethod</span>

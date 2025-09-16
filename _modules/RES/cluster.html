@@ -1085,9 +1085,9 @@ document.write(`
         <span class="k">for</span> <span class="n">cluster_df</span> <span class="ow">in</span> <span class="n">clusters</span><span class="p">[</span><span class="o">-</span><span class="n">optimal_k</span><span class="p">:]:</span>
             <span class="n">cluster_df</span><span class="p">[</span><span class="s1">&#39;Cluster_No&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cluster_no_counter</span>
             <span class="n">cluster_no_counter</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="n">cells_cluster_map_df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">clusters</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">cells_cluster_map_df</span><span class="p">,</span><span class="n">optimal_k_df</span></div>
+    <span class="k">if</span> <span class="n">clusters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">clusters</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">cells_cluster_map_df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">clusters</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cells_cluster_map_df</span><span class="p">,</span><span class="n">optimal_k_df</span></div>
 
 
 <div class="viewcode-block" id="create_cells_Union_in_clusters">

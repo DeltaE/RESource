@@ -302,6 +302,7 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">rioxarray</span> <span class="k">as</span> <span class="nn">rxr</span>
 <span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
@@ -683,7 +684,7 @@ document.write(`
 <span class="sd">        - Multiple raster files are automatically merged into unified dataset</span>
 <span class="sd">        - Spatial coordinates are preserved for subsequent spatial analysis</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">data_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gwa_data_list</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Load configuration parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gwa_datafields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gwa_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;datafields&#39;</span><span class="p">,</span> <span class="p">{})</span>
@@ -698,7 +699,7 @@ document.write(`
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">raster_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gwa_rasters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gwa_country_code</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">region_mapping</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;GWA_country_code&#39;</span><span class="p">)</span>  <span class="c1"># INHERITED ATTRIBUTES from AttributesParser</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">raster_name</span><span class="o">=</span><span class="n">raster_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;GWA_country_code&quot;</span><span class="p">,</span>  <span class="bp">self</span><span class="o">.</span><span class="n">gwa_country_code</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gwa_root</span> <span class="o">/</span> <span class="n">raster_name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gwa_root</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">raster_name</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
                 <span class="n">generic_source_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gwa_sources</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">region_source_url</span> <span class="o">=</span> <span class="n">generic_source_url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;GWA_country_code&quot;</span><span class="p">,</span>  <span class="bp">self</span><span class="o">.</span><span class="n">gwa_country_code</span><span class="p">)</span>
@@ -714,33 +715,47 @@ document.write(`
                     <span class="o">.</span><span class="n">drop_vars</span><span class="p">([</span><span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="s1">&#39;spatial_ref&#39;</span><span class="p">])</span>
                     <span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">band</span><span class="o">=</span><span class="mi">1</span> <span class="k">if</span> <span class="s1">&#39;*Class*&#39;</span> <span class="ow">in</span> <span class="n">key</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># &#39;IEC_Class_ExLoads&#39; data is in band 1</span>
                 <span class="p">)</span>
-
-                <span class="n">data_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                
+                <span class="c1"># data.rio.write_crs(self.get_default_crs(), inplace=True)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">gwa_data_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Error processing </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Merge and clean the data in a more efficient way</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">merged_data</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">data_list</span><span class="p">)</span> <span class="k">if</span> <span class="n">data_list</span> <span class="k">else</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">()</span> <span class="c1">#.rename(&#39;gwa_data&#39;)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">merged_data</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         
+        
+        <span class="n">gwa_dfs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">da</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gwa_data_list</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="sa">f</span><span class="s2">&quot;var_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+            <span class="n">gwa_dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+        <span class="c1"># concatenate side-by-side on the same MultiIndex (y,x)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">gwa_dfs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        self.merged_data = xr.merge(self.gwa_data_list) if self.gwa_data_list is None else xr.DataArray()</span>
+<span class="sd">        self.merged_data.rename(&#39;gwa_data&#39;)</span>
+<span class="sd">      </span>
+<span class="sd">        self.merged_df = self.merged_data.to_dataframe().dropna(how=&#39;any&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  
         <span class="k">if</span> <span class="n">memory_resource_limitation</span><span class="p">:</span>
             <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Memory resource limitations enabled. Filtering GWA cells within windspeed mask to limit the data offload processing...&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">windpseed_min</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="mi">0</span> <span class="c1">#m/s</span>
-            <span class="n">windpseed_max</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="mi">50</span> <span class="c1">#m/s</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     windpseed_min:float=0 #m/s</span>
+        <span class="c1">#     windpseed_max:float=100 #m/s</span>
  
-        <span class="n">mask</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span><span class="p">[</span><span class="s1">&#39;windspeed_gwa&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">windpseed_min</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span><span class="p">[</span><span class="s1">&#39;windspeed_gwa&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">windpseed_max</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">merged_df_f</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df_f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2"> cells have been filtered due to Windspeed filter [</span><span class="si">{</span><span class="n">windpseed_min</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">windpseed_max</span><span class="si">}</span><span class="s2"> m/s].&quot;</span><span class="p">)</span>
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;✔ Cleaned data loaded for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">merged_df_f</span><span class="p">)</span><span class="si">}</span><span class="s2"> GWA cells&quot;</span><span class="p">)</span>
+        <span class="c1"># mask=(self.merged_df[&#39;windspeed_gwa&#39;] &gt;= windpseed_min) &amp; (self.merged_df[&#39;windspeed_gwa&#39;] &lt;= windpseed_max)</span>
+        <span class="c1"># self.merged_df_f=self.merged_df[mask]</span>
+        <span class="c1"># utils.print_update(level=print_level_base+1,message=f&quot;{__name__}| {abs(len(self.merged_df_f) - self.merged_df.shape[0])} cells have been filtered due to Windspeed filter [{windpseed_min}-{windpseed_max} m/s].&quot;)</span>
+        <span class="c1"># utils.print_update(level=print_level_base,message=f&quot;✔ Cleaned data loaded for {len(self.merged_df_f)} GWA cells&quot;)</span>
         
         <span class="c1"># class_mapping = {0: &#39;III&#39;, 1: &#39;II&#39;, 2: &#39;I&#39;, 3: &#39;T&#39;, 4: &#39;S&#39;}</span>
         <span class="c1"># # Correctly modifying only one column</span>
         <span class="c1"># self.merged_df_f[&#39;IEC_Class_ExLoads&#39;] = self.merged_df_f[&#39;IEC_Class_ExLoads&#39;].map(class_mapping).fillna(0)</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">merged_df_f</span></div>
+        <span class="c1"># return self.merged_df_f</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">merged_df</span></div>
 
     
 <div class="viewcode-block" id="GWACells.download_file">
@@ -1060,7 +1075,9 @@ document.write(`
     
 
         <span class="c1"># Store the aggregated data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mapped_gwa_cells_aggr_df</span><span class="p">,</span> <span class="s1">&#39;cells&#39;</span><span class="p">)</span>  </div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mapped_gwa_cells_aggr_df</span><span class="p">,</span> <span class="s1">&#39;cells&#39;</span><span class="p">)</span>
+        
+        <span class="k">return</span>  <span class="bp">self</span><span class="o">.</span><span class="n">mapped_gwa_cells_aggr_df</span></div>
 </div>
 
 </pre></div>
