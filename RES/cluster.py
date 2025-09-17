@@ -776,9 +776,9 @@ def cells_to_cluster_mapping(
         for cluster_df in clusters[-optimal_k:]:
             cluster_df['Cluster_No'] = cluster_no_counter
             cluster_no_counter += 1
-    cells_cluster_map_df=pd.concat(clusters, ignore_index=False)
-
-    return cells_cluster_map_df,optimal_k_df
+    if clusters is not None and len(clusters) > 0:
+        cells_cluster_map_df=pd.concat(clusters, ignore_index=False)
+        return cells_cluster_map_df,optimal_k_df
 
 def create_cells_Union_in_clusters(
         cluster_map_gdf:gpd.GeoDataFrame, 

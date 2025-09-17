@@ -214,7 +214,20 @@ class DataHandler:
         except Exception as e:
             utils.print_update(message=f"{__name__}|  ❌ Error reading file: {e}",alert=True)
 
-            
+    def clean_store(self):
+        """
+        Cleans the HDF5 store by removing all keys and datasets.
+        
+        Parameters:
+            None
+        """
+        # Remove all keys and datasets from the HDF5 store
+        with h5py.File(self.store, "a") as hdf_file:
+            keys_to_delete = list(hdf_file.keys())
+            for key in keys_to_delete:
+                del hdf_file[key]
+        utils.print_update(level=3, message=f"{__name__}|🗑️ All keys have been deleted from the store: {self.store}")
+    
     @staticmethod
     def del_key(store_path,
                 key_to_delete:str):

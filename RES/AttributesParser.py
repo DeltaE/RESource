@@ -44,15 +44,16 @@ class AttributesParser:
         # Load the user configuration master file by using the method
         self.config:Dict[str,dict] = self.load_config(self.config_file_path)
         self.disaggregation_config:Dict[str,dict] = self.config.get('capacity_disaggregation','')
+        self.resource_disaggregation_config=self.get_resource_disaggregation_config()
         self.region_code_validity=self.is_region_code_valid()
-        self.sub_national_unit_tag=self.get_gadm_config().get('datafield_mapping', {}).get('NAME_2', 'NAME_2')
+        self.sub_national_unit_tag=self.get_gadm_config().get('datafield_mapping', {}).get('NAME_1', 'NAME_1')
         self.multi_country_flag = self.get_multi_country_flag  # This will set the multi_country_flag based on the config file.
         self.RUN_ID=self.get_RUN_ID() 
+        self.country=self.get_country()
         self.results_save_to=self.get_results_save_to_path()
-        
 
         # Define the store file path and filename
-        self.store = Path(f"data/store/resources_{self.region_short_code}_{self.RUN_ID}.h5")
+        self.store = Path(f"data/store/resources_{self.country.replace(' ', '')}_{self.region_short_code}_{self.RUN_ID}.h5")
         self.store.parent.mkdir(parents=True, exist_ok=True)
        
     
@@ -68,7 +69,8 @@ class AttributesParser:
         """
         Returns the path where results will be saved.
         """
-        results_save_to=Path('results/RESources')
+        country_kwd=self.country.replace(' ','')
+        results_save_to=Path(f"results/RESources/{country_kwd}")
         results_save_to.mkdir(parents=True, exist_ok=True)
         
         return results_save_to
@@ -117,7 +119,7 @@ class AttributesParser:
         return start_date, end_date
     
     def get_conserved_lands_CAN_args(self)->dict:
-        if self.get_country()=='Canada':
+        if self.country=='Canada':
             return {
             "config_file_path": self.config_file_path,
             "region_short_code": self.region_short_code,
@@ -164,6 +166,9 @@ class AttributesParser:
     
     def get_vis_dir(self) -> Path:
         return Path(f'vis/{self.region_short_code}') / (self.resource_type if self.resource_type else f'misc/{self.region_short_code}')
+    
+    def get_CLC_raster_config(self) -> Dict[str, dict]:
+        return self.config.get('CORINE', {})
 
     def get_gaez_data_config(self) -> Dict[str, dict]:
         return self.config.get('GAEZ', {})
@@ -199,7 +204,6 @@ class AttributesParser:
         return utils.ensure_path('data/processed_data/network')
     
     def get_turbines_config(self):
-        self.resource_disaggregation_config=self.get_resource_disaggregation_config()
         return self.resource_disaggregation_config['turbines']
     
     def get_gwa_config(self):

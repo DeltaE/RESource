@@ -788,7 +788,7 @@ class LandContainer(AttributesParser):
         Returns:
             tuple: A tuple containing two lists - raster_configs and vector_configs.
         """
-    # load Raster Layers
+    # load GAEZ Raster Layers
         utils.print_update(
             level=PRINT_LEVEL_BASE + 2,
             message=f"{__name__}| Loading GAEZ raster layers for {self.region_name}...",
@@ -803,6 +803,25 @@ class LandContainer(AttributesParser):
                 raster_config_item["filepath"] = str(regional_raster_paths[name])
         utils.print_update(level=PRINT_LEVEL_BASE+3,
                            message= f"{__name__}| Raster Layers Loaded")
+    
+    # Load CORINE rasters - for Europe only
+        utils.print_update(
+            level=PRINT_LEVEL_BASE + 2,
+            message=f"{__name__}| Loading CORINE raster layers for {self.region_name}...",
+        )
+        self.CLC_config:dict = self.get_CLC_raster_config()  # INHERITED METHOD from AttributesParser
+        CLC_raster_configs:list=self.CLC_config.get("raster_types", [])
+
+
+        for CLC_raster_config_item in CLC_raster_configs:
+            CLC_raster_config_item["filepath"]=Path(self.CLC_config.get('root'))/CLC_raster_config_item['raster']
+                
+        utils.print_update(level=PRINT_LEVEL_BASE+3,
+                           message= f"{__name__}| Raster Layers Loaded")
+        
+        # Merge raster_configs and CLC_raster_config into a single list
+        raster_configs = raster_configs + CLC_raster_configs
+        
     # Load Vector layers
         utils.print_update(
             level=PRINT_LEVEL_BASE + 2,
@@ -1175,8 +1194,10 @@ def get_eligible_share(region_shape, excluder: ExclusionContainer) -> tuple:
     """
     Calculate the eligible share of the region based on the exclusion container.
     """
-    if region_shape.crs != excluder.crs:
-        # Reproject region_shape to match the CRS of the excluder
+    # Ensure region_shape has a CRS and matches excluder.crs
+    if region_shape.crs is None:
+        region_shape = region_shape.set_crs(excluder.crs)
+    elif region_shape.crs != excluder.crs:
         region_shape = region_shape.to_crs(excluder.crs)
     masked, transform = excluder.compute_shape_availability(region_shape)
     region_area = region_shape.geometry.area.sum() # item()

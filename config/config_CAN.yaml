@@ -3,30 +3,21 @@ Developer: Md Eliasinul Islam (Elias Islam)
 Affiliation: Sustainable Energy Engineering, Simon Fraser University, BC, Canada
 version: 1.0
 Release_Year: 2025
-description: 'Inside the user configuration file of the L:INKING TOOL, there are ''keys'' with quantitative ''values'' upon which the module results relies on.
-
-  These  have been given as ''parameters'' in the RULES
-
-
-
-  '
 Scenario:
-  run_id: default
-  Description: Baseline scenario; no additional buffer zones around protected areas or aeroways.
+  run_id: strict_policy_aeroway_CPCAD_buffer
+  Description: Policy scenario; buffer zones applied around aeroway lands and CPCAD areas, restricting resource siting.
 country: Canada
 region_mapping:
-  AB:
+  'AB':
     name: Alberta
     land_area_km2: 642,317
-    land_area_mi2: 275,000
     percentage_national_land_area: 7.1%
     timezone_convert: Etc/GMT-7
     sub_region_mapping: {}
     GWA_country_code: CAN
-  BC:
+  'BC':
     name: British Columbia
     land_area_km2: 925,186
-    land_area_mi2: 357,216
     percentage_national_land_area: 10.4%
     snapshots_tz_BC:
       start:
@@ -36,34 +27,30 @@ region_mapping:
     timezone_convert: Etc/GMT+7
     sub_region_mapping: {}
     GWA_country_code: CAN
-  MB:
+  'MB':
     name: Manitoba
     land_area_km2: 553,556
-    land_area_mi2: 213,733
     percentage_national_land_area: 6.1%
     timezone_convert: Etc/GMT-6
     sub_region_mapping: {}
     GWA_country_code: CAN
-  NB:
+  'NB':
     name: New Brunswick
     land_area_km2: 71,450
-    land_area_mi2: 27,587
     percentage_national_land_area: 0.8%
     timezone_convert: Etc/GMT-4
     sub_region_mapping: {}
     GWA_country_code: CAN
-  NL:
+  'NL':
     name: Newfoundland and Labrador
     land_area_km2: 373,872
-    land_area_mi2: 144,355
     percentage_national_land_area: 4.1%
     timezone_convert: Etc/GMT-3.5
     sub_region_mapping: {}
     GWA_country_code: CAN
-  NS:
+  'NS':
     name: Nova Scotia
     land_area_km2: 53,338
-    land_area_mi2: 20,594
     percentage_national_land_area: 0.6%
     timezone_convert: Etc/GMT-4
     sub_region_mapping: {}
@@ -76,7 +63,7 @@ region_mapping:
     percentage_national_land_area: 10.1%
     sub_region_mapping: {}
     GWA_country_code: CAN
-  PE:
+  'PE':
     name: Prince Edward Island
     land_area_km2: 5,660
     land_area_mi2: 2,185
@@ -84,7 +71,7 @@ region_mapping:
     percentage_national_land_area: 0.1%
     sub_region_mapping: {}
     GWA_country_code: CAN
-  QC:
+  'QC':
     name: Québec
     land_area_km2: 1,365,128
     land_area_mi2: 527,088
@@ -92,7 +79,7 @@ region_mapping:
     percentage_national_land_area: 15.0%
     sub_region_mapping: {}
     GWA_country_code: CAN
-  SK:
+  'SK':
     name: Saskatchewan
     land_area_km2: 591,670
     land_area_mi2: 228,449
@@ -100,14 +87,18 @@ region_mapping:
     percentage_national_land_area: 6.5%
     sub_region_mapping: {}
     GWA_country_code: CAN
+
 GADM:
   root: data/downloaded_data/GADM
   processed: data/processed_data/regions
+  admin_level: 2 # 0=Country, 1=Province, 2=Regional-District
   datafield_mapping:
     NAME_0: Country
     NAME_1: Province
     NAME_2: Region
+
 Gov:
+  # Explicitly for Canadian Government Data
   conservation_lands:
     url: https://data-donnees.az.ec.gc.ca/api/file?path=%2Fspecies%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FDatabases%2FProtectedConservedArea_2023.zip
     root: data/downloaded_data/Gov/Conservation_Lands
@@ -184,19 +175,25 @@ Gov:
       waste: https://www2.gov.bc.ca/assets/gov/environment/climate-change/data/ceei/bc_municipal_solid_waste_data_at_the_community_level.xlsx
 NREL:
   ATB:
-    root: data/downloaded_data/NREL/ATB
+    # Annual technology Baseline (ATB) - 2024\
+    root: 'data/downloaded_data/NREL/ATB'
     source:
+      # parquet file recommended for less memory usage
+      # excel: https://data.openei.org/files/6006/2024%20v2%20Annual%20Technology%20Baseline%20Workbook%20Errata%207-19-2024.xlsx
       csv: https://oedi-data-lake.s3.amazonaws.com/ATB/electricity/csv/2024/ATBe.csv
       parquet: https://oedi-data-lake.s3.amazonaws.com/ATB/electricity/parquet/2024/v3.0.0/ATBe.parquet
     datafile:
-      csv: ATBe.csv
-      parquet: ATBe.parquet
+      # excel: https://data.openei.org/files/6006/2024%20v2%20Annual%20Technology%20Baseline%20Workbook%20Errata%207-19-2024.xlsx
+      csv: ATBe.csv #96 MB
+      parquet: ATBe.parquet #5 MB
     about: https://atb.nrel.gov/electricity/2024/technologies
-    column: core_metric_parameter
+    column: 'core_metric_parameter'
     cost_params:
-      capex: OCC
-      fom: Fixed O&M
-      vom: None
+      # capex: 'CAPEX' # $/ kW
+      capex: 'OCC' # $/ kW
+      fom: 'Fixed O&M' # mill. $/ MW
+      vom: 'None' # Not found for solar,wind,bess
+
 OSM_data:
   root: data/downloaded_data/OSM
   data_keys:
@@ -272,8 +269,8 @@ GAEZ:
       - 6
       - 7
       buffer:
-        solar: 0
-        wind: 0
+        solar: 500
+        wind: 500
   - name: terrain_resources
     raster: slpmed05.tif
     zip_extract_direct: LR/ter
@@ -281,14 +278,14 @@ GAEZ:
     stepwise_plot_title: Excluding Terrain Slope
     class_exclusion:
       solar:
+      - 8
       - 9
       wind:
-      - 7
       - 8
       - 9
       buffer:
         solar: 0
-        wind: 0
+        wind: 500
   - name: land_cover
     raster: faocmb_2010.tif
     zip_extract_direct: LR/lco
@@ -305,6 +302,7 @@ GAEZ:
       - 2
       - 3
       - 5
+      - 6
       - 8
       - 9
 WorldPop:
@@ -342,7 +340,7 @@ GWA:
     IEC_Class_ExLoads: CAN.IEC-class-extreme-loads.tif
   filter:
     windspeed_low: 7
-    windspeed_high: 45
+    windspeed_high: 40
 capacity_disaggregation:
   solar:
     max_capacity: 5
@@ -354,34 +352,34 @@ capacity_disaggregation:
     tracking: dual
     cell_static_CF_tolerance: 0.16
     cell_capacity_tolerance: 1
-    WCSS_tolerance: 0.01
+    WCSS_tolerance: 0.03
     vector_buffers:
     - aeroway:
         buffer_mapping_key: aeroway
         buffer_mapping_key_buffers:
-          aerodrome: 0
-          runway: 0
-          taxiway: 0
-          helipad: 0
-          apron: 0
-          gate: 0
+          aerodrome: 1000
+          runway: 500
+          taxiway: 100
+          helipad: 100
+          apron: 100
+          gate: 100
     - conserved_lands:
         buffer_mapping_key: IUCN_CAT_desc
         buffer_mapping_key_buffers:
-          Strict Nature Reserve: 0
-          Wilderness Area: 0
+          Strict Nature Reserve: 5000
+          Wilderness Area: 5000
           National Park: 0
           Natural Monument or Feature: 0
-          Habitat/Species Management Area: 0
-          Protected Landscape/Seascape: 0
-          Protected Area with Sustainable Use of Natural Resources: 0
-          Interim Sites (unknown specifics): 0
-          OECM areas: 0
+          Habitat/Species Management Area: 5000
+          Protected Landscape/Seascape: 1000
+          Protected Area with Sustainable Use of Natural Resources: 5000
+          Interim Sites (unknown specifics): 500
+          OECM areas: 1000
   wind:
     max_capacity: 15
     landuse_intensity: 3
     cost_data: data/processed_data/wind/land_based_wind_T3_cost_moderate_NREL_ATB2024.csv
-    WCSS_tolerance: 0.01
+    WCSS_tolerance: 0.03
     CF_low: 0.2
     CF_high: 1
     NREL_ATB_technology: LandbasedWind
@@ -414,24 +412,24 @@ capacity_disaggregation:
     - aeroway:
         buffer_mapping_key: aeroway
         buffer_mapping_key_buffers:
-          aerodrome: 0
-          runway: 0
-          taxiway: 0
-          helipad: 0
-          apron: 0
-          gate: 0
+          aerodrome: 10000
+          runway: 100
+          taxiway: 100
+          helipad: 100
+          apron: 100
+          gate: 100
     - conserved_lands:
         buffer_mapping_key: IUCN_CAT_desc
         buffer_mapping_key_buffers:
-          Strict Nature Reserve: 0
-          Wilderness Area: 0
-          National Park: 0
-          Natural Monument or Feature: 0
-          Habitat/Species Management Area: 0
-          Protected Landscape/Seascape: 0
-          Protected Area with Sustainable Use of Natural Resources: 0
-          Interim Sites (unknown specifics): 0
-          OECM areas: 0
+          Strict Nature Reserve: 10000
+          Wilderness Area: 10000
+          National Park: 10000
+          Natural Monument or Feature: 5000
+          Habitat/Species Management Area: 5000
+          Protected Landscape/Seascape: 5000
+          Protected Area with Sustainable Use of Natural Resources: 5000
+          Interim Sites (unknown specifics): 1000
+          OECM areas: 5000
   bess:
     max_capacity: 10
     cost_data: data/processed_data/bess/bess_LI_6hr_cost_moderate_NREL_ATB2024.csv
@@ -446,8 +444,8 @@ capacity_disaggregation:
       Optimistic: 0.1
     storage_discharge_duration: 5.5
   transmission:
-    grid_connection_cost_per_Km: 1.616
-    tx_line_rebuild_cost: 0.348
-    grid_proximity_km: 100 #km
-    buses: data/processed_data/buses.csv
-    lines: data/processed_data/lines.csv
+    grid_connection_cost_per_Km: 2.6 #M$/km   # from MISO , may try NREL method for different range of distance
+    tx_line_rebuild_cost: 0.56 #M$/km # from MISO
+    proximity_filter: 200 #km
+    buses: 'data/processed_data/buses_BC.csv'
+    lines: 'data/processed_data/lines_BC.csv' #future scope usage

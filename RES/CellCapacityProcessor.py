@@ -265,10 +265,10 @@ class CellCapacityProcessor(AttributesParser):
     
     
     def __get_unified_region_shape__(self):
-        if 'Region' in self.LandContainer.region_shape.columns:
-             self.region_shape=self.LandContainer.region_shape.dissolve(by=self.gadm_config['datafield_mapping']['NAME_1']) # .drop(columns =['Region'])
-
-        return self.LandContainer.region_shape
+        # if self.sub_national_unit_tag in self.LandContainer.region_shape.columns:
+        self.region_shape=self.LandContainer.region_shape.dissolve(by=self.gadm_config.get('datafield_mapping').get('NAME_0')) # .drop(columns =['Region'])
+        self.region_shape = self.region_shape[['geometry']]
+        return self.region_shape
     
     def load_cost(self,
                   resource_atb:pd.DataFrame):
@@ -424,7 +424,7 @@ class CellCapacityProcessor(AttributesParser):
 
         # The xarray doesn't create cell geometries by default. We hav to create it.
         # Apply the bounding box (cell) creation to the DataFrame's x,y coordinates (centroid of the cells)
-        _provincial_cell_capacity_gdf:gpd.GeoDataFrame = gpd.GeoDataFrame(
+        self.provincial_cell_capacity_gdf:gpd.GeoDataFrame = gpd.GeoDataFrame(
             _df_flat,
             geometry=[self.__create_cell_geom__(x, y) for x, y in zip(_df_flat['x'], _df_flat['y'])],
             crs=super().get_default_crs()  # INHERITED METHOD from AttributesParser
@@ -444,28 +444,25 @@ class CellCapacityProcessor(AttributesParser):
         stylized_columns = {f'{key}_{self.resource_type}': value for key, value in parameters_to_add.items()}
 
         # Assign the new stylized columns to the DataFrame
-        _provincial_cell_capacity_gdf = _provincial_cell_capacity_gdf.assign(**stylized_columns)
+        self.provincial_cell_capacity_gdf =  self.provincial_cell_capacity_gdf.assign(**stylized_columns)
 
     ## 4 Trim the cells to sub-provincial boundaries instead of overlapping cell (boxes) in the regional boundaries.
-        _provincial_cell_capacity_gdf=_provincial_cell_capacity_gdf.overlay(self.region_boundary)
+        self.provincial_cell_capacity_gdf= self.provincial_cell_capacity_gdf.overlay(self.region_boundary)
         
         # print(_provincial_cell_capacity_gdf.columns) # debugging purpose
         
-        self.provincial_cells=utils.assign_cell_id(cells=_provincial_cell_capacity_gdf,
-            source_column=self.gadm_config['datafield_mapping'].get('NAME_2'))
-
-
-        cells_with_capacity = self.provincial_cells
+        self.provincial_cells=utils.assign_cell_id(cells= self.provincial_cell_capacity_gdf,
+            source_column=self.sub_national_unit_tag)
         
         utils.print_update(level=PRINT_LEVEL_BASE+2,
                    message=f"{__name__}| ✓ Capacity dataframe cleaned and processed")
         
         utils.print_update(level=PRINT_LEVEL_BASE+1,
-                   message=f"{__name__}| ERA5 cells' capacity loaded for : {len(self.provincial_cells)} Cells [each with .025 deg. (~30km) resolution ]")
+                   message=f"{__name__}| ERA5 cells' capacity loaded for : {len(self.provincial_cell_capacity_gdf)} Cells [each with .025 deg. (~30km) resolution ]")
        
-        self.datahandler.to_store(self.provincial_cells,'cells')
+        self.datahandler.to_store(self.provincial_cell_capacity_gdf,'cells')
      
-        return cells_with_capacity,capacity_matrix
+        return  self.provincial_cell_capacity_gdf,self.capacity_matrix
     
     
     
@@ -517,8 +514,8 @@ class CellCapacityProcessor(AttributesParser):
         Availability_df=Availability_matrix.to_dataframe(name="availability").reset_index()
         
         # Define bins and labels
-        bins = [x / 100 for x in [0, 10, 30, 60, 90, 100]]  # Define bin edges
-        labels = ["0-10%", "10-30%", "30-60%", "60-90%", ">90%"]
+        bins = [x / 100 for x in [1, 10, 30, 60, 90, 100]]  # Define bin edges
+        labels = ["1-10%", "10-30%", "30-60%", "60-90%", ">90%"]
         
         
         # Categorize availability into bins

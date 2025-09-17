@@ -76,14 +76,6 @@ def load_api_key(file_path=default_coders_cfg_file_path):
     return None  # or raise an exception
 
 
-api_key,user = load_api_key(default_coders_cfg_file_path)
-if api_key is None:
-    utils.print_update(level=PRINT_LEVEL_BASE,message="No API key found. Please ensure you have a valid API key in the configuration file.",
-                       alert=True)
-else:
-    utils.print_update(level=2,message=f"CODERS API key loaded from: {default_coders_cfg_file_path}")
-    utils.print_update(level=3,message=f"user {user}: {api_key}")
-
 
 @dataclass
 class CODERSData(AttributesParser):
@@ -188,6 +180,15 @@ class CODERSData(AttributesParser):
         
         # Call the parent class __post_init__ to initialize inherited attributes
         super().__post_init__()
+        
+        api_key,user = load_api_key(default_coders_cfg_file_path)
+        if api_key is None:
+            utils.print_update(level=PRINT_LEVEL_BASE,message="No API key found. Please ensure you have a valid API key in the configuration file.",
+                            alert=True)
+        else:
+            utils.print_update(level=2,message=f"CODERS API key loaded from: {default_coders_cfg_file_path}")
+            utils.print_update(level=3,message=f"user {user}: {api_key}")
+
 
         # Load CODERS data config
         self.coders_data_config = self.config.get('CODERS', {})
