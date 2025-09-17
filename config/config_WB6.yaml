@@ -9,73 +9,68 @@ description: |+
   These  have been given as 'parameters' in the RULES
 
 Scenario:
-  REF:
-    Name: Reference
-    Description: A base scenario with reasonable assumptions.
+  run_id: default
+  Description: Policy scenario; buffer zones applied around aeroway lands, restricting resource siting.
 
 country: 'Western Balkan Regions' # Western Balkan Regions
 
 multi_country_flag: True # True if the 'country' represents a multi-country region   and 'regions' are nations, False if it is a single country and 'regions' are sub-nations.
 
-# grid_cell_resolution:  ### hardcoded for now. Future scope
-#   dx: 0.025
-#   dy: 0.025
+# Note: All WB states are east of London. Use GMT+1 (CET) in winter, GMT+2 (CEST) in summer (last Sunday of March to last Sunday of October).
+# The 'Etc/GMT-2' value in timezone_convert reflects GMT+2 (CEST). Adjust logic in code if you need to distinguish between CET and CEST.
 
 region_mapping:
+
   'AL':
     name: "Albania"
     land_area_km2: 28,748
-    land_area_mi2: 11,100
     percentage_national_land_area: "100%" # Since it's a country
-    timezone_convert: 'Etc/GMT-1' # Central European Time (CET)
+    timezone_convert: 'Etc/GMT-2' # Central European Time (CET, GMT+1) / Central European Summer Time (CEST, GMT+2)
     # region_mapping: {}
     GWA_country_code: 'ALB'
 
   'BA':
     name: "Bosnia and Herzegovina"
     land_area_km2: 51,209
-    land_area_mi2: 19,772
     percentage_national_land_area: "100%"
-    timezone_convert: 'Etc/GMT-1' # Central European Time (CET)
+    timezone_convert: 'Etc/GMT-2' # Central European Time (CET, GMT+1) / Central European Summer Time (CEST, GMT+2)
     # region_mapping: {}
     GWA_country_code: 'BIH'
 
   'XK':
     name: "Kosovo"
     land_area_km2: 10,887
-    land_area_mi2: 4,203
     percentage_national_land_area: "100%"
-    timezone_convert: 'Etc/GMT-1' # Central European Time (CET)
+    timezone_convert: 'Etc/GMT-2' # Central European Time (CET, GMT+1) / Central European Summer Time (CEST, GMT+2)
     # region_mapping: {}
     GWA_country_code: 'XKX'
 
   'ME':
     name: "Montenegro"
     land_area_km2: 13,812
-    land_area_mi2: 5,333
     percentage_national_land_area: "100%"
-    timezone_convert: 'Etc/GMT-1' # Central European Time (CET)
+    timezone_convert: 'Etc/GMT-2' # Central European Time (CET, GMT+1) / Central European Summer Time (CEST, GMT+2)
     GWA_country_code: 'MNE'
 
   'MK':
     name: "North Macedonia"
     land_area_km2: 25,713
-    land_area_mi2: 9,928
     percentage_national_land_area: "100%"
-    timezone_convert: 'Etc/GMT-1' # Central European Time (CET)
+    timezone_convert: 'Etc/GMT-2' # Central European Time (CET, GMT+1) / Central European Summer Time (CEST, GMT+2)
     GWA_country_code: 'MKD'
 
   'RS':
     name: "Serbia"
-    land_area_km2: 88,361
-    land_area_mi2: 34,116
+    land_area_km2: 77, 474 # The conflict between Serbia and Kosovo spills over into this data. The area of Serbia stated here (i.e. 88361 km2) includes Kosovo (as Serbia does not recognise it as a sovereign state). Without Kosovo (which is what we are going for here), it is 77474 km2. 
+
     percentage_national_land_area: "100%"
-    timezone_convert: 'Etc/GMT-1' # Central European Time (CET)
+    timezone_convert: 'Etc/GMT-2' # Central European Time (CET, GMT+1) / Central European Summer Time (CEST, GMT+2)
     GWA_country_code: 'SRB'
 
 GADM:
   root: data/downloaded_data/GADM
   processed: data/processed_data/regions
+  admin_level: 1 # 0=country, 1=sub-nation, 2=sub-sub-nation
   datafield_mapping:
     'NAME_0': 'Country'
     'NAME_1': 'Municipality'
@@ -157,8 +152,8 @@ GAEZ:
       solar: [ 2, 3, 4, 5, 6, 7 ]
       wind: [ 2, 3, 4, 5, 6, 7 ]
       buffer:
-        solar: 500 #m
-        wind: 500 #m
+        solar: 0 #m
+        wind: 0 #m
 
   # GAEZ v4 Median slope class compiled from 3 arc-second SRTM data 
   - name: 'terrain_resources'
@@ -176,31 +171,45 @@ GAEZ:
       # 7 : high slope (slope angle 30-45%)
       # 8 : high slope (slope angle >45%)
       # 9 : Water
-      solar: [ 9 ]
+      solar: [ 7, 8, 9 ]
       wind: [ 7, 8, 9 ]
       buffer:
         solar: 0 #m
-        wind: 500 #m
+        wind: 0 #m
+  # - name: 'land_cover'
+  #   raster: "faocmb_2010.tif" # Dominant land cover/use ; 11 classes; (5 arc-minute)
+  #   zip_extract_direct: 'LR/lco'
+  #   color_map: 'YlGn'
+  #   stepwise_plot_title: "Excluding not-Suitable Landcovers"
+  #   class_inclusion:
+  #     # 1 : artificial surfaces
+  #     # 2 : cropland
+  #     # 3 : grassland
+  #     # 4 : forest/ tree covered areas
+  #     # 5 : shrubs covered areas
+  #     # 6 : herbaceous vegetation,aquatic or regularly flooded areas
+  #     # 7 : mangroves        
+  #     # 8 : sparse vegetation
+  #     # 9 : bare soil
+  #     # 10: snow and glaciers
+  #     # 11: water bodies
+  #     solar: [ 2, 3, 5, 6, 8, 9 ]
+  #     wind: [ 2, 3, 5, 6, 8, 9 ]
 
-  - name: 'land_cover'
-    raster: "faocmb_2010.tif" # Dominant land cover/use ; 11 classes; (5 arc-minute)
-    zip_extract_direct: 'LR/lco'
-    color_map: 'YlGn'
-    stepwise_plot_title: "Excluding not-Suitable Landcovers"
+CORINE:
+  root: 'data/downloaded_data/CORINE'
+  raster_types:
+  # list of dictionaries
+  # CORINE Land Cover (CLC) 2018 raster data (100m resolution, 44 classes)
+  - name: 'CORINE_land_cover'
+    source: 'https://copernicus-fme.eea.europa.eu/fmedatadownload/results/13521.zip' #2024 version
+    # zip_file: '13521.zip'
+    raster: 'U2018_CLC2018_V2020_20u1.tif'
+    color_map: 'tab20'
+    stepwise_plot_title: "Excluding not-Suitable CORINE Landcovers"
     class_inclusion:
-      # 1 : artificial surfaces
-      # 2 : cropland
-      # 3 : grassland
-      # 4 : forest/ tree covered areas
-      # 5 : shrubs covered areas
-      # 6 : herbaceous vegetation,aquatic or regularly flooded areas
-      # 7 : mangroves        
-      # 8 : sparse vegetation
-      # 9 : bare soil
-      # 10: snow and glaciers
-      # 11: water bodies
-      solar: [ 2, 3, 5, 8, 9 ]
-      wind: [ 2, 3, 5, 8, 9 ]
+      solar: [ 7, 8, 9, 31, 32, 38 ]
+      wind: [ 7, 8, 12, 23, 18, 26, 27, 28, 29, 31, 32, 33 ]
 
 WorldPop:
   root: 'data/downloaded_data/WorldPop'
@@ -244,8 +253,8 @@ GWA:
     CF_IEC3: 'GWA_country_code_capacity-factor_IEC3.tif'
     # IEC_Class_ExLoads: 'GWA_country_code_IEC-class-extreme-loads.tif'
   filter:
-    windspeed_low: 7 # meter/s
-    windspeed_high: 60 # meter/s # The extreme wind speed above which the wind turbine is not expected to operate.
+    windspeed_low: 5 # meter/s
+    windspeed_high: 80 # meter/s # The extreme wind speed above which the wind turbine is not expected to operate.
 
 capacity_disaggregation:
   solar:
@@ -266,8 +275,8 @@ capacity_disaggregation:
         buffer_mapping_key: 'aeroway'
         buffer_mapping_key_buffers:
           # Buffer distances in meters for each aeroway type
-          aerodrome: 500 # m
-          runway: 500 # m
+          aerodrome: 100 # m
+          runway: 100 # m
           taxiway: 100 # m
           helipad: 100 # m
           apron: 100 # m
@@ -321,23 +330,8 @@ capacity_disaggregation:
           helipad: 100 # m
           apron: 100 # m
           gate: 100 # m
-  # bess:
-  #   max_capacity : 10 #GW
-  #   cost_data: 'data/NREL/bess_LI_6hr_cost_moderate_NREL_ATB2024.csv'
-  #   NREL_ATB_type: '6Hr Battery Storage' # storage_discharge_duration should be in-line with this. Other options are
-  #   vom: 0 # not found in NREL,ATB
-  #   unit_size: 60 #MW; default in NREL is 50 MW
-  #   residential_energy_consumption_year: 2021 # BESS cluster size calculation is associated to this year' data
-  #   Based on general industry data and the needs of a region with a balanced energy mix like BC, you might consider the following approximate range:
-  #   capacity_estimate_per_energy_unit:    # MW per GWh of energy consumption.
-  #     Conservative: 0.01 
-  #     Moderate : 0.05 
-  #     Optimistic : 0.1 
-  #   storage_discharge_duration : 5.5 # hr  ; the battery cost should be inline with this data.
 
   transmission:
-    grid_connection_cost_per_Km: 2.6 #M$/km   # from MISO , may try NREL method for different range of distance
+    grid_connection_cost_per_Km: 2.6 # M$/km   # from MISO , may try NREL method for different range of distance
     tx_line_rebuild_cost: 0.56 #M$/km # from MISO
     proximity_filter: 200 #km
-    buses: 'data/processed_data/buses_BC.csv'
-    lines: 'data/processed_data/lines_BC.csv' #future scope usage

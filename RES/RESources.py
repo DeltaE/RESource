@@ -225,7 +225,25 @@ class RESources_builder(AttributesParser):
         # Save the configuration to the results directory
         utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| Saving configuration to results directory...")                
         utils.save_to_yaml(self.config, self.results_save_to/self.region_short_code/f'config_{self.region_short_code}_{self.RUN_ID}.yaml')
+    
+    def clean_data_store(self):
+        """
+        Cleans the HDF5 data store by removing all stored datasets.
         
+        This method deletes all datasets stored in the HDF5 file associated with the current region and resource type. It is useful for resetting the data store before re-running analyses or when starting fresh with new data.
+
+        Raises:
+            StorageError: If there is an issue accessing or modifying the HDF5 store.
+        
+        Notes:
+            - Use with caution as this will permanently delete all stored data.
+            - After cleaning, the data store will be empty and ready for new data.
+        """
+        utils.print_update(level=PRINT_LEVEL_BASE+1,
+                           message=f"{__name__}| Cleaning data store...")
+        self.datahandler.clean_store()
+        utils.print_update(level=PRINT_LEVEL_BASE+1,
+                           message=f"{__name__}| Data store cleaned.")
 
     def get_grid_cells(self)->gpd.GeoDataFrame:
         """
@@ -315,7 +333,7 @@ class RESources_builder(AttributesParser):
                            message=f"{__name__}| Extracting 'windspeed_ERA5' from cutout.")
                 _store_grid_cells_updated_:gpd.GeoDataFrame=wind.impute_ERA5_windspeed_to_Cells(self.cutout,
                                                self.store_grid_cells)
-                self.store_grid_cells_updated=utils.assign_cell_id(_store_grid_cells_updated_,self.gadmBoundary.boundary_datafields['NAME_2'])
+                self.store_grid_cells_updated=utils.assign_cell_id(_store_grid_cells_updated_,self.sub_national_unit_tag)
                 self.datahandler.to_store(self.store_grid_cells_updated,'cells')
                 utils.print_update(level=PRINT_LEVEL_BASE+2,
                            message=f"{__name__}| 'windspeed_ERA5' extraction completed and stored.")
@@ -342,7 +360,7 @@ class RESources_builder(AttributesParser):
             else:
                 utils.print_update(level=PRINT_LEVEL_BASE+3,
                            message=f"{__name__}| Data extracting from source: 'CF_IEC2', 'CF_IEC3', 'windspeed_gwa' ")
-                self.gwa_cells.map_GWA_cells_to_ERA5(aggregation_level=self.gadmBoundary.boundary_datafields['NAME_2'],
+                self.gwa_cells.map_GWA_cells_to_ERA5(aggregation_level=self.sub_national_unit_tag,
                                                      memory_resource_limitation=memory_resource_limitation)
 
         elif self.resource_type=='solar': 
@@ -666,8 +684,9 @@ class RESources_builder(AttributesParser):
     # _________________________________________________________________________________
 
     def build(self,
-            select_top_sites:Optional[bool]=True,
+            select_top_sites:Optional[bool]=False,
             use_pypsa_buses:Optional[bool]=False,
+            get_clusters: Optional[bool]=False,
             memory_resource_limitation:Optional[bool]=True):
         """
         Execute the specific module logic for the given resource type ('solar' or 'wind').
@@ -695,11 +714,12 @@ class RESources_builder(AttributesParser):
         utils.print_banner("Step 6 : Use capacity, energy yield and cost attributes to score each cell")
         self.score_cells()
         
-        utils.print_banner("Step 7.1 : Use score similarities to find clusterized representation (sites) of cells")
-        self.get_clusters()
-        
-        utils.print_banner("Step 7.2 : Prepare representative timeseries of the clusterized sites")
-        self.get_cluster_timeseries()
+        if get_clusters:
+            utils.print_banner("Step 7.1 : Use score similarities to find clusterized representation (sites) of cells")
+            self.get_clusters()
+            
+            utils.print_banner("Step 7.2 : Prepare representative timeseries of the clusterized sites")
+            self.get_cluster_timeseries()
         
         utils.print_info("To avoid confusion, Units dictionary method should be updated if any units are changed across modules. However, units dictionary is for documentation purposes only. It doesn't have any calculation impacts on any of the methods.")
         self.units.create_units_dictionary()
@@ -714,29 +734,27 @@ class RESources_builder(AttributesParser):
                
             utils.print_module_title(f"Top Sites(clusters) from {self.resource_type} module saved to {self.store} for {self.get_region_name()}...")
             
-        else: # When user wants all of the sites
-            resource_clusters=self.get_clusters().clusters,
-            cluster_timeseries=self.get_cluster_timeseries(),
+        # else: # When user wants all of the sites
+        #     resource_clusters=self.get_clusters().clusters,
+        #     cluster_timeseries=self.get_cluster_timeseries(),
     
-            utils.print_module_title(f"All Sites (clusters) from {self.resource_type} module saved to {self.store} for {self.get_region_name()}...")
-   
+        #     utils.print_module_title(f"All Sites (clusters) from {self.resource_type} module saved to {self.store} for {self.get_region_name()}...")
+    
+            
+            self.export_results(self.resource_type,
+                                self.region_name,
+                                resource_clusters,
+                                cluster_timeseries,
+                                self.results_save_to)
         
-        self.export_results(self.resource_type,
-                            self.region_name,
-                            resource_clusters,
-                            cluster_timeseries,
-                            self.results_save_to)
-        
-        sites_summary:str=self.create_summary_info(self.resource_type,
-                                                   self.region_name,
-                                                   resource_clusters,
-                                                   cluster_timeseries)
-        self.dump_export_metadata(sites_summary,
-                                  self.results_save_to)
+            sites_summary:str=self.create_summary_info(self.resource_type,
+                                                    self.region_name,
+                                                    resource_clusters,
+                                                    cluster_timeseries)
+            self.dump_export_metadata(sites_summary,
+                                    self.results_save_to)
 
 
-
-       
     @staticmethod
     def export_results(resource_type:str,
                        region:str,

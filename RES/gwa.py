@@ -4,6 +4,7 @@ from typing import Optional
 
 import geopandas as gpd
 import pandas as pd
+import numpy as np
 import requests
 import rioxarray as rxr
 import xarray as xr
@@ -381,7 +382,7 @@ class GWACells(AttributesParser):
         - Multiple raster files are automatically merged into unified dataset
         - Spatial coordinates are preserved for subsequent spatial analysis
         """
-        data_list = []
+        self.gwa_data_list = []
 
         # Load configuration parameters
         self.gwa_datafields = self.gwa_config.get('datafields', {})
@@ -396,7 +397,7 @@ class GWACells(AttributesParser):
         for key, raster_name in self.gwa_rasters.items():
             self.gwa_country_code=self.region_mapping[self.region_short_code].get('GWA_country_code')  # INHERITED ATTRIBUTES from AttributesParser
             self.raster_name=raster_name.replace("GWA_country_code",  self.gwa_country_code)
-            self.raster_path = self.gwa_root / raster_name
+            self.raster_path = self.gwa_root / self.raster_name
             if not self.raster_path.exists():
                 generic_source_url = self.gwa_sources[key]
                 self.region_source_url = generic_source_url.replace("GWA_country_code",  self.gwa_country_code)
@@ -412,33 +413,47 @@ class GWACells(AttributesParser):
                     .drop_vars(['band', 'spatial_ref'])
                     .isel(band=1 if '*Class*' in key else 0)  # 'IEC_Class_ExLoads' data is in band 1
                 )
-
-                data_list.append(data)
+                
+                # data.rio.write_crs(self.get_default_crs(), inplace=True)
+                self.gwa_data_list.append(data)
             except Exception as e:
                 utils.print_update(level=print_level_base+1,message=f"{__name__}| Error processing {key}: {e}")
-
-        # Merge and clean the data in a more efficient way
-        self.merged_data = xr.merge(data_list) if data_list else xr.DataArray() #.rename('gwa_data')
-
-        self.merged_df = self.merged_data.to_dataframe().dropna(how='all')
-        self.merged_df.reset_index(inplace=True)
         
+        
+        gwa_dfs = []
+        for i, da in enumerate(self.gwa_data_list):
+            name = da.name or f"var_{i}"
+            df = da.to_dataframe(name=name).dropna()
+            gwa_dfs.append(df)
+
+        # concatenate side-by-side on the same MultiIndex (y,x)
+        self.merged_df = pd.concat(gwa_dfs, axis=1)
+        
+        """ 
+        self.merged_data = xr.merge(self.gwa_data_list) if self.gwa_data_list is None else xr.DataArray()
+        self.merged_data.rename('gwa_data')
+      
+        self.merged_df = self.merged_data.to_dataframe().dropna(how='any')
+        """
+        self.merged_df.reset_index(inplace=True)
+  
         if memory_resource_limitation:
             utils.print_update(level=print_level_base,message=f"{__name__}| Memory resource limitations enabled. Filtering GWA cells within windspeed mask to limit the data offload processing...")
-        else:
-            windpseed_min:float=0 #m/s
-            windpseed_max:float=50 #m/s
+        # else:
+        #     windpseed_min:float=0 #m/s
+        #     windpseed_max:float=100 #m/s
  
-        mask=(self.merged_df['windspeed_gwa'] >= windpseed_min) & (self.merged_df['windspeed_gwa'] <= windpseed_max)
-        self.merged_df_f=self.merged_df[mask]
-        utils.print_update(level=print_level_base+1,message=f"{__name__}| {abs(len(self.merged_df_f) - self.merged_df.shape[0])} cells have been filtered due to Windspeed filter [{windpseed_min}-{windpseed_max} m/s].")
-        utils.print_update(level=print_level_base,message=f"✔ Cleaned data loaded for {len(self.merged_df_f)} GWA cells")
+        # mask=(self.merged_df['windspeed_gwa'] >= windpseed_min) & (self.merged_df['windspeed_gwa'] <= windpseed_max)
+        # self.merged_df_f=self.merged_df[mask]
+        # utils.print_update(level=print_level_base+1,message=f"{__name__}| {abs(len(self.merged_df_f) - self.merged_df.shape[0])} cells have been filtered due to Windspeed filter [{windpseed_min}-{windpseed_max} m/s].")
+        # utils.print_update(level=print_level_base,message=f"✔ Cleaned data loaded for {len(self.merged_df_f)} GWA cells")
         
         # class_mapping = {0: 'III', 1: 'II', 2: 'I', 3: 'T', 4: 'S'}
         # # Correctly modifying only one column
         # self.merged_df_f['IEC_Class_ExLoads'] = self.merged_df_f['IEC_Class_ExLoads'].map(class_mapping).fillna(0)
 
-        return self.merged_df_f
+        # return self.merged_df_f
+        return self.merged_df
     
     def download_file(self,
                       url: str, 
@@ -749,4 +764,6 @@ class GWACells(AttributesParser):
     
 
         # Store the aggregated data
-        self.datahandler.to_store(self.mapped_gwa_cells_aggr_df, 'cells')  
+        self.datahandler.to_store(self.mapped_gwa_cells_aggr_df, 'cells')
+        
+        return  self.mapped_gwa_cells_aggr_df

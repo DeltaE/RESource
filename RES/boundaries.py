@@ -146,7 +146,6 @@ class GADMBoundaries(AttributesParser):
             "resource_type": self.resource_type
         }
         
-        self.admin_level:int= 2 # hardcoded to keep the workflow intact. The workflow has dependency on Regional District name i.e. level 2 boundaries.
 
         # Setup paths and ensure directories exist
         self.gadm_config = super().get_gadm_config()  # INHERITED METHOD from AttributesParser
@@ -156,7 +155,7 @@ class GADMBoundaries(AttributesParser):
         
         self.gadm_processed = Path(self.gadm_config['processed'])
         self.gadm_processed.mkdir(parents=True, exist_ok=True) # Creates parent directories if not exists.
-        
+        self.admin_level:int= self.gadm_config.get('admin_level',1) 
         self.boundary_datafields = self.gadm_config.get('datafield_mapping')
 
         self.crs=super().get_default_crs()  # INHERITED METHOD from AttributesParser
@@ -271,6 +270,13 @@ class GADMBoundaries(AttributesParser):
                     utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}|  No data found for region '{self.region_name}'.")
                     utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| | @ LINE | Consider revising '{self.region_name}' to match source (e.g. https://gadm.org/maps.html); Select 'show sub-divisions' to get the list of Supported Regional Names")
                     raise ValueError(f"{__name__} | @ LINE {inspect.currentframe().f_lineno} | No data found for region '{self.region_name}'.")
+                
+                elif  self.admin_level==1:
+                    _boundary_region_ = _boundary_region_[['NAME_0', 'NAME_1', 'geometry']].rename(columns={
+                        'NAME_0': self.boundary_datafields['NAME_0'], 'NAME_1': self.boundary_datafields['NAME_1']
+                    })
+                    self.boundary_region:gpd.GeoDataFrame=_boundary_region_
+                
                 else:
                     _boundary_region_ = _boundary_region_[['NAME_0', 'NAME_1', 'NAME_2', 'geometry']].rename(columns={
                         'NAME_0': self.boundary_datafields['NAME_0'], 'NAME_1': self.boundary_datafields['NAME_1'], 'NAME_2': self.boundary_datafields['NAME_2']

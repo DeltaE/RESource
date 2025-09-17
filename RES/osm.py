@@ -53,7 +53,10 @@ class OSMData(AttributesParser):
         self.root_path.mkdir(parents=True, exist_ok=True)
         
         # Format area name for OSM queries
-        self.area_name:str = f"{self.get_region_name()}, {self.get_country()}"
+        if self.multi_country_flag:
+            self.area_name:str = f"{self.get_region_name()}"
+        else:
+            self.area_name:str = f"{self.get_region_name()}, {self.get_country()}"
         
         # Dictionary to store GeoDataFrames by data_key
         self.gdfs:dict = {}

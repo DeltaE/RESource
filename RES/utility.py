@@ -34,7 +34,7 @@ from pathlib import Path
 import geojson as gj
 import rasterio as rio
 import numpy as np
-
+import zipfile
 
 now = datetime.datetime.now()
 date_time_str = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -81,7 +81,15 @@ def print_info(info:str):
 
 def print_warning(info: str):
     print(f"{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}⚠️  {info}{Style.RESET_ALL}")
-    
+
+
+def extract_from_zip(zip_path, extract_dir):
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall(extract_dir)
+    extracted_folders = [f for f in Path(extract_dir).iterdir() if f.is_dir()]
+    print_update(level=2,message=f"Extracted folders: {extracted_folders}")
+    return extracted_folders
+
 def load_geojson_file(geojson_file_path:str|Path)->list:
     """
     Loads a GeoJSON file and extracts the coordinates from its geometry.

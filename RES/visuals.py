@@ -44,15 +44,14 @@ import plotly.graph_objects as go
 import rasterio
 import seaborn as sns
 import xarray
-
 from atlite import ExclusionContainer
 from IPython.display import display
 from matplotlib import lines as mlines
-from matplotlib.colors import BoundaryNorm, ListedColormap
+from matplotlib.colors import BoundaryNorm, LinearSegmentedColormap, ListedColormap
 from matplotlib.font_manager import FontProperties
 from matplotlib.gridspec import GridSpec
 from matplotlib.lines import Line2D
-from matplotlib.patches import RegularPolygon
+from matplotlib.patches import Rectangle, RegularPolygon
 from matplotlib.ticker import FuncFormatter, MultipleLocator
 from plotly.subplots import make_subplots
 from rasterio.warp import Resampling, calculate_default_transform, reproject
@@ -60,6 +59,7 @@ from rasterio.warp import Resampling, calculate_default_transform, reproject
 import RES.lands as lands
 import RES.utility as utils
 import RES.visual_styles as styles
+
 style_path = Path(styles.__file__).parent / "elsevier.mplstyle"
 plt.style.use(style_path)# Custom style for publication quality figures
 
@@ -203,6 +203,394 @@ def add_compass_to_plot(ax, x_offset=0.76, y_offset=0.92, size=14, triangle_size
             fontsize=size, fontweight='bold',
             color='grey')
 
+
+def extract_region(col_name:str):
+    """
+    Extracts the region code from a column name formatted as 'Region_SiteID'.
+    Parameters:
+        col_name (str): The column name string.
+    Returns:
+        str: The extracted region code.
+    """
+    return col_name.split('_')[0]
+
+
+def plot_region_complementarity(timeseries_solar: pd.DataFrame,
+                                timeseries_wind: pd.DataFrame,
+                                region_code: str,
+                                RUN_ID: str = 'default',
+                                region: str | None = None,
+                                clusters: bool = True,
+                                aggregate: bool = False,   # kept for signature compatibility
+                                show: bool = True,
+                                font_family: str | None = None,
+                                metric: str = "pearson"    # "pearson" or "diff"
+                                ):
+    """
+    Plots complementarity heatmaps for solar and wind.
+
+    - metric="pearson": hour×month Pearson r between (mean across selected sites) solar and wind.
+                        Negative r → stronger complementarity (anti-correlation).
+    - metric="diff":     normalized (solar - wind) dominance map (your previous visualization).
+                         **Keeps the older annotation block** (rectangles & labels).
+    If `region` is provided, site columns are filtered by `extract_region(col) == region` before aggregation.
+    """
+
+    # --- Global style ---
+    sns.set_theme(style="whitegrid")
+    sns.set_palette("Set2")
+    if font_family is not None:
+        plt.rcParams['font.family'] = font_family
+    try:
+        plt.style.use(style_path)  # optional external style
+    except Exception:
+        pass
+
+    # --- Diverging cmap for "diff" metric (as in your previous code) ---
+    colors_neg = plt.cm.PuBu(np.linspace(0.3, 1, 128))
+    colors_pos = plt.cm.OrRd(np.linspace(0.3, 1, 128))
+    colors = np.vstack((colors_neg[::-1], colors_pos))
+    custom_cmap = LinearSegmentedColormap.from_list('WindSolarDiv', colors)
+
+    # --- Safety: align indices ---
+    idx = timeseries_solar.index.intersection(timeseries_wind.index)
+    if len(idx) == 0:
+        raise ValueError("Solar and wind time indices do not overlap.")
+    ts_solar_full = timeseries_solar.loc[idx]
+    ts_wind_full  = timeseries_wind.loc[idx]
+
+    # --- Region filter helper ---
+    def _select_cols(cols, region_label):
+        if region_label is None:
+            return list(cols)
+        return [c for c in cols if extract_region(c) == region_label]
+
+    solar_cols = _select_cols(ts_solar_full.columns, region)
+    wind_cols  = _select_cols(ts_wind_full.columns,  region)
+    common_cols = sorted(set(solar_cols).intersection(set(wind_cols)))
+    if len(common_cols) == 0:
+        raise ValueError(f"No common site columns for region={region!r}. Check column names / extract_region().")
+
+    ts_solar = ts_solar_full[common_cols]
+    ts_wind  = ts_wind_full[common_cols]
+
+    # --- Aggregate across selected sites ---
+    solar_mean = ts_solar.mean(axis=1)
+    wind_mean  = ts_wind.mean(axis=1)
+
+    # --- Pearson r in hour×month bins ---
+    def hour_month_corr(a: pd.Series, b: pd.Series) -> pd.DataFrame:
+        df = pd.DataFrame({'solar': a, 'wind': b}).dropna()
+        df['hour'] = df.index.hour
+        df['month'] = df.index.month
+
+        def _corr(g):
+            if (g['solar'].std(ddof=0) == 0) or (g['wind'].std(ddof=0) == 0):
+                return np.nan
+            return g['solar'].corr(g['wind'])
+
+        r = df.groupby(['hour', 'month'], observed=True).apply(_corr).unstack('month')
+        return r.reindex(index=range(24), columns=range(1, 13))
+
+    # --- Build matrix and plotting params ---
+    if metric.lower() == "pearson":
+        mat = hour_month_corr(solar_mean, wind_mean)              # [-1, 1]
+        vmin, vmax, center = -1.0, 1.0, 0.0
+        cmap = "coolwarm"
+        cbar_label = "Pearson r (negative = complementary)"
+        comp_score = np.nanmean(np.clip(-mat.values, 0, 1))       # average negative r (0–1)
+        title_metric = "Pearson r"
+    elif metric.lower() == "diff":
+        # Your dominance metric
+        solar_df = pd.DataFrame({'value': solar_mean})
+        solar_df['hour'] = solar_df.index.hour
+        solar_df['month'] = solar_df.index.month
+        wind_df = pd.DataFrame({'value': wind_mean})
+        wind_df['hour'] = wind_df.index.hour
+        wind_df['month'] = wind_df.index.month
+
+        solar_matrix = solar_df.groupby(['hour','month'], observed=True)['value'].mean().unstack('month')
+        wind_matrix  = wind_df.groupby(['hour','month'],  observed=True)['value'].mean().unstack('month')
+
+        solar_norm = solar_matrix / np.nanmax(solar_matrix.values)
+        wind_norm  = wind_matrix  / np.nanmax(wind_matrix.values)
+
+        mat = solar_norm - wind_norm
+        vmin, vmax, center = -0.8, 0.8, 0.0
+        cmap = custom_cmap
+        cbar_label = 'Resource Dominance\n(Purple: Wind | Orange: Solar)'
+        comp_score = np.nanmean(np.abs(mat.values))
+        title_metric = "Solar–Wind Dominance"
+    else:
+        raise ValueError("metric must be 'pearson' or 'diff'.")
+
+    # --- Plot ---
+    month_names = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+    fig, ax = plt.subplots(figsize=(9, 5), dpi=500)
+    sns.heatmap(mat, cmap=cmap, vmin=vmin, vmax=vmax, center=center,
+                linewidths=0, cbar_kws={'label': cbar_label, 'shrink': 0.8}, ax=ax)
+
+    ax.set_xticks(np.arange(12) + 0.5)
+    ax.set_xticklabels(month_names, rotation=90, fontsize=9)
+    ax.set_yticks(np.arange(0, 24, 4) + 0.5)
+    ax.set_yticklabels(np.arange(0, 24, 4), fontsize=9)
+    ax.set_xlabel('Month', fontsize=9, fontweight='bold')
+    ax.set_ylabel('Hour of Day', fontsize=9, fontweight='bold')
+
+    region_label = region if region is not None else "All Regions"
+    ax.set_title(f'{region_label} | {title_metric} | Complementarity Score: {comp_score:.2f}',
+                 fontsize=14, fontweight='bold')
+
+    # Annotation badge (shared)
+    annotation_custom = 'Representative Clustered Sites Nos:' if clusters else 'ERA5 Cells Nos:'
+    ax.text(0.02, 0.97, f'{annotation_custom} {len(common_cols)}', transform=ax.transAxes,
+            ha='left', va='bottom', fontsize=8, fontweight='bold', color='black',
+            bbox=dict(boxstyle='round,pad=0.2', facecolor='lightgrey', alpha=0.7))
+
+    # --- KEEP OLD ANNOTATIONS when metric == "diff" ---
+    if metric.lower() == "diff":
+        # Peak solar and wind periods (original rectangles & labels)
+        ax.add_patch(Rectangle((0,10),12,6, linewidth=1.5, edgecolor='orange',
+                               facecolor='none', linestyle='--', alpha=0.8))
+        ax.text(6, 8.5, 'Solar Peak\nDay', ha='center', va='center', fontsize=7, fontweight='bold',
+                bbox=dict(boxstyle='round,pad=0.4', facecolor='orange', alpha=0.7))
+
+        ax.add_patch(Rectangle((0,0),12,6, linewidth=1.5, edgecolor='lightblue',
+                               facecolor='none', linestyle='--', alpha=0.8))
+        ax.text(6, 3, 'Wind Dominant\nNight', ha='center', va='center', fontsize=7, fontweight='bold',
+                bbox=dict(boxstyle='round,pad=0.4', facecolor='lightblue', alpha=0.7))
+
+        ax.add_patch(Rectangle((0,18),12,6, linewidth=1.5, edgecolor='lightblue',
+                               facecolor='none', linestyle='--', alpha=0.8))
+        ax.text(6, 21, 'Wind Dominant\nEve', ha='center', va='center', fontsize=7, fontweight='bold',
+                bbox=dict(boxstyle='round,pad=0.4', facecolor='lightblue', alpha=0.7))
+
+        # Seasonal annotations (kept as in your prior code)
+        ax.text(1.5, 28.2, 'Winter', ha='center', va='center', fontsize=10,
+                bbox=dict(boxstyle='round,pad=0.3', facecolor='lightcyan', alpha=0.8))
+        ax.text(5.5, 28.2, 'Summer', ha='center', va='center', fontsize=10,
+                bbox=dict(boxstyle='round,pad=0.3', facecolor='lightyellow', alpha=0.8))
+        ax.text(9.5, 28.2, 'Fall', ha='center', va='center', fontsize=10,
+                bbox=dict(boxstyle='round,pad=0.3', facecolor='lightgreen', alpha=0.8))
+
+    plt.tight_layout()
+    if show:
+        plt.show()
+
+    return mat, comp_score
+
+
+# def plot_region_complementarity(timeseries_solar:pd.DataFrame, 
+#                                 timeseries_wind:pd.DataFrame,
+#                                 region_code:str,
+#                                 RUN_ID:str='default',
+#                                 region:str=None, 
+#                                 clusters: bool=True, 
+#                                 aggregate: bool=False,
+#                                 show:bool=True,
+#                                 font_family:str=None):
+#     """
+#         Plots complementarity heatmaps for solar and wind resources.
+
+#     Parameters:
+#         - timeseries_solar: pd.DataFrame with solar site time series (columns = sites)
+#         - timeseries_wind: pd.DataFrame with wind site time series (columns = sites)
+#         - region: str or None. If str, plots only that region. If None, plots all regions individually.
+#         - clusters: bool, whether using clustered representative sites
+#         - aggregate: bool, if True, aggregate all regions into a single heatmap
+#         - show: bool, if True, display the plot
+#     """
+#     regions = sorted(list(set(extract_region(c) for c in timeseries_solar.columns)))
+    
+#     # --- Global style ---
+#     sns.set_theme(style="whitegrid")
+#     sns.set_palette("Set2")
+    
+#     # --- Custom diverging colormap ---
+#     colors_neg = plt.cm.PuBu(np.linspace(0.3, 1, 128))
+#     colors_pos = plt.cm.OrRd(np.linspace(0.3, 1, 128))
+#     colors = np.vstack((colors_neg[::-1], colors_pos))
+#     custom_cmap = LinearSegmentedColormap.from_list('WindSolarDiv', colors)
+
+#     plt.style.use(style_path)  
+#     if font_family is not None:  
+#      plt.rcParams['font.family'] = font_family
+     
+#     if aggregate:
+#         print("Aggregating all regions into a single complementarity plot...")
+#         solar_cols = timeseries_solar.columns
+#         wind_cols = timeseries_wind.columns
+
+#         # Compute mean time series across all sites
+#         solar_mean = timeseries_solar[solar_cols].mean(axis=1)
+#         wind_mean = timeseries_wind[wind_cols].mean(axis=1)
+
+#         # Hour & month
+#         solar_df = pd.DataFrame({'value': solar_mean})
+#         solar_df['hour'] = solar_df.index.hour
+#         solar_df['month'] = solar_df.index.month
+#         wind_df = pd.DataFrame({'value': wind_mean})
+#         wind_df['hour'] = wind_df.index.hour
+#         wind_df['month'] = wind_df.index.month
+
+#         # Aggregate & normalize
+#         solar_matrix = solar_df.groupby(['hour','month'])['value'].mean().unstack()
+#         wind_matrix = wind_df.groupby(['hour','month'])['value'].mean().unstack()
+#         solar_norm = solar_matrix / solar_matrix.max().max()
+#         wind_norm = wind_matrix / wind_matrix.max().max()
+#         diff_matrix = solar_norm - wind_norm
+
+#         # Complementarity score
+#         complementarity_score = np.abs(diff_matrix).mean().mean()
+#         num_sites = len(solar_cols)
+
+#         # Plot
+#         fig, ax = plt.subplots(figsize=(9,5), dpi=500)
+#         sns.heatmap(diff_matrix,
+#                     cmap=custom_cmap,
+#                     center=0,
+#                     linewidths=0,
+#                     vmin=-0.8, vmax=0.8,
+#                     cbar_kws={'label':'Resource Dominance\n(Purple: Wind | Orange: Solar)', 'shrink':0.8},
+#                     ax=ax)
+
+#         # Axes
+#         month_names = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+#         ax.set_xticks(np.arange(12)+0.5)
+#         ax.set_xticklabels(month_names, rotation=90, fontsize=9)
+#         ax.set_yticks(np.arange(0,24,4)+0.5)
+#         ax.set_yticklabels(np.arange(0,24,4), fontsize=9)
+#         ax.set_xlabel('Month',fontsize=9,fontweight='bold' )
+#         ax.set_ylabel('Hour of Day',fontsize=9,fontweight='bold')
+
+#         # Annotations
+#         ax.set_title(f'All Regions | Complementarity Score: {complementarity_score:.2f}', fontsize=14, fontweight='bold')
+#         annotation_custom = 'Representative Clustered Sites Nos:' if clusters else 'ERA5 Cells Nos:'
+#         ax.text(0.1, 0.2, f'{annotation_custom} {num_sites}', 
+#                 ha='left', va='top', fontsize=8, fontweight='bold', color='black',
+#                 bbox=dict(boxstyle='round,pad=0.1', facecolor='lightgrey', alpha=0.7))
+#         # Peak solar and wind periods
+#         ax.add_patch(Rectangle((0,10),12,6, linewidth=1.5, edgecolor='orange', facecolor='none', linestyle='--', alpha=0.8))
+#         ax.text(6, 8.5, 'Solar Peak\nDay', ha='center', va='center', fontsize=7, fontweight='bold',
+#                 bbox=dict(boxstyle='round,pad=0.4', facecolor='orange', alpha=0.7))
+
+#         ax.add_patch(Rectangle((0,0),12,6, linewidth=1.5, edgecolor='lightblue', facecolor='none', linestyle='--', alpha=0.8))
+#         ax.text(6, 3, 'Wind Dominant\nNight', ha='center', va='center', fontsize=7, fontweight='bold',
+#                 bbox=dict(boxstyle='round,pad=0.4', facecolor='lightblue', alpha=0.7))
+
+#         ax.add_patch(Rectangle((0,18),12,6, linewidth=1.5, edgecolor='lightblue', facecolor='none', linestyle='--', alpha=0.8))
+#         ax.text(6, 21, 'Wind Dominant\nEve', ha='center', va='center', fontsize=7, fontweight='bold',
+#                 bbox=dict(boxstyle='round,pad=0.4', facecolor='lightblue', alpha=0.7))
+
+#         # Seasonal annotations
+#         ax.text(1.5, 28.2, 'Winter', ha='center', va='center', fontsize=10,
+#                 bbox=dict(boxstyle='round,pad=0.3', facecolor='lightcyan', alpha=0.8))
+#         ax.text(5.5, 28.2, 'Summer', ha='center', va='center', fontsize=10,
+#                 bbox=dict(boxstyle='round,pad=0.3', facecolor='lightyellow', alpha=0.8))
+#         ax.text(9.5, 28.2, 'Fall', ha='center', va='center', fontsize=10,
+#                 bbox=dict(boxstyle='round,pad=0.3', facecolor='lightgreen', alpha=0.8))
+#         plt.tight_layout()
+#         plt.show()
+#         return
+
+    # Else plot individually or selected region
+    if region:
+        regions = [region]
+        print(f"Plotting only for region: {region}")
+    else:
+        print(f"Plotting for all regions: {regions}")
+
+    for region_name in regions:
+        # Region-specific columns
+        region_cols_solar = [c for c in timeseries_solar.columns if extract_region(c) == region_name]
+        region_cols_wind = [c for c in timeseries_wind.columns if extract_region(c) == region_name]
+        
+        if not region_cols_solar or not region_cols_wind:
+            print(f"Skipping {region_name} (no matching columns).")
+            continue
+
+        # Compute mean time series
+        solar_mean = timeseries_solar[region_cols_solar].mean(axis=1)
+        wind_mean = timeseries_wind[region_cols_wind].mean(axis=1)
+
+        # Hour & month
+        solar_df = pd.DataFrame({'value': solar_mean})
+        solar_df['hour'] = solar_df.index.hour
+        solar_df['month'] = solar_df.index.month
+        wind_df = pd.DataFrame({'value': wind_mean})
+        wind_df['hour'] = wind_df.index.hour
+        wind_df['month'] = wind_df.index.month
+
+        # Aggregate & normalize
+        solar_matrix = solar_df.groupby(['hour','month'])['value'].mean().unstack()
+        wind_matrix = wind_df.groupby(['hour','month'])['value'].mean().unstack()
+        solar_norm = solar_matrix / solar_matrix.max().max()
+        wind_norm = wind_matrix / wind_matrix.max().max()
+        diff_matrix = solar_norm - wind_norm
+
+        # Complementarity score
+        complementarity_score = np.abs(diff_matrix).mean().mean()
+        num_sites = len(region_cols_solar)
+
+        # --- Plot ---
+        fig, ax = plt.subplots(figsize=(9,5), dpi=500)
+
+        sns.heatmap(diff_matrix,
+                    cmap=custom_cmap,
+                    center=0,
+                    linewidths=0,
+                    vmin=-0.8, vmax=0.8,
+                    cbar_kws={'label':'Resource Dominance\n(Purple: Wind | Orange: Solar)', 'shrink':0.8},
+                    ax=ax)
+
+        # Axes
+        month_names = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+        ax.set_xticks(np.arange(12)+0.5)
+        ax.set_xticklabels(month_names, rotation=90, fontsize=9)
+        ax.set_yticks(np.arange(0,24,4)+0.5)
+        ax.set_yticklabels(np.arange(0,24,4), fontsize=9)
+        ax.set_xlabel('Month',fontsize=9,fontweight='bold' )
+        ax.set_ylabel('Hour of Day',fontsize=9,fontweight='bold')
+
+        # Peak solar and wind periods
+        ax.add_patch(Rectangle((0,10),12,6, linewidth=1.5, edgecolor='orange', facecolor='none', linestyle='--', alpha=0.8))
+        ax.text(6, 8.5, 'Solar Peak\nDay', ha='center', va='center', fontsize=7, fontweight='bold',
+                bbox=dict(boxstyle='round,pad=0.4', facecolor='orange', alpha=0.7))
+
+        ax.add_patch(Rectangle((0,0),12,6, linewidth=1.5, edgecolor='lightblue', facecolor='none', linestyle='--', alpha=0.8))
+        ax.text(6, 3, 'Wind Dominant\nNight', ha='center', va='center', fontsize=7, fontweight='bold',
+                bbox=dict(boxstyle='round,pad=0.4', facecolor='lightblue', alpha=0.7))
+
+        ax.add_patch(Rectangle((0,18),12,6, linewidth=1.5, edgecolor='lightblue', facecolor='none', linestyle='--', alpha=0.8))
+        ax.text(6, 21, 'Wind Dominant\nEve', ha='center', va='center', fontsize=7, fontweight='bold',
+                bbox=dict(boxstyle='round,pad=0.4', facecolor='lightblue', alpha=0.7))
+
+        # Seasonal annotations
+        ax.text(1.5, 28.2, 'Winter', ha='center', va='center', fontsize=10,
+                bbox=dict(boxstyle='round,pad=0.3', facecolor='lightcyan', alpha=0.8))
+        ax.text(5.5, 28.2, 'Summer', ha='center', va='center', fontsize=10,
+                bbox=dict(boxstyle='round,pad=0.3', facecolor='lightyellow', alpha=0.8))
+        ax.text(9.5, 28.2, 'Fall', ha='center', va='center', fontsize=10,
+                bbox=dict(boxstyle='round,pad=0.3', facecolor='lightgreen', alpha=0.8))
+        
+        # Annotation: Number of common sites
+        if clusters:
+                annotation_custom = 'Representative Clustered Sites Nos:'
+        else:
+                annotation_custom = 'ERA5 Cells Nos:'
+        ax.text(0.1, 0.2, f'{annotation_custom} {num_sites}', 
+                ha='left', va='top', fontsize=8, fontweight='bold', color='black',
+                bbox=dict(boxstyle='round,pad=0.1', facecolor='lightgrey', alpha=0.7))
+        # Title
+        ax.set_title(f'{region_name} | Complementarity Score: {complementarity_score:.2f}', fontsize=14, fontweight='bold')
+
+        plt.tight_layout()
+        plt.savefig(f'../vis/{region_code}/complementarity_{region_name}_{RUN_ID}.png', dpi=300)
+        print(f"Saved figure for {region_name} with complementarity score {complementarity_score:.2f}")
+        if show:
+           plt.show()
+
+
 def plot_resources_scatter_metric_combined(
     solar_clusters:pd.DataFrame,
     wind_clusters:pd.DataFrame,
@@ -265,7 +653,7 @@ def plot_resources_scatter_metric_combined(
     )
 
     ax.set_xlabel('Average Capacity Factor', fontweight='bold')
-    ax.set_ylabel('Score ($/MWh)', fontweight='bold')
+    ax.set_ylabel('Relative Cost Score ($/MWh)', fontweight='bold')
     ax.set_title('CF vs Score for Solar and Wind resources', fontweight='bold')
 
     ax.xaxis.set_major_locator(MultipleLocator(0.02))
@@ -333,7 +721,7 @@ def get_CF_wind_check_plot(cells: gpd.GeoDataFrame,
     vmax = cells[columns].max().max()
 
     # Layout: 1 row × 3 columns
-    fig = plt.figure(figsize=(13, figure_height), constrained_layout=True)
+    fig = plt.figure(figsize=(13, figure_height), constrained_layout=True,dpi=500)
     spec = GridSpec(nrows=1, ncols=3, width_ratios=[1, 1, 1], figure=fig)
 
 
@@ -959,7 +1347,7 @@ def get_data_in_map_plot(cells,
     legend_labels = {
         'CF': f'{resource_type.capitalize()} Capacity Factor (annual mean)',
         'CAPACITY': f'{resource_type.capitalize()} Potential Capacity (MW)',
-        'SCORE': f'{resource_type.capitalize()} Score'
+        'SCORE': f'{resource_type.capitalize()} Relative Cost Score ($/MWh)'
     }
     
     if column_keyword is not None:
@@ -998,7 +1386,7 @@ def get_data_in_map_plot(cells,
             # Colorbar
             sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
             cbar = fig.colorbar(sm, ax=ax, orientation='vertical', fraction=0.025, pad=0.02)
-            cbar.set_label(legend_labels[column_keyword], fontsize=12)
+            cbar.set_label(legend_labels[column_keyword], fontsize=10)
             cbar.ax.tick_params(labelsize=12)
             # Set font weight for colorbar tick labels
             for label in cbar.ax.get_yticklabels():
@@ -1025,6 +1413,72 @@ def get_data_in_map_plot(cells,
         
     return ax
 
+# def plot_grid_lines(
+#     region_code: str,
+#     region_name: str,
+#     lines: gpd.GeoDataFrame,
+#     boundary: gpd.GeoDataFrame,
+#     font_family: str = None,
+#     figsize: tuple = (10, 8),
+#     dpi=500,
+#     save_to: str | Path = None,
+#     show: bool = True,
+# ):
+#     """
+#     Plots transmission lines with binned voltage levels in a specified region.
+#     """
+
+#     fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
+#     fig.suptitle("Transmission Lines by Voltage Levels", fontsize=16, fontweight='bold')
+#     plt.style.use(style_path)
+#     if font_family is not None:
+#         plt.rcParams['font.family'] = font_family
+
+#     boundary.plot(ax=ax, facecolor='grey', edgecolor='black', linewidth=1, alpha=0.1)
+
+#     if 'voltage' in lines.columns:
+#         # Convert to numeric
+#         lines['voltage_kv'] = pd.to_numeric(lines['voltage'], errors='coerce') / 1000
+
+#         # Define voltage bins
+#         bins = [0, 12, 25, 132, 220, float("inf")]
+#         labels = ["<12 kV", "12–25 kV", "25–132 kV", "132–220 kV", "≥220 kV"]
+#         lines['voltage_class'] = pd.cut(lines['voltage_kv'], bins=bins, labels=labels, right=False)
+
+#         # Color map (enough distinct colors)
+#         cmap = plt.colormaps.get_cmap('tab10')
+#         colors = [cmap(i) for i in range(len(labels))]
+#         color_map = {label: colors[i] for i, label in enumerate(labels)}
+
+
+#         # Plot by class
+#         for label in labels:
+#             mask = lines['voltage_class'] == label
+#             if mask.any():
+#                 lines[mask].plot(ax=ax, color=color_map[label], linewidth=1, alpha=0.8)
+
+#         # Legend
+#         legend_patches = [mpatches.Patch(color=color_map[label], label=label) for label in labels if label in lines['voltage_class'].unique()]
+#         ax.legend(handles=legend_patches, frameon=False, fontsize=11, loc='upper right')
+
+#     else:
+#         lines.plot(ax=ax, color='blue', linewidth=1,alpha=0.7)
+
+#     ax.set_axis_off()
+#     plt.tight_layout()
+
+#     if save_to is None:
+#         save_to = Path("vis") / region_code / "network"
+#     else:
+#         save_to = Path(save_to)
+    
+#     save_to.mkdir(parents=True, exist_ok=True)
+#     save_to_file = save_to / f"transmission_lines_{region_code}.png"
+#     plt.savefig(save_to_file, bbox_inches='tight', dpi=300)
+    
+#     utils.print_update(level=2, message=f"Transmission Lines for {region_name} saved to {save_to_file}")
+#     if show:
+#         plt.show()
 def plot_grid_lines(
     region_code: str,
     region_name: str,
@@ -1091,7 +1545,6 @@ def plot_grid_lines(
     utils.print_update(level=2, message=f"Transmission Lines for {region_name} saved to {save_to_file}")
     if show:
         plt.show()
-
 
 def create_key_data_map_interactive(
     province_gadm_regions_gdf:gpd.GeoDataFrame,

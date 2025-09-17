@@ -1,11 +1,11 @@
-```{warning}
-This library is under heavy development
-```
-
 <img src="../_static/RES__BC_banner_202508.jpg" alt="assessment_steps" width="800"/>
 
 # Case study: VRE site selection in British Columbia
-For more on this case study, please refer to the open-access publication [here](https://www.example.com).
+> publication under review.
+
+```{warning}
+This library is under heavy development
+```
 
 To demonstrate RESource's practical utility, we apply the framework to the Canadian province of British Columbia (BC). BC presents an ideal testbed due to its varied geography—coastal areas, rugged mountains, and interior plateaus—and a favorable policy environment, including the [Clean Energy Act](https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/10022_01), [expedited permitting processes for wind projects](https://news.gov.bc.ca/releases/2025ECS0006-000100) and renewable energy targeted call for power [2024](https://www.bchydro.com/work-with-us/selling-clean-energy/2024-call-for-power.html), [2025](https://www.bchydro.com/work-with-us/selling-clean-energy/2025-call-for-power.html) by BC Hydro. These characteristics offer a rich context for testing spatial, technical, and regulatory dimensions of VRE siting.
 
@@ -29,9 +29,13 @@ Key parameters are configurable to reflect geographic constraints (e.g., slope, 
 
 <!-- <img src="../_static/GAEZ_layers_BC_2025.jpg" alt="GAEZ layers used in BC spatial screening showing land cover, slope, and exclusion zones" width="600"/> -->
 
-<img src="../_static/exclusion_layers_BC.jpg" alt="Stepwise layer results for BC" width="900"/>
+<!-- <img src="../_static/exclusion_layers_BC.jpg" alt="Stepwise layer results for BC" width="900"/>
 <img src="../_static/landcovers_BC.jpg" alt="Stepwise layer results for BC" width="800"/>
-<img src="../_static/terrain_layers_BC.jpg" alt="Stepwise layer results for BC" width="800"/>
+<img src="../_static/terrain_layers_BC.jpg" alt="Stepwise layer results for BC" width="800"/> -->
+
+<img src="../_static/exclusion_global_with_existing_VREs.png" alt="exclusion_global_with_existing_VREs" width="800"/>
+<img src="../_static/Landcover_with_existing_VREs.png" alt="Landcover_with_existing_VREs" width="800"/>
+<img src="../_static/terrains_with_existing_VREs.png" alt="terrains_with_existing_VREs" width="800"/>
 
 > For full details on the raster classes, refer to the [Global Agro-Ecological Zones v4 – Model documentation](https://openknowledge.fao.org/items/039f7ec9-98af-49e1-8d24-850122c69bef).
 

@@ -527,16 +527,16 @@ class CellScorer(AttributesParser):
         
         # Calculate LCOE using the dedicated calculate_score method
         dataframe[f'lcoe_{self.resource_type}'] = dataframe.apply(
-            lambda row: self.calculate_score(row, node_distance_col,CF_column, CRF), 
-            axis=1
-        )
-        
-        dataframe[f'lcoe_norm_{self.resource_type}'] = dataframe.apply(
             lambda row: self.calculate_score_normalized(row, node_distance_col,CF_column, CRF), 
             axis=1
         )
         
-        scored_dataframe:pd.DataFrame = dataframe.sort_values(by=f'lcoe_norm_{self.resource_type}', ascending=True).copy()  # Lower LCOE is better (ascending=True)
+        dataframe[f'lcoe_actualCap_{self.resource_type}'] = dataframe.apply(
+            lambda row: self.calculate_score(row, node_distance_col,CF_column, CRF), 
+            axis=1
+        )
+        
+        scored_dataframe:pd.DataFrame = dataframe.sort_values(by=f'lcoe_actualCap_{self.resource_type}', ascending=True).copy()  # Lower LCOE is better (ascending=True)
         
         # dataframe[f'LCOE_{self.resource_type}'] = dataframe.apply(lambda row: self.calc_LCOE_lambda_m2(row), axis=1) # LCOE in $/MWh  # adopting NREL's method + some added costs
         # scored_dataframe = dataframe.sort_values(by=f'LCOE_{self.resource_type}', ascending=False).copy()  # Lower LCOE is better

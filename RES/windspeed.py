@@ -28,15 +28,15 @@ def impute_ERA5_windspeed_to_Cells(
 
         # Perform spatial join and drop unnecessary columns
         region_grid_cells = (
-            gpd.sjoin(region_grid_cells.rename(columns={'x': 'x_bc', 'y': 'y_bc'}), 
+            gpd.sjoin(region_grid_cells.rename(columns={'x': 'x_dup', 'y': 'y_dup'}), 
                       wnd_ymean_gdf, 
                       predicate='intersects')
-            .drop(columns=['x_bc', 'y_bc', 'lon', 'lat','index_right','year'])
+            .drop(columns=['x_dup', 'y_dup', 'lon', 'lat','index_right','year'])
         )
         
         # Handle potential duplicate indices
         # Resetting index to ensure unique index after join
-        region_grid_cells = region_grid_cells.reset_index(drop=True)
+        # region_grid_cells = region_grid_cells.reset_index(drop=True)
         region_grid_cells = region_grid_cells.drop_duplicates(subset=['geometry'])
 
         return region_grid_cells
