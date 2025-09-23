@@ -19,13 +19,31 @@ Here is a quick overview of the data sources used in this case study:
 [Detailed overview of the data sources used in this case study.](https://deltae.github.io/RESource/notes/data.html)
 ```
 
+## Coordinate Reference System (CRS)
+
+CRS is a critical choice when it comes to geospatial analysis. RESource involves area calculations as an impact of spatial filters usage on land availability for site development. 
+
+Here is a summary of the CRS used in this tool and study.
+
+| CRS ([EPSG](https://epsg.io/about)) | Name / Projection                | Units   | Coverage    | Purpose and Recommended Use in BC Study                                                         |
+| ---------- | -------------------------------- | ------- | ----------- | ------------------------------------------------------------------------------ |
+| **4326**   | WGS 84 (Geographic)              | Degrees | Global      | Storage, data exchange, global overlays.                                       |
+| **3005**   | NAD83 / BC Albers Equal Area     | Meters  | BC          | Provincial analyses (area, buffers, land use, siting). Official BC projection. |
+| **3347**   | NAD83 / Canada Albers Equal Area | Meters  | Canada-wide | Pan-Canadian analyses (NRCan datasets, multi-province work). 3005 is better suitable for  land-area calculations in BC explicit studies.                   |
+| **3035**   | ETRS89 / LAEA Europe             | Meters  | Europe      | European datasets only (default CRS for atlite's Exclusion Container, i.e. for land area calculation). **Not suitable for BC.**                               |
+
+
+```{tip}
+Users of this tool ( or in any other geospatial analysis!) should critically review the preferred CRS for area calculation. Check EPSG Resources for more details on regional coordinate system suitability.
+```
+
 ## Extracting Spatial grid cells
 BC was discretized into uniform grid cells using the spatial resolution of ERA5 data (~30 km × 30 km), with each cell serving as the basic unit of analysis. For each cell, RESource processed multiple geospatial layers, filtering out ineligible land based on legal (e.g., protected areas), environmental (e.g., slope, wetlands), and infrastructure-related constraints (e.g., distance to substations). Eligible cells were then evaluated for their proximity to the grid and assigned hourly profiles of solar irradiance and wind speed, allowing theoretical VRE potential to be estimated per technology.
  
 <img src="../_static/Grid_cells.jpg" alt="Extraction of Spatial Grid Cells in BC" width="600"/>
 
 ## Spatial Screening and Land Availability
-Key parameters are configurable to reflect geographic constraints (e.g., slope, protected areas), We applied the spatial screening process using global raster datasets from the GAEZ to systematically identify suitable VRE sites by filtering land based on land cover, terrain slope, and exclusion zones.. Land cover data layers are used to selectively include classes such as croplands, grasslands, shrubs, and bare soil while excluding artificial surfaces, dense forests, and water bodies. Terrain slope rasters helped eliminate areas with steep gradients over 30%, which pose construction and accessibility challenges. Additionally, exclusion zones—compiled from global biodiversity, wetland, and protected area databases—were entirely filtered out from consideration to respect environmental conservation boundaries. This layered geospatial filtering ensures that selected sites align with both technical feasibility and ecological integrity. We extracted the land availability map from this spatial screening process. 
+Key parameters are configurable to reflect geographic constraints (e.g., slope, protected areas), We applied the spatial screening process using global raster datasets from the GAEZ to systematically identify suitable VRE sites by filtering land based on land cover, terrain slope, and exclusion zones.. Land cover data layers are used to selectively include classes such as croplands, grasslands, shrubs, and bare soil while excluding artificial surfaces, dense forests, and water bodies. Terrain slope rasters helped eliminate areas with steep gradients over 30%, which pose construction and accessibility challenges. Additionally, exclusion zones—compiled from global biodiversity, wetland, and protected area databases—were entirely filtered out from consideration to respect environmental conservation boundaries. This layered geospatial mfiltering ensures that selected sites align with both technical feasibility and ecological integrity. We extracted the land availability map from this spatial screening process. 
 
 <!-- <img src="../_static/GAEZ_layers_BC_2025.jpg" alt="GAEZ layers used in BC spatial screening showing land cover, slope, and exclusion zones" width="600"/> -->
 

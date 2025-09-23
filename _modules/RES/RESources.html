@@ -544,7 +544,7 @@ document.write(`
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Cleaning data store...&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">clean_store</span><span class="p">()</span>
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Data store cleaned.&quot;</span><span class="p">)</span></div>
 
 
@@ -720,7 +720,8 @@ document.write(`
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.find_grid_nodes">[docs]</a>
     <span class="k">def</span> <span class="nf">find_grid_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                         <span class="n">cells</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="n">use_pypsa_buses</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
+                        <span class="n">use_pypsa_buses</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">use_grid_lines</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Find the grid nodes for the given cells.                            </span>
 
@@ -764,7 +765,7 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">grid_ss</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
                 <span class="n">grid_ss_df</span><span class="p">,</span>
                 <span class="n">geometry</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span><span class="n">grid_ss_df</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">grid_ss_df</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]),</span>
-                <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_default_crs</span><span class="p">(),</span>  <span class="c1"># Set the coordinate reference system (e.g., WGS84)</span>
+                <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs_m</span><span class="p">,</span>  <span class="c1"># Set the coordinate reference system (e.g., WGS84)</span>
                 <span class="p">)</span> 
             
             <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span>
@@ -777,10 +778,9 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store_grid_cells</span><span class="p">,</span><span class="s1">&#39;cells&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid_ss</span><span class="p">,</span><span class="s1">&#39;buses&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span>
-                           <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Using Substations (sourced from CODERS) preferred nodes for resource connection.&quot;</span><span class="p">)</span>
-            
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">country_name</span> <span class="o">==</span> <span class="s1">&#39;Canada&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">country_name</span> <span class="o">==</span> <span class="s1">&#39;Canada&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">use_grid_lines</span><span class="p">:</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span>
+                           <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Using CODERS substations for connection point analysis...&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">grid_ss</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coders</span><span class="o">.</span><span class="n">get_table_provincial</span><span class="p">(</span><span class="s1">&#39;substations&#39;</span><span class="p">)</span>
                 
                 <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span>
@@ -1018,7 +1018,9 @@ document.write(`
     <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
             <span class="n">select_top_sites</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">use_pypsa_buses</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">use_grid_lines</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">get_clusters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">clean_store</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">memory_resource_limitation</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Execute the specific module logic for the given resource type (&#39;solar&#39; or &#39;wind&#39;).</span>
@@ -1026,9 +1028,27 @@ document.write(`
         <span class="n">utils</span><span class="o">.</span><span class="n">print_module_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Initiating </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s2"> module for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_region_name</span><span class="p">()</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">memory_resource_limitation</span><span class="o">=</span><span class="n">memory_resource_limitation</span>
         
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="s2">&quot;Step 1 : Prepare Cutout and Grid Cells&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">clean_store</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clean_data_store</span><span class="p">()</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     utils.print_update(level=PRINT_LEVEL_BASE+1,</span>
+        <span class="c1">#                    message=f&quot;{__name__}| Skipping data store cleaning step as per user request.&quot;)</span>
+        <span class="c1">#     self.datahandler.refresh()</span>
+        <span class="c1">#     self.store_grid_cells=self.datahandler.from_store(&#39;cells&#39;)</span>
+        <span class="c1">#     if self.store_grid_cells is not None and &#39;geometry&#39; not in self.store_grid_cells.columns:</span>
+        <span class="c1">#         utils.print_banner(&quot;Step 1.1 : Prepare Cutout and Grid Cells&quot;)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_grid_cells</span><span class="p">()</span>
+            <span class="c1"># else:</span>
+            <span class="c1">#     utils.print_update(level=PRINT_LEVEL_BASE+1,</span>
+            <span class="c1">#                 message=f&quot;{__name__}| Grid Cells already present in the store, skipping grid cell preparation step.&quot;)</span>
         
+            <span class="c1"># if  self.store_grid_cells is not None and&#39;nearest_station_distance_km&#39; not in self.store_grid_cells.columns:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">find_grid_nodes</span><span class="p">(</span><span class="n">use_pypsa_buses</span><span class="o">=</span><span class="n">use_pypsa_buses</span><span class="p">,</span>
+                                    <span class="n">use_grid_lines</span><span class="o">=</span><span class="n">use_grid_lines</span><span class="p">)</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#         utils.print_update(level=PRINT_LEVEL_BASE+1,</span>
+        <span class="c1">#                     message=f&quot;{__name__}| Nearest grid connection nodes already present in the store, skipping grid node location step.&quot;)</span>
+                
         <span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="s2">&quot;Step 2 : Calculate Land availability and process capacity matrix&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_cell_capacity</span><span class="p">()</span>
         
@@ -1040,17 +1060,14 @@ document.write(`
         <span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="s2">&quot;Step 4 : Create timeseries for Resources CF&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_CF_timeseries</span><span class="p">()</span>
         
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="s2">&quot;Step 5 : Find closed grid connection nodes&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">find_grid_nodes</span><span class="p">(</span><span class="n">use_pypsa_buses</span><span class="o">=</span><span class="n">use_pypsa_buses</span><span class="p">)</span>
-        
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="s2">&quot;Step 6 : Use capacity, energy yield and cost attributes to score each cell&quot;</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="s2">&quot;Step 5 : Use capacity, energy yield and cost attributes to score each cell&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">score_cells</span><span class="p">()</span>
         
         <span class="k">if</span> <span class="n">get_clusters</span><span class="p">:</span>
-            <span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="s2">&quot;Step 7.1 : Use score similarities to find clusterized representation (sites) of cells&quot;</span><span class="p">)</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="s2">&quot;Step 6.1 : Use score similarities to find clusterized representation (sites) of cells&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">get_clusters</span><span class="p">()</span>
             
-            <span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="s2">&quot;Step 7.2 : Prepare representative timeseries of the clusterized sites&quot;</span><span class="p">)</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="s2">&quot;Step 6.2 : Prepare representative timeseries of the clusterized sites&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">get_cluster_timeseries</span><span class="p">()</span>
         
         <span class="n">utils</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;To avoid confusion, Units dictionary method should be updated if any units are changed across modules. However, units dictionary is for documentation purposes only. It doesn&#39;t have any calculation impacts on any of the methods.&quot;</span><span class="p">)</span>

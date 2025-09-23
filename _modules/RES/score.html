@@ -451,7 +451,7 @@ document.write(`
         <span class="n">tech_capex</span> <span class="o">=</span> <span class="n">capex_tech</span> <span class="o">*</span> <span class="n">potential_capacity_mw</span>
         
         <span class="c1"># Grid connection with economies of scale</span>
-        <span class="n">base_grid_cost</span> <span class="o">=</span> <span class="p">(</span><span class="n">distance_to_grid_km</span> <span class="o">*</span> <span class="n">grid_connection_cost_per_km</span><span class="p">)</span> <span class="o">+</span> <span class="n">tx_line_rebuild_cost</span>
+        <span class="n">base_grid_cost</span> <span class="o">=</span> <span class="n">distance_to_grid_km</span> <span class="o">*</span> <span class="p">(</span><span class="n">grid_connection_cost_per_km</span> <span class="o">+</span> <span class="n">tx_line_rebuild_cost</span><span class="p">)</span>
         
         <span class="c1"># Method 1: Simple scaling factor based on capacity tiers</span>
         <span class="k">if</span> <span class="n">potential_capacity_mw</span> <span class="o">&lt;=</span> <span class="mi">50</span><span class="p">:</span>  <span class="c1"># Small projects</span>
@@ -615,41 +615,6 @@ document.write(`
         <span class="k">return</span> <span class="n">total_cost</span></div>
 
     
-    <span class="c1"># def calculate_total_cost(self, </span>
-    <span class="c1">#                      distance_to_grid_km: float, </span>
-    <span class="c1">#                      grid_connection_cost_per_km: float, </span>
-    <span class="c1">#                      tx_line_rebuild_cost: float, </span>
-    <span class="c1">#                      capex_tech: float,</span>
-    <span class="c1">#                      potential_capacity_mw: float) -&gt; float:</span>
-    <span class="c1">#     &quot;&quot;&quot;</span>
-    <span class="c1">#     Calculate total project cost including CAPEX and distance-based grid connection costs.</span>
-        
-    <span class="c1">#     Args:</span>
-    <span class="c1">#         distance_to_grid_km (float): Distance to nearest grid connection point (km)</span>
-    <span class="c1">#         grid_connection_cost_per_km (float): Cost per km for grid connection (M$/km)</span>
-    <span class="c1">#         tx_line_rebuild_cost (float): Transmission line rebuild cost (M$/km)</span>
-    <span class="c1">#         capex_tech (float): Technology-specific capital expenditure (M$/MW)</span>
-    <span class="c1">#         potential_capacity_mw (float): Potential installed capacity (MW)</span>
-            
-    <span class="c1">#     Returns:</span>
-    <span class="c1">#         float: Total project cost in millions of dollars (M$)</span>
-    <span class="c1">#     &quot;&quot;&quot;</span>
-        
-    <span class="c1">#     # Technology CAPEX scales with capacity</span>
-    <span class="c1">#     tech_capex = capex_tech * potential_capacity_mw</span>
-        
-    <span class="c1">#     # Grid connection costs - could scale with project size for larger projects</span>
-    <span class="c1">#     # Option 1: Fixed connection cost (current approach)</span>
-    <span class="c1">#     grid_connection_cost = (distance_to_grid_km * grid_connection_cost_per_km) + tx_line_rebuild_cost</span>
-        
-    <span class="c1">#     # Option 2: Scale grid costs with capacity for very large projects</span>
-    <span class="c1">#     # capacity_factor = min(1.0, potential_capacity_mw / 100.0)  # Scale factor for projects &gt;100MW</span>
-    <span class="c1">#     # grid_connection_cost = ((distance_to_grid_km * grid_connection_cost_per_km) + tx_line_rebuild_cost) * capacity_factor</span>
-        
-    <span class="c1">#     total_cost = tech_capex + grid_connection_cost</span>
-        
-    <span class="c1">#     return total_cost</span>
-    
 <div class="viewcode-block" id="CellScorer.calculate_score">
 <a class="viewcode-back" href="../../notes/api.html#RES.score.CellScorer.calculate_score">[docs]</a>
     <span class="k">def</span> <span class="nf">calculate_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
@@ -763,7 +728,7 @@ document.write(`
     <span class="k">def</span> <span class="nf">get_cell_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
                     <span class="n">cells</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                     <span class="n">CF_column</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
-                    <span class="n">interest_rate</span><span class="o">=</span><span class="mf">0.03</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+                    <span class="n">interest_rate</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="mf">0.03</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate LCOE scores for all grid cells in a DataFrame and return ranked results.</span>
 <span class="sd">        </span>
@@ -824,7 +789,6 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dataframe</span> <span class="o">=</span> <span class="n">cells</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># Use the input DataFrame for calculations</span>
 
-        
         <span class="n">node_distance_col</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_available_column</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;nearest_station_distance_km&#39;</span><span class="p">,</span> <span class="s1">&#39;nearest_distance&#39;</span><span class="p">])</span>
         
         <span class="n">required_columns</span> <span class="o">=</span> <span class="p">[</span>
@@ -1000,7 +964,9 @@ document.write(`
                                 <span class="n">node_distance_col</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                                 <span class="n">CF_column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                                 <span class="n">CRF</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-                                <span class="n">reference_capacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+                                <span class="n">reference_capacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+                                <span class="n">typical_build_mw</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">100.0</span><span class="p">,</span>
+                                <span class="n">scaling_exponent</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate LCOE using a normalized capacity for fair comparison in clustering.</span>
 <span class="sd">        </span>
@@ -1016,23 +982,29 @@ document.write(`
             <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;999999&#39;</span><span class="p">)</span>
         
         <span class="c1"># Calculate costs using reference capacity</span>
-        <span class="n">total_capex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_total_cost_smooth_scaling</span><span class="p">(</span>
+        <span class="n">total_cost_typical</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_total_cost_smooth_scaling</span><span class="p">(</span>
             <span class="n">row</span><span class="p">[</span><span class="n">node_distance_col</span><span class="p">],</span>
             <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;grid_connection_cost_per_km_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>
             <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;tx_line_rebuild_cost_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>
             <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;capex_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>
-            <span class="n">reference_capacity</span>  <span class="c1"># Use fixed capacity</span>
+            <span class="n">potential_capacity_MW</span><span class="o">=</span><span class="n">typical_build_mw</span><span class="p">,</span>
+            <span class="n">reference_capacity_MW</span><span class="o">=</span><span class="n">typical_build_mw</span><span class="p">,</span>   <span class="c1"># align baseline</span>
+            <span class="n">scaling_exponent</span><span class="o">=</span><span class="n">scaling_exponent</span><span class="p">,</span>
         <span class="p">)</span>
+        <span class="c1"># 2) Convert that to a per-MW capex</span>
+        <span class="n">capex_per_mw</span> <span class="o">=</span> <span class="n">total_cost_typical</span> <span class="o">/</span> <span class="n">typical_build_mw</span>  <span class="c1"># M$/MW</span>
+        
+        <span class="c1"># 3) Build the normalized 1-MW project with that per-MW capex</span>
+        <span class="n">total_capex_for_ref</span> <span class="o">=</span> <span class="n">capex_per_mw</span> <span class="o">*</span> <span class="n">reference_capacity</span>
         
         <span class="c1"># O&amp;M costs with reference capacity</span>
         <span class="n">fom_annual</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;fom_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">reference_capacity</span>
         <span class="n">vom_annual</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;vom_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">annual_energy</span>
         
         <span class="c1"># Calculate LCOE</span>
-        <span class="n">lcoe_millions</span> <span class="o">=</span> <span class="p">((</span><span class="n">total_capex</span> <span class="o">*</span> <span class="n">CRF</span><span class="p">)</span> <span class="o">+</span> <span class="n">fom_annual</span> <span class="o">+</span> <span class="n">vom_annual</span><span class="p">)</span> <span class="o">/</span> <span class="n">annual_energy</span>
-        <span class="n">lcoe_dollars</span> <span class="o">=</span> <span class="n">lcoe_millions</span> <span class="o">*</span> <span class="mf">1E6</span>
+        <span class="n">lcoe_musd_per_mwh</span>  <span class="o">=</span> <span class="p">((</span><span class="n">total_capex_for_ref</span>  <span class="o">*</span> <span class="n">CRF</span><span class="p">)</span> <span class="o">+</span> <span class="n">fom_annual</span> <span class="o">+</span> <span class="n">vom_annual</span><span class="p">)</span> <span class="o">/</span> <span class="n">annual_energy</span>
         
-        <span class="k">return</span> <span class="n">lcoe_dollars</span></div>
+        <span class="k">return</span> <span class="n">lcoe_musd_per_mwh</span>  <span class="o">*</span> <span class="mf">1E6</span></div>
 
 
 <div class="viewcode-block" id="CellScorer.calculate_score_per_mw">

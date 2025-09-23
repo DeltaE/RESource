@@ -470,7 +470,6 @@ document.write(`
 
         <span class="c1">## Initiate the Store and Datahandler (interfacing with the Store)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">=</span><span class="n">DataHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_default_crs</span><span class="p">()</span>
         
     
 <div class="viewcode-block" id="GridCells._check_resolution">
@@ -545,7 +544,7 @@ document.write(`
         <span class="n">cells</span> <span class="o">=</span> <span class="p">[</span><span class="n">box</span><span class="p">(</span><span class="o">*</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">coords</span> <span class="o">-</span> <span class="n">span</span><span class="p">,</span> <span class="n">coords</span> <span class="o">+</span> <span class="n">span</span><span class="p">))]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box_grid</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
             <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">cells</span><span class="p">},</span>
-            <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span>
+            <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs_d</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="c1"># Return GeoDataFrame with centroids and grid cells</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box_grid</span></div>
