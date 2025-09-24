@@ -1264,96 +1264,93 @@ document.write(`
     <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="n">font_size</span><span class="p">)</span> </div>
 
 
-<div class="viewcode-block" id="get_selected_vs_missed_visuals">
-<a class="viewcode-back" href="../../notes/api.html#RES.visuals.get_selected_vs_missed_visuals">[docs]</a>
-<span class="k">def</span> <span class="nf">get_selected_vs_missed_visuals</span><span class="p">(</span><span class="n">cells</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
-                                  <span class="n">province_short_code</span><span class="p">,</span>
-                                  <span class="n">resource_type</span><span class="p">,</span>
-                                   <span class="n">lcoe_threshold</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-                                   <span class="n">CF_threshold</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-                                   <span class="n">capacity_threshold</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-                                   <span class="n">text_box_x</span><span class="o">=</span><span class="mf">.4</span><span class="p">,</span>
-                                   <span class="n">text_box_y</span><span class="o">=</span><span class="mf">.95</span><span class="p">,</span>
-                                   <span class="n">title_y</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                                   <span class="n">title_x</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
-                                   <span class="n">font_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-                                   <span class="n">dpi</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-                                   <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
-                                   <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate visualizations for selected vs missed cells.</span>
+<span class="c1"># def get_selected_vs_missed_visuals(cells: gpd.GeoDataFrame,</span>
+<span class="c1">#                                   province_short_code,</span>
+<span class="c1">#                                   resource_type,</span>
+<span class="c1">#                                    lcoe_threshold: float,</span>
+<span class="c1">#                                    CF_threshold: float,</span>
+<span class="c1">#                                    capacity_threshold: float,</span>
+<span class="c1">#                                    text_box_x=.4,</span>
+<span class="c1">#                                    text_box_y=.95,</span>
+<span class="c1">#                                    title_y=1,</span>
+<span class="c1">#                                    title_x=0.6,</span>
+<span class="c1">#                                    font_size=10,</span>
+<span class="c1">#                                    dpi=1000,</span>
+<span class="c1">#                                    figsize=(12, 7),</span>
+<span class="c1">#                                    save=False):</span>
+<span class="c1">#     &quot;&quot;&quot;Generate visualizations for selected vs missed cells.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        cells (gpd.GeoDataFrame): GeoDataFrame containing cell data.</span>
-<span class="sd">        province_short_code (str): Short code for the province.</span>
-<span class="sd">        resource_type (str): Type of renewable resource (e.g., &#39;solar&#39;, &#39;wind&#39;).</span>
-<span class="sd">        lcoe_threshold (float): _description_</span>
-<span class="sd">        CF_threshold (float): _description_</span>
-<span class="sd">        capacity_threshold (float): _description_</span>
-<span class="sd">        text_box_x (float, optional): _description_. Defaults to .4.</span>
-<span class="sd">        text_box_y (float, optional): _description_. Defaults to .95.</span>
-<span class="sd">        title_y (int, optional): _description_. Defaults to 1.</span>
-<span class="sd">        title_x (float, optional): _description_. Defaults to 0.6.</span>
-<span class="sd">        font_size (int, optional): _description_. Defaults to 10.</span>
-<span class="sd">        dpi (int, optional): _description_. Defaults to 1000.</span>
-<span class="sd">        figsize (tuple, optional): _description_. Defaults to (12, 7).</span>
-<span class="sd">        save (bool, optional): _description_. Defaults to False.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">mask</span><span class="o">=</span><span class="p">(</span><span class="n">cells</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">_CF_mean&#39;</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">CF_threshold</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">cells</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">capacity_threshold</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">cells</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">lcoe_threshold</span><span class="p">)</span>
-    <span class="n">filtered_cells</span><span class="o">=</span><span class="n">cells</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+<span class="c1">#     Args:</span>
+<span class="c1">#         cells (gpd.GeoDataFrame): GeoDataFrame containing cell data.</span>
+<span class="c1">#         province_short_code (str): Short code for the province.</span>
+<span class="c1">#         resource_type (str): Type of renewable resource (e.g., &#39;solar&#39;, &#39;wind&#39;).</span>
+<span class="c1">#         lcoe_threshold (float): _description_</span>
+<span class="c1">#         CF_threshold (float): _description_</span>
+<span class="c1">#         capacity_threshold (float): _description_</span>
+<span class="c1">#         text_box_x (float, optional): _description_. Defaults to .4.</span>
+<span class="c1">#         text_box_y (float, optional): _description_. Defaults to .95.</span>
+<span class="c1">#         title_y (int, optional): _description_. Defaults to 1.</span>
+<span class="c1">#         title_x (float, optional): _description_. Defaults to 0.6.</span>
+<span class="c1">#         font_size (int, optional): _description_. Defaults to 10.</span>
+<span class="c1">#         dpi (int, optional): _description_. Defaults to 1000.</span>
+<span class="c1">#         figsize (tuple, optional): _description_. Defaults to (12, 7).</span>
+<span class="c1">#         save (bool, optional): _description_. Defaults to False.</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     mask=(cells[f&#39;{resource_type}_CF_mean&#39;]&gt;=CF_threshold)&amp;(cells[f&#39;potential_capacity_{resource_type}&#39;]&gt;=capacity_threshold)&amp;(cells[f&#39;lcoe_{resource_type}&#39;]&lt;=lcoe_threshold)</span>
+<span class="c1">#     filtered_cells=cells[mask]</span>
     
-    <span class="c1"># Create a high-resolution side-by-side plot in a 2x2 grid</span>
-    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+<span class="c1">#     # Create a high-resolution side-by-side plot in a 2x2 grid</span>
+<span class="c1">#     fig, axs = plt.subplots(nrows=2, ncols=2, figsize=figsize, dpi=dpi)</span>
 
-    <span class="c1"># Define the message</span>
-    <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cell thresholds @ lcoe &gt;= </span><span class="si">{</span><span class="n">lcoe_threshold</span><span class="si">}</span><span class="s2"> $/kWH, &quot;</span>
-           <span class="sa">f</span><span class="s2">&quot;CF &gt;=</span><span class="si">{</span><span class="n">CF_threshold</span><span class="si">}</span><span class="s2">, MW &gt;=</span><span class="si">{</span><span class="n">capacity_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1">#     # Define the message</span>
+<span class="c1">#     msg = (f&quot;Cell thresholds @ lcoe &gt;= {lcoe_threshold} $/kWH, &quot;</span>
+<span class="c1">#            f&quot;CF &gt;={CF_threshold}, MW &gt;={capacity_threshold}&quot;)</span>
 
 
 
-    <span class="c1"># First plot: CF_mean Visualization (top left)</span>
-    <span class="n">plot_with_matched_cells</span><span class="p">(</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">cells</span><span class="p">,</span> <span class="n">filtered_cells</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">_CF_mean&#39;</span><span class="p">,</span> <span class="s1">&#39;YlOrRd&#39;</span><span class="p">,</span> 
-                            <span class="n">background_cell_linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">selected_cells_linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">font_size</span><span class="o">=</span><span class="n">font_size</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;CF_mean Overview&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">font_size</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Longitude&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">font_size</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Latitude&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">font_size</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+<span class="c1">#     # First plot: CF_mean Visualization (top left)</span>
+<span class="c1">#     plot_with_matched_cells(axs[0, 0], cells, filtered_cells, f&#39;{resource_type}_CF_mean&#39;, &#39;YlOrRd&#39;, </span>
+<span class="c1">#                             background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)</span>
+<span class="c1">#     axs[0, 0].set_title(&#39;CF_mean Overview&#39;, fontsize=font_size)</span>
+<span class="c1">#     axs[0, 0].set_xlabel(&#39;Longitude&#39;, fontsize=font_size-3)</span>
+<span class="c1">#     axs[0, 0].set_ylabel(&#39;Latitude&#39;, fontsize=font_size-3)</span>
+<span class="c1">#     axs[0, 0].set_axis_off()</span>
 
-    <span class="c1"># Second plot: Potential Capacity Visualization (top right)</span>
-    <span class="n">plot_with_matched_cells</span><span class="p">(</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">cells</span><span class="p">,</span> <span class="n">filtered_cells</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;potential_capacity_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;Blues&#39;</span><span class="p">,</span>
-                            <span class="n">background_cell_linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">selected_cells_linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">font_size</span><span class="o">=</span><span class="n">font_size</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Potential Capacity Overview&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">font_size</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Longitude&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">font_size</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Latitude&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">font_size</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+<span class="c1">#     # Second plot: Potential Capacity Visualization (top right)</span>
+<span class="c1">#     plot_with_matched_cells(axs[0, 1], cells, filtered_cells, f&#39;potential_capacity_{resource_type}&#39;, &#39;Blues&#39;,</span>
+<span class="c1">#                             background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)</span>
+<span class="c1">#     axs[0, 1].set_title(&#39;Potential Capacity Overview&#39;, fontsize=font_size)</span>
+<span class="c1">#     axs[0, 1].set_xlabel(&#39;Longitude&#39;, fontsize=font_size-3)</span>
+<span class="c1">#     axs[0, 1].set_ylabel(&#39;Latitude&#39;, fontsize=font_size-3)</span>
+<span class="c1">#     axs[0, 1].set_axis_off()</span>
 
-    <span class="c1"># Third plot: Nearest Station Distance Visualization (bottom left)</span>
-    <span class="n">plot_with_matched_cells</span><span class="p">(</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">cells</span><span class="p">,</span> <span class="n">filtered_cells</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;nearest_station_distance_km&#39;</span><span class="p">,</span> <span class="s1">&#39;coolwarm&#39;</span><span class="p">,</span>
-                            <span class="n">background_cell_linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">selected_cells_linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">font_size</span><span class="o">=</span><span class="n">font_size</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Nearest Station Distance Overview&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">font_size</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Longitude&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">font_size</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Latitude&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">font_size</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+<span class="c1">#     # Third plot: Nearest Station Distance Visualization (bottom left)</span>
+<span class="c1">#     plot_with_matched_cells(axs[1, 0], cells, filtered_cells, f&#39;nearest_station_distance_km&#39;, &#39;coolwarm&#39;,</span>
+<span class="c1">#                             background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)</span>
+<span class="c1">#     axs[1, 0].set_title(&#39;Nearest Station Distance Overview&#39;, fontsize=font_size)</span>
+<span class="c1">#     axs[1, 0].set_xlabel(&#39;Longitude&#39;, fontsize=font_size-3)</span>
+<span class="c1">#     axs[1, 0].set_ylabel(&#39;Latitude&#39;, fontsize=font_size-3)</span>
+<span class="c1">#     axs[1, 0].set_axis_off()</span>
 
-    <span class="c1"># Fourth plot: LCOE Visualization (bottom right)</span>
-    <span class="n">plot_with_matched_cells</span><span class="p">(</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">cells</span><span class="p">,</span> <span class="n">filtered_cells</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;lcoe_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;summer&#39;</span><span class="p">,</span>
-                            <span class="n">background_cell_linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">selected_cells_linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">font_size</span><span class="o">=</span><span class="n">font_size</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;LCOE Overview&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">font_size</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Longitude&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">font_size</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Latitude&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">font_size</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+<span class="c1">#     # Fourth plot: LCOE Visualization (bottom right)</span>
+<span class="c1">#     plot_with_matched_cells(axs[1, 1], cells, filtered_cells, f&#39;lcoe_{resource_type}&#39;, &#39;summer&#39;,</span>
+<span class="c1">#                             background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)</span>
+<span class="c1">#     axs[1, 1].set_title(&#39;LCOE Overview&#39;, fontsize=font_size)</span>
+<span class="c1">#     axs[1, 1].set_xlabel(&#39;Longitude&#39;, fontsize=font_size-3)</span>
+<span class="c1">#     axs[1, 1].set_ylabel(&#39;Latitude&#39;, fontsize=font_size-3)</span>
+<span class="c1">#     axs[1, 1].set_axis_off()</span>
 
-    <span class="c1"># Add a super title for the figure</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">- Selected Cells Overview - </span><span class="si">{</span><span class="n">province_short_code</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">font_size</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span><span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">title_x</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">title_y</span><span class="p">)</span>
-    <span class="c1"># Add a text box with grey background for the message</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">text_box_x</span><span class="p">,</span> <span class="n">text_box_y</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">font_size</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span>
-             <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgrey&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">boxstyle</span><span class="o">=</span><span class="s1">&#39;round,pad=0.2&#39;</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-    <span class="c1"># Save the plot</span>
-    <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;vis/linking/solar/Selected_cells_solar_</span><span class="si">{</span><span class="n">province_short_code</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>  <span class="c1"># Optional: Show the plot if desired</span></div>
-
+<span class="c1">#     # Add a super title for the figure</span>
+<span class="c1">#     fig.suptitle(f&#39;{resource_type}- Selected Cells Overview - {province_short_code}&#39;, fontsize=font_size+2,fontweight=&#39;bold&#39;, x=title_x,y=title_y)</span>
+<span class="c1">#     # Add a text box with grey background for the message</span>
+<span class="c1">#     fig.text(text_box_x, text_box_y, msg, ha=&#39;center&#39;, va=&#39;top&#39;, fontsize=font_size-3,</span>
+<span class="c1">#              bbox=dict(facecolor=&#39;lightgrey&#39;, edgecolor=&#39;grey&#39;, boxstyle=&#39;round,pad=0.2&#39;))</span>
+<span class="c1">#     plt.tight_layout()</span>
+<span class="c1">#     # Save the plot</span>
+<span class="c1">#     if save:</span>
+<span class="c1">#         plt.savefig(f&quot;vis/linking/solar/Selected_cells_solar_{province_short_code}.png&quot;, bbox_inches=&#39;tight&#39;)</span>
+<span class="c1">#     plt.tight_layout()</span>
+<span class="c1">#     plt.show()  # Optional: Show the plot if desired</span>
 
 
 <div class="viewcode-block" id="create_raster_image_with_legend">

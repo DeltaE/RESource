@@ -825,11 +825,11 @@ document.write(`
             
             <span class="c1"># Call visualization method</span>
             <span class="n">plot_save_to</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;vis/misc&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="n">raster_file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.tif&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;_raster_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">plot_gaez_tif</span><span class="p">(</span><span class="n">clipped_raster_path</span><span class="p">,</span> 
-                               <span class="n">color_map</span><span class="p">,</span> 
-                               <span class="n">plot_title</span><span class="p">,</span> 
-                               <span class="n">plot_save_to</span><span class="p">,</span><span class="n">show</span><span class="p">)</span>
-            <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Clipped Raster plot for </span><span class="si">{</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_region_name</span><span class="p">()</span><span class="si">}</span><span class="s2"> saved at: </span><span class="si">{</span><span class="n">plot_save_to</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># INHERITED METHOD from AttributesParser</span>
+            <span class="c1"># self.plot_gaez_tif(clipped_raster_path, </span>
+            <span class="c1">#                    color_map, </span>
+            <span class="c1">#                    plot_title, </span>
+            <span class="c1">#                    plot_save_to,show)</span>
+            <span class="c1"># utils.print_update(level=print_level_base+1,message=f&quot;{__name__}| Clipped Raster plot for {super().get_region_name()} saved at: {plot_save_to}&quot;)  # INHERITED METHOD from AttributesParser</span>
             <span class="k">return</span> <span class="n">clipped_raster_path</span>
 
 <div class="viewcode-block" id="GAEZRasterProcessor.plot_gaez_tif">

@@ -34,7 +34,7 @@ Here is a summary of the CRS used in this tool and study.
 
 
 ```{tip}
-Users of this tool ( or in any other geospatial analysis!) should critically review the preferred CRS for area calculation. Check EPSG Resources for more details on regional coordinate system suitability.
+Users of this tool ( or in any other geospatial analysis!) should critically review the preferred CRS for area calculation. Check EPSG Resources for more details on regional coordinate system suitability. Meter/ degree based (default/ explicit for regions) CRS is configurable in RESource. 
 ```
 
 ## Extracting Spatial grid cells
@@ -59,10 +59,32 @@ Key parameters are configurable to reflect geographic constraints (e.g., slope, 
 
 ```{tip}
 |chapter 2|
+
 page 17; Elevation and terrain-slope data 
 page 18; Land Cover data
 page 20; Exclusion zones
 ```
+<img src="../_static/CPCAD_BC.png" alt="CPCAD_BC" width="800"/>
+
+| Buffer Type | Category/Layer | ☀️ Solar Buffer (meters) | 🌬️ Wind Buffer (meters) |
+|-------------|----------------|---------------------|--------------------|
+| **Aeroway Buffers** | Aerodrome | 1,000 | 5,000 |
+| | Runway | 500 | 500 |
+| | Taxiway/Helipad/Apron/Gate | 100 | 100 |
+| **Canadian Conservation and Protected Lands** | Strict Nature Reserve | 2,000 | 2,000 |
+| | Wilderness Area | 2,000 | 2,000 |
+| | National Park | - | 2,000 |
+| | Natural Monument/Feature | - | 2,000 |
+| | Habitat/Species Management Area | 2,000 | 2,000 |
+| | Protected Landscape/Seascape | 500 | 2,000 |
+| | Protected Area with Sustainable Use | 2,000 | 2,000 |
+| | Interim Sites and OECM | 500 | 1,000 |
+
+*Note: Some global protected areas overlap with Canadian conservation and protected lands.*
+
+Here is a visual on how the no-go zones for site development looks like:
+
+<img src="../_static/CPCAD_BC_buffers.png" alt="CPCAD_BC with buffers" width="900"/>
 
 
 Spatial screening revealed that roughly 64% of BC’s land is unsuitable for VRE development due to terrain, regulatory restrictions, and conservation priorities. The remaining land comprises technically viable areas suitable for further capacity and cost assessment. Figure 5 illustrates the land availability for grid cells (in the left most plot) and the potential capacity translated from availability percentage. It illustrates that steep terrain in the province’s western region limits turbine deployment, while the southern interior exhibits favorable solar deployment. Regulatory buffers around aeroways and parks further shape siting decisions.
@@ -196,6 +218,7 @@ Cells with zero annual energy production receive a high penalty score and are de
 ## Impact due to the land-use policy:
 
 <img src="../_static/potential_capacity_lost_default_vs_policy_aeroway_CPCAD_buffer.png" alt="Final results for BC rescaled to ERA5 Resolution" width="1000"/>
+
 
 
 ## Clusterized Representation:
