@@ -252,7 +252,7 @@ find vis/Canada/BC/ -name "*.svg" -o -name "*.png" | head -10
 If you encounter issues not covered above, you can reach out to the development team:
 
 ```{tip}
-**Contact the Developer**: For direct assistance, see contact information in [developers.md](developers.md) or open an issue on GitHub.
+**Contact the Developer**: For direct assistance, see contact information in [developers.md](https://deltae.github.io/RESource/notes/developers.html) or open an issue on GitHub.
 ```
 
 ---
