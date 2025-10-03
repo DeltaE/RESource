@@ -312,8 +312,6 @@ docs/
 
 ### Development
 
-- Use `make run` for running the main RESource script
-- Use `make jupyter` for interactive development (ensures correct kernel)
 - Use `make autobuild` for documentation development with live reload
 
 ### Collaboration
