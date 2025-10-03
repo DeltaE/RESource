@@ -3,7 +3,7 @@
 
 __One of the many solutions ?__
 
-<img src="docs/source/_static/RES_logo_v2_2025.jpg" alt="RESource logo" width="250"/>
+<img src="docs/source/_static/graphic_RES_logo_202508.jpg" alt="RESource logo" width="250"/>
 
 __A Modular and Transparent Open-Source Framework for Sub-National Assessment of Solar and Land-based Wind Potential.__
 
@@ -13,7 +13,7 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 
 
 ## Workflow overview
-<img src="docs/source/_static/Workflow.jpg" alt="high_level_workflow" width="1000"/>
+<img src="docs/source/_static/workflow.jpg" alt="high_level_workflow" width="1000"/>
 
 ------
 
