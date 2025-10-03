@@ -357,7 +357,6 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#first-run">🔥 First Run</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-canadian-wind-solar-analysis">Run Canadian Wind &amp; Solar Analysis</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#start-interactive-environment">Start Interactive Environment</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-resource-does">📊 What RESource Does</a><ul class="nav section-nav flex-column">
@@ -369,9 +368,12 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-regions">🌍 Supported Regions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">📚 Next Steps</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explore-examples">Explore Examples</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-documentation">Build Documentation</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#try-the-playground-notebooks">Try the playground notebooks</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-documentation">Build Documentation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#need-help">🆘 Need Help?</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-debugging">Quick Debugging</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
@@ -493,23 +495,13 @@ unzip<span class="w"> </span>RESource_data.zip<span class="w"> </span>-d<span cl
 <h2>🔥 First Run<a class="headerlink" href="#first-run" title="Link to this heading">#</a></h2>
 <section id="run-canadian-wind-solar-analysis">
 <h3>Run Canadian Wind &amp; Solar Analysis<a class="headerlink" href="#run-canadian-wind-solar-analysis" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run with default Canadian configuration</span>
-make<span class="w"> </span>run
-
-<span class="c1"># Or run specific region/config</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Or run specific region/config</span>
 python<span class="w"> </span>run.py<span class="w"> </span>--config<span class="w"> </span>config/config_CAN_baseline.yaml
 </pre></div>
 </div>
-</section>
-<section id="start-interactive-environment">
-<h3>Start Interactive Environment<a class="headerlink" href="#start-interactive-environment" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Launch Jupyter Lab</span>
-make<span class="w"> </span>jupyter
-
-<span class="c1"># Open notebooks/</span>
-<span class="c1"># Try: resources_playground_CAN.ipynb</span>
-</pre></div>
-</div>
+<blockquote>
+<div><p>the 'RES' conda environment activated while you run this script.</p>
+</div></blockquote>
 </section>
 </section>
 <hr class="docutils" />
@@ -611,13 +603,14 @@ make<span class="w"> </span>clean<span class="w">            </span><span class=
 <h2>📚 Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
 <section id="explore-examples">
 <h3>Explore Examples<a class="headerlink" href="#explore-examples" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Try the playground notebooks</span>
-jupyter<span class="w"> </span>lab<span class="w"> </span>notebooks/resources_playground_CAN.ipynb
-</pre></div>
-</div>
 </section>
+</section>
+</section>
+<section id="try-the-playground-notebooks">
+<h1>Try the playground notebooks<a class="headerlink" href="#try-the-playground-notebooks" title="Link to this heading">#</a></h1>
+<p>notebooks/resources_playground_CAN.ipynb</p>
 <section id="build-documentation">
-<h3>Build Documentation<a class="headerlink" href="#build-documentation" title="Link to this heading">#</a></h3>
+<h2>Build Documentation<a class="headerlink" href="#build-documentation" title="Link to this heading">#</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate full documentation</span>
 make<span class="w"> </span>docs
 
@@ -625,7 +618,6 @@ make<span class="w"> </span>docs
 make<span class="w"> </span>autobuild<span class="w">  </span><span class="c1"># Visit http://127.0.0.1:8000</span>
 </pre></div>
 </div>
-</section>
 </section>
 <section id="need-help">
 <h2>🆘 Need Help?<a class="headerlink" href="#need-help" title="Link to this heading">#</a></h2>
@@ -789,7 +781,6 @@ find<span class="w"> </span>vis/Canada/BC/<span class="w"> </span>-name<span cla
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#first-run">🔥 First Run</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-canadian-wind-solar-analysis">Run Canadian Wind &amp; Solar Analysis</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#start-interactive-environment">Start Interactive Environment</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-resource-does">📊 What RESource Does</a><ul class="nav section-nav flex-column">
@@ -801,9 +792,12 @@ find<span class="w"> </span>vis/Canada/BC/<span class="w"> </span>-name<span cla
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-regions">🌍 Supported Regions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">📚 Next Steps</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explore-examples">Explore Examples</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-documentation">Build Documentation</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#try-the-playground-notebooks">Try the playground notebooks</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-documentation">Build Documentation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#need-help">🆘 Need Help?</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-debugging">Quick Debugging</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>

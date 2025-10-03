@@ -75,22 +75,10 @@ For running custom analyses beyond the provided case study data, some data sourc
 ### Run Canadian Wind & Solar Analysis
 
 ```bash
-# Run with default Canadian configuration
-make run
-
 # Or run specific region/config
 python run.py --config config/config_CAN_baseline.yaml
 ```
-
-### Start Interactive Environment
-
-```bash
-# Launch Jupyter Lab
-make jupyter
-
-# Open notebooks/
-# Try: resources_playground_CAN.ipynb
-```
+> the 'RES' conda environment activated while you run this script.
 
 ---
 
@@ -192,10 +180,10 @@ make clean            # Clean cache & build files
 
 ### Explore Examples
 
-```bash
+
 # Try the playground notebooks
-jupyter lab notebooks/resources_playground_CAN.ipynb
-```
+notebooks/resources_playground_CAN.ipynb
+
 
 ### Build Documentation
 
