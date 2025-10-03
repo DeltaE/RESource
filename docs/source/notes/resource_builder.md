@@ -167,6 +167,47 @@ Currently scoring calculation is configured as simplified LCOE formula.
 ```
 - Scores each grid cell based on multiple criteria (e.g., resource quality, proximity to grid), supporting site selection.
 
+**relative cost scoring method** (configurable)
+
+```math
+\text{CRF} = \frac{r(1+r)^N}{(1+r)^N - 1}
+```
+
+CRF from discount rate (r) and life (N). 
+
+```math
+E_i = 8760 \times CF_i \times C_{\text{ref}}
+```
+
+Annual energy at site (i). 
+
+```math
+\text{Score}_i
+= \frac{\text{CRF}\cdot C_i^{\text{cap}} + FOM_i + VOM_i \cdot E_i}{E_i}
+\quad [\$/\text{MWh}]
+```
+
+
+**Capital cost**
+
+```math
+C_i^{\text{cap}} = CAPEX_i \cdot C_{\text{ref}} + C_i^{\text{spur}} + C_i^{\text{upgrade}}
+```
+
+Grid costs are added on top of plant CAPEX; upgrades can be modeled as linear $/MW-km.  
+
+---
+
+__Symbols (units)__
+
+* (r): discount rate; (N): project lifetime (yr). 
+* (C_i_cap): total capital at site (i) using fixed (C_ref) (plant CAPEX + grid connection).
+* (FOM_i): annual fixed O&M at site (i).
+* (VOM_i): variable O&M ($/MWh).
+* (CF_i): capacity factor at site (i); (C_{\text{ref}}): fixed reference capacity (e.g., 100 MW).
+
+*Note:* The score is a relative, LCOE-like screening metric (not investment-grade LCOE).
+
 ```{hint}
 - Working enhancement includes several scoring metrics to serve scenario analysis.
 - Future improvements are planned to include Multi-criteria Decision Analysis (MCDA) methods to make scoring more robust.

@@ -6,7 +6,13 @@ Release_Year: 2025
 Scenario:
   run_id: strict_policy_aeroway_CPCAD_buffer
   Description: Policy scenario; buffer zones applied around aeroway lands and CPCAD areas, restricting resource siting.
+
 country: Canada
+
+default_CRS:
+  degrees: EPSG:4326
+  meters: EPSG:3347
+
 region_mapping:
   'AB':
     name: Alberta
@@ -15,18 +21,18 @@ region_mapping:
     timezone_convert: Etc/GMT-7
     sub_region_mapping: {}
     GWA_country_code: CAN
+    CRS_meters: EPSG:3577
+
   'BC':
     name: British Columbia
     land_area_km2: 925,186
     percentage_national_land_area: 10.4%
-    snapshots_tz_BC:
-      start:
-      - '2021-01-01 00:00:00'
-      end:
-      - '2021-12-31 23:00:00'
+
     timezone_convert: Etc/GMT+7
     sub_region_mapping: {}
     GWA_country_code: CAN
+    CRS_meters: EPSG:3005
+
   'MB':
     name: Manitoba
     land_area_km2: 553,556
@@ -34,6 +40,7 @@ region_mapping:
     timezone_convert: Etc/GMT-6
     sub_region_mapping: {}
     GWA_country_code: CAN
+    CRS_meters: EPSG:3978
   'NB':
     name: New Brunswick
     land_area_km2: 71,450
@@ -41,6 +48,7 @@ region_mapping:
     timezone_convert: Etc/GMT-4
     sub_region_mapping: {}
     GWA_country_code: CAN
+    CRS_meters: EPSG:2950
   'NL':
     name: Newfoundland and Labrador
     land_area_km2: 373,872
@@ -48,6 +56,7 @@ region_mapping:
     timezone_convert: Etc/GMT-3.5
     sub_region_mapping: {}
     GWA_country_code: CAN
+    CRS_meters: EPSG:3347
   'NS':
     name: Nova Scotia
     land_area_km2: 53,338
@@ -55,6 +64,7 @@ region_mapping:
     timezone_convert: Etc/GMT-4
     sub_region_mapping: {}
     GWA_country_code: CAN
+    CRS_meters: EPSG:2950
   'ON':
     name: Ontario
     land_area_km2: 917,741
@@ -63,6 +73,7 @@ region_mapping:
     percentage_national_land_area: 10.1%
     sub_region_mapping: {}
     GWA_country_code: CAN
+    CRS_meters: EPSG:3978
   'PE':
     name: Prince Edward Island
     land_area_km2: 5,660
@@ -71,6 +82,7 @@ region_mapping:
     percentage_national_land_area: 0.1%
     sub_region_mapping: {}
     GWA_country_code: CAN
+    CRS_meters: EPSG:2950
   'QC':
     name: Québec
     land_area_km2: 1,365,128
@@ -79,6 +91,7 @@ region_mapping:
     percentage_national_land_area: 15.0%
     sub_region_mapping: {}
     GWA_country_code: CAN
+    CRS_meters: EPSG:3978
   'SK':
     name: Saskatchewan
     land_area_km2: 591,670
@@ -87,6 +100,7 @@ region_mapping:
     percentage_national_land_area: 6.5%
     sub_region_mapping: {}
     GWA_country_code: CAN
+    CRS_meters: EPSG:3978
 
 GADM:
   root: data/downloaded_data/GADM
@@ -105,7 +119,7 @@ Gov:
     data_name: ProtectedConservedArea
     gdb_layer: ProtectedConservedArea_2023
     IUCN_CAT_mapping:
-      1: Strict  Nature Reserve
+      1: Strict Nature Reserve
       2: Wilderness Area
       3: National Park
       4: Natural Monument or Feature
@@ -269,8 +283,8 @@ GAEZ:
       - 6
       - 7
       buffer:
-        solar: 500
-        wind: 500
+        solar: 0
+        wind: 0
   - name: terrain_resources
     raster: slpmed05.tif
     zip_extract_direct: LR/ter
@@ -281,11 +295,12 @@ GAEZ:
       - 8
       - 9
       wind:
+      - 7
       - 8
       - 9
       buffer:
         solar: 0
-        wind: 500
+        wind: 0
   - name: land_cover
     raster: faocmb_2010.tif
     zip_extract_direct: LR/lco
@@ -302,7 +317,6 @@ GAEZ:
       - 2
       - 3
       - 5
-      - 6
       - 8
       - 9
 WorldPop:
@@ -357,24 +371,24 @@ capacity_disaggregation:
     - aeroway:
         buffer_mapping_key: aeroway
         buffer_mapping_key_buffers:
-          aerodrome: 1000
-          runway: 500
-          taxiway: 100
-          helipad: 100
-          apron: 100
-          gate: 100
+          aerodrome: 5000
+          runway: 2000
+          taxiway: 500
+          helipad: 1000
+          apron: 500
+          gate: 500
     - conserved_lands:
         buffer_mapping_key: IUCN_CAT_desc
         buffer_mapping_key_buffers:
-          Strict Nature Reserve: 5000
-          Wilderness Area: 5000
-          National Park: 0
-          Natural Monument or Feature: 0
-          Habitat/Species Management Area: 5000
-          Protected Landscape/Seascape: 1000
-          Protected Area with Sustainable Use of Natural Resources: 5000
-          Interim Sites (unknown specifics): 500
-          OECM areas: 1000
+          'Strict Nature Reserve': 2000
+          'Wilderness Area': 2000
+          'National Park': 1000
+          'Natural Monument or Feature': 2000
+          'Habitat/Species Management Area': 1500
+          'Protected Landscape/Seascape': 1500
+          'Protected Area with Sustainable Use of Natural Resources': 1500
+          'Interim Sites (unknown specifics)': 1000
+          'OECM areas': 100
   wind:
     max_capacity: 15
     landuse_intensity: 3
@@ -412,24 +426,24 @@ capacity_disaggregation:
     - aeroway:
         buffer_mapping_key: aeroway
         buffer_mapping_key_buffers:
-          aerodrome: 5000
-          runway: 100
-          taxiway: 100
-          helipad: 100
-          apron: 100
-          gate: 100
+          aerodrome: 10000 # checked with 5km, 10km before
+          runway: 3500
+          taxiway: 500
+          helipad: 2400
+          apron: 1000
+          gate: 1000
     - conserved_lands:
         buffer_mapping_key: IUCN_CAT_desc
         buffer_mapping_key_buffers:
-          Strict Nature Reserve: 10000
-          Wilderness Area: 10000
-          National Park: 10000
-          Natural Monument or Feature: 5000
-          Habitat/Species Management Area: 5000
-          Protected Landscape/Seascape: 5000
-          Protected Area with Sustainable Use of Natural Resources: 5000
-          Interim Sites (unknown specifics): 1000
-          OECM areas: 5000
+          'Strict Nature Reserve': 2000 #older was 10km
+          'Wilderness Area': 2000 # older was 10km
+          'National Park': 2000 # older was 10km
+          'Natural Monument or Feature': 2000
+          'Habitat/Species Management Area': 2000
+          'Protected Landscape/Seascape': 2000
+          'Protected Area with Sustainable Use of Natural Resources': 2000
+          'Interim Sites (unknown specifics)': 1000
+          'OECM areas': 300
   bess:
     max_capacity: 10
     cost_data: data/processed_data/bess/bess_LI_6hr_cost_moderate_NREL_ATB2024.csv

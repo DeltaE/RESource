@@ -146,7 +146,7 @@ class CellScorer(AttributesParser):
         tech_capex = capex_tech * potential_capacity_mw
         
         # Grid connection with economies of scale
-        base_grid_cost = (distance_to_grid_km * grid_connection_cost_per_km) + tx_line_rebuild_cost
+        base_grid_cost = distance_to_grid_km * (grid_connection_cost_per_km + tx_line_rebuild_cost)
         
         # Method 1: Simple scaling factor based on capacity tiers
         if potential_capacity_mw <= 50:  # Small projects
@@ -300,41 +300,6 @@ class CellScorer(AttributesParser):
         total_cost = tech_capex + grid_connection_cost
         return total_cost
     
-    # def calculate_total_cost(self, 
-    #                      distance_to_grid_km: float, 
-    #                      grid_connection_cost_per_km: float, 
-    #                      tx_line_rebuild_cost: float, 
-    #                      capex_tech: float,
-    #                      potential_capacity_mw: float) -> float:
-    #     """
-    #     Calculate total project cost including CAPEX and distance-based grid connection costs.
-        
-    #     Args:
-    #         distance_to_grid_km (float): Distance to nearest grid connection point (km)
-    #         grid_connection_cost_per_km (float): Cost per km for grid connection (M$/km)
-    #         tx_line_rebuild_cost (float): Transmission line rebuild cost (M$/km)
-    #         capex_tech (float): Technology-specific capital expenditure (M$/MW)
-    #         potential_capacity_mw (float): Potential installed capacity (MW)
-            
-    #     Returns:
-    #         float: Total project cost in millions of dollars (M$)
-    #     """
-        
-    #     # Technology CAPEX scales with capacity
-    #     tech_capex = capex_tech * potential_capacity_mw
-        
-    #     # Grid connection costs - could scale with project size for larger projects
-    #     # Option 1: Fixed connection cost (current approach)
-    #     grid_connection_cost = (distance_to_grid_km * grid_connection_cost_per_km) + tx_line_rebuild_cost
-        
-    #     # Option 2: Scale grid costs with capacity for very large projects
-    #     # capacity_factor = min(1.0, potential_capacity_mw / 100.0)  # Scale factor for projects >100MW
-    #     # grid_connection_cost = ((distance_to_grid_km * grid_connection_cost_per_km) + tx_line_rebuild_cost) * capacity_factor
-        
-    #     total_cost = tech_capex + grid_connection_cost
-        
-    #     return total_cost
-    
     def calculate_score(self,
                     row: pd.Series,
                     node_distance_col: str,
@@ -440,7 +405,7 @@ class CellScorer(AttributesParser):
     def get_cell_score(self, 
                     cells: pd.DataFrame,
                     CF_column:str,
-                    interest_rate=0.03) -> pd.DataFrame:
+                    interest_rate:float=0.03) -> pd.DataFrame:
         """
         Calculate LCOE scores for all grid cells in a DataFrame and return ranked results.
         
@@ -501,7 +466,6 @@ class CellScorer(AttributesParser):
         """
         dataframe = cells.copy()  # Use the input DataFrame for calculations
 
-        
         node_distance_col = utils.get_available_column(dataframe, ['nearest_station_distance_km', 'nearest_distance'])
         
         required_columns = [
@@ -674,7 +638,9 @@ class CellScorer(AttributesParser):
                                 node_distance_col: str,
                                 CF_column: str,
                                 CRF: float,
-                                reference_capacity: float = 1.0) -> float:
+                                reference_capacity: float = 1.0,
+                                typical_build_mw: float = 100.0,
+                                scaling_exponent: float = 0.8,) -> float:
         """
         Calculate LCOE using a normalized capacity for fair comparison in clustering.
         
@@ -690,23 +656,29 @@ class CellScorer(AttributesParser):
             return float('999999')
         
         # Calculate costs using reference capacity
-        total_capex = self.calculate_total_cost_smooth_scaling(
+        total_cost_typical  = self.calculate_total_cost_smooth_scaling(
             row[node_distance_col],
             row[f'grid_connection_cost_per_km_{self.resource_type}'],
             row[f'tx_line_rebuild_cost_{self.resource_type}'],
             row[f'capex_{self.resource_type}'],
-            reference_capacity  # Use fixed capacity
+            potential_capacity_MW=typical_build_mw,
+            reference_capacity_MW=typical_build_mw,   # align baseline
+            scaling_exponent=scaling_exponent,
         )
+        # 2) Convert that to a per-MW capex
+        capex_per_mw = total_cost_typical / typical_build_mw  # M$/MW
+        
+        # 3) Build the normalized 1-MW project with that per-MW capex
+        total_capex_for_ref = capex_per_mw * reference_capacity
         
         # O&M costs with reference capacity
         fom_annual = row[f'fom_{self.resource_type}'] * reference_capacity
         vom_annual = row[f'vom_{self.resource_type}'] * annual_energy
         
         # Calculate LCOE
-        lcoe_millions = ((total_capex * CRF) + fom_annual + vom_annual) / annual_energy
-        lcoe_dollars = lcoe_millions * 1E6
+        lcoe_musd_per_mwh  = ((total_capex_for_ref  * CRF) + fom_annual + vom_annual) / annual_energy
         
-        return lcoe_dollars
+        return lcoe_musd_per_mwh  * 1E6
 
     def calculate_score_per_mw(self,
                             row: pd.Series,

@@ -224,7 +224,7 @@ class RESources_builder(AttributesParser):
         
         # Save the configuration to the results directory
         utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| Saving configuration to results directory...")                
-        utils.save_to_yaml(self.config, self.results_save_to/self.region_short_code/f'config_{self.region_short_code}_{self.RUN_ID}.yaml')
+        utils.save_to_yaml(self.config, self.results_save_to/f'config_{self.region_short_code}_{self.RUN_ID}.yaml')
     
     def clean_data_store(self):
         """
@@ -242,7 +242,7 @@ class RESources_builder(AttributesParser):
         utils.print_update(level=PRINT_LEVEL_BASE+1,
                            message=f"{__name__}| Cleaning data store...")
         self.datahandler.clean_store()
-        utils.print_update(level=PRINT_LEVEL_BASE+1,
+        utils.print_update(level=PRINT_LEVEL_BASE+2,
                            message=f"{__name__}| Data store cleaned.")
 
     def get_grid_cells(self)->gpd.GeoDataFrame:
@@ -400,7 +400,8 @@ class RESources_builder(AttributesParser):
 
     def find_grid_nodes(self,
                         cells:gpd.GeoDataFrame=None,
-                        use_pypsa_buses:bool=False) -> gpd.GeoDataFrame:
+                        use_pypsa_buses:bool=False,
+                        use_grid_lines:bool=False) -> gpd.GeoDataFrame:
         """
         Find the grid nodes for the given cells.                            
 
@@ -444,7 +445,7 @@ class RESources_builder(AttributesParser):
             self.grid_ss = gpd.GeoDataFrame(
                 grid_ss_df,
                 geometry=gpd.points_from_xy(grid_ss_df['x'], grid_ss_df['y']),
-                crs=self.get_default_crs(),  # Set the coordinate reference system (e.g., WGS84)
+                crs=self.crs_m,  # Set the coordinate reference system (e.g., WGS84)
                 ) 
             
             utils.print_update(level=PRINT_LEVEL_BASE+3,
@@ -457,10 +458,9 @@ class RESources_builder(AttributesParser):
             self.datahandler.to_store(self.store_grid_cells,'cells')
             self.datahandler.to_store(self.grid_ss,'buses')
         else:
-            utils.print_update(level=PRINT_LEVEL_BASE+3,
-                           message=f"{__name__}| Using Substations (sourced from CODERS) preferred nodes for resource connection.")
-            
-            if self.country_name == 'Canada':
+            if self.country_name == 'Canada' and not use_grid_lines:
+                utils.print_update(level=PRINT_LEVEL_BASE+3,
+                           message=f"{__name__}| Using CODERS substations for connection point analysis...")
                 self.grid_ss:gpd.GeoDataFrame=self.coders.get_table_provincial('substations')
                 
                 utils.print_update(level=PRINT_LEVEL_BASE+3,
@@ -686,7 +686,9 @@ class RESources_builder(AttributesParser):
     def build(self,
             select_top_sites:Optional[bool]=False,
             use_pypsa_buses:Optional[bool]=False,
+            use_grid_lines:Optional[bool]=False,
             get_clusters: Optional[bool]=False,
+            clean_store:Optional[bool]=False,
             memory_resource_limitation:Optional[bool]=True):
         """
         Execute the specific module logic for the given resource type ('solar' or 'wind').
@@ -694,9 +696,27 @@ class RESources_builder(AttributesParser):
         utils.print_module_title(f"Initiating {self.resource_type} module for {self.get_region_name()}...")
         self.memory_resource_limitation=memory_resource_limitation
         
-        utils.print_banner("Step 1 : Prepare Cutout and Grid Cells")
+        if clean_store:
+            self.clean_data_store()
+        # else:
+        #     utils.print_update(level=PRINT_LEVEL_BASE+1,
+        #                    message=f"{__name__}| Skipping data store cleaning step as per user request.")
+        #     self.datahandler.refresh()
+        #     self.store_grid_cells=self.datahandler.from_store('cells')
+        #     if self.store_grid_cells is not None and 'geometry' not in self.store_grid_cells.columns:
+        #         utils.print_banner("Step 1.1 : Prepare Cutout and Grid Cells")
         self.get_grid_cells()
+            # else:
+            #     utils.print_update(level=PRINT_LEVEL_BASE+1,
+            #                 message=f"{__name__}| Grid Cells already present in the store, skipping grid cell preparation step.")
         
+            # if  self.store_grid_cells is not None and'nearest_station_distance_km' not in self.store_grid_cells.columns:
+        self.find_grid_nodes(use_pypsa_buses=use_pypsa_buses,
+                                    use_grid_lines=use_grid_lines)
+        # else:
+        #         utils.print_update(level=PRINT_LEVEL_BASE+1,
+        #                     message=f"{__name__}| Nearest grid connection nodes already present in the store, skipping grid node location step.")
+                
         utils.print_banner("Step 2 : Calculate Land availability and process capacity matrix")
         self.get_cell_capacity()
         
@@ -708,17 +728,14 @@ class RESources_builder(AttributesParser):
         utils.print_banner("Step 4 : Create timeseries for Resources CF")
         self.get_CF_timeseries()
         
-        utils.print_banner("Step 5 : Find closed grid connection nodes")
-        self.find_grid_nodes(use_pypsa_buses=use_pypsa_buses)
-        
-        utils.print_banner("Step 6 : Use capacity, energy yield and cost attributes to score each cell")
+        utils.print_banner("Step 5 : Use capacity, energy yield and cost attributes to score each cell")
         self.score_cells()
         
         if get_clusters:
-            utils.print_banner("Step 7.1 : Use score similarities to find clusterized representation (sites) of cells")
+            utils.print_banner("Step 6.1 : Use score similarities to find clusterized representation (sites) of cells")
             self.get_clusters()
             
-            utils.print_banner("Step 7.2 : Prepare representative timeseries of the clusterized sites")
+            utils.print_banner("Step 6.2 : Prepare representative timeseries of the clusterized sites")
             self.get_cluster_timeseries()
         
         utils.print_info("To avoid confusion, Units dictionary method should be updated if any units are changed across modules. However, units dictionary is for documentation purposes only. It doesn't have any calculation impacts on any of the methods.")

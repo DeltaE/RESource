@@ -521,12 +521,13 @@ class GAEZRasterProcessor(AttributesParser):
                 dst.write(clipped_raster)
             
             # Call visualization method
-            plot_save_to = Path('vis/misc') / raster_file.replace('.tif', f'_raster_{self.region_short_code}.png')
-            self.plot_gaez_tif(clipped_raster_path, 
-                               color_map, 
-                               plot_title, 
-                               plot_save_to,show)
-            utils.print_update(level=print_level_base+1,message=f"{__name__}| Clipped Raster plot for {super().get_region_name()} saved at: {plot_save_to}")  # INHERITED METHOD from AttributesParser
+            # save_to_root=self.get_vis_dir()
+            # plot_save_to = Path(f'{save_to_root}') / raster_file.replace('.tif', f'_raster_{self.region_short_code}.png')
+            # self.plot_gaez_tif(clipped_raster_path, 
+            #                    color_map, 
+            #                    plot_title, 
+            #                    plot_save_to,show)
+            # utils.print_update(level=print_level_base+1,message=f"{__name__}| Clipped Raster plot for {super().get_region_name()} saved at: {plot_save_to}")  # INHERITED METHOD from AttributesParser
             return clipped_raster_path
 
     def plot_gaez_tif(self, tif_path, color_map, plot_title, save_to, show=False):

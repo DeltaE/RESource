@@ -144,26 +144,29 @@ class DataHandler:
             FileNotFoundError: If the key is not found in the store.
             TypeError: If the loaded data is not a DataFrame or GeoDataFrame.
         """
-        
-        with pd.HDFStore(self.store, 'r') as store:
-            if key not in store:
-                utils.print_update(level=3,message=f"{__name__}| ❌ Error: Key '{key}' not found in {self.store}")
-                return None
+        try:
+            with pd.HDFStore(self.store, 'r') as store:
+                if key not in store:
+                    utils.print_update(level=3,message=f"{__name__}| ❌ Error: Key '{key}' not found in {self.store}")
+                    return None
 
-            # Load the data
-            self.data = pd.read_hdf(self.store, key)
+                # Load the data
+                self.data = pd.read_hdf(self.store, key)
 
-            # Rename 'geometry' back to 'geometry' and convert WKT to geometry if applicable
-            for geom_col in self.geom_columns:
-                if geom_col in self.data.columns:
-                    self.data[geom_col] = self.data[geom_col].apply(loads)
-                    return gpd.GeoDataFrame(self.data, geometry='geometry', crs='EPSG:4326')
+                # Rename 'geometry' back to 'geometry' and convert WKT to geometry if applicable
+                for geom_col in self.geom_columns:
+                    if geom_col in self.data.columns:
+                        self.data[geom_col] = self.data[geom_col].apply(loads)
+                        return gpd.GeoDataFrame(self.data, geometry='geometry', crs='EPSG:4326')
 
-            # If not geometry, return the regular DataFrame
-            if key == 'timeseries':
-                utils.print_info({__name__}|"'timeseries' key access suggestions: use '.solar' to access Solar-timeseries and '.wind' for Wind-timeseries.")
-            
-            return self.data
+                # If not geometry, return the regular DataFrame
+                if key == 'timeseries':
+                    utils.print_info({__name__}|"'timeseries' key access suggestions: use '.solar' to access Solar-timeseries and '.wind' for Wind-timeseries.")
+                
+                return self.data
+        except Exception as e:
+            utils.print_update(level=3,message=f"{__name__}| ❌ Error loading data from store: {e}")
+            return None
 
     def refresh(self):
         """

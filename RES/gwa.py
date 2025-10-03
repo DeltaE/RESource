@@ -607,7 +607,7 @@ class GWACells(AttributesParser):
         self.gwa_cells_gdf = gpd.GeoDataFrame(
             self.region_gwa_cells_df,
             geometry=gpd.points_from_xy(self.region_gwa_cells_df['x'], self.region_gwa_cells_df['y']),
-            crs=self.get_default_crs()  # INHERITED METHOD from AttributesParser
+            crs=self.crs_d  # INHERITED METHOD from AttributesParser
         ).clip(self.gadmBoundaries.get_region_boundary(), keep_geom_type=False)  # INHERITED METHOD from GADMBoundaries
 
         # self.gwa_cells_gdf = self.calculate_common_parameters_GWA_cells()

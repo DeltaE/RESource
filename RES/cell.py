@@ -170,7 +170,6 @@ class GridCells(AttributesParser):
 
         ## Initiate the Store and Datahandler (interfacing with the Store)
         self.datahandler=DataHandler(self.store)
-        self.crs=self.get_default_crs()
         
     
     def _check_resolution(self): # not is use for now, future scope when user up/down scales the resolution
@@ -237,7 +236,7 @@ class GridCells(AttributesParser):
         cells = [box(*c) for c in np.hstack((coords - span, coords + span))]
         self.bounding_box_grid=gpd.GeoDataFrame(
             {"x": coords[:, 0], "y": coords[:, 1], "geometry": cells},
-            crs=self.crs,
+            crs=self.crs_d,
         )
         # Return GeoDataFrame with centroids and grid cells
         return self.bounding_box_grid
