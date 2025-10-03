@@ -387,9 +387,6 @@ document.write(`
   <img src="../_static/graphic_RES_banner_BC.jpg" alt="assessment_steps" width="800"/>
 <section id="case-study-vre-site-selection-in-british-columbia">
 <h1>Case study: VRE site selection in British Columbia<a class="headerlink" href="#case-study-vre-site-selection-in-british-columbia" title="Link to this heading">#</a></h1>
-<blockquote>
-<div><p>publication under review.</p>
-</div></blockquote>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>This library is under heavy development and the publication is under review process.</p>
@@ -573,9 +570,13 @@ Here is a quick overview of the data sources used in this case study:</p>
 </div></blockquote>
 <p>Here is a visual on how the no-go zones for site development looks like:</p>
 <img src="../_static/CPCAD_BC_buffers.png" alt="CPCAD_BC with buffers" width="900"/>
->Note: sourced from [Canadian Protected and Conserved Areas Database, 2024](https://www.canada.ca/en/environment-climate-change/services/national-wildlife-areas/protected-conserved-areas-database.html)
+<blockquote>
+<div><p>Note: sourced from <a class="reference external" href="https://www.canada.ca/en/environment-climate-change/services/national-wildlife-areas/protected-conserved-areas-database.html">Canadian Protected and Conserved Areas Database, 2024</a></p>
+</div></blockquote>
 <img src="../_static/aeroway_buffers.png" alt="aeroway_buffers" width="900"/>
->Note: Aeroway data is sourced from Openstreetmap.
+<blockquote>
+<div><p>Note: Aeroway data is sourced from Openstreetmap.</p>
+</div></blockquote>
 </section>
 <section id="restricted-land-use-policy-scenario">
 <h4>Restricted Land-use POLICY scenario:<a class="headerlink" href="#restricted-land-use-policy-scenario" title="Link to this heading">#</a></h4>
@@ -657,7 +658,7 @@ Here is a quick overview of the data sources used in this case study:</p>
 <li><p>Resource's spatial screening process for BC, showing the stepwise filtering of land availability based on terrain, land cover, and exclusion zones. These plots are in 100m resolution, illustrating the progressive reduction of eligible land as each layer of constraints is applied.</p>
 <ul>
 <li><p>The land availability maps for BC, illustrating the <strong>remaining eligible areas after applying each layer of spatial constraints</strong>.From the explicit impact of each spatial layers, the map below shows that <strong>suitable land cover selection and regionally protected lands have the biggest impact on land availability for site development</strong>. This visual help us to quickly spot spatial impact of our land-use layer selections and no-go buffers.</p>
-<img src="../_static/LandAvailability_IndividualLayers_100m_BASELINE.jpg" alt="LandAvailability_IndividualLayers_100m_BASELINE" width="auto"/>
+<img src="../_static/LandAvailability_IndividualLayers_100m_BASELINE.jpg" alt="LandAvailability_IndividualLayers_100m_BASELINE" width="800"/>
 </li>
 <li><p>The <strong>cumulative impact of each layer</strong> on land availability, illustrating how terrain, land cover, and exclusion zones progressively reduce the pool of eligible sites. The following maps show the final screening result in 100m resolution (land container's default resolution. Land container helps us to account the configured logics for layer/category-wise selections and buffers). We rescale this availability numbers to ERA5 cells resolution. Finally we translate these numbers to potential capacity by using technology land-use intensity numbers.</p></li>
 </ul>
@@ -751,33 +752,36 @@ Tightening buffers primarily truncates the solar supply curve (availability loss
 <section id="economic-scoring-where-power-pays-off">
 <h3>Economic Scoring : Where Power Pays Off<a class="headerlink" href="#economic-scoring-where-power-pays-off" title="Link to this heading">#</a></h3>
 <p>RESource ranks and prioritizes renewable energy sites using the <code class="docutils literal notranslate"><span class="pre">score_cells()</span></code> <a class="reference external" href="https://deltae.github.io/RESource/notes/resource_builder.html#step-6-scoring-metric-to-rank-the-sites">method</a>, which calculates a Levelized Cost of Energy (LCOE) score for each grid cell. This score incorporates:</p>
-<p><strong>relative cost scoring method</strong> (configurable)</p>
-<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>\text{CRF} = \frac{r(1+r)^N}{(1+r)^N - 1}
+<p><strong>Relative cost scoring method</strong> (configurable)</p>
+<p><strong>Capital Recovery Factor (CRF):</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CRF</span> <span class="o">=</span> <span class="n">r</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">r</span><span class="p">)</span><span class="o">^</span><span class="n">N</span> <span class="o">/</span> <span class="p">[(</span><span class="mi">1</span><span class="o">+</span><span class="n">r</span><span class="p">)</span><span class="o">^</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>CRF from discount rate (r) and life (N).</p>
-<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>E_i = 8760 \times CF_i \times C_{\text{ref}}
+<p>where r = discount rate, N = project lifetime (years)</p>
+<p><strong>Annual Energy:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>E_i = 8760 × CF_i × C_ref
 </pre></div>
 </div>
-<p>Annual energy at site (i).</p>
-<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>\text{Score}_i
-= \frac{\text{CRF}\cdot C_i^{\text{cap}} + FOM_i + VOM_i \cdot E_i}{E_i}
-\quad [\$/\text{MWh}]
+<p>Annual energy at site (i) in MWh/year</p>
+<p><strong>Site Score:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Score_i = [CRF × C_i_cap + FOM_i + VOM_i × E_i] / E_i  [$/MWh]
 </pre></div>
 </div>
-<p><strong>Capital cost</strong></p>
-<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>C_i^{\text{cap}} = CAPEX_i \cdot C_{\text{ref}} + C_i^{\text{spur}} + C_i^{\text{upgrade}}
+<p><strong>Capital Cost:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>C_i_cap = CAPEX_i × C_ref + C_i_spur + C_i_upgrade
 </pre></div>
 </div>
 <p>Grid costs are added on top of plant CAPEX; upgrades can be modeled as linear $/MW-km.</p>
 <hr class="docutils" />
-<p><strong>Symbols (units)</strong></p>
+<p><strong>Symbols (units):</strong></p>
 <ul class="simple">
-<li><p>(r): discount rate; (N): project lifetime (yr).</p></li>
-<li><p>(C_i_cap): total capital at site (i) using fixed (C_ref) (plant CAPEX + grid connection).</p></li>
-<li><p>(FOM_i): annual fixed O&amp;M at site (i).</p></li>
-<li><p>(VOM_i): variable O&amp;M ($/MWh).</p></li>
-<li><p>(CF_i): capacity factor at site (i); (C_{\text{ref}}): fixed reference capacity (e.g., 100 MW).</p></li>
+<li><p>r: discount rate</p></li>
+<li><p>N: project lifetime (years)</p></li>
+<li><p>C_i_cap: total capital at site (i) using fixed C_ref (plant CAPEX + grid connection)</p></li>
+<li><p>FOM_i: annual fixed O&amp;M at site (i)</p></li>
+<li><p>VOM_i: variable O&amp;M ($/MWh)</p></li>
+<li><p>CF_i: capacity factor at site (i)</p></li>
+<li><p>C_ref: fixed reference capacity (e.g., 100 MW)</p></li>
 </ul>
 <p><em>Note:</em> The score is a relative, LCOE-like screening metric (not investment-grade LCOE).</p>
 </section>

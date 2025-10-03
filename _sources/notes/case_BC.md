@@ -1,7 +1,7 @@
 <img src="../_static/graphic_RES_banner_BC.jpg" alt="assessment_steps" width="800"/>
 
 # Case study: VRE site selection in British Columbia
-> publication under review.
+
 
 ```{warning}
 This library is under heavy development and the publication is under review process.
@@ -88,10 +88,12 @@ Key parameters are configurable to reflect geographic constraints (e.g., slope, 
 Here is a visual on how the no-go zones for site development looks like:
 
 <img src="../_static/CPCAD_BC_buffers.png" alt="CPCAD_BC with buffers" width="900"/>
+
 >Note: sourced from [Canadian Protected and Conserved Areas Database, 2024](https://www.canada.ca/en/environment-climate-change/services/national-wildlife-areas/protected-conserved-areas-database.html)
 
 <img src="../_static/aeroway_buffers.png" alt="aeroway_buffers" width="900"/>
->Note: Aeroway data is sourced from Openstreetmap.
+
+> Note: Aeroway data is sourced from Openstreetmap.
 
 #### Restricted Land-use POLICY scenario:
 Buffers listed below are __incremental restrictions__ on-top of the BASELINE assumptions.
@@ -117,7 +119,7 @@ Spatial screening revealed that roughly 64% of BC’s land is unsuitable for VRE
 
   - The land availability maps for BC, illustrating the __remaining eligible areas after applying each layer of spatial constraints__.From the explicit impact of each spatial layers, the map below shows that __suitable land cover selection and regionally protected lands have the biggest impact on land availability for site development__. This visual help us to quickly spot spatial impact of our land-use layer selections and no-go buffers.
   
-    <img src="../_static/LandAvailability_IndividualLayers_100m_BASELINE.jpg" alt="LandAvailability_IndividualLayers_100m_BASELINE" width="auto"/>
+    <img src="../_static/LandAvailability_IndividualLayers_100m_BASELINE.jpg" alt="LandAvailability_IndividualLayers_100m_BASELINE" width="800"/>
 
   - The __cumulative impact of each layer__ on land availability, illustrating how terrain, land cover, and exclusion zones progressively reduce the pool of eligible sites. The following maps show the final screening result in 100m resolution (land container's default resolution. Land container helps us to account the configured logics for layer/category-wise selections and buffers). We rescale this availability numbers to ERA5 cells resolution. Finally we translate these numbers to potential capacity by using technology land-use intensity numbers.
 
@@ -212,44 +214,45 @@ These uncertainties highlight that RESource provides a relative, comparative ass
 
 RESource ranks and prioritizes renewable energy sites using the `score_cells()` [method](https://deltae.github.io/RESource/notes/resource_builder.html#step-6-scoring-metric-to-rank-the-sites), which calculates a Levelized Cost of Energy (LCOE) score for each grid cell. This score incorporates:
 
-**relative cost scoring method** (configurable)
+**Relative cost scoring method** (configurable)
 
-```math
-\text{CRF} = \frac{r(1+r)^N}{(1+r)^N - 1}
+**Capital Recovery Factor (CRF):**
+```
+CRF = r(1+r)^N / [(1+r)^N - 1]
+```
+where r = discount rate, N = project lifetime (years)
+
+**Annual Energy:**
+```
+E_i = 8760 × CF_i × C_ref
+```
+Annual energy at site (i) in MWh/year
+
+**Site Score:**
+```
+Score_i = [CRF × C_i_cap + FOM_i + VOM_i × E_i] / E_i  [$/MWh]
 ```
 
-CRF from discount rate (r) and life (N). 
 
-```math
-E_i = 8760 \times CF_i \times C_{\text{ref}}
+**Capital Cost:**
+
+```
+C_i_cap = CAPEX_i × C_ref + C_i_spur + C_i_upgrade
 ```
 
-Annual energy at site (i). 
+Grid costs are added on top of plant CAPEX; upgrades can be modeled as linear $/MW-km.
 
-```math
-\text{Score}_i
-= \frac{\text{CRF}\cdot C_i^{\text{cap}} + FOM_i + VOM_i \cdot E_i}{E_i}
-\quad [\$/\text{MWh}]
-```
+----
 
+**Symbols (units):**
 
-**Capital cost**
-
-```math
-C_i^{\text{cap}} = CAPEX_i \cdot C_{\text{ref}} + C_i^{\text{spur}} + C_i^{\text{upgrade}}
-```
-
-Grid costs are added on top of plant CAPEX; upgrades can be modeled as linear $/MW-km.  
-
----
-
-__Symbols (units)__
-
-* (r): discount rate; (N): project lifetime (yr). 
-* (C_i_cap): total capital at site (i) using fixed (C_ref) (plant CAPEX + grid connection).
-* (FOM_i): annual fixed O&M at site (i).
-* (VOM_i): variable O&M ($/MWh).
-* (CF_i): capacity factor at site (i); (C_{\text{ref}}): fixed reference capacity (e.g., 100 MW).
+- r: discount rate
+- N: project lifetime (years)
+- C_i_cap: total capital at site (i) using fixed C_ref (plant CAPEX + grid connection)
+- FOM_i: annual fixed O&M at site (i)
+- VOM_i: variable O&M ($/MWh)
+- CF_i: capacity factor at site (i)
+- C_ref: fixed reference capacity (e.g., 100 MW)
 
 *Note:* The score is a relative, LCOE-like screening metric (not investment-grade LCOE).
 
