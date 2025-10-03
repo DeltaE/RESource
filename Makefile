@@ -11,10 +11,6 @@ help:
 	@echo "  updateenv   - Update existing conda environment"
 	@echo "  exportenv   - Export current environment to env/environment.yml"
 	@echo ""
-	@echo "Running:"
-	@echo "  run         - Run main RESource script (run.py)"
-	@echo "  jupyter     - Start Jupyter Lab"
-	@echo ""
 	@echo "Documentation:"
 	@echo "  docs        - Build and deploy documentation"
 	@echo "  autobuild   - Live rebuild documentation (port 8000)"
@@ -60,15 +56,6 @@ run:
 	@echo "Running main RESource script..."
 	@if conda env list | grep -q "^RES "; then \
 		conda run -n RES python run.py $(ARGS); \
-	else \
-		echo "❌ Environment 'RES' not found. Run 'make setupenv' first."; \
-		exit 1; \
-	fi
-
-jupyter:
-	@echo "Starting Jupyter Lab..."
-	@if conda env list | grep -q "^RES "; then \
-		conda run -n RES jupyter lab; \
 	else \
 		echo "❌ Environment 'RES' not found. Run 'make setupenv' first."; \
 		exit 1; \
@@ -121,3 +108,4 @@ clean:
 	@find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
 	@find . -name "*.pyc" -delete 2>/dev/null || true
 	@echo "✅ Cleaned build files and cache!"
+

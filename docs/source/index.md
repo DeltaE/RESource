@@ -21,6 +21,18 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 ## Workflow overview
 <img src="_static/workflow.jpg" alt="high_level_workflow" width="1000"/>
 
+---
+
+## 🚀 Quick Start
+
+```{include} notes/quickstart.md
+```
+
+```{tip}
+**Ready to dive deeper?** Check out the [Complete Setup Guide](notes/setup_guide.md) or explore the [BC Case Study](notes/case_BC.md) for detailed examples.
+```
+
+---
 
 ```{toctree}
 :caption: 'Contents:'
