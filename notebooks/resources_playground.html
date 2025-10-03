@@ -1,0 +1,887 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Resources Plots &#8212; RESource 2025.07 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=e9b82cb4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/resources_playground';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../notes/config.html">How to use the CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/learning.html">Best Practices and Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/developers.html">Contributing Developers</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Store_explorer.html">Explore data store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Visuals_BC.html">Example Visuals for BC</a></li>
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notes/api.html">RES API References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/documentation_guide.html">Documentation Build Guide</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/resources_playground.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Resources Plots</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Resources Plots</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Select-Region">Select Region</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Select-Resource-type">Select Resource type</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#[Exploratory]">[Exploratory]</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#Playground-for-Top-Site-Selection">Playground for Top Site Selection</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#Visualize-Results">Visualize Results</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="Resources-Plots">
+<h1>Resources Plots<a class="headerlink" href="#Resources-Plots" title="Link to this heading">#</a></h1>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">ipywidgets</span> <span class="k">as</span> <span class="nn">widgets</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span>
+<span class="kn">import</span> <span class="nn">RES.RESources</span> <span class="k">as</span> <span class="nn">RES_module</span>
+
+<span class="kn">from</span> <span class="nn">RES</span> <span class="kn">import</span> <span class="n">utility</span> <span class="k">as</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">RES.hdf5_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
+
+<span class="kn">import</span> <span class="nn">RES.visual_styles</span> <span class="k">as</span> <span class="nn">styles</span>
+<span class="n">style_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">styles</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;elsevier.mplstyle&quot;</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">style_path</span><span class="p">)</span>
+<span class="c1"># Suppress specific warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+<span class="n">cfg</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="s1">&#39;config/config_CAN.yaml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-fg"> └&gt; CODERS API key loaded from: data/downloaded_data/CODERS/coders_api.yaml</span>
+<span class="ansi-white-intense-fg">  └&gt; user Elias: w0OksqQKMFMtKPbO</span>
+</pre></div></div>
+</div>
+<hr class="docutils" />
+<section id="Select-Region">
+<h2>Select Region<a class="headerlink" href="#Select-Region" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Construct region_options as a list of tuples: (name, code)</span>
+<span class="n">region_options</span> <span class="o">=</span> <span class="p">[(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;region_mapping&#39;</span><span class="p">][</span><span class="n">code</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">code</span><span class="p">)</span> <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;region_mapping&#39;</span><span class="p">]]</span>
+<span class="n">region_code</span> <span class="o">=</span> <span class="s1">&#39;BC&#39;</span>  <span class="c1"># Default selection, change as needed</span>
+
+<span class="c1"># Create dropdown widget for region codes with names shown, codes as values</span>
+<span class="n">region_code_dropdown</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
+    <span class="n">options</span><span class="o">=</span><span class="n">region_options</span><span class="p">,</span>
+    <span class="n">value</span><span class="o">=</span><span class="n">region_code</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Region:&#39;</span><span class="p">,</span>
+    <span class="n">disabled</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">region_code_dropdown</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f78d9cda8fec4e7abac7a90427f7cce1", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+<section id="Select-Resource-type">
+<h2>Select Resource type<a class="headerlink" href="#Select-Resource-type" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">resource_type_dropdown</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
+    <span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;wind&#39;</span><span class="p">,</span> <span class="s1">&#39;solar&#39;</span><span class="p">],</span>
+    <span class="n">value</span><span class="o">=</span><span class="s1">&#39;wind&#39;</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Resource:&#39;</span><span class="p">,)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">resource_type_dropdown</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4d322516a8e24f4f91a01d40ce54d0e1", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">resource_type</span> <span class="o">=</span> <span class="n">resource_type_dropdown</span><span class="o">.</span><span class="n">value</span>
+<span class="n">province_code</span> <span class="o">=</span> <span class="n">region_code_dropdown</span><span class="o">.</span><span class="n">value</span>
+
+
+
+<span class="n">required_args</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;config_file_path&quot;</span><span class="p">:</span> <span class="s1">&#39;config/config_CAN.yaml&#39;</span><span class="p">,</span>
+    <span class="s2">&quot;region_short_code&quot;</span><span class="p">:</span> <span class="n">province_code</span><span class="p">,</span>
+    <span class="s2">&quot;resource_type&quot;</span><span class="p">:</span> <span class="n">resource_type</span>
+<span class="p">}</span>
+
+
+<span class="c1"># Create an instance of Resources and execute the module</span>
+<span class="n">RES_module</span> <span class="o">=</span> <span class="n">RES_module</span><span class="o">.</span><span class="n">RESources_builder</span><span class="p">(</span><span class="o">**</span><span class="n">required_args</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-intense-fg">____________________________________________________________</span>
+<span class="ansi-green-intense-fg">     Initiating RESource Builder | RES.RESources</span>
+<span class="ansi-cyan-intense-fg">____________________________________________________________</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Region Set to &gt;&gt; Short Code : BC, Name: British Columbia).</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Collecting regional boundary...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Loading GADM boundaries (Sub-provincial | level =2) for British Columbia from local file data/processed_data/regions/gadm41_Canada_L2_BC.geojson.</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Region Set to &gt;&gt; Short Code : BC, Name: British Columbia).</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Collecting regional boundary...</span>
+<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Loading GADM boundaries (Sub-provincial | level =2) for British Columbia from local file data/processed_data/regions/gadm41_Canada_L2_BC.geojson.</span>
+<span class="ansi-cyan-fg"> └&gt; NREL_ATBProcessor initiated...</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.atb| Processing Annual Technology Baseline (ATB) data sourced from NREL...</span>
+<span class="ansi-cyan-fg"> └&gt; RES.utility| Directory &#39;data/downloaded_data/NREL/ATB/ATBe.parquet&#39; found locally.</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.atb| ATB cost datafile: ATBe.parquet loaded</span>
+<span class="ansi-white-intense-fg">  └&gt; Extracting technology baseline costs...</span>
+<span class="ansi-black-intense-fg">  └─&gt; Extracting Solar PV technology cost...</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler|💾 Data (GeoDataFrame/DataFrame) saved to data/store/resources_BC_strict_policy_aeroway_CPCAD_buffer.h5 with key &#39;cost/atb/solar&#39;</span>
+<span class="ansi-black-intense-fg">  └─&gt; Extracting Wind Turbine technology cost...</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler|💾 Data (GeoDataFrame/DataFrame) saved to data/store/resources_BC_strict_policy_aeroway_CPCAD_buffer.h5 with key &#39;cost/atb/wind&#39;</span>
+<span class="ansi-cyan-fg"> └&gt; Snapshot for Resources: 2023-01-01 07:00:00 to 2024-01-01 06:00:00</span>
+<span class="ansi-cyan-fg"> └&gt; RES.RESources| Saving configuration to results directory...</span>
+<span class="ansi-black-intense-fg ansi-bold">ℹ️  RES.utility| A copy of the dictionary saved to : &#39;results/RESources/BC/config_BC_strict_policy_aeroway_CPCAD_buffer.yaml&#39;</span>
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="[Exploratory]">
+<h1>[Exploratory]<a class="headerlink" href="#[Exploratory]" title="Link to this heading">#</a></h1>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the directory and search pattern</span>
+<span class="n">data_store_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;data/store/&quot;</span><span class="p">)</span>
+<span class="n">search_keyword</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;resources_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">_&quot;</span>
+
+<span class="c1"># List files containing the search pattern</span>
+<span class="n">matching_files</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">data_store_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">search_keyword</span><span class="si">}</span><span class="s2">*&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">is_file</span><span class="p">()]</span>
+
+<span class="c1"># Extract run IDs from matching_files</span>
+<span class="n">run_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">data_store_dir</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">search_keyword</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.h5&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">matching_files</span><span class="p">]</span>
+
+
+<span class="n">RUN_ID</span><span class="o">=</span><span class="s2">&quot;default&quot;</span>
+
+<span class="c1"># Create dropdown widget</span>
+<span class="n">run_id_dropdown</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
+    <span class="n">options</span><span class="o">=</span><span class="n">run_ids</span><span class="p">,</span>
+    <span class="n">value</span><span class="o">=</span><span class="n">RUN_ID</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Run ID:&#39;</span><span class="p">,</span>
+    <span class="n">disabled</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">run_id_dropdown</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7ffd5a9eb0a641339d092fe168182935", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RUN_ID</span><span class="o">=</span> <span class="n">run_id_dropdown</span><span class="o">.</span><span class="n">value</span>
+<span class="n">store</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/store/resources_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">RUN_ID</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="c1"># f&quot;../data/store/resources_{province_code}.h5&quot;</span>
+<span class="n">res_store</span><span class="o">=</span><span class="n">DataHandler</span><span class="p">(</span><span class="n">store</span><span class="p">,</span><span class="n">show_structure</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># the DataHandler object could be initiated without the store definition as well.</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-intense-fg">____________________________________________________________</span>
+<span class="ansi-green-intense-fg">     RES.hdf5_handler|🗄️ Structure of HDF5 file: data/store/resources_BC_default.h5</span>
+<span class="ansi-cyan-intense-fg">____________________________________________________________</span>
+<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">boundary</span>
+<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cells</span>
+<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">clusters</span>
+  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">clusters/solar</span>
+  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">clusters/wind</span>
+<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost</span>
+  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb</span>
+  └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb/solar</span>
+  └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb/wind</span>
+<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">dissolved_indices</span>
+  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">dissolved_indices/solar</span>
+  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">dissolved_indices/wind</span>
+<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">lines</span>
+<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">substations</span>
+<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries</span>
+  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries/clusters</span>
+  └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries/clusters/solar</span>
+  └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries/clusters/wind</span>
+  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries/solar</span>
+  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries/wind</span>
+<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">units</span>
+
+
+<span class="ansi-yellow-fg">└&gt; To access the data : </span>
+<span class="ansi-cyan-fg"> └&gt; &lt;datahandler instance&gt;.from_store(&#39;&lt;key&gt;&#39;)</span>
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells</span><span class="o">=</span><span class="n">res_store</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;cells&#39;</span><span class="p">)</span>
+<span class="n">boundary</span><span class="o">=</span><span class="n">res_store</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;boundary&#39;</span><span class="p">)</span>
+<span class="n">solar_clusters</span><span class="o">=</span><span class="n">res_store</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;clusters/solar&#39;</span><span class="p">)</span>
+<span class="n">wind_clusters</span><span class="o">=</span><span class="n">res_store</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;clusters/wind&#39;</span><span class="p">)</span>
+<span class="n">solar_clusters_ts</span><span class="o">=</span><span class="n">res_store</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;timeseries/clusters/solar&#39;</span><span class="p">)</span>
+<span class="n">wind_clusters_ts</span><span class="o">=</span><span class="n">res_store</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;timeseries/clusters/wind&#39;</span><span class="p">)</span>
+<span class="n">dissolved_indices_solar</span><span class="o">=</span><span class="n">res_store</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;dissolved_indices/solar&#39;</span><span class="p">)</span>
+<span class="n">dissolved_indices_wind</span><span class="o">=</span><span class="n">res_store</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;dissolved_indices/wind&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p>Interactive Map</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># wind_clusters[wind_clusters[&#39;lcoe&#39;]&lt;=100].explore(&#39;potential_capacity&#39;)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Playground-for-Top-Site-Selection">
+<h1>Playground for Top Site Selection<a class="headerlink" href="#Playground-for-Top-Site-Selection" title="Link to this heading">#</a></h1>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">resource_clusters_solar</span><span class="p">,</span><span class="n">cluster_timeseries_solar</span><span class="o">=</span><span class="n">RES_module</span><span class="o">.</span><span class="n">select_top_sites</span><span class="p">(</span><span class="n">solar_clusters</span><span class="p">,</span>
+                                                                <span class="n">solar_clusters_ts</span><span class="p">,</span>
+                                                                    <span class="n">resource_max_capacity</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">resource_clusters_wind</span><span class="p">,</span><span class="n">cluster_timeseries_wind</span><span class="o">=</span><span class="n">RES_module</span><span class="o">.</span><span class="n">select_top_sites</span><span class="p">(</span><span class="n">wind_clusters</span><span class="p">,</span>
+                                                                <span class="n">wind_clusters_ts</span><span class="p">,</span>
+                                                                    <span class="n">resource_max_capacity</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&gt;&gt;&gt; Selecting TOP Sites to for 10 GW Capacity Investment in BC...
+____________________________________________________________________________________________________
+Selecting the Top Ranked Sites to invest in 10 GW PV in BC
+____________________________________________________________________________________________________
+
+!! Note: The Last cluster (Okanagan-Similkameen_2) originally had 2.08 GW potential capacity.To fit the maximum capacity investment of 10 GW, it has been adjusted to 1.76 GW
+
+&gt;&gt;&gt; Selecting TOP Sites to for 20 GW Capacity Investment in BC...
+____________________________________________________________________________________________________
+Selecting the Top Ranked Sites to invest in 20 GW PV in BC
+____________________________________________________________________________________________________
+
+!! Note: The Last cluster (Thompson-Nicola_1) originally had 4.17 GW potential capacity.To fit the maximum capacity investment of 20 GW, it has been adjusted to 2.77 GW
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RES_module</span><span class="o">.</span><span class="n">export_results</span><span class="p">(</span><span class="s1">&#39;wind&#39;</span><span class="p">,</span>
+                          <span class="n">region_code</span><span class="p">,</span>
+                    <span class="n">resource_clusters_wind</span><span class="p">,</span>
+                    <span class="n">cluster_timeseries_wind</span><span class="p">,)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-fg"> └&gt; wind clusters exported to :results/resource_options_wind_BC_timeseries.csv</span>
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RES_module</span><span class="o">.</span><span class="n">export_results</span><span class="p">(</span><span class="s1">&#39;solar&#39;</span><span class="p">,</span>
+                             <span class="n">region_code</span><span class="p">,</span>
+                    <span class="n">resource_clusters_solar</span><span class="p">,</span>
+                    <span class="n">cluster_timeseries_solar</span><span class="p">,)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-fg"> └&gt; solar clusters exported to :results/resource_options_solar_BC_timeseries.csv</span>
+</pre></div></div>
+</div>
+</section>
+<section id="Visualize-Results">
+<h1>Visualize Results<a class="headerlink" href="#Visualize-Results" title="Link to this heading">#</a></h1>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">legend_x_ax_offset</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># Ensure &#39;Region&#39; in boundary</span>
+<span class="k">if</span> <span class="s1">&#39;Region&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">boundary</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="n">boundary</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Assign region numbers</span>
+<span class="n">boundary</span><span class="p">[</span><span class="s1">&#39;Region_Number&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">boundary</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Compute totals</span>
+<span class="n">solar_total_GW</span> <span class="o">=</span> <span class="n">resource_clusters_solar</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="mf">1E3</span>
+<span class="n">wind_total_GW</span> <span class="o">=</span> <span class="n">resource_clusters_wind</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="mf">1E3</span>
+
+<span class="c1"># Create figure and axes</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Potential Sites for Targeted Capacity Investments&quot;</span><span class="p">,</span>
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+
+<span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.02</span>
+
+<span class="c1"># --- Solar Map ---</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">)</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;lightgrey&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">)</span>
+
+<span class="n">im1</span> <span class="o">=</span> <span class="n">resource_clusters_solar</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">column</span><span class="o">=</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;YlOrRd&#39;</span><span class="p">,</span>
+    <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">legend_kwds</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s2">&quot;Solar Capacity (MW)&quot;</span><span class="p">,</span> <span class="s1">&#39;shrink&#39;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span> <span class="s1">&#39;orientation&#39;</span><span class="p">:</span> <span class="s1">&#39;vertical&#39;</span><span class="p">}</span>
+<span class="p">)</span>
+
+<span class="c1"># Get the colorbar and set font size</span>
+<span class="n">cbar1</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span><span class="o">.</span><span class="n">get_axes</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Get the colorbar axes</span>
+<span class="n">cbar1</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">cbar1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Potential Capacity (MW)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Solar Clusters&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+
+<span class="c1"># Annotation for total solar capacity</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;Total: </span><span class="si">{</span><span class="n">solar_total_GW</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2"> GW&quot;</span><span class="p">,</span>
+    <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s2">&quot;axes fraction&quot;</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+    <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">boxstyle</span><span class="o">=</span><span class="s2">&quot;round,pad=0.3&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># --- Wind Map ---</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">)</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;lightgrey&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">)</span>
+
+<span class="n">im2</span> <span class="o">=</span> <span class="n">resource_clusters_wind</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">column</span><span class="o">=</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;BuPu&#39;</span><span class="p">,</span>
+    <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">legend_kwds</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s2">&quot;Potential Capacity (MW)&quot;</span><span class="p">,</span> <span class="s1">&#39;shrink&#39;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span> <span class="s1">&#39;orientation&#39;</span><span class="p">:</span> <span class="s1">&#39;vertical&#39;</span><span class="p">}</span>
+<span class="p">)</span>
+
+<span class="c1"># Get the colorbar and set font size</span>
+<span class="n">cbar2</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span><span class="o">.</span><span class="n">get_axes</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Get the colorbar axes</span>
+<span class="n">cbar2</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">cbar2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Wind Capacity (MW)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Wind Clusters&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+
+<span class="c1"># Annotation for total wind capacity</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;Total: </span><span class="si">{</span><span class="n">wind_total_GW</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2"> GW&quot;</span><span class="p">,</span>
+    <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s2">&quot;axes fraction&quot;</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+    <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">boxstyle</span><span class="o">=</span><span class="s2">&quot;round,pad=0.3&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># Layout</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.85</span><span class="p">)</span>
+
+<span class="c1"># plt.show()</span>
+<span class="c1"># plt.savefig(f&quot;../vis/{region_code}/invested_resources_{region_code}_{RUN_ID}.png&quot;, dpi=300, bbox_inches=&#39;tight&#39;)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_resources_playground_20_0.png" src="../_images/notebooks_resources_playground_20_0.png" />
+</div>
+</div>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Resources Plots</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Select-Region">Select Region</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Select-Resource-type">Select Resource type</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#[Exploratory]">[Exploratory]</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#Playground-for-Top-Site-Selection">Playground for Top Site Selection</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#Visualize-Results">Visualize Results</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

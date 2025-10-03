@@ -136,8 +136,8 @@
       
     
     
-    <img src="../../_static/RES_logo_v2_2025.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
-    <script>document.write(`<img src="../../_static/RES_logo_v2_2025.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+    <img src="../../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -915,7 +915,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">gwa_cells_gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">region_gwa_cells_df</span><span class="p">,</span>
             <span class="n">geometry</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region_gwa_cells_df</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_gwa_cells_df</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]),</span>
-            <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_default_crs</span><span class="p">()</span>  <span class="c1"># INHERITED METHOD from AttributesParser</span>
+            <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs_d</span>  <span class="c1"># INHERITED METHOD from AttributesParser</span>
         <span class="p">)</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gadmBoundaries</span><span class="o">.</span><span class="n">get_region_boundary</span><span class="p">(),</span> <span class="n">keep_geom_type</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># INHERITED METHOD from GADMBoundaries</span>
 
         <span class="c1"># self.gwa_cells_gdf = self.calculate_common_parameters_GWA_cells()</span>

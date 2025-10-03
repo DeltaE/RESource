@@ -137,8 +137,8 @@
       
     
     
-    <img src="../_static/RES_logo_v2_2025.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
-    <script>document.write(`<img src="../_static/RES_logo_v2_2025.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -613,6 +613,35 @@ Wind resources (windspeed) are known to have significant variations across ERA5'
 <ul class="simple">
 <li><p>Scores each grid cell based on multiple criteria (e.g., resource quality, proximity to grid), supporting site selection.</p></li>
 </ul>
+<p><strong>relative cost scoring method</strong> (configurable)</p>
+<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>\text{CRF} = \frac{r(1+r)^N}{(1+r)^N - 1}
+</pre></div>
+</div>
+<p>CRF from discount rate (r) and life (N).</p>
+<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>E_i = 8760 \times CF_i \times C_{\text{ref}}
+</pre></div>
+</div>
+<p>Annual energy at site (i).</p>
+<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>\text{Score}_i
+= \frac{\text{CRF}\cdot C_i^{\text{cap}} + FOM_i + VOM_i \cdot E_i}{E_i}
+\quad [\$/\text{MWh}]
+</pre></div>
+</div>
+<p><strong>Capital cost</strong></p>
+<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>C_i^{\text{cap}} = CAPEX_i \cdot C_{\text{ref}} + C_i^{\text{spur}} + C_i^{\text{upgrade}}
+</pre></div>
+</div>
+<p>Grid costs are added on top of plant CAPEX; upgrades can be modeled as linear $/MW-km.</p>
+<hr class="docutils" />
+<p><strong>Symbols (units)</strong></p>
+<ul class="simple">
+<li><p>(r): discount rate; (N): project lifetime (yr).</p></li>
+<li><p>(C_i_cap): total capital at site (i) using fixed (C_ref) (plant CAPEX + grid connection).</p></li>
+<li><p>(FOM_i): annual fixed O&amp;M at site (i).</p></li>
+<li><p>(VOM_i): variable O&amp;M ($/MWh).</p></li>
+<li><p>(CF_i): capacity factor at site (i); (C_{\text{ref}}): fixed reference capacity (e.g., 100 MW).</p></li>
+</ul>
+<p><em>Note:</em> The score is a relative, LCOE-like screening metric (not investment-grade LCOE).</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <ul class="simple">

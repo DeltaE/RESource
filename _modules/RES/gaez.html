@@ -136,8 +136,8 @@
       
     
     
-    <img src="../../_static/RES_logo_v2_2025.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
-    <script>document.write(`<img src="../../_static/RES_logo_v2_2025.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+    <img src="../../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -824,7 +824,8 @@ document.write(`
                 <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">clipped_raster</span><span class="p">)</span>
             
             <span class="c1"># Call visualization method</span>
-            <span class="n">plot_save_to</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;vis/misc&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="n">raster_file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.tif&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;_raster_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">)</span>
+            <span class="c1"># save_to_root=self.get_vis_dir()</span>
+            <span class="c1"># plot_save_to = Path(f&#39;{save_to_root}&#39;) / raster_file.replace(&#39;.tif&#39;, f&#39;_raster_{self.region_short_code}.png&#39;)</span>
             <span class="c1"># self.plot_gaez_tif(clipped_raster_path, </span>
             <span class="c1">#                    color_map, </span>
             <span class="c1">#                    plot_title, </span>

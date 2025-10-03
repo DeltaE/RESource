@@ -137,8 +137,8 @@
       
     
     
-    <img src="../_static/RES_logo_v2_2025.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
-    <script>document.write(`<img src="../_static/RES_logo_v2_2025.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -345,21 +345,30 @@ document.write(`
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Case study: VRE site selection in British Columbia</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-sources">Data sources</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coordinate-reference-system-crs">Coordinate Reference System (CRS)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-spatial-grid-cells">Extracting Spatial grid cells</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spatial-screening-and-land-availability">Spatial Screening and Land Availability</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-districts-to-data-grids-unlocking-finer-detail">From Districts to Data Grids: Unlocking Finer Detail</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spatial-screening-and-land-availability">Spatial Screening and Land Availability</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#land-use-restriction-buffers">Land-use Restriction Buffers</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#baseline">BASELINE</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#restricted-land-use-policy-scenario">Restricted Land-use POLICY scenario:</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#potential-capacity">Potential capacity</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#capacity-factor">Capacity factor</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#temporal-profiles">Temporal profiles</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#impact-of-grid-accessibility">Impact of grid accessibility</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#insights-from-the-bc-case-study">Insights from the BC case study</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#renewable-energy-potential-and-site-suitability">Renewable energy potential and site suitability</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ranking-and-prioritization">Ranking and prioritization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grid-connectivity-as-a-key-planning-bottleneck">Grid connectivity as a key planning bottleneck</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modeling-assumptions-and-site-ranking">Modeling assumptions and site ranking</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#economic-scoring-where-power-pays-off">Economic Scoring : Where Power Pays Off</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-policy-impact-on-sub-national-resource-potentials">Example Policy Impact on Sub-national Resource Potentials:</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#impact-due-to-the-land-use-policy">Impact due to the land-use policy:</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#configurations-on-the-scenarios">Configurations on the scenarios</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clusterized-representation">Clusterized Representation:</a></li>
 </ul>
 </li>
@@ -375,7 +384,7 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <img src="../_static/RES__BC_banner_202508.jpg" alt="assessment_steps" width="800"/>
+  <img src="../_static/graphic_RES_banner_BC.jpg" alt="assessment_steps" width="800"/>
 <section id="case-study-vre-site-selection-in-british-columbia">
 <h1>Case study: VRE site selection in British Columbia<a class="headerlink" href="#case-study-vre-site-selection-in-british-columbia" title="Link to this heading">#</a></h1>
 <blockquote>
@@ -383,7 +392,7 @@ document.write(`
 </div></blockquote>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This library is under heavy development</p>
+<p>This library is under heavy development and the publication is under review process.</p>
 </div>
 <p>To demonstrate RESource's practical utility, we apply the framework to the Canadian province of British Columbia (BC). BC presents an ideal testbed due to its varied geography—coastal areas, rugged mountains, and interior plateaus—and a favorable policy environment, including the <a class="reference external" href="https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/10022_01">Clean Energy Act</a>, <a class="reference external" href="https://news.gov.bc.ca/releases/2025ECS0006-000100">expedited permitting processes for wind projects</a> and renewable energy targeted call for power <a class="reference external" href="https://www.bchydro.com/work-with-us/selling-clean-energy/2024-call-for-power.html">2024</a>, <a class="reference external" href="https://www.bchydro.com/work-with-us/selling-clean-energy/2025-call-for-power.html">2025</a> by BC Hydro. These characteristics offer a rich context for testing spatial, technical, and regulatory dimensions of VRE siting.</p>
 <section id="data-sources">
@@ -439,149 +448,250 @@ Here is a quick overview of the data sources used in this case study:</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Users of this tool ( or in any other geospatial analysis!) should critically review the preferred CRS for area calculation. Check EPSG Resources for more details on regional coordinate system suitability. Meter/ degree based (default/ explicit for regions) CRS is configurable in RESource.</p>
+<p>Users of this tool (or in any other geospatial analysis!) should critically review the preferred CRS for area calculation. Check EPSG Resources for more details on regional coordinate system suitability. Meter/degree-based (default/explicit for regions) CRS is configurable in RESource.</p>
 </div>
 </section>
-<section id="extracting-spatial-grid-cells">
-<h2>Extracting Spatial grid cells<a class="headerlink" href="#extracting-spatial-grid-cells" title="Link to this heading">#</a></h2>
+<section id="from-districts-to-data-grids-unlocking-finer-detail">
+<h2>From Districts to Data Grids: Unlocking Finer Detail<a class="headerlink" href="#from-districts-to-data-grids-unlocking-finer-detail" title="Link to this heading">#</a></h2>
 <p>BC was discretized into uniform grid cells using the spatial resolution of ERA5 data (~30 km × 30 km), with each cell serving as the basic unit of analysis. For each cell, RESource processed multiple geospatial layers, filtering out ineligible land based on legal (e.g., protected areas), environmental (e.g., slope, wetlands), and infrastructure-related constraints (e.g., distance to substations). Eligible cells were then evaluated for their proximity to the grid and assigned hourly profiles of solar irradiance and wind speed, allowing theoretical VRE potential to be estimated per technology.</p>
-<img src="../_static/Grid_cells.jpg" alt="Extraction of Spatial Grid Cells in BC" width="600"/>
+<img src="../_static/Grid_Cells.jpg" alt="Extraction of Spatial Grid Cells in BC" width="900"/>
+<p><strong>Every cell tells a story</strong>, therefore we then plug in land-use, climatology, accessibility, etc. to analyze scenario-specific studies to answer our questions:</p>
 </section>
 <section id="spatial-screening-and-land-availability">
 <h2>Spatial Screening and Land Availability<a class="headerlink" href="#spatial-screening-and-land-availability" title="Link to this heading">#</a></h2>
-<p>Key parameters are configurable to reflect geographic constraints (e.g., slope, protected areas), We applied the spatial screening process using global raster datasets from the GAEZ to systematically identify suitable VRE sites by filtering land based on land cover, terrain slope, and exclusion zones.. Land cover data layers are used to selectively include classes such as croplands, grasslands, shrubs, and bare soil while excluding artificial surfaces, dense forests, and water bodies. Terrain slope rasters helped eliminate areas with steep gradients over 30%, which pose construction and accessibility challenges. Additionally, exclusion zones—compiled from global biodiversity, wetland, and protected area databases—were entirely filtered out from consideration to respect environmental conservation boundaries. This layered geospatial mfiltering ensures that selected sites align with both technical feasibility and ecological integrity. We extracted the land availability map from this spatial screening process.</p>
-<!-- <img src="../_static/GAEZ_layers_BC_2025.jpg" alt="GAEZ layers used in BC spatial screening showing land cover, slope, and exclusion zones" width="600"/> -->
-<!-- <img src="../_static/exclusion_layers_BC.jpg" alt="Stepwise layer results for BC" width="900"/>
-<img src="../_static/landcovers_BC.jpg" alt="Stepwise layer results for BC" width="800"/>
-<img src="../_static/terrain_layers_BC.jpg" alt="Stepwise layer results for BC" width="800"/> -->
+<p>The key question we want to ask is <strong>Can We Build Without Overlapping Nature?</strong></p>
+<p>Key parameters are configurable to reflect geographic constraints (e.g., slope, protected areas). We applied the spatial screening process using global raster datasets from the GAEZ to systematically identify suitable VRE sites by filtering land based on land cover, terrain slope, and exclusion zones. Land cover data layers are used to selectively include classes such as croplands, grasslands, shrubs, and bare soil while excluding artificial surfaces, dense forests, and water bodies. Terrain slope rasters helped eliminate areas with steep gradients over 30%, which pose construction and accessibility challenges. Additionally, exclusion zones—compiled from global biodiversity, wetland, and protected area databases—were entirely filtered out from consideration to respect environmental conservation boundaries. This layered geospatial filtering ensures that selected sites align with both technical feasibility and ecological integrity. We extracted the land availability map from this spatial screening process.</p>
 <img src="../_static/exclusion_global_with_existing_VREs.png" alt="exclusion_global_with_existing_VREs" width="800"/>
 <img src="../_static/Landcover_with_existing_VREs.png" alt="Landcover_with_existing_VREs" width="800"/>
 <img src="../_static/terrains_with_existing_VREs.png" alt="terrains_with_existing_VREs" width="800"/>
 <blockquote>
-<div><p>For full details on the raster classes, refer to the <a class="reference external" href="https://openknowledge.fao.org/items/039f7ec9-98af-49e1-8d24-850122c69bef">Global Agro-Ecological Zones v4 – Model documentation</a>.</p>
+<div><p>For full details on the raster classes, refer to the <a class="reference external" href="https://openknowledge.fao.org/items/039f7ec9-98af-49e1-8d24-850122c69bef">Global Agro-Ecological Zones v4 – Model documentation</a>; Chapter 2.Page 17 for Elevation and terrain-slope data, page 18 for Land Cover data and page 20 for Exclusion zones.</p>
 </div></blockquote>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>|chapter 2|</p>
-<p>page 17; Elevation and terrain-slope data
-page 18; Land Cover data
-page 20; Exclusion zones</p>
-</div>
 <img src="../_static/CPCAD_BC.png" alt="CPCAD_BC" width="800"/>
+<section id="land-use-restriction-buffers">
+<h3>Land-use Restriction Buffers<a class="headerlink" href="#land-use-restriction-buffers" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Scenario Name</p></th>
+<th class="head"><p>Buffer Applied</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>BASELINE</p></td>
+<td><p>None</p></td>
+<td><p>Baseline scenario; no additional buffer zones around protected areas or aeroways.</p></td>
+</tr>
+<tr class="row-odd"><td><p>POLICY (Restricted land-use policy)</p></td>
+<td><p>High slope areas, Aeroway, Canadian conservation and protected lands</p></td>
+<td><p>Policy, introducing restricted buffer areas for solar/wind site development around airway, high slope areas, and provincial/federal protected fields.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="baseline">
+<h4>BASELINE<a class="headerlink" href="#baseline" title="Link to this heading">#</a></h4>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Buffer Type</p></th>
 <th class="head"><p>Category/Layer</p></th>
-<th class="head"><p>☀️ Solar Buffer (meters)</p></th>
-<th class="head"><p>🌬️ Wind Buffer (meters)</p></th>
+<th class="head"><p>☀️ Solar No-go Buffer (meters)</p></th>
+<th class="head"><p>🌬️ Wind No-go Buffer (meters)</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><strong>Aeroway Buffers</strong></p></td>
+<tr class="row-even"><td><p><strong>Aeroway</strong></p></td>
 <td><p>Aerodrome</p></td>
-<td><p>1,000</p></td>
+<td><p>2,000</p></td>
 <td><p>5,000</p></td>
 </tr>
 <tr class="row-odd"><td><p></p></td>
 <td><p>Runway</p></td>
-<td><p>500</p></td>
-<td><p>500</p></td>
+<td><p>1,500</p></td>
+<td><p>3,000</p></td>
 </tr>
 <tr class="row-even"><td><p></p></td>
-<td><p>Taxiway/Helipad/Apron/Gate</p></td>
-<td><p>100</p></td>
-<td><p>100</p></td>
+<td><p>Helipad</p></td>
+<td><p>1,000</p></td>
+<td><p>1,000</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>Canadian Conservation and Protected Lands</strong></p></td>
+<tr class="row-odd"><td><p></p></td>
+<td><p>Taxiway/Apron/Gate</p></td>
+<td><p>500</p></td>
+<td><p>1,000</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Canadian Conservation and Protected Lands</strong></p></td>
 <td><p>Strict Nature Reserve</p></td>
-<td><p>2,000</p></td>
-<td><p>2,000</p></td>
+<td><p>1,000</p></td>
+<td><p>1,000</p></td>
 </tr>
-<tr class="row-even"><td><p></p></td>
+<tr class="row-odd"><td><p></p></td>
 <td><p>Wilderness Area</p></td>
-<td><p>2,000</p></td>
-<td><p>2,000</p></td>
+<td><p>1,000</p></td>
+<td><p>1,000</p></td>
 </tr>
-<tr class="row-odd"><td><p></p></td>
+<tr class="row-even"><td><p></p></td>
 <td><p>National Park</p></td>
-<td><p>-</p></td>
-<td><p>2,000</p></td>
-</tr>
-<tr class="row-even"><td><p></p></td>
-<td><p>Natural Monument/Feature</p></td>
-<td><p>-</p></td>
-<td><p>2,000</p></td>
+<td><p>1,000</p></td>
+<td><p>1,000</p></td>
 </tr>
 <tr class="row-odd"><td><p></p></td>
-<td><p>Habitat/Species Management Area</p></td>
-<td><p>2,000</p></td>
-<td><p>2,000</p></td>
+<td><p>Natural Monument/Feature</p></td>
+<td><p>500</p></td>
+<td><p>500</p></td>
 </tr>
 <tr class="row-even"><td><p></p></td>
+<td><p>Habitat/Species Management Area</p></td>
+<td><p>500</p></td>
+<td><p>500</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
 <td><p>Protected Landscape/Seascape</p></td>
 <td><p>500</p></td>
-<td><p>2,000</p></td>
-</tr>
-<tr class="row-odd"><td><p></p></td>
-<td><p>Protected Area with Sustainable Use</p></td>
-<td><p>2,000</p></td>
-<td><p>2,000</p></td>
+<td><p>500</p></td>
 </tr>
 <tr class="row-even"><td><p></p></td>
-<td><p>Interim Sites and OECM</p></td>
+<td><p>Protected Area with Sustainable Use of Natural Resources</p></td>
+<td><p>500</p></td>
+<td><p>500</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>Interim Sites (unknown specifics)</p></td>
+<td><p>500</p></td>
+<td><p>1,000</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p>Other Effective area-based Conservation Measures <a class="reference external" href="https://www.canada.ca/en/environment-climate-change/services/nature-legacy/other-effective-area-based-measures.html">(OECM) areas</a></p></td>
 <td><p>500</p></td>
 <td><p>1,000</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p><em>Note: Some global protected areas overlap with Canadian conservation and protected lands.</em></p>
+<blockquote>
+<div><p><em>Note: Some global protected areas overlap with Canadian conservation and protected lands.</em></p>
+</div></blockquote>
 <p>Here is a visual on how the no-go zones for site development looks like:</p>
 <img src="../_static/CPCAD_BC_buffers.png" alt="CPCAD_BC with buffers" width="900"/>
+>Note: sourced from [Canadian Protected and Conserved Areas Database, 2024](https://www.canada.ca/en/environment-climate-change/services/national-wildlife-areas/protected-conserved-areas-database.html)
+<img src="../_static/aeroway_buffers.png" alt="aeroway_buffers" width="900"/>
+>Note: Aeroway data is sourced from Openstreetmap.
+</section>
+<section id="restricted-land-use-policy-scenario">
+<h4>Restricted Land-use POLICY scenario:<a class="headerlink" href="#restricted-land-use-policy-scenario" title="Link to this heading">#</a></h4>
+<p>Buffers listed below are <strong>incremental restrictions</strong> on-top of the BASELINE assumptions.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Buffer Type</p></th>
+<th class="head"><p>Category/Layer</p></th>
+<th class="head"><p>☀️ Solar No-go Buffer (meters)</p></th>
+<th class="head"><p>🌬️ Wind No-go Buffer (meters)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Aeroway</strong></p></td>
+<td><p>Aerodrome</p></td>
+<td><p>+3,000</p></td>
+<td><p>+5,000</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>Runway</p></td>
+<td><p>+500</p></td>
+<td><p>+500</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p>Helipad</p></td>
+<td><p>+1,000</p></td>
+<td><p>+1,000</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Canadian Conservation and Protected Lands</strong></p></td>
+<td><p>Strict Nature Reserve</p></td>
+<td><p>+1,000</p></td>
+<td><p>+1,000</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p>Wilderness Area</p></td>
+<td><p>+1,000</p></td>
+<td><p>+1,000</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>National Park</p></td>
+<td><p>-</p></td>
+<td><p>1,000</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p>Natural Monument/Feature</p></td>
+<td><p>+1,500</p></td>
+<td><p>+1,500</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>Habitat/Species Management Area</p></td>
+<td><p>+1,000</p></td>
+<td><p>+1,500</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p>Protected Landscape/Seascape</p></td>
+<td><p>+1,000</p></td>
+<td><p>+1,500</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>Protected Area with Sustainable Use of Natural Resources</p></td>
+<td><p>+1,000</p></td>
+<td><p>+1,500</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p>Interim Sites (unknown specifics)</p></td>
+<td><p>+500</p></td>
+<td><p>+500</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>Other Effective area-based Conservation Measures <a class="reference external" href="https://www.canada.ca/en/environment-climate-change/services/nature-legacy/other-effective-area-based-measures.html">(OECM) areas</a></p></td>
+<td><p>-</p></td>
+<td><p>+200</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>Spatial screening revealed that roughly 64% of BC’s land is unsuitable for VRE development due to terrain, regulatory restrictions, and conservation priorities. The remaining land comprises technically viable areas suitable for further capacity and cost assessment. Figure 5 illustrates the land availability for grid cells (in the left most plot) and the potential capacity translated from availability percentage. It illustrates that steep terrain in the province’s western region limits turbine deployment, while the southern interior exhibits favorable solar deployment. Regulatory buffers around aeroways and parks further shape siting decisions.</p>
 <ul>
 <li><p>Resource's spatial screening process for BC, showing the stepwise filtering of land availability based on terrain, land cover, and exclusion zones. These plots are in 100m resolution, illustrating the progressive reduction of eligible land as each layer of constraints is applied.</p>
 <ul>
-<li><p>The land availability maps for BC, illustrating the <strong>remaining eligible areas after applying each layer of spatial constraints</strong>.</p>
-<img src="../_static/_layers_impact1.jpg" alt="Stepwise layer results for BC" width="auto"/>
+<li><p>The land availability maps for BC, illustrating the <strong>remaining eligible areas after applying each layer of spatial constraints</strong>.From the explicit impact of each spatial layers, the map below shows that <strong>suitable land cover selection and regionally protected lands have the biggest impact on land availability for site development</strong>. This visual help us to quickly spot spatial impact of our land-use layer selections and no-go buffers.</p>
+<img src="../_static/LandAvailability_IndividualLayers_100m_BASELINE.jpg" alt="LandAvailability_IndividualLayers_100m_BASELINE" width="auto"/>
 </li>
-<li><p>The <strong>cumulative impact of each layer</strong> on land availability, illustrating how terrain, land cover, and exclusion zones progressively reduce the pool of eligible sites.</p>
-<img src="../_static/_layers_impact2.jpg" alt="Stepwise layer results for BC" width="auto"/>
-</li>
-<li><p><strong>Rescaling the land availability map to the ERA5 grid resolution</strong>.</p>
-<img src="../_static/landAvailability_100m.jpg" alt="Final results for BC rescaled to ERA5 Resolution" width="800"/>
-<img src="../_static/landAvailability_ERA5.jpg" alt="Final results for BC rescaled to ERA5 Resolution" width="800"/>
+<li><p>The <strong>cumulative impact of each layer</strong> on land availability, illustrating how terrain, land cover, and exclusion zones progressively reduce the pool of eligible sites. The following maps show the final screening result in 100m resolution (land container's default resolution. Land container helps us to account the configured logics for layer/category-wise selections and buffers). We rescale this availability numbers to ERA5 cells resolution. Finally we translate these numbers to potential capacity by using technology land-use intensity numbers.</p></li>
+</ul>
 </li>
 </ul>
+<hr class="docutils" />
+<ul>
+<li><p>Spatial screeing result</p>
+  <img src="../_static/LandAvailability_100m_BASELINE.jpg" alt="Final results for BC rescaled to ERA5 Resolution" width="700"/>
+</li>
+<li><p><strong>Rescaling the land availability map to the ERA5 grid resolution</strong>.</p>
+  <img src="../_static/LandAvailability_ERA5_BASELINE.jpg" alt="Final results for BC rescaled to ERA5 Resolution" width="700"/>
 <blockquote>
 <div><p>The rescaled land availability map for BC, showing the eligible areas aligned with the ERA5 grid resolution. This step ensures that the spatial data is compatible with the weather-driven modeling inputs used in subsequent analyses.</p>
 </div></blockquote>
 </li>
 </ul>
 </section>
+</section>
+</section>
 <section id="potential-capacity">
 <h2>Potential capacity<a class="headerlink" href="#potential-capacity" title="Link to this heading">#</a></h2>
-<p>We translated eligible land into theoretical energy capacity using technology-specific land-use intensity benchmarks—3 MW/km² for wind and 1.45 MW/km² for solar PV consistent with prior studies [5,6,7].</p>
-<img src="../_static/Resources_combined_CAPACITY.png" alt="Final results for BC rescaled to ERA5 Resolution" width="800"/>
+<p>We translated eligible land into theoretical energy capacity using technology-specific land-use intensity benchmarks—3 MW/km² for wind and 1.45 MW/km² for solar PV consistent with prior studies.</p>
+<img src="../_static/Capacity_BASELINE.jpg" alt="Final results for BC rescaled to ERA5 Resolution" width="800"/>
 </section>
 <section id="capacity-factor">
 <h2>Capacity factor<a class="headerlink" href="#capacity-factor" title="Link to this heading">#</a></h2>
 <p>While the potential capacity map highlights the total installable potential based on available land and infrastructure constraints, the capacity factor (CF) map provides deeper insights into the quality and reliability of the resource by capturing temporal generation patterns driven by weather conditions. Figure 6 shows the spatial distribution of annual mean capacity factors for solar photovoltaic (left) and wind energy (right) across BC. The solar map highlights the southern interior as the most viable region for solar PV deployment, with capacity factors increasing progressively from coastal to inland zones due to clearer skies and higher irradiance. The wind energy map, derived from coarse-resolution GWA data, reveals elevated wind potential primarily in the northern and coastal regions. While the spatial granularity of the wind map captures broader regional trends, its coarse resolution may obscure finer-scale resource variability. Together, these maps support the identification of high-potential VRE zones, facilitating regionally informed renewable energy planning.</p>
-<img src="../_static/Resources_combined_CF.png" alt="Final results for BC rescaled to ERA5 Resolution" width="800"/>
+<img src="../_static/CF_BASELINE.jpg" alt="Final results for BC rescaled to ERA5 Resolution" width="800"/>
 </section>
 <section id="temporal-profiles">
 <h2>Temporal profiles<a class="headerlink" href="#temporal-profiles" title="Link to this heading">#</a></h2>
 <p>Building on the spatial overview of average capacity factors, we next extract hourly generation profiles to analyse seasonal and diurnal performance dynamics at representative high-potential sites. Figure 7 illustrates the hourly resolution capacity factor (CF) profiles for selected solar and wind energy sites—Capital 1 (southern interior) and Peace River 1 (northern BC). For solar PV (top panel), the profiles reveal expected seasonal variation, with high CFs during summer months and near-zero generation in winter nights. The smoother shape and consistent daylight generation patterns underscore the predictability of solar profiles. In contrast, wind profiles (bottom panel) show higher variability throughout the year, with sporadic peaks and low average CFs. Notably, wind generation in Peace River exhibits distinct winter peaks, complementing the seasonal lull in solar output. These contrasting patterns demonstrate the value of geographic and technological diversification for renewable integration and grid stability. The hourly granularity provided by RESource supports more robust energy system modeling and planning scenarios.</p>
-<!-- <Figure 7: Hourly capacity factor (CF) profiles for representative solar and wind sites.> -->
 <p>While temporal profiles provide critical insight into seasonal and diurnal generation patterns, effective VRE planning also requires evaluating the spatial and regulatory context of candidate sites. The next section focuses on the geographic, infrastructural, and policy-driven parameters that shape site suitability, highlighting how RESource integrates these factors to inform spatial prioritization and investment readiness.</p>
-</section>
-<section id="impact-of-grid-accessibility">
-<h2>Impact of grid accessibility<a class="headerlink" href="#impact-of-grid-accessibility" title="Link to this heading">#</a></h2>
-<p>Following the assessment of temporal generation dynamics, we turn to a key economic driver of project feasibility: the spatial relationship between candidate sites and existing grid infrastructure. We map the centroid of each grid cell to the nearest substation for proximity analysis. RESource enables the site ranking sensitive to the proximity of existing infrastructure and provides a scalable approximation of grid connectivity costs. This helps prioritize sites where renewable generation can be integrated with minimal new infrastructure. shows the spatial distribution of grid substations and their proximity to each cell. Sites located closer to existing substations are inherently more attractive due to reduced transmission upgrade costs. In BC, where much of the terrain is remote or rugged, distance to infrastructure can outweigh resource quality in project feasibility. We also show the grid lines map (right side of Figure 8) to demonstrate that RESource can perform proximity analysis for both substations and the nearest connection points on explicitly rated lines. These spatial-economic filters feed directly into site scoring and prioritization workflows within RESource.</p>
-<img src="../_static/Grid_proximity.jpg" alt="Heatmap of substation proximity in BC" height="auto"/>
-<blockquote>
-<div><p>Grid data shown above is sourced from Open-streetmap.</p>
-</div></blockquote>
 <p>This case study in BC provides a practical example of how RESource integrates geospatial screening, weather-driven modeling, and infrastructure constraints to identify and evaluate VRE deployment opportunities. The following section presents the analytical outputs from this application, including estimated technical potential, site rankings, and the influence of policy constraints on site viability.</p>
 </section>
 <section id="insights-from-the-bc-case-study">
@@ -589,41 +699,92 @@ page 20; Exclusion zones</p>
 <p>Applying the RESource to BC yields several important findings on the spatial and technical viability of VRE deployment. The analysis integrates VRE resource’s characterization, and infrastructure accessibility to derive ranked candidate sites for solar PV and onshore wind development.</p>
 <section id="renewable-energy-potential-and-site-suitability">
 <h3>Renewable energy potential and site suitability<a class="headerlink" href="#renewable-energy-potential-and-site-suitability" title="Link to this heading">#</a></h3>
-<p>Our geospatial assessment identifies strong regional variation in VRE potential across BC:
-•	Solar PV potential is highest in the southern interior, where terrain is flatter and solar irradiance is stronger and more consistent.
-•	Wind energy resources are most promising along the north and west coasts, with additional pockets of viability in elevated interior plateaus.
-Despite this theoretical potential, regulatory and physical constraints significantly reduce the pool of developable land. Approximately 64% of BC's landmass is excluded due to legal protections (e.g., parks), ecological concerns (e.g., wetlands), and terrain features (e.g., steep slop es).</p>
-<p>Figure 9 presents two maps of BC, illustrating the theoretical capacity potential for solar and wind energy, where the map colors represent the score, with lighter shades indicating better economic feasibility and darker shades denoting expensive sites. The left map illustrates better feasible sites with lighter yellow areas in the southern and eastern interior regions suggesting higher potential and lower costs. The right map uses a green-to-blue gradient for wind site scoring, with lighter green areas along the coastal and northern regions indicating better economic viability. The distribution at the bottom of each map highlights the available potential across these score ranges.</p>
-<img src="../_static/Resources_combined_SCORE.png" alt="Final results for BC rescaled to ERA5 Resolution" width="1000"/>
-<p>Building on the spatial insights from scores and potential capacity distributions, Figure 10 offers a complementary capacity-focused view that further clarifies how these site scores translate into aggregated development potential. Figure 10 shows a scatter plot illustrating the theoretical capacity potential, with bubble sizes representing clustered site’s capacity levels and colors reflecting solar and wind site scores. Lighter shades (orange for solar, blue for wind) indicate lower costs. The scoring, calculated to reflect the dollar investment per unit of energy yield (MWh), identifies clusters of larger bubbles as high-potential areas, with two boxed regions emphasizing concentrated zones of solar and wind capacity. Together, these outputs enable the identification of high-value locations where resource quality, land availability, and proximity to grid access align, supporting informed decision-making for VRE deployment.</p>
-<img src="../_static/Resources_CF_vs_LCOE_combined.png" alt="Final results for BC rescaled to ERA5 Resolution" width="1000"/>
-<p>To translate spatial availability into investment prioritization, RESource ranks sites using a simplified levelized cost of energy (LCOE) metric that includes proximity to the transmission grid. We named this as score for the sites acknowledging that the market competitiveness and incentives are needed to be adjusted to reflect a competitive benchmark for the sites and that these are not directly translatable to the cost of energy from any given site. VRE sites owners and utilities might plug in their internal costs (Utility energy costs) to account project implementation and operation overheads. Such ranking is especially useful for planning under infrastructure or policy constraints.</p>
+<p>Our geospatial assessment identifies strong regional variation in VRE potential across BC:</p>
+<ul class="simple">
+<li><p>Solar PV potential is highest in the southern interior, where terrain is flatter and solar irradiance is stronger and more consistent.</p></li>
+<li><p>Wind energy resources are most promising along the north and west coasts, with additional pockets of viability in elevated interior plateaus.</p></li>
+</ul>
+<p>Applying regulatory and land-use buffers leads to measurable reductions in technically viable capacity. Buffer restrictions were applied more stringently to wind than to solar, so larger reductions in capacity were expected. The results confirm this, with about 10% of wind potential capacity and only 1% of solar potential capacity lost compared to the baseline. Across BC, this corresponds to approximately 368.6 GW of wind, and 6.5 GW of solar potential becomes unavailable. The following map illustrates these reductions by regional district, showing the magnitude and spatial distribution of losses for solar (left) and wind (right).</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>A planner always has to remember &quot;Not All Potential Becomes Power&quot;!</p>
+</div>
+<img src="../_static/capacity_lost_comparison.jpg" alt="capacity_lost_comparison" width="1000"/>
+<blockquote>
+<div><p>The largest reductions appear in Cariboo (≈73 GW wind, 0.9 GW solar), Peace River (≈46.5 GW wind, 0.4 GW solar), and Bulkley–Nechako (≈46.7 GW wind, 1.0 GW solar), with notable coastal impacts in Kitimat–Stikine (≈38.3 GW wind, 0.8 GW solar) and Skeena–Queen Charlotte (≈18.6 GW wind, 0.2 GW solar). These outcomes align with the spatial overlap between resource-rich zones and extensive protected or conservation lands shown above. Northern and interior districts host some of the best wind regimes in BC, but they also contain large areas of wilderness, national parks, and OECM designations. Applying buffers around these features excludes broad swaths of otherwise high-quality land, driving large capacity losses.</p>
+</div></blockquote>
+<blockquote>
+<div><p>Coastal districts face similar constraints: strong wind resources coincide with marine and terrestrial protected areas, including seascapes and ecological management zones. These restrictions lead to reductions of more than 20–40 GW total VRE potential reduction in several districts. Importantly, these losses occur not because the resources are weak, but because the best wind and solar zones are heavily overlapped by protected lands and their buffers. This explains why reductions are concentrated in the very regions that appear most attractive from a purely technical perspective.</p>
+</div></blockquote>
+<p>To inform planners, the following visual presents two maps of BC, illustrating the theoretical capacity potential for solar and wind energy. The map colors represent the spatial distribution of scored sites, with lighter shades indicating better economic feasibility and darker shades denoting expensive sites. The left map illustrates better feasible sites with lighter yellow areas in the southern and eastern interior regions suggesting higher potential and lower costs. The right map uses a green-to-blue gradient for wind site scoring, with lighter green areas along the coastal and northern regions indicating better economic viability. The bar chart at bottom of each map highlights the available potential across these relative cost score ranges.
+<img src="../_static/Capacity_vs_Scores_POLICY.jpg" alt="Capacity_vs_Scores_POLICY" width="800"/></p>
+<p>These results highlight the scale of capacity foregone when balancing renewable energy deployment with ecological and land-use safeguards. To better understand these dynamics, we next examine supply curves. Comparative supply curves reveal how policy-driven constraints reshape the accessible share of renewable energy potential.</p>
+<img src="../_static/SupplyCurve_BASELINEvsPOLICY.jpg" alt="SupplyCurve_BASELINEvsPOLICY" width="800"/>
+<blockquote>
+<div><p>We constrained the supply curve to 10,000 GWh of solar and 40,000 GWh of wind to match the provincial integrated resource planner, BC Hydro(BCH)’s supply-curve backed by Resource Options Database (RODAT). In BC Hydro’s publicly available version of 2021 IRP RODAT (<a class="reference external" href="https://www.bchydro.com/content/dam/BCHydro/customer-portal/documents/corporate/regulatory-planning-documents/regulatory-matters/rou-resource-options-database-2021-irp-appendix-j-20211221-v01.pdf">section 3</a>), about 10,000 GWh of wind is available below USD 60/MWh, extending to 40,000 GWh below USD 100/MWh. Solar starts higher, around USD 90–110/MWh. Our curves have a similar shape. Wind shows a large pool of low-cost resources, while solar is shorter and steeper. The absolute cost levels differ. This is because our scoring is a relative metric based on capacity factor, distance, capex, and O&amp;M. BC Hydro’s 2021 IRP RODAT used 2020 CAD and ATB-2019 assumptions; our scoring uses ATB-2024 values in 2024 USD. We therefore compare only qualitatively. An updated list of potential site-wise list from BCH is available at <a class="reference external" href="https://www.bchydro.com/content/dam/BCHydro/customer-portal/documents/corporate/regulatory-planning-documents/integrated-resource-plans/current-plan/ror-update-appx-3-20130802.pdf">2013 Resource Options Report Update</a>.</p>
+</div></blockquote>
+<p>Land-use policy restrictions affect the two technologies differently. For solar, the constrained curve follows the baseline cost but ends sooner. This means fewer sites are available, but cost competitiveness remains. For wind, restrictions cut potential in half—from ~40,000 GWh to ~20,000 GWh. They also remove most of the lowest-cost options (&lt; USD 40/MWh), pushing the curve into higher-cost ranges.</p>
+<p>Solar’s policy challenge is therefore one of limited availability. Wind’s challenge is the loss of both low-cost and diverse options. These patterns show that policy design matters. Expanding siting flexibility could support solar. Preserving access to competitive sites is critical for wind. Technology-specific planning will be more effective than uniform buffer rules.
+Tightening buffers primarily truncates the solar supply curve (availability loss) while simultaneously removing the lowest‑score wind sites (competitiveness loss). Because the score embeds grid distance, a portion of the upward shift reflects grid access exposure; sites that remain attractive tend to be closer to substations or rated lines. Such availability constraints for solar and competitiveness constraints for wind have direct planning implications for transmission staging and siting policy.</p>
 </section>
-<section id="ranking-and-prioritization">
-<h3>Ranking and prioritization<a class="headerlink" href="#ranking-and-prioritization" title="Link to this heading">#</a></h3>
+<section id="grid-connectivity-as-a-key-planning-bottleneck">
+<h3>Grid connectivity as a key planning bottleneck<a class="headerlink" href="#grid-connectivity-as-a-key-planning-bottleneck" title="Link to this heading">#</a></h3>
+<p>Grid accessibility plays a critical role in assessing economic viability of the sites. Locations with strong resource potential but far from substations were deprioritized due to estimated connection costs. This echoes growing global concerns: interconnection delays and transmission bottlenecks are now among the most cited obstacles to renewable deployment.</p>
+<img src="../_static/GridProximity.jpg" alt="Heatmap of substation proximity in BC" width="800"/>
+<blockquote>
+<div><p>Grid data shown above is sourced from Openstreetmap.</p>
+</div></blockquote>
+<p>Building on the spatial insights from scores and potential capacity distributions, Figure 13 offers a complementary capacity-focused view that further clarifies how these sites scores translate into aggregated development potential for expected energy yields.  As the relative cost scoring is sensitive to proximity to transmission infrastructure, it helps translate technical resource potential into practical investment prioritization. Figure 13 provides overview of the renewable energy landscape by plotting three critical dimensions that drive investment decisions: potential capacity (approximate bubble size), average capacity factor (y-axis), and siting score (x-axis) for both solar and wind resources. Big bubbles (orange for solar, purple for wind) at lower end of Y-axis indicate comparatively high potential capacity for relatively lower costs. These represents the best candidates for site development.</p>
+<img src="../_static/CFvsScore_POLICY.jpg" alt="CFvsScore_POLICY" width="1000"/>
+<p>This helps stakeholders to quickly identify the most attractive development opportunities by highlighting sites that combine high energy output potential (large bubbles), excellent resource quality (high-capacity factors), and favorable economics including grid access (low relative cost scores). The scatter pattern reveals the trade-offs inherent in renewable energy development, where some sites may offer exceptional resource quality but face transmission challenges, while others provide grid-accessible locations with moderate resource potential. For energy planners and developers, this integrated view supports strategic decision-making. The same configuration can be re-run by public agencies and communities to test local policy buffers, supporting more inclusive deliberation over siting trade-offs.</p>
+</section>
+</section>
+<section id="modeling-assumptions-and-site-ranking">
+<h2>Modeling assumptions and site ranking<a class="headerlink" href="#modeling-assumptions-and-site-ranking" title="Link to this heading">#</a></h2>
+<p>While RESource improves spatial transparency, several assumptions introduce uncertainties that must be carefully managed by the user:</p>
+<ul class="simple">
+<li><p><strong>Technological parameters</strong>: Uniform assumptions for turbine efficiency or solar panel tilt may not fully capture local microclimates, terrain effects, or resource variability.</p></li>
+<li><p><strong>Simplified economic metrics</strong>: LCOE-like scores are useful for ranking sites but omit site-specific factors such as permitting timelines, financing structures, and community engagement, which can materially influence project viability.</p></li>
+<li><p><strong>Grid proximity and costs</strong>: Transmission connection is modeled using straight-line (Euclidean) distance, whereas actual routing may be longer, more expensive, or constrained by terrain, right-of-way, or regulatory factors.</p></li>
+</ul>
+<p>These uncertainties highlight that RESource provides a relative, comparative assessment rather than definitive predictions of project economics or feasibility. Users should interpret site rankings in the context of local knowledge, regulatory conditions, and potential site-specific adaptations.</p>
+<section id="economic-scoring-where-power-pays-off">
+<h3>Economic Scoring : Where Power Pays Off<a class="headerlink" href="#economic-scoring-where-power-pays-off" title="Link to this heading">#</a></h3>
 <p>RESource ranks and prioritizes renewable energy sites using the <code class="docutils literal notranslate"><span class="pre">score_cells()</span></code> <a class="reference external" href="https://deltae.github.io/RESource/notes/resource_builder.html#step-6-scoring-metric-to-rank-the-sites">method</a>, which calculates a Levelized Cost of Energy (LCOE) score for each grid cell. This score incorporates:</p>
+<p><strong>relative cost scoring method</strong> (configurable)</p>
+<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>\text{CRF} = \frac{r(1+r)^N}{(1+r)^N - 1}
+</pre></div>
+</div>
+<p>CRF from discount rate (r) and life (N).</p>
+<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>E_i = 8760 \times CF_i \times C_{\text{ref}}
+</pre></div>
+</div>
+<p>Annual energy at site (i).</p>
+<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>\text{Score}_i
+= \frac{\text{CRF}\cdot C_i^{\text{cap}} + FOM_i + VOM_i \cdot E_i}{E_i}
+\quad [\$/\text{MWh}]
+</pre></div>
+</div>
+<p><strong>Capital cost</strong></p>
+<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>C_i^{\text{cap}} = CAPEX_i \cdot C_{\text{ref}} + C_i^{\text{spur}} + C_i^{\text{upgrade}}
+</pre></div>
+</div>
+<p>Grid costs are added on top of plant CAPEX; upgrades can be modeled as linear $/MW-km.</p>
+<hr class="docutils" />
+<p><strong>Symbols (units)</strong></p>
 <ul class="simple">
-<li><p>Technology capital expenditure (CAPEX)</p></li>
-<li><p>Grid connection and transmission upgrade costs (sensitive to closest node distance)</p></li>
-<li><p>Fixed and variable operational costs (OPEX)</p></li>
-<li><p>Site-specific annual energy production (based on capacity factor)</p></li>
-<li><p>Financial parameters (discount rate, project lifetime)</p></li>
+<li><p>(r): discount rate; (N): project lifetime (yr).</p></li>
+<li><p>(C_i_cap): total capital at site (i) using fixed (C_ref) (plant CAPEX + grid connection).</p></li>
+<li><p>(FOM_i): annual fixed O&amp;M at site (i).</p></li>
+<li><p>(VOM_i): variable O&amp;M ($/MWh).</p></li>
+<li><p>(CF_i): capacity factor at site (i); (C_{\text{ref}}): fixed reference capacity (e.g., 100 MW).</p></li>
 </ul>
-<p><strong>Scoring metric:</strong></p>
-<p><strong>Score (simplified LCOE) = (Total Cost × CRF + OPEX) / Annual Energy Production</strong></p>
-<p>Where:</p>
-<ul class="simple">
-<li><p><strong>Total Cost</strong> = CAPEX + (distance to grid × grid connection cost per km × transmission rebuild cost)</p></li>
-<li><p><strong>CRF</strong> (Capital Recovery Factor) = [r × (1 + r)<sup>N</sup>] / [(1 + r)<sup>N</sup> - 1], with r = discount rate and N = project lifetime</p></li>
-<li><p><strong>Annual Energy Production</strong> = 8760 × Capacity Factor × Installed Capacity</p></li>
-<li><p><strong>OPEX</strong> = Fixed O&amp;M + Variable O&amp;M</p></li>
-</ul>
-<p>Cells with zero annual energy production receive a high penalty score and are deprioritized. The resulting Score values (in $/MWh) allow direct comparison and ranking of sites for investment prioritization, with lower Score indicating higher economic attractiveness.</p>
+<p><em>Note:</em> The score is a relative, LCOE-like screening metric (not investment-grade LCOE).</p>
 </section>
 </section>
 </section>
-<section id="example-policy-impact-on-sub-national-resource-potentials">
-<h1>Example Policy Impact on Sub-national Resource Potentials:<a class="headerlink" href="#example-policy-impact-on-sub-national-resource-potentials" title="Link to this heading">#</a></h1>
+<section id="configurations-on-the-scenarios">
+<h1>Configurations on the scenarios<a class="headerlink" href="#configurations-on-the-scenarios" title="Link to this heading">#</a></h1>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Scenario Name</p></th>
@@ -634,13 +795,13 @@ Despite this theoretical potential, regulatory and physical constraints signific
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Baseline</p></td>
-<td><p><a class="reference external" href="https://github.com/DeltaE/RESource/blob/main/results/RESources/BC/config_BC_default.yaml">default</a></p></td>
+<tr class="row-even"><td><p>BASELINE</p></td>
+<td><p><a class="reference external" href="https://github.com/DeltaE/RESource/blob/main/results/RESources/BC/config_BC_default.yaml">baseline</a></p></td>
 <td><p>None</p></td>
 <td><p>N/A</p></td>
 <td><p>Baseline scenario; no additional buffer zones around protected areas or aeroways.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Policy: Aeroway &amp; CPCAD Buffers</p></td>
+<tr class="row-odd"><td><p>POLICY: Aeroway &amp; CPCAD Buffers</p></td>
 <td><p><a class="reference external" href="https://github.com/DeltaE/RESource/blob/main/results/RESources/BC/config_BC_policy_aeroway_CPCAD_buffer.yaml">policy</a></p></td>
 <td><p>Aeroway &amp; CPCAD Buffers</p></td>
 <td><p>&gt;&gt; see below</p></td>
@@ -649,98 +810,6 @@ Despite this theoretical potential, regulatory and physical constraints signific
 </tbody>
 </table>
 </div>
-<p><strong>Scenario Name:</strong> <code class="docutils literal notranslate"><span class="pre">policy_aeroway_CPCAD_buffer</span></code><br />
-<strong>Buffer Applied:</strong> GAEZ global exclusions, high slope areas, Aeroway and CPCAD Buffers</p>
-<p><strong>Buffer Distances (meters):</strong></p>
-<blockquote>
-<div><p>Explicitly for this scenario study</p>
-</div></blockquote>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Buffer Type</p></th>
-<th class="head"><p>Category/Layer</p></th>
-<th class="head"><p>Solar Buffer (meters)</p></th>
-<th class="head"><p>Wind Buffer (meters)</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>Aeroway Buffers</strong></p></td>
-<td><p>Aerodrome</p></td>
-<td><p>1,000</p></td>
-<td><p>10,000</p></td>
-</tr>
-<tr class="row-odd"><td><p></p></td>
-<td><p>Runway</p></td>
-<td><p>500</p></td>
-<td><p>100</p></td>
-</tr>
-<tr class="row-even"><td><p></p></td>
-<td><p>Taxiway/Helipad/Apron/Gate</p></td>
-<td><p>100</p></td>
-<td><p>100</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>Canadian Conservation and Protected Lands</strong></p></td>
-<td><p>Strict Nature Reserve</p></td>
-<td><p>2,000</p></td>
-<td><p>10,000</p></td>
-</tr>
-<tr class="row-even"><td><p></p></td>
-<td><p>Wilderness Area</p></td>
-<td><p>2,000</p></td>
-<td><p>10,000</p></td>
-</tr>
-<tr class="row-odd"><td><p></p></td>
-<td><p>National Park</p></td>
-<td><p>0</p></td>
-<td><p>5,000</p></td>
-</tr>
-<tr class="row-even"><td><p></p></td>
-<td><p>Natural Monument/Feature</p></td>
-<td><p>0</p></td>
-<td><p>500</p></td>
-</tr>
-<tr class="row-odd"><td><p></p></td>
-<td><p>Habitat/Species Management Area</p></td>
-<td><p>1,000</p></td>
-<td><p>2,000</p></td>
-</tr>
-<tr class="row-even"><td><p></p></td>
-<td><p>Protected Landscape/Seascape</p></td>
-<td><p>500</p></td>
-<td><p>2,000</p></td>
-</tr>
-<tr class="row-odd"><td><p></p></td>
-<td><p>Protected Area w/ Sustainable Use</p></td>
-<td><p>500</p></td>
-<td><p>1,000</p></td>
-</tr>
-<tr class="row-even"><td><p></p></td>
-<td><p>Interim Sites/OECM</p></td>
-<td><p>0</p></td>
-<td><p>500</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>GAEZ Layers</strong></p></td>
-<td><p>exclusion_areas</p></td>
-<td><p>500</p></td>
-<td><p>500</p></td>
-</tr>
-<tr class="row-even"><td><p></p></td>
-<td><p>terrain_resources</p></td>
-<td><p>0</p></td>
-<td><p>500</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>Notes:</strong></p>
-<ul class="simple">
-<li><p>&quot;Aeroway &amp; CPCAD Buffers&quot; means buffer distances (e.g., 1km, 5km) are set around airports and protected/conserved lands.</p></li>
-<li><p>The policy scenario reduces available land for renewable resource development compared to the default.</p></li>
-</ul>
-<section id="impact-due-to-the-land-use-policy">
-<h2>Impact due to the land-use policy:<a class="headerlink" href="#impact-due-to-the-land-use-policy" title="Link to this heading">#</a></h2>
-<img src="../_static/potential_capacity_lost_default_vs_policy_aeroway_CPCAD_buffer.png" alt="Final results for BC rescaled to ERA5 Resolution" width="1000"/>
-</section>
 <section id="clusterized-representation">
 <h2>Clusterized Representation:<a class="headerlink" href="#clusterized-representation" title="Link to this heading">#</a></h2>
 <p>For each regional district, we cluster the cells to reasonably represent the sites based on their scoring. Our scoring is already sensitive to distance to grid node, energy yield and capacity size. We use the <em>score</em>, apply k-means clustering with configurable wcss tolerance to find-out how many clusters are a reasonable representation of the regional district cells. To find the optimal clusters we use elbow charts.</p>
@@ -803,21 +872,30 @@ Despite this theoretical potential, regulatory and physical constraints signific
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Case study: VRE site selection in British Columbia</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-sources">Data sources</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coordinate-reference-system-crs">Coordinate Reference System (CRS)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-spatial-grid-cells">Extracting Spatial grid cells</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spatial-screening-and-land-availability">Spatial Screening and Land Availability</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-districts-to-data-grids-unlocking-finer-detail">From Districts to Data Grids: Unlocking Finer Detail</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spatial-screening-and-land-availability">Spatial Screening and Land Availability</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#land-use-restriction-buffers">Land-use Restriction Buffers</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#baseline">BASELINE</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#restricted-land-use-policy-scenario">Restricted Land-use POLICY scenario:</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#potential-capacity">Potential capacity</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#capacity-factor">Capacity factor</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#temporal-profiles">Temporal profiles</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#impact-of-grid-accessibility">Impact of grid accessibility</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#insights-from-the-bc-case-study">Insights from the BC case study</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#renewable-energy-potential-and-site-suitability">Renewable energy potential and site suitability</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ranking-and-prioritization">Ranking and prioritization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grid-connectivity-as-a-key-planning-bottleneck">Grid connectivity as a key planning bottleneck</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modeling-assumptions-and-site-ranking">Modeling assumptions and site ranking</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#economic-scoring-where-power-pays-off">Economic Scoring : Where Power Pays Off</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-policy-impact-on-sub-national-resource-potentials">Example Policy Impact on Sub-national Resource Potentials:</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#impact-due-to-the-land-use-policy">Impact due to the land-use policy:</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#configurations-on-the-scenarios">Configurations on the scenarios</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clusterized-representation">Clusterized Representation:</a></li>
 </ul>
 </li>
