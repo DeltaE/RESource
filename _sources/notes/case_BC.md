@@ -272,9 +272,8 @@ For each regional district, we cluster the cells to reasonably represent the sit
 
 Here are examples of some clusters' profile (representative profile of all cells that scored alike) with standard deviations from the actual ERA5 cells' timeseries.
 
-<img src="../_static/wind_cluster_PeaceRiver_1_vs_cells_profile.png" alt="Final results for BC rescaled to ERA5 Resolution" width="1000"/>
+<img src="../_static/Profiles_sample_202509.jpg" alt="Profiles_sample_202509" width="1000"/>
 
-<img src="../_static/solar_cluster_EastKootenay_1_vs_cells_profile.png" alt="Final results for BC rescaled to ERA5 Resolution" width="1000"/>
 
 ---
 
