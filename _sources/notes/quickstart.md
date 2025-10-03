@@ -4,7 +4,7 @@
 
 ---
 
-## 🚀 Quick Setup (5 Minutes)
+## 🚀 Quick Setup
 
 ### Prerequisites
 
@@ -70,7 +70,7 @@ For running custom analyses beyond the provided case study data, some data sourc
 
 ---
 
-## 🔥 First Run (2 Minutes)
+## 🔥 First Run
 
 ### Run Canadian Wind & Solar Analysis
 
