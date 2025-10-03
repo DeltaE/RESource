@@ -158,7 +158,7 @@ class ConservationLands(AttributesParser):
     >>> # Show conservation areas with regional boundaries
     >>> conservation.show_lands(
     ...     conserved_lands=conserved_areas,
-    ...     save_to="plots/BC_conservation.png",
+    ...     save_to="plots/BC_conservation.svg",
     ...     show=True
     ... )
     
@@ -732,12 +732,12 @@ class LandContainer(AttributesParser):
             by=self.get_gadm_config()["datafield_mapping"]["NAME_1"]  # INHERITED METHOD from AttributesParser
         )  # Get the geometry of the region boundary
 
-        self.excluder_crs = self.get_excluder_crs(country="Canada")  # INHERITED METHOD from AttributesParser
+        self.excluder_crs = self.crs_m
 
         # Initiate Exclusion Container
         self.excluder = ExclusionContainer(
             crs=self.excluder_crs
-        )  # CRS 3347 fit for Canada
+        ) 
 
         # Initialize resource_disaggregation_config attribute
         self.resource_disaggregation_config = self.get_resource_disaggregation_config()  # INHERITED METHOD from AttributesParser
@@ -759,13 +759,14 @@ class LandContainer(AttributesParser):
         )
 
         args_add_excluder_layer = {
+            "crs_meters":self.excluder_crs,
             "resource_type": self.resource_type,  # INHERITED ATTRIBUTE from AttributesParser
             "excluder": self.excluder,
             "region_shape": self.region_shape,
             "raster_configs": raster_configs,
             "vector_configs": vector_configs,
             "font_family": self.default_font_family,  # INHERITED ATTRIBUTE from AttributesParser
-            "plot_save_to": f"vis/{self.region_short_code}/lands"  # INHERITED ATTRIBUTE from AttributesParser
+            "plot_save_to": self.vis_root/'lands'  # INHERITED ATTRIBUTE from AttributesParser
         }
         
         
@@ -878,18 +879,24 @@ class LandContainer(AttributesParser):
                     "Excluding Regional Aeroways"
                 )
 
+
+
             # Apply buffer to the vector geometries
             vector_gdf_with_buffer, vector_area_comparison = apply_buffer_to_vector(
-                vector_gdf,
-                vector_config_item[vector_name]["buffer_mapping_key_buffers"],
-                vector_config_item[vector_name]["buffer_mapping_key"],
+                gdf=vector_gdf,
+                crs_meters=self.crs_m,
+                crs_degrees=self.crs_d,
+                buffer_mapping=   vector_config_item[vector_name]["buffer_mapping_key_buffers"],
+                buffer_mapping_key= vector_config_item[vector_name]["buffer_mapping_key"],
             )
             vector_config_item[vector_name]["gdf"] = vector_gdf_with_buffer
-
+            vector_area_comparison['Resource_Type']=self.resource_type
+            vector_area_comparison['Region']=self.region_name
+            vector_area_comparison['Scenario']=self.get_RUN_ID()
             # Save the area comparison to a CSV file
             area_comparison_save_path = (
                 Path("data/processed_data/lands")
-                / f"{vector_config_item[vector_name]['buffer_mapping_key']}_area_comparisons_{self.region_name}.csv"
+                / f"{vector_config_item[vector_name]['buffer_mapping_key']}_area_comparisons_{self.region_name}_{self.resource_type}_{self.RUN_ID}.csv"
             )
             area_comparison_save_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -954,10 +961,10 @@ def add_and_plot_exclusion_layer(
     masked_data = np.ma.masked_where(raster_data == 0, raster_data)
     
     if disregard_other_layers:
-        cmap = ListedColormap(["#078176"])
+        cmap = ListedColormap(["#0B936A"])
         # Clean and modify title
         title_cleaned = title.replace("Excluding", "Land filtered for").strip()
-        ax.set_title(f"{title_cleaned} ({eligible_share:.2%})")
+        ax.set_title(f"{title_cleaned} ({eligible_share:.2%})",fontsize=18)
     else:
         # Simple solid green for eligible
         cmap = ListedColormap(["#027227"])
@@ -988,6 +995,7 @@ def add_and_plot_exclusion_layer(
 
 @staticmethod
 def load_layers_to_excluder(
+    crs_meters:str,
     resource_type: str,
     excluder: ExclusionContainer,
     region_shape: gpd.GeoDataFrame,
@@ -1014,7 +1022,7 @@ def load_layers_to_excluder(
         utils.print_warning(f"{__name__}|'intiate_excluder' set to FALSE. ExclusionContainer has not been initiated. The container may have residual rasters/vector already loaded")
     if disregard_other_layers:
         utils.print_warning(f"{__name__}|'disregard_other_layers' set to TRUE. This parameter should be used exclusively for plotting purposes to showcase land availability impact for individual layers")
-    excluder=ExclusionContainer(excluder.crs)
+    excluder=ExclusionContainer(crs_meters)
     
     n_rasters = len(raster_configs)
     n_vectors = len(vector_configs)
@@ -1073,7 +1081,8 @@ def load_layers_to_excluder(
     # 4. Vector layers
     for i, v in enumerate(vector_configs):
         if disregard_other_layers:
-            excluder=ExclusionContainer(crs=excluder.crs)
+            excluder=ExclusionContainer(crs=crs_meters)
+            utils.print_warning(f"Excluder crs set to {crs_meters}")
         utils.print_update(
             level=PRINT_LEVEL_BASE + 2,
             message=f"{__name__}| Loading vector layer {i+1} for '{list(vector_configs[i]['buffer_mapping_key_buffers'].keys())}' to ExclusionContainer ...",
@@ -1096,14 +1105,14 @@ def load_layers_to_excluder(
     if disregard_other_layers:
         fig.suptitle(
             f"Land Availability impact for each Exclusion/Inclusion Layers for {resource_type} resource", 
-            fontsize=24, 
+            fontsize=30, 
             y=1.05
         )
         plot_name:str=f"individual_layers_impact_land_availability_plot_{resource_type}"
     else:
         fig.suptitle(
             f"Stepwise Land Availability for Exclusion/Inclusion Layers for {resource_type} resource",
-            fontsize=24,
+            fontsize=30,
             y=1.05,
         )
         plot_name:str=f"stepwise_land_availability_plot_{resource_type}"
@@ -1114,10 +1123,10 @@ def load_layers_to_excluder(
     if plot_save_to is None:
         plot_save_to=Path.cwd()
     
-    plot_save_to.mkdir(parents=True, exist_ok=True)
+    utils.ensure_path(plot_save_to)
 
     plt.savefig(
-        plot_save_to / f"{plot_name}.png",
+        plot_save_to / f"{plot_name}.svg",
         bbox_inches="tight",
         dpi=300,
     )
@@ -1132,7 +1141,11 @@ def load_layers_to_excluder(
 
 @staticmethod
 def apply_buffer_to_vector(
-    gdf: gpd.GeoDataFrame, buffer_mapping: dict, buffer_mapping_key: str
+    gdf: gpd.GeoDataFrame,
+    crs_meters:str,
+    crs_degrees:str,
+    buffer_mapping: dict, 
+    buffer_mapping_key: str
 ) -> tuple[gpd.GeoDataFrame, pd.DataFrame]:
     """
     Projects the input GeoDataFrame to BC Albers, applies buffer distances from config,
@@ -1140,8 +1153,8 @@ def apply_buffer_to_vector(
     Adds a column 'buffer_applied_m' to show actual buffer distance applied per feature.
     """
 
-    # 1. Project to BC Albers (EPSG:3005)
-    gdf_proj = gdf.to_crs(epsg=3005)
+    # 1. Project to meter-based CRS
+    gdf_proj = gdf.to_crs(crs_meters)
 
     # 2. Assign buffer distances from mapping
     buffer_series = pd.Series(buffer_mapping)
@@ -1183,8 +1196,9 @@ def apply_buffer_to_vector(
         "original_area_km2", ascending=False
     ).round(4)
 
-    # 7. Reproject back to EPSG:4326
-    gdf_buffered = gdf_buffered.to_crs(epsg=4326)
+    # 7. Reproject back to degree based crs
+    if gdf_buffered.crs != crs_degrees:
+        gdf_buffered = gdf_buffered.to_crs(crs_degrees)
 
     return gdf_buffered, area_comparison
 

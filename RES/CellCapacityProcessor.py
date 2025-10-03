@@ -401,7 +401,7 @@ class CellCapacityProcessor(AttributesParser):
         self.plot_ERAF5_grid_land_availability()
         self.plot_excluder_land_availability(excluder=self.composite_excluder)
         
-        area = self.cutout.grid.set_index(["y", "x"]).to_crs(3035).area / 1e6 # This crs is fit for area calculation
+        area = self.cutout.grid.set_index(["y", "x"]).to_crs(self.crs_m).area / 1e6 # This crs is fit for area calculation
         area = xr.DataArray(area, dims=("spatial"))
         
         utils.print_update(level=PRINT_LEVEL_BASE+1,
@@ -427,7 +427,7 @@ class CellCapacityProcessor(AttributesParser):
         self.provincial_cell_capacity_gdf:gpd.GeoDataFrame = gpd.GeoDataFrame(
             _df_flat,
             geometry=[self.__create_cell_geom__(x, y) for x, y in zip(_df_flat['x'], _df_flat['y'])],
-            crs=super().get_default_crs()  # INHERITED METHOD from AttributesParser
+            crs=self.crs_d  # INHERITED METHOD from AttributesParser
         )
         
     ## 3 Assign Static exogenous Costs after potential capacity calculation
@@ -539,25 +539,33 @@ class CellCapacityProcessor(AttributesParser):
         ax.set_axis_off()
 
         # Shadow effect offset
-        shadow_offset = 0.004
+        # shadow_offset = 0.004
 
+        if region_boundary.crs is None or region_boundary.crs.to_string() != self.crs_m:
+            region_boundary_proj = region_boundary.to_crs(self.crs_m)
+            A_gdf_proj = A_gdf.to_crs(self.crs_m)
+            utils.print_update(level=PRINT_LEVEL_BASE+2,
+                               message=f"{__name__}| Converted region boundary and availability GeoDataFrame to {self.crs_m} for plotting.")
         # Plot solar map on ax1
         # Add shadow effect for solar map
-        region_boundary.geometry = region_boundary.geometry.translate(xoff=shadow_offset, yoff=-shadow_offset)
-        region_boundary.plot(ax=ax, facecolor='none', edgecolor='gray', linewidth=2, alpha=0.3)  # Shadow layer
+        # region_boundary_proj.geometry = region_boundary_proj.geometry.translate(xoff=shadow_offset, yoff=-shadow_offset)
+        # region_boundary_proj.plot(ax=ax, facecolor='none', edgecolor='gray', linewidth=2, alpha=0.3)  # Shadow layer
 
         # Plot solar cells
-        A_gdf.plot(column='availability_category', ax=ax, cmap='Greens', legend=True, 
+        A_gdf_proj.plot(column='availability_category', ax=ax, cmap='Greens', legend=True, 
                 legend_kwds={'title': "Land Availability", 'loc': 'upper right', 'bbox_to_anchor': legend_box_x_y,'borderpad': 1,'frameon': False})
 
         # Plot actual boundary for solar map
-        region_boundary.plot(ax=ax, facecolor='none', edgecolor='black', linewidth=0.2, alpha=0.9)
+        region_boundary_proj.plot(ax=ax, facecolor='none', edgecolor='black', linewidth=0.2, alpha=0.9)
         plt.subplots_adjust(right=0.85)  # Increase space on the right
         ax.set_title(f"Land Availability for {self.resource_type} resources ({self.region_name})", fontsize=14)
         # Adjust layout for cleaner appearance
         plt.tight_layout()
-        plt.savefig(f'vis/{self.region_short_code}/lands/land_availability_ERA5grid_{self.region_short_code}_{self.resource_type}.png',dpi=300)
-        utils.print_update(level=PRINT_LEVEL_BASE+3,message=f"{__name__}|Land availability (grid cells) map saved at vis/{self.region_short_code}/lands/land_availability_ERA5grid_{self.region_short_code}.png")
+        vis_save_to_root=self.get_vis_dir()
+        plot_save_to=Path(vis_save_to_root)/'lands'
+        utils.ensure_path(plot_save_to)
+        plt.savefig(f'{plot_save_to}/land_availability_ERA5grid_{self.region_short_code}_{self.resource_type}.svg',dpi=500)
+        utils.print_update(level=PRINT_LEVEL_BASE+3,message=f"{__name__}|Land availability (grid cells) map saved at {vis_save_to_root}")
         # return fig
         
 
@@ -579,8 +587,11 @@ class CellCapacityProcessor(AttributesParser):
                                               plot_kwargs={'facecolor':'none','edgecolor':'black'},
                                               ax=ax)
         ax.axis("off")
-        plt.savefig(f'vis/misc/land_availability_excluderResolution_{self.region_name}.png',dpi=300)
-        utils.print_update(level=PRINT_LEVEL_BASE+3,message=f"{__name__}|Land availability map (excluder resolution) saved at vis/misc/land_availability_excluderResolution_{self.region_name}.png")
+        vis_save_to_root=self.get_vis_dir()
+        plot_save_to=Path(vis_save_to_root)/'lands'
+        utils.ensure_path(plot_save_to)
+        plt.savefig(f'{plot_save_to}/land_availability_excluderResolution_{self.region_name}.svg',dpi=500)
+        utils.print_update(level=PRINT_LEVEL_BASE+3,message=f"{__name__}|Land availability map (excluder resolution) saved to {plot_save_to}/land_availability_excluderResolution_{self.region_name}.svg")
         return fig
     
 @staticmethod

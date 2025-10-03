@@ -40,11 +40,19 @@ Dependencies:
     - Spatial data sources (ERA5, Global Wind Atlas, etc.)
 
 Usage:
-    python run.py
+    python run.py [--config CONFIG_FILE]
+    
+Arguments:
+    --config, -c    Path to configuration file (default: config/config_CAN.yaml)
+
+Examples:
+    python run.py                                    # Use default config
+    python run.py --config config/config_US.yaml    # Use custom config
+    python run.py -c my_config.yaml                 # Use custom config (short form)
 
 Notes:
     - Requires proper conda environment setup (see environment.yml)
-    - Configuration parameters defined in config/config_CAN.yaml
+    - Configuration parameters defined in specified config file
     - Results stored in data/store/ and results/ directories
     - Processing time varies by province size and data availability
 
@@ -53,22 +61,53 @@ Date: 2025
 Version: 1
 """
 
+import argparse
 import RES.RESources as RES
 
-# Iterate over provinces for both solar and wind resources
-resource_types = ['wind','solar'] 
-regions=['BC']  # 'BC','QC','AB','SK','ON','NS','MB'
 
-for region in regions:
-    for resource_type in resource_types:
-        required_args = {
-            "config_file_path": 'config/config_CAN.yaml',
-            "region_short_code": region,
-            "resource_type": resource_type
-        }
-        
-        # Create an instance of Resources and execute the module
-        RES_module = RES.RESources_builder(**required_args)
-        RES_module.build(select_top_sites=False,
-                         use_pypsa_buses=False,
-                         get_clusters=False)
+def main():
+    """Main function to execute the renewable energy resource analysis pipeline."""
+    # Set up command-line argument parsing
+    parser = argparse.ArgumentParser(
+        description='Canadian Renewable Energy Resource Analysis and Processing Pipeline',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python run.py                                    # Use default config
+  python run.py --config config/config_US.yaml    # Use custom config
+  python run.py -c my_config.yaml                 # Use custom config (short form)
+        """
+    )
+    
+    parser.add_argument(
+        '--config', '-c',
+        type=str,
+        default='config/config_CAN_baseline.yaml',
+        help='Path to configuration file (default: config/config_CAN.yaml)'
+    )
+    
+    # Parse command-line arguments
+    args = parser.parse_args()
+    
+    # Iterate over provinces for both solar and wind resources
+    resource_types = ['wind','solar'] 
+    regions=['BC']  # 'BC','QC','AB','SK','ON','NS','MB'
+
+    for region in regions:
+        for resource_type in resource_types:
+            required_args = {
+                "config_file_path": args.config,
+                "region_short_code": region,
+                "resource_type": resource_type
+            }
+            
+            # Create an instance of Resources and execute the module
+            RES_module = RES.RESources_builder(**required_args)
+            RES_module.build(select_top_sites=True,
+                             use_pypsa_buses=False,
+                             get_clusters=True,
+                             clean_store=False)
+
+
+if __name__ == '__main__':
+    main()

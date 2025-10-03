@@ -46,17 +46,61 @@ class AttributesParser:
         self.disaggregation_config:Dict[str,dict] = self.config.get('capacity_disaggregation','')
         self.resource_disaggregation_config=self.get_resource_disaggregation_config()
         self.region_code_validity=self.is_region_code_valid()
-        self.sub_national_unit_tag=self.get_gadm_config().get('datafield_mapping', {}).get('NAME_1', 'NAME_1')
+        self.sub_national_unit_tag=self.get_gadm_config().get('datafield_mapping', {}).get('NAME_2', 'NAME_1')
         self.multi_country_flag = self.get_multi_country_flag  # This will set the multi_country_flag based on the config file.
         self.RUN_ID=self.get_RUN_ID() 
         self.country=self.get_country()
+        self.country_kwd=self.country.replace(' ','')
         self.results_save_to=self.get_results_save_to_path()
+
 
         # Define the store file path and filename
         self.store = Path(f"data/store/resources_{self.country.replace(' ', '')}_{self.region_short_code}_{self.RUN_ID}.h5")
         self.store.parent.mkdir(parents=True, exist_ok=True)
-       
+        self.default_crs_cfg:dict=self.config.get('default_CRS',None)
+        self.crs_d,self.crs_m=self.get_CRS()
+        self.vis_root=self.get_vis_dir()
     
+    def get_CRS(self):
+        """
+        Returns the CRS for degrees and meters based on the region code. If not found, defaults to EPSG:4326 for degrees and EPSG:3347 for meters.
+        
+        Steps:
+            1. Loads default CRS from config file.
+            2. Checks for region-specific CRS in config file.
+            3. If not found, uses default CRS.
+            4. If defaults are missing, falls back to EPSG:4326 for degrees and EPSG:3347 for meters.
+            5. Returns a tuple of (CRS_degrees, CRS_meters).
+        
+        Returns:
+            tuple: (CRS_degrees, CRS_meters)
+        """
+        # Load defaults from config
+        self.crs_d_default = self.default_crs_cfg.get('degrees') if self.default_crs_cfg else None
+        self.crs_m_default = self.default_crs_cfg.get('meters') if self.default_crs_cfg else None
+
+        # If missing, set fallbacks
+        if self.crs_d_default is None or self.crs_m_default is None:
+            utils.print_warning("Default CRS not fully configured. Using EPSG:4326 for degrees and EPSG:3347 for meters.")
+            self.crs_d_default = 'EPSG:4326'
+            self.crs_m_default = 'EPSG:3347'
+        
+        # Check for region-specific CRS in config, else use defaults
+        self.crs_d = (self.config.get('region_mapping', {})
+                        .get(self.region_short_code, {})
+                        .get('CRS_degrees', None))
+        if self.crs_d is None:
+            self.crs_d = self.crs_d_default
+        
+        self.crs_m = (self.config.get('region_mapping', {})
+                        .get(self.region_short_code, {})
+                        .get('CRS_meters', None))
+        if self.crs_m is None:
+            self.crs_m = self.crs_m_default
+        
+        return self.crs_d,self.crs_m
+
+        
     def load_config(self,config_file_path):
         """ 
         Loads the yaml file as dictionary and extracts the attributes to pass on child classes. 
@@ -69,9 +113,7 @@ class AttributesParser:
         """
         Returns the path where results will be saved.
         """
-        country_kwd=self.country.replace(' ','')
-        results_save_to=Path(f"results/RESources/{country_kwd}")
-        results_save_to.mkdir(parents=True, exist_ok=True)
+        results_save_to=utils.ensure_path(f"results/{self.country_kwd}/{self.region_short_code}/{self.RUN_ID}")
         
         return results_save_to
     
@@ -154,18 +196,15 @@ class AttributesParser:
        # Access 'capacity_disaggregation' and then the specific resource type (e.g., 'solar' or 'wind')
     
         return self.config.get('capacity_disaggregation', {}).get(self.resource_type, {})
-
-    def get_excluder_crs(self,
-                         country:str=None) -> int:
-        recommended_excluder_crs:dict={
-            'Canada':3347}
-        if country in recommended_excluder_crs.keys():
-            return recommended_excluder_crs[country]
-        else:
-            return 3347 # default CRS for CANADA, atlite's default is 3035
     
     def get_vis_dir(self) -> Path:
-        return Path(f'vis/{self.region_short_code}') / (self.resource_type if self.resource_type else f'misc/{self.region_short_code}')
+        vis_path = Path(
+            f"vis/{self.country_kwd}/{self.region_short_code}/{self.RUN_ID}/"
+            f"{self.resource_type if self.resource_type else f'misc/{self.region_short_code}'}"
+        )
+
+        utils.ensure_path(vis_path)
+        return vis_path
     
     def get_CLC_raster_config(self) -> Dict[str, dict]:
         return self.config.get('CORINE', {})
@@ -184,9 +223,6 @@ class AttributesParser:
     
     def get_country(self)-> str:
         return self.config.get('country', None)
-    
-    def get_default_crs(self)->str:
-        return 'EPSG:4326'
     
     def get_custom_land_layers(self):
         return self.config.get('custom_land_layers', {})

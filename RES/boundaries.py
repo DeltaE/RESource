@@ -158,8 +158,7 @@ class GADMBoundaries(AttributesParser):
         self.admin_level:int= self.gadm_config.get('admin_level',1) 
         self.boundary_datafields = self.gadm_config.get('datafield_mapping')
 
-        self.crs=super().get_default_crs()  # INHERITED METHOD from AttributesParser
-        self.country=super().get_country()  # INHERITED METHOD from AttributesParser
+        self.country=self.get_country()  # INHERITED METHOD from AttributesParser
 
         self.region_file:Path = Path(self.gadm_processed) / f'gadm41_{self.country}_L{self.admin_level}_{self.region_short_code}.geojson'
         
@@ -206,7 +205,7 @@ class GADMBoundaries(AttributesParser):
                 utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__} | Fetching GADM data for {self.country} at Administrative Level {self.admin_level}....from source: https://gadm.org/data.html")
                 
                 _country_gdf_:gpd.GeoDataFrame = pygadm.AdmItems(name=self.country, content_level=self.admin_level)
-                _country_gdf_.set_crs(self.crs)
+                _country_gdf_.set_crs(self.crs_d)
                 self.boundary_country=_country_gdf_
                 # save to local file
                 self.boundary_country.to_file(self.country_file, driver='GeoJSON')
@@ -319,8 +318,6 @@ class GADMBoundaries(AttributesParser):
             'maxy': max_y
             }
         
-        # plot_info='(Minimum Bounding Rectangle)'
-        # bounding_box_gdf = gpd.GeoDataFrame(geometry=[box(min_x, min_y, max_x, max_y)], crs=region_gadm_regions_gdf.crs)
         
         return self.bounding_box,self.actual_boundary
         

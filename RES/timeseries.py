@@ -1,4 +1,3 @@
-from collections import namedtuple
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -7,7 +6,6 @@ import geopandas as gpd
 import pandas as pd
 import plotly.graph_objects as go
 import xarray as xr
-
 
 import RES.windspeed as windspeed
 from RES import utility as utils

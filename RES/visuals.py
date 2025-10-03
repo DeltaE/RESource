@@ -585,7 +585,7 @@ def plot_region_complementarity(timeseries_solar: pd.DataFrame,
         ax.set_title(f'{region_name} | Complementarity Score: {complementarity_score:.2f}', fontsize=14, fontweight='bold')
 
         plt.tight_layout()
-        plt.savefig(f'../vis/{region_code}/complementarity_{region_name}_{RUN_ID}.png', dpi=300)
+        plt.savefig(f'../vis/{region_code}/complementarity_{region_name}_{RUN_ID}.svg', dpi=300)
         print(f"Saved figure for {region_name} with complementarity score {complementarity_score:.2f}")
         if show:
            plt.show()
@@ -693,7 +693,7 @@ def plot_resources_scatter_metric_combined(
         
     save_to_root = Path(save_to_root)
     save_to_root.mkdir(parents=True, exist_ok=True)
-    file_path = save_to_root / "Resources_CF_vs_LCOE_combined.png"
+    file_path = save_to_root / "Resources_CF_vs_LCOE_combined.svg"
     plt.savefig(file_path,transparent=set_transparent)
     utils.print_update(level=1, message=f"Combined CF vs LCOE plot created and saved to: {file_path}")
     # return fig
@@ -706,13 +706,15 @@ def get_CF_wind_check_plot(cells: gpd.GeoDataFrame,
                            region_name: str,
                            columns: list,
                            figure_height: int = 7,
-                           font_family:str='sans-serif',
+                           font_family:str=None,
                            save_to: str | Path = None):
     """
     Plots GWA benchmark (left), CF_IEC3 (middle), and wind_CF_mean (right).
     """
       # assumes vis.add_compass_to_plot() exists
-    
+    plt.style.use(style_path)  
+    if font_family is not None:  
+        plt.rcParams['font.family'] = font_family
     assert len(columns) == 2, "Expected exactly two columns: CF_IEC3 and wind_CF_mean"
     col_mid, col_right = columns
 
@@ -792,15 +794,12 @@ def get_CF_wind_check_plot(cells: gpd.GeoDataFrame,
     plt.rcParams['font.family']=font_family
 
 
-    if save_to is None:
-        save_to = Path(f"vis/{region_code}")
-    else:
+    if save_to is not None:
         save_to = Path(save_to)
-
-    save_to.mkdir(parents=True, exist_ok=True)
-    save_to_file = save_to / "Wind_CF_comparison.png"
-    plt.savefig(save_to_file, dpi=300, bbox_inches='tight', transparent=False)
-    utils.print_update(level=1, message=f"Wind CF comparison plot created and saved to: {save_to_file}")
+        save_to.mkdir(parents=True, exist_ok=True)
+        save_to_file = save_to / "Wind_CF_comparison.svg"
+        plt.savefig(save_to_file, dpi=300, bbox_inches='tight', transparent=False)
+        utils.print_update(level=1, message=f"Wind CF comparison plot created and saved to: {save_to_file}")
     # Summary table
     display(cells[columns].describe().style.format(precision=2).set_caption("Summary Statistics for CF_IEC3 and calibrated Wind CF_mean"))
 
@@ -895,7 +894,7 @@ def plot_resources_scatter_metric(resource_type:str,
     
     # Save the plot as a transparent image with 600 dpi
     save_to_root.mkdir(parents=True, exist_ok=True)
-    file_path=save_to_root/f"Resources_CF_vs_LCOE_{resource_type}.png"
+    file_path=save_to_root/f"Resources_CF_vs_LCOE_{resource_type}.svg"
     
     plt.savefig(file_path, dpi=600, transparent=True)
     utils.print_update(level=1,message=f"CF vs LCOE plot for {resource_type} resources created and saved to : {file_path}")
@@ -936,93 +935,93 @@ def plot_with_matched_cells(ax, cells: gpd.GeoDataFrame, filtered_cells: gpd.Geo
     cbar.set_label(column, fontsize=font_size)  # Label for the colorbar
     cbar.ax.tick_params(labelsize=font_size) 
 
-def get_selected_vs_missed_visuals(cells: gpd.GeoDataFrame,
-                                  province_short_code,
-                                  resource_type,
-                                   lcoe_threshold: float,
-                                   CF_threshold: float,
-                                   capacity_threshold: float,
-                                   text_box_x=.4,
-                                   text_box_y=.95,
-                                   title_y=1,
-                                   title_x=0.6,
-                                   font_size=10,
-                                   dpi=1000,
-                                   figsize=(12, 7),
-                                   save=False):
-    """Generate visualizations for selected vs missed cells.
+# def get_selected_vs_missed_visuals(cells: gpd.GeoDataFrame,
+#                                   province_short_code,
+#                                   resource_type,
+#                                    lcoe_threshold: float,
+#                                    CF_threshold: float,
+#                                    capacity_threshold: float,
+#                                    text_box_x=.4,
+#                                    text_box_y=.95,
+#                                    title_y=1,
+#                                    title_x=0.6,
+#                                    font_size=10,
+#                                    dpi=1000,
+#                                    figsize=(12, 7),
+#                                    save=False):
+#     """Generate visualizations for selected vs missed cells.
 
-    Args:
-        cells (gpd.GeoDataFrame): GeoDataFrame containing cell data.
-        province_short_code (str): Short code for the province.
-        resource_type (str): Type of renewable resource (e.g., 'solar', 'wind').
-        lcoe_threshold (float): _description_
-        CF_threshold (float): _description_
-        capacity_threshold (float): _description_
-        text_box_x (float, optional): _description_. Defaults to .4.
-        text_box_y (float, optional): _description_. Defaults to .95.
-        title_y (int, optional): _description_. Defaults to 1.
-        title_x (float, optional): _description_. Defaults to 0.6.
-        font_size (int, optional): _description_. Defaults to 10.
-        dpi (int, optional): _description_. Defaults to 1000.
-        figsize (tuple, optional): _description_. Defaults to (12, 7).
-        save (bool, optional): _description_. Defaults to False.
-    """
-    mask=(cells[f'{resource_type}_CF_mean']>=CF_threshold)&(cells[f'potential_capacity_{resource_type}']>=capacity_threshold)&(cells[f'lcoe_{resource_type}']<=lcoe_threshold)
-    filtered_cells=cells[mask]
+#     Args:
+#         cells (gpd.GeoDataFrame): GeoDataFrame containing cell data.
+#         province_short_code (str): Short code for the province.
+#         resource_type (str): Type of renewable resource (e.g., 'solar', 'wind').
+#         lcoe_threshold (float): _description_
+#         CF_threshold (float): _description_
+#         capacity_threshold (float): _description_
+#         text_box_x (float, optional): _description_. Defaults to .4.
+#         text_box_y (float, optional): _description_. Defaults to .95.
+#         title_y (int, optional): _description_. Defaults to 1.
+#         title_x (float, optional): _description_. Defaults to 0.6.
+#         font_size (int, optional): _description_. Defaults to 10.
+#         dpi (int, optional): _description_. Defaults to 1000.
+#         figsize (tuple, optional): _description_. Defaults to (12, 7).
+#         save (bool, optional): _description_. Defaults to False.
+#     """
+#     mask=(cells[f'{resource_type}_CF_mean']>=CF_threshold)&(cells[f'potential_capacity_{resource_type}']>=capacity_threshold)&(cells[f'lcoe_{resource_type}']<=lcoe_threshold)
+#     filtered_cells=cells[mask]
     
-    # Create a high-resolution side-by-side plot in a 2x2 grid
-    fig, axs = plt.subplots(nrows=2, ncols=2, figsize=figsize, dpi=dpi)
+#     # Create a high-resolution side-by-side plot in a 2x2 grid
+#     fig, axs = plt.subplots(nrows=2, ncols=2, figsize=figsize, dpi=dpi)
 
-    # Define the message
-    msg = (f"Cell thresholds @ lcoe >= {lcoe_threshold} $/kWH, "
-           f"CF >={CF_threshold}, MW >={capacity_threshold}")
+#     # Define the message
+#     msg = (f"Cell thresholds @ lcoe >= {lcoe_threshold} $/kWH, "
+#            f"CF >={CF_threshold}, MW >={capacity_threshold}")
 
 
 
-    # First plot: CF_mean Visualization (top left)
-    plot_with_matched_cells(axs[0, 0], cells, filtered_cells, f'{resource_type}_CF_mean', 'YlOrRd', 
-                            background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
-    axs[0, 0].set_title('CF_mean Overview', fontsize=font_size)
-    axs[0, 0].set_xlabel('Longitude', fontsize=font_size-3)
-    axs[0, 0].set_ylabel('Latitude', fontsize=font_size-3)
-    axs[0, 0].set_axis_off()
+#     # First plot: CF_mean Visualization (top left)
+#     plot_with_matched_cells(axs[0, 0], cells, filtered_cells, f'{resource_type}_CF_mean', 'YlOrRd', 
+#                             background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
+#     axs[0, 0].set_title('CF_mean Overview', fontsize=font_size)
+#     axs[0, 0].set_xlabel('Longitude', fontsize=font_size-3)
+#     axs[0, 0].set_ylabel('Latitude', fontsize=font_size-3)
+#     axs[0, 0].set_axis_off()
 
-    # Second plot: Potential Capacity Visualization (top right)
-    plot_with_matched_cells(axs[0, 1], cells, filtered_cells, f'potential_capacity_{resource_type}', 'Blues',
-                            background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
-    axs[0, 1].set_title('Potential Capacity Overview', fontsize=font_size)
-    axs[0, 1].set_xlabel('Longitude', fontsize=font_size-3)
-    axs[0, 1].set_ylabel('Latitude', fontsize=font_size-3)
-    axs[0, 1].set_axis_off()
+#     # Second plot: Potential Capacity Visualization (top right)
+#     plot_with_matched_cells(axs[0, 1], cells, filtered_cells, f'potential_capacity_{resource_type}', 'Blues',
+#                             background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
+#     axs[0, 1].set_title('Potential Capacity Overview', fontsize=font_size)
+#     axs[0, 1].set_xlabel('Longitude', fontsize=font_size-3)
+#     axs[0, 1].set_ylabel('Latitude', fontsize=font_size-3)
+#     axs[0, 1].set_axis_off()
 
-    # Third plot: Nearest Station Distance Visualization (bottom left)
-    plot_with_matched_cells(axs[1, 0], cells, filtered_cells, f'nearest_station_distance_km', 'coolwarm',
-                            background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
-    axs[1, 0].set_title('Nearest Station Distance Overview', fontsize=font_size)
-    axs[1, 0].set_xlabel('Longitude', fontsize=font_size-3)
-    axs[1, 0].set_ylabel('Latitude', fontsize=font_size-3)
-    axs[1, 0].set_axis_off()
+#     # Third plot: Nearest Station Distance Visualization (bottom left)
+#     plot_with_matched_cells(axs[1, 0], cells, filtered_cells, f'nearest_station_distance_km', 'coolwarm',
+#                             background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
+#     axs[1, 0].set_title('Nearest Station Distance Overview', fontsize=font_size)
+#     axs[1, 0].set_xlabel('Longitude', fontsize=font_size-3)
+#     axs[1, 0].set_ylabel('Latitude', fontsize=font_size-3)
+#     axs[1, 0].set_axis_off()
 
-    # Fourth plot: LCOE Visualization (bottom right)
-    plot_with_matched_cells(axs[1, 1], cells, filtered_cells, f'lcoe_{resource_type}', 'summer',
-                            background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
-    axs[1, 1].set_title('LCOE Overview', fontsize=font_size)
-    axs[1, 1].set_xlabel('Longitude', fontsize=font_size-3)
-    axs[1, 1].set_ylabel('Latitude', fontsize=font_size-3)
-    axs[1, 1].set_axis_off()
+#     # Fourth plot: LCOE Visualization (bottom right)
+#     plot_with_matched_cells(axs[1, 1], cells, filtered_cells, f'lcoe_{resource_type}', 'summer',
+#                             background_cell_linewidth=0.2, selected_cells_linewidth=0.5,font_size=font_size-3)
+#     axs[1, 1].set_title('LCOE Overview', fontsize=font_size)
+#     axs[1, 1].set_xlabel('Longitude', fontsize=font_size-3)
+#     axs[1, 1].set_ylabel('Latitude', fontsize=font_size-3)
+#     axs[1, 1].set_axis_off()
 
-    # Add a super title for the figure
-    fig.suptitle(f'{resource_type}- Selected Cells Overview - {province_short_code}', fontsize=font_size+2,fontweight='bold', x=title_x,y=title_y)
-    # Add a text box with grey background for the message
-    fig.text(text_box_x, text_box_y, msg, ha='center', va='top', fontsize=font_size-3,
-             bbox=dict(facecolor='lightgrey', edgecolor='grey', boxstyle='round,pad=0.2'))
-    plt.tight_layout()
-    # Save the plot
-    if save:
-        plt.savefig(f"vis/linking/solar/Selected_cells_solar_{province_short_code}.png", bbox_inches='tight')
-    plt.tight_layout()
-    plt.show()  # Optional: Show the plot if desired
+#     # Add a super title for the figure
+#     fig.suptitle(f'{resource_type}- Selected Cells Overview - {province_short_code}', fontsize=font_size+2,fontweight='bold', x=title_x,y=title_y)
+#     # Add a text box with grey background for the message
+#     fig.text(text_box_x, text_box_y, msg, ha='center', va='top', fontsize=font_size-3,
+#              bbox=dict(facecolor='lightgrey', edgecolor='grey', boxstyle='round,pad=0.2'))
+#     plt.tight_layout()
+#     # Save the plot
+#     if save:
+#         plt.savefig(f"vis/linking/solar/Selected_cells_solar_{province_short_code}.svg", bbox_inches='tight')
+#     plt.tight_layout()
+#     plt.show()  # Optional: Show the plot if desired
 
 
 def create_raster_image_with_legend(
@@ -1171,7 +1170,7 @@ def create_timeseries_plots(cells_df, CF_timeseries_df, max_resource_capacity, d
         plt.grid(True)
         plt.tight_layout()
         
-        plt_name = f'Site Capacity Factor (Resample Span: {resampling}) - {region}_{cluster_no}.png'
+        plt_name = f'Site Capacity Factor (Resample Span: {resampling}) - {region}_{cluster_no}.svg'
         plt.savefig(os.path.join(vis_directory,plt_name))
         plt.close()
 
@@ -1226,7 +1225,7 @@ def create_timeseries_plots_solar(cells_df,CF_timeseries_df, dissolved_indices,m
     
         plt.grid(True)
         plt.tight_layout()
-        plt_name=f'Solar CF timeseries (Resample Span :{resample_span}) - {region}_{cluster_no}.png'
+        plt_name=f'Solar CF timeseries (Resample Span :{resample_span}) - {region}_{cluster_no}.svg'
         plt.savefig(os.path.join(solar_vis_directory,'Site_timeseries',plt_name))
 
     print(f">>> Plots generated for CF timeseries of TOP Sites for {max_solar_capacity} GW Capacity Investment...")
@@ -1314,7 +1313,7 @@ def get_data_in_map_plot(cells,
                     ax=None,
                     compass_size:float=10,
                     font_family:str=None,
-                    discalimers:bool=False,
+                    score_threshold:float=200,
                     show=True):
     
     """
@@ -1366,7 +1365,7 @@ def get_data_in_map_plot(cells,
             cmap = 'YlOrRd' if resource_type == 'solar' else 'BuPu'
             column = columns[column_keyword]
             if column_keyword == 'SCORE':
-                cells=cells[cells[column]<=200]
+                cells=cells[cells[column]<=score_threshold]
             
             vmin = cells[column].min()
             vmax = cells[column].max()
@@ -1399,13 +1398,13 @@ def get_data_in_map_plot(cells,
             ax.set_axis_off()
             if resource_type=='solar':
                 utils.print_update(level=2,message= "Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name")
-            if column_keyword == 'SCORE' and discalimers:
-                # Add disclaimer text at the bottom of the plot
-                ax.text(
-                    0.5, 0,
-                    "Note: The Scoring is calculated to reflect Dollar investment required to get an unit of Energy yield (MWh).\nTo reflect market competitiveness and incentives, the Score ($/MWh) needs financial adjustment factors to be considered on top of it.\nScore Higher than 200 $/MWh are assumed to be not feasible and not shown in this map.",
-                    transform=ax.transAxes, ha='center', va='top', fontsize=10, color='gray'
-                )
+            # if column_keyword == 'SCORE':
+            #     # Add disclaimer text at the bottom of the plot
+            #     ax.text(
+            #         0.5, 0,
+            #         f"Note: The Scoring is calculated to reflect Dollar investment required to get an unit of Energy yield (MWh).\nTo reflect market competitiveness and incentives, the Score ($/MWh) needs financial adjustment factors to be considered on top of it.\nScore Higher than {score_threshold} $/MWh are assumed to be not feasible and not shown in this map.",
+            #         transform=ax.transAxes, ha='center', va='top', fontsize=10, color='gray'
+            #     )
             if show:
                 plt.show()
 
@@ -1413,72 +1412,6 @@ def get_data_in_map_plot(cells,
         
     return ax
 
-# def plot_grid_lines(
-#     region_code: str,
-#     region_name: str,
-#     lines: gpd.GeoDataFrame,
-#     boundary: gpd.GeoDataFrame,
-#     font_family: str = None,
-#     figsize: tuple = (10, 8),
-#     dpi=500,
-#     save_to: str | Path = None,
-#     show: bool = True,
-# ):
-#     """
-#     Plots transmission lines with binned voltage levels in a specified region.
-#     """
-
-#     fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
-#     fig.suptitle("Transmission Lines by Voltage Levels", fontsize=16, fontweight='bold')
-#     plt.style.use(style_path)
-#     if font_family is not None:
-#         plt.rcParams['font.family'] = font_family
-
-#     boundary.plot(ax=ax, facecolor='grey', edgecolor='black', linewidth=1, alpha=0.1)
-
-#     if 'voltage' in lines.columns:
-#         # Convert to numeric
-#         lines['voltage_kv'] = pd.to_numeric(lines['voltage'], errors='coerce') / 1000
-
-#         # Define voltage bins
-#         bins = [0, 12, 25, 132, 220, float("inf")]
-#         labels = ["<12 kV", "12–25 kV", "25–132 kV", "132–220 kV", "≥220 kV"]
-#         lines['voltage_class'] = pd.cut(lines['voltage_kv'], bins=bins, labels=labels, right=False)
-
-#         # Color map (enough distinct colors)
-#         cmap = plt.colormaps.get_cmap('tab10')
-#         colors = [cmap(i) for i in range(len(labels))]
-#         color_map = {label: colors[i] for i, label in enumerate(labels)}
-
-
-#         # Plot by class
-#         for label in labels:
-#             mask = lines['voltage_class'] == label
-#             if mask.any():
-#                 lines[mask].plot(ax=ax, color=color_map[label], linewidth=1, alpha=0.8)
-
-#         # Legend
-#         legend_patches = [mpatches.Patch(color=color_map[label], label=label) for label in labels if label in lines['voltage_class'].unique()]
-#         ax.legend(handles=legend_patches, frameon=False, fontsize=11, loc='upper right')
-
-#     else:
-#         lines.plot(ax=ax, color='blue', linewidth=1,alpha=0.7)
-
-#     ax.set_axis_off()
-#     plt.tight_layout()
-
-#     if save_to is None:
-#         save_to = Path("vis") / region_code / "network"
-#     else:
-#         save_to = Path(save_to)
-    
-#     save_to.mkdir(parents=True, exist_ok=True)
-#     save_to_file = save_to / f"transmission_lines_{region_code}.png"
-#     plt.savefig(save_to_file, bbox_inches='tight', dpi=300)
-    
-#     utils.print_update(level=2, message=f"Transmission Lines for {region_name} saved to {save_to_file}")
-#     if show:
-#         plt.show()
 def plot_grid_lines(
     region_code: str,
     region_name: str,
@@ -1493,7 +1426,7 @@ def plot_grid_lines(
     """
     Plots transmission lines with binned voltage levels in a specified region.
     """
-
+    lines = lines.copy() # Avoid modifying the original GeoDataFrame
     fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
     fig.suptitle("Transmission Lines by Voltage Levels", fontsize=16, fontweight='bold')
     plt.style.use(style_path)
@@ -1539,7 +1472,7 @@ def plot_grid_lines(
         save_to = Path(save_to)
     
     save_to.mkdir(parents=True, exist_ok=True)
-    save_to_file = save_to / f"transmission_lines_{region_code}.png"
+    save_to_file = save_to / f"transmission_lines_{region_code}.svg"
     plt.savefig(save_to_file, bbox_inches='tight', dpi=300)
     
     utils.print_update(level=2, message=f"Transmission Lines for {region_name} saved to {save_to_file}")

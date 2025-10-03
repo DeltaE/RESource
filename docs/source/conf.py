@@ -88,7 +88,7 @@ autodoc_inherit_docstrings = False
 suppress_warnings = ['autodoc.import_error']
 
 # html_logo = "_static/RESource_logo_2025.07.jpg"
-html_logo = "_static/RES_logo_v2_2025.jpg"
+html_logo = "_static/graphic_RES_logo_202508.jpg"
 
 # NBSphinx configuration for Jupyter notebooks
 nbsphinx_execute = 'never'  # Don't execute notebooks during build

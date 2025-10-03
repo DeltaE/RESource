@@ -1,7 +1,7 @@
 import geopandas as gpd
 from scipy.spatial import cKDTree
 import pandas as pd
-import logging as log
+
 from dataclasses import dataclass
 
 from RES.AttributesParser import AttributesParser
@@ -344,7 +344,8 @@ class GridNodeLocator(AttributesParser):
         
         return cells_gdf_with_station_data # cells_within_proximity_gdf
     
-    def get_OSM_grid_lines(self) -> gpd.GeoDataFrame:
+    def get_OSM_grid_lines(self,
+                           columns_to_keep = ['power', 'voltage', 'geometry']) -> gpd.GeoDataFrame:
         """
         Retrieve transmission line infrastructure data from OpenStreetMap.
         
@@ -404,8 +405,15 @@ class GridNodeLocator(AttributesParser):
             osm_power_data = osm_power_data.reset_index()
         lines_gdf=osm_power_data[osm_power_data.element=='way']
         
-        if lines_gdf is None:
-            log.error("No OSM data found for Grid Lines")
+        # Select columns using boolean indexing
+        lines_subset_gdf = lines_gdf.loc[:, lines_gdf.columns.isin(columns_to_keep)].copy()
+        if 'power' in lines_subset_gdf.columns:
+            lines_subset_gdf["power"] = lines_subset_gdf["power"].astype(str)
+        if 'voltage' in lines_subset_gdf.columns:
+            lines_subset_gdf["voltage"]=pd.to_numeric(lines_subset_gdf["voltage"], errors='coerce').fillna(0).astype(int)
+
+        if lines_subset_gdf is None:
+            utils.print_update(level=PRINT_LEVEL_BASE,message="No OSM data found for Grid Lines")
             return None
         else:
-            return lines_gdf
+            return lines_subset_gdf
