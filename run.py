@@ -73,9 +73,9 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python run.py                                    # Use default config
-  python run.py --config config/config_US.yaml    # Use custom config
-  python run.py -c my_config.yaml                 # Use custom config (short form)
+  python run.py                                    # Use default config (set to BASELINE scenario for Canadian studies)
+  python run.py --config config/config_CAN_baseline.yaml    # Use custom config
+  python run.py -c config/config_CAN_baseline.yaml              # Use custom config (short form)
         """
     )
     

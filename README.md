@@ -15,9 +15,38 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 ## Workflow overview
 <img src="docs/source/_static/workflow.jpg" alt="high_level_workflow" width="1000"/>
 
+## 🚀 Quick Start
+
+**New to RESource?** Get started in 5 minutes:
+
+```bash
+# Clone and setup
+git clone https://github.com/DeltaE/RESource.git
+cd RESource
+make setupenv
+
+# Activate and test
+conda activate RES
+make run
+```
+
+📖 **[Full Quickstart Guide](QUICKSTART.md)** | 📚 **[Complete Documentation](https://deltae.github.io/RESource/)**
+
 ------
 
-**for more**
+## 📋 Key Features
 
-- [BC Case Study](https://deltae.github.io/RESource/notes/case_BC.html)
-- [RESource-documentation](https://deltae.github.io/RESource/)
+- **🌍 Multi-Regional**: Canada, Western Balkans, and custom regions
+- **⚡ Multi-Technology**: Wind and solar resource assessment
+- **🔧 Modular Design**: Configurable exclusions, constraints, and parameters
+- **📊 Rich Outputs**: Time series, capacity maps, and interactive visualizations
+- **🔄 Reproducible**: Locked environments and standardized workflows
+
+------
+
+## 📚 Resources
+
+- **[📖 Quickstart Guide](QUICKSTART.md)** - Get running in 5 minutes
+- **[🏔️ BC Case Study](https://deltae.github.io/RESource/notes/case_BC.html)** - Detailed regional analysis
+- **[📘 Full Documentation](https://deltae.github.io/RESource/)** - Complete reference
+- **[💻 Setup Guide](https://deltae.github.io/RESource/notes/setup_guide.html)** - Environment and development setup
