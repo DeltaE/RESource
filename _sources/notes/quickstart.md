@@ -65,7 +65,7 @@ For running custom analyses beyond the provided case study data, some data sourc
 - **CODERS API**: Requires registration for Canadian-specific data sources
 
 ```{note}
-**Complete Setup Instructions**: For detailed API registration steps, configuration files, and data source information, see [data.md](data.md).
+**Complete Setup Instructions**: For detailed API registration steps, configuration files, and data source information, see [data.md](https://deltae.github.io/RESource/notes/data.html).
 ```
 
 ---
