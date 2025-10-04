@@ -705,21 +705,15 @@ it prepends the new info at the top of the file.</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">extract_weather_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.extract_weather_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Extracts weather data for the cells (e.g. windspeed, solar influx).
-This method retrieves the ERA5 cutout and extracts windspeed data for the cells.
-If the windspeed data is already present in the stored dataset, it skips the extraction from the source.
-If the resource type is 'wind', it extracts the 'windspeed_ERA5' from the cutout and updates the cells GeoDataFrame.
-If the resource type is 'solar', it currently does not support extraction from the Global Solar Atlas data.
-:param None:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<ul class="simple">
-<li><p>Currently active for windspeed only due to significant contrast with high resolution data.</p></li>
-</ul>
+<dd><p>Extract meteorological data for renewable energy resource assessment.</p>
+<p>Retrieves ERA5 climate data including wind speeds and solar irradiance
+for each grid cell. Implements caching to avoid redundant data extraction
+and processing.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently optimized for wind resource assessment. Solar resource
+extraction from Global Solar Atlas is under development.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -774,31 +768,18 @@ If the resource type is 'solar', it currently does not support extraction from t
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_cell_capacity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.get_cell_capacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Retrieves the potential capacity of the cells based on land availability and land-use intensity.
-:param force_update: If True, forces the update of the cell capacity data.
-:type force_update: bool</p>
+<dd><p>Calculate renewable energy capacity potential for grid cells.</p>
+<p>Determines developable capacity based on land availability constraints,
+land use intensity factors, and cell geometry. Accounts for exclusion
+zones, protected areas, and resource-specific siting requirements.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A namedtuple containing the cells with their potential capacity and the capacity matrix.</p>
+<dd class="field-odd"><p>Grid cells with capacity data and capacity matrix for time series analysis</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>tuple</p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<ul class="simple">
-<li><p>The capacity matrix is a 2D array where each row corresponds to a cell and each column corresponds to a time step.</p></li>
-<li><dl class="simple">
-<dt>The potential capacity is calculated as:</dt><dd><ul>
-<li><p>Potential capacity (MW) = available land (%) x land-use intensity (MW/sq.km) x Area of a cell (sq. km)</p></li>
-<li><p>The method uses the <cite>CellCapacityProcessor</cite> class to process the capacity data.</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><p>The method returns a namedtuple with two attributes: <cite>data</cite> (the cells GeoDataFrame) and <cite>matrix</cite> (the capacity matrix).</p></li>
-<li><p>Could be parallelized with Step 2A/2C.</p></li>
-</ul>
 </dd></dl>
 
 <dl class="py method">
@@ -821,31 +802,18 @@ If the resource type is 'solar', it currently does not support extraction from t
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_grid_cells</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GeoDataFrame</span></span></span><a class="reference internal" href="../_modules/RES/RESources.html#RESources_builder.get_grid_cells"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Retrieves the default grid cells for the region.</p>
+<dd><p>Generate spatial grid cells covering the analysis region.</p>
+<p>Creates a regular spatial grid based on the region boundary and
+configured resolution. Grid cells serve as fundamental spatial
+units for capacity calculations and resource assessment.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>None</strong></p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Grid cells with geometry, coordinates, and unique identifiers</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A GeoDataFrame containing the grid cells with their coordinates, geometry, and unique cell ids.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>gpd.GeoDataFrame</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>gpd.GeoDataFrame</p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<ul class="simple">
-<li><p>The <cite>get_default_grid()</cite> method creates several attributes, such as the atlite <cite>cutout</cite> object and the <cite>region_boundary</cite>.</p></li>
-<li><p>Uses the <cite>cutout.grid</cite> attribute to create the analysis grid cells (GeoDataFrame).</p></li>
-</ul>
-<blockquote>
-<div><dl class="simple">
-<dt>Step 0: Set-up the Grid Cells and their Unique Indices to populate incremental datafields and to easy navigation to cells</dt><dd><ul class="simple">
-<li><p>Step to create the Cells with unique indices generated from their x,y (centroids).</p></li>
-</ul>
-</dd>
-</dl>
-</div></blockquote>
 </dd></dl>
 
 <dl class="py method">
@@ -4161,11 +4129,82 @@ If False, uses full wind speed range (0-50 m/s) for processing.</p></li>
 <dt class="sig sig-object py">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.tech.</span></span><span class="sig-name descname"><span class="pre">OEDBTurbines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">OEDB_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/tech.html#OEDBTurbines"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Wind turbine configuration manager for OEDB (Open Energy Database) integration.</p>
+<p>Handles fetching, processing, and caching of wind turbine technical specifications
+from the Open Energy Database. Provides standardized turbine configurations for
+renewable energy modeling including power curves, hub heights, and rotor specifications.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>OEDB_config</strong> (<em>dict</em>) -- Configuration dictionary containing OEDB connection parameters,
+turbine model specifications, and data source information</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">OEDB_config</span></span></dt>
+<dd><p>Configuration parameters for OEDB connection and turbine selection</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">turbine_name</span></span></dt>
+<dd><p>Name of the selected turbine model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">turbine_config_dir</span></span></dt>
+<dd><p>Directory for storing downloaded turbine configuration files</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">turbine_config_file</span></span></dt>
+<dd><p>Path to the specific turbine configuration YAML file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">fetch_turbine_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/tech.html#OEDBTurbines.fetch_turbine_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Fetches turbine data based on the resource type (e.g., 'wind') and saves the formatted
-configuration for the turbines found.</p>
+<dd><p>Fetch turbine configuration from OEDB and cache locally.</p>
+<p>Retrieves turbine technical specifications from the Open Energy Database
+and formats them for use in renewable energy modeling. Implements local
+caching to avoid repeated downloads.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model</strong> -- Turbine model identifier corresponding to OEDB configuration</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Formatted turbine configuration with power curve and specifications,</dt><dd><p>or None if fetch/processing fails</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -4185,7 +4224,19 @@ configuration for the turbines found.</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">load_turbine_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/tech.html#OEDBTurbines.load_turbine_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Loads the turbine configuration from a YAML file.</p>
+<dd><p>Load turbine configuration from cached YAML file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Turbine configuration with technical specifications</dt><dd><p>including power curve, hub height, and rotor diameter</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -5635,27 +5686,23 @@ across different capacity ranges.</p>
 <dt class="sig sig-object py">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RES.hdf5_handler.</span></span><span class="sig-name descname"><span class="pre">DataHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hdf_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent_initiation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_structure</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/hdf5_handler.html#DataHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A class to handle reading and writing data to an HDF5 file.
-This class provides methods to save DataFrames or GeoDataFrames to an HDF5 file. This class is useful for managing large datasets efficiently, allowing for quick access and storage of structured data.</p>
-<dl class="simple">
-<dt>Key Features:</dt><dd><ul class="simple">
-<li><p>Save DataFrames or GeoDataFrames to an HDF5 file with optional geometry handling.</p></li>
-<li><p>Load data from the HDF5 file, converting WKT geometries back to GeoDataFrames.</p></li>
-<li><p>Manage the structure of the HDF5 file, including showing the tree structure and deleting keys.</p></li>
-</ul>
-</dd>
-<dt>Dependencies:</dt><dd><ul class="simple">
-<li><p>pandas: For DataFrame operations</p></li>
-<li><p>geopandas: For GeoDataFrame operations</p></li>
-<li><p>h5py: For HDF5 file handling</p></li>
-<li><p>shapely: For geometry serialization and deserialization</p></li>
+<p>HDF5-based data storage manager for geospatial renewable energy datasets.</p>
+<p>Provides efficient storage and retrieval of large DataFrame and GeoDataFrame
+datasets using HDF5 format. Handles geometry serialization for spatial data
+and implements caching mechanisms for workflow optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hdf_file_path</strong> (<em>Path</em>) -- Path to the HDF5 storage file</p></li>
+<li><p><strong>silent_initiation</strong> (<em>bool</em><em>, </em><em>default True</em>) -- Suppress initialization messages</p></li>
+<li><p><strong>show_structure</strong> (<em>bool</em><em>, </em><em>default False</em>) -- Display HDF5 file structure on initialization</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py attribute">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">store</span></span></dt>
-<dd><p>Path to the HDF5 file.</p>
+<dd><p>Path to the HDF5 storage file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Path</p>
@@ -5665,76 +5712,13 @@ This class provides methods to save DataFrames or GeoDataFrames to an HDF5 file.
 
 <dl class="py attribute">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">data_new</span></span></dt>
-<dd><p>Data to be saved.</p>
+<span class="sig-name descname"><span class="pre">geom_columns</span></span></dt>
+<dd><p>Column names containing geometry data for special handling</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pd.DataFrame or gpd.GeoDataFrame</p>
+<dd class="field-odd"><p>list</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">data_ext</span></span></dt>
-<dd><p>Existing data from the store.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pd.DataFrame or gpd.GeoDataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">updated_data</span></span></dt>
-<dd><p>Updated data after merging new data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pd.DataFrame or gpd.GeoDataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">__init__(hdf_file_path</span></span></dt>
-<dd><p>Path, silent_initiation: Optional[bool] = True, show_structure: Optional[bool] = False):
-Initializes the DataHandler with the file path.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">to_store(data</span></span></dt>
-<dd><p>pd.DataFrame or gpd.GeoDataFrame, key: str, hdf_file_path: Path = None, force_update: bool = False):
-Saves the DataFrame or GeoDataFrame to the HDF5 file.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">from_store(key</span></span></dt>
-<dd><p>str):
-Loads data from the HDF5 store and handles geometry conversion.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">refresh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/hdf5_handler.html#DataHandler.refresh"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Initializes a new DataHandler instance with the current store path.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">show_tree(store_path</span></span></dt>
-<dd><p>Path, show_dataset: bool = False):
-Recursively prints the hierarchy of an HDF5 file.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">del_key(store_path</span></span></dt>
-<dd><p>Path, key_to_delete: str):
-Deletes a specific key from the HDF5 file.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -5779,22 +5763,18 @@ Deletes a specific key from the HDF5 file.</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">from_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/hdf5_handler.html#DataHandler.from_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Load data from the HDF5 store and handle geometry conversion.</p>
+<dd><p>Load data from HDF5 storage with geometry reconstruction.</p>
+<p>Automatically handles geometry deserialization for spatial datasets
+and returns appropriate DataFrame or GeoDataFrame objects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>str</em>) -- Key for loading the DataFrame or GeoDataFrame.</p>
+<dd class="field-odd"><p><strong>key</strong> -- Storage key identifier</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The loaded DataFrame or GeoDataFrame.</p>
+<dd class="field-even"><p>DataFrame or GeoDataFrame with reconstructed geometry columns</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pd.DataFrame or gpd.GeoDataFrame</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>FileNotFoundError</strong> -- If the key is not found in the store.</p></li>
-<li><p><strong>TypeError</strong> -- If the loaded data is not a DataFrame or GeoDataFrame.</p></li>
-</ul>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>KeyError</strong> -- If storage key is not found</p>
 </dd>
 </dl>
 </dd></dl>
@@ -5843,21 +5823,20 @@ This method is useful for reloading the DataHandler with the same store path wit
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">to_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdf_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RES/hdf5_handler.html#DataHandler.to_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Save the DataFrame or GeoDataFrame to an HDF5 file.</p>
+<dd><p>Save DataFrame or GeoDataFrame to HDF5 storage.</p>
+<p>Handles geometry serialization for spatial data and implements
+intelligent updates to avoid data duplication.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>hdf_file_path</strong> (<em>Path</em>) -- Path to the HDF5 file. If None, it uses the existing store path.</p></li>
-<li><p><strong>data</strong> (<em>pd.DataFrame</em><em> or </em><em>gpd.GeoDataFrame</em>) -- The DataFrame or GeoDataFrame to save.</p></li>
-<li><p><strong>key</strong> (<em>str</em>) -- Key for saving the DataFrame to the HDF5 file.</p></li>
-<li><p><strong>force_update</strong> (<em>bool</em>) -- If True, force update the data even if it exists.</p></li>
+<li><p><strong>data</strong> -- DataFrame or GeoDataFrame to store</p></li>
+<li><p><strong>key</strong> -- Storage key identifier</p></li>
+<li><p><strong>hdf_file_path</strong> -- Optional override for storage file path</p></li>
+<li><p><strong>force_update</strong> -- Force overwrite of existing data</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>TypeError</strong> -- If the data is not a DataFrame or GeoDataFrame.</p></li>
-<li><p><strong>ValueError</strong> -- If the key is empty.</p></li>
-</ul>
+<dd class="field-even"><p><strong>TypeError</strong> -- If data is not a DataFrame or GeoDataFrame</p>
 </dd>
 </dl>
 </dd></dl>

@@ -550,24 +550,15 @@ document.write(`
 
 <div class="viewcode-block" id="RESources_builder.get_grid_cells">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.get_grid_cells">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_grid_cells</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Retrieves the default grid cells for the region.</span>
-<span class="sd">    </span>
-<span class="sd">        Args:</span>
-<span class="sd">            None</span>
-<span class="sd">    </span>
+    <span class="k">def</span> <span class="nf">get_grid_cells</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate spatial grid cells covering the analysis region.</span>
+<span class="sd">        </span>
+<span class="sd">        Creates a regular spatial grid based on the region boundary and </span>
+<span class="sd">        configured resolution. Grid cells serve as fundamental spatial</span>
+<span class="sd">        units for capacity calculations and resource assessment.</span>
+<span class="sd">        </span>
 <span class="sd">        Returns:</span>
-<span class="sd">            gpd.GeoDataFrame: A GeoDataFrame containing the grid cells with their coordinates, geometry, and unique cell ids.</span>
-<span class="sd">    </span>
-<span class="sd">        Notes:</span>
-<span class="sd">            - The `get_default_grid()` method creates several attributes, such as the atlite `cutout` object and the `region_boundary`.</span>
-<span class="sd">            - Uses the `cutout.grid` attribute to create the analysis grid cells (GeoDataFrame).</span>
-<span class="sd">        _________________________________________________________________________________________________________________________</span>
-<span class="sd">        - Future Scopes:</span>
-<span class="sd">            To give user flexibility to make their own grid resolution</span>
-<span class="sd">            Step 0: Set-up the Grid Cells and their Unique Indices to populate incremental datafields and to easy navigation to cells</span>
-<span class="sd">                - Step to create the Cells with unique indices generated from their x,y (centroids).</span>
+<span class="sd">            gpd.GeoDataFrame: Grid cells with geometry, coordinates, and unique identifiers</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
@@ -584,20 +575,14 @@ document.write(`
 <div class="viewcode-block" id="RESources_builder.get_cell_capacity">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.get_cell_capacity">[docs]</a>
     <span class="k">def</span> <span class="nf">get_cell_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Retrieves the potential capacity of the cells based on land availability and land-use intensity.</span>
-<span class="sd">        Args:   </span>
-<span class="sd">            force_update (bool): If True, forces the update of the cell capacity data.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate renewable energy capacity potential for grid cells.</span>
+<span class="sd">        </span>
+<span class="sd">        Determines developable capacity based on land availability constraints,</span>
+<span class="sd">        land use intensity factors, and cell geometry. Accounts for exclusion</span>
+<span class="sd">        zones, protected areas, and resource-specific siting requirements.</span>
+<span class="sd">        </span>
 <span class="sd">        Returns:</span>
-<span class="sd">            tuple: A namedtuple containing the cells with their potential capacity and the capacity matrix.</span>
-<span class="sd">        Notes:</span>
-<span class="sd">            - The capacity matrix is a 2D array where each row corresponds to a cell and each column corresponds to a time step.</span>
-<span class="sd">            - The potential capacity is calculated as:</span>
-<span class="sd">                - Potential capacity (MW) = available land (%) x land-use intensity (MW/sq.km) x Area of a cell (sq. km)</span>
-<span class="sd">                - The method uses the `CellCapacityProcessor` class to process the capacity data.</span>
-<span class="sd">            - The method returns a namedtuple with two attributes: `data` (the cells GeoDataFrame) and `matrix` (the capacity matrix).</span>
-<span class="sd">            - Could be parallelized with Step 2A/2C.</span>
-
+<span class="sd">            tuple: Grid cells with capacity data and capacity matrix for time series analysis</span>
 <span class="sd">        &quot;&quot;&quot;</span>       
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Preparing Cells&#39; capacity...&quot;</span><span class="p">)</span>
@@ -614,18 +599,15 @@ document.write(`
 <div class="viewcode-block" id="RESources_builder.extract_weather_data">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.extract_weather_data">[docs]</a>
     <span class="k">def</span> <span class="nf">extract_weather_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extracts weather data for the cells (e.g. windspeed, solar influx).</span>
-<span class="sd">        This method retrieves the ERA5 cutout and extracts windspeed data for the cells.</span>
-<span class="sd">        If the windspeed data is already present in the stored dataset, it skips the extraction from the source.</span>
-<span class="sd">        If the resource type is &#39;wind&#39;, it extracts the &#39;windspeed_ERA5&#39; from the cutout and updates the cells GeoDataFrame.</span>
-<span class="sd">        If the resource type is &#39;solar&#39;, it currently does not support extraction from the Global Solar Atlas data.</span>
-<span class="sd">        Args:</span>
-<span class="sd">            None</span>
-<span class="sd">    </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            None</span>
-<span class="sd">        Notes:</span>
-<span class="sd">            - Currently active for windspeed only due to significant contrast with high resolution data.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract meteorological data for renewable energy resource assessment.</span>
+<span class="sd">        </span>
+<span class="sd">        Retrieves ERA5 climate data including wind speeds and solar irradiance</span>
+<span class="sd">        for each grid cell. Implements caching to avoid redundant data extraction</span>
+<span class="sd">        and processing.</span>
+<span class="sd">        </span>
+<span class="sd">        Note:</span>
+<span class="sd">            Currently optimized for wind resource assessment. Solar resource</span>
+<span class="sd">            extraction from Global Solar Atlas is under development.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>

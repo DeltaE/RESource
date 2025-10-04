@@ -313,77 +313,68 @@ document.write(`
 <div class="viewcode-block" id="DataHandler">
 <a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler">[docs]</a>
 <span class="k">class</span> <span class="nc">DataHandler</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A class to handle reading and writing data to an HDF5 file.</span>
-<span class="sd">    This class provides methods to save DataFrames or GeoDataFrames to an HDF5 file. This class is useful for managing large datasets efficiently, allowing for quick access and storage of structured data.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;HDF5-based data storage manager for geospatial renewable energy datasets.</span>
 <span class="sd">    </span>
-<span class="sd">    Key Features:</span>
-<span class="sd">        - Save DataFrames or GeoDataFrames to an HDF5 file with optional geometry handling.</span>
-<span class="sd">        - Load data from the HDF5 file, converting WKT geometries back to GeoDataFrames.</span>
-<span class="sd">        - Manage the structure of the HDF5 file, including showing the tree structure and deleting keys.</span>
-<span class="sd">    Dependencies:</span>
-<span class="sd">        - pandas: For DataFrame operations</span>
-<span class="sd">        - geopandas: For GeoDataFrame operations</span>
-<span class="sd">        - h5py: For HDF5 file handling</span>
-<span class="sd">        - shapely: For geometry serialization and deserialization</span>
-<span class="sd">    Attributes:</span>
-<span class="sd">        store (Path): Path to the HDF5 file.</span>
-<span class="sd">        data_new (pd.DataFrame or gpd.GeoDataFrame): Data to be saved.</span>
-<span class="sd">        data_ext (pd.DataFrame or gpd.GeoDataFrame): Existing data from the store.</span>
-<span class="sd">        updated_data (pd.DataFrame or gpd.GeoDataFrame): Updated data after merging new data.</span>
-<span class="sd">    Methods:</span>
-<span class="sd">        __init__(hdf_file_path: Path, silent_initiation: Optional[bool] = True, show_structure: Optional[bool] = False):</span>
-<span class="sd">            Initializes the DataHandler with the file path.</span>
-<span class="sd">        to_store(data: pd.DataFrame or gpd.GeoDataFrame, key: str, hdf_file_path: Path = None, force_update: bool = False):</span>
-<span class="sd">            Saves the DataFrame or GeoDataFrame to the HDF5 file.</span>
-<span class="sd">        from_store(key: str):</span>
-<span class="sd">            Loads data from the HDF5 store and handles geometry conversion.</span>
-<span class="sd">        refresh():</span>
-<span class="sd">            Initializes a new DataHandler instance with the current store path.</span>
-<span class="sd">        show_tree(store_path: Path, show_dataset: bool = False):</span>
-<span class="sd">            Recursively prints the hierarchy of an HDF5 file.</span>
-<span class="sd">        del_key(store_path: Path, key_to_delete: str):</span>
-<span class="sd">            Deletes a specific key from the HDF5 file.</span>
+<span class="sd">    Provides efficient storage and retrieval of large DataFrame and GeoDataFrame</span>
+<span class="sd">    datasets using HDF5 format. Handles geometry serialization for spatial data</span>
+<span class="sd">    and implements caching mechanisms for workflow optimization.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hdf_file_path : Path</span>
+<span class="sd">        Path to the HDF5 storage file</span>
+<span class="sd">    silent_initiation : bool, default True</span>
+<span class="sd">        Suppress initialization messages</span>
+<span class="sd">    show_structure : bool, default False</span>
+<span class="sd">        Display HDF5 file structure on initialization</span>
+<span class="sd">        </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    store : Path</span>
+<span class="sd">        Path to the HDF5 storage file</span>
+<span class="sd">    geom_columns : list</span>
+<span class="sd">        Column names containing geometry data for special handling</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                 <span class="n">hdf_file_path</span><span class="p">:</span><span class="n">Path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">silent_initiation</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">show_structure</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hdf_file_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">silent_initiation</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> 
+                 <span class="n">show_structure</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize HDF5 data handler.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            hdf_file_path: Path to HDF5 storage file</span>
+<span class="sd">            silent_initiation: Suppress initialization messages</span>
+<span class="sd">            show_structure: Display file structure after initialization</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">hdf_file_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;⚠️  Store has not been set during initialization. Please define the store path during applying DataHandler methods&quot;</span><span class="p">)</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Store path not set during initialization. Define store path when calling methods.&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">store</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">hdf_file_path</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">geom_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;nearest_connection_point&#39;</span><span class="p">,</span><span class="s1">&#39;centroid&#39;</span><span class="p">]</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">silent_initiation</span><span class="p">:</span>
-                    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;🗄️ Store initialized with the given path: </span><span class="si">{</span><span class="n">hdf_file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Store initialized: </span><span class="si">{</span><span class="n">hdf_file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">show_structure</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">show_tree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">)</span>
                 
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;❌ Error reading file: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error initializing data handler: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                
 <div class="viewcode-block" id="DataHandler.to_store">
 <a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler.to_store">[docs]</a>
-    <span class="k">def</span> <span class="nf">to_store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                 <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> 
-                 <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-                 <span class="n">hdf_file_path</span><span class="p">:</span><span class="n">Path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">to_store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">hdf_file_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
                  <span class="n">force_update</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Save the DataFrame or GeoDataFrame to an HDF5 file.</span>
-
-<span class="sd">        Parameters:</span>
-<span class="sd">            hdf_file_path (Path): Path to the HDF5 file. If None, it uses the existing store path.</span>
-<span class="sd">            data (pd.DataFrame or gpd.GeoDataFrame):</span>
-<span class="sd">                The DataFrame or GeoDataFrame to save.</span>
-<span class="sd">            key (str): Key for saving the DataFrame to the HDF5 file.</span>
-<span class="sd">            force_update (bool): If True, force update the data even if it exists.  </span>
-<span class="sd">        Raises:</span>
-<span class="sd">            TypeError: If the data is not a DataFrame or GeoDataFrame.</span>
-<span class="sd">            ValueError: If the key is empty.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save DataFrame or GeoDataFrame to HDF5 storage.</span>
+<span class="sd">        </span>
+<span class="sd">        Handles geometry serialization for spatial data and implements</span>
+<span class="sd">        intelligent updates to avoid data duplication.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            data: DataFrame or GeoDataFrame to store</span>
+<span class="sd">            key: Storage key identifier</span>
+<span class="sd">            hdf_file_path: Optional override for storage file path</span>
+<span class="sd">            force_update: Force overwrite of existing data</span>
 <span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            TypeError: If data is not a DataFrame or GeoDataFrame</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="k">if</span> <span class="n">hdf_file_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -436,18 +427,20 @@ document.write(`
 
 <div class="viewcode-block" id="DataHandler.from_store">
 <a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler.from_store">[docs]</a>
-    <span class="k">def</span> <span class="nf">from_store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
-                   <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Load data from the HDF5 store and handle geometry conversion.</span>
+    <span class="k">def</span> <span class="nf">from_store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load data from HDF5 storage with geometry reconstruction.</span>
 <span class="sd">        </span>
-<span class="sd">        Parameters:</span>
-<span class="sd">            key (str): Key for loading the DataFrame or GeoDataFrame.</span>
-<span class="sd">        Returns:    </span>
-<span class="sd">            pd.DataFrame or gpd.GeoDataFrame: The loaded DataFrame or GeoDataFrame.</span>
+<span class="sd">        Automatically handles geometry deserialization for spatial datasets</span>
+<span class="sd">        and returns appropriate DataFrame or GeoDataFrame objects.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            key: Storage key identifier</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            DataFrame or GeoDataFrame with reconstructed geometry columns</span>
+<span class="sd">            </span>
 <span class="sd">        Raises:</span>
-<span class="sd">            FileNotFoundError: If the key is not found in the store.</span>
-<span class="sd">            TypeError: If the loaded data is not a DataFrame or GeoDataFrame.</span>
+<span class="sd">            KeyError: If storage key is not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">HDFStore</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">store</span><span class="p">:</span>
