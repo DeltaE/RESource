@@ -53,8 +53,8 @@ notes/developers
 :maxdepth: 1
 :titlesonly:
 
-notebooks/explore_Store_n_Visuals_CAN
-notebooks/resources_playground_CAN
+notebooks/Store_explorer
+notebooks/Visuals_BC
 ```
 
 ```{toctree}
