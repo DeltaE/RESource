@@ -17,20 +17,9 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 
 ## 🚀 Quick Start
 
-**New to RESource?** Get started in 5 minutes:
+**New to RESource?** Get started with 
 
-```bash
-# Clone and setup
-git clone https://github.com/DeltaE/RESource.git
-cd RESource
-make setupenv
-
-# Activate and test
-conda activate RES
-make run
-```
-
-📖 **[Full Quickstart Guide](QUICKSTART.md)** | 📚 **[Complete Documentation](https://deltae.github.io/RESource/)**
+📖 **[Full Quickstart Guide](https://deltae.github.io/RESource/#quick-start))** | 📚 **[Complete Documentation](https://deltae.github.io/RESource/)**
 
 ------
 
