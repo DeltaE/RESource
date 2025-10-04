@@ -236,7 +236,8 @@ RESource uses the [coders](https://github.com/DeltaE/RESource/blob/main/RES/code
 - 🎯 **Use-case**: Used for land suitability analysis to identify suitable areas for renewable energy installations (solar and wind). The tool excludes unsuitable land cover classes and includes only appropriate land types for energy development. Different land cover classes are filtered for solar vs wind applications based on terrain and land use compatibility.
 - ⚙️ **Supply_chain_mode**: Manual registration and download via API access
     - 📋 **Instruction**: 
-        1. Go to https://land.copernicus.eu/en/products/corine-land-cover/clc2018#download
+    - 
+        1. Go to [CLC download](https://land.copernicus.eu/en/products/corine-land-cover/clc2018#download)
         2. Register to their portal for API access
         3. Use the raster option to get the download URL
         > RESource currently supports raster processing (automated) for this dataset. However, users can define their custom methods to incorporate vector (GDB/GPKG) datasets to fit their purpose.
