@@ -13,75 +13,66 @@ import RES.utility as utils
 
 
 class DataHandler:
-    """
-    A class to handle reading and writing data to an HDF5 file.
-    This class provides methods to save DataFrames or GeoDataFrames to an HDF5 file. This class is useful for managing large datasets efficiently, allowing for quick access and storage of structured data.
+    """HDF5-based data storage manager for geospatial renewable energy datasets.
     
-    Key Features:
-        - Save DataFrames or GeoDataFrames to an HDF5 file with optional geometry handling.
-        - Load data from the HDF5 file, converting WKT geometries back to GeoDataFrames.
-        - Manage the structure of the HDF5 file, including showing the tree structure and deleting keys.
-    Dependencies:
-        - pandas: For DataFrame operations
-        - geopandas: For GeoDataFrame operations
-        - h5py: For HDF5 file handling
-        - shapely: For geometry serialization and deserialization
-    Attributes:
-        store (Path): Path to the HDF5 file.
-        data_new (pd.DataFrame or gpd.GeoDataFrame): Data to be saved.
-        data_ext (pd.DataFrame or gpd.GeoDataFrame): Existing data from the store.
-        updated_data (pd.DataFrame or gpd.GeoDataFrame): Updated data after merging new data.
-    Methods:
-        __init__(hdf_file_path: Path, silent_initiation: Optional[bool] = True, show_structure: Optional[bool] = False):
-            Initializes the DataHandler with the file path.
-        to_store(data: pd.DataFrame or gpd.GeoDataFrame, key: str, hdf_file_path: Path = None, force_update: bool = False):
-            Saves the DataFrame or GeoDataFrame to the HDF5 file.
-        from_store(key: str):
-            Loads data from the HDF5 store and handles geometry conversion.
-        refresh():
-            Initializes a new DataHandler instance with the current store path.
-        show_tree(store_path: Path, show_dataset: bool = False):
-            Recursively prints the hierarchy of an HDF5 file.
-        del_key(store_path: Path, key_to_delete: str):
-            Deletes a specific key from the HDF5 file.
+    Provides efficient storage and retrieval of large DataFrame and GeoDataFrame
+    datasets using HDF5 format. Handles geometry serialization for spatial data
+    and implements caching mechanisms for workflow optimization.
+    
+    Parameters
+    ----------
+    hdf_file_path : Path
+        Path to the HDF5 storage file
+    silent_initiation : bool, default True
+        Suppress initialization messages
+    show_structure : bool, default False
+        Display HDF5 file structure on initialization
+        
+    Attributes
+    ----------
+    store : Path
+        Path to the HDF5 storage file
+    geom_columns : list
+        Column names containing geometry data for special handling
     """
-    def __init__(self,
-                 hdf_file_path:Path=None,
-                 silent_initiation:Optional[bool]=True,
-                 show_structure:Optional[bool]=False):
-
+    def __init__(self, hdf_file_path: Path = None, silent_initiation: Optional[bool] = True, 
+                 show_structure: Optional[bool] = False):
+        """Initialize HDF5 data handler.
+        
+        Args:
+            hdf_file_path: Path to HDF5 storage file
+            silent_initiation: Suppress initialization messages
+            show_structure: Display file structure after initialization
+        """
         try:
             if hdf_file_path is None:
-                warnings.warn("⚠️  Store has not been set during initialization. Please define the store path during applying DataHandler methods")
+                warnings.warn("Store path not set during initialization. Define store path when calling methods.")
             else:
                 self.store = Path(hdf_file_path)
                 self.geom_columns = ['geometry', 'nearest_connection_point','centroid']
                 if not silent_initiation:
-                    utils.print_update(level=2,message=f"🗄️ Store initialized with the given path: {hdf_file_path}")
+                    utils.print_update(level=2, message=f"Store initialized: {hdf_file_path}")
                 if show_structure:
                     self.show_tree(self.store)
                 
         except Exception as e:
-            warnings.warn(f"❌ Error reading file: {e}")
+            warnings.warn(f"Error initializing data handler: {e}")
                
-    def to_store(self,
-                 data: pd.DataFrame, 
-                 key: str,
-                 hdf_file_path:Path=None,
+    def to_store(self, data: pd.DataFrame, key: str, hdf_file_path: Path = None, 
                  force_update: bool = False):
-        """
-        Save the DataFrame or GeoDataFrame to an HDF5 file.
-
-        Parameters:
-            hdf_file_path (Path): Path to the HDF5 file. If None, it uses the existing store path.
-            data (pd.DataFrame or gpd.GeoDataFrame):
-                The DataFrame or GeoDataFrame to save.
-            key (str): Key for saving the DataFrame to the HDF5 file.
-            force_update (bool): If True, force update the data even if it exists.  
-        Raises:
-            TypeError: If the data is not a DataFrame or GeoDataFrame.
-            ValueError: If the key is empty.
+        """Save DataFrame or GeoDataFrame to HDF5 storage.
+        
+        Handles geometry serialization for spatial data and implements
+        intelligent updates to avoid data duplication.
+        
+        Args:
+            data: DataFrame or GeoDataFrame to store
+            key: Storage key identifier
+            hdf_file_path: Optional override for storage file path
+            force_update: Force overwrite of existing data
             
+        Raises:
+            TypeError: If data is not a DataFrame or GeoDataFrame
         """
         
         if hdf_file_path is not None:
@@ -131,18 +122,20 @@ class DataHandler:
         finally:
             store.close()
 
-    def from_store(self, 
-                   key: str):
-        """
-        Load data from the HDF5 store and handle geometry conversion.
+    def from_store(self, key: str):
+        """Load data from HDF5 storage with geometry reconstruction.
         
-        Parameters:
-            key (str): Key for loading the DataFrame or GeoDataFrame.
-        Returns:    
-            pd.DataFrame or gpd.GeoDataFrame: The loaded DataFrame or GeoDataFrame.
+        Automatically handles geometry deserialization for spatial datasets
+        and returns appropriate DataFrame or GeoDataFrame objects.
+        
+        Args:
+            key: Storage key identifier
+            
+        Returns:
+            DataFrame or GeoDataFrame with reconstructed geometry columns
+            
         Raises:
-            FileNotFoundError: If the key is not found in the store.
-            TypeError: If the loaded data is not a DataFrame or GeoDataFrame.
+            KeyError: If storage key is not found
         """
         try:
             with pd.HDFStore(self.store, 'r') as store:

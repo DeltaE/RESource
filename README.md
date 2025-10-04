@@ -21,6 +21,19 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 
 📖 **[Full Quickstart Guide](https://deltae.github.io/RESource/#quick-start))** | 📚 **[Complete Documentation](https://deltae.github.io/RESource/)**
 
+### Enhanced Analysis Pipeline
+
+The enhanced `run.py` script provides flexible region selection with colored output:
+
+| Command | Description |
+|---------|-------------|
+| `python3 run.py` | Default Canadian analysis (all provinces) |
+| `python3 run.py -c config/config_WB6.yaml` | Western Balkans analysis (all countries) |
+| `python3 run.py -c config/config_WB6.yaml -r AL BA` | Specific regions only |
+| `python3 run.py --help` | Show all available options |
+
+**Features:** Smart region detection • Input validation • Colored error messages • Flexible region selection
+
 ------
 
 ## 📋 Key Features

@@ -46,7 +46,8 @@ class AttributesParser:
         self.disaggregation_config:Dict[str,dict] = self.config.get('capacity_disaggregation','')
         self.resource_disaggregation_config=self.get_resource_disaggregation_config()
         self.region_code_validity=self.is_region_code_valid()
-        self.sub_national_unit_tag=self.get_gadm_config().get('datafield_mapping', {}).get('NAME_2', 'NAME_1')
+        gadm_config = self.get_gadm_config().get('datafield_mapping', {})
+        self.sub_national_unit_tag = gadm_config.get('NAME_2') if 'NAME_2' in gadm_config else gadm_config.get('NAME_1')
         self.multi_country_flag = self.get_multi_country_flag  # This will set the multi_country_flag based on the config file.
         self.RUN_ID=self.get_RUN_ID() 
         self.country=self.get_country()

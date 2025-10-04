@@ -72,11 +72,46 @@ For running custom analyses beyond the provided case study data, some data sourc
 
 ## 🔥 First Run
 
-### Run Canadian Wind & Solar Analysis
+### Run Analysis Pipeline
+
+**Enhanced `run.py` Script** - Flexible region selection with colored output:
+
+| Command | Description |
+|---------|-------------|
+| `python3 run.py` | Run with default config (Canadian provinces) |
+| `python3 run.py -c config/config_WB6.yaml` | Run Western Balkans analysis (all regions) |
+| `python3 run.py -c config/config_WB6.yaml -r AL BA XK` | Run specific regions only |
+| `python3 run.py --help` | Show all available options |
+
+**Key Features:**
+
+- ✅ **Smart Region Detection**: Automatically reads available regions from config
+- ✅ **Validation**: Invalid regions show available options with suggestions  
+- ✅ **Colored Output**: Error messages, warnings, and progress in colors
+- ✅ **Flexible Selection**: Process all regions or specify subset
+
+#### Command Line Options
+
+| Option | Short | Description | Example |
+|--------|-------|-------------|---------|
+| `--config` | `-c` | Configuration file path | `-c config/config_WB6.yaml` |
+| `--regions` | `-r` | Specific regions to process | `-r AL BA XK ME` |
+| `--help` | `-h` | Show help message | `--help` |
+
+#### Example Workflows
 
 ```bash
-# Or run specific region/config
-python run.py --config config/config_CAN_baseline.yaml
+# Canadian Analysis (Default)
+python3 run.py                                    # All Canadian provinces
+python3 run.py --regions BC QC AB                # Specific provinces only
+
+# Western Balkans Analysis  
+python3 run.py -c config/config_WB6.yaml         # All WB6 countries
+python3 run.py -c config/config_WB6.yaml -r AL BA # Albania & Bosnia only
+
+# Error Handling Examples
+python3 run.py -c nonexistent.yaml               # Shows available configs
+python3 run.py -c config/config_WB6.yaml -r INVALID # Shows valid regions
 ```
 > the 'RES' conda environment activated while you run this script.
 

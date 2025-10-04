@@ -245,24 +245,15 @@ class RESources_builder(AttributesParser):
         utils.print_update(level=PRINT_LEVEL_BASE+2,
                            message=f"{__name__}| Data store cleaned.")
 
-    def get_grid_cells(self)->gpd.GeoDataFrame:
-        """
-        Retrieves the default grid cells for the region.
-    
-        Args:
-            None
-    
+    def get_grid_cells(self) -> gpd.GeoDataFrame:
+        """Generate spatial grid cells covering the analysis region.
+        
+        Creates a regular spatial grid based on the region boundary and 
+        configured resolution. Grid cells serve as fundamental spatial
+        units for capacity calculations and resource assessment.
+        
         Returns:
-            gpd.GeoDataFrame: A GeoDataFrame containing the grid cells with their coordinates, geometry, and unique cell ids.
-    
-        Notes:
-            - The `get_default_grid()` method creates several attributes, such as the atlite `cutout` object and the `region_boundary`.
-            - Uses the `cutout.grid` attribute to create the analysis grid cells (GeoDataFrame).
-        _________________________________________________________________________________________________________________________
-        - Future Scopes:
-            To give user flexibility to make their own grid resolution
-            Step 0: Set-up the Grid Cells and their Unique Indices to populate incremental datafields and to easy navigation to cells
-                - Step to create the Cells with unique indices generated from their x,y (centroids).
+            gpd.GeoDataFrame: Grid cells with geometry, coordinates, and unique identifiers
         """
 
         utils.print_update(level=PRINT_LEVEL_BASE+1,
@@ -276,20 +267,14 @@ class RESources_builder(AttributesParser):
         return self.region_grid_cells
 
     def get_cell_capacity(self):
-        """
-        Retrieves the potential capacity of the cells based on land availability and land-use intensity.
-        Args:   
-            force_update (bool): If True, forces the update of the cell capacity data.
+        """Calculate renewable energy capacity potential for grid cells.
+        
+        Determines developable capacity based on land availability constraints,
+        land use intensity factors, and cell geometry. Accounts for exclusion
+        zones, protected areas, and resource-specific siting requirements.
+        
         Returns:
-            tuple: A namedtuple containing the cells with their potential capacity and the capacity matrix.
-        Notes:
-            - The capacity matrix is a 2D array where each row corresponds to a cell and each column corresponds to a time step.
-            - The potential capacity is calculated as:
-                - Potential capacity (MW) = available land (%) x land-use intensity (MW/sq.km) x Area of a cell (sq. km)
-                - The method uses the `CellCapacityProcessor` class to process the capacity data.
-            - The method returns a namedtuple with two attributes: `data` (the cells GeoDataFrame) and `matrix` (the capacity matrix).
-            - Could be parallelized with Step 2A/2C.
-
+            tuple: Grid cells with capacity data and capacity matrix for time series analysis
         """       
         utils.print_update(level=PRINT_LEVEL_BASE+1,
                            message=f"{__name__}| Preparing Cells' capacity...")
@@ -303,18 +288,15 @@ class RESources_builder(AttributesParser):
         return self.cells_with_capacity,self.capacity_matrix # returns a namedtuple with `data` and `matrix attributes
     
     def extract_weather_data(self):
-        """Extracts weather data for the cells (e.g. windspeed, solar influx).
-        This method retrieves the ERA5 cutout and extracts windspeed data for the cells.
-        If the windspeed data is already present in the stored dataset, it skips the extraction from the source.
-        If the resource type is 'wind', it extracts the 'windspeed_ERA5' from the cutout and updates the cells GeoDataFrame.
-        If the resource type is 'solar', it currently does not support extraction from the Global Solar Atlas data.
-        Args:
-            None
-    
-        Returns:
-            None
-        Notes:
-            - Currently active for windspeed only due to significant contrast with high resolution data.
+        """Extract meteorological data for renewable energy resource assessment.
+        
+        Retrieves ERA5 climate data including wind speeds and solar irradiance
+        for each grid cell. Implements caching to avoid redundant data extraction
+        and processing.
+        
+        Note:
+            Currently optimized for wind resource assessment. Solar resource
+            extraction from Global Solar Atlas is under development.
         """
         
         utils.print_update(level=PRINT_LEVEL_BASE+1,

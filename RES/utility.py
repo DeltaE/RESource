@@ -127,7 +127,7 @@ def assign_cell_id(cells: gpd.GeoDataFrame,
     """
     # Ensure the source column exists
     if source_column not in cells.columns:
-        raise ValueError(f"'{source_column}' does not exist in the GeoDataFrame.")
+        raise ValueError(f"'{source_column}' does not exist in the GeoDataFrame. Try reconfiguring the 'sub-national_unit_tag' in 'GADM' section in the config file.")
 
     # Remove spaces in the region names for consistency
     cells[source_column] = cells[source_column].str.replace(" ", "", regex=False)

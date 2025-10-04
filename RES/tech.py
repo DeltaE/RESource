@@ -8,18 +8,45 @@ PRINT_LEVEL_BASE=3
 
 # * Check 'windpowerlib' package
 class OEDBTurbines:
+    """Wind turbine configuration manager for OEDB (Open Energy Database) integration.
     
-    def __init__(self,
-                 OEDB_config:dict):
-        """
-        Class to manage turbine configuration data.
+    Handles fetching, processing, and caching of wind turbine technical specifications
+    from the Open Energy Database. Provides standardized turbine configurations for
+    renewable energy modeling including power curves, hub heights, and rotor specifications.
     
+    Parameters
+    ----------
+    OEDB_config : dict
+        Configuration dictionary containing OEDB connection parameters,
+        turbine model specifications, and data source information
+        
+    Attributes
+    ----------
+    OEDB_config : dict
+        Configuration parameters for OEDB connection and turbine selection
+    turbine_name : str
+        Name of the selected turbine model
+    turbine_config_dir : Path
+        Directory for storing downloaded turbine configuration files
+    turbine_config_file : Path
+        Path to the specific turbine configuration YAML file
+    """
+    
+    def __init__(self, OEDB_config: dict):
+        """Initialize OEDB turbine configuration manager.
+        
+        Args:
+            OEDB_config: Configuration dictionary containing turbine model
+                        specifications and OEDB connection parameters
         """
         self.OEDB_config = OEDB_config
     
     def load_turbine_config(self):
-        """
-        Loads the turbine configuration from a YAML file.
+        """Load turbine configuration from cached YAML file.
+        
+        Returns:
+            dict: Turbine configuration with technical specifications
+                  including power curve, hub height, and rotor diameter
         """
         # Read the YAML file into a dictionary
         with open(self.turbine_config_file, 'r') as file:
@@ -28,9 +55,18 @@ class OEDBTurbines:
             return turbine_config
                 
     def fetch_turbine_config(self, model):
-        """
-        Fetches turbine data based on the resource type (e.g., 'wind') and saves the formatted
-        configuration for the turbines found.
+        """Fetch turbine configuration from OEDB and cache locally.
+        
+        Retrieves turbine technical specifications from the Open Energy Database
+        and formats them for use in renewable energy modeling. Implements local
+        caching to avoid repeated downloads.
+        
+        Args:
+            model: Turbine model identifier corresponding to OEDB configuration
+            
+        Returns:
+            dict: Formatted turbine configuration with power curve and specifications,
+                  or None if fetch/processing fails
         """
         OEDB_id = self.OEDB_config['models'][model]['ID']
         OEDB_source = self.OEDB_config['source']
@@ -75,20 +111,16 @@ class OEDBTurbines:
             return None
 
 
-    def __get_required_turbines__(self, 
-                      OEDB_data: dict, 
-                      key: str, 
-                      value: str):
-        """
-        Searches for a turbine configuration in the fetched data from OEDB.
-
+    def __get_required_turbines__(self, OEDB_data: dict, key: str, value: str):
+        """Search for specific turbine configuration in OEDB dataset.
+        
         Args:
-            - OEDB_turbines_dict (dict): The dictionary containing OEDB turbine data.
-            - key (str): The field name to search by (e.g., 'id').
-            - value (str): The value to search for.
-
+            OEDB_data: Complete turbine database from OEDB
+            key: Field name to search by (typically 'id')
+            value: Target value to match
+            
         Returns:
-            - dict or None: The matching turbine's data or None if not found.
+            dict: Matching turbine configuration or None if not found
         """
         for entry in OEDB_data:
             if entry.get(key) == value:

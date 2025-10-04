@@ -6,50 +6,63 @@ import numpy as np
 import pandas as pd
 
 import RES.utility as utils
-from RES import utility
 
 PRINT_LEVEL_BASE=3
 
-def impute_ERA5_windspeed_to_Cells(
-        cutout:atlite.Cutout, 
-        region_grid_cells:gpd.GeoDataFrame)->gpd.GeoDataFrame:
-        """
-        For each grid cells, this function finds the yearly mean windspeed from the windspeed timeseries and imputes to the cell dataframe.
-        """
+def impute_ERA5_windspeed_to_Cells(cutout: atlite.Cutout, 
+                                   region_grid_cells: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+    """Extract yearly mean wind speeds from ERA5 cutout and assign to grid cells.
+    
+    Calculates annual average wind speeds from hourly ERA5 data and spatially
+    joins the results to the grid cell geometries for renewable energy assessment.
+    
+    Args:
+        cutout: Atlite cutout object containing ERA5 wind speed data
+        region_grid_cells: Grid cells covering the analysis region
         
-        utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| Calculating yearly mean windspeed and imputing to provincial Grid Cells named as 'windspeed_ERA5'")
+    Returns:
+        gpd.GeoDataFrame: Grid cells with added 'windspeed_ERA5' column containing
+                         annual mean wind speeds at 100m height
+    """
+    utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{__name__}| Calculating yearly mean windspeed and imputing to provincial Grid Cells named as 'windspeed_ERA5'")
 
-        # Calculate yearly mean windspeed
-        wnd_ymean_df = cutout.data.wnd100m.groupby('time.year').mean('time').to_dataframe(name='windspeed_ERA5').reset_index()
+    # Calculate yearly mean windspeed
+    wnd_ymean_df = cutout.data.wnd100m.groupby('time.year').mean('time').to_dataframe(name='windspeed_ERA5').reset_index()
 
-        # Create a GeoDataFrame for spatial join
-        wnd_ymean_gdf = gpd.GeoDataFrame(wnd_ymean_df, geometry=gpd.points_from_xy(wnd_ymean_df['x'], wnd_ymean_df['y']))
-        wnd_ymean_gdf.crs = region_grid_cells.crs
+    # Create a GeoDataFrame for spatial join
+    wnd_ymean_gdf = gpd.GeoDataFrame(wnd_ymean_df, geometry=gpd.points_from_xy(wnd_ymean_df['x'], wnd_ymean_df['y']))
+    wnd_ymean_gdf.crs = region_grid_cells.crs
 
-        # Perform spatial join and drop unnecessary columns
-        region_grid_cells = (
-            gpd.sjoin(region_grid_cells.rename(columns={'x': 'x_dup', 'y': 'y_dup'}), 
-                      wnd_ymean_gdf, 
-                      predicate='intersects')
-            .drop(columns=['x_dup', 'y_dup', 'lon', 'lat','index_right','year'])
-        )
-        
-        # Handle potential duplicate indices
-        # Resetting index to ensure unique index after join
-        # region_grid_cells = region_grid_cells.reset_index(drop=True)
-        region_grid_cells = region_grid_cells.drop_duplicates(subset=['geometry'])
+    # Perform spatial join and drop unnecessary columns
+    region_grid_cells = (
+        gpd.sjoin(region_grid_cells.rename(columns={'x': 'x_dup', 'y': 'y_dup'}), 
+                  wnd_ymean_gdf, 
+                  predicate='intersects')
+        .drop(columns=['x_dup', 'y_dup', 'lon', 'lat','index_right','year'])
+    )
+    
+    # Handle potential duplicate indices
+    # Resetting index to ensure unique index after join
+    # region_grid_cells = region_grid_cells.reset_index(drop=True)
+    region_grid_cells = region_grid_cells.drop_duplicates(subset=['geometry'])
 
-        return region_grid_cells
+    return region_grid_cells
 
     
-def scale_wind(row:pd.Series, 
-               wnd,
-               method=2):
-    """
-    Scales wind speeds from ERA5 data based on a specified method.
-    This function adjusts the wind speeds in the ERA5 data array using scaling factors 
-    derived from a row of wind asset data. It is typically used in the `generate_wind_ts()` 
-    function to prepare wind speed time series data.
+def scale_wind(row: pd.Series, wnd, method=2):
+    """Scale ERA5 wind speeds using site-specific correction factors.
+    
+    Applies wind speed scaling corrections to account for local topography,
+    surface roughness, and other site-specific factors not captured in
+    coarse-resolution ERA5 data.
+    
+    Args:
+        row: Row containing wind asset data with scaling parameters
+        wnd: Wind speed data array from ERA5
+        method: Scaling method identifier (default: 2)
+        
+    Returns:
+        Scaled wind speed data adjusted for local conditions
     
     Args:
         row (pd.Series): A row from the `wind_assets.csv` DataFrame containing wind asset 
@@ -154,8 +167,10 @@ def get_wind_coords(assets, wind_atlas, wind_geojson):
     latitudes = [wind_geojson[i][0][j][1] for i in range(len(wind_geojson)) for j in range(len(wind_geojson[i][0]))] #[lon, lat], choose index 1
 
     #Get latitude and longitude values to construct a bounding box for the wind speed data in latitude longitude format
-    west = min(longitudes); north = max(latitudes) #Upper left corner
-    east = max(longitudes); south = min(latitudes) #Lower right corner
+    west = min(longitudes)
+    north = max(latitudes)  # Upper left corner
+    east = max(longitudes) 
+    south = min(latitudes)  # Lower right corner
 
     #Get x and y axis as linearly spaced longitudes and latitudes from the values calculated above
     xaxis = np.linspace(west, east, wind_atlas.shape[1])

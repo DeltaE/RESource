@@ -30,8 +30,16 @@ import numpy as np
 import pandas as pd
 
 def get_speed(row, xaxis, yaxis, data):
-    """
-    Function to get wind speed at a specific latitude and longitude from the Global Wind Atlas data.
+    """Extract wind speed at specific coordinates from Global Wind Atlas data.
+    
+    Args:
+        row: DataFrame row containing 'longitude' and 'latitude' columns
+        xaxis: Array of longitude values from wind atlas grid
+        yaxis: Array of latitude values from wind atlas grid  
+        data: 2D array of wind speed data from Global Wind Atlas
+        
+    Returns:
+        float: Wind speed value at the specified coordinates
     """
     #Get indices of the nearest pixels
     xIdx = np.searchsorted(xaxis, row['longitude'], side='left')
@@ -41,13 +49,19 @@ def get_speed(row, xaxis, yaxis, data):
 
 #Generate a data frame that matches wind speeds from Global Wind Atlas to latitude/longitude values for scaling the cutout speeds
 
-def get_wind_coords(assets:pd.DataFrame, 
-                    wind_atlas, 
-                    wind_geojson)-> pd.DataFrame:
-
-    """
-    Paramters:
-        assets (pd.DataFrame): Data frame containing wind asset locations.
+def get_wind_coords(assets: pd.DataFrame, wind_atlas, wind_geojson) -> pd.DataFrame:
+    """Extract wind speeds at asset locations from Global Wind Atlas data.
+    
+    Matches wind speed values from Global Wind Atlas raster data to specific
+    asset coordinates for wind speed scaling and correction factors.
+    
+    Args:
+        assets: DataFrame containing wind asset locations with coordinate columns
+        wind_atlas: Wind atlas raster data containing wind speed values
+        wind_geojson: GeoJSON metadata for wind atlas spatial reference
+        
+    Returns:
+        pd.DataFrame: Assets with added wind speed values from Global Wind Atlas
         wind_atlas: The Global Wind Atlas wind speed data from the .tif file.
         wind_geojson: The Global Wind Atlas geojson data which creates the shape for the region
 
@@ -60,8 +74,10 @@ def get_wind_coords(assets:pd.DataFrame,
     latitudes = [wind_geojson[i][0][j][1] for i in range(len(wind_geojson)) for j in range(len(wind_geojson[i][0]))] #[lon, lat], choose index 1
 
     #Get latitude and longitude values to construct a bounding box for the wind speed data in latitude longitude format
-    west = min(longitudes); north = max(latitudes) #Upper left corner
-    east = max(longitudes); south = min(latitudes) #Lower right corner
+    west = min(longitudes)
+    north = max(latitudes)  # Upper left corner
+    east = max(longitudes)
+    south = min(latitudes)  # Lower right corner
 
     #Get x and y axis as linearly spaced longitudes and latitudes from the values calculated above
     xaxis = np.linspace(west, east, wind_atlas.shape[1])
