@@ -342,6 +342,12 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-with-run-py">Quick Start with <code class="docutils literal notranslate"><span class="pre">run.py</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#command-overview">Command Overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-support">Regional Support</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-usage-step-by-step-workflow">Advanced Usage: Step-by-Step Workflow</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-prepare-spatial-grid-cells">Step 1: Prepare Spatial Grid Cells</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-calculate-potential-capacity">Step 2: Calculate Potential Capacity</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-get-cf-and-windspeed-from-higher-resolution-data">Step 3: Get CF and Windspeed from Higher Resolution Data</a></li>
@@ -362,6 +368,69 @@ document.write(`
                   
   <section id="resource-builder-module">
 <h1>RESource Builder Module<a class="headerlink" href="#resource-builder-module" title="Link to this heading">#</a></h1>
+<section id="quick-start-with-run-py">
+<h2>Quick Start with <code class="docutils literal notranslate"><span class="pre">run.py</span></code><a class="headerlink" href="#quick-start-with-run-py" title="Link to this heading">#</a></h2>
+<p>The enhanced <code class="docutils literal notranslate"><span class="pre">run.py</span></code> script provides the simplest way to execute complete resource assessments with flexible region selection and colored output.</p>
+<section id="command-overview">
+<h3>Command Overview<a class="headerlink" href="#command-overview" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Usage Pattern</p></th>
+<th class="head"><p>Example</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>All Regions</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">config/config_WB6.yaml</span></code></p></td>
+<td><p>Process all regions in config</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Specific Regions</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">config/config_WB6.yaml</span> <span class="pre">-r</span> <span class="pre">AL</span> <span class="pre">BA</span></code></p></td>
+<td><p>Process selected regions only</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Default Config</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">--regions</span> <span class="pre">BC</span> <span class="pre">QC</span></code></p></td>
+<td><p>Use default Canadian config</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Validation</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">config/config_WB6.yaml</span> <span class="pre">-r</span> <span class="pre">INVALID</span></code></p></td>
+<td><p>Shows available regions</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="regional-support">
+<h3>Regional Support<a class="headerlink" href="#regional-support" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Region Set</p></th>
+<th class="head"><p>Config File</p></th>
+<th class="head"><p>Available Regions</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Canadian Provinces</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">config_CAN_baseline.yaml</span></code></p></td>
+<td><p>BC, QC, AB, SK, ON, NS, MB</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Western Balkans</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">config_WB6.yaml</span></code></p></td>
+<td><p>AL, BA, XK, ME, MK, RS</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Custom Regions</strong></p></td>
+<td><p>User-defined config</p></td>
+<td><p>Defined in <code class="docutils literal notranslate"><span class="pre">region_mapping</span></code> section</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="advanced-usage-step-by-step-workflow">
+<h2>Advanced Usage: Step-by-Step Workflow<a class="headerlink" href="#advanced-usage-step-by-step-workflow" title="Link to this heading">#</a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Typical Sequential Steps involves the following process as mentioned below. Note that data-source errors, configuration error may break the workflow which may necessitate additional methods to be used as intermediate steps.</p>
@@ -375,6 +444,7 @@ document.write(`
 <p>For detailed API documentation of the methods, see <a class="reference internal" href="api.html"><span class="doc">RES API References</span></a> and apis under <a class="reference internal" href="api.html#resource-builder"><span class="std std-ref">RESource Builder</span></a>.</p>
 </div>
 <insert flow diagram of typical resource assessment>
+</section>
 <section id="step-1-prepare-spatial-grid-cells">
 <h2>Step 1: Prepare Spatial Grid Cells<a class="headerlink" href="#step-1-prepare-spatial-grid-cells" title="Link to this heading">#</a></h2>
 <div class="admonition seealso">
@@ -708,6 +778,12 @@ Wind resources (windspeed) are known to have significant variations across ERA5'
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-with-run-py">Quick Start with <code class="docutils literal notranslate"><span class="pre">run.py</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#command-overview">Command Overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-support">Regional Support</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-usage-step-by-step-workflow">Advanced Usage: Step-by-Step Workflow</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-prepare-spatial-grid-cells">Step 1: Prepare Spatial Grid Cells</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-calculate-potential-capacity">Step 2: Calculate Potential Capacity</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-get-cf-and-windspeed-from-higher-resolution-data">Step 3: Get CF and Windspeed from Higher Resolution Data</a></li>

@@ -353,7 +353,11 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#first-run">🔥 First Run</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-canadian-wind-solar-analysis">Run Canadian Wind &amp; Solar Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-analysis-pipeline">Run Analysis Pipeline</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#command-line-options">Command Line Options</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-workflows">Example Workflows</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-resource-does">📊 What RESource Does</a><ul class="nav section-nav flex-column">
@@ -468,15 +472,87 @@ unzip<span class="w"> </span>RESource_data.zip<span class="w"> </span>-d<span cl
 <hr class="docutils" />
 <section id="first-run">
 <h2>🔥 First Run<a class="headerlink" href="#first-run" title="Link to this heading">#</a></h2>
-<section id="run-canadian-wind-solar-analysis">
-<h3>Run Canadian Wind &amp; Solar Analysis<a class="headerlink" href="#run-canadian-wind-solar-analysis" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Or run specific region/config</span>
-python<span class="w"> </span>run.py<span class="w"> </span>--config<span class="w"> </span>config/config_CAN_baseline.yaml
+<section id="run-analysis-pipeline">
+<h3>Run Analysis Pipeline<a class="headerlink" href="#run-analysis-pipeline" title="Link to this heading">#</a></h3>
+<p><strong>Enhanced <code class="docutils literal notranslate"><span class="pre">run.py</span></code> Script</strong> - Flexible region selection with colored output:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span></code></p></td>
+<td><p>Run with default config (Canadian provinces)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">config/config_WB6.yaml</span></code></p></td>
+<td><p>Run Western Balkans analysis (all regions)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">config/config_WB6.yaml</span> <span class="pre">-r</span> <span class="pre">AL</span> <span class="pre">BA</span> <span class="pre">XK</span></code></p></td>
+<td><p>Run specific regions only</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">--help</span></code></p></td>
+<td><p>Show all available options</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Key Features:</strong></p>
+<ul class="simple">
+<li><p>✅ <strong>Smart Region Detection</strong>: Automatically reads available regions from config</p></li>
+<li><p>✅ <strong>Validation</strong>: Invalid regions show available options with suggestions</p></li>
+<li><p>✅ <strong>Colored Output</strong>: Error messages, warnings, and progress in colors</p></li>
+<li><p>✅ <strong>Flexible Selection</strong>: Process all regions or specify subset</p></li>
+</ul>
+<section id="command-line-options">
+<h4>Command Line Options<a class="headerlink" href="#command-line-options" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Short</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Example</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--config</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-c</span></code></p></td>
+<td><p>Configuration file path</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-c</span> <span class="pre">config/config_WB6.yaml</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--regions</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-r</span></code></p></td>
+<td><p>Specific regions to process</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-r</span> <span class="pre">AL</span> <span class="pre">BA</span> <span class="pre">XK</span> <span class="pre">ME</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--help</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-h</span></code></p></td>
+<td><p>Show help message</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">--help</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="example-workflows">
+<h4>Example Workflows<a class="headerlink" href="#example-workflows" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Canadian Analysis (Default)</span>
+python3<span class="w"> </span>run.py<span class="w">                                    </span><span class="c1"># All Canadian provinces</span>
+python3<span class="w"> </span>run.py<span class="w"> </span>--regions<span class="w"> </span>BC<span class="w"> </span>QC<span class="w"> </span>AB<span class="w">                </span><span class="c1"># Specific provinces only</span>
+
+<span class="c1"># Western Balkans Analysis  </span>
+python3<span class="w"> </span>run.py<span class="w"> </span>-c<span class="w"> </span>config/config_WB6.yaml<span class="w">         </span><span class="c1"># All WB6 countries</span>
+python3<span class="w"> </span>run.py<span class="w"> </span>-c<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>-r<span class="w"> </span>AL<span class="w"> </span>BA<span class="w"> </span><span class="c1"># Albania &amp; Bosnia only</span>
+
+<span class="c1"># Error Handling Examples</span>
+python3<span class="w"> </span>run.py<span class="w"> </span>-c<span class="w"> </span>nonexistent.yaml<span class="w">               </span><span class="c1"># Shows available configs</span>
+python3<span class="w"> </span>run.py<span class="w"> </span>-c<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>-r<span class="w"> </span>INVALID<span class="w"> </span><span class="c1"># Shows valid regions</span>
 </pre></div>
 </div>
 <blockquote>
 <div><p>the 'RES' conda environment activated while you run this script.</p>
 </div></blockquote>
+</section>
 </section>
 </section>
 <hr class="docutils" />
@@ -708,7 +784,11 @@ find<span class="w"> </span>vis/Canada/BC/<span class="w"> </span>-name<span cla
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#first-run">🔥 First Run</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-canadian-wind-solar-analysis">Run Canadian Wind &amp; Solar Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-analysis-pipeline">Run Analysis Pipeline</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#command-line-options">Command Line Options</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-workflows">Example Workflows</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-resource-does">📊 What RESource Does</a><ul class="nav section-nav flex-column">

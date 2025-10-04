@@ -372,7 +372,14 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#daily-development-workflow">🚀 Daily Development Workflow</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#activate-environment">1. Activate Environment</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-resource">2. Run RESource</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-resource">2. Run RESource</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#enhanced-analysis-pipeline-run-py">Enhanced Analysis Pipeline (<code class="docutils literal notranslate"><span class="pre">run.py</span></code>)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#command-reference">Command Reference</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-configurations">Regional Configurations</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#error-handling-examples">Error Handling Examples</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#alternative-development-methods">Alternative Development Methods</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-development">3. Documentation Development</a></li>
 </ul>
 </li>
@@ -596,13 +603,121 @@ bash<span class="w"> </span>Miniconda3-latest-MacOSX-x86_64.sh
 </section>
 <section id="run-resource">
 <h3>2. Run RESource<a class="headerlink" href="#run-resource" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Main module</span>
+<section id="enhanced-analysis-pipeline-run-py">
+<h4>Enhanced Analysis Pipeline (<code class="docutils literal notranslate"><span class="pre">run.py</span></code>)<a class="headerlink" href="#enhanced-analysis-pipeline-run-py" title="Link to this heading">#</a></h4>
+<p><strong>Smart Region Selection &amp; Colored Output</strong> - The enhanced <code class="docutils literal notranslate"><span class="pre">run.py</span></code> script provides flexible region selection with validation and colored terminal output.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Smart Detection</strong></p></td>
+<td><p>Automatically reads available regions from config file</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Validation</strong></p></td>
+<td><p>Invalid regions trigger helpful error messages with suggestions</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Colored Output</strong></p></td>
+<td><p>Errors (red), warnings (yellow), success (green), info (cyan)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Flexible Selection</strong></p></td>
+<td><p>Process all regions or specify subset via command line</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="command-reference">
+<h4>Command Reference<a class="headerlink" href="#command-reference" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Output Colors</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span></code></p></td>
+<td><p>Default config (Canadian provinces)</p></td>
+<td><p>🟢 Success messages</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">config/config_WB6.yaml</span></code></p></td>
+<td><p>Western Balkans (all regions)</p></td>
+<td><p>🔵 Info messages</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">config/config_WB6.yaml</span> <span class="pre">-r</span> <span class="pre">AL</span> <span class="pre">BA</span></code></p></td>
+<td><p>Specific regions only</p></td>
+<td><p>🟡 Warnings</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">invalid.yaml</span></code></p></td>
+<td><p>Shows available configs</p></td>
+<td><p>🔴 Error messages</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">--help</span></code></p></td>
+<td><p>Display all options</p></td>
+<td><p>-</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="regional-configurations">
+<h4>Regional Configurations<a class="headerlink" href="#regional-configurations" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Config File</p></th>
+<th class="head"><p>Regions Available</p></th>
+<th class="head"><p>Example Usage</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">config_CAN_baseline.yaml</span></code></p></td>
+<td><p>AB, BC, MB, NB, NL, NS, ON, PE, QC, SK</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">--regions</span> <span class="pre">BC</span> <span class="pre">QC</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">config_CAN_policy1.yaml</span></code></p></td>
+<td><p>AB, BC, MB, NB, NL, NS, ON, PE, QC, SK</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">config/config_CAN_policy1.yaml</span> <span class="pre">-r</span> <span class="pre">BC</span> <span class="pre">ON</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">config_WB6.yaml</span></code></p></td>
+<td><p>AL, BA, XK, ME, MK, RS</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">config/config_WB6.yaml</span> <span class="pre">-r</span> <span class="pre">AL</span> <span class="pre">BA</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="error-handling-examples">
+<h4>Error Handling Examples<a class="headerlink" href="#error-handling-examples" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Invalid config file - shows available options</span>
+python3<span class="w"> </span>run.py<span class="w"> </span>-c<span class="w"> </span>nonexistent.yaml
+<span class="c1"># Output: ✗ Configuration file &#39;nonexistent.yaml&#39; not found.</span>
+<span class="c1">#         💡 Available config files:</span>
+<span class="c1">#            • config/config_CAN_baseline.yaml (Canadian provinces - baseline)</span>
+<span class="c1">#            • config/config_CAN_policy1.yaml (Canadian provinces - policy scenario)</span>
+<span class="c1">#            • config/config_WB6.yaml (Western Balkans)</span>
+
+<span class="c1"># Invalid regions - shows valid options  </span>
+python3<span class="w"> </span>run.py<span class="w"> </span>-c<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>-r<span class="w"> </span>INVALID
+<span class="c1"># Output: ✗ Invalid region(s): [&#39;INVALID&#39;]</span>
+<span class="c1">#         ⚠️  Available regions in config: [&#39;AL&#39;, &#39;BA&#39;, &#39;XK&#39;, &#39;ME&#39;, &#39;MK&#39;, &#39;RS&#39;]</span>
+<span class="c1">#         💡 Examples of valid commands:</span>
+<span class="c1">#            • python3 run.py -c config/config_WB6.yaml --regions AL BA XK</span>
+</pre></div>
+</div>
+</section>
+<section id="alternative-development-methods">
+<h4>Alternative Development Methods<a class="headerlink" href="#alternative-development-methods" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Legacy make command (still supported)</span>
 make<span class="w"> </span>run
 
 <span class="c1"># Interactive development</span>
 make<span class="w"> </span>jupyter
 </pre></div>
 </div>
+</section>
 </section>
 <section id="documentation-development">
 <h3>3. Documentation Development<a class="headerlink" href="#documentation-development" title="Link to this heading">#</a></h3>
@@ -880,7 +995,14 @@ make<span class="w"> </span><span class="nb">help</span><span class="w">        
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#daily-development-workflow">🚀 Daily Development Workflow</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#activate-environment">1. Activate Environment</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-resource">2. Run RESource</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-resource">2. Run RESource</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#enhanced-analysis-pipeline-run-py">Enhanced Analysis Pipeline (<code class="docutils literal notranslate"><span class="pre">run.py</span></code>)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#command-reference">Command Reference</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-configurations">Regional Configurations</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#error-handling-examples">Error Handling Examples</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#alternative-development-methods">Alternative Development Methods</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-development">3. Documentation Development</a></li>
 </ul>
 </li>
