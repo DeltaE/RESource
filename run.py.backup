@@ -146,60 +146,60 @@ Examples:
     # Load configuration file
     try:
         config = load_config(args.config)
-        print_success("? Configuration file loaded: {}".format(args.config))
+        print_success("√ Configuration file loaded: {}".format(args.config))
     except FileNotFoundError:
-        print_error("? Configuration file '{}' not found.".format(args.config))
-        print_suggestion("? Available config files:")
-        print_info("   - config/config_CAN_baseline.yaml (Canadian provinces - baseline)")
-        print_info("   - config/config_CAN_policy1.yaml (Canadian provinces - policy scenario)")
-        print_info("   - config/config_WB6.yaml (Western Balkans)")
-        print_suggestion("? Example: python3 run.py -c config/config_WB6.yaml")
+        print_error("× Configuration file '{}' not found.".format(args.config))
+        print_suggestion("→ Available config files:")
+        print_info("   • config/config_CAN_baseline.yaml (Canadian provinces - baseline)")
+        print_info("   • config/config_CAN_policy1.yaml (Canadian provinces - policy scenario)")
+        print_info("   • config/config_WB6.yaml (Western Balkans)")
+        print_suggestion("→ Example: python3 run.py -c config/config_WB6.yaml")
         sys.exit(1)
     except Exception as e:
-        print_error("? Error loading configuration file: {}".format(e))
+        print_error("✗ Error loading configuration file: {}".format(e))
         sys.exit(1)
     
     # Extract available regions from config
     if 'region_mapping' not in config:
-        print_error("? 'region_mapping' not found in configuration file.")
-        print_suggestion("? Please check your config file format - it should contain a 'region_mapping' section.")
+        print_error("✗ 'region_mapping' not found in configuration file.")
+        print_suggestion("💡 Please check your config file format - it should contain a 'region_mapping' section.")
         sys.exit(1)
     
     available_regions = list(config['region_mapping'].keys())
-    print_info("- Available regions in config: {}".format(available_regions))
+    print_info("📍 Available regions in config: {}".format(available_regions))
     
     # Determine which regions to process
     if args.regions is None:
         # Use all regions from config
         regions = available_regions
-        print_success("* Processing all regions from config: {}".format(regions))
+        print_success("🌍 Processing all regions from config: {}".format(regions))
     else:
         # Validate provided regions
         invalid_regions = [r for r in args.regions if r not in available_regions]
         if invalid_regions:
-            print_error("? Invalid region(s): {}".format(invalid_regions))
-            print_warning("!  Available regions in config: {}".format(available_regions))
-            print_suggestion("? Examples of valid commands:")
+            print_error("✗ Invalid region(s): {}".format(invalid_regions))
+            print_warning("⚠️  Available regions in config: {}".format(available_regions))
+            print_suggestion("💡 Examples of valid commands:")
             
             # Generate helpful suggestions based on available regions
             if len(available_regions) >= 3:
                 sample_regions = available_regions[:3]
-                print_info("   - python3 run.py -c {} --regions {}".format(
+                print_info("   • python3 run.py -c {} --regions {}".format(
                     args.config, ' '.join(sample_regions)))
             if len(available_regions) >= 1:
-                print_info("   - python3 run.py -c {} --regions {}".format(
+                print_info("   • python3 run.py -c {} --regions {}".format(
                     args.config, available_regions[0]))
-            print_info("   - python3 run.py -c {} (process all regions)".format(args.config))
+            print_info("   • python3 run.py -c {} (process all regions)".format(args.config))
             sys.exit(1)
         regions = args.regions
-        print_success("> Processing specified regions: {}".format(regions))
+        print_success("🎯 Processing specified regions: {}".format(regions))
     
     # Display processing banner
     print("\n" + "="*70)
-    print_info("> Starting RESource Analysis Pipeline")
-    print_info("? Config: {}".format(args.config))
-    print_info("* Regions: {}".format(regions))
-    print_info("? Resources: wind, solar")
+    print_info("🚀 Starting RESource Analysis Pipeline")
+    print_info("📋 Config: {}".format(args.config))
+    print_info("🌍 Regions: {}".format(regions))
+    print_info("⚡ Resources: wind, solar")
     print("="*70 + "\n")
     
     # Iterate over regions for both solar and wind resources
@@ -207,7 +207,7 @@ Examples:
 
     for region in regions:
         for resource_type in resource_types:
-            print_info("? Processing {} {} resources...".format(region, resource_type))
+            print_info("🔄 Processing {} {} resources...".format(region, resource_type))
             required_args = {
                 "config_file_path": args.config,
                 "region_short_code": region,
@@ -221,15 +221,15 @@ Examples:
                                  use_pypsa_buses=False,
                                  get_clusters=True,
                                  clean_store=False)
-                print_success("? Completed {} {} processing".format(region, resource_type))
+                print_success("✅ Completed {} {} processing".format(region, resource_type))
             except Exception as e:
-                print_error("? Failed processing {} {}: {}".format(region, resource_type, str(e)))
-                print_warning("!  Continuing with next resource/region...")
+                print_error("❌ Failed processing {} {}: {}".format(region, resource_type, str(e)))
+                print_warning("⚠️  Continuing with next resource/region...")
                 continue
     
     print("\n" + "="*70)
-    print_success("? RESource Analysis Pipeline Completed!")
-    print_info("? Results stored in data/store/ and results/ directories")
+    print_success("🎉 RESource Analysis Pipeline Completed!")
+    print_info("📊 Results stored in data/store/ and results/ directories")
     print("="*70)
 
 
@@ -237,9 +237,9 @@ if __name__ == '__main__':
     try:
         main()
     except KeyboardInterrupt:
-        print_warning("\n!  Process interrupted by user (Ctrl+C)")
-        print_info("? Partial results may be available in data/store/ directory")
+        print_warning("\n⚠️  Process interrupted by user (Ctrl+C)")
+        print_info("💡 Partial results may be available in data/store/ directory")
         sys.exit(130)
     except Exception as e:
-        print_error("? Unexpected error: {}".format(str(e)))
+        print_error("❌ Unexpected error: {}".format(str(e)))
         sys.exit(1)
