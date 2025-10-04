@@ -1,5 +1,30 @@
 ## RESource Builder Module
 
+### Quick Start with `run.py`
+
+The enhanced `run.py` script provides the simplest way to execute complete resource assessments with flexible region selection and colored output.
+
+#### Command Overview
+
+| Usage Pattern | Example | Description |
+|---------------|---------|-------------|
+| **All Regions** | `python3 run.py -c config/config_WB6.yaml` | Process all regions in config |
+| **Specific Regions** | `python3 run.py -c config/config_WB6.yaml -r AL BA` | Process selected regions only |
+| **Default Config** | `python3 run.py --regions BC QC` | Use default Canadian config |
+| **Validation** | `python3 run.py -c config/config_WB6.yaml -r INVALID` | Shows available regions |
+
+#### Regional Support
+
+| Region Set | Config File | Available Regions |
+|------------|-------------|-------------------|
+| **Canadian Provinces** | `config_CAN_baseline.yaml` | BC, QC, AB, SK, ON, NS, MB |
+| **Western Balkans** | `config_WB6.yaml` | AL, BA, XK, ME, MK, RS |
+| **Custom Regions** | User-defined config | Defined in `region_mapping` section |
+
+---
+
+### Advanced Usage: Step-by-Step Workflow
+
 ```{warning}
 Typical Sequential Steps involves the following process as mentioned below. Note that data-source errors, configuration error may break the workflow which may necessitate additional methods to be used as intermediate steps.
 ```

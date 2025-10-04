@@ -16,6 +16,10 @@ country: 'Western Balkan Regions' # Western Balkan Regions
 
 multi_country_flag: True # True if the 'country' represents a multi-country region   and 'regions' are nations, False if it is a single country and 'regions' are sub-nations.
 
+default_CRS:
+  degrees: EPSG:4326
+  meters: EPSG:3035 # ETRS89-extended / LAEA Europe - appropriate for European analysis
+
 # Note: All WB states are east of London. Use GMT+1 (CET) in winter, GMT+2 (CEST) in summer (last Sunday of March to last Sunday of October).
 # The 'Etc/GMT-2' value in timezone_convert reflects GMT+2 (CEST). Adjust logic in code if you need to distinguish between CET and CEST.
 
@@ -28,6 +32,7 @@ region_mapping:
     timezone_convert: 'Etc/GMT-2' # Central European Time (CET, GMT+1) / Central European Summer Time (CEST, GMT+2)
     # region_mapping: {}
     GWA_country_code: 'ALB'
+    CRS_meters: EPSG:3035
 
   'BA':
     name: "Bosnia and Herzegovina"
@@ -36,6 +41,7 @@ region_mapping:
     timezone_convert: 'Etc/GMT-2' # Central European Time (CET, GMT+1) / Central European Summer Time (CEST, GMT+2)
     # region_mapping: {}
     GWA_country_code: 'BIH'
+    CRS_meters: EPSG:3035
 
   'XK':
     name: "Kosovo"
@@ -44,6 +50,7 @@ region_mapping:
     timezone_convert: 'Etc/GMT-2' # Central European Time (CET, GMT+1) / Central European Summer Time (CEST, GMT+2)
     # region_mapping: {}
     GWA_country_code: 'XKX'
+    CRS_meters: EPSG:3035
 
   'ME':
     name: "Montenegro"
@@ -51,6 +58,7 @@ region_mapping:
     percentage_national_land_area: "100%"
     timezone_convert: 'Etc/GMT-2' # Central European Time (CET, GMT+1) / Central European Summer Time (CEST, GMT+2)
     GWA_country_code: 'MNE'
+    CRS_meters: EPSG:3035
 
   'MK':
     name: "North Macedonia"
@@ -58,6 +66,7 @@ region_mapping:
     percentage_national_land_area: "100%"
     timezone_convert: 'Etc/GMT-2' # Central European Time (CET, GMT+1) / Central European Summer Time (CEST, GMT+2)
     GWA_country_code: 'MKD'
+    CRS_meters: EPSG:3035
 
   'RS':
     name: "Serbia"
@@ -66,6 +75,7 @@ region_mapping:
     percentage_national_land_area: "100%"
     timezone_convert: 'Etc/GMT-2' # Central European Time (CET, GMT+1) / Central European Summer Time (CEST, GMT+2)
     GWA_country_code: 'SRB'
+    CRS_meters: EPSG:3035
 
 GADM:
   root: data/downloaded_data/GADM
@@ -74,9 +84,9 @@ GADM:
   datafield_mapping:
     'NAME_0': 'Country'
     'NAME_1': 'Municipality'
-    'NAME_2': 'City'
-  # Gov:
-  # not configured for Wb6
+    # 'NAME_2': 'City'
+    # Gov:
+    # not configured for Wb6
 
 NREL:
   ATB:

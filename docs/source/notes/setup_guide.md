@@ -157,8 +157,60 @@ conda activate RES
 ```
 
 ### 2. Run RESource
+
+#### Enhanced Analysis Pipeline (`run.py`)
+
+**Smart Region Selection & Colored Output** - The enhanced `run.py` script provides flexible region selection with validation and colored terminal output.
+
+| Feature | Description |
+|---------|-------------|
+| **Smart Detection** | Automatically reads available regions from config file |
+| **Validation** | Invalid regions trigger helpful error messages with suggestions |
+| **Colored Output** | Errors (red), warnings (yellow), success (green), info (cyan) |
+| **Flexible Selection** | Process all regions or specify subset via command line |
+
+#### Command Reference
+
+| Command | Description | Output Colors |
+|---------|-------------|---------------|
+| `python3 run.py` | Default config (Canadian provinces) | 🟢 Success messages |
+| `python3 run.py -c config/config_WB6.yaml` | Western Balkans (all regions) | 🔵 Info messages |
+| `python3 run.py -c config/config_WB6.yaml -r AL BA` | Specific regions only | 🟡 Warnings |
+| `python3 run.py -c invalid.yaml` | Shows available configs | 🔴 Error messages |
+| `python3 run.py --help` | Display all options | - |
+
+#### Regional Configurations
+
+| Config File | Regions Available | Example Usage |
+|-------------|-------------------|---------------|
+| `config_CAN_baseline.yaml` | AB, BC, MB, NB, NL, NS, ON, PE, QC, SK | `python3 run.py --regions BC QC` |
+| `config_CAN_policy1.yaml` | AB, BC, MB, NB, NL, NS, ON, PE, QC, SK | `python3 run.py -c config/config_CAN_policy1.yaml -r BC ON` |
+| `config_WB6.yaml` | AL, BA, XK, ME, MK, RS | `python3 run.py -c config/config_WB6.yaml -r AL BA` |
+
+
+#### Error Handling Examples
+
 ```bash
-# Main module
+# Invalid config file - shows available options
+python3 run.py -c nonexistent.yaml
+# Output: ✗ Configuration file 'nonexistent.yaml' not found.
+#         💡 Available config files:
+#            • config/config_CAN_baseline.yaml (Canadian provinces - baseline)
+#            • config/config_CAN_policy1.yaml (Canadian provinces - policy scenario)
+#            • config/config_WB6.yaml (Western Balkans)
+
+# Invalid regions - shows valid options  
+python3 run.py -c config/config_WB6.yaml -r INVALID
+# Output: ✗ Invalid region(s): ['INVALID']
+#         ⚠️  Available regions in config: ['AL', 'BA', 'XK', 'ME', 'MK', 'RS']
+#         💡 Examples of valid commands:
+#            • python3 run.py -c config/config_WB6.yaml --regions AL BA XK
+```
+
+#### Alternative Development Methods
+
+```bash
+# Legacy make command (still supported)
 make run
 
 # Interactive development

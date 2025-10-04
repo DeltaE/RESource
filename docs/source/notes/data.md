@@ -540,14 +540,6 @@ The following standardized legend CSV files are available in the `data/` directo
 
 All legend CSV files follow a consistent structure:
 
-```csv
-class,description,color
-1,Class description,#hexcolor
-2,Another class,#hexcolor
-...
-```
-
-**Required columns:**
 - `class`: Integer class value matching raster pixel values
 - `description`: Human-readable description of the class
 - `color`: Hex color code for visualization (format: #RRGGBB or #RRGGBBAA with alpha)
@@ -555,6 +547,7 @@ class,description,color
 ## Usage and Configuration
 
 ### Color Map Integration
+
 The system uses these legend files in two ways:
 
 1. **Matplotlib colormaps** (specified in config files via `color_map` parameter):
