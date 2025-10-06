@@ -28,6 +28,11 @@ def main():
         ("scipy", "SciPy"),
         ("matplotlib", "Matplotlib"),
         ("matplotlib.pyplot", "Matplotlib.pyplot"),
+        ("atlite", "Atlite"),
+        ("cdsapi", "CDS API"),
+        ("plotly", "Plotly"),
+        ("h5py", "H5Py"),
+        ("sklearn", "Scikit-learn"),
     ]
     
     # Geospatial packages
@@ -49,14 +54,12 @@ def main():
     
     # Optional packages that might not be available in all environments
     optional_packages = [
-        ("atlite", "Atlite"),
-        ("cdsapi", "CDS API"),
-        ("plotly", "Plotly"),
+
         ("folium", "Folium"),
         ("seaborn", "Seaborn"),
-        ("sklearn", "Scikit-learn"),
+
         ("dask", "Dask"),
-        ("h5py", "H5Py"),
+
         ("bokeh", "Bokeh"),
         ("holoviews", "HoloViews"),
         ("hvplot", "HvPlot"),
