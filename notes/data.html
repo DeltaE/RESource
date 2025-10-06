@@ -747,12 +747,11 @@ Different constraint classes are applied for solar vs wind development based on 
 <li><p>Register to their portal for API access</p></li>
 <li><p>Use the raster option to get the download URL</p></li>
 </ol>
-<blockquote>
-<div><p>RESource currently supports raster processing (automated) for this dataset. However, users can define their custom methods to incorporate vector (GDB/GPKG) datasets to fit their purpose.</p>
-</div></blockquote>
   <img src="../_static/screenshots/CORINE_land_cover_data.png" alt="CORINE_land_cover_data" width="500"/>
 <ol class="arabic" start="4">
-<li><p>Update the <code class="docutils literal notranslate"><span class="pre">source</span></code> key in your configuration file (e.g., <code class="docutils literal notranslate"><span class="pre">config/config_WB6.yaml</span></code>) with the obtained URL</p>
+<li><p>Download the raster file package (comes as a zip file) and extract the raster file (.tiff) from the zip.</p></li>
+<li><p>Save the raster file (.tiff) inside 'data/downloaded_data/CORINE'</p></li>
+<li><p>Update the <code class="docutils literal notranslate"><span class="pre">raster</span></code> key in your configuration file (e.g., <code class="docutils literal notranslate"><span class="pre">config/config_WB6.yaml</span></code>) with the downloaded raster file (.tiff) name.</p>
 <ul class="simple">
 <li><p><strong>Example</strong> configuration structure from <code class="docutils literal notranslate"><span class="pre">config/config_WB6.yaml</span></code>:</p></li>
 </ul>
@@ -762,8 +761,6 @@ Different constraint classes are applied for solar vs wind development based on 
 <span class="c1"># list of dictionaries</span>
 <span class="c1"># CORINE Land Cover (CLC) 2018 raster data (100m resolution, 44 classes)</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CORINE_land_cover&#39;</span>
-<span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;https://copernicus-fme.eea.europa.eu/fmedatadownload/results/13521.zip&#39;</span><span class="w"> </span><span class="c1">#2024 version</span>
-<span class="w"> </span>
 <span class="w">    </span><span class="nt">readme</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;https://eea.github.io/clms-api-docs/download.html#download-prepackaged-files&#39;</span>
 <span class="w">    </span><span class="nt">raster</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;U2018_CLC2018_V2020_20u1.tif&#39;</span>
 <span class="w">    </span><span class="nt">color_map</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;tab20&#39;</span>

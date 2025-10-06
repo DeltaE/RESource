@@ -1,0 +1,1643 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Bangladesh Renewable Energy Resource Analysis &#8212; RESource 2025.07 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=e9b82cb4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/Visuals_Bangladesh_Combined';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../notes/config.html">How to use the CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/learning.html">Best Practices and Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/developers.html">Contributing Developers</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Store_explorer.html">Explore data store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Visuals_BC.html">Example Visuals for BC</a></li>
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notes/api.html">RES API References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/documentation_guide.html">Documentation Build Guide</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/Visuals_Bangladesh_Combined.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Bangladesh Renewable Energy Resource Analysis</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Comprehensive-visualization-of-Bangladesh's-solar-and-wind-energy-potential-across-8-administrative-divisions">Comprehensive visualization of Bangladesh’s solar and wind energy potential across 8 administrative divisions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Authors:">Authors:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Study-Coverage:">Study Coverage:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-1:-Import-Required-Libraries">Section 1: Import Required Libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-2:-Load-Configuration-and-Data">Section 2: Load Configuration and Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Load-Validation-Data-(if-available)">Load Validation Data (if available)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-3:-Create-Country-Overview-Map">Section 3: Create Country Overview Map</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-4:-Display-Land-Use-Constraints-(GAEZ-Analysis)">Section 4: Display Land Use Constraints (GAEZ Analysis)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-5:-Visualize-Solar-Resource-Distribution">Section 5: Visualize Solar Resource Distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-6:-Visualize-Solar-Capacity-Potential">Section 6: Visualize Solar Capacity Potential</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-7:-Generate-LCOE-Analysis">Section 7: Generate LCOE Analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-8:-Show-Transmission-Infrastructure">Section 8: Show Transmission Infrastructure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-9:-Generate-Resource-Potential-Summary-by-Divisions">Section 9: Generate Resource Potential Summary by Divisions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-10:-Export-Final-Visualizations-and-Create-Report">Section 10: Export Final Visualizations and Create Report</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="Bangladesh-Renewable-Energy-Resource-Analysis">
+<h1>Bangladesh Renewable Energy Resource Analysis<a class="headerlink" href="#Bangladesh-Renewable-Energy-Resource-Analysis" title="Link to this heading">#</a></h1>
+<section id="Comprehensive-visualization-of-Bangladesh's-solar-and-wind-energy-potential-across-8-administrative-divisions">
+<h2>Comprehensive visualization of Bangladesh’s solar and wind energy potential across 8 administrative divisions<a class="headerlink" href="#Comprehensive-visualization-of-Bangladesh's-solar-and-wind-energy-potential-across-8-administrative-divisions" title="Link to this heading">#</a></h2>
+<section id="Authors:">
+<h3>Authors:<a class="headerlink" href="#Authors:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Md Eliasinul Islam (Elias Islam)</p></li>
+<li><p>Sustainable Energy Engineering, Simon Fraser University, BC, Canada</p></li>
+</ul>
+</section>
+<section id="Study-Coverage:">
+<h3>Study Coverage:<a class="headerlink" href="#Study-Coverage:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Country</strong>: Bangladesh</p></li>
+<li><p><strong>Administrative Divisions</strong>: 8 (Barisal, Chittagong, Dhaka, Khulna, Mymensingh, Rajshahi, Rangpur, Sylhet)</p></li>
+<li><p><strong>Resource Types</strong>: Solar PV and Wind Energy</p></li>
+<li><p><strong>Data Sources</strong>: ERA5, GAEZ, Global Wind Atlas, OpenStreetMap, WorldPop</p></li>
+</ul>
+<hr class="docutils" />
+</section>
+</section>
+<section id="Section-1:-Import-Required-Libraries">
+<h2>Section 1: Import Required Libraries<a class="headerlink" href="#Section-1:-Import-Required-Libraries" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.patheffects</span> <span class="k">as</span> <span class="nn">pe</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">rasterio</span> <span class="k">as</span> <span class="nn">rio</span>
+<span class="kn">import</span> <span class="nn">rioxarray</span> <span class="k">as</span> <span class="nn">rxr</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">ListedColormap</span><span class="p">,</span> <span class="n">BoundaryNorm</span><span class="p">,</span> <span class="n">to_rgba</span>
+<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">Patch</span>
+
+<span class="kn">import</span> <span class="nn">RES.visuals</span> <span class="k">as</span> <span class="nn">vis</span>
+<span class="kn">from</span> <span class="nn">RES</span> <span class="kn">import</span> <span class="n">utility</span> <span class="k">as</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">RES.hdf5_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
+<span class="kn">import</span> <span class="nn">RES.utility</span> <span class="k">as</span> <span class="nn">utlis</span>
+
+<span class="c1"># Set plotting style</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;../RES/visual_styles/elsevier.mplstyle&#39;</span><span class="p">)</span>
+
+<span class="c1"># Suppress specific warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ All required libraries imported successfully!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+✓ All required libraries imported successfully!
+</pre></div></div>
+</div>
+</section>
+<section id="Section-2:-Load-Configuration-and-Data">
+<h2>Section 2: Load Configuration and Data<a class="headerlink" href="#Section-2:-Load-Configuration-and-Data" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load configuration file</span>
+<span class="n">cfg</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="s1">&#39;../config/config_BGD.yaml&#39;</span><span class="p">)</span>
+<span class="n">sub_national_unit_tag</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;GADM&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;datafield_mapping&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;NAME_1&#39;</span><span class="p">)</span>
+<span class="n">country_name</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="s1">&#39;Bangladesh&#39;</span><span class="p">)</span>
+<span class="n">country_kwd</span> <span class="o">=</span> <span class="n">country_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+<span class="c1"># Define all 8 administrative divisions of Bangladesh</span>
+<span class="n">regions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;BD-01&#39;</span><span class="p">,</span> <span class="s1">&#39;BD-02&#39;</span><span class="p">,</span> <span class="s1">&#39;BD-03&#39;</span><span class="p">,</span> <span class="s1">&#39;BD-04&#39;</span><span class="p">,</span> <span class="s1">&#39;BD-05&#39;</span><span class="p">,</span> <span class="s1">&#39;BD-06&#39;</span><span class="p">,</span> <span class="s1">&#39;BD-07&#39;</span><span class="p">,</span> <span class="s1">&#39;BD-08&#39;</span><span class="p">]</span>
+<span class="n">region_names</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;BD-01&#39;</span><span class="p">:</span> <span class="s1">&#39;Barisal&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;BD-02&#39;</span><span class="p">:</span> <span class="s1">&#39;Chittagong&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;BD-03&#39;</span><span class="p">:</span> <span class="s1">&#39;Dhaka&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;BD-04&#39;</span><span class="p">:</span> <span class="s1">&#39;Khulna&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;BD-05&#39;</span><span class="p">:</span> <span class="s1">&#39;Mymensingh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;BD-06&#39;</span><span class="p">:</span> <span class="s1">&#39;Rajshahi&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;BD-07&#39;</span><span class="p">:</span> <span class="s1">&#39;Rangpur&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;BD-08&#39;</span><span class="p">:</span> <span class="s1">&#39;Sylhet&#39;</span>
+<span class="p">}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Configuration loaded for </span><span class="si">{</span><span class="n">country_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Administrative divisions: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">region_names</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+✓ Configuration loaded for Bangladesh
+✓ Administrative divisions: [&#39;Barisal&#39;, &#39;Chittagong&#39;, &#39;Dhaka&#39;, &#39;Khulna&#39;, &#39;Mymensingh&#39;, &#39;Rajshahi&#39;, &#39;Rangpur&#39;, &#39;Sylhet&#39;]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load processed data stores for all regions</span>
+<span class="n">RUN_ID</span> <span class="o">=</span> <span class="s1">&#39;baseline&#39;</span>  <span class="c1"># All the regions should have RUN_ID results available</span>
+<span class="n">BGD_store</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Loading data stores for Bangladesh regions with RUN_ID: </span><span class="si">{</span><span class="n">RUN_ID</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">regions</span><span class="p">:</span>
+    <span class="n">country_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">store</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;../data/store/resources_</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">RUN_ID</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">store</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">res_data</span> <span class="o">=</span> <span class="n">DataHandler</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">show_structure</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">country_dict</span><span class="p">[</span><span class="s1">&#39;cells&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;cells&#39;</span><span class="p">)</span>
+            <span class="n">country_dict</span><span class="p">[</span><span class="s1">&#39;boundary&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;boundary&#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">country_dict</span><span class="p">[</span><span class="s1">&#39;lines&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;lines&#39;</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  No transmission line data for </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">country_dict</span><span class="p">[</span><span class="s1">&#39;lines&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">BGD_store</span><span class="p">[</span><span class="n">region</span><span class="p">]</span> <span class="o">=</span> <span class="n">country_dict</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;✓ Loaded data for region: </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">region_names</span><span class="p">[</span><span class="n">region</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ⚠️  Store not found for region </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">region_names</span><span class="p">[</span><span class="n">region</span><span class="p">]</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">store</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ❌ Error with region </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">region_names</span><span class="p">[</span><span class="n">region</span><span class="p">]</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">continue</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ Successfully loaded data for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">BGD_store</span><span class="p">)</span><span class="si">}</span><span class="s2"> out of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">regions</span><span class="p">)</span><span class="si">}</span><span class="s2"> regions&quot;</span><span class="p">)</span>
+<span class="n">available_regions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">BGD_store</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Available regions: </span><span class="si">{</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">region_names</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="si">}</span><span class="s1">)&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">available_regions</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-yellow-fg">└&gt; Loading data stores for Bangladesh regions with RUN_ID: baseline</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| ❌ Error: Key &#39;cells&#39; not found in ../data/store/resources_Bangladesh_BD-01_baseline.h5</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| ❌ Error: Key &#39;boundary&#39; not found in ../data/store/resources_Bangladesh_BD-01_baseline.h5</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| ❌ Error: Key &#39;lines&#39; not found in ../data/store/resources_Bangladesh_BD-01_baseline.h5</span>
+<span class="ansi-cyan-fg"> └&gt; ✓ Loaded data for region: BD-01 (Barisal)</span>
+  ⚠️  Store not found for region BD-02 (Chittagong): ../data/store/resources_Bangladesh_BD-02_baseline.h5
+<span class="ansi-cyan-fg"> └&gt; ✓ Loaded data for region: BD-03 (Dhaka)</span>
+  ⚠️  Store not found for region BD-04 (Khulna): ../data/store/resources_Bangladesh_BD-04_baseline.h5
+  ⚠️  Store not found for region BD-05 (Mymensingh): ../data/store/resources_Bangladesh_BD-05_baseline.h5
+  ⚠️  Store not found for region BD-06 (Rajshahi): ../data/store/resources_Bangladesh_BD-06_baseline.h5
+  ⚠️  Store not found for region BD-07 (Rangpur): ../data/store/resources_Bangladesh_BD-07_baseline.h5
+  ⚠️  Store not found for region BD-08 (Sylhet): ../data/store/resources_Bangladesh_BD-08_baseline.h5
+
+✓ Successfully loaded data for 2 out of 8 regions
+Available regions: [&#39;BD-01 (Barisal)&#39;, &#39;BD-03 (Dhaka)&#39;]
+</pre></div></div>
+</div>
+<section id="Load-Validation-Data-(if-available)">
+<h3>Load Validation Data (if available)<a class="headerlink" href="#Load-Validation-Data-(if-available)" title="Link to this heading">#</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load existing renewable energy projects data for Bangladesh (if available)</span>
+<span class="n">existing_VREs_data_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;../data/validation_data/existing_VREs_Bangladesh.csv&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">existing_VREs_data_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+    <span class="n">existing_VREs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">existing_VREs_data_path</span><span class="p">)</span>
+    <span class="n">existing_VREs_gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
+        <span class="n">existing_VREs</span><span class="p">,</span>
+        <span class="n">geometry</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span><span class="n">existing_VREs</span><span class="o">.</span><span class="n">Longitude</span><span class="p">,</span> <span class="n">existing_VREs</span><span class="o">.</span><span class="n">Latitude</span><span class="p">),</span>
+        <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span>
+    <span class="p">)</span>
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;✓ Loaded validation data for existing VREs from </span><span class="si">{</span><span class="n">existing_VREs_data_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">existing_VREs_gdf</span><span class="p">)</span><span class="si">}</span><span class="s2"> existing renewable energy projects&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">existing_VREs_gdf</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;⚠️  Validation data for existing VREs not found at </span><span class="si">{</span><span class="n">existing_VREs_data_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  You can create this file with columns: Project_Name, Technology, Capacity_MW, Longitude, Latitude&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-yellow-intense-fg ansi-bold">⚠️  ⚠️  Validation data for existing VREs not found at ../data/validation_data/existing_VREs_Bangladesh.csv</span>
+  You can create this file with columns: Project_Name, Technology, Capacity_MW, Longitude, Latitude
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="Section-3:-Create-Country-Overview-Map">
+<h2>Section 3: Create Country Overview Map<a class="headerlink" href="#Section-3:-Create-Country-Overview-Map" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">BGD_store</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;BD-03&#39;</span><span class="p">:</span> <span class="n">BGD_store</span><span class="p">[</span><span class="s1">&#39;BD-03&#39;</span><span class="p">]}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create combined boundary for Bangladesh</span>
+<span class="k">if</span> <span class="n">BGD_store</span><span class="p">:</span>
+    <span class="c1"># Combine all region boundaries into a single GeoDataFrame</span>
+    <span class="n">boundary_gdfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">BGD_store</span><span class="p">[</span><span class="n">region</span><span class="p">][</span><span class="s1">&#39;boundary&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">BGD_store</span><span class="p">]</span>
+    <span class="n">BGD_boundary</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">boundary_gdfs</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">crs</span><span class="o">=</span><span class="n">boundary_gdfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+    <span class="n">BGD_boundary_dissolved</span> <span class="o">=</span> <span class="n">BGD_boundary</span><span class="o">.</span><span class="n">dissolve</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;Country&quot;</span><span class="p">)[[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+    <span class="c1"># Create a map showing all administrative divisions</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+    <span class="c1"># Plot individual boundaries with different colors</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Set3</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">BGD_store</span><span class="p">)))</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">BGD_store</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+        <span class="n">boundary</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;boundary&#39;</span><span class="p">]</span>
+        <span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Add division labels</span>
+        <span class="n">centroid</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">centroid</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">region_names</span><span class="p">[</span><span class="n">region</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">centroid</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">centroid</span><span class="o">.</span><span class="n">y</span><span class="p">),</span>
+            <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+            <span class="n">path_effects</span><span class="o">=</span><span class="p">[</span><span class="n">pe</span><span class="o">.</span><span class="n">withStroke</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">foreground</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)]</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Add existing VREs if available</span>
+    <span class="k">if</span> <span class="n">existing_VREs_gdf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">existing_VREs_gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+                              <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Existing Renewable Energy Projects&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Bangladesh Administrative Divisions</span><span class="se">\n</span><span class="s2">Renewable Energy Resource Analysis Coverage&quot;</span><span class="p">,</span>
+                 <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+
+    <span class="c1"># Add compass</span>
+    <span class="n">vis</span><span class="o">.</span><span class="n">add_compass_arrow_custom</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">text_offset</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="c1"># Save the map</span>
+    <span class="n">save_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/Bangladesh_Administrative_Divisions.png&#39;</span><span class="p">)</span>
+    <span class="n">save_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Country overview map saved to: </span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;❌ No boundary data available to create country overview map&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Visuals_Bangladesh_Combined_10_0.png" src="../_images/notebooks_Visuals_Bangladesh_Combined_10_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+✓ Country overview map saved to: ../vis/Bangladesh/Bangladesh_Administrative_Divisions.png
+</pre></div></div>
+</div>
+</section>
+<section id="Section-4:-Display-Land-Use-Constraints-(GAEZ-Analysis)">
+<h2>Section 4: Display Land Use Constraints (GAEZ Analysis)<a class="headerlink" href="#Section-4:-Display-Land-Use-Constraints-(GAEZ-Analysis)" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load GAEZ land cover legends and class mappings</span>
+<span class="n">GAEZ_legends</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data/faocmb_2010_legend.csv&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;../data/faocmb_2010_legend.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span>
+<span class="n">class_inclusion_layers</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;GAEZ&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;raster_types&#39;</span><span class="p">,</span> <span class="p">[])</span>
+
+<span class="k">if</span> <span class="n">class_inclusion_layers</span><span class="p">:</span>
+    <span class="c1"># Find land cover configuration</span>
+    <span class="n">land_cover_config</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">raster_type</span> <span class="ow">in</span> <span class="n">class_inclusion_layers</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">raster_type</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;land_cover&#39;</span><span class="p">:</span>
+            <span class="n">land_cover_config</span> <span class="o">=</span> <span class="n">raster_type</span>
+            <span class="k">break</span>
+
+    <span class="k">if</span> <span class="n">land_cover_config</span> <span class="ow">and</span> <span class="n">BGD_boundary_dissolved</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Found GAEZ land cover configuration&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Solar suitable classes: </span><span class="si">{</span><span class="n">land_cover_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;class_inclusion&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;solar&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">[])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Wind suitable classes: </span><span class="si">{</span><span class="n">land_cover_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;class_inclusion&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;wind&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">[])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Define raster path for GAEZ land cover</span>
+        <span class="n">GAEZ_raster_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;../Rasters_in_use/faocmb_2010.tif&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">GAEZ_raster_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Found GAEZ raster at: </span><span class="si">{</span><span class="n">GAEZ_raster_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Reproject boundary to UTM for clipping</span>
+            <span class="n">BGD_boundary_utm</span> <span class="o">=</span> <span class="n">BGD_boundary_dissolved</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">epsg</span><span class="o">=</span><span class="mi">32646</span><span class="p">)</span>  <span class="c1"># UTM Zone 46N for Bangladesh</span>
+
+            <span class="c1"># Get bounds for clipping</span>
+            <span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span> <span class="o">=</span> <span class="n">BGD_boundary_utm</span><span class="o">.</span><span class="n">total_bounds</span>
+            <span class="n">bounding_box_dict</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;minx&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">minx</span><span class="p">),</span>
+                <span class="s2">&quot;miny&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">miny</span><span class="p">),</span>
+                <span class="s2">&quot;maxx&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">maxx</span><span class="p">),</span>
+                <span class="s2">&quot;maxy&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">maxy</span><span class="p">)</span>
+            <span class="p">}</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Load and clip raster to Bangladesh boundary</span>
+                <span class="n">GAEZ_raster_data</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">rxr</span><span class="o">.</span><span class="n">open_rasterio</span><span class="p">(</span><span class="n">GAEZ_raster_path</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">reproject</span><span class="p">(</span><span class="s2">&quot;EPSG:32646&quot;</span><span class="p">)</span>  <span class="c1"># Reproject to UTM</span>
+                    <span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">clip_box</span><span class="p">(</span><span class="o">**</span><span class="n">bounding_box_dict</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Successfully loaded and clipped GAEZ land cover data&quot;</span><span class="p">)</span>
+
+                <span class="c1"># Extract unique land cover classes</span>
+                <span class="n">codes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">GAEZ_raster_data</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">GAEZ_raster_data</span><span class="o">.</span><span class="n">values</span><span class="p">)])</span>
+                <span class="n">codes</span> <span class="o">=</span> <span class="n">codes</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">codes</span><span class="p">)</span><span class="si">}</span><span class="s2"> unique land cover classes in Bangladesh&quot;</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;❌ Error loading GAEZ raster: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">GAEZ_raster_data</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;⚠️  GAEZ raster not found at: </span><span class="si">{</span><span class="n">GAEZ_raster_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">GAEZ_raster_data</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠️  No land cover configuration found in GAEZ settings&quot;</span><span class="p">)</span>
+        <span class="n">GAEZ_raster_data</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠️  No GAEZ raster configuration found&quot;</span><span class="p">)</span>
+    <span class="n">GAEZ_raster_data</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+✓ Found GAEZ land cover configuration
+  Solar suitable classes: [2, 3, 5, 6, 8, 9]
+  Wind suitable classes: [2, 3, 5, 6, 8, 9]
+⚠️  GAEZ raster not found at: ../Rasters_in_use/faocmb_2010.tif
+</pre></div></div>
+</div>
+</section>
+<section id="Section-5:-Visualize-Solar-Resource-Distribution">
+<h2>Section 5: Visualize Solar Resource Distribution<a class="headerlink" href="#Section-5:-Visualize-Solar-Resource-Distribution" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Combine all cell data for comprehensive solar analysis</span>
+<span class="k">if</span> <span class="n">BGD_store</span><span class="p">:</span>
+    <span class="n">all_cells</span> <span class="o">=</span> <span class="p">[</span><span class="n">BGD_store</span><span class="p">[</span><span class="n">region</span><span class="p">][</span><span class="s1">&#39;cells&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">BGD_store</span><span class="p">]</span>
+    <span class="n">BGD_cells</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">all_cells</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">crs</span><span class="o">=</span><span class="n">all_cells</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Combined data from </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">BGD_store</span><span class="p">)</span><span class="si">}</span><span class="s2"> regions&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Total grid cells: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">BGD_cells</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Check available solar data columns</span>
+    <span class="n">solar_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">BGD_cells</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;solar&#39;</span> <span class="ow">in</span> <span class="n">col</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Available solar data columns: </span><span class="si">{</span><span class="n">solar_columns</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create solar resource visualizations</span>
+    <span class="k">if</span> <span class="s1">&#39;solar_CF_mean&#39;</span> <span class="ow">in</span> <span class="n">BGD_cells</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="s1">&#39;CF&#39;</span> <span class="ow">in</span> <span class="n">col</span> <span class="ow">and</span> <span class="s1">&#39;solar&#39;</span> <span class="ow">in</span> <span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">BGD_cells</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
+
+        <span class="c1"># Find the correct CF column</span>
+        <span class="n">cf_column</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">BGD_cells</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;solar_CF_mean&#39;</span> <span class="o">==</span> <span class="n">col</span><span class="p">:</span>
+                <span class="n">cf_column</span> <span class="o">=</span> <span class="n">col</span>
+                <span class="k">break</span>
+            <span class="k">elif</span> <span class="s1">&#39;CF&#39;</span> <span class="ow">in</span> <span class="n">col</span> <span class="ow">and</span> <span class="s1">&#39;solar&#39;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">:</span>
+                <span class="n">cf_column</span> <span class="o">=</span> <span class="n">col</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">cf_column</span><span class="p">:</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+            <span class="c1"># Plot solar capacity factor</span>
+            <span class="n">vis</span><span class="o">.</span><span class="n">get_data_in_map_plot</span><span class="p">(</span>
+                <span class="n">BGD_cells</span><span class="p">,</span>
+                <span class="n">resource_type</span><span class="o">=</span><span class="s1">&#39;solar&#39;</span><span class="p">,</span>
+                <span class="n">datafield</span><span class="o">=</span><span class="s1">&#39;CF&#39;</span><span class="p">,</span>
+                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                <span class="n">show</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Add existing VREs if available</span>
+            <span class="k">if</span> <span class="n">existing_VREs_gdf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">solar_projects</span> <span class="o">=</span> <span class="n">existing_VREs_gdf</span><span class="p">[</span>
+                    <span class="n">existing_VREs_gdf</span><span class="p">[</span><span class="s1">&#39;Technology&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">&#39;solar&#39;</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">solar_projects</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">solar_projects</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;orangered&#39;</span><span class="p">,</span>
+                        <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span>
+                        <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Existing Solar Projects&#39;</span>
+                    <span class="p">)</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Solar Photovoltaic Capacity Factor</span><span class="se">\n</span><span class="s2">Bangladesh Administrative Divisions&quot;</span><span class="p">,</span>
+                        <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+            <span class="c1"># Add compass</span>
+            <span class="n">vis</span><span class="o">.</span><span class="n">add_compass_arrow_custom</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">text_offset</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
+
+            <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+            <span class="c1"># Save the plot</span>
+            <span class="n">save_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/Bangladesh_Solar_CF.png&#39;</span><span class="p">)</span>
+            <span class="n">save_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Solar CF map saved to: </span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠️  No solar capacity factor data found&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠️  No solar resource data available&quot;</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;❌ No cell data available for solar resource visualization&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+✓ Combined data from 1 regions
+  Total grid cells: 51
+  Available solar data columns: [&#39;potential_capacity_solar&#39;, &#39;capex_solar&#39;, &#39;fom_solar&#39;, &#39;vom_solar&#39;, &#39;grid_connection_cost_per_km_solar&#39;, &#39;tx_line_rebuild_cost_solar&#39;, &#39;Operational_life_solar&#39;, &#39;solar_CF_mean&#39;, &#39;lcoe_solar&#39;, &#39;lcoe_actualCap_solar&#39;]
+<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Visuals_Bangladesh_Combined_14_1.png" src="../_images/notebooks_Visuals_Bangladesh_Combined_14_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+✓ Solar CF map saved to: ../vis/Bangladesh/Bangladesh_Solar_CF.png
+</pre></div></div>
+</div>
+</section>
+<section id="Section-6:-Visualize-Solar-Capacity-Potential">
+<h2>Section 6: Visualize Solar Capacity Potential<a class="headerlink" href="#Section-6:-Visualize-Solar-Capacity-Potential" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize solar capacity potential</span>
+<span class="k">if</span> <span class="n">BGD_store</span> <span class="ow">and</span> <span class="s1">&#39;potential_capacity_solar&#39;</span> <span class="ow">in</span> <span class="n">BGD_cells</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+    <span class="c1"># Plot solar capacity potential</span>
+    <span class="n">vis</span><span class="o">.</span><span class="n">get_data_in_map_plot</span><span class="p">(</span>
+        <span class="n">BGD_cells</span><span class="p">,</span>
+        <span class="n">resource_type</span><span class="o">=</span><span class="s1">&#39;solar&#39;</span><span class="p">,</span>
+        <span class="n">datafield</span><span class="o">=</span><span class="s1">&#39;capacity&#39;</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">show</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Add existing VREs if available</span>
+    <span class="k">if</span> <span class="n">existing_VREs_gdf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">solar_projects</span> <span class="o">=</span> <span class="n">existing_VREs_gdf</span><span class="p">[</span>
+            <span class="n">existing_VREs_gdf</span><span class="p">[</span><span class="s1">&#39;Technology&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">&#39;solar&#39;</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">solar_projects</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">solar_projects</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;orangered&#39;</span><span class="p">,</span>
+                <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span>
+                <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Existing Solar Projects&#39;</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Solar PV Potential Capacity (MW)</span><span class="se">\n</span><span class="s2">Bangladesh Administrative Divisions&quot;</span><span class="p">,</span>
+                <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+    <span class="c1"># Add compass</span>
+    <span class="n">vis</span><span class="o">.</span><span class="n">add_compass_arrow_custom</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">text_offset</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="c1"># Save the plot</span>
+    <span class="n">save_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/Bangladesh_Solar_Capacity.png&#39;</span><span class="p">)</span>
+    <span class="n">save_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="c1"># Calculate and display summary statistics</span>
+    <span class="n">total_solar_capacity</span> <span class="o">=</span> <span class="n">BGD_cells</span><span class="p">[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">max_solar_capacity</span> <span class="o">=</span> <span class="n">BGD_cells</span><span class="p">[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="n">mean_solar_capacity</span> <span class="o">=</span> <span class="n">BGD_cells</span><span class="p">[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Solar capacity map saved to: </span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">📊 Solar Capacity Summary:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Total potential capacity: </span><span class="si">{</span><span class="n">total_solar_capacity</span><span class="o">/</span><span class="mi">1000</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> GW&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Maximum cell capacity: </span><span class="si">{</span><span class="n">max_solar_capacity</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> MW&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Average cell capacity: </span><span class="si">{</span><span class="n">mean_solar_capacity</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> MW&quot;</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠️  No solar capacity data available for visualization&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Visuals_Bangladesh_Combined_16_1.png" src="../_images/notebooks_Visuals_Bangladesh_Combined_16_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+✓ Solar capacity map saved to: ../vis/Bangladesh/Bangladesh_Solar_Capacity.png
+
+📊 Solar Capacity Summary:
+  Total potential capacity: 2.8 GW
+  Maximum cell capacity: 820.3 MW
+  Average cell capacity: 54.5 MW
+</pre></div></div>
+</div>
+</section>
+<section id="Section-7:-Generate-LCOE-Analysis">
+<h2>Section 7: Generate LCOE Analysis<a class="headerlink" href="#Section-7:-Generate-LCOE-Analysis" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># LCOE (Levelized Cost of Energy) Analysis for Solar</span>
+<span class="k">if</span> <span class="n">BGD_store</span> <span class="ow">and</span> <span class="s1">&#39;lcoe_solar&#39;</span> <span class="ow">in</span> <span class="n">BGD_cells</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+
+    <span class="c1"># Define LCOE bins for categorization</span>
+    <span class="n">solar_bins</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)]</span>
+    <span class="n">solar_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&lt;$50&#39;</span><span class="p">,</span> <span class="s1">&#39;$50-60&#39;</span><span class="p">,</span> <span class="s1">&#39;$60-70&#39;</span><span class="p">,</span> <span class="s1">&#39;$70-80&#39;</span><span class="p">,</span> <span class="s1">&#39;$80-100&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;$100&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Categorize LCOE into bins</span>
+    <span class="n">BGD_cells</span><span class="p">[</span><span class="s1">&#39;solar_lcoe_category&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span>
+        <span class="n">BGD_cells</span><span class="p">[</span><span class="s1">&#39;lcoe_solar&#39;</span><span class="p">],</span>
+        <span class="n">bins</span><span class="o">=</span><span class="n">solar_bins</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="n">solar_labels</span><span class="p">,</span>
+        <span class="n">include_lowest</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Create LCOE visualization</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+    <span class="c1"># Map plot</span>
+    <span class="n">vis</span><span class="o">.</span><span class="n">get_data_in_map_plot</span><span class="p">(</span>
+        <span class="n">BGD_cells</span><span class="p">,</span>
+        <span class="n">resource_type</span><span class="o">=</span><span class="s1">&#39;solar&#39;</span><span class="p">,</span>
+        <span class="n">datafield</span><span class="o">=</span><span class="s1">&#39;score&#39;</span><span class="p">,</span>  <span class="c1"># This typically corresponds to LCOE</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span>
+        <span class="n">show</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Add existing VREs if available</span>
+    <span class="k">if</span> <span class="n">existing_VREs_gdf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">solar_projects</span> <span class="o">=</span> <span class="n">existing_VREs_gdf</span><span class="p">[</span>
+            <span class="n">existing_VREs_gdf</span><span class="p">[</span><span class="s1">&#39;Technology&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">&#39;solar&#39;</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">solar_projects</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">solar_projects</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;orangered&#39;</span><span class="p">,</span>
+                <span class="n">markersize</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span>
+                <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Existing Solar&#39;</span>
+            <span class="p">)</span>
+            <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Solar LCOE Distribution</span><span class="se">\n</span><span class="s2">($/MWh)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Bar chart of capacity by LCOE category</span>
+    <span class="n">lcoe_capacity</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">BGD_cells</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;solar_lcoe_category&#39;</span><span class="p">)[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">]</span>
+        <span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>  <span class="c1"># Convert to GW</span>
+        <span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">solar_labels</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Remove empty categories</span>
+    <span class="n">lcoe_capacity</span> <span class="o">=</span> <span class="n">lcoe_capacity</span><span class="p">[</span><span class="n">lcoe_capacity</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Color mapping for consistency</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">YlOrRd</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">lcoe_capacity</span><span class="p">)))</span>
+
+    <span class="n">ax2</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lcoe_capacity</span><span class="p">)),</span> <span class="n">lcoe_capacity</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lcoe_capacity</span><span class="p">)))</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">lcoe_capacity</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Solar Potential (GW)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;LCOE Category ($/MWh)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Solar Capacity by LCOE Range&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+    <span class="c1"># Add value labels on bars</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lcoe_capacity</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="c1"># Save the plot</span>
+    <span class="n">save_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/Bangladesh_Solar_LCOE_Analysis.png&#39;</span><span class="p">)</span>
+    <span class="n">save_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="c1"># Calculate LCOE statistics</span>
+    <span class="n">mean_lcoe</span> <span class="o">=</span> <span class="n">BGD_cells</span><span class="p">[</span><span class="s1">&#39;lcoe_solar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">min_lcoe</span> <span class="o">=</span> <span class="n">BGD_cells</span><span class="p">[</span><span class="s1">&#39;lcoe_solar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="n">max_lcoe</span> <span class="o">=</span> <span class="n">BGD_cells</span><span class="p">[</span><span class="s1">&#39;lcoe_solar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ LCOE analysis saved to: </span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">💰 Solar LCOE Summary:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Average LCOE: $</span><span class="si">{</span><span class="n">mean_lcoe</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">/MWh&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Minimum LCOE: $</span><span class="si">{</span><span class="n">min_lcoe</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">/MWh&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Maximum LCOE: $</span><span class="si">{</span><span class="n">max_lcoe</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">/MWh&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Most economic range: </span><span class="si">{</span><span class="n">lcoe_capacity</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="n">lcoe_capacity</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> GW potential&quot;</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠️  No LCOE data available for analysis&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Visuals_Bangladesh_Combined_18_1.png" src="../_images/notebooks_Visuals_Bangladesh_Combined_18_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+✓ LCOE analysis saved to: ../vis/Bangladesh/Bangladesh_Solar_LCOE_Analysis.png
+
+💰 Solar LCOE Summary:
+  Average LCOE: $60.4/MWh
+  Minimum LCOE: $58.3/MWh
+  Maximum LCOE: $64.1/MWh
+  Most economic range: $50-60 with 0.2 GW potential
+</pre></div></div>
+</div>
+</section>
+<section id="Section-8:-Show-Transmission-Infrastructure">
+<h2>Section 8: Show Transmission Infrastructure<a class="headerlink" href="#Section-8:-Show-Transmission-Infrastructure" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize transmission infrastructure from OpenStreetMap data</span>
+<span class="k">if</span> <span class="n">BGD_store</span><span class="p">:</span>
+    <span class="c1"># Combine all transmission line data</span>
+    <span class="n">all_lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">BGD_store</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">BGD_store</span><span class="p">[</span><span class="n">region</span><span class="p">][</span><span class="s1">&#39;lines&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">all_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">BGD_store</span><span class="p">[</span><span class="n">region</span><span class="p">][</span><span class="s1">&#39;lines&#39;</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">all_lines</span><span class="p">:</span>
+        <span class="n">BGD_lines</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">all_lines</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">crs</span><span class="o">=</span><span class="n">all_lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+
+        <span class="c1"># Process voltage data if available</span>
+        <span class="k">if</span> <span class="s1">&#39;voltage&#39;</span> <span class="ow">in</span> <span class="n">BGD_lines</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="c1"># Convert to numeric and create voltage classes</span>
+            <span class="n">BGD_lines</span><span class="p">[</span><span class="s1">&#39;voltage_kv&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">BGD_lines</span><span class="p">[</span><span class="s1">&#39;voltage&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000</span>
+
+            <span class="c1"># Define voltage bins</span>
+            <span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">132</span><span class="p">,</span> <span class="mi">220</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)]</span>
+            <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&lt;12 kV&quot;</span><span class="p">,</span> <span class="s2">&quot;12–25 kV&quot;</span><span class="p">,</span> <span class="s2">&quot;25–132 kV&quot;</span><span class="p">,</span> <span class="s2">&quot;132–220 kV&quot;</span><span class="p">,</span> <span class="s2">&quot;≥220 kV&quot;</span><span class="p">]</span>
+            <span class="n">BGD_lines</span><span class="p">[</span><span class="s1">&#39;voltage_class&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">BGD_lines</span><span class="p">[</span><span class="s1">&#39;voltage_kv&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># Create transmission infrastructure map</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+            <span class="c1"># Plot boundaries first</span>
+            <span class="k">if</span> <span class="n">BGD_boundary_dissolved</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">BGD_boundary_dissolved</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span>
+                    <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Plot transmission lines by voltage class</span>
+            <span class="n">unique_classes</span> <span class="o">=</span> <span class="n">BGD_lines</span><span class="p">[</span><span class="s1">&#39;voltage_class&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+            <span class="n">colors</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">viridis</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_classes</span><span class="p">)))</span>
+
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">voltage_class</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">unique_classes</span><span class="p">):</span>
+                <span class="n">lines_subset</span> <span class="o">=</span> <span class="n">BGD_lines</span><span class="p">[</span><span class="n">BGD_lines</span><span class="p">[</span><span class="s1">&#39;voltage_class&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">voltage_class</span><span class="p">]</span>
+                <span class="n">lines_subset</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">voltage_class</span><span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Add existing VREs if available</span>
+            <span class="k">if</span> <span class="n">existing_VREs_gdf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">existing_VREs_gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+                    <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Existing RE Projects&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">5</span>
+                <span class="p">)</span>
+
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Transmission Infrastructure</span><span class="se">\n</span><span class="s2">Bangladesh Power Grid Network&quot;</span><span class="p">,</span>
+                        <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+
+            <span class="c1"># Add compass</span>
+            <span class="n">vis</span><span class="o">.</span><span class="n">add_compass_arrow_custom</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">text_offset</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
+
+            <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+            <span class="c1"># Save the plot</span>
+            <span class="n">save_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/Bangladesh_Transmission_Grid.png&#39;</span><span class="p">)</span>
+            <span class="n">save_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Transmission grid map saved to: </span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Total transmission lines: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">BGD_lines</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Voltage classes found: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">unique_classes</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠️  No voltage information available in transmission line data&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠️  No transmission line data available&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;❌ No data available for transmission infrastructure visualization&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Visuals_Bangladesh_Combined_20_0.png" src="../_images/notebooks_Visuals_Bangladesh_Combined_20_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+✓ Transmission grid map saved to: ../vis/Bangladesh/Bangladesh_Transmission_Grid.png
+  Total transmission lines: 518
+  Voltage classes found: [&#39;&lt;12 kV&#39;, &#39;≥220 kV&#39;, &#39;132–220 kV&#39;, &#39;12–25 kV&#39;]
+</pre></div></div>
+</div>
+</section>
+<section id="Section-9:-Generate-Resource-Potential-Summary-by-Divisions">
+<h2>Section 9: Generate Resource Potential Summary by Divisions<a class="headerlink" href="#Section-9:-Generate-Resource-Potential-Summary-by-Divisions" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate comprehensive summary by administrative divisions</span>
+<span class="k">if</span> <span class="n">BGD_store</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">BGD_cells</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+    <span class="c1"># Create division-level summary</span>
+    <span class="n">division_summary</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">BGD_store</span><span class="p">:</span>
+        <span class="n">region_cells</span> <span class="o">=</span> <span class="n">BGD_store</span><span class="p">[</span><span class="n">region</span><span class="p">][</span><span class="s1">&#39;cells&#39;</span><span class="p">]</span>
+
+        <span class="n">summary_row</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;Division_Code&#39;</span><span class="p">:</span> <span class="n">region</span><span class="p">,</span>
+            <span class="s1">&#39;Division_Name&#39;</span><span class="p">:</span> <span class="n">region_names</span><span class="p">[</span><span class="n">region</span><span class="p">],</span>
+            <span class="s1">&#39;Grid_Cells&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">region_cells</span><span class="p">),</span>
+            <span class="s1">&#39;Total_Solar_Capacity_MW&#39;</span><span class="p">:</span> <span class="n">region_cells</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">&#39;Avg_Solar_CF&#39;</span><span class="p">:</span> <span class="n">region_cells</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;solar_CF_mean&#39;</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+            <span class="s1">&#39;Min_Solar_LCOE&#39;</span><span class="p">:</span> <span class="n">region_cells</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lcoe_solar&#39;</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)]))</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+            <span class="s1">&#39;Avg_Solar_LCOE&#39;</span><span class="p">:</span> <span class="n">region_cells</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lcoe_solar&#39;</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+            <span class="s1">&#39;Land_Area_km2&#39;</span><span class="p">:</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;region_mapping&#39;</span><span class="p">][</span><span class="n">region</span><span class="p">][</span><span class="s1">&#39;land_area_km2&#39;</span><span class="p">]</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Handle wind data if available</span>
+        <span class="k">if</span> <span class="s1">&#39;potential_capacity_wind&#39;</span> <span class="ow">in</span> <span class="n">region_cells</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">summary_row</span><span class="p">[</span><span class="s1">&#39;Total_Wind_Capacity_MW&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">region_cells</span><span class="p">[</span><span class="s1">&#39;potential_capacity_wind&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s1">&#39;wind_CF_mean&#39;</span> <span class="ow">in</span> <span class="n">region_cells</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">summary_row</span><span class="p">[</span><span class="s1">&#39;Avg_Wind_CF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">region_cells</span><span class="p">[</span><span class="s1">&#39;wind_CF_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s1">&#39;lcoe_wind&#39;</span> <span class="ow">in</span> <span class="n">region_cells</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">summary_row</span><span class="p">[</span><span class="s1">&#39;Min_Wind_LCOE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">region_cells</span><span class="p">[</span><span class="s1">&#39;lcoe_wind&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+                <span class="n">summary_row</span><span class="p">[</span><span class="s1">&#39;Avg_Wind_LCOE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">region_cells</span><span class="p">[</span><span class="s1">&#39;lcoe_wind&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="n">division_summary</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">summary_row</span><span class="p">)</span>
+
+    <span class="c1"># Convert to DataFrame</span>
+    <span class="n">summary_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">division_summary</span><span class="p">)</span>
+
+    <span class="c1"># Clean up infinite values</span>
+    <span class="n">summary_df</span> <span class="o">=</span> <span class="n">summary_df</span><span class="o">.</span><span class="n">replace</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">),</span> <span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)],</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+    <span class="c1"># Display summary table</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🏛️  BANGLADESH RENEWABLE ENERGY POTENTIAL BY ADMINISTRATIVE DIVISIONS&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">summary_df</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">float_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%.1f</span><span class="s1">&#39;</span><span class="p">))</span>
+
+    <span class="c1"># Create visualization of division-level data</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">summary_df</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># Only create plots if we have multiple divisions</span>
+
+        <span class="n">fig</span><span class="p">,</span> <span class="p">((</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">),</span> <span class="p">(</span><span class="n">ax3</span><span class="p">,</span> <span class="n">ax4</span><span class="p">))</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+
+        <span class="c1"># Solar capacity by division</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Division_Name&#39;</span><span class="p">],</span> <span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Total_Solar_Capacity_MW&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Solar Potential by Division (GW)&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Capacity (GW)&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Solar capacity factor by division</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Division_Name&#39;</span><span class="p">],</span> <span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Avg_Solar_CF&#39;</span><span class="p">],</span>
+                <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Average Solar Capacity Factor&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Capacity Factor&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Solar LCOE by division</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Division_Name&#39;</span><span class="p">],</span> <span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Avg_Solar_LCOE&#39;</span><span class="p">],</span>
+                <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gold&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Average Solar LCOE ($/MWh)&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;LCOE ($/MWh)&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Land area vs solar potential scatter</span>
+        <span class="n">ax4</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Land_Area_km2&#39;</span><span class="p">],</span> <span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Total_Solar_Capacity_MW&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span>
+                   <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+        <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Land Area (km²)&#39;</span><span class="p">)</span>
+        <span class="n">ax4</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Solar Potential (GW)&#39;</span><span class="p">)</span>
+        <span class="n">ax4</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Land Area vs Solar Potential&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Add division labels to scatter plot</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">txt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Division_Name&#39;</span><span class="p">]):</span>
+            <span class="n">ax4</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">txt</span><span class="p">,</span> <span class="p">(</span><span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Land_Area_km2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                              <span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Total_Solar_Capacity_MW&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="mi">1000</span><span class="p">),</span>
+                        <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+        <span class="c1"># Save the summary plot</span>
+        <span class="n">save_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/Bangladesh_Division_Summary.png&#39;</span><span class="p">)</span>
+        <span class="n">save_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n✓ Division summary plots saved to: </span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Save summary table as CSV</span>
+    <span class="n">csv_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../results/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/Bangladesh_Division_Summary.csv&#39;</span><span class="p">)</span>
+    <span class="n">csv_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">summary_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">csv_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Summary table saved to: </span><span class="si">{</span><span class="n">csv_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Calculate national totals</span>
+    <span class="n">total_solar_gw</span> <span class="o">=</span> <span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Total_Solar_Capacity_MW&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="mi">1000</span>
+    <span class="n">avg_national_cf</span> <span class="o">=</span> <span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Avg_Solar_CF&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">avg_national_lcoe</span> <span class="o">=</span> <span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Avg_Solar_LCOE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n🇧🇩 NATIONAL SUMMARY:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Total Solar Potential: </span><span class="si">{</span><span class="n">total_solar_gw</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> GW&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  National Average CF: </span><span class="si">{</span><span class="n">avg_national_cf</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  National Average LCOE: $</span><span class="si">{</span><span class="n">avg_national_lcoe</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">/MWh&quot;</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;❌ No data available to generate division summary&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+🏛️  BANGLADESH RENEWABLE ENERGY POTENTIAL BY ADMINISTRATIVE DIVISIONS
+================================================================================
+Division_Code Division_Name  Grid_Cells  Total_Solar_Capacity_MW  Avg_Solar_CF  Min_Solar_LCOE  Avg_Solar_LCOE Land_Area_km2  Total_Wind_Capacity_MW
+        BD-03         Dhaka          51                   2778.7           0.2            58.3            60.4        20,594                  4783.5
+✓ Summary table saved to: ../results/Bangladesh/Bangladesh_Division_Summary.csv
+\n🇧🇩 NATIONAL SUMMARY:
+  Total Solar Potential: 2.8 GW
+  National Average CF: 0.194
+  National Average LCOE: $60.4/MWh
+</pre></div></div>
+</div>
+</section>
+<section id="Section-10:-Export-Final-Visualizations-and-Create-Report">
+<h2>Section 10: Export Final Visualizations and Create Report<a class="headerlink" href="#Section-10:-Export-Final-Visualizations-and-Create-Report" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a comprehensive final summary and export high-resolution figures</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;📊 FINAL BANGLADESH RENEWABLE ENERGY RESOURCE ANALYSIS SUMMARY&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+
+<span class="c1"># Check what data we have available</span>
+<span class="k">if</span> <span class="n">BGD_store</span><span class="p">:</span>
+    <span class="n">available_divisions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">BGD_store</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">total_divisions</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">regions</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ DATA AVAILABILITY:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   • Processed divisions: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">available_divisions</span><span class="p">)</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">total_divisions</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   • Available divisions: </span><span class="si">{</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">region_names</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="si">}</span><span class="s1">)&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">available_divisions</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">available_divisions</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">total_divisions</span><span class="p">:</span>
+        <span class="n">missing_divisions</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">regions</span> <span class="k">if</span> <span class="n">r</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">available_divisions</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   • Missing divisions: </span><span class="si">{</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">region_names</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="si">}</span><span class="s1">)&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">missing_divisions</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   • Note: Run RESource analysis for missing divisions to get complete coverage&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Generate final combined visualization</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">BGD_cells</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+        <span class="c1"># Create a comprehensive dashboard</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+        <span class="n">gs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_gridspec</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+        <span class="c1"># Title</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Bangladesh Renewable Energy Resource Analysis Dashboard&#39;</span><span class="p">,</span>
+                    <span class="n">fontsize</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+
+        <span class="c1"># Map 1: Administrative boundaries</span>
+        <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">BGD_boundary_dissolved</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">colors</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Set3</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">BGD_store</span><span class="p">)))</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">BGD_store</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;boundary&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+                <span class="n">centroid</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;boundary&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">centroid</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">ax1</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">region_names</span><span class="p">[</span><span class="n">region</span><span class="p">],</span> <span class="p">(</span><span class="n">centroid</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">centroid</span><span class="o">.</span><span class="n">y</span><span class="p">),</span>
+                           <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Administrative Divisions&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+
+        <span class="c1"># Map 2: Solar capacity factor</span>
+        <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s1">&#39;solar_CF_mean&#39;</span> <span class="ow">in</span> <span class="n">BGD_cells</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="s1">&#39;CF&#39;</span> <span class="ow">in</span> <span class="n">col</span> <span class="ow">and</span> <span class="s1">&#39;solar&#39;</span> <span class="ow">in</span> <span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">BGD_cells</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
+            <span class="n">vis</span><span class="o">.</span><span class="n">get_data_in_map_plot</span><span class="p">(</span><span class="n">BGD_cells</span><span class="p">,</span> <span class="n">resource_type</span><span class="o">=</span><span class="s1">&#39;solar&#39;</span><span class="p">,</span> <span class="n">datafield</span><span class="o">=</span><span class="s1">&#39;CF&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Solar Capacity Factor&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Map 3: Solar capacity potential</span>
+        <span class="n">ax3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s1">&#39;potential_capacity_solar&#39;</span> <span class="ow">in</span> <span class="n">BGD_cells</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">vis</span><span class="o">.</span><span class="n">get_data_in_map_plot</span><span class="p">(</span><span class="n">BGD_cells</span><span class="p">,</span> <span class="n">resource_type</span><span class="o">=</span><span class="s1">&#39;solar&#39;</span><span class="p">,</span> <span class="n">datafield</span><span class="o">=</span><span class="s1">&#39;capacity&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax3</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Solar Capacity Potential (MW)&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Chart 1: Division comparison</span>
+        <span class="n">ax4</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">summary_df</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">summary_df</span><span class="p">))</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="mf">0.35</span>
+
+            <span class="n">ax4_twin</span> <span class="o">=</span> <span class="n">ax4</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
+            <span class="n">bars1</span> <span class="o">=</span> <span class="n">ax4</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Total_Solar_Capacity_MW&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span>
+                           <span class="n">width</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Solar Capacity (GW)&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+            <span class="n">bars2</span> <span class="o">=</span> <span class="n">ax4_twin</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Avg_Solar_CF&#39;</span><span class="p">],</span>
+                                <span class="n">width</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Avg CF&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+
+            <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Administrative Divisions&#39;</span><span class="p">)</span>
+            <span class="n">ax4</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Solar Capacity (GW)&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">)</span>
+            <span class="n">ax4_twin</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Capacity Factor&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+            <span class="n">ax4</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Solar Resource Potential by Division&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+            <span class="n">ax4</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">ax4</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Division_Name&#39;</span><span class="p">],</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+
+            <span class="c1"># Add legends</span>
+            <span class="n">lines1</span><span class="p">,</span> <span class="n">labels1</span> <span class="o">=</span> <span class="n">ax4</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
+            <span class="n">lines2</span><span class="p">,</span> <span class="n">labels2</span> <span class="o">=</span> <span class="n">ax4_twin</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
+            <span class="n">ax4</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">lines1</span> <span class="o">+</span> <span class="n">lines2</span><span class="p">,</span> <span class="n">labels1</span> <span class="o">+</span> <span class="n">labels2</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Chart 2: LCOE distribution</span>
+        <span class="n">ax5</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s1">&#39;lcoe_solar&#39;</span> <span class="ow">in</span> <span class="n">BGD_cells</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">BGD_cells</span><span class="p">[</span><span class="s1">&#39;lcoe_solar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gold&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+            <span class="n">ax5</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">BGD_cells</span><span class="p">[</span><span class="s1">&#39;lcoe_solar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span>
+                       <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Mean: $</span><span class="si">{</span><span class="n">BGD_cells</span><span class="p">[</span><span class="s2">&quot;lcoe_solar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">/MWh&#39;</span><span class="p">)</span>
+            <span class="n">ax5</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;LCOE ($/MWh)&#39;</span><span class="p">)</span>
+            <span class="n">ax5</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Number of Grid Cells&#39;</span><span class="p">)</span>
+            <span class="n">ax5</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Solar LCOE Distribution&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+            <span class="n">ax5</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+        <span class="c1"># Chart 3: Capacity vs Area scatter</span>
+        <span class="n">ax6</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">summary_df</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">scatter</span> <span class="o">=</span> <span class="n">ax6</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Land_Area_km2&#39;</span><span class="p">],</span>
+                                <span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Total_Solar_Capacity_MW&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span>
+                                <span class="n">s</span><span class="o">=</span><span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Avg_Solar_CF&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">500</span><span class="p">,</span>
+                                <span class="n">c</span><span class="o">=</span><span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Avg_Solar_LCOE&#39;</span><span class="p">],</span>
+                                <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis_r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+            <span class="n">ax6</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Land Area (km²)&#39;</span><span class="p">)</span>
+            <span class="n">ax6</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Solar Potential (GW)&#39;</span><span class="p">)</span>
+            <span class="n">ax6</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Area vs Potential</span><span class="se">\\</span><span class="s1">n(size=CF, color=LCOE)&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scatter</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax6</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;LCOE ($/MWh)&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Statistics summary</span>
+        <span class="n">ax7</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="n">ax7</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Create summary statistics text</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">BGD_cells</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">summary_df</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">stats_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">NATIONAL SUMMARY</span>
+
+<span class="s2">📍 Coverage: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">available_divisions</span><span class="p">)</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">total_divisions</span><span class="si">}</span><span class="s2"> divisions</span>
+<span class="s2">🔋 Total Solar Potential:</span>
+<span class="s2">   </span><span class="si">{</span><span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Total_Solar_Capacity_MW&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="mi">1000</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> GW</span>
+
+<span class="s2">⚡ Average Capacity Factor:</span>
+<span class="s2">   </span><span class="si">{</span><span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Avg_Solar_CF&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span>
+
+<span class="s2">💰 Average LCOE:</span>
+<span class="s2">   $</span><span class="si">{</span><span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Avg_Solar_LCOE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">/MWh</span>
+
+<span class="s2">🏆 Best Division (LCOE):</span>
+<span class="s2">   </span><span class="si">{</span><span class="n">summary_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Avg_Solar_LCOE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">idxmin</span><span class="p">(),</span><span class="w"> </span><span class="s1">&#39;Division_Name&#39;</span><span class="p">]</span><span class="si">}</span>
+<span class="s2">   $</span><span class="si">{</span><span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Avg_Solar_LCOE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">/MWh</span>
+
+<span class="s2">📊 Total Grid Cells: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">BGD_cells</span><span class="p">)</span><span class="si">}</span>
+<span class="s2">🗓️ Analysis Date: </span><span class="si">{</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="si">}</span>
+<span class="s2">            &quot;&quot;&quot;</span>
+            <span class="n">ax7</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="n">stats_text</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax7</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
+                    <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s1">&#39;round&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">))</span>
+
+        <span class="c1"># Save the dashboard</span>
+        <span class="n">dashboard_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/Bangladesh_Complete_Dashboard.png&#39;</span><span class="p">)</span>
+        <span class="n">dashboard_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">dashboard_path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n✅ EXPORTS COMPLETED:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   📊 Dashboard: </span><span class="si">{</span><span class="n">dashboard_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># List all generated files</span>
+        <span class="n">vis_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">vis_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">generated_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vis_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*.png&#39;</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   📁 All visualizations (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">generated_files</span><span class="p">)</span><span class="si">}</span><span class="s2"> files):&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">generated_files</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      • </span><span class="si">{</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">results_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../results/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">results_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">result_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">results_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*.csv&#39;</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   📈 Data exports (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result_files</span><span class="p">)</span><span class="si">}</span><span class="s2"> files):&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">result_files</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      • </span><span class="si">{</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n🎯 NEXT STEPS:&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">available_divisions</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">total_divisions</span><span class="p">:</span>
+            <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">region_names</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="si">}</span><span class="s1">)&#39;</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">regions</span> <span class="k">if</span> <span class="n">r</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">available_divisions</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   1. Run RESource analysis for missing divisions: </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   2. Debug wind resource processing (Global Wind Atlas issue)&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   3. Validate results with actual renewable energy projects in Bangladesh&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   4. Consider policy constraints and grid integration requirements&quot;</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;❌ No processed data available. Please run RESource analysis first.&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;📋 Analysis completed! Check the generated files for detailed results.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+📊 FINAL BANGLADESH RENEWABLE ENERGY RESOURCE ANALYSIS SUMMARY
+======================================================================
+✅ DATA AVAILABILITY:
+   • Processed divisions: 1/8
+   • Available divisions: [&#39;BD-03 (Dhaka)&#39;]
+   • Missing divisions: [&#39;BD-01 (Barisal)&#39;, &#39;BD-02 (Chittagong)&#39;, &#39;BD-04 (Khulna)&#39;, &#39;BD-05 (Mymensingh)&#39;, &#39;BD-06 (Rajshahi)&#39;, &#39;BD-07 (Rangpur)&#39;, &#39;BD-08 (Sylhet)&#39;]
+   • Note: Run RESource analysis for missing divisions to get complete coverage
+<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
+<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
+<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
+<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Visuals_Bangladesh_Combined_24_1.png" src="../_images/notebooks_Visuals_Bangladesh_Combined_24_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+\n✅ EXPORTS COMPLETED:
+   📊 Dashboard: ../vis/Bangladesh/Bangladesh_Complete_Dashboard.png
+   📁 All visualizations (6 files):
+      • Bangladesh_Administrative_Divisions.png
+      • Bangladesh_Complete_Dashboard.png
+      • Bangladesh_Solar_Capacity.png
+      • Bangladesh_Transmission_Grid.png
+      • Bangladesh_Solar_LCOE_Analysis.png
+      • Bangladesh_Solar_CF.png
+   📈 Data exports (1 files):
+      • Bangladesh_Division_Summary.csv
+\n🎯 NEXT STEPS:
+   1. Run RESource analysis for missing divisions: [&#39;BD-01 (Barisal)&#39;, &#39;BD-02 (Chittagong)&#39;, &#39;BD-04 (Khulna)&#39;, &#39;BD-05 (Mymensingh)&#39;, &#39;BD-06 (Rajshahi)&#39;, &#39;BD-07 (Rangpur)&#39;, &#39;BD-08 (Sylhet)&#39;]
+   2. Debug wind resource processing (Global Wind Atlas issue)
+   3. Validate results with actual renewable energy projects in Bangladesh
+   4. Consider policy constraints and grid integration requirements
+\n======================================================================
+📋 Analysis completed! Check the generated files for detailed results.
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Comprehensive-visualization-of-Bangladesh's-solar-and-wind-energy-potential-across-8-administrative-divisions">Comprehensive visualization of Bangladesh’s solar and wind energy potential across 8 administrative divisions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Authors:">Authors:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Study-Coverage:">Study Coverage:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-1:-Import-Required-Libraries">Section 1: Import Required Libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-2:-Load-Configuration-and-Data">Section 2: Load Configuration and Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Load-Validation-Data-(if-available)">Load Validation Data (if available)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-3:-Create-Country-Overview-Map">Section 3: Create Country Overview Map</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-4:-Display-Land-Use-Constraints-(GAEZ-Analysis)">Section 4: Display Land Use Constraints (GAEZ Analysis)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-5:-Visualize-Solar-Resource-Distribution">Section 5: Visualize Solar Resource Distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-6:-Visualize-Solar-Capacity-Potential">Section 6: Visualize Solar Capacity Potential</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-7:-Generate-LCOE-Analysis">Section 7: Generate LCOE Analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-8:-Show-Transmission-Infrastructure">Section 8: Show Transmission Infrastructure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-9:-Generate-Resource-Potential-Summary-by-Divisions">Section 9: Generate Resource Potential Summary by Divisions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Section-10:-Export-Final-Visualizations-and-Create-Report">Section 10: Export Final Visualizations and Create Report</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
