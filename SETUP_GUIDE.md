@@ -4,13 +4,13 @@
 
 ## 🚀 Quick Start
 
-### Option 1: Interactive Setup (Recommended for New Users)
+### Option 1/3: Interactive Setup (Recommended for New Users)
 ```bash
 ./setup_environment_clean.sh
 ```
 **Features:** Environment selection menu • Colored output • Auto-detects mamba • Verification
 
-### Option 2: Quick Setup (For Developers)
+### Option 2/3: Quick Setup (For Developers)
 ```bash
 # Standard environment (most users)
 make setupenv
@@ -20,7 +20,7 @@ conda env create -f env/environment.yml
 conda activate RESource
 ```
 
-### Option 3: Manual Setup
+### Option 3/3: Manual Setup
 ```bash
 # Create and activate environment
 conda env create -f env/environment.yml

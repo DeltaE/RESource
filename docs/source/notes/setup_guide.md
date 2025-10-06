@@ -20,7 +20,7 @@ cd RESource
 make setupenv
 
 # Activate environment
-conda activate RES
+conda activate RESource
 
 # Test installation
 python -c "import RES; print('✅ RESource is ready!')"
@@ -44,7 +44,7 @@ RESource ensures reproducible research through:
 make setupenv
 
 # Verify environment matches expectations
-conda activate RES
+conda activate RESource
 python -c "import RES; print('✅ RESource is ready!')"
 
 # Export current state for sharing
@@ -152,8 +152,8 @@ The `env/environment.yml` includes:
 
 ### 1. Activate Environment
 ```bash
-conda activate RES
-# Your prompt should show: (RES) $
+conda activate RESource
+# Your prompt should show: (RESource) $
 ```
 
 ### 2. Run RESource
@@ -266,15 +266,15 @@ conda env remove -n RES -y && make setupenv
 **Problem:** Local package not updating after code changes
 ```bash
 # Solution: Reinstall in development mode
-conda activate RES
+conda activate RESource
 pip install -e .
 ```
 
 ### Check Environment Health
 ```bash
 # Check if environment exists and is activated
-conda env list | grep RES
-conda activate RES
+conda env list | grep RESource
+conda activate RESource
 python -c "import RES; print('✅ RESource is ready!')"
 ```
 
