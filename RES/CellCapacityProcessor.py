@@ -416,7 +416,7 @@ class CellCapacityProcessor(AttributesParser):
         # _provincial_cell_capacity_df:pd.DataFrame=self.capacity_matrix.to_dataframe()
         _df_flat:pd.DataFrame=self.capacity_matrix.to_dataframe()
         # _df_flat = _df_flat.drop(columns=['x', 'y'])
-        _df_flat = _df_flat.reset_index(drop=True)
+        _df_flat = _df_flat.reset_index()
         # _df_flat = _df_flat.drop(columns='dim_0')  # optional
         # _df_flat = _df_flat.drop_duplicates(subset=['y', 'x'], keep='first')
         # filter the cells that has no lands (i.e. no potential capacity)
