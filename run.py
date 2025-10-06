@@ -55,7 +55,7 @@ Examples:
     python run.py --regions BC QC AB                       # Use default config with specific regions
 
 Notes:
-    - Requires proper conda environment setup (see environment.yml)
+    - Requires proper conda environment setup (see env/environment.yml)
     - Configuration parameters defined in specified config file
     - Regions are validated against the region_mapping section in config
     - Invalid regions will display available options and exit

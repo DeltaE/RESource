@@ -1,9 +1,8 @@
-# RESource Environment Configuration
-# Clean, reproducible environment for Renewable Energy Resource Assessment
+# RESource Development Environment
+# Complete development setup with testing, documentation, and code quality tools
 # Created: 2025-10-05
-# Python Version: 3.12 (recommended for best performance and compatibility)
 
-name: RESource
+name: RESource-dev
 channels:
 - conda-forge
 - defaults
@@ -51,7 +50,7 @@ dependencies:
 - dask-geopandas>=0.4.0
 
 # =============================================================================
-# INTERACTIVE VISUALIZATION
+# VISUALIZATION & INTERACTIVE TOOLS
 # =============================================================================
 - plotly>=5.24.0
 - folium>=0.18.0
@@ -60,7 +59,7 @@ dependencies:
 - holoviews>=1.19.0
 
 # =============================================================================
-# MACHINE LEARNING & CLUSTERING
+# MACHINE LEARNING
 # =============================================================================
 - scikit-learn>=1.5.0
 
@@ -71,9 +70,37 @@ dependencies:
 - jupyterlab>=4.2.0
 - ipywidgets>=8.1.0
 - notebook>=7.2.0
+- nbconvert>=7.16.0
 
 # =============================================================================
-# UTILITIES & HELPERS
+# DEVELOPMENT & TESTING
+# =============================================================================
+- pytest>=8.3.0
+- pytest-cov>=6.0.0
+- pytest-xdist>=3.5.0
+- coverage>=7.6.0
+
+# =============================================================================
+# CODE QUALITY & FORMATTING
+# =============================================================================
+- black>=24.0.0
+- isort>=5.13.0
+- flake8>=7.0.0
+- mypy>=1.8.0
+- pre-commit>=3.6.0
+
+# =============================================================================
+# DOCUMENTATION
+# =============================================================================
+- sphinx>=8.1.0
+- myst-parser>=4.0.0
+- furo>=2024.8.0
+- sphinx-book-theme>=1.1.0
+- nbsphinx>=0.9.0
+- sphinx-autobuild>=2024.10.0
+
+# =============================================================================
+# UTILITIES
 # =============================================================================
 - tqdm>=4.66.0
 - requests>=2.32.0
@@ -82,16 +109,10 @@ dependencies:
 - colorama>=0.4.6
 
 # =============================================================================
-# DEVELOPMENT & TESTING (Optional)
-# =============================================================================
-- pytest>=8.3.0
-- pytest-cov>=6.0.0
-
-# =============================================================================
 # PIP-ONLY PACKAGES
 # =============================================================================
 - pip:
-  # Energy system modeling and climate data access
+  # Energy system modeling
   - "atlite>=0.4.0"
   - "cdsapi>=0.7.5"
 
@@ -102,28 +123,11 @@ dependencies:
   - "osmnx>=1.9.0"
   - "geojson>=3.1.0"
 
-  # Additional utilities
-  - "ipython>=8.28.0"
+  # Development tools
+  - "twine>=5.0.0"
+  - "build>=1.0.0"
+  - "ghp-import>=2.1.0"
+  - "jupyter-cache>=1.0.0"
 
   # RESource package (editable install)
   - "-e ."
-
-# =============================================================================
-# USAGE INSTRUCTIONS
-# =============================================================================
-#
-# 1. Create the environment:
-#    conda env create -f env/environment.yml
-#
-# 2. Activate the environment:
-#    conda activate RESource
-#
-# 3. Verify installation:
-#    python -c "import RES; print('RESource installed successfully!')"
-#
-# 4. Update environment (when changes are made to this file):
-#    conda env update -f env/environment.yml --prune
-#
-# 5. Export current environment (for sharing exact versions):
-#    conda env export > environment_locked.yml
-# =============================================================================

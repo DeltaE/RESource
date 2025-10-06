@@ -48,7 +48,7 @@ The enhanced `run.py` script provides flexible region selection with colored out
 
 ## 📚 Resources
 
-- **[📖 Quickstart Guide](QUICKSTART.md)** - Get running in 5 minutes
+- **[� Setup Guide](SETUP_GUIDE.md)** - Clean, simple environment setup
+- **[�📖 Quickstart Guide](QUICKSTART.md)** - Get running in 5 minutes
 - **[🏔️ BC Case Study](https://deltae.github.io/RESource/notes/case_BC.html)** - Detailed regional analysis
 - **[📘 Full Documentation](https://deltae.github.io/RESource/)** - Complete reference
-- **[💻 Setup Guide](https://deltae.github.io/RESource/notes/setup_guide.html)** - Environment and development setup

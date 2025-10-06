@@ -240,11 +240,12 @@ RESource uses the [coders](https://github.com/DeltaE/RESource/blob/main/RES/code
         1. Go to [CLC download](https://land.copernicus.eu/en/products/corine-land-cover/clc2018#download)
         2. Register to their portal for API access
         3. Use the raster option to get the download URL
-        > RESource currently supports raster processing (automated) for this dataset. However, users can define their custom methods to incorporate vector (GDB/GPKG) datasets to fit their purpose.
 
         <img src="../_static/screenshots/CORINE_land_cover_data.png" alt="CORINE_land_cover_data" width="500"/>
 
-        4. Update the `source` key in your configuration file (e.g., `config/config_WB6.yaml`) with the obtained URL
+        4. Download the raster file package (comes as a zip file) and extract the raster file (.tiff) from the zip. 
+        5. Save the raster file (.tiff) inside 'data/downloaded_data/CORINE'
+        6. Update the `raster` key in your configuration file (e.g., `config/config_WB6.yaml`) with the downloaded raster file (.tiff) name.
 
            - __Example__ configuration structure from `config/config_WB6.yaml`:
            ```yaml
@@ -254,8 +255,6 @@ RESource uses the [coders](https://github.com/DeltaE/RESource/blob/main/RES/code
            # list of dictionaries
            # CORINE Land Cover (CLC) 2018 raster data (100m resolution, 44 classes)
            - name: 'CORINE_land_cover'
-               source: 'https://copernicus-fme.eea.europa.eu/fmedatadownload/results/13521.zip' #2024 version
-            
                readme: 'https://eea.github.io/clms-api-docs/download.html#download-prepackaged-files'
                raster: 'U2018_CLC2018_V2020_20u1.tif'
                color_map: 'tab20'

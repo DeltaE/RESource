@@ -13,24 +13,65 @@ Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: numpy>=1.26.0
 Requires-Dist: pandas>=2.2.0
-Requires-Dist: geopandas>=0.14.0
+Requires-Dist: scipy>=1.14.0
+Requires-Dist: matplotlib>=3.9.0
+Requires-Dist: geopandas>=1.0.0
 Requires-Dist: rasterio>=1.3.0
 Requires-Dist: shapely>=2.0.0
-Requires-Dist: matplotlib>=3.9.0
+Requires-Dist: pyproj>=3.6.0
+Requires-Dist: fiona>=1.10.0
+Requires-Dist: rioxarray>=0.17.0
+Requires-Dist: xarray>=2024.10.0
+Requires-Dist: netcdf4>=1.7.0
+Requires-Dist: cftime>=1.6.0
+Requires-Dist: atlite>=0.4.0
+Requires-Dist: cdsapi>=0.7.5
+Requires-Dist: h5py>=3.12.0
+Requires-Dist: dask>=2024.11.0
 Requires-Dist: requests>=2.32.0
 Requires-Dist: pyyaml>=6.0.0
 Requires-Dist: tqdm>=4.66.0
 Requires-Dist: click>=8.1.0
+Requires-Dist: pygadm>=0.5.3
+Requires-Dist: pyogrio>=0.9.0
+Provides-Extra: viz
+Requires-Dist: plotly>=5.24.0; extra == "viz"
+Requires-Dist: folium>=0.18.0; extra == "viz"
+Requires-Dist: seaborn>=0.13.0; extra == "viz"
+Requires-Dist: bokeh>=3.5.0; extra == "viz"
+Requires-Dist: hvplot>=0.11.0; extra == "viz"
+Requires-Dist: holoviews>=1.19.0; extra == "viz"
+Requires-Dist: contextily>=1.6.0; extra == "viz"
+Provides-Extra: jupyter
+Requires-Dist: jupyter>=1.1.0; extra == "jupyter"
+Requires-Dist: jupyterlab>=4.2.0; extra == "jupyter"
+Requires-Dist: ipywidgets>=8.1.0; extra == "jupyter"
+Requires-Dist: notebook>=7.2.0; extra == "jupyter"
+Provides-Extra: dev
+Requires-Dist: pytest>=8.3.0; extra == "dev"
+Requires-Dist: pytest-cov>=6.0.0; extra == "dev"
+Requires-Dist: pytest-xdist>=3.5.0; extra == "dev"
+Requires-Dist: coverage>=7.6.0; extra == "dev"
+Requires-Dist: black>=24.0.0; extra == "dev"
+Requires-Dist: isort>=5.13.0; extra == "dev"
+Requires-Dist: flake8>=7.0.0; extra == "dev"
+Requires-Dist: mypy>=1.8.0; extra == "dev"
+Requires-Dist: pre-commit>=3.6.0; extra == "dev"
+Requires-Dist: twine>=5.0.0; extra == "dev"
+Requires-Dist: build>=1.0.0; extra == "dev"
 Provides-Extra: docs
-Requires-Dist: sphinx>=7.0; extra == "docs"
-Requires-Dist: myst-parser; extra == "docs"
-Requires-Dist: furo; extra == "docs"
-Requires-Dist: sphinx-book-theme; extra == "docs"
-Requires-Dist: nbsphinx; extra == "docs"
-Requires-Dist: sphinx-autobuild; extra == "docs"
-Requires-Dist: ipykernel; extra == "docs"
-Requires-Dist: jupyter; extra == "docs"
-Requires-Dist: ghp-import; extra == "docs"
+Requires-Dist: sphinx>=8.1.0; extra == "docs"
+Requires-Dist: myst-parser>=4.0.0; extra == "docs"
+Requires-Dist: furo>=2024.8.0; extra == "docs"
+Requires-Dist: sphinx-book-theme>=1.1.0; extra == "docs"
+Requires-Dist: nbsphinx>=0.9.0; extra == "docs"
+Requires-Dist: sphinx-autobuild>=2024.10.0; extra == "docs"
+Requires-Dist: ghp-import>=2.1.0; extra == "docs"
+Requires-Dist: ipykernel>=6.29.0; extra == "docs"
+Requires-Dist: jupyter>=1.1.0; extra == "docs"
+Requires-Dist: nbconvert>=7.16.0; extra == "docs"
+Provides-Extra: all
+Requires-Dist: RESource[dev,docs,jupyter,viz]; extra == "all"
 Dynamic: license-file
 
 <img src="docs/source/_static/Issue_msg_box.png" alt="Issue" width="600"/>
@@ -38,21 +79,52 @@ Dynamic: license-file
 
 __One of the many solutions ?__
 
-
-<img src="docs/source/_static/RESource_logo_2025.07.png" alt="RESource logo" width="200"/>
-
-# RESource 
+<img src="docs/source/_static/graphic_RES_logo_202508.jpg" alt="RESource logo" width="250"/>
 
 __A Modular and Transparent Open-Source Framework for Sub-National Assessment of Solar and Land-based Wind Potential.__
 
-```{warning}
-This library is under heavy development
-```
+> ⚠️ **Note: This library is under heavy development**
 
 RESource is developed to enable reproducible, adaptable assessments of VRE potential that are sensitive to local constraints and planning priorities. We developed a structured, modular workflow that integrates geospatial, temporal, economic, and regulatory data to evaluate site suitability for solar and wind energy development. This structured methodology ensures transparency and transferability, allowing RESource to be adapted for different regions and scaled for long-term strategic energy planning.
 
 
 ## Workflow overview
-<img src="docs/source/_static/high_level_workflow.png" alt="high_level_workflow" width="1000"/>
+<img src="docs/source/_static/workflow.jpg" alt="high_level_workflow" width="1000"/>
 
-for more - [RESource-documentation](https://deltae.github.io/RESource/)
+## 🚀 Quick Start
+
+**New to RESource?** Get started with 
+
+📖 **[Full Quickstart Guide](https://deltae.github.io/RESource/#quick-start))** | 📚 **[Complete Documentation](https://deltae.github.io/RESource/)**
+
+### Enhanced Analysis Pipeline
+
+The enhanced `run.py` script provides flexible region selection with colored output:
+
+| Command | Description |
+|---------|-------------|
+| `python3 run.py` | Default Canadian analysis (all provinces) |
+| `python3 run.py -c config/config_WB6.yaml` | Western Balkans analysis (all countries) |
+| `python3 run.py -c config/config_WB6.yaml -r AL BA` | Specific regions only |
+| `python3 run.py --help` | Show all available options |
+
+**Features:** Smart region detection • Input validation • Colored error messages • Flexible region selection
+
+------
+
+## 📋 Key Features
+
+- **🌍 Multi-Regional**: Canada, Western Balkans, and custom regions
+- **⚡ Multi-Technology**: Wind and solar resource assessment
+- **🔧 Modular Design**: Configurable exclusions, constraints, and parameters
+- **📊 Rich Outputs**: Time series, capacity maps, and interactive visualizations
+- **🔄 Reproducible**: Locked environments and standardized workflows
+
+------
+
+## 📚 Resources
+
+- **[📖 Quickstart Guide](QUICKSTART.md)** - Get running in 5 minutes
+- **[🏔️ BC Case Study](https://deltae.github.io/RESource/notes/case_BC.html)** - Detailed regional analysis
+- **[📘 Full Documentation](https://deltae.github.io/RESource/)** - Complete reference
+- **[💻 Setup Guide](https://deltae.github.io/RESource/notes/setup_guide.html)** - Environment and development setup
