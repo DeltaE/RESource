@@ -48,7 +48,7 @@ def main():
     # Climate data packages
     climate_packages = [
         ("xarray", "Xarray"),
-        ("netcdf4", "NetCDF4"),
+        ("netCDF4", "NetCDF4"),
         ("cftime", "CfTime"),
     ]
     
