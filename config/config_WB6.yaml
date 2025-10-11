@@ -9,7 +9,7 @@ description: |+
   These  have been given as 'parameters' in the RULES
 
 Scenario:
-  run_id: default
+  run_id: vre_low
   Description: Policy scenario; buffer zones applied around aeroway lands, restricting resource siting.
 
 country: 'Western Balkan Regions' # Western Balkan Regions
@@ -19,6 +19,11 @@ multi_country_flag: True # True if the 'country' represents a multi-country regi
 default_CRS:
   degrees: EPSG:4326
   meters: EPSG:3035 # ETRS89-extended / LAEA Europe - appropriate for European analysis
+
+lands:
+  default_dtype: uint8
+  default_fill_value: 255
+
 
 # Note: All WB states are east of London. Use GMT+1 (CET) in winter, GMT+2 (CEST) in summer (last Sunday of March to last Sunday of October).
 # The 'Etc/GMT-2' value in timezone_convert reflects GMT+2 (CEST). Adjust logic in code if you need to distinguish between CET and CEST.
@@ -142,16 +147,60 @@ GAEZ:
   zip_file: 'LR.zip'
   Rasters_in_use_direct: 'Rasters_in_use'
   raster_types:
-  # list of dictionaries
+    # GAEZ exclusion layer
+    - name: 'exclusion_areas'
+      raster: "exclusion_2017_uint8.tif"
+      zip_extract_direct: 'LR/excl'
+      color_map: 'OrRd'
+      dtype: uint8
+      fill_value: 255
+      stepwise_plot_title: "Excluding Global Exclusion Areas"
+      class_exclusion:
+        solar: [2, 3, 4, 5, 6, 7]
+        wind:  [2, 3, 4, 5, 6, 7]
+        buffer:
+          solar: 0
+          wind:  0
+
+    # # GAEZ terrain slope layer
+    # - name: 'terrain_resources'
+    #   raster: "slpmed05_uint8.tif"
+    #   zip_extract_direct: 'LR/ter'
+    #   color_map: 'terrain'
+    #   dtype: uint8
+    #   fill_value: 255
+    #   stepwise_plot_title: "Excluding Terrain Slope"
+    #   class_exclusion:
+    #     solar: [6, 7, 8, 9]
+    #     wind:  [6, 7, 8, 9]
+    #     buffer:
+    #       solar: 0
+    #       wind:  0
+
+EU_DEM:
+  root: 'data/downloaded_data/EU_DEM'
+  processed: 'data/processed_data/EU_DEM'
+  raster_types:
+    - name: 'terrain_slope_percent_100m'
+      raster: "WB6_slope_pct_100m.tif"
+      color_map: 'terrain'
+      dtype: float32
+      fill_value: 255
+      stepwise_plot_title: "Terrain Slope (%) (Copernicus DEM GLO-30, 100 m avg)"
+
+    - name: 'terrain_slope_class'
+      raster: "WB6_slope_class_uint8.tif"
+      color_map: 'terrain'
+      dtype: uint8
+      fill_value: 255
+      stepwise_plot_title: "Excluding Terrain Slope (Copernicus DEM GLO-30)"
+      class_exclusion:
+        solar: [6, 7, 8]   # add 9 if you set a water class
+        wind:  [6, 7, 8]
+        buffer: { solar: 0, wind: 0 }
 
 
-  # GAEZ v4 ‘exclusion’ layer of protected areas and land with high biodiversity values 
-  - name: 'exclusion_areas'
-    raster: "exclusion_2017.tif" # Exclusion areas defined by Int'l orgs ; 7 classes;
-    zip_extract_direct: 'LR/excl'
-    color_map: 'OrRd'
-    stepwise_plot_title: "Excluding Global Exclusion Areas"
-    class_exclusion:
+
       # 1 : no exclusion
       # 2 : IUCN category in WDPA
       # 3 : WDPA, not an IUCN category
@@ -159,19 +208,10 @@ GAEZ:
       # 5 : GLWD-3 class 4-9, outside protected area and KBA polygons
       # 6 : buffers around protected areas (30 arc sec buffer)
       # 7 : water
-      solar: [ 2, 3, 4, 5, 6, 7 ]
-      wind: [ 2, 3, 4, 5, 6, 7 ]
-      buffer:
-        solar: 0 #m
-        wind: 0 #m
+
 
   # GAEZ v4 Median slope class compiled from 3 arc-second SRTM data 
-  - name: 'terrain_resources'
-    raster: "slpmed05.tif" # Median terrain slope classes; 8 classes ; (5 arc-minute)
-    zip_extract_direct: 'LR/ter'
-    color_map: 'terrain'
-    stepwise_plot_title: "Excluding Terrain Slope"
-    class_exclusion:
+
       # 1 : flat (slope angle 0-0.5%)
       # 2 : flat (slope angle 0.5-2%)
       # 3 : low slope (slope angle 2-5%)
@@ -181,11 +221,7 @@ GAEZ:
       # 7 : high slope (slope angle 30-45%)
       # 8 : high slope (slope angle >45%)
       # 9 : Water
-      solar: [ 7, 8, 9 ]
-      wind: [ 7, 8, 9 ]
-      buffer:
-        solar: 0 #m
-        wind: 0 #m
+
   # - name: 'land_cover'
   #   raster: "faocmb_2010.tif" # Dominant land cover/use ; 11 classes; (5 arc-minute)
   #   zip_extract_direct: 'LR/lco'
@@ -209,17 +245,19 @@ GAEZ:
 CORINE:
   root: 'data/downloaded_data/CORINE'
   raster_types:
-  # list of dictionaries
-  # CORINE Land Cover (CLC) 2018 raster data (100m resolution, 44 classes)
-  - name: 'CORINE_land_cover'
-    source: 'https://copernicus-fme.eea.europa.eu/fmedatadownload/results/13521.zip' #2024 version
-    # zip_file: '13521.zip'
-    raster: 'U2018_CLC2018_V2020_20u1.tif'
-    color_map: 'tab20'
-    stepwise_plot_title: "Excluding not-Suitable CORINE Landcovers"
-    class_inclusion:
-      solar: [ 7, 8, 9, 31, 32, 38 ]
-      wind: [ 7, 8, 12, 23, 18, 26, 27, 28, 29, 31, 32, 33 ]
+    - name: 'CORINE_land_cover'
+      source: 'https://copernicus-fme.eea.europa.eu/fmedatadownload/results/13521.zip'
+      raster: 'U2018_CLC2018_V2020_20u1_uint8.tif'
+      color_map: 'tab20'
+      dtype: uint8
+      fill_value: 255
+      stepwise_plot_title: "Excluding not-Suitable CORINE Landcovers"
+      class_inclusion:
+        #solar: [7, 8, 9, 27, 28, 29, 31, 32, 38] # Old layers that were just assumed 'reasonable'
+        #wind:  [7, 8, 12, 23, 18, 26, 27, 28, 29, 31, 32, 33] # Old layers that were just assumed 'reasonable'
+        solar: [2, 3, 7, 12, 15, 18, 20, 21, 28, 32] # New layers based on where solar power plants are built today
+        wind:  [12, 18, 21, 23, 26, 28, 29, 32] # New layers based on where wind power plants are built today
+
 
 WorldPop:
   root: 'data/downloaded_data/WorldPop'
