@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -157,7 +157,6 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="../../notes/config.html">How to use the CONFIG</a></li>
@@ -296,33 +295,33 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for RES.RESources</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span><span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span><span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">product</span>
 
-<span class="kn">from</span> <span class="nn">shapely</span> <span class="kn">import</span> <span class="n">Point</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point</span>
 
 <span class="c1"># RESource&#39;s Local</span>
-<span class="kn">from</span> <span class="nn">RES.era5_cutout</span> <span class="kn">import</span> <span class="n">ERA5Cutout</span>
-<span class="kn">from</span> <span class="nn">RES</span> <span class="kn">import</span> <span class="n">cluster</span>
-<span class="kn">from</span> <span class="nn">RES</span> <span class="kn">import</span> <span class="n">windspeed</span> <span class="k">as</span> <span class="n">wind</span>
-<span class="kn">from</span> <span class="nn">RES.CellCapacityProcessor</span> <span class="kn">import</span> <span class="n">CellCapacityProcessor</span>
-<span class="kn">from</span> <span class="nn">RES.coders</span> <span class="kn">import</span> <span class="n">CODERSData</span>
-<span class="kn">from</span> <span class="nn">RES.power_nodes</span> <span class="kn">import</span> <span class="n">GridNodeLocator</span>
-<span class="kn">from</span> <span class="nn">RES.timeseries</span> <span class="kn">import</span> <span class="n">Timeseries</span>
-<span class="kn">from</span> <span class="nn">RES.hdf5_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
-<span class="kn">from</span> <span class="nn">RES.AttributesParser</span> <span class="kn">import</span> <span class="n">AttributesParser</span>
-<span class="kn">from</span> <span class="nn">RES.score</span> <span class="kn">import</span> <span class="n">CellScorer</span>
-<span class="kn">from</span> <span class="nn">RES.cell</span> <span class="kn">import</span> <span class="n">GridCells</span>
-<span class="kn">from</span> <span class="nn">RES.gwa</span> <span class="kn">import</span> <span class="n">GWACells</span>
-<span class="kn">from</span> <span class="nn">RES.boundaries</span> <span class="kn">import</span> <span class="n">GADMBoundaries</span>
-<span class="kn">from</span> <span class="nn">RES.units</span> <span class="kn">import</span> <span class="n">Units</span>
-<span class="kn">from</span> <span class="nn">RES</span> <span class="kn">import</span> <span class="n">utility</span> <span class="k">as</span> <span class="n">utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.era5_cutout</span><span class="w"> </span><span class="kn">import</span> <span class="n">ERA5Cutout</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES</span><span class="w"> </span><span class="kn">import</span> <span class="n">cluster</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES</span><span class="w"> </span><span class="kn">import</span> <span class="n">windspeed</span> <span class="k">as</span> <span class="n">wind</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.CellCapacityProcessor</span><span class="w"> </span><span class="kn">import</span> <span class="n">CellCapacityProcessor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.coders</span><span class="w"> </span><span class="kn">import</span> <span class="n">CODERSData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.power_nodes</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridNodeLocator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.timeseries</span><span class="w"> </span><span class="kn">import</span> <span class="n">Timeseries</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.hdf5_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.AttributesParser</span><span class="w"> </span><span class="kn">import</span> <span class="n">AttributesParser</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.score</span><span class="w"> </span><span class="kn">import</span> <span class="n">CellScorer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.cell</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridCells</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.gwa</span><span class="w"> </span><span class="kn">import</span> <span class="n">GWACells</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.boundaries</span><span class="w"> </span><span class="kn">import</span> <span class="n">GADMBoundaries</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.units</span><span class="w"> </span><span class="kn">import</span> <span class="n">Units</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES</span><span class="w"> </span><span class="kn">import</span> <span class="n">utility</span> <span class="k">as</span> <span class="n">utils</span>
 
 
 <span class="c1"># Get the current local time</span>
@@ -333,7 +332,7 @@ document.write(`
 
 <div class="viewcode-block" id="RESources_builder">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder">[docs]</a>
-<span class="k">class</span> <span class="nc">RESources_builder</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>  
+<span class="k">class</span><span class="w"> </span><span class="nc">RESources_builder</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>  
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Main orchestrator class for renewable energy resource assessment workflows.</span>
 
@@ -434,7 +433,7 @@ document.write(`
 <span class="sd">    - Economic calculations follow NREL LCOE methodology</span>
 <span class="sd">    - Clustering uses k-means with automatic cluster number optimization</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize inherited attributes and orchestrate the complete RESources workflow setup.</span>
 <span class="sd">        </span>
@@ -528,7 +527,7 @@ document.write(`
     
 <div class="viewcode-block" id="RESources_builder.clean_data_store">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.clean_data_store">[docs]</a>
-    <span class="k">def</span> <span class="nf">clean_data_store</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clean_data_store</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Cleans the HDF5 data store by removing all stored datasets.</span>
 <span class="sd">        </span>
@@ -550,7 +549,7 @@ document.write(`
 
 <div class="viewcode-block" id="RESources_builder.get_grid_cells">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.get_grid_cells">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_grid_cells</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_grid_cells</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate spatial grid cells covering the analysis region.</span>
 <span class="sd">        </span>
 <span class="sd">        Creates a regular spatial grid based on the region boundary and </span>
@@ -574,7 +573,7 @@ document.write(`
 
 <div class="viewcode-block" id="RESources_builder.get_cell_capacity">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.get_cell_capacity">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_cell_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_cell_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate renewable energy capacity potential for grid cells.</span>
 <span class="sd">        </span>
 <span class="sd">        Determines developable capacity based on land availability constraints,</span>
@@ -598,7 +597,7 @@ document.write(`
     
 <div class="viewcode-block" id="RESources_builder.extract_weather_data">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.extract_weather_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">extract_weather_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extract_weather_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract meteorological data for renewable energy resource assessment.</span>
 <span class="sd">        </span>
 <span class="sd">        Retrieves ERA5 climate data including wind speeds and solar irradiance</span>
@@ -643,7 +642,7 @@ document.write(`
     <span class="c1">#---------------------------</span>
 <div class="viewcode-block" id="RESources_builder.update_gwa_scaled_params">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.update_gwa_scaled_params">[docs]</a>
-    <span class="k">def</span> <span class="nf">update_gwa_scaled_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_gwa_scaled_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                 <span class="n">memory_resource_limitation</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="o">==</span><span class="s1">&#39;wind&#39;</span><span class="p">:</span> 
             <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
@@ -672,7 +671,7 @@ document.write(`
     
 <div class="viewcode-block" id="RESources_builder.get_CF_timeseries">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.get_CF_timeseries">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_CF_timeseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_CF_timeseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                           <span class="n">cells</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                           <span class="n">force_update</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">tuple</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -700,7 +699,7 @@ document.write(`
 
 <div class="viewcode-block" id="RESources_builder.find_grid_nodes">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.find_grid_nodes">[docs]</a>
-    <span class="k">def</span> <span class="nf">find_grid_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_grid_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                         <span class="n">cells</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">use_pypsa_buses</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                         <span class="n">use_grid_lines</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
@@ -831,7 +830,7 @@ document.write(`
 <span class="sd">    &#39;&#39;&#39;</span>
 <div class="viewcode-block" id="RESources_builder.score_cells">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.score_cells">[docs]</a>
-    <span class="k">def</span> <span class="nf">score_cells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">score_cells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                     <span class="n">cells</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Scores the Cells based on calculated LCOE ($/MWh). &lt;/br&gt;</span>
@@ -879,7 +878,7 @@ document.write(`
 <span class="sd">    &#39;&#39;&#39;</span>
 <div class="viewcode-block" id="RESources_builder.get_clusters">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.get_clusters">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_clusters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_clusters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                      <span class="n">scored_cells</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">score_tolerance</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
                      <span class="n">wcss_tolerance</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -965,7 +964,7 @@ document.write(`
 
 <div class="viewcode-block" id="RESources_builder.get_cluster_timeseries">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.get_cluster_timeseries">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_cluster_timeseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_cluster_timeseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                <span class="n">clusters</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                <span class="n">dissolved_indices</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                <span class="n">cells_timeseries</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -997,7 +996,7 @@ document.write(`
 
 <div class="viewcode-block" id="RESources_builder.build">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.build">[docs]</a>
-    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
             <span class="n">select_top_sites</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">use_pypsa_buses</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">use_grid_lines</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -1090,7 +1089,7 @@ document.write(`
 <div class="viewcode-block" id="RESources_builder.export_results">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.export_results">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">export_results</span><span class="p">(</span><span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">export_results</span><span class="p">(</span><span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
                        <span class="n">region</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
                     <span class="n">resource_clusters</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                     <span class="n">cluster_timeseries</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -1132,7 +1131,7 @@ document.write(`
 <div class="viewcode-block" id="RESources_builder.create_summary_info">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.create_summary_info">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">create_summary_info</span><span class="p">(</span><span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_summary_info</span><span class="p">(</span><span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
                             <span class="n">region</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
                             <span class="n">sites</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                             <span class="n">timeseries</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
@@ -1159,7 +1158,7 @@ document.write(`
 <div class="viewcode-block" id="RESources_builder.dump_export_metadata">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.dump_export_metadata">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">dump_export_metadata</span><span class="p">(</span><span class="n">info</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">save_to</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;results/linking&#39;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dump_export_metadata</span><span class="p">(</span><span class="n">info</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">save_to</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;results/linking&#39;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Dumps the metadata summary information to a file. If the file already exists,</span>
 <span class="sd">        it prepends the new info at the top of the file.</span>
@@ -1187,7 +1186,7 @@ document.write(`
 <div class="viewcode-block" id="RESources_builder.select_top_sites">
 <a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.select_top_sites">[docs]</a>
     <span class="nd">@staticmethod</span>    
-    <span class="k">def</span> <span class="nf">select_top_sites</span><span class="p">(</span><span class="n">sites</span><span class="p">:</span><span class="n">Union</span><span class="p">[</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_top_sites</span><span class="p">(</span><span class="n">sites</span><span class="p">:</span><span class="n">Union</span><span class="p">[</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span>
                         <span class="n">sites_timeseries</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                         <span class="n">resource_max_capacity</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span>
                         <span class="p">)</span><span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
@@ -1263,7 +1262,7 @@ document.write(`
 </div>
 
 
-<span class="k">def</span> <span class="nf">build_resources</span><span class="p">(</span><span class="n">regions</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_resources</span><span class="p">(</span><span class="n">regions</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span>
                     <span class="n">resource_types</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> 
                     <span class="n">config_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">=</span> <span class="s1">&#39;config/config.yaml&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>

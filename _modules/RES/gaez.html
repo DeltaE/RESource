@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -157,7 +157,6 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="../../notes/config.html">How to use the CONFIG</a></li>
@@ -296,24 +295,24 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for RES.gaez</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">zipfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZipFile</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">rasterio</span>
-<span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">from</span> <span class="nn">rasterio.mask</span> <span class="kn">import</span> <span class="n">mask</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rasterio.mask</span><span class="w"> </span><span class="kn">import</span> <span class="n">mask</span>
 
-<span class="kn">from</span> <span class="nn">RES</span> <span class="kn">import</span> <span class="n">utility</span> <span class="k">as</span> <span class="n">utils</span>
-<span class="kn">from</span> <span class="nn">RES.AttributesParser</span> <span class="kn">import</span> <span class="n">AttributesParser</span>
-<span class="kn">from</span> <span class="nn">RES.boundaries</span> <span class="kn">import</span> <span class="n">GADMBoundaries</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES</span><span class="w"> </span><span class="kn">import</span> <span class="n">utility</span> <span class="k">as</span> <span class="n">utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.AttributesParser</span><span class="w"> </span><span class="kn">import</span> <span class="n">AttributesParser</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.boundaries</span><span class="w"> </span><span class="kn">import</span> <span class="n">GADMBoundaries</span>
 
 <span class="n">print_level_base</span><span class="o">=</span><span class="mi">4</span>
 
 <span class="c1"># Define the GAEZRasterProcessor class</span>
 <div class="viewcode-block" id="GAEZRasterProcessor">
 <a class="viewcode-back" href="../../notes/api.html#RES.gaez.GAEZRasterProcessor">[docs]</a>
-<span class="k">class</span> <span class="nc">GAEZRasterProcessor</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GAEZRasterProcessor</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    GAEZ (Global Agro-Ecological Zones) raster data processor for renewable energy land constraint analysis.</span>
 <span class="sd">    </span>
@@ -528,7 +527,7 @@ document.write(`
 <span class="sd">    RES.boundaries.GADMBoundaries : Regional boundary processing</span>
 <span class="sd">    RES.lands : Land constraint integration for renewable energy</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize GAEZ raster processor with configuration and boundary setup.</span>
 <span class="sd">        </span>
@@ -574,7 +573,7 @@ document.write(`
 
 <div class="viewcode-block" id="GAEZRasterProcessor.process_all_rasters">
 <a class="viewcode-back" href="../../notes/api.html#RES.gaez.GAEZRasterProcessor.process_all_rasters">[docs]</a>
-    <span class="k">def</span> <span class="nf">process_all_rasters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_all_rasters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                             <span class="n">show</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Main pipeline to download, extract, clip, and plot rasters based on configuration.</span>
@@ -651,7 +650,7 @@ document.write(`
         <span class="k">return</span> <span class="n">raster_paths</span></div>
 
 
-    <span class="k">def</span> <span class="nf">__download_resources_zip_file__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__download_resources_zip_file__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Download the GAEZ resources ZIP archive from remote source.</span>
 <span class="sd">        </span>
@@ -691,7 +690,7 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">|  ❌ Failed to download the Resources zip file from GAEZ. Status code: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__extract_rasters__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__extract_rasters__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Extract required raster files from the downloaded GAEZ ZIP archive.</span>
 <span class="sd">        </span>
@@ -747,7 +746,7 @@ document.write(`
                     <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">print_level_base</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Raster file &#39;</span><span class="si">{</span><span class="n">raster_file</span><span class="si">}</span><span class="s2">&#39; found in local directory, skipping download.&quot;</span><span class="p">)</span>
 
 
-    <span class="k">def</span> <span class="nf">__clip_to_boundary_n_plot__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_type</span><span class="p">,</span> <span class="n">boundary_geom</span><span class="p">,</span> <span class="n">show</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__clip_to_boundary_n_plot__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_type</span><span class="p">,</span> <span class="n">boundary_geom</span><span class="p">,</span> <span class="n">show</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Clip raster data to regional boundaries and generate visualization plot.</span>
 <span class="sd">        </span>
@@ -835,7 +834,7 @@ document.write(`
 
 <div class="viewcode-block" id="GAEZRasterProcessor.plot_gaez_tif">
 <a class="viewcode-back" href="../../notes/api.html#RES.gaez.GAEZRasterProcessor.plot_gaez_tif">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_gaez_tif</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tif_path</span><span class="p">,</span> <span class="n">color_map</span><span class="p">,</span> <span class="n">plot_title</span><span class="p">,</span> <span class="n">save_to</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_gaez_tif</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tif_path</span><span class="p">,</span> <span class="n">color_map</span><span class="p">,</span> <span class="n">plot_title</span><span class="p">,</span> <span class="n">save_to</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate and save visualization plot for processed GAEZ raster data.</span>
 <span class="sd">        </span>

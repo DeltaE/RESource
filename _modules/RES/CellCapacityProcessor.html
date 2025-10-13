@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -157,7 +157,6 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="../../notes/config.html">How to use the CONFIG</a></li>
@@ -296,32 +295,32 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for RES.CellCapacityProcessor</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">inspect</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
-<span class="kn">from</span> <span class="nn">atlite</span> <span class="kn">import</span> <span class="n">ExclusionContainer</span>
-<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Polygon</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">atlite</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExclusionContainer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polygon</span>
 
 <span class="c1"># Local Packages</span>
-<span class="kn">import</span> <span class="nn">RES.utility</span> <span class="k">as</span> <span class="nn">utils</span>
-<span class="kn">from</span> <span class="nn">RES.atb</span> <span class="kn">import</span> <span class="n">NREL_ATBProcessor</span>
-<span class="kn">from</span> <span class="nn">RES.AttributesParser</span> <span class="kn">import</span> <span class="n">AttributesParser</span>
-<span class="kn">from</span> <span class="nn">RES.era5_cutout</span> <span class="kn">import</span> <span class="n">ERA5Cutout</span>
-<span class="kn">from</span> <span class="nn">RES.hdf5_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">RES.utility</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.atb</span><span class="w"> </span><span class="kn">import</span> <span class="n">NREL_ATBProcessor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.AttributesParser</span><span class="w"> </span><span class="kn">import</span> <span class="n">AttributesParser</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.era5_cutout</span><span class="w"> </span><span class="kn">import</span> <span class="n">ERA5Cutout</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.hdf5_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataHandler</span>
 
 <span class="c1"># from RES.AttributesParser import AttributesParser</span>
-<span class="kn">from</span> <span class="nn">RES.lands</span> <span class="kn">import</span> <span class="n">LandContainer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.lands</span><span class="w"> </span><span class="kn">import</span> <span class="n">LandContainer</span>
 
 <span class="n">PRINT_LEVEL_BASE</span><span class="o">=</span><span class="mi">2</span>
 
 <div class="viewcode-block" id="CellCapacityProcessor">
 <a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor">[docs]</a>
-<span class="k">class</span> <span class="nc">CellCapacityProcessor</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CellCapacityProcessor</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Renewable energy capacity processor for grid cell-based resource assessment.</span>
 <span class="sd">    </span>
@@ -528,7 +527,7 @@ document.write(`
 <span class="sd">        If configuration files or data dependencies are not found</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         
         <span class="c1"># Call the parent class __post_init__ to initialize inherited attributes</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__post_init__</span><span class="p">()</span>
@@ -566,7 +565,7 @@ document.write(`
     
 <div class="viewcode-block" id="CellCapacityProcessor.__get_unified_region_shape__">
 <a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor.__get_unified_region_shape__">[docs]</a>
-    <span class="k">def</span> <span class="nf">__get_unified_region_shape__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__get_unified_region_shape__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># if self.sub_national_unit_tag in self.LandContainer.region_shape.columns:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">region_shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LandContainer</span><span class="o">.</span><span class="n">region_shape</span><span class="o">.</span><span class="n">dissolve</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gadm_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;datafield_mapping&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;NAME_0&#39;</span><span class="p">))</span> <span class="c1"># .drop(columns =[&#39;Region&#39;])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">region_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_shape</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]]</span>
@@ -575,7 +574,7 @@ document.write(`
     
 <div class="viewcode-block" id="CellCapacityProcessor.load_cost">
 <a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor.load_cost">[docs]</a>
-    <span class="k">def</span> <span class="nf">load_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                   <span class="n">resource_atb</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Extracts cost parameters from the NREL ATB DataFrame and converts them to million $/MW.</span>
@@ -643,7 +642,7 @@ document.write(`
     <span class="c1"># Define a function to create bounding boxes (of cell) directly from coordinates (x, y) and resolution</span>
 <div class="viewcode-block" id="CellCapacityProcessor.__create_cell_geom__">
 <a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor.__create_cell_geom__">[docs]</a>
-    <span class="k">def</span> <span class="nf">__create_cell_geom__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__create_cell_geom__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="n">half_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_resolution</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="k">return</span> <span class="n">Polygon</span><span class="p">([</span>
             <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">half_res</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="n">half_res</span><span class="p">),</span>  <span class="c1"># Bottom-left</span>
@@ -655,7 +654,7 @@ document.write(`
         
 <div class="viewcode-block" id="CellCapacityProcessor.get_capacity">
 <a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor.get_capacity">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">tuple</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">tuple</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method processes the capacity of the resources based on the availability matrix and other parameters.</span>
 <span class="sd">        It calculates the potential capacity for each cell in the region and returns a named tuple containing the</span>
@@ -727,7 +726,9 @@ document.write(`
         <span class="c1"># _provincial_cell_capacity_df:pd.DataFrame=self.capacity_matrix.to_dataframe()</span>
         <span class="n">_df_flat</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity_matrix</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span>
         <span class="c1"># _df_flat = _df_flat.drop(columns=[&#39;x&#39;, &#39;y&#39;])</span>
-        <span class="n">_df_flat</span> <span class="o">=</span> <span class="n">_df_flat</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">}</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">_df_flat</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
+            <span class="n">_df_flat</span> <span class="o">=</span> <span class="n">_df_flat</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
         <span class="c1"># _df_flat = _df_flat.drop(columns=&#39;dim_0&#39;)  # optional</span>
         <span class="c1"># _df_flat = _df_flat.drop_duplicates(subset=[&#39;y&#39;, &#39;x&#39;], keep=&#39;first&#39;)</span>
         <span class="c1"># filter the cells that has no lands (i.e. no potential capacity)</span>
@@ -781,7 +782,7 @@ document.write(`
 <span class="c1">## Visuals </span>
 <div class="viewcode-block" id="CellCapacityProcessor.plot_ERAF5_grid_land_availability">
 <a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor.plot_ERAF5_grid_land_availability">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_ERAF5_grid_land_availability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_ERAF5_grid_land_availability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                           <span class="n">region_boundary</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                           <span class="n">Availability_matrix</span><span class="p">:</span><span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                           <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
@@ -878,7 +879,7 @@ document.write(`
         <span class="n">vis_save_to_root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_vis_dir</span><span class="p">()</span>
         <span class="n">plot_save_to</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="n">vis_save_to_root</span><span class="p">)</span><span class="o">/</span><span class="s1">&#39;lands&#39;</span>
         <span class="n">utils</span><span class="o">.</span><span class="n">ensure_path</span><span class="p">(</span><span class="n">plot_save_to</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">plot_save_to</span><span class="si">}</span><span class="s1">/land_availability_ERA5grid_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">.svg&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">plot_save_to</span><span class="si">}</span><span class="s1">/land_availability_ERA5grid_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">|Land availability (grid cells) map saved at </span><span class="si">{</span><span class="n">vis_save_to_root</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
         <span class="c1"># return fig</span>
@@ -886,7 +887,7 @@ document.write(`
 
 <div class="viewcode-block" id="CellCapacityProcessor.plot_excluder_land_availability">
 <a class="viewcode-back" href="../../notes/api.html#RES.CellCapacityProcessor.CellCapacityProcessor.plot_excluder_land_availability">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_excluder_land_availability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_excluder_land_availability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                         <span class="n">excluder</span><span class="p">:</span><span class="n">ExclusionContainer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plots the land availability based on the excluder resolution.</span>
@@ -907,14 +908,14 @@ document.write(`
         <span class="n">vis_save_to_root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_vis_dir</span><span class="p">()</span>
         <span class="n">plot_save_to</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="n">vis_save_to_root</span><span class="p">)</span><span class="o">/</span><span class="s1">&#39;lands&#39;</span>
         <span class="n">utils</span><span class="o">.</span><span class="n">ensure_path</span><span class="p">(</span><span class="n">plot_save_to</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">plot_save_to</span><span class="si">}</span><span class="s1">/land_availability_excluderResolution_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s1">.svg&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">|Land availability map (excluder resolution) saved to </span><span class="si">{</span><span class="n">plot_save_to</span><span class="si">}</span><span class="s2">/land_availability_excluderResolution_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2">.svg&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">plot_save_to</span><span class="si">}</span><span class="s1">/land_availability_excluderResolution_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">|Land availability map (excluder resolution) saved to </span><span class="si">{</span><span class="n">plot_save_to</span><span class="si">}</span><span class="s2">/land_availability_excluderResolution_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fig</span></div>
 </div>
 
     
 <span class="nd">@staticmethod</span>
-<span class="k">def</span> <span class="nf">get_sub_nationally_aggregated_capacity</span><span class="p">(</span><span class="n">cells_with_capacity</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_sub_nationally_aggregated_capacity</span><span class="p">(</span><span class="n">cells_with_capacity</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                            <span class="n">sub_national_unit_tag</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     
     <span class="k">if</span> <span class="n">cells_with_capacity</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cells_with_capacity</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">):</span>

@@ -1,30 +1,31 @@
-# RESource Project - Complete Setup & Development Guide
+# RESource Setup Guide (Deprecated)
 
-## 🎯 Quick Start (New Users)
+> **🚨 This guide has been moved and consolidated!**
+>
+> **📚 Please use the new complete setup guide: [SETUP.md](../../../SETUP.md) in the repository root.**
+>
+> This page is kept for backward compatibility but will be removed in a future version.
 
-### Prerequisites
-- **Python 3.11+**
-- **Git**
-- **Conda or Miniconda** (strongly recommended for better package management)
-- **Linux environment** (native Linux, WSL2 on Windows, or macOS)
+---
 
-### 1. Clone and Navigate
+## Quick Migration to New Setup
+
+The setup process is now simplified to a single command:
+
 ```bash
+# Clone repository
 git clone https://github.com/DeltaE/RESource.git
 cd RESource
+
+# Create environment (ONE COMMAND!)
+conda env create -f env/environment.yml
+conda activate RESource
+
+# Verify installation
+python run.py --help
 ```
 
-### 2. Environment Setup (One Command)
-```bash
-# Create conda environment with all dependencies
-make setupenv
-
-# Activate environment
-conda activate RES
-
-# Test installation
-python -c "import RES; print('✅ RESource is ready!')"
-```
+**For complete instructions, troubleshooting, and all setup options, please see [SETUP.md](../../../SETUP.md).**
 
 ---
 
@@ -44,7 +45,7 @@ RESource ensures reproducible research through:
 make setupenv
 
 # Verify environment matches expectations
-conda activate RES
+conda activate RESource
 python -c "import RES; print('✅ RESource is ready!')"
 
 # Export current state for sharing
@@ -152,8 +153,8 @@ The `env/environment.yml` includes:
 
 ### 1. Activate Environment
 ```bash
-conda activate RES
-# Your prompt should show: (RES) $
+conda activate RESource
+# Your prompt should show: (RESource) $
 ```
 
 ### 2. Run RESource
@@ -266,15 +267,15 @@ conda env remove -n RES -y && make setupenv
 **Problem:** Local package not updating after code changes
 ```bash
 # Solution: Reinstall in development mode
-conda activate RES
+conda activate RESource
 pip install -e .
 ```
 
 ### Check Environment Health
 ```bash
 # Check if environment exists and is activated
-conda env list | grep RES
-conda activate RES
+conda env list | grep RESource
+conda activate RESource
 python -c "import RES; print('✅ RESource is ready!')"
 ```
 

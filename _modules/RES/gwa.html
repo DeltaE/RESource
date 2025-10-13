@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -157,7 +157,6 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="../../notes/config.html">How to use the CONFIG</a></li>
@@ -296,28 +295,28 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for RES.gwa</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">import</span> <span class="nn">rioxarray</span> <span class="k">as</span> <span class="nn">rxr</span>
-<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rioxarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rxr</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
 
-<span class="kn">import</span> <span class="nn">RES.utility</span> <span class="k">as</span> <span class="nn">utils</span>
-<span class="kn">from</span> <span class="nn">RES.boundaries</span> <span class="kn">import</span> <span class="n">GADMBoundaries</span>
-<span class="kn">from</span> <span class="nn">RES.hdf5_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
-<span class="kn">from</span> <span class="nn">RES.AttributesParser</span> <span class="kn">import</span> <span class="n">AttributesParser</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">RES.utility</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.boundaries</span><span class="w"> </span><span class="kn">import</span> <span class="n">GADMBoundaries</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.hdf5_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.AttributesParser</span><span class="w"> </span><span class="kn">import</span> <span class="n">AttributesParser</span>
 
 <span class="n">print_level_base</span><span class="o">=</span><span class="mi">3</span>
 
 <div class="viewcode-block" id="GWACells">
 <a class="viewcode-back" href="../../notes/api.html#RES.gwa.GWACells">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">GWACells</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GWACells</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Global Wind Atlas (GWA) data processor for high-resolution wind resource analysis.</span>
 <span class="sd">    </span>
@@ -562,7 +561,7 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">merged_data</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize GWA processor with configuration and data handler setup.</span>
 <span class="sd">        </span>
@@ -600,7 +599,7 @@ document.write(`
 
 <div class="viewcode-block" id="GWACells.prepare_GWA_data">
 <a class="viewcode-back" href="../../notes/api.html#RES.gwa.GWACells.prepare_GWA_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">prepare_GWA_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">prepare_GWA_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                          <span class="n">windpseed_min</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                          <span class="n">windpseed_max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
                          <span class="n">memory_resource_limitation</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">:</span>
@@ -760,7 +759,7 @@ document.write(`
     
 <div class="viewcode-block" id="GWACells.download_file">
 <a class="viewcode-back" href="../../notes/api.html#RES.gwa.GWACells.download_file">[docs]</a>
-    <span class="k">def</span> <span class="nf">download_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">download_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                       <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> 
                       <span class="n">destination</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -836,7 +835,7 @@ document.write(`
     
 <div class="viewcode-block" id="GWACells.load_gwa_cells">
 <a class="viewcode-back" href="../../notes/api.html#RES.gwa.GWACells.load_gwa_cells">[docs]</a>
-    <span class="k">def</span> <span class="nf">load_gwa_cells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_gwa_cells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                        <span class="n">memory_resource_limitation</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Load GWA cells as a spatial GeoDataFrame with point geometries.</span>
@@ -928,7 +927,7 @@ document.write(`
 
 <div class="viewcode-block" id="GWACells.map_GWA_cells_to_ERA5">
 <a class="viewcode-back" href="../../notes/api.html#RES.gwa.GWACells.map_GWA_cells_to_ERA5">[docs]</a>
-    <span class="k">def</span> <span class="nf">map_GWA_cells_to_ERA5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">map_GWA_cells_to_ERA5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                               <span class="n">aggregation_level</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
                               <span class="n">memory_resource_limitation</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

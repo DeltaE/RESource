@@ -29,7 +29,7 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 ```
 
 ```{tip}
-**Ready to dive deeper?** Check out the [Complete Setup Guide](notes/setup_guide.md) or explore the [BC Case Study](notes/case_BC.md) for detailed examples.
+**Ready to dive deeper?** Check out the [Complete Setup Guide](../../SETUP.md) or explore the [BC Case Study](notes/case_BC.md) for detailed examples.
 ```
 
 ---
@@ -40,7 +40,6 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 :titlesonly:
 
 notes/resource_builder
-notes/setup_guide
 notes/case_BC
 notes/config
 notes/learning

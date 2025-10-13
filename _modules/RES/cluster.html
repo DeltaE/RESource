@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -157,7 +157,6 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="../../notes/config.html">How to use the CONFIG</a></li>
@@ -479,23 +478,23 @@ document.write(`
 <span class="sd">- sklearn.cluster: For alternative clustering algorithms</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">logging</span> <span class="k">as</span> <span class="nn">log</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">log</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
-<span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="kn">import</span> <span class="n">SimpleImputer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">KMeans</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.impute</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleImputer</span>
 
-<span class="kn">import</span> <span class="nn">RES.utility</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">RES.utility</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">utils</span>
 
 <span class="n">imputer</span> <span class="o">=</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>  <span class="c1"># Other strategies: &quot;median&quot;,         &quot;most_frequent&quot;</span>
 
 <div class="viewcode-block" id="assign_cluster_id">
 <a class="viewcode-back" href="../../notes/api.html#RES.cluster.assign_cluster_id">[docs]</a>
-<span class="k">def</span> <span class="nf">assign_cluster_id</span><span class="p">(</span><span class="n">cells</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> 
+<span class="k">def</span><span class="w"> </span><span class="nf">assign_cluster_id</span><span class="p">(</span><span class="n">cells</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> 
                   <span class="n">source_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
                   <span class="n">index_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;cell&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -582,7 +581,7 @@ document.write(`
 
 <div class="viewcode-block" id="find_optimal_K">
 <a class="viewcode-back" href="../../notes/api.html#RES.cluster.find_optimal_K">[docs]</a>
-<span class="k">def</span> <span class="nf">find_optimal_K</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_optimal_K</span><span class="p">(</span>
         <span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
         <span class="n">data_for_clustering</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> 
         <span class="n">region</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> 
@@ -722,7 +721,7 @@ document.write(`
 
 <div class="viewcode-block" id="pre_process_cluster_mapping">
 <a class="viewcode-back" href="../../notes/api.html#RES.cluster.pre_process_cluster_mapping">[docs]</a>
-<span class="k">def</span> <span class="nf">pre_process_cluster_mapping</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">pre_process_cluster_mapping</span><span class="p">(</span>
         <span class="n">cells_scored</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
         <span class="n">vis_directory</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
         <span class="n">wcss_tolerance</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span>
@@ -916,7 +915,7 @@ document.write(`
 
 <div class="viewcode-block" id="cells_to_cluster_mapping">
 <a class="viewcode-back" href="../../notes/api.html#RES.cluster.cells_to_cluster_mapping">[docs]</a>
-<span class="k">def</span> <span class="nf">cells_to_cluster_mapping</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cells_to_cluster_mapping</span><span class="p">(</span>
         <span class="n">cells_scored</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
         <span class="n">vis_directory</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
         <span class="n">wcss_tolerance</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span>
@@ -1092,7 +1091,7 @@ document.write(`
 
 <div class="viewcode-block" id="create_cells_Union_in_clusters">
 <a class="viewcode-back" href="../../notes/api.html#RES.cluster.create_cells_Union_in_clusters">[docs]</a>
-<span class="k">def</span> <span class="nf">create_cells_Union_in_clusters</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_cells_Union_in_clusters</span><span class="p">(</span>
         <span class="n">cluster_map_gdf</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> 
         <span class="n">region_optimal_k_df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
         <span class="n">sub_national_unit_tag</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
@@ -1306,7 +1305,7 @@ document.write(`
 
 <div class="viewcode-block" id="clip_cluster_boundaries_upto_regions">
 <a class="viewcode-back" href="../../notes/api.html#RES.cluster.clip_cluster_boundaries_upto_regions">[docs]</a>
-<span class="k">def</span> <span class="nf">clip_cluster_boundaries_upto_regions</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">clip_cluster_boundaries_upto_regions</span><span class="p">(</span>
         <span class="n">cell_cluster_gdf</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
         <span class="n">gadm_regions_gdf</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
         <span class="n">resource_type</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>

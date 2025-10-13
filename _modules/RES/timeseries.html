@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -157,7 +157,6 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="../../notes/config.html">How to use the CONFIG</a></li>
@@ -296,29 +295,29 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for RES.timeseries</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">import</span> <span class="nn">atlite</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
-<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">atlite</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.graph_objects</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">go</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
 
-<span class="kn">import</span> <span class="nn">RES.windspeed</span> <span class="k">as</span> <span class="nn">windspeed</span>
-<span class="kn">from</span> <span class="nn">RES</span> <span class="kn">import</span> <span class="n">utility</span> <span class="k">as</span> <span class="n">utils</span>
-<span class="kn">from</span> <span class="nn">RES.AttributesParser</span> <span class="kn">import</span> <span class="n">AttributesParser</span>
-<span class="kn">from</span> <span class="nn">RES.era5_cutout</span> <span class="kn">import</span> <span class="n">ERA5Cutout</span>
-<span class="kn">from</span> <span class="nn">RES.gwa</span> <span class="kn">import</span> <span class="n">GWACells</span>
-<span class="kn">from</span> <span class="nn">RES.hdf5_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
-<span class="kn">from</span> <span class="nn">RES.tech</span> <span class="kn">import</span> <span class="n">OEDBTurbines</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">RES.windspeed</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">windspeed</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES</span><span class="w"> </span><span class="kn">import</span> <span class="n">utility</span> <span class="k">as</span> <span class="n">utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.AttributesParser</span><span class="w"> </span><span class="kn">import</span> <span class="n">AttributesParser</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.era5_cutout</span><span class="w"> </span><span class="kn">import</span> <span class="n">ERA5Cutout</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.gwa</span><span class="w"> </span><span class="kn">import</span> <span class="n">GWACells</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.hdf5_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.tech</span><span class="w"> </span><span class="kn">import</span> <span class="n">OEDBTurbines</span>
 
 <span class="n">PRINT_LEVEL_BASE</span><span class="o">=</span><span class="mi">1</span>
 
 <div class="viewcode-block" id="Timeseries">
 <a class="viewcode-back" href="../../notes/api.html#RES.timeseries.Timeseries">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Timeseries</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Timeseries</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Climate data processor and capacity factor calculator for renewable energy resources.</span>
 <span class="sd">    </span>
@@ -427,7 +426,7 @@ document.write(`
 <span class="sd">    - Technology databases for turbine and panel specifications</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__post_init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">required_args</span> <span class="o">=</span> <span class="p">{</span>
@@ -453,7 +452,7 @@ document.write(`
     
 <div class="viewcode-block" id="Timeseries.get_timeseries">
 <a class="viewcode-back" href="../../notes/api.html#RES.timeseries.Timeseries.get_timeseries">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_timeseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_timeseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                        <span class="n">cells</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieves the capacity factor (CF) timeseries for the cells.</span>
@@ -531,7 +530,7 @@ document.write(`
 
 <div class="viewcode-block" id="Timeseries.__process_PV_timeseries__">
 <a class="viewcode-back" href="../../notes/api.html#RES.timeseries.Timeseries.__process_PV_timeseries__">[docs]</a>
-    <span class="k">def</span> <span class="nf">__process_PV_timeseries__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__process_PV_timeseries__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                   <span class="n">cells</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">        A wrapper that leverage Atlite&#39;s _cutout.pv_ method to convert downward-shortwave, upward-shortwave radiation flux and ambient temperature into a pv generation time-series.</span>
@@ -581,7 +580,7 @@ document.write(`
     
 <div class="viewcode-block" id="Timeseries.get_gwa_geogson_data">
 <a class="viewcode-back" href="../../notes/api.html#RES.timeseries.Timeseries.get_gwa_geogson_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_gwa_geogson_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_gwa_geogson_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                              <span class="n">gwa_geojson_file_path</span><span class="p">:</span><span class="nb">str</span><span class="o">|</span><span class="n">Path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads Global Wind Atlas (GWA) GeoJSON data from the specified file path.</span>
@@ -615,7 +614,7 @@ document.write(`
     
 <div class="viewcode-block" id="Timeseries.get_windatlas_data">
 <a class="viewcode-back" href="../../notes/api.html#RES.timeseries.Timeseries.get_windatlas_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_windatlas_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_windatlas_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                            <span class="n">gwa_windspeed_raster_path</span><span class="p">:</span><span class="nb">str</span><span class="o">|</span><span class="n">Path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieves wind atlas data from a specified raster file or a default path.</span>
@@ -641,7 +640,7 @@ document.write(`
     
 <div class="viewcode-block" id="Timeseries.get_windspeed_rescaling_data">
 <a class="viewcode-back" href="../../notes/api.html#RES.timeseries.Timeseries.get_windspeed_rescaling_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_windspeed_rescaling_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">tuple</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_windspeed_rescaling_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">tuple</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieves wind speed rescaling data, including wind atlas data and </span>
 <span class="sd">        geographical wind data in GeoJSON format.</span>
@@ -659,7 +658,7 @@ document.write(`
     
 <div class="viewcode-block" id="Timeseries.__process_WIND_timeseries__">
 <a class="viewcode-back" href="../../notes/api.html#RES.timeseries.Timeseries.__process_WIND_timeseries__">[docs]</a>
-    <span class="k">def</span> <span class="nf">__process_WIND_timeseries__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__process_WIND_timeseries__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                     <span class="n">cells</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
                                     <span class="n">turbine_model_source</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">&#39;OEDB&#39;</span><span class="p">,</span>
                                     <span class="n">model</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
@@ -748,7 +747,7 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wind_profile</span></div>
 
     
-    <span class="k">def</span> <span class="nf">__fix_timezone__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__fix_timezone__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
         <span class="n">data</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        This function converts the timeseries index with timezone information imputed conversion.&lt;br&gt;</span>
@@ -767,7 +766,7 @@ document.write(`
     
 <div class="viewcode-block" id="Timeseries.get_cluster_timeseries">
 <a class="viewcode-back" href="../../notes/api.html#RES.timeseries.Timeseries.get_cluster_timeseries">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_cluster_timeseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_cluster_timeseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                <span class="n">all_clusters</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                                <span class="n">cells_timeseries</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                                <span class="n">dissolved_indices</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -809,7 +808,7 @@ document.write(`
 
 
 <span class="nd">@staticmethod</span>
-<span class="k">def</span> <span class="nf">get_timeseries_for_project_points</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_timeseries_for_project_points</span><span class="p">(</span>
     <span class="n">resources_store</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
     <span class="n">projects</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
     <span class="n">save_to</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span>

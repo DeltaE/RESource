@@ -30,7 +30,7 @@ make setupenv
 
 ```bash
 # Activate environment
-conda activate RES
+conda activate RESource
 
 # Quick test
 python -c "import RES; print('✅ RESource ready!')"
@@ -236,7 +236,7 @@ make autobuild  # Visit http://127.0.0.1:8000
 
 ```bash
 # Check environment
-conda activate RES && python -c "import RES"
+conda activate RESource && python -c "import RES"
 
 # Test all dependencies  
 python workflow/scripts/test_venv.py
@@ -264,8 +264,8 @@ find vis/Canada/BC/ -name "*.svg" -o -name "*.png" | head -10
 
 | Problem | Solution |
 |---------|----------|
-| `Environment 'RES' not found` | Run `make setupenv` |
-| `ImportError: No module named RES` | Run `conda activate RES` |
+| `Environment 'RESource' not found` | Run `make setupenv` |
+| `ImportError: No module named RES` | Run `conda activate RESource` |
 | `FileNotFoundError: data/...` | Download case study data from [Zenodo](https://zenodo.org/records/16658067) |
 | `Permission denied` on WSL2 | Run `sudo chown -R $USER:$USER .` |
 | Slow downloads | Check internet connection, try different mirror |
@@ -283,5 +283,5 @@ If you encounter issues not covered above, you can reach out to the development 
 **🎯 Ready to analyze renewable energy resources? Run `make run` and explore the results!**
 
 ```{tip}
-For more detailed setup and development information, see the [Complete Setup Guide](setup_guide.md).
+For more detailed setup and development information, see the [Complete Setup Guide](../../../SETUP.md).
 ```

@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -157,7 +157,6 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="../../notes/config.html">How to use the CONFIG</a></li>
@@ -297,20 +296,20 @@ document.write(`
                   
   <h1>Source code for RES.boundaries</h1><div class="highlight"><pre>
 <span></span><span class="c1"># Import Global Packages</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">pygadm</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygadm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
 
 <span class="c1"># Import local packages</span>
-<span class="kn">from</span> <span class="nn">RES.AttributesParser</span> <span class="kn">import</span> <span class="n">AttributesParser</span>
-<span class="kn">import</span> <span class="nn">RES.utility</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.AttributesParser</span><span class="w"> </span><span class="kn">import</span> <span class="n">AttributesParser</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">RES.utility</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">utils</span>
 <span class="n">PRINT_LEVEL_BASE</span><span class="o">=</span><span class="mi">4</span>
 <div class="viewcode-block" id="GADMBoundaries">
 <a class="viewcode-back" href="../../notes/api.html#RES.boundaries.GADMBoundaries">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">GADMBoundaries</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GADMBoundaries</span><span class="p">(</span><span class="n">AttributesParser</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    GADM (Global Administrative Areas) boundary processor for regional analysis.</span>
 <span class="sd">    </span>
@@ -435,7 +434,7 @@ document.write(`
 <span class="sd">        If there is an error fetching or loading the GADM data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         
      <span class="c1"># Call the parent class __post_init__ to initialize inherited attributes</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__post_init__</span><span class="p">()</span>
@@ -466,7 +465,7 @@ document.write(`
     
 <div class="viewcode-block" id="GADMBoundaries.get_country_boundary">
 <a class="viewcode-back" href="../../notes/api.html#RES.boundaries.GADMBoundaries.get_country_boundary">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_country_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_country_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                              <span class="n">country</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                              <span class="n">force_update</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -522,7 +521,7 @@ document.write(`
 
 <div class="viewcode-block" id="GADMBoundaries.get_region_boundary">
 <a class="viewcode-back" href="../../notes/api.html#RES.boundaries.GADMBoundaries.get_region_boundary">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_region_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_region_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                             <span class="n">region_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                             <span class="n">force_update</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -597,7 +596,7 @@ document.write(`
 
 <div class="viewcode-block" id="GADMBoundaries.get_bounding_box">
 <a class="viewcode-back" href="../../notes/api.html#RES.boundaries.GADMBoundaries.get_bounding_box">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_bounding_box</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">tuple</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_bounding_box</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">tuple</span><span class="p">:</span>
 <span class="w">        </span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method loads the region boundary using `get_region_boundary()` method and gets Minimum Bounding Rectangle (MBR).</span>
@@ -632,7 +631,7 @@ document.write(`
         
 <div class="viewcode-block" id="GADMBoundaries.show_regions">
 <a class="viewcode-back" href="../../notes/api.html#RES.boundaries.GADMBoundaries.show_regions">[docs]</a>
-    <span class="k">def</span> <span class="nf">show_regions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+    <span class="k">def</span><span class="w"> </span><span class="nf">show_regions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
                     <span class="n">basemap</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;CartoDB positron&#39;</span><span class="p">,</span> 
                     <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;vis/regions&#39;</span><span class="p">,</span>
                     <span class="n">save</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -668,7 +667,7 @@ document.write(`
 
 <div class="viewcode-block" id="GADMBoundaries.run">
 <a class="viewcode-back" href="../../notes/api.html#RES.boundaries.GADMBoundaries.run">[docs]</a>
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Executes the process of extracting boundaries and creating an interactive map. </span>
 <span class="sd">        To be used as a main method to run the class&#39;s sequential tasks.</span>

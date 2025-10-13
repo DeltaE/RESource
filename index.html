@@ -28,7 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -41,6 +41,8 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -159,7 +161,6 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="notes/config.html">How to use the CONFIG</a></li>
@@ -454,7 +455,7 @@ make<span class="w"> </span>setupenv
 <section id="activate-test">
 <h3>3️⃣ Activate &amp; Test<a class="headerlink" href="#activate-test" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Activate environment</span>
-conda<span class="w"> </span>activate<span class="w"> </span>RES
+conda<span class="w"> </span>activate<span class="w"> </span>RESource
 
 <span class="c1"># Quick test</span>
 python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import RES; print(&#39;✅ RESource ready!&#39;)&quot;</span>
@@ -700,7 +701,7 @@ make<span class="w"> </span>autobuild<span class="w">  </span><span class="c1">#
 <section id="quick-debugging">
 <h3>Quick Debugging<a class="headerlink" href="#quick-debugging" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check environment</span>
-conda<span class="w"> </span>activate<span class="w"> </span>RES<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import RES&quot;</span>
+conda<span class="w"> </span>activate<span class="w"> </span>RESource<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import RES&quot;</span>
 
 <span class="c1"># Test all dependencies  </span>
 python<span class="w"> </span>workflow/scripts/test_venv.py
@@ -736,11 +737,11 @@ find<span class="w"> </span>vis/Canada/BC/<span class="w"> </span>-name<span cla
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Environment</span> <span class="pre">'RES'</span> <span class="pre">not</span> <span class="pre">found</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Environment</span> <span class="pre">'RESource'</span> <span class="pre">not</span> <span class="pre">found</span></code></p></td>
 <td><p>Run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">setupenv</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ImportError:</span> <span class="pre">No</span> <span class="pre">module</span> <span class="pre">named</span> <span class="pre">RES</span></code></p></td>
-<td><p>Run <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">RES</span></code></p></td>
+<td><p>Run <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">RESource</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FileNotFoundError:</span> <span class="pre">data/...</span></code></p></td>
 <td><p>Download case study data from <a class="reference external" href="https://zenodo.org/records/16658067">Zenodo</a></p></td>
@@ -765,18 +766,17 @@ find<span class="w"> </span>vis/Canada/BC/<span class="w"> </span>-name<span cla
 <p><strong>🎯 Ready to analyze renewable energy resources? Run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">run</span></code> and explore the results!</strong></p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>For more detailed setup and development information, see the <a class="reference internal" href="#setup_guide.md"><span class="xref myst">Complete Setup Guide</span></a>.</p>
+<p>For more detailed setup and development information, see the <a class="reference internal" href="#../../../SETUP.md"><span class="xref myst">Complete Setup Guide</span></a>.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p><strong>Ready to dive deeper?</strong> Check out the <a class="reference internal" href="notes/setup_guide.html"><span class="std std-doc">Complete Setup Guide</span></a> or explore the <a class="reference internal" href="notes/case_BC.html"><span class="std std-doc">BC Case Study</span></a> for detailed examples.</p>
+<p><strong>Ready to dive deeper?</strong> Check out the <span class="xref myst">Complete Setup Guide</span> or explore the <a class="reference internal" href="notes/case_BC.html"><span class="std std-doc">BC Case Study</span></a> for detailed examples.</p>
 </div>
 <hr class="docutils" />
 <div class="toctree-wrapper compound">
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes/case_BC.html#configurations-on-the-scenarios">Configurations on the scenarios</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes/config.html">How to use the CONFIG</a></li>

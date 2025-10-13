@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -157,7 +157,6 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="../../notes/config.html">How to use the CONFIG</a></li>
@@ -296,23 +295,23 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for RES.hdf5_handler</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">h5py</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">colorama</span> <span class="kn">import</span> <span class="n">Fore</span><span class="p">,</span> <span class="n">Style</span>
-<span class="kn">from</span> <span class="nn">shapely.geometry.base</span> <span class="kn">import</span> <span class="n">BaseGeometry</span>
-<span class="kn">from</span> <span class="nn">shapely.wkt</span> <span class="kn">import</span> <span class="n">dumps</span><span class="p">,</span> <span class="n">loads</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">h5py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">colorama</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fore</span><span class="p">,</span> <span class="n">Style</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseGeometry</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely.wkt</span><span class="w"> </span><span class="kn">import</span> <span class="n">dumps</span><span class="p">,</span> <span class="n">loads</span>
 
-<span class="kn">import</span> <span class="nn">RES.utility</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">RES.utility</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">utils</span>
 
 
 <div class="viewcode-block" id="DataHandler">
 <a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler">[docs]</a>
-<span class="k">class</span> <span class="nc">DataHandler</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataHandler</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;HDF5-based data storage manager for geospatial renewable energy datasets.</span>
 <span class="sd">    </span>
 <span class="sd">    Provides efficient storage and retrieval of large DataFrame and GeoDataFrame</span>
@@ -335,7 +334,7 @@ document.write(`
 <span class="sd">    geom_columns : list</span>
 <span class="sd">        Column names containing geometry data for special handling</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hdf_file_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">silent_initiation</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> 
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hdf_file_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">silent_initiation</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> 
                  <span class="n">show_structure</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize HDF5 data handler.</span>
 <span class="sd">        </span>
@@ -360,7 +359,7 @@ document.write(`
                
 <div class="viewcode-block" id="DataHandler.to_store">
 <a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler.to_store">[docs]</a>
-    <span class="k">def</span> <span class="nf">to_store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">hdf_file_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">hdf_file_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
                  <span class="n">force_update</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Save DataFrame or GeoDataFrame to HDF5 storage.</span>
 <span class="sd">        </span>
@@ -427,7 +426,7 @@ document.write(`
 
 <div class="viewcode-block" id="DataHandler.from_store">
 <a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler.from_store">[docs]</a>
-    <span class="k">def</span> <span class="nf">from_store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Load data from HDF5 storage with geometry reconstruction.</span>
 <span class="sd">        </span>
 <span class="sd">        Automatically handles geometry deserialization for spatial datasets</span>
@@ -469,7 +468,7 @@ document.write(`
 
 <div class="viewcode-block" id="DataHandler.refresh">
 <a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler.refresh">[docs]</a>
-    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize a new DataHandler instance with the current store path.</span>
 <span class="sd">        This method is useful for reloading the DataHandler with the same store path without needing to reinitialize the entire class.</span>
@@ -486,7 +485,7 @@ document.write(`
 <div class="viewcode-block" id="DataHandler.show_tree">
 <a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler.show_tree">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">show_tree</span><span class="p">(</span><span class="n">store_path</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">show_tree</span><span class="p">(</span><span class="n">store_path</span><span class="p">,</span>
                   <span class="n">show_dataset</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method provides a structured view of the keys and datasets within the HDF5 file, allowing users to understand its organization.</span>
@@ -500,7 +499,7 @@ document.write(`
 <span class="sd">            None: This method prints the structure to the console.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">def</span> <span class="nf">print_structure</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">print_structure</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;Helper function to recursively print the structure.&quot;&quot;&quot;</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">h5py</span><span class="o">.</span><span class="n">Group</span><span class="p">):</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">indent</span><span class="si">}{</span><span class="n">Fore</span><span class="o">.</span><span class="n">LIGHTBLUE_EX</span><span class="si">}</span><span class="s2">[key]</span><span class="si">{</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">Fore</span><span class="o">.</span><span class="n">LIGHTGREEN_EX</span><span class="si">}{</span><span class="n">name</span><span class="si">}{</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -524,7 +523,7 @@ document.write(`
 
 <div class="viewcode-block" id="DataHandler.clean_store">
 <a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler.clean_store">[docs]</a>
-    <span class="k">def</span> <span class="nf">clean_store</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clean_store</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Cleans the HDF5 store by removing all keys and datasets.</span>
 <span class="sd">        </span>
@@ -542,7 +541,7 @@ document.write(`
 <div class="viewcode-block" id="DataHandler.del_key">
 <a class="viewcode-back" href="../../notes/api.html#RES.hdf5_handler.DataHandler.del_key">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">del_key</span><span class="p">(</span><span class="n">store_path</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">del_key</span><span class="p">(</span><span class="n">store_path</span><span class="p">,</span>
                 <span class="n">key_to_delete</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

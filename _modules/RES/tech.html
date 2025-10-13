@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -157,7 +157,6 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/setup_guide.html">RESource Project - Complete Setup &amp; Development Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="../../notes/config.html">How to use the CONFIG</a></li>
@@ -296,18 +295,18 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for RES.tech</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">import</span> <span class="nn">yaml</span>
-<span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">get</span>
-<span class="kn">from</span> <span class="nn">RES</span> <span class="kn">import</span> <span class="n">utility</span> <span class="k">as</span> <span class="n">utils</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">requests</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES</span><span class="w"> </span><span class="kn">import</span> <span class="n">utility</span> <span class="k">as</span> <span class="n">utils</span>
 
 <span class="n">PRINT_LEVEL_BASE</span><span class="o">=</span><span class="mi">3</span>
 
 <span class="c1"># * Check &#39;windpowerlib&#39; package</span>
 <div class="viewcode-block" id="OEDBTurbines">
 <a class="viewcode-back" href="../../notes/api.html#RES.tech.OEDBTurbines">[docs]</a>
-<span class="k">class</span> <span class="nc">OEDBTurbines</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OEDBTurbines</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Wind turbine configuration manager for OEDB (Open Energy Database) integration.</span>
 <span class="sd">    </span>
 <span class="sd">    Handles fetching, processing, and caching of wind turbine technical specifications</span>
@@ -332,7 +331,7 @@ document.write(`
 <span class="sd">        Path to the specific turbine configuration YAML file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">OEDB_config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">OEDB_config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize OEDB turbine configuration manager.</span>
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
@@ -343,7 +342,7 @@ document.write(`
     
 <div class="viewcode-block" id="OEDBTurbines.load_turbine_config">
 <a class="viewcode-back" href="../../notes/api.html#RES.tech.OEDBTurbines.load_turbine_config">[docs]</a>
-    <span class="k">def</span> <span class="nf">load_turbine_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_turbine_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Load turbine configuration from cached YAML file.</span>
 <span class="sd">        </span>
 <span class="sd">        Returns:</span>
@@ -359,7 +358,7 @@ document.write(`
                 
 <div class="viewcode-block" id="OEDBTurbines.fetch_turbine_config">
 <a class="viewcode-back" href="../../notes/api.html#RES.tech.OEDBTurbines.fetch_turbine_config">[docs]</a>
-    <span class="k">def</span> <span class="nf">fetch_turbine_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fetch_turbine_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch turbine configuration from OEDB and cache locally.</span>
 <span class="sd">        </span>
 <span class="sd">        Retrieves turbine technical specifications from the Open Energy Database</span>
@@ -417,7 +416,7 @@ document.write(`
 
 
 
-    <span class="k">def</span> <span class="nf">__get_required_turbines__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">OEDB_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__get_required_turbines__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">OEDB_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Search for specific turbine configuration in OEDB dataset.</span>
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
@@ -435,7 +434,7 @@ document.write(`
 
 <div class="viewcode-block" id="OEDBTurbines.format_and_save_turbine_config">
 <a class="viewcode-back" href="../../notes/api.html#RES.tech.OEDBTurbines.format_and_save_turbine_config">[docs]</a>
-    <span class="k">def</span> <span class="nf">format_and_save_turbine_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_and_save_turbine_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
                                        <span class="n">turbine_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
                                        <span class="n">save_to</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -476,7 +475,7 @@ document.write(`
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">turbine_name</span><span class="si">}</span><span class="s2"> turbine config saved to &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">turbine_config_file</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">__create_blank_yaml__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+    <span class="k">def</span><span class="w"> </span><span class="nf">__create_blank_yaml__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
                            <span class="n">filepath</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a blank YAML file.</span>

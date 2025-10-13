@@ -184,7 +184,7 @@ python3 -c "import colorama; print('✅ Colorama available')"
 This enhanced `run.py` functionality is documented across:
 
 - **[Quickstart Guide](quickstart.md)** - Basic usage examples
-- **[Setup Guide](setup_guide.md)** - Comprehensive command reference  
+- **[Setup Guide](../../../SETUP.md)** - Comprehensive setup and installation guide  
 - **[Resource Builder](resource_builder.md)** - Integration with analysis pipeline
 - **[README.md](../../README.md)** - Project overview and quick reference
 
