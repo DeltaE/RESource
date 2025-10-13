@@ -432,6 +432,15 @@ class CellCapacityProcessor(AttributesParser):
         # _df_flat = _df_flat.drop_duplicates(subset=["y", "x"], keep="first")
         # _df_flat = _df_flat[_df_flat[value_col] > 0]
 
+    ## 2.1 convert the Availability Matrix to dataframe.
+        # _provincial_cell_capacity_df:pd.DataFrame=self.capacity_matrix.to_dataframe()
+        _df_flat:pd.DataFrame=self.capacity_matrix.to_dataframe()
+        # _df_flat = _df_flat.drop(columns=['x', 'y'])
+        _df_flat = _df_flat.reset_index()
+        # _df_flat = _df_flat.drop(columns='dim_0')  # optional
+        # _df_flat = _df_flat.drop_duplicates(subset=['y', 'x'], keep='first')
+        # filter the cells that has no lands (i.e. no potential capacity)
+        # _provincial_cell_capacity_df = _provincial_cell_capacity[_provincial_cell_capacity["potential_capacity"] != 0]
 
         # The xarray doesn't create cell geometries by default. We hav to create it.
         # Apply the bounding box (cell) creation to the DataFrame's x,y coordinates (centroid of the cells)

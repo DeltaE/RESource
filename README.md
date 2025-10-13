@@ -27,9 +27,9 @@ The enhanced `run.py` script provides flexible region selection with colored out
 
 | Command | Description |
 |---------|-------------|
-| `python3 run.py` | Default Canadian analysis (all provinces) |
-| `python3 run.py -c config/config_WB6.yaml` | Western Balkans analysis (all countries) |
-| `python3 run.py -c config/config_WB6.yaml -r AL BA` | Specific regions only |
+| `python3 run.py config/config_CAN_baseline.yaml` | Canadian analysis (all provinces) |
+| `python3 run.py config/config_WB6.yaml` | Western Balkans analysis (all countries) |
+| `python3 run.py config/config_WB6.yaml -r AL BA` | Specific regions only |
 | `python3 run.py --help` | Show all available options |
 
 **Features:** Smart region detection • Input validation • Colored error messages • Flexible region selection
@@ -48,7 +48,7 @@ The enhanced `run.py` script provides flexible region selection with colored out
 
 ## 📚 Resources
 
+- **[� Complete Setup Guide](SETUP.md)** - Definitive installation & setup guide
 - **[📖 Quickstart Guide](QUICKSTART.md)** - Get running in 5 minutes
 - **[🏔️ BC Case Study](https://deltae.github.io/RESource/notes/case_BC.html)** - Detailed regional analysis
 - **[📘 Full Documentation](https://deltae.github.io/RESource/)** - Complete reference
-- **[💻 Setup Guide](https://deltae.github.io/RESource/notes/setup_guide.html)** - Environment and development setup

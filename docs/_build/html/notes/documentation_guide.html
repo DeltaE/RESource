@@ -1,0 +1,928 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Documentation Build Guide &#8212; RESource 2025.07 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=e9b82cb4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notes/documentation_guide';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="RES API References" href="api.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">Best Practices and Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Store_explorer.html">Explore data store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="api.html">RES API References</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Documentation Build Guide</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notes/documentation_guide.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Documentation Build Guide</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">🚀 Quick Start</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-documentation-locally">Build Documentation Locally</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#live-development">Live Development</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-commands">📖 Documentation Commands</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#building">Building</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development">Development</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deployment">Deployment</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-structure">📁 Documentation Structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sphinx-configuration">🔧 Sphinx Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-settings-docs-source-conf-py">Key Settings (docs/source/conf.py)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notebook-integration">📓 Notebook Integration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automatic-sync">Automatic Sync</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-sync">Manual Sync</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-new-notebooks">Adding New Notebooks</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#github-pages-deployment">🌐 GitHub Pages Deployment</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automated-deployment">Automated Deployment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-github-pages-setup">Manual GitHub Pages Setup</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jekyll-bypass">Jekyll Bypass</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-documentation">✍️ Writing Documentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#myst-markdown-syntax">MyST Markdown Syntax</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-workflow">🔍 Development Workflow</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#live-development-recommended">Live Development (Recommended)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-and-check">Build and Check</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deploy-changes">Deploy Changes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">🐛 Troubleshooting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-issues">Common Issues</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#debug-commands">Debug Commands</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-checklist">📋 Documentation Checklist</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-committing">Before Committing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-release">Before Release</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">💡 Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#content-organization">Content Organization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-style">Writing Style</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maintenance">Maintenance</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="documentation-build-guide">
+<h1>Documentation Build Guide<a class="headerlink" href="#documentation-build-guide" title="Link to this heading">#</a></h1>
+<p>This guide covers building, developing, and deploying RESource documentation using Sphinx.</p>
+<section id="quick-start">
+<h2>🚀 Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h2>
+<section id="build-documentation-locally">
+<h3>Build Documentation Locally<a class="headerlink" href="#build-documentation-locally" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build documentation (includes notebook sync)</span>
+make<span class="w"> </span>docs-build
+
+<span class="c1"># View locally</span>
+open<span class="w"> </span>docs/build/html/index.html<span class="w">  </span><span class="c1"># macOS</span>
+xdg-open<span class="w"> </span>docs/build/html/index.html<span class="w">  </span><span class="c1"># Linux</span>
+</pre></div>
+</div>
+</section>
+<section id="live-development">
+<h3>Live Development<a class="headerlink" href="#live-development" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start live rebuild server (recommended for development)</span>
+make<span class="w"> </span>autobuild
+
+<span class="c1"># Opens http://localhost:8000 with auto-reload</span>
+<span class="c1"># Changes to source files automatically rebuild and refresh browser</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="documentation-commands">
+<h2>📖 Documentation Commands<a class="headerlink" href="#documentation-commands" title="Link to this heading">#</a></h2>
+<section id="building">
+<h3>Building<a class="headerlink" href="#building" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>docs-build<span class="w">        </span><span class="c1"># Build documentation only</span>
+make<span class="w"> </span>sync-notebooks<span class="w">    </span><span class="c1"># Sync notebooks from root to docs/source/notebooks/</span>
+make<span class="w"> </span>docs-conda<span class="w">        </span><span class="c1"># Build and deploy to GitHub Pages</span>
+</pre></div>
+</div>
+</section>
+<section id="development">
+<h3>Development<a class="headerlink" href="#development" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>autobuild<span class="w">         </span><span class="c1"># Live rebuild with auto-reload server</span>
+make<span class="w"> </span>clean-docs<span class="w">        </span><span class="c1"># Clean build files</span>
+</pre></div>
+</div>
+</section>
+<section id="deployment">
+<h3>Deployment<a class="headerlink" href="#deployment" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>deploy<span class="w">            </span><span class="c1"># Deploy to GitHub Pages</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="documentation-structure">
+<h2>📁 Documentation Structure<a class="headerlink" href="#documentation-structure" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docs/
+├── source/                    # Source files
+│   ├── index.md              # Main documentation page
+│   ├── conf.py               # Sphinx configuration
+│   ├── _static/              # Static assets (images, CSS)
+│   ├── _templates/           # Custom templates
+│   ├── notes/                # Documentation pages
+│   │   ├── setup_guide.md    # Deprecated (see SETUP.md in root)
+│   │   ├── api.md            # API documentation
+│   │   ├── developers.md     # Developer guide
+│   │   └── ...
+│   └── notebooks/            # Jupyter notebooks (synced from root)
+│       ├── Store_explorer.ipynb
+│       ├── Visuals_BC.ipynb
+│       └── resource_module_runner.ipynb
+├── build/                     # Generated HTML (auto-created)
+│   └── html/                 # HTML output
+└── requirements.txt          # Documentation dependencies
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="sphinx-configuration">
+<h2>🔧 Sphinx Configuration<a class="headerlink" href="#sphinx-configuration" title="Link to this heading">#</a></h2>
+<section id="key-settings-docs-source-conf-py">
+<h3>Key Settings (docs/source/conf.py)<a class="headerlink" href="#key-settings-docs-source-conf-py" title="Link to this heading">#</a></h3>
+<p>The documentation uses:</p>
+<ul class="simple">
+<li><p><strong>Theme:</strong> <code class="docutils literal notranslate"><span class="pre">sphinx-book-theme</span></code> (modern, responsive)</p></li>
+<li><p><strong>Format:</strong> MyST Markdown (<code class="docutils literal notranslate"><span class="pre">.md</span></code> files with extended syntax)</p></li>
+<li><p><strong>Extensions:</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">myst_parser</span></code> - Markdown support</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nbsphinx</span></code> - Jupyter notebook integration</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sphinx.ext.autodoc</span></code> - API documentation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sphinx.ext.viewcode</span></code> - Source code links</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="dependencies">
+<h3>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">#</a></h3>
+<p>Documentation dependencies are managed through the main conda environment:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># In env/environment.yml</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sphinx</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">pip</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myst-parser</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sphinx-book-theme</span><span class="w">  </span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbsphinx</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sphinx-autobuild</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghp-import</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="notebook-integration">
+<h2>📓 Notebook Integration<a class="headerlink" href="#notebook-integration" title="Link to this heading">#</a></h2>
+<section id="automatic-sync">
+<h3>Automatic Sync<a class="headerlink" href="#automatic-sync" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">docs-build</span></code> command automatically syncs notebooks:</p>
+<p><strong>Source Locations → Documentation:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">notebooks/Store_explorer.ipynb</span></code> → <code class="docutils literal notranslate"><span class="pre">docs/source/notebooks/Store_explorer.ipynb</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">notebooks/Visuals_BC.ipynb</span></code> → <code class="docutils literal notranslate"><span class="pre">docs/source/notebooks/Visuals_BC.ipynb</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">resource_module_runner.ipynb</span></code> → <code class="docutils literal notranslate"><span class="pre">docs/source/notebooks/resource_module_runner.ipynb</span></code></p></li>
+</ul>
+</section>
+<section id="manual-sync">
+<h3>Manual Sync<a class="headerlink" href="#manual-sync" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>sync-notebooks
+</pre></div>
+</div>
+</section>
+<section id="adding-new-notebooks">
+<h3>Adding New Notebooks<a class="headerlink" href="#adding-new-notebooks" title="Link to this heading">#</a></h3>
+<ol class="arabic">
+<li><p>Add notebook to root <code class="docutils literal notranslate"><span class="pre">notebooks/</span></code> directory</p></li>
+<li><p>Update sync command in Makefile:</p>
+<div class="highlight-makefile notranslate"><div class="highlight"><pre><span></span><span class="nf">sync-notebooks</span><span class="o">:</span>
+<span class="w">    </span>@cp<span class="w"> </span>notebooks/your_new_notebook.ipynb<span class="w"> </span>docs/source/notebooks/
+</pre></div>
+</div>
+</li>
+<li><p>Add to <code class="docutils literal notranslate"><span class="pre">docs/source/index.md</span></code> toctree:</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>```{toctree}
+:caption: &#39;Notebooks:&#39;
+
+notebooks/your_new_notebook
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="github-pages-deployment">
+<h2>🌐 GitHub Pages Deployment<a class="headerlink" href="#github-pages-deployment" title="Link to this heading">#</a></h2>
+<section id="automated-deployment">
+<h3>Automated Deployment<a class="headerlink" href="#automated-deployment" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>deploy
+</pre></div>
+</div>
+<p>This command:</p>
+<ol class="arabic simple">
+<li><p>Builds documentation (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">docs-build</span></code>)</p></li>
+<li><p>Creates Jekyll bypass files (<code class="docutils literal notranslate"><span class="pre">.nojekyll</span></code>, <code class="docutils literal notranslate"><span class="pre">_config.yml</span></code>)</p></li>
+<li><p>Deploys to <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code> branch using <code class="docutils literal notranslate"><span class="pre">ghp-import</span></code></p></li>
+<li><p>Documentation available at: https://deltae.github.io/RESource/</p></li>
+</ol>
+</section>
+<section id="manual-github-pages-setup">
+<h3>Manual GitHub Pages Setup<a class="headerlink" href="#manual-github-pages-setup" title="Link to this heading">#</a></h3>
+<p>If setting up for first time:</p>
+<ol class="arabic simple">
+<li><p>Go to repository Settings → Pages</p></li>
+<li><p>Set source to &quot;Deploy from a branch&quot;</p></li>
+<li><p>Select branch: <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code></p></li>
+<li><p>Path: <code class="docutils literal notranslate"><span class="pre">/</span> <span class="pre">(root)</span></code></p></li>
+</ol>
+</section>
+<section id="jekyll-bypass">
+<h3>Jekyll Bypass<a class="headerlink" href="#jekyll-bypass" title="Link to this heading">#</a></h3>
+<p>The build process creates these files to bypass Jekyll processing:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">.nojekyll</span></code> - Disables Jekyll</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_config.yml</span></code> - Minimal Jekyll config</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">README.md</span></code> - GitHub Pages notice</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="writing-documentation">
+<h2>✍️ Writing Documentation<a class="headerlink" href="#writing-documentation" title="Link to this heading">#</a></h2>
+<section id="myst-markdown-syntax">
+<h3>MyST Markdown Syntax<a class="headerlink" href="#myst-markdown-syntax" title="Link to this heading">#</a></h3>
+<p>Documentation uses MyST (Markedly Structured Text) which extends Markdown:</p>
+<p><strong>Basic MyST:</strong></p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gh"># Page Title</span>
+
+<span class="gu">## Section</span>
+
+Regular markdown content...
+
+```{note}
+This is a note box
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is a warning box</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+**Cross-references:**
+```markdown
+[Setup Guide](../../../SETUP.md)  # Link to consolidated setup guide
+{ref}`section-label`      # Link to section
+</pre></div>
+</div>
+<p><strong>Code blocks with syntax highlighting:</strong></p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>```python
+import pandas as pd
+df = pd.DataFrame({&#39;col&#39;: [1, 2, 3]})
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+### Adding New Documentation Pages
+1. Create `.md` file in `docs/source/notes/`
+2. Add to `docs/source/index.md` toctree:
+   ```markdown
+   ```{toctree}
+   :caption: &#39;Contents:&#39;
+   
+   notes/your_new_page
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="development-workflow">
+<h2>🔍 Development Workflow<a class="headerlink" href="#development-workflow" title="Link to this heading">#</a></h2>
+<section id="live-development-recommended">
+<h3>Live Development (Recommended)<a class="headerlink" href="#live-development-recommended" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start live reload server</span>
+make<span class="w"> </span>autobuild
+
+<span class="c1"># In another terminal, edit files in docs/source/</span>
+<span class="c1"># Browser automatically refreshes on changes</span>
+<span class="c1"># Available at: http://localhost:8000</span>
+</pre></div>
+</div>
+</section>
+<section id="build-and-check">
+<h3>Build and Check<a class="headerlink" href="#build-and-check" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build documentation</span>
+make<span class="w"> </span>docs-build
+
+<span class="c1"># Check for warnings/errors in output</span>
+<span class="c1"># View locally: docs/build/html/index.html</span>
+</pre></div>
+</div>
+</section>
+<section id="deploy-changes">
+<h3>Deploy Changes<a class="headerlink" href="#deploy-changes" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build and deploy to GitHub Pages</span>
+make<span class="w"> </span>deploy
+
+<span class="c1"># View live: https://deltae.github.io/RESource/</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="troubleshooting">
+<h2>🐛 Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">#</a></h2>
+<section id="common-issues">
+<h3>Common Issues<a class="headerlink" href="#common-issues" title="Link to this heading">#</a></h3>
+<p><strong>Build Errors:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check environment has Sphinx dependencies</span>
+make<span class="w"> </span>conda-status
+
+<span class="c1"># Clean build and retry</span>
+make<span class="w"> </span>clean-docs
+make<span class="w"> </span>docs-build
+</pre></div>
+</div>
+<p><strong>Notebook Issues:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ensure notebooks are synced</span>
+make<span class="w"> </span>sync-notebooks
+
+<span class="c1"># Check notebook paths in index.md toctree</span>
+</pre></div>
+</div>
+<p><strong>GitHub Pages Not Updating:</strong></p>
+<ul class="simple">
+<li><p>Check gh-pages branch exists and has content</p></li>
+<li><p>Verify GitHub Pages settings point to gh-pages branch</p></li>
+<li><p>Check Actions tab for deployment status</p></li>
+</ul>
+<p><strong>Live Reload Not Working:</strong></p>
+<ul class="simple">
+<li><p>Ensure port 8000 is available</p></li>
+<li><p>Check for firewall issues</p></li>
+<li><p>Try different port: <code class="docutils literal notranslate"><span class="pre">sphinx-autobuild</span> <span class="pre">docs/source</span> <span class="pre">docs/build</span> <span class="pre">--port</span> <span class="pre">8001</span></code></p></li>
+</ul>
+</section>
+<section id="debug-commands">
+<h3>Debug Commands<a class="headerlink" href="#debug-commands" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Verbose build</span>
+sphinx-build<span class="w"> </span>-v<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>docs/source<span class="w"> </span>docs/build/html
+
+<span class="c1"># Check configuration</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import sphinx; print(sphinx.__version__)&quot;</span>
+
+<span class="c1"># List extensions</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from docs.source.conf import extensions; print(extensions)&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="documentation-checklist">
+<h2>📋 Documentation Checklist<a class="headerlink" href="#documentation-checklist" title="Link to this heading">#</a></h2>
+<section id="before-committing">
+<h3>Before Committing<a class="headerlink" href="#before-committing" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>[ ] Documentation builds without errors: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">docs-build</span></code></p></li>
+<li><p>[ ] Live reload works: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">autobuild</span></code></p></li>
+<li><p>[ ] New notebooks are synced: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">sync-notebooks</span></code></p></li>
+<li><p>[ ] Cross-references work</p></li>
+<li><p>[ ] Images and assets are included</p></li>
+</ul>
+</section>
+<section id="before-release">
+<h3>Before Release<a class="headerlink" href="#before-release" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>[ ] All documentation is current</p></li>
+<li><p>[ ] API documentation is updated</p></li>
+<li><p>[ ] Examples and tutorials work</p></li>
+<li><p>[ ] Deploy to GitHub Pages: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">deploy</span></code></p></li>
+<li><p>[ ] Verify live site: https://deltae.github.io/RESource/</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="best-practices">
+<h2>💡 Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h2>
+<section id="content-organization">
+<h3>Content Organization<a class="headerlink" href="#content-organization" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Keep setup/installation info in <code class="docutils literal notranslate"><span class="pre">SETUP.md</span></code> (repository root)</p></li>
+<li><p>API documentation in <code class="docutils literal notranslate"><span class="pre">api.md</span></code></p></li>
+<li><p>Developer guides in <code class="docutils literal notranslate"><span class="pre">developers.md</span></code></p></li>
+<li><p>Use descriptive filenames without spaces</p></li>
+</ul>
+</section>
+<section id="writing-style">
+<h3>Writing Style<a class="headerlink" href="#writing-style" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Use MyST admonitions (<code class="docutils literal notranslate"><span class="pre">{note}</span></code>, <code class="docutils literal notranslate"><span class="pre">{warning}</span></code>) for callouts</p></li>
+<li><p>Include code examples with proper syntax highlighting</p></li>
+<li><p>Cross-reference other documentation sections</p></li>
+<li><p>Keep line length reasonable for editing</p></li>
+</ul>
+</section>
+<section id="maintenance">
+<h3>Maintenance<a class="headerlink" href="#maintenance" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update documentation with code changes</p></li>
+<li><p>Test all code examples</p></li>
+<li><p>Keep screenshot/images current</p></li>
+<li><p>Regular spelling/grammar checks</p></li>
+</ul>
+<hr class="docutils" />
+<p><em>This guide covers all aspects of RESource documentation development and deployment.</em></p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="api.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">RES API References</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">🚀 Quick Start</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-documentation-locally">Build Documentation Locally</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#live-development">Live Development</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-commands">📖 Documentation Commands</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#building">Building</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development">Development</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deployment">Deployment</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-structure">📁 Documentation Structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sphinx-configuration">🔧 Sphinx Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-settings-docs-source-conf-py">Key Settings (docs/source/conf.py)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notebook-integration">📓 Notebook Integration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automatic-sync">Automatic Sync</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-sync">Manual Sync</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-new-notebooks">Adding New Notebooks</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#github-pages-deployment">🌐 GitHub Pages Deployment</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automated-deployment">Automated Deployment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-github-pages-setup">Manual GitHub Pages Setup</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jekyll-bypass">Jekyll Bypass</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-documentation">✍️ Writing Documentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#myst-markdown-syntax">MyST Markdown Syntax</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-workflow">🔍 Development Workflow</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#live-development-recommended">Live Development (Recommended)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-and-check">Build and Check</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deploy-changes">Deploy Changes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">🐛 Troubleshooting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-issues">Common Issues</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#debug-commands">Debug Commands</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-checklist">📋 Documentation Checklist</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-committing">Before Committing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-release">Before Release</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">💡 Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#content-organization">Content Organization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-style">Writing Style</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maintenance">Maintenance</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

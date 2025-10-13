@@ -46,6 +46,8 @@ from matplotlib.axes import Axes
 from matplotlib.colors import ListedColormap
 from rasterio.plot import show
 from shapely.geometry.base import BaseGeometry
+import rasterio
+from tempfile import NamedTemporaryFile
 
 from RES import utility as utils
 from RES.boundaries import GADMBoundaries
@@ -815,7 +817,11 @@ class LandContainer(AttributesParser):
 
 
         for CLC_raster_config_item in CLC_raster_configs:
-            CLC_raster_config_item["filepath"]=Path(self.CLC_config.get('root'))/CLC_raster_config_item['raster']
+            CLC_raster_config_item["filepath"]=Path(self.CLC_config.get('root'))/
+            
+            if 
+            
+            CLC_raster_config_item['raster']
                 
         utils.print_update(level=PRINT_LEVEL_BASE+3,
                            message= f"{__name__}| Raster Layers Loaded")
@@ -1072,7 +1078,7 @@ def load_layers_to_excluder(
             title=r.get("stepwise_plot_title", r.get("name", "Raster Layer")),
             invert=invert,
             is_raster=True,
-            filepath=r["filepath"],
+            filepath=ensure_uint8_raster(r["filepath"]),
             codes=codes,
             disregard_other_layers=disregard_other_layers
         )
@@ -1219,3 +1225,27 @@ def get_eligible_share(region_shape, excluder: ExclusionContainer) -> tuple:
     eligible_share = eligible_area / region_area
 
     return masked, transform, eligible_share
+
+@staticmethod
+
+
+def ensure_uint8_raster(filepath):
+    """
+    Ensure the raster is in uint8 format with nodata as 255. If not, convert it and save to a temporary file.
+
+    Args:
+        filepath (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    with rasterio.open(filepath) as src:
+        if src.dtypes[0] != 'uint8' or src.nodata not in (255, 0, None):
+            data = src.read(1).astype(np.uint8)
+            meta = src.meta.copy()
+            meta.update(dtype='uint8', nodata=255)
+            tmp = NamedTemporaryFile(suffix=".tif", delete=False)
+            with rasterio.open(tmp.name, "w", **meta) as dst:
+                dst.write(data, 1)
+            return tmp.name
+    return filepath

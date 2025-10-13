@@ -6,10 +6,14 @@
 help:
 	@echo "RESource Project - Available Commands:"
 	@echo ""
+	@echo "Setup:"
+	@echo "  📚 See SETUP.md for complete setup guide"
+	@echo ""
 	@echo "Environment:"
-	@echo "  setupenv    - Setup conda environment from env/environment.yml"
-	@echo "  updateenv   - Update existing conda environment"
-	@echo "  exportenv   - Export current environment to env/environment.yml"
+	@echo "  setupenv       - Setup conda environment from env/environment.yml (RECOMMENDED)"
+	@echo "  setupenv-clean - Setup tested working environment (manual method)"
+	@echo "  updateenv      - Update existing conda environment"
+	@echo "  exportenv      - Export current environment to env/environment.yml"
 	@echo ""
 	@echo "Documentation:"
 	@echo "  docs        - Build and deploy documentation"
@@ -20,83 +24,103 @@ help:
 	@echo "  clean       - Clean build files and cache"
 
 # Environment Management
+setupenv-clean:
+	@echo "🚀 Setting up clean, tested RESource environment..."
+	@if conda env list | grep -q "^RESource "; then \
+		echo "⚠️  Environment 'RESource' already exists."; \
+		echo "To replace with clean version, run: conda env remove -n RESource && make setupenv-clean"; \
+	else \
+		echo "📦 Creating conda environment with Python 3.12..."; \
+		conda create -n RESource python=3.12 -y; \
+		echo "📦 Installing core geospatial packages..."; \
+		conda run -n RESource pip install numpy pandas geopandas==1.0.1 shapely==2.0.6 \
+			dask-geopandas==0.4.2 fiona==1.10.1 pyproj==3.6.1 rasterio==1.4.3; \
+		echo "📦 Installing additional packages..."; \
+		conda run -n RESource pip install atlite xarray netcdf4 matplotlib seaborn jupyter \
+			ipywidgets h5py scikit-learn requests pyyaml tqdm geojson rioxarray colorama \
+			pygadm osmnx plotly tables progressbar memory-profiler configparser lxml \
+			pyogrio openpyxl; \
+		echo "✅ Clean RESource environment setup completed!"; \
+		echo "💡 Activate with: conda activate RESource"; \
+	fi
+
 setupenv:
-	@echo "Setting up conda environment 'RES'..."
-	@if conda env list | grep -q "^RES "; then \
-		echo "Environment 'RES' already exists. Use 'make updateenv' to update."; \
+	@echo "Setting up conda environment 'RESource'..."
+	@if conda env list | grep -q "^RESource "; then \
+		echo "Environment 'RESource' already exists. Use 'make updateenv' to update."; \
 	else \
 		conda env create -f env/environment.yml; \
-		conda run -n RES pip install -e .; \
-		echo "✅ Environment 'RES' setup completed!"; \
+		conda run -n RESource pip install -e .; \
+		echo "✅ Environment 'RESource' setup completed!"; \
 	fi
 
 updateenv:
-	@echo "Updating conda environment 'RES'..."
-	@if conda env list | grep -q "^RES "; then \
+	@echo "Updating conda environment 'RESource'..."
+	@if conda env list | grep -q "^RESource "; then \
 		conda env update -f env/environment.yml; \
-		conda run -n RES pip install -e .; \
+		conda run -n RESource pip install -e .; \
 		echo "✅ Environment updated!"; \
 	else \
-		echo "❌ Environment 'RES' not found. Run 'make setupenv' first."; \
+		echo "❌ Environment 'RESource' not found. Run 'make setupenv' first."; \
 	fi
 
 exportenv:
-	@echo "Exporting conda environment 'RES' to env/environment.yml..."
-	@if conda env list | grep -q "^RES "; then \
+	@echo "Exporting conda environment 'RESource' to env/environment.yml..."
+	@if conda env list | grep -q "^RESource "; then \
 		mkdir -p env; \
-		conda env export -n RES > env/environment.yml; \
+		conda env export -n RESource > env/environment.yml; \
 		echo "✅ Environment exported to env/environment.yml"; \
 	else \
-		echo "❌ Environment 'RES' not found. Run 'make setupenv' first."; \
+		echo "❌ Environment 'RESource' not found. Run 'make setupenv' first."; \
 		exit 1; \
 	fi
 
 # Running Code
 run:
 	@echo "Running main RESource script..."
-	@if conda env list | grep -q "^RES "; then \
-		conda run -n RES python run.py $(ARGS); \
+	@if conda env list | grep -q "^RESource "; then \
+		conda run -n RESource python run.py $(ARGS); \
 	else \
-		echo "❌ Environment 'RES' not found. Run 'make setupenv' first."; \
+		echo "❌ Environment 'RESource' not found. Run 'make setupenv' first."; \
 		exit 1; \
 	fi
 
 # Documentation
 docs:
 	@echo "Building and deploying documentation..."
-	@if conda env list | grep -q "^RES "; then \
-		mkdir -p docs/build/html; \
+	@if conda env list | grep -q "^RESource "; then \
+		mkdir -p docs/_build/html; \
 		mkdir -p docs/source/notebooks; \
 		cp notebooks/*.ipynb docs/source/notebooks/ 2>/dev/null || true; \
-		conda run -n RES sphinx-build -b html docs/source docs/build/html; \
-		echo "" > docs/build/html/.nojekyll; \
-		conda run -n RES ghp-import -n -p -f docs/build/html; \
+		conda run -n RESource sphinx-build -b html docs/source docs/_build/html; \
+		echo "" > docs/_build/html/.nojekyll; \
+		conda run -n RESource ghp-import -n -p -f docs/_build/html; \
 		echo "✅ Documentation deployed to GitHub Pages!"; \
 	else \
-		echo "❌ Environment 'RES' not found. Run 'make setupenv' first."; \
+		echo "❌ Environment 'RESource' not found. Run 'make setupenv' first."; \
 		exit 1; \
 	fi
 
 autobuild:
 	@echo "Starting live documentation rebuild on port 8000..."
-	@if conda env list | grep -q "^RES "; then \
+	@if conda env list | grep -q "^RESource "; then \
 		mkdir -p docs/source/notebooks; \
 		cp notebooks/*.ipynb docs/source/notebooks/ 2>/dev/null || true; \
-		echo "� Server: http://127.0.0.1:8000"; \
-		conda run -n RES sphinx-autobuild docs/source docs/build --host 127.0.0.1 --port 8000; \
+		echo "🔄 Server: http://127.0.0.1:8000"; \
+		conda run -n RESource sphinx-autobuild docs/source docs/_build/html --host 127.0.0.1 --port 8000; \
 	else \
-		echo "❌ Environment 'RES' not found. Run 'make setupenv' first."; \
+		echo "❌ Environment 'RESource' not found. Run 'make setupenv' first."; \
 		exit 1; \
 	fi
 
 deploy:
 	@echo "Deploying documentation to GitHub Pages..."
-	@if conda env list | grep -q "^RES "; then \
-		conda run -n RES ghp-import -n -p -f docs/build/html; \
+	@if conda env list | grep -q "^RESource "; then \
+		conda run -n RESource ghp-import -n -p -f docs/_build/html; \
 		echo "✅ Documentation deployed!"; \
 		echo "🌐 Visit: https://deltae.github.io/RESource/"; \
 	else \
-		echo "❌ Environment 'RES' not found. Run 'make setupenv' first."; \
+		echo "❌ Environment 'RESource' not found. Run 'make setupenv' first."; \
 		exit 1; \
 	fi
 

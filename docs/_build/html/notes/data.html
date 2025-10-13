@@ -1,0 +1,1455 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Data Sources and Supply Chain &#8212; RESource 2025.07 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=e9b82cb4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notes/data';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contributing Developers" href="developers.html" />
+    <link rel="prev" title="Best Practices and Guidelines" href="learning.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">Best Practices and Guidelines</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Store_explorer.html">Explore data store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="api.html">RES API References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">Documentation Build Guide</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notes/data.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Data Sources and Supply Chain</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-source-categories">Data Source Categories</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#access-methods">Access Methods</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#power-system-infrastructure-data">1. Power System Infrastructure Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coders-canadian-open-data-exchange-for-renewable-energy-systems">1.1 CODERS (Canadian Open Data Exchange for Renewable Energy Systems)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#climate-and-weather-data">2. Climate and Weather Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#era5-ecmwf-reanalysis-v5">2.1 ERA5 (ECMWF Reanalysis v5)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#geospatial-and-administrative-data">3. Geospatial and Administrative Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gadm-global-administrative-areas">3.1 GADM (Global Administrative Areas)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cpcad-canadian-protected-and-conserved-areas-database">3.2 CPCAD (Canadian Protected and Conserved Areas Database)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#land-constraint-and-suitability-data">4. Land Constraint and Suitability Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaez-global-agro-ecological-zones">4.1 GAEZ (Global Agro-Ecological Zones)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corine-land-cover">4.2 CORINE Land Cover</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#osm-openstreetmap-infrastructure-constraints">4.3 OSM (OpenStreetMap) Infrastructure Constraints</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#renewable-energy-resource-data">5. Renewable Energy Resource Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gwa-global-wind-atlas">5.1 GWA (Global Wind Atlas)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nrel-atb-annual-technology-baseline">5.2 NREL ATB (Annual Technology Baseline)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#oedb-open-energy-database-wind-turbine-library">5.3 OEDB (Open Energy Database) Wind Turbine Library</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demographics-and-demand-data">6. Demographics and Demand Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ceei-community-energy-and-emissions-inventory">6.1 CEEI (Community Energy and Emissions Inventory)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#population-data">6.2 Population Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#worldpop">6.3 WorldPop</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#legends-and-color-coding-standardization">7. Legends and Color Coding Standardization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-legend-files">7.1 Available Legend Files</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clc-2018-legend-csv">1. <strong>CLC_2018_legend.csv</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exclusion-2017-legend-csv">2. <strong>exclusion_2017_legend.csv</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaez-slpmed05-legend-csv">3. <strong>gaez_slpmed05_legend.csv</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#faocmb-2010-legend-csv">4. <strong>faocmb_2010_legend.csv</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cpcad-legends-csv">5. <strong>CPCAD_legends.csv</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#legend-file-structure">7.2 Legend File Structure</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-and-configuration">Usage and Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#color-map-integration">Color Map Integration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-version-harmonization">Data Version Harmonization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#customizing-colors">Customizing Colors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-prevention">Error Prevention</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="data-sources-and-supply-chain">
+<h1>Data Sources and Supply Chain<a class="headerlink" href="#data-sources-and-supply-chain" title="Link to this heading">#</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The data pipeline is under active development. This documentation will be updated as more regional studies are completed and new data sources are integrated.</p>
+</div>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>The RESource data supply chain integrates multiple global and regional data sources to support comprehensive renewable energy resource assessment and energy system modeling. The system prioritizes global data sources for consistency and scalability, with local government data sources used where global alternatives are unavailable or insufficient.</p>
+<p>This documentation provides comprehensive information about each data source, including licensing requirements, access methods, data characteristics, and integration procedures. All use cases described are specific to renewable energy resource assessment and energy system analysis within the RESource framework.</p>
+<section id="data-source-categories">
+<h3>Data Source Categories<a class="headerlink" href="#data-source-categories" title="Link to this heading">#</a></h3>
+<p>The RESource system integrates data across several key categories:</p>
+<ul>
+<li><p><strong>Power System Infrastructure</strong>: Existing generation facilities, transmission networks, and grid connectivity data</p></li>
+<li><p><strong>Climate and Weather</strong>: Meteorological data for renewable resource characterization and energy system modeling</p></li>
+<li><p><strong>Geospatial and Administrative</strong>: Boundaries, land use constraints, and geographic reference data</p></li>
+<li><p><strong>Land Constraints</strong>: Protected areas, terrain limitations, and development exclusions</p></li>
+<li><p><strong>Technology and Economics</strong>: Cost data, performance parameters, and technology specifications</p></li>
+<li><p><strong>Demographics and Demand</strong>: Population data and energy demand characteristics</p>
+<blockquote>
+<div><p>currently not configured in the public version. Features under active development.</p>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="access-methods">
+<h3>Access Methods<a class="headerlink" href="#access-methods" title="Link to this heading">#</a></h3>
+<p>Data sources employ various access mechanisms:</p>
+<ul class="simple">
+<li><p><strong>API Access</strong>: Automated retrieval with authentication and caching</p></li>
+<li><p><strong>Direct Download</strong>: HTTP-based file downloads with local storage</p></li>
+<li><p><strong>Manual Processing</strong>: Interactive portals requiring user input</p></li>
+<li><p><strong>Third-party Services</strong>: Integration through specialized libraries and tools</p></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><strong>Need Help? Encountered Issues?</strong></p>
+<p>If you experience technical difficulties, workflow failures, or data pipeline breakdowns while using RESource:</p>
+<ol class="arabic simple">
+<li><p><strong>Check the Documentation</strong>: Review the specific data source instructions and configuration examples</p></li>
+<li><p><strong>GitHub Issues</strong>: Report bugs, request features, or seek help at <a class="reference external" href="https://github.com/DeltaE/RESource/issues">RESource Issues</a></p></li>
+<li><p><strong>Contact Developers</strong>: Reach out to the development team for technical support and troubleshooting assistance</p></li>
+<li><p><strong>Community Support</strong>: Join discussions and share experiences with other RESource users</p></li>
+</ol>
+<p><strong>Common Issues:</strong></p>
+<ul class="simple">
+<li><p>API authentication failures</p></li>
+<li><p>Network connectivity problems</p></li>
+<li><p>Configuration file errors</p></li>
+<li><p>Missing dependencies or environment setup</p></li>
+<li><p>Data format compatibility issues</p></li>
+</ul>
+<p>Developer(s) actively monitors issues and provides support for data pipeline integration challenges.</p>
+</div>
+</section>
+</section>
+<section id="power-system-infrastructure-data">
+<h2>1. Power System Infrastructure Data<a class="headerlink" href="#power-system-infrastructure-data" title="Link to this heading">#</a></h2>
+<section id="coders-canadian-open-data-exchange-for-renewable-energy-systems">
+<h3>1.1 CODERS (Canadian Open Data Exchange for Renewable Energy Systems)<a class="headerlink" href="#coders-canadian-open-data-exchange-for-renewable-energy-systems" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>Exclusively for Canadian studies</p>
+</div></blockquote>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>RESource uses the <a class="reference external" href="https://github.com/DeltaE/RESource/blob/main/RES/coders.py">coders</a> module to access CODERS API data. Explore existing API endpoints and extend the module with custom methods to fit specific research needs.</p>
+</div>
+<ul>
+<li><p>🏷️ <strong>Tag</strong>: Local (Canada)</p></li>
+<li><p>📄 <strong>License</strong>: Open data license with attribution required. Subjected to End-user License Agreement (EULA). Academic and research use permitted. Check if tables are marked as 'Proprietary' or 'restricted'.</p>
+<ul class="simple">
+<li><p>Attribution: &quot;Data source: CODERS (Canadian Open Data Exchange for Renewable Energy Systems), SESIT Lab&quot;</p></li>
+</ul>
+</li>
+<li><p>🏛️ <strong>Authority</strong>: Sustainable Energy Systems Integration &amp; Transitions (SESIT) Lab, University of Victoria, Canada</p></li>
+<li><p>📊 <strong>Data</strong>: <a class="reference external" href="https://coders.cme-emh.ca/">CODERS dashboard</a> and <a class="reference external" href="https://sesit.dev/api/docs">CODERS API Documentation</a></p>
+<ul class="simple">
+<li><p>🔍 <strong>Resolution</strong>: Individual facility-level data for power system infrastructure across Canada</p></li>
+</ul>
+</li>
+<li><p>📝 <strong>Description</strong>: CODERS provides comprehensive Canadian power system infrastructure data including power generation facilities (existing and planned), transmission substations, transmission lines, and regional power system characteristics. The database contains both current and historical power system data with geographic coordinates, capacity information, technology specifications, and operational parameters. Data is available at provincial and national scales, supporting detailed power system analysis and renewable energy integration studies.</p></li>
+<li><p>🎯 <strong>Use-case</strong>:</p>
+<ul class="simple">
+<li><p><strong>Power System Infrastructure Analysis</strong>: Existing generator locations, capacities, and technology types for baseline power system modeling</p></li>
+<li><p><strong>Transmission Network Mapping</strong>: Substation locations and transmission line routes for grid connectivity analysis</p></li>
+<li><p><strong>Regional Energy Assessment</strong>: Provincial power system characteristics and capacity for regional energy planning</p></li>
+<li><p><strong>Renewable Integration Studies</strong>: Baseline power system data for evaluating renewable energy integration potential
+Available data tables include: generators, substations, transmission_lines, hydro_existing, wind_generators, forecasted_annual_demand</p></li>
+</ul>
+</li>
+<li><p>⚙️ <strong>Supply_chain_mode</strong>: API-based data retrieval with local caching</p>
+<ul>
+<li><p>📋 <strong>Instruction</strong>:</p>
+<ol class="arabic simple">
+<li><p><strong>API Key Setup</strong>: Create <code class="docutils literal notranslate"><span class="pre">coders_api.yaml</span></code> config file with the structure below:</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">Default_user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your_username&gt;</span>
+<span class="nt">api_keys</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">&lt;your_username&gt;</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your_api_key&gt;</span>
+<span class="w">  </span><span class="nt">&lt;other_user1&gt;</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;other_api_key1&gt;</span>
+<span class="w">  </span><span class="nt">&lt;other_user2&gt;</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;other_api_key2&gt;</span>
+<span class="w">  </span><span class="c1"># Additional users as needed</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>File Storage</strong>: Save the API config file at directory: <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/CODERS/coders_api.yaml</span></code></p></li>
+<li><p><strong>API Access</strong>: Contact CODERS team to request API access keys for your research</p></li>
+<li><p><strong>Data Retrieval</strong>: The system automatically:</p>
+<ul class="simple">
+<li><p>Fetches data from CODERS API using authenticated requests</p></li>
+<li><p>Caches data locally in pickle format for improved performance</p></li>
+<li><p>Filters data by province/region as configured</p></li>
+<li><p>Converts tabular data to GeoDataFrames when geographic coordinates are available</p></li>
+</ul>
+</li>
+<li><p><strong>Available Data Sources</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cef</span></code>: Canadian Energy Facts data tables</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">coders</span></code>: Core power system infrastructure tables</p></li>
+</ul>
+</li>
+<li><p><strong>Example Usage</strong>: The system provides methods to:</p>
+<ul class="simple">
+<li><p>List available tables: <code class="docutils literal notranslate"><span class="pre">show_list('coders')</span></code> or <code class="docutils literal notranslate"><span class="pre">show_list('cef')</span></code></p></li>
+<li><p>Retrieve national data: <code class="docutils literal notranslate"><span class="pre">get_table_canada('generators')</span></code></p></li>
+<li><p>Filter provincial data: <code class="docutils literal notranslate"><span class="pre">get_table_provincial('substations')</span></code></p></li>
+<li><p>Force data refresh: <code class="docutils literal notranslate"><span class="pre">force_update=True</span></code> parameter</p></li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="climate-and-weather-data">
+<h2>2. Climate and Weather Data<a class="headerlink" href="#climate-and-weather-data" title="Link to this heading">#</a></h2>
+<section id="era5-ecmwf-reanalysis-v5">
+<h3>2.1 ERA5 (ECMWF Reanalysis v5)<a class="headerlink" href="#era5-ecmwf-reanalysis-v5" title="Link to this heading">#</a></h3>
+<ul>
+<li><p>🏷️ <strong>Tag</strong>: Global</p></li>
+<li><p>🏛️ <strong>Authority</strong>: Copernicus Climate Change Service (C3S), ECMWF, EU.</p></li>
+<li><p>📄 <strong>License</strong>: free of charge, worldwide, non-exclusive, royalty free and perpetual.</p>
+<ul class="simple">
+<li><p>Caution: have to mention the attribution regarding C3S.</p></li>
+<li><p><a class="reference external" href="https://cds.climate.copernicus.eu/api/v2/terms/static/licence-to-use-copernicus-products.pdf">Check Article 4,5 of the license agreement</a></p></li>
+</ul>
+</li>
+<li><p>📊 <strong>Data</strong>: <a class="reference external" href="https://cds-beta.climate.copernicus.eu/datasets/reanalysis-era5-complete?tab=overview">Complete ERA5 global atmospheric reanalysis</a></p></li>
+<li><p>📝 <strong>Description</strong>: Solar influx, wind speed (vertical components at 100m), land elevation (heights) time-series data for weather years.</p>
+<ul class="simple">
+<li><p>🔍 <strong>Resolution</strong>: hourly time-series for .25 arc degree (~ 30km) grids.</p></li>
+</ul>
+</li>
+<li><p>🎯 <strong>Use-case</strong>:</p>
+<ul class="simple">
+<li><p>A cutout is one of the basis for this work and associated calculations.</p></li>
+<li><p>We are using <a class="reference external" href="https://atlite.readthedocs.io/en/master/index.html">atlite</a> to create the cutout and also to download the <a class="reference external" href="https://www.ecmwf.int/en/forecasts/dataset/ecmwf-reanalysis-v5#:~:text=ERA5%20is%20the%20fifth%20generation,Service%20(C3S)%20at%20ECMWF.">ERA5</a> data for the cutout. The cutout will be saved as a NetCDF (<strong>.nc</strong>) file. NetCDF is a file format often used for storing large scientific data sets that often involves time-series data, especially in the fields of climate and weather research. Please check this resource for <a class="reference external" href="https://atlite.readthedocs.io/en/latest/examples/create_cutout.html">more about cutout preparation and customization</a>.</p></li>
+<li><p>In this analysis, we are downloading ERA5 data on-demand for a specified region e.g. <strong>BC region cutout</strong> . But <a class="reference external" href="https://atlite.readthedocs.io/en/latest/examples/create_cutout.html">atlite</a> does also work with other data sources e.g. <a class="reference external" href="https://atlite.readthedocs.io/en/latest/examples/create_cutout_SARAH.html">SARAH-2</a> for high resolution solar dataset.</p></li>
+<li><p>NREL has higher spatio-temporal dataset for renewable resources but does not cover complete global regions. Atlite currently does not support  NREL's <a class="reference external" href="https://nsrdb.nrel.gov">NSDRB for solar</a> or <a class="reference external" href="https://wrdb.nrel.gov/">WRDB for wind</a>. Users can <a class="reference external" href="https://github.com/PyPSA/atlite/issues/213">follow this thread for updates</a>.</p></li>
+<li><p>Atlite does not support ERA5 forecast data yet. Users can <a class="reference external" href="https://github.com/PyPSA/atlite/issues/184">follow this thread for updates</a></p></li>
+</ul>
+<p>Please go through <a class="reference external" href="https://atlite.readthedocs.io/en/master/examples/create_cutout.html">this documentation</a> and example usage of cutout to learn further.</p>
+</li>
+<li><p>⚙️ <strong>Supply_chain_mode</strong>: Automated via cdsapi (current version is <a class="reference external" href="https://cds-beta.climate.copernicus.eu/">cds-beta</a>)</p>
+<blockquote>
+<div><p><U>Note</U>: From Sep 26, 2024 onwards the ERA5 dataset will only be supplied via cds-beta or ads-beta (<a class="reference external" href="https://confluence.ecmwf.int/display/CKB/Please+read%3A+CDS+and+ADS+migrating+to+new+infrastructure%3A+Common+Data+Store+%28CDS%29+Engine">source</a>)</p>
+</div></blockquote>
+<ul>
+<li><p>Before the data can be downloaded from ERA5, it has to be processed by CDS servers, this might take a while depending on the volume of data requested. This only works if you have in before</p>
+<ul class="simple">
+<li><p>For linux users, please proceed as follows:</p></li>
+<li><p>Steps to install the Copernicus Climate Data Store cdsapi package at your <strong>local Linux/WSL</strong> (sourced from &gt; <a class="reference external" href="https://cds-beta.climate.copernicus.eu/how-to-api">Registered and setup your CDS API key as described</a>)</p></li>
+</ul>
+<blockquote>
+<div><p>step1: Setup the CDS API personal access token <br>
+step2: Install the CDS API client. <br></p>
+<blockquote>
+<div><p>Note: atlite currently supports cdsapi &lt;=0.7.2</p>
+</div></blockquote>
+</div></blockquote>
+<p>Now your datapipeline to create the ERA5 Cutout is set.</p>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="geospatial-and-administrative-data">
+<h2>3. Geospatial and Administrative Data<a class="headerlink" href="#geospatial-and-administrative-data" title="Link to this heading">#</a></h2>
+<section id="gadm-global-administrative-areas">
+<h3>3.1 GADM (Global Administrative Areas)<a class="headerlink" href="#gadm-global-administrative-areas" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>🏷️ <strong>Tag</strong>: Global</p>
+<ul>
+<li><p>This data could be sourced locally as well e.g for Canada from <a class="reference external" href="https://open.canada.ca/data/en/dataset/306e5004-534b-4110-9feb-58e3a5c3fd97">Canadian open-dataset</a></p></li>
+<li><p>Other global data sources :</p>
+<ul>
+<li><p>OpenstreetMap via <a class="reference external" href="https://pyrosm.readthedocs.io/en/latest/basics.html#read-boundaries">pyrosm</a> library.</p></li>
+<li><p>World Administrative Boundaries - Countries and Territories by opendatasoft (https://public.opendatasoft.com/explore/dataset/world-administrative-boundaries/export)</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>📄 <strong>License</strong>: <a class="reference external" href="https://gadm.org/license.html">freely available for academic use and other non-commercial use</a></p></li>
+<li><p>🏛️ <strong>Authority</strong>: University of Berkeley, Museum of Vertebrate Zoology and the International Rice Research Institute (2012)</p></li>
+<li><p>📊 <strong>Data</strong>: <a class="reference external" href="https://gadm.org/download_country.html">Download GADM data (v4.1 | 16 July 2022 )</a></p></li>
+<li><p>📝 <strong>Description</strong>: <a class="reference external" href="https://gadm.org/">GADM</a>, the Database of Global Administrative Areas, is a high-resolution database of country administrative areas, with a goal of &quot;all countries, at all levels, at any time period.</p></li>
+<li><p>🎯 <strong>Use-case</strong>: This boundary has been processed for admin level 2 (i.e. sub-provincial) to extract geospatial boundaries of the Regional Districts (RD) e.g. 28 RDs inside BC, Canada. This boundary is primarily used for spatial-grid cell/point mapping, regional overlay visuals, clipping point of interests in regional level while clustering.</p></li>
+<li><p>⚙️ <strong>Supply_chain_mode</strong>: Automated via <a class="reference external" href="https://pypi.org/project/pygadm">pygadm</a> library [supports GADM data V4.1]</p></li>
+</ul>
+</section>
+<section id="cpcad-canadian-protected-and-conserved-areas-database">
+<h3>3.2 CPCAD (Canadian Protected and Conserved Areas Database)<a class="headerlink" href="#cpcad-canadian-protected-and-conserved-areas-database" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>Explicitly for Canadian Studies</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>🏷️ <strong>Tag</strong>: Local</p>
+<ul>
+<li><p>GAEZ also has similar global data under Land Resources (LR) theme, raster data with 7 classes. We are using this data as a mandatory filter in the process. But the local (pan-Canadian) data has more detailed local government and indigenous protected areas' data. The user can control the classes of exclusion and also can use buffer around exclusion for both case.</p></li>
+</ul>
+</li>
+<li><p>📄 <strong>License</strong>: Data obtained through this application is distributed under the <a class="reference external" href="https://www2.gov.bc.ca/gov/content/data/policy-standards/open-data/open-government-licence-bc">Canadian Open Government License</a>.</p>
+<ul>
+<li><p>In-short :  worldwide, royalty-free, perpetual, non-exclusive licence to Copy, modify, publish, translate, adapt, distribute or otherwise use the Information in any medium, mode or format for any lawful purpose</p></li>
+</ul>
+</li>
+<li><p>🏛️ <strong>Authority</strong>: Environment and Climate Change Canada (ECCC)</p></li>
+<li><p>📊 <strong>Data</strong>: <a class="reference external" href="https://catalogue.ec.gc.ca/geonetwork/oilsands/api/records/6c343726-1e92-451a-876a-76e17d398a1c">Canadian Protected and Conserved Areas Database (CPCAD) | 2023-12-31</a></p>
+<ul>
+<li><p>downloadble_source_url: https://data-donnees.az.ec.gc.ca/api/file?path=%2Fspecies%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FDatabases%2FProtectedConservedArea_2022.gdb.zip</p></li>
+<li><p>🔍 <strong>Resolution</strong>: Spatial boundaries vector data</p></li>
+</ul>
+</li>
+<li><p>📝 <strong>Description</strong>: CPCAD is the authoritative source of data on protected and conserved areas in Canada. The database consists of the most up-to-date spatial and attribute data on marine and terrestrial protected areas in all governance categories recognized by the International Union for Conservation of Nature (IUCN), as well as other effective area-based conservation measures (OECMs, or conserved areas) across the country. Indigenous Protected and Conserved Areas (IPCAs) are also included if they are recognized as protected or conserved areas. CPCAD adheres to national reporting standards and is available to the public.</p></li>
+<li><p>🎯 <strong>Use-case</strong>: These specific areas (raster cells/vectors) are excluded in analysis for site considerations. The modeller can also consider buffer around exclusion areas.</p></li>
+<li><p>⚙️ <strong>Supply_chain_mode</strong>: Automated via specific url download. Has dependency on <a class="reference external" href="https://data-donnees.az.ec.gc.ca/api/file?path=%2Fspecies%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FDatabases%2FProtectedConservedArea_2022.gdb.zip">source_url</a>.</p></li>
+</ul>
+</section>
+</section>
+<section id="land-constraint-and-suitability-data">
+<h2>4. Land Constraint and Suitability Data<a class="headerlink" href="#land-constraint-and-suitability-data" title="Link to this heading">#</a></h2>
+<section id="gaez-global-agro-ecological-zones">
+<h3>4.1 GAEZ (Global Agro-Ecological Zones)<a class="headerlink" href="#gaez-global-agro-ecological-zones" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>For global land constraint analysis</p>
+</div></blockquote>
+<ul>
+<li><p>🏷️ <strong>Tag</strong>: Global</p></li>
+<li><p>📄 <strong>License</strong>: The datasets are available under open access policy. Attribution required: &quot;Source: FAO-GAEZ v4.0, 2021&quot;.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://www.fao.org/3/ca7570en/ca7570en.pdf">FAO Open Data License</a>: Free use for any purpose, with attribution.</p></li>
+</ul>
+</li>
+<li><p>🏛️ <strong>Authority</strong>: Food and Agriculture Organization of the United Nations (FAO) and International Institute for Applied Systems Analysis (IIASA)</p></li>
+<li><p>📊 <strong>Data</strong>: <a class="reference external" href="https://gaez.fao.org/pages/data-viewer">GAEZ v4.0 Land Resources (LR) Dataset</a></p>
+<ul class="simple">
+<li><p>🔍 <strong>Resolution</strong>: 5 arc-minute (~10km at equator) and 30 arc-second (~1km at equator) grid resolution, global coverage</p></li>
+</ul>
+</li>
+<li><p>📝 <strong>Description</strong>: Global Agro-Ecological Zones (GAEZ) is a comprehensive global land resources assessment that provides spatial data on agricultural potential, land constraints, and ecological zones. GAEZ v4.0 includes multiple thematic layers such as terrain slope, land cover/use, exclusion areas (protected areas and biodiversity hotspots), and agro-climatic resources. The dataset uses consistent methodologies for global coverage and provides essential input for land suitability analysis.</p></li>
+<li><p>🎯 <strong>Use-case</strong>: Used for land constraint analysis in renewable energy siting. The tool processes multiple GAEZ layers including:</p>
+<ul class="simple">
+<li><p><strong>Exclusion Areas</strong> (<code class="docutils literal notranslate"><span class="pre">exclusion_2017.tif</span></code>): Protected areas and biodiversity zones to exclude from development</p></li>
+<li><p><strong>Terrain Slope</strong> (<code class="docutils literal notranslate"><span class="pre">slpmed05.tif</span></code>): Median slope classes for accessibility and installation feasibility analysis</p></li>
+<li><p><strong>Land Cover</strong> (<code class="docutils literal notranslate"><span class="pre">faocmb_2010.tif</span></code>): Dominant land cover/use types for compatibility assessment
+Different constraint classes are applied for solar vs wind development based on terrain and land use suitability requirements.</p></li>
+</ul>
+</li>
+<li><p>⚙️ <strong>Supply_chain_mode</strong>: Automated download and processing via ZIP archive</p>
+<ul>
+<li><p>📋 <strong>Instruction</strong>:</p>
+<ol class="arabic">
+<li><p>The system automatically downloads the LR.zip file from FAO's data repository</p></li>
+<li><p>Extracts required raster layers based on configuration settings</p></li>
+<li><p>Clips rasters to regional boundaries for analysis</p></li>
+<li><p>Generates visualization plots for each processed layer</p>
+<ul class="simple">
+<li><p><strong>Example</strong> configuration structure from <code class="docutils literal notranslate"><span class="pre">config/config_WB6.yaml</span></code>:</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">GAEZ</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;data/downloaded_data/GAEZ&#39;</span>
+<span class="w">  </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip&#39;</span>
+<span class="w">  </span><span class="nt">zip_file</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;LR.zip&#39;</span>
+<span class="w">  </span><span class="nt">Rasters_in_use_direct</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Rasters_in_use&#39;</span>
+<span class="w">  </span><span class="nt">raster_types</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># GAEZ v4 &#39;exclusion&#39; layer of protected areas and biodiversity values </span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;exclusion_areas&#39;</span>
+<span class="w">    </span><span class="nt">raster</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;exclusion_2017.tif&quot;</span>
+<span class="w">    </span><span class="nt">zip_extract_direct</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;LR/excl&#39;</span>
+<span class="w">    </span><span class="nt">color_map</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;OrRd&#39;</span>
+<span class="w">    </span><span class="nt">stepwise_plot_title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Excluding</span><span class="nv"> </span><span class="s">Global</span><span class="nv"> </span><span class="s">Exclusion</span><span class="nv"> </span><span class="s">Areas&quot;</span>
+<span class="w">    </span><span class="nt">class_exclusion</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">solar</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">6</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">7</span><span class="w"> </span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># Exclude protected areas, biodiversity zones, water</span>
+<span class="w">      </span><span class="nt">wind</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">6</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">7</span><span class="w"> </span><span class="p p-Indicator">]</span>
+<span class="w">      </span>
+<span class="w">  </span><span class="c1"># GAEZ v4 Median slope class from SRTM data</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;terrain_resources&#39;</span>
+<span class="w">    </span><span class="nt">raster</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;slpmed05.tif&quot;</span>
+<span class="w">    </span><span class="nt">zip_extract_direct</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;LR/ter&#39;</span>
+<span class="w">    </span><span class="nt">color_map</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;terrain&#39;</span>
+<span class="w">    </span><span class="nt">stepwise_plot_title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Excluding</span><span class="nv"> </span><span class="s">Terrain</span><span class="nv"> </span><span class="s">Slope&quot;</span>
+<span class="w">    </span><span class="nt">class_exclusion</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">solar</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">7</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">8</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">9</span><span class="w"> </span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># Exclude high slopes (&gt;30%) and water</span>
+<span class="w">      </span><span class="nt">wind</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">7</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">8</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">9</span><span class="w"> </span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="corine-land-cover">
+<h3>4.2 CORINE Land Cover<a class="headerlink" href="#corine-land-cover" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>Explicitly recommended for EUROPEAN studies.</p>
+</div></blockquote>
+<ul>
+<li><p>🏷️ <strong>Tag</strong>: European</p></li>
+<li><p>📄 <strong>License</strong>: Data obtained through this application is distributed under the <a class="reference external" href="https://scihub.copernicus.eu/twiki/do/view/SciHubWebPortal/TermsConditions">Copernicus Open Access Hub License</a>. Free, full, and open access worldwide, royalty-free, non-exclusive license.</p></li>
+<li><p>🏛️ <strong>Authority</strong>: European Environment Agency (EEA), Copernicus Land Monitoring Service</p></li>
+<li><p>📊 <strong>Data</strong>: <a class="reference external" href="https://land.copernicus.eu/en/products/corine-land-cover/clc2018">CORINE Land Cover 2018</a></p>
+<ul class="simple">
+<li><p>🔍 <strong>Resolution</strong>: 100m raster resolution, 44 land cover classes</p></li>
+</ul>
+</li>
+<li><p>📝 <strong>Description</strong>: CORINE Land Cover (CLC) 2018 is a European land cover and land use mapping product based on the interpretation of satellite images. It provides consistent and thematically detailed information on land cover and land cover changes across Europe. The CLC uses a Minimum Mapping Unit (MMU) of 25 hectares for areal phenomena and a minimum width of 100 metres for linear phenomena. CLC 2018 is the most recent version, produced with 2018 as reference year.</p></li>
+<li><p>🎯 <strong>Use-case</strong>: Used for land suitability analysis to identify suitable areas for renewable energy installations (solar and wind). The tool excludes unsuitable land cover classes and includes only appropriate land types for energy development. Different land cover classes are filtered for solar vs wind applications based on terrain and land use compatibility.</p></li>
+<li><p>⚙️ <strong>Supply_chain_mode</strong>: Manual registration and download via API access</p>
+<ul>
+<li><p>📋 <strong>Instruction</strong>:</p></li>
+<li><ol class="arabic simple">
+<li><p>Go to <a class="reference external" href="https://land.copernicus.eu/en/products/corine-land-cover/clc2018#download">CLC download</a></p></li>
+<li><p>Register to their portal for API access</p></li>
+<li><p>Use the raster option to get the download URL</p></li>
+</ol>
+  <img src="../_static/screenshots/CORINE_land_cover_data.png" alt="CORINE_land_cover_data" width="500"/>
+<ol class="arabic" start="4">
+<li><p>Download the raster file package (comes as a zip file) and extract the raster file (.tiff) from the zip.</p></li>
+<li><p>Save the raster file (.tiff) inside 'data/downloaded_data/CORINE'</p></li>
+<li><p>Update the <code class="docutils literal notranslate"><span class="pre">raster</span></code> key in your configuration file (e.g., <code class="docutils literal notranslate"><span class="pre">config/config_WB6.yaml</span></code>) with the downloaded raster file (.tiff) name.</p>
+<ul class="simple">
+<li><p><strong>Example</strong> configuration structure from <code class="docutils literal notranslate"><span class="pre">config/config_WB6.yaml</span></code>:</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">CORINE</span><span class="p">:</span>
+<span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;data/downloaded_data/CORINE&#39;</span>
+<span class="nt">raster_types</span><span class="p">:</span>
+<span class="c1"># list of dictionaries</span>
+<span class="c1"># CORINE Land Cover (CLC) 2018 raster data (100m resolution, 44 classes)</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CORINE_land_cover&#39;</span>
+<span class="w">    </span><span class="nt">readme</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;https://eea.github.io/clms-api-docs/download.html#download-prepackaged-files&#39;</span>
+<span class="w">    </span><span class="nt">raster</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;U2018_CLC2018_V2020_20u1.tif&#39;</span>
+<span class="w">    </span><span class="nt">color_map</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;tab20&#39;</span>
+<span class="w">    </span><span class="nt">stepwise_plot_title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Excluding</span><span class="nv"> </span><span class="s">not-Suitable</span><span class="nv"> </span><span class="s">CORINE</span><span class="nv"> </span><span class="s">Landcovers&quot;</span>
+<span class="w">    </span><span class="nt">class_inclusion</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">solar</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">7</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">8</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">9</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">31</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">32</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">38</span><span class="w"> </span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">wind</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">7</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">8</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">12</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">23</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">18</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">26</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">27</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">28</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">29</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">31</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">32</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">33</span><span class="w"> </span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-tip notranslate"><div class="highlight"><pre><span></span>You can also skip this configuration setup and download the file or use your customized area raster file. __If you already have a local raster__ (.tiff) file for your analysis, please drop the file at __&#39;data/downloaded_data/CORINE&#39;__ directory and update the &#39;raster&#39; key with your local file name.  
+
+The class inclusion layers should match the layers available at your raster.
+</pre></div>
+</div>
+</section>
+<section id="osm-openstreetmap-infrastructure-constraints">
+<h3>4.3 OSM (OpenStreetMap) Infrastructure Constraints<a class="headerlink" href="#osm-openstreetmap-infrastructure-constraints" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>For infrastructure and constraint mapping</p>
+</div></blockquote>
+<ul>
+<li><p>🏷️ <strong>Tag</strong>: Global</p></li>
+<li><p>📄 <strong>License</strong>: Open Database License (ODbL)</p>
+<ul class="simple">
+<li><p>Attribution: &quot;© OpenStreetMap contributors&quot;</p></li>
+</ul>
+</li>
+<li><p>🏛️ <strong>Authority</strong>: OpenStreetMap Foundation and global contributor community</p></li>
+<li><p>📊 <strong>Data</strong>: <a class="reference external" href="https://www.openstreetmap.org/">OpenStreetMap</a></p>
+<ul class="simple">
+<li><p>🔍 <strong>Resolution</strong>: Vector data with individual feature precision</p></li>
+</ul>
+</li>
+<li><p>📝 <strong>Description</strong>: OpenStreetMap provides comprehensive, crowd-sourced geospatial data including infrastructure, land use, and constraint features. For renewable energy analysis, OSM data includes power infrastructure (transmission lines, substations, power plants), transportation networks (roads, railways, airports), and land use constraints. The data is continuously updated by a global community of contributors and provides detailed, current information on infrastructure and constraints.</p></li>
+<li><p>🎯 <strong>Use-case</strong>:</p>
+<ul class="simple">
+<li><p><strong>Infrastructure constraint mapping</strong>: Airport buffer zones, power line corridors, transportation exclusions</p></li>
+<li><p><strong>Grid connection analysis</strong>: Existing substation and transmission line locations</p></li>
+<li><p><strong>Land use exclusions</strong>: Built-up areas, protected zones, infrastructure setbacks</p></li>
+<li><p><strong>Buffer zone creation</strong>: Automated buffer generation around constraint features</p></li>
+</ul>
+</li>
+<li><p>⚙️ <strong>Supply_chain_mode</strong>: API-based query using OSMnx library</p>
+<ul>
+<li><p>📋 <strong>Instruction</strong>:</p>
+<ol class="arabic simple">
+<li><p>System queries OSM Overpass API for specific feature tags</p></li>
+<li><p>Downloads vector data as GeoDataFrames</p></li>
+<li><p>Caches data locally as GeoJSON files</p></li>
+<li><p>Applies configured buffer distances for constraint analysis</p></li>
+<li><p><strong>Example</strong> configuration from <code class="docutils literal notranslate"><span class="pre">config/config_WB6.yaml</span></code>:</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">OSM_data</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;data/downloaded_data/OSM&#39;</span>
+<span class="w">  </span><span class="nt">data_keys</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">aeroway</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="s">&#39;aerodrome&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;runway&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;taxiway&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;helipad&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;apron&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;gate&#39;</span><span class="w"> </span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">power</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="s">&#39;line&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;cable&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;substation&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;tower&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;generator&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;plant&#39;</span><span class="w"> </span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p><strong>Note</strong>:
+RESource's <a class="reference external" href="https://github.com/DeltaE/RESource/blob/main/RES/gwa.py">gwa module</a> handles the 'GWA_country_code' and replaces them with appropriate codes as configured under 'region mapping' key. <strong>Example</strong> of how GWA_country_code is configured :</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">region_mapping</span><span class="p">:</span>
+<span class="s">&#39;AB&#39;</span><span class="p p-Indicator">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Alberta</span>
+<span class="w">    </span><span class="nt">land_area_km2</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">642,317</span>
+<span class="w">    </span><span class="nt">percentage_national_land_area</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7.1%</span>
+<span class="w">    </span><span class="nt">timezone_convert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Etc/GMT-7</span>
+<span class="w">    </span><span class="nt">sub_region_mapping</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+<span class="w">    </span><span class="nt">GWA_country_code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CAN</span>
+<span class="w">    </span><span class="nt">CRS_meters</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EPSG:3577</span>
+
+<span class="s">&#39;BC&#39;</span><span class="p p-Indicator">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">British Columbia</span>
+<span class="w">    </span><span class="nt">land_area_km2</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">925,186</span>
+<span class="w">    </span><span class="nt">percentage_national_land_area</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.4%</span>
+<span class="w">    </span><span class="nt">timezone_convert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Etc/GMT+7</span>
+<span class="w">    </span><span class="nt">sub_region_mapping</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+<span class="w">    </span><span class="nt">GWA_country_code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CAN</span>
+<span class="w">    </span><span class="nt">CRS_meters</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EPSG:3005</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+<section id="renewable-energy-resource-data">
+<h2>5. Renewable Energy Resource Data<a class="headerlink" href="#renewable-energy-resource-data" title="Link to this heading">#</a></h2>
+<section id="gwa-global-wind-atlas">
+<h3>5.1 GWA (Global Wind Atlas)<a class="headerlink" href="#gwa-global-wind-atlas" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>For high-resolution wind resource analysis</p>
+</div></blockquote>
+<ul>
+<li><p>🏷️ <strong>Tag</strong>: Global</p></li>
+<li><p>📄 <strong>License</strong>: Creative Commons Attribution 4.0 International License (CC BY 4.0)</p>
+<ul class="simple">
+<li><p>Attribution: &quot;Global Wind Atlas 3.0, a free, web-based application developed, owned and operated by the Technical University of Denmark (DTU). The Global Wind Atlas 3.0 is released in partnership with the World Bank Group, utilizing data provided by Vortex, using funding provided by the Energy Sector Management Assistance Program (ESMAP).&quot;</p></li>
+</ul>
+</li>
+<li><p>🏛️ <strong>Authority</strong>: Technical University of Denmark (DTU) in partnership with World Bank Group and Vortex</p></li>
+<li><p>📊 <strong>Data</strong>: <a class="reference external" href="https://globalwindatlas.info/">Global Wind Atlas</a></p>
+<ul class="simple">
+<li><p>🔍 <strong>Resolution</strong>: 250m spatial resolution, annual and seasonal statistics</p></li>
+</ul>
+</li>
+<li><p>📝 <strong>Description</strong>: The Global Wind Atlas provides high-resolution wind resource data including wind speed, wind power density, and wind power class information. It offers detailed wind statistics at hub heights from 10m to 200m above ground level, capacity factors for different IEC wind turbine classes, and extreme wind conditions. The atlas combines mesoscale modeling with high-resolution terrain and roughness data to provide accurate wind resource estimates for wind energy development.</p></li>
+<li><p>🎯 <strong>Use-case</strong>:</p>
+<ul class="simple">
+<li><p><strong>High-resolution wind resource mapping</strong>: Detailed wind speed and power density analysis at multiple hub heights</p></li>
+<li><p><strong>Wind turbine siting</strong>: Capacity factor estimates for different IEC turbine classes (IEC1, IEC2, IEC3)</p></li>
+<li><p><strong>Resource validation</strong>: Comparison with ERA5 data for resource assessment validation</p></li>
+<li><p><strong>Site-specific analysis</strong>: Fine-scale wind resource characterization for detailed feasibility studies</p></li>
+</ul>
+</li>
+<li><p>⚙️ <strong>Supply_chain_mode</strong>: Automated download of parquet/CSV files</p>
+<ul>
+<li><p>📋 <strong>Instruction</strong>:</p>
+<ol class="arabic simple">
+<li><p>System downloads ATB parquet files from NREL data repository</p></li>
+<li><p>Filters data by technology type (UtilityPV, LandbasedWind, etc.)</p></li>
+<li><p>Extracts cost parameters and performance metrics</p></li>
+<li><p>Exports processed cost data for LCOE calculations</p></li>
+<li><p><strong>Example</strong> configuration from <code class="docutils literal notranslate"><span class="pre">config/config_WB6.yaml</span></code>:</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">NREL</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ATB</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;data/downloaded_data/NREL/ATB&#39;</span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">parquet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://oedi-data-lake.s3.amazonaws.com/ATB/electricity/parquet/2024/v3.0.0/ATBe.parquet</span>
+<span class="w">    </span><span class="nt">cost_params</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">capex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;OCC&#39;</span><span class="w"> </span><span class="c1"># Overnight Capital Cost</span>
+<span class="w">      </span><span class="nt">fom</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Fixed</span><span class="nv"> </span><span class="s">O&amp;M&#39;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="nrel-atb-annual-technology-baseline">
+<h3>5.2 NREL ATB (Annual Technology Baseline)<a class="headerlink" href="#nrel-atb-annual-technology-baseline" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>For renewable energy technology cost and performance data</p>
+</div></blockquote>
+<ul>
+<li><p>🏷️ <strong>Tag</strong>: Global</p></li>
+<li><p>📄 <strong>License</strong>: Creative Commons Attribution 4.0 International License (CC BY 4.0)</p>
+<ul class="simple">
+<li><p>Attribution: &quot;National Renewable Energy Laboratory (NREL)&quot;</p></li>
+</ul>
+</li>
+<li><p>🏛️ <strong>Authority</strong>: National Renewable Energy Laboratory (NREL), U.S. Department of Energy</p></li>
+<li><p>📊 <strong>Data</strong>: <a class="reference external" href="https://atb.nrel.gov/">NREL Annual Technology Baseline</a></p>
+<ul class="simple">
+<li><p>🔍 <strong>Resolution</strong>: Technology-specific cost and performance data with annual projections</p></li>
+</ul>
+</li>
+<li><p>📝 <strong>Description</strong>: The Annual Technology Baseline (ATB) provides current and future cost and performance estimates for electricity generation, storage, and transportation technologies. ATB provides a consistent set of technology cost and performance data for energy analysis and is updated annually with the latest projections for renewable energy technologies including solar PV, wind, storage, and other generation technologies.</p></li>
+<li><p>🎯 <strong>Use-case</strong>:</p>
+<ul class="simple">
+<li><p><strong>LCOE calculations</strong>: Technology-specific capital and operational cost data for economic analysis</p></li>
+<li><p><strong>Technology comparison</strong>: Standardized cost and performance metrics across different technologies</p></li>
+<li><p><strong>Future projections</strong>: Cost reduction scenarios and technology improvement trajectories</p></li>
+<li><p><strong>Investment analysis</strong>: Financial modeling inputs for renewable energy projects</p></li>
+</ul>
+</li>
+<li><p>⚙️ <strong>Supply_chain_mode</strong>: Automated download of parquet/CSV files</p>
+<ul>
+<li><p>📋 <strong>Instruction</strong>:</p>
+<ol class="arabic simple">
+<li><p>System downloads ATB parquet files from NREL data repository</p></li>
+<li><p>Filters data by technology type (UtilityPV, LandbasedWind, etc.)</p></li>
+<li><p>Extracts cost parameters and performance metrics</p></li>
+<li><p>Exports processed cost data for LCOE calculations</p></li>
+<li><p><strong>Example</strong> configuration from <code class="docutils literal notranslate"><span class="pre">config/config_WB6.yaml</span></code>:</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">NREL</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ATB</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;data/downloaded_data/NREL/ATB&#39;</span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">parquet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://oedi-data-lake.s3.amazonaws.com/ATB/electricity/parquet/2024/v3.0.0/ATBe.parquet</span>
+<span class="w">    </span><span class="nt">cost_params</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">capex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;OCC&#39;</span><span class="w"> </span><span class="c1"># Overnight Capital Cost</span>
+<span class="w">      </span><span class="nt">fom</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Fixed</span><span class="nv"> </span><span class="s">O&amp;M&#39;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="oedb-open-energy-database-wind-turbine-library">
+<h3>5.3 OEDB (Open Energy Database) Wind Turbine Library<a class="headerlink" href="#oedb-open-energy-database-wind-turbine-library" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>For wind turbine specifications and performance data</p>
+</div></blockquote>
+<ul>
+<li><p>🏷️ <strong>Tag</strong>: Global</p></li>
+<li><p>📄 <strong>License</strong>: Open Database License (ODbL) and various open licenses</p>
+<ul class="simple">
+<li><p>Attribution: &quot;Open Energy Platform (OEP), Reiner Lemoine Institut&quot;</p></li>
+</ul>
+</li>
+<li><p>🏛️ <strong>Authority</strong>: Open Energy Platform, Reiner Lemoine Institut, Germany</p></li>
+<li><p>📊 <strong>Data</strong>: <a class="reference external" href="https://openenergy-platform.org/dataedit/view/supply/wind_turbine_library">Open Energy Database Wind Turbine Library</a></p>
+<ul class="simple">
+<li><p>🔍 <strong>Resolution</strong>: Individual turbine model specifications</p></li>
+</ul>
+</li>
+<li><p>📝 <strong>Description</strong>: The Open Energy Database provides detailed technical specifications for wind turbine models including power curves, hub heights, rotor diameters, and performance characteristics. The wind turbine library contains manufacturer data for hundreds of turbine models with standardized technical parameters. This data supports detailed wind energy analysis by providing realistic turbine specifications for capacity factor calculations and energy yield modeling.</p></li>
+<li><p>🎯 <strong>Use-case</strong>:</p>
+<ul class="simple">
+<li><p><strong>Turbine performance modeling</strong>: Power curves and capacity factor calculations</p></li>
+<li><p><strong>Technology selection</strong>: Comparison of turbine specifications for site-specific analysis</p></li>
+<li><p><strong>Yield optimization</strong>: Hub height and rotor diameter optimization for wind resources</p></li>
+<li><p><strong>Economic analysis</strong>: Turbine-specific cost and performance parameters</p></li>
+</ul>
+</li>
+<li><p>⚙️ <strong>Supply_chain_mode</strong>: API access and manual configuration files</p>
+<ul>
+<li><p>Instruction:</p>
+<ol class="arabic simple">
+<li><p>System accesses OEDB API for turbine specifications</p></li>
+<li><p>Downloads YAML configuration files for specific turbine models</p></li>
+<li><p>Integrates turbine power curves with wind resource data</p></li>
+<li><p><strong>Example</strong> configuration from <code class="docutils literal notranslate"><span class="pre">config/config_WB6.yaml</span></code>:</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">wind</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">turbines</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">OEDB</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;https://openenergy-platform.org/api/v0/schema/supply/tables/wind_turbine_library/rows&#39;</span>
+<span class="w">      </span><span class="nt">models</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">1</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;GE2.75_120&#39;</span>
+<span class="w">          </span><span class="nt">ID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">116</span>
+<span class="w">          </span><span class="nt">P</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.75</span><span class="w"> </span><span class="c1"># Nominal Power (MW)</span>
+<span class="w">          </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;data/downloaded_data/OEDB/3.2M114_NES.yaml&#39;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="demographics-and-demand-data">
+<h2>6. Demographics and Demand Data<a class="headerlink" href="#demographics-and-demand-data" title="Link to this heading">#</a></h2>
+<section id="ceei-community-energy-and-emissions-inventory">
+<h3>6.1 CEEI (Community Energy and Emissions Inventory)<a class="headerlink" href="#ceei-community-energy-and-emissions-inventory" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>Not required for the current public version. Required for features under active development.</p>
+</div></blockquote>
+<ul>
+<li><p>🏷️ <strong>Tag</strong>: Local</p></li>
+<li><p>📄 <strong>License</strong>: Data obtained through this application is distributed under the <a class="reference external" href="https://www2.gov.bc.ca/gov/content/data/policy-standards/open-data/open-government-licence-bc">Canadian Open Government License</a>.</p></li>
+<li><p>🏛️ <strong>Authority</strong>: [Community Energy and Emissions Inventory(CEEI)]https://www2.gov.bc.ca/gov/content/environment/climate-change/data/ceei</p></li>
+<li><p>📊 <strong>Data</strong>: <a class="reference external" href="https://www2.gov.bc.ca/gov/content/environment/climate-change/data/ceei/current-data">CEEI data up to 2021</a></p>
+<ul class="simple">
+<li><p>🔍 <strong>Resolution</strong>: Annual total for Regional Districts, for different sectors and different end-use demands.</p></li>
+</ul>
+</li>
+<li><p>📝 <strong>Description</strong>: The Community Energy and Emissions Inventory (CEEI) provides community-level greenhouse gas (GHG) emissions and energy consumption estimates for communities across BC. The data covers the buildings, municipal solid waste, and on-road transportation sectors for 161 municipalities, 28 regional districts, and 1 region (Stikine).</p>
+<ul class="simple">
+<li><p>Buildings :The data is provided by utility companies and includes the amount of electricity and natural gas used by residential, commercial and some industrial buildings.</p></li>
+<li><p>Transportation : Community-level data on greenhouse gas emissions from on-road transportation.</p></li>
+<li><p>Waste : Estimates of community greenhouse gas emissions based on historic annual tonnes of waste disposed at regional district landfills.</p></li>
+</ul>
+<blockquote>
+<div><p>More about <a class="reference external" href="https://www2.gov.bc.ca/gov/content/environment/climate-change/data/ceei/methodology">data methods</a> and <a class="reference external" href="https://www2.gov.bc.ca/gov/content/environment/climate-change/data/ceei/current-data">inputs</a></p>
+</div></blockquote>
+</li>
+<li><p>🎯 <strong>Use-case</strong>: Used for load-center estimations on regional district level. Further used for Battery Energy Storage (BESS) size and required discharge hour estimation.</p></li>
+<li><p>⚙️ <strong>Supply_chain_mode</strong>: Automated via specific url download. Check config file for specific url dependencies.</p></li>
+</ul>
+</section>
+<section id="population-data">
+<h3>6.2 Population Data<a class="headerlink" href="#population-data" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>For Canadian studies (under development)</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>🏷️ <strong>Tag</strong>: Local</p></li>
+<li><p>🏛️ <strong>Authority</strong>: Statistics Canada</p></li>
+<li><p>📄 <strong>License</strong>: Data obtained through this application is distributed under the <a class="reference external" href="https://www2.gov.bc.ca/gov/content/data/policy-standards/open-data/open-government-licence-bc">Canadian Open Government License</a>.</p>
+<ul>
+<li><p>In-short: worldwide, royalty-free, perpetual, non-exclusive licence to Copy, modify, publish, translate, adapt, distribute or otherwise use the Information in any medium, mode or format for any lawful purpose</p></li>
+</ul>
+</li>
+<li><p>📊 <strong>Data</strong>: <a class="reference external" href="https://bcstats.shinyapps.io/popApp">Population projection 2021-2046</a></p>
+<ul>
+<li><p>🔍 <strong>Resolution</strong>: Annual population for regional districts (sub-provincial).</p></li>
+</ul>
+</li>
+<li><p>📝 <strong>Description</strong>: Historical data up to 2023 and projection for 2024-2046.</p></li>
+<li><p>🎯 <strong>Use-case</strong>: To mimic the load-centers in Canada at sub-provincial level (regional districts of province)</p></li>
+<li><p>⚙️ <strong>Supply_chain_mode</strong>: Manual Download from the portal</p>
+<ul>
+<li><p>📋 <strong>Instruction</strong>: Manually download from the portal with mentioned steps given in <a class="reference external" href="https://github.com/DeltaE/Linking_tool/blob/main/config/data_source.yml">data_sources.yml</a></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="worldpop">
+<h3>6.3 WorldPop<a class="headerlink" href="#worldpop" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>For population density and demographic analysis (under development)</p>
+</div></blockquote>
+<ul>
+<li><p>🏷️ <strong>Tag</strong>: Global</p></li>
+<li><p>📄 <strong>License</strong>: Creative Commons Attribution 4.0 International License (CC BY 4.0)</p>
+<ul class="simple">
+<li><p>Attribution: &quot;WorldPop (www.worldpop.org - School of Geography and Environmental Science, University of Southampton)&quot;</p></li>
+</ul>
+</li>
+<li><p>🏛️ <strong>Authority</strong>: WorldPop Research Group, University of Southampton</p></li>
+<li><p>📊 <strong>Data</strong>: <a class="reference external" href="https://www.worldpop.org/">WorldPop Global Population Data</a></p>
+<ul class="simple">
+<li><p>🔍 <strong>Resolution</strong>: 1km × 1km grid cells, annual estimates</p></li>
+</ul>
+</li>
+<li><p>📝 <strong>Description</strong>: WorldPop provides high-resolution, contemporary data on human population distributions. The dataset includes population count, population density, and demographic breakdowns at fine spatial scales. Data is produced using census data, satellite imagery, and geospatial datasets through machine learning approaches to create gridded population estimates that are more accurate than traditional administrative unit-based data.</p></li>
+<li><p>🎯 <strong>Use-case</strong>:</p>
+<ul class="simple">
+<li><p><strong>Load center identification</strong>: Population-weighted demand center estimation for energy planning</p></li>
+<li><p><strong>Grid connection prioritization</strong>: Population density analysis for transmission planning</p></li>
+<li><p><strong>Environmental impact assessment</strong>: Population exposure analysis for renewable energy projects</p></li>
+<li><p><strong>Demand forecasting</strong>: Population-based electricity demand projections</p></li>
+</ul>
+</li>
+<li><p>⚙️ <strong>Supply_chain_mode</strong>: Direct download from WorldPop data portal</p>
+<ul>
+<li><p>📋 <strong>Instruction</strong>:</p>
+<ol class="arabic simple">
+<li><p>System downloads ASCII XYZ or GeoJSON files from WorldPop servers</p></li>
+<li><p>Processes population count and density layers</p></li>
+<li><p>Clips data to regional boundaries</p></li>
+<li><p><strong>Example</strong> configuration from <code class="docutils literal notranslate"><span class="pre">config/config_WB6.yaml</span></code>:</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">WorldPop</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;data/downloaded_data/WorldPop&#39;</span>
+<span class="w">  </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">population_density_CAN</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;https://data.worldpop.org/GIS/Population_Density/Global_2000_2020_1km_UNadj/2020/CAN/can_pd_2020_1km_UNadj_ASCII_XYZ.zip&#39;</span>
+<span class="w">    </span><span class="nt">population_count_CAN</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;https://data.worldpop.org/GIS/Population/Global_2000_2020_1km_UNadj/2020/CAN/can_ppp_2020_1km_UNadj_ASCII_XYZ.zip&#39;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="legends-and-color-coding-standardization">
+<h2>7. Legends and Color Coding Standardization<a class="headerlink" href="#legends-and-color-coding-standardization" title="Link to this heading">#</a></h2>
+<p>The RESource system uses standardized legend files and color coding schemes to ensure consistent visualization across different raster datasets. These legend files are stored in the <code class="docutils literal notranslate"><span class="pre">data/</span></code> directory and provide the mapping between raster class values, descriptions, and color representations.</p>
+<section id="available-legend-files">
+<h3>7.1 Available Legend Files<a class="headerlink" href="#available-legend-files" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>Currently the workflow does not have dependency for it. The post processing visualization uses these for color coding standardization.</p>
+</div></blockquote>
+<p>The following standardized legend CSV files are available in the <code class="docutils literal notranslate"><span class="pre">data/</span></code> directory:</p>
+</section>
+<section id="clc-2018-legend-csv">
+<h3>1. <strong>CLC_2018_legend.csv</strong><a class="headerlink" href="#clc-2018-legend-csv" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Purpose</strong>: CORINE Land Cover 2018 class definitions and colors</p></li>
+<li><p><strong>Structure</strong>: 44 land cover classes with descriptions and hex color codes</p></li>
+<li><p><strong>Example classes</strong>:</p>
+<ul>
+<li><p>Class 1: Continuous urban fabric (#e6004d)</p></li>
+<li><p>Class 12: Non-irrigated arable land (#ffffa8)</p></li>
+<li><p>Class 44: Salt marshes (#cccccc)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="exclusion-2017-legend-csv">
+<h3>2. <strong>exclusion_2017_legend.csv</strong><a class="headerlink" href="#exclusion-2017-legend-csv" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Purpose</strong>: GAEZ exclusion areas (protected areas and biodiversity zones)</p></li>
+<li><p><strong>Structure</strong>: 7 exclusion classes with conservation status descriptions</p></li>
+<li><p><strong>Example classes</strong>:</p>
+<ul>
+<li><p>Class 1: no exclusion (#b2df8a)</p></li>
+<li><p>Class 2: IUCN category in WDPA (#fcae91)</p></li>
+<li><p>Class 7: water (#66c2a5)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="gaez-slpmed05-legend-csv">
+<h3>3. <strong>gaez_slpmed05_legend.csv</strong><a class="headerlink" href="#gaez-slpmed05-legend-csv" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Purpose</strong>: GAEZ terrain slope classifications</p></li>
+<li><p><strong>Structure</strong>: 9 slope classes from flat to high slope plus water</p></li>
+<li><p><strong>Example classes</strong>:</p>
+<ul>
+<li><p>Class 1: flat (0-0.5%) (#edf8e9)</p></li>
+<li><p>Class 8: high slope (&gt;45%) (#a0092cff)</p></li>
+<li><p>Class 9: Water (#66c2a5)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="faocmb-2010-legend-csv">
+<h3>4. <strong>faocmb_2010_legend.csv</strong><a class="headerlink" href="#faocmb-2010-legend-csv" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Purpose</strong>: GAEZ land cover/use classifications</p></li>
+<li><p><strong>Structure</strong>: 11 dominant land cover types</p></li>
+<li><p><strong>Example classes</strong>:</p>
+<ul>
+<li><p>Class 2: cropland (#62e660ff)</p></li>
+<li><p>Class 4: forest/tree covered areas (#0a6304ff)</p></li>
+<li><p>Class 11: water bodies (#6a3d9a)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="cpcad-legends-csv">
+<h3>5. <strong>CPCAD_legends.csv</strong><a class="headerlink" href="#cpcad-legends-csv" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Purpose</strong>: Canadian Protected and Conserved Areas Database classifications</p></li>
+<li><p><strong>Structure</strong>: IUCN categories with conservation descriptions</p></li>
+<li><p><strong>Example classes</strong>:</p>
+<ul>
+<li><p>National Park (#06c854ff)</p></li>
+<li><p>Wilderness Area (#1f7c02ff)</p></li>
+<li><p>OECM areas (#9467bd)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="legend-file-structure">
+<h3>7.2 Legend File Structure<a class="headerlink" href="#legend-file-structure" title="Link to this heading">#</a></h3>
+<p>All legend CSV files follow a consistent structure:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">class</span></code>: Integer class value matching raster pixel values</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">description</span></code>: Human-readable description of the class</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">color</span></code>: Hex color code for visualization (format: #RRGGBB or #RRGGBBAA with alpha)</p></li>
+</ul>
+</section>
+</section>
+<section id="usage-and-configuration">
+<h2>Usage and Configuration<a class="headerlink" href="#usage-and-configuration" title="Link to this heading">#</a></h2>
+<section id="color-map-integration">
+<h3>Color Map Integration<a class="headerlink" href="#color-map-integration" title="Link to this heading">#</a></h3>
+<p>The system uses these legend files in two ways:</p>
+<ol class="arabic">
+<li><p><strong>Matplotlib colormaps</strong> (specified in config files via <code class="docutils literal notranslate"><span class="pre">color_map</span></code> parameter):</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">raster_types</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;exclusion_areas&#39;</span>
+<span class="w">  </span><span class="nt">color_map</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;OrRd&#39;</span><span class="w">  </span><span class="c1"># Standard matplotlib colormap</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Custom legend-based colormaps</strong> (using CSV legend files):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In visualization functions</span>
+<span class="n">legend_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/exclusion_2017_legend.csv&#39;</span><span class="p">)</span>
+<span class="n">custom_cmap</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">(</span><span class="n">legend_df</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="data-version-harmonization">
+<h3>Data Version Harmonization<a class="headerlink" href="#data-version-harmonization" title="Link to this heading">#</a></h3>
+<p><strong>⚠️ IMPORTANT</strong>: Legend files must be synchronized with the actual raster data versions to avoid visualization errors.</p>
+<p><strong>Requirements:</strong></p>
+<ul class="simple">
+<li><p>Legend class values must exactly match raster pixel values</p></li>
+<li><p>Missing classes in legend files will cause visualization failures</p></li>
+<li><p>Extra classes in legend files are acceptable (filtered automatically)</p></li>
+<li><p>Color codes must be valid hex format</p></li>
+</ul>
+<p><strong>Version Control:</strong></p>
+<ul class="simple">
+<li><p>When updating raster datasets, verify class values match legend files</p></li>
+<li><p>Update legend descriptions if class definitions change</p></li>
+<li><p>Maintain consistent color schemes across related datasets</p></li>
+</ul>
+</section>
+<section id="customizing-colors">
+<h3>Customizing Colors<a class="headerlink" href="#customizing-colors" title="Link to this heading">#</a></h3>
+<p>Users can modify legend colors by editing the CSV files:</p>
+<ol class="arabic">
+<li><p><strong>Edit legend file</strong> (e.g., <code class="docutils literal notranslate"><span class="pre">data/CLC_2018_legend.csv</span></code>):</p>
+<div class="highlight-csv notranslate"><div class="highlight"><pre><span></span>class,description,color
+1,Continuous urban fabric,#your_new_color
+2,Discontinuous urban fabric,#another_color
+</pre></div>
+</div>
+</li>
+<li><p><strong>Validate hex colors</strong>: Ensure colors follow hex format (#RRGGBB or #RRGGBBAA)</p></li>
+<li><p><strong>Test visualization</strong>: Run visualization functions to verify color changes</p></li>
+<li><p><strong>Maintain consistency</strong>: Keep related datasets using compatible color schemes</p></li>
+</ol>
+</section>
+<section id="error-prevention">
+<h3>Error Prevention<a class="headerlink" href="#error-prevention" title="Link to this heading">#</a></h3>
+<p><strong>Common issues and solutions:</strong></p>
+<ul class="simple">
+<li><p><strong>Missing classes</strong>: Add missing class entries to legend files</p></li>
+<li><p><strong>Invalid hex codes</strong>: Verify color format (#RRGGBB or #RRGGBBAA)</p></li>
+<li><p><strong>Class mismatch</strong>: Ensure raster values exactly match legend class column</p></li>
+<li><p><strong>Encoding issues</strong>: Save CSV files with UTF-8 encoding</p></li>
+</ul>
+<p><strong>Best practices:</strong></p>
+<ul class="simple">
+<li><p>Backup original legend files before modifications</p></li>
+<li><p>Use colorbrewer-compatible color schemes for accessibility</p></li>
+<li><p>Test visualizations after legend changes</p></li>
+<li><p>Document color scheme rationale for future reference</p></li>
+</ul>
+<hr class="docutils" />
+<!-- 
+---
+## Information Template
+- 🏷️ **Tag**: 
+- 📄 **License**: 
+- 🏛️ **Authority**: 
+- 📊 **Data**: [title](Url)
+    - 🔍 **Resolution**:
+- 📝 **Description**:
+- 🎯 **Use-case**:
+- ⚙️ **Supply_chain_mode**: 
+    - 📋 **Instruction**:  -->
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="learning.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Best Practices and Guidelines</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="developers.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Contributing Developers</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-source-categories">Data Source Categories</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#access-methods">Access Methods</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#power-system-infrastructure-data">1. Power System Infrastructure Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coders-canadian-open-data-exchange-for-renewable-energy-systems">1.1 CODERS (Canadian Open Data Exchange for Renewable Energy Systems)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#climate-and-weather-data">2. Climate and Weather Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#era5-ecmwf-reanalysis-v5">2.1 ERA5 (ECMWF Reanalysis v5)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#geospatial-and-administrative-data">3. Geospatial and Administrative Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gadm-global-administrative-areas">3.1 GADM (Global Administrative Areas)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cpcad-canadian-protected-and-conserved-areas-database">3.2 CPCAD (Canadian Protected and Conserved Areas Database)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#land-constraint-and-suitability-data">4. Land Constraint and Suitability Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaez-global-agro-ecological-zones">4.1 GAEZ (Global Agro-Ecological Zones)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corine-land-cover">4.2 CORINE Land Cover</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#osm-openstreetmap-infrastructure-constraints">4.3 OSM (OpenStreetMap) Infrastructure Constraints</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#renewable-energy-resource-data">5. Renewable Energy Resource Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gwa-global-wind-atlas">5.1 GWA (Global Wind Atlas)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nrel-atb-annual-technology-baseline">5.2 NREL ATB (Annual Technology Baseline)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#oedb-open-energy-database-wind-turbine-library">5.3 OEDB (Open Energy Database) Wind Turbine Library</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demographics-and-demand-data">6. Demographics and Demand Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ceei-community-energy-and-emissions-inventory">6.1 CEEI (Community Energy and Emissions Inventory)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#population-data">6.2 Population Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#worldpop">6.3 WorldPop</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#legends-and-color-coding-standardization">7. Legends and Color Coding Standardization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-legend-files">7.1 Available Legend Files</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clc-2018-legend-csv">1. <strong>CLC_2018_legend.csv</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exclusion-2017-legend-csv">2. <strong>exclusion_2017_legend.csv</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaez-slpmed05-legend-csv">3. <strong>gaez_slpmed05_legend.csv</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#faocmb-2010-legend-csv">4. <strong>faocmb_2010_legend.csv</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cpcad-legends-csv">5. <strong>CPCAD_legends.csv</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#legend-file-structure">7.2 Legend File Structure</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-and-configuration">Usage and Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#color-map-integration">Color Map Integration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-version-harmonization">Data Version Harmonization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#customizing-colors">Customizing Colors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-prevention">Error Prevention</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
