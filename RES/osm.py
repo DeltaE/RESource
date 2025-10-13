@@ -169,7 +169,8 @@ class OSMData(AttributesParser):
         # Check if data is already stored locally
         if geojson_path.exists():
             utils.print_update(level=print_level_base+1,message=f"{__name__}| Loading locally stored OSM data for '{data_key}' from {geojson_path}")
-            return gpd.read_file(geojson_path)
+            gdf=gpd.read_file(geojson_path)
+            return gdf
         else:
             print(f">> Downloading data for {self.area_name} with tags {tags} and saving to {geojson_path}")
             gdf = ox.features_from_place(self.area_name, tags_dict)

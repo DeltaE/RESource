@@ -20,21 +20,23 @@ Version: 1.0
 Development Year: 2024-2025
 """
 
-import yaml
-import os
-import requests
-from typing import Optional
-from colorama import Fore, Style
-import pandas as pd
-import geopandas as gpd 
-import json
-import pickle
 import datetime
-from pathlib import Path
-import geojson as gj
-import rasterio as rio
-import numpy as np
+import json
+import os
+import pickle
 import zipfile
+from pathlib import Path
+from typing import Optional
+
+import geojson as gj
+import geopandas as gpd
+import numpy as np
+import pandas as pd
+import rasterio as rio
+import requests
+import rioxarray as rxr
+import yaml
+from colorama import Fore, Style
 
 now = datetime.datetime.now()
 date_time_str = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -64,6 +66,9 @@ def print_update(level: int=None,
         prefix=" ─"
     
     print(f"{color}{prefix}> {message}{Style.RESET_ALL}")
+
+def print_error(message):
+    print(f"{Fore.RED} └ ❌ > {message}{Style.RESET_ALL}")
 
 def print_module_title(text, Length_Char_inLine=60):
     print(f"{Fore.LIGHTCYAN_EX}{Length_Char_inLine * '_'}{Style.RESET_ALL}\n"
@@ -318,6 +323,8 @@ def download_data(source_URL: str, file_path: str) -> str:
     try:
         # Send HTTP GET request
         response = requests.get(source_URL, headers=headers, timeout=30)
+        ensure_path(Path(file_path).parent)
+        print_update(level=3,message=f"{__name__}| ⏬ Downloading data from {source_URL} ...")
         
         # Check if the request was successful
         if response.status_code == 200:
@@ -333,10 +340,86 @@ def download_data(source_URL: str, file_path: str) -> str:
         return print_update(level=2, message=f"{__name__}| Please download the data manually from {source_URL} and save it to {file_path}")
 
 
-def load_raster_file(raster_path:str|Path)->np.ndarray :
-    raster_path=Path(raster_path)
-    with rio.open(raster_path) as f:
-        raster_data: np.ndarray = f.read(1)
-        f.close()  
-    return raster_data
+def load_raster_file(raster_path: str | Path, band: int = 1) -> np.ndarray:
+    """
+    Loads a GeoTIFF raster as a NumPy array (single band).
+    Designed for lightweight array processing.
 
+    Parameters
+    ----------
+    raster_path : str or Path
+        Path to the GeoTIFF raster.
+    band : int, default=1
+        Raster band to read.
+
+    Returns
+    -------
+    np.ndarray
+        2D array of raster values, or None on failure.
+    """
+    raster_path = Path(raster_path)
+    if not raster_path.exists():
+        print(f"❌ File not found: {raster_path}")
+        return None
+
+    if raster_path.suffix.lower() not in [".tif", ".tiff"]:
+        print(f"❌ Invalid raster format: {raster_path.suffix} (expected .tif or .tiff)")
+        return None
+
+    try:
+        with rio.open(raster_path) as src:
+            data = src.read(band)
+            print(f"✅ Loaded raster ({src.width}×{src.height}), res: {src.res[0]:.2f} m")
+        return data
+    except Exception as e:
+        print(f"⚠️ Failed to read raster {raster_path.name}: {e}")
+        return None
+
+
+def get_raster_da(raster_path: str | Path, masked: bool = True):
+    """
+    Loads a GeoTIFF raster as a rioxarray DataArray with CRS, transform, and resolution metadata.
+    Drops all-NaN rows/cols for cleaner data structure.
+
+    Parameters
+    ----------
+    raster_path : str or Path
+        Path to the raster file.
+    masked : bool, default=True
+        Whether to mask nodata values.
+
+    Returns
+    -------
+    xarray.DataArray
+        Geospatial raster object with CRS and transform metadata.
+    """
+    raster_path = Path(raster_path)
+    if not raster_path.exists():
+        print(f"❌ Raster does not exist: {raster_path}")
+        return None
+
+    if raster_path.suffix.lower() not in [".tif", ".tiff"]:
+        print(f"❌ Invalid raster file: {raster_path}")
+        return None
+
+    try:
+        da = (
+            rxr.open_rasterio(raster_path, masked=masked)
+            .squeeze(drop=True)
+            .dropna(dim="x", how="all")
+            .dropna(dim="y", how="all")
+        )
+
+        print(f"✅ Loaded DataArray: {raster_path.name}")
+        print(f"   ├─ shape: {da.shape}")
+        print(f"   ├─ CRS: {da.rio.crs}")
+        print(f"   └─ res: {da.rio.resolution()}")
+        return da
+
+    except Exception as e:
+        print(f"⚠️ Failed to load DataArray from {raster_path.name}: {e}")
+        loading_via_rioxarray_fails = True
+
+        if loading_via_rioxarray_fails:
+            fallback = load_raster_file(raster_path)
+            return fallback

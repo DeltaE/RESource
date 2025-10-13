@@ -34,6 +34,8 @@ configurable and extensible for different regions and data sources.
 """
 
 from pathlib import Path
+from tempfile import NamedTemporaryFile
+from typing import Optional
 from zipfile import ZipFile
 
 import fiona
@@ -41,20 +43,24 @@ import geopandas as gpd
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import rasterio
+import xarray as xr
 from atlite.gis import ExclusionContainer
 from matplotlib.axes import Axes
 from matplotlib.colors import ListedColormap
+from rasterio.enums import Resampling
+from rasterio.mask import mask
 from rasterio.plot import show
+from rasterio.transform import Affine
+from shapely.geometry import box
 from shapely.geometry.base import BaseGeometry
-import rasterio
-from tempfile import NamedTemporaryFile
 
 from RES import utility as utils
+from RES.AttributesParser import AttributesParser
 from RES.boundaries import GADMBoundaries
 from RES.era5_cutout import ERA5Cutout
 from RES.gaez import GAEZRasterProcessor
 from RES.osm import OSMData
-from RES.AttributesParser import AttributesParser
 
 PRINT_LEVEL_BASE: int = 2  # handles the print level for the utils.print_update function
 class ConservationLands(AttributesParser):
@@ -160,7 +166,7 @@ class ConservationLands(AttributesParser):
     >>> # Show conservation areas with regional boundaries
     >>> conservation.show_lands(
     ...     conserved_lands=conserved_areas,
-    ...     save_to="plots/BC_conservation.svg",
+    ...     save_to="plots/BC_conservation.png",
     ...     show=True
     ... )
     
@@ -750,6 +756,7 @@ class LandContainer(AttributesParser):
             self.conserved_lands_CAN=None
         # Initialize conservation_lands_region_gdf attribute
         self.conservation_lands_region_gdf = None
+        self.custom_land_layers = self.get_custom_land_layers()  # INHERITED METHOD from AttributesParser
 
     def set_excluder(self):
         raster_configs, vector_configs = self.get_layers()
@@ -800,6 +807,8 @@ class LandContainer(AttributesParser):
         raster_configs: list[dict] = self.gaez_config["raster_types"]
         regional_raster_paths: dict = self.gaez_raster_processor.process_all_rasters(show=False)
 
+           
+                                                            
         for raster_config_item in raster_configs:
             name = raster_config_item.get("name")
             if name and name in regional_raster_paths:
@@ -817,18 +826,47 @@ class LandContainer(AttributesParser):
 
 
         for CLC_raster_config_item in CLC_raster_configs:
-            CLC_raster_config_item["filepath"]=Path(self.CLC_config.get('root'))/
-            
-            if 
-            
-            CLC_raster_config_item['raster']
+            CLC_raster_config_item["filepath"]=Path(self.CLC_config.get('root'))/CLC_raster_config_item['raster']
                 
         utils.print_update(level=PRINT_LEVEL_BASE+3,
                            message= f"{__name__}| Raster Layers Loaded")
-        
-        # Merge raster_configs and CLC_raster_config into a single list
-        raster_configs = raster_configs + CLC_raster_configs
-        
+     
+    # Load Custom Rasters
+        utils.print_update(
+            level=PRINT_LEVEL_BASE + 2,
+            message=f"{__name__}| Loading Custom raster layers for {self.region_name}...",
+        )
+
+        custom_raster_configs: list[dict] = self.custom_land_layers.get("rasters", [])   
+        if custom_raster_configs is None:
+            custom_raster_configs = []
+            utils.print_update(
+                level=PRINT_LEVEL_BASE + 1,
+                message=f"{__name__}| No custom raster layers found in config for {self.region_name}.",
+                alert=True,
+            )
+            
+            # Merge raster_configs and CLC_raster_config into a single list
+            raster_configs = raster_configs + CLC_raster_configs
+        else:
+            utils.print_update(
+                level=PRINT_LEVEL_BASE + 2,
+                message=f"{__name__}| Found {len(custom_raster_configs)} custom raster layers in config for {self.region_name}.",
+            )
+            for custom_raster_config_item in custom_raster_configs:
+                custom_raster_config_item["filepath"] =clip_to_boundary_and_resample_raster(
+                                                    in_raster_config=custom_raster_config_item,
+                                                    boundary_name=self.region_short_code,
+                                                    boundary=self.region_boundary)
+                
+                # custom_raster_config_item["filepath"] = (
+                #     Path(custom_raster_config_item["root"]) /
+                #     custom_raster_config_item["raster"]
+                # )
+
+            # Merge raster_configs and CLC_raster_config into a single list
+            raster_configs = raster_configs + CLC_raster_configs + custom_raster_configs
+            
     # Load Vector layers
         utils.print_update(
             level=PRINT_LEVEL_BASE + 2,
@@ -885,9 +923,11 @@ class LandContainer(AttributesParser):
                     "Excluding Regional Aeroways"
                 )
 
-
-
             # Apply buffer to the vector geometries
+            utils.print_update(
+                level=PRINT_LEVEL_BASE + 2,
+                message=f"{__name__}| Applying buffer to {vector_name} areas for {self.region_name}",
+            )
             vector_gdf_with_buffer, vector_area_comparison = apply_buffer_to_vector(
                 gdf=vector_gdf,
                 crs_meters=self.crs_m,
@@ -1132,7 +1172,7 @@ def load_layers_to_excluder(
     utils.ensure_path(plot_save_to)
 
     plt.savefig(
-        plot_save_to / f"{plot_name}.svg",
+        plot_save_to / f"{plot_name}.png",
         bbox_inches="tight",
         dpi=300,
     )
@@ -1167,13 +1207,12 @@ def apply_buffer_to_vector(
     gdf_proj["buffer_applied_m"] = (
         gdf_proj[buffer_mapping_key].map(buffer_series).fillna(0)
     )
-
     # 3. Keep unbuffered copy for area comparison
     gdf_unbuffered = gdf_proj.copy()
 
     # 4. Apply buffer (in meters)
-    gdf_buffered = gdf_proj.copy()
-    gdf_buffered["geometry"] = gdf_proj.geometry.buffer(gdf_proj["buffer_applied_m"])
+    gdf_buffered = gdf_unbuffered.copy()
+    gdf_buffered["geometry"] = gdf_unbuffered.geometry.buffer(gdf_proj["buffer_applied_m"])
 
     # 5. Area calculations (in km²)
     gdf_unbuffered["area_km2"] = gdf_unbuffered.geometry.area / 1e6
@@ -1205,7 +1244,7 @@ def apply_buffer_to_vector(
     # 7. Reproject back to degree based crs
     if gdf_buffered.crs != crs_degrees:
         gdf_buffered = gdf_buffered.to_crs(crs_degrees)
-
+    print(f"{__name__}| Buffer applied to vector layer with key '{buffer_mapping_key}'. Area comparison:\n{area_comparison}")
     return gdf_buffered, area_comparison
 
 
@@ -1249,3 +1288,544 @@ def ensure_uint8_raster(filepath):
                 dst.write(data, 1)
             return tmp.name
     return filepath
+
+
+@staticmethod
+
+def clip_to_boundary_and_resample_raster(
+    in_raster_config: dict,
+    boundary_name: str,
+    boundary: gpd.GeoDataFrame | str | Path,
+    clip_to_geom: bool = True,
+    target_res: Optional[int | None] = 100,
+    categorical_threshold: int = 50,
+):
+    """
+    Clips a raster to a boundary and optionally resamples to target resolution.
+    Automatically detects categorical vs continuous data and applies appropriate
+    resampling method. Skips processing if intermediate or final outputs already exist.
+
+    Parameters
+    ----------
+    in_raster_config : dict
+        Dictionary containing raster configuration with keys:
+        - 'name': str, raster identifier name
+        - 'root': str or Path, root directory path
+        - 'raster': str, raster filename
+        - 'target_res_meters': int, optional target resolution in meters
+    boundary_name : str
+        Label used for naming output files (e.g., region code).
+    boundary : str, Path, or GeoDataFrame
+        Vector boundary file (Shapefile/GeoJSON) or GeoDataFrame for clipping.
+    clip_to_geom : bool, default=True
+        If True, clips to exact geometry boundary. If False, clips to bounding box.
+    target_res : float, optional
+        Desired output resolution in meters. If None, uses 'target_res_meters' from config.
+    categorical_threshold : int, default=50
+        Maximum number of unique values to classify raster as categorical.
+        Categorical rasters use 'mode' resampling, continuous use 'average'.
+        
+    Returns
+    -------
+    xarray.DataArray or None
+        Loaded raster data as xarray DataArray if successful, None if verification fails.
+        The returned data array is masked and ready for spatial analysis.
+        
+    Raises
+    ------
+    FileNotFoundError
+        If input raster file does not exist.
+    TypeError
+        If boundary parameter is not a valid file path or GeoDataFrame.
+    ValueError
+        If boundary does not overlap with raster extent.
+        
+    Notes
+    -----
+    - Output files are named: {stem}_clipped_{boundary_name}[_{resolution}m].tif
+    - Categorical detection uses center window sampling for efficiency
+    - Resampling is skipped if current resolution is already coarser than target
+    - CRS reprojection is handled automatically when boundary CRS differs from raster
+    - Intermediate clipped files are reused if target resolution changes
+    """
+    raster_name:str=in_raster_config.get('name')
+    in_raster:str|Path=Path(in_raster_config.get('root'))/in_raster_config.get('raster')
+    
+    
+    in_raster = Path(in_raster)
+    if not in_raster.exists():
+        try:
+            source_url=in_raster_config.get('source',None)
+            if source_url is not None:
+                utils.download_data(source_url,in_raster)
+        except Exception as e:
+            utils.print_error(f"{__name__}|❌ Failed to locate and download raster from {source_url}: {e}")
+
+
+    # --- Define output paths ---
+    clipped_path = in_raster.with_name(f"{in_raster.stem}_clipped_{boundary_name}{in_raster.suffix}")
+    out_path = (
+        in_raster.with_name(
+            f"{in_raster.stem}_clipped_{boundary_name}_{int(target_res)}m{in_raster.suffix}"
+        )
+        if target_res is not None
+        else clipped_path
+    )
+
+    # === 0. Skip logic ===
+    if out_path.exists():
+        utils.print_update(PRINT_LEVEL_BASE,
+                           f"{__name__}✅ Final output already exists: {out_path.name} — skipping all processing.")
+        return out_path
+
+    if clipped_path.exists() and (target_res is None):
+        utils.print_update(PRINT_LEVEL_BASE,
+                           f"{__name__}✅ Clipped raster exists: {clipped_path.name} — no resampling requested.")
+        return clipped_path
+
+    if clipped_path.exists() and (target_res is not None):
+        utils.print_update(PRINT_LEVEL_BASE,
+                           f"{__name__}✅ Using existing clipped raster for resampling: {clipped_path.name}")
+        clip_needed = False
+    else:
+        clip_needed = True
+
+    # === 1. Load boundary ===
+    if isinstance(boundary, (str, Path)):
+        gdf = gpd.read_file(boundary)
+    elif isinstance(boundary, gpd.GeoDataFrame):
+        gdf = boundary.copy()
+    else:
+        raise TypeError("Boundary must be a file path or a GeoDataFrame.")
+
+    # === 2. Clip (if not already done) ===
+    if clip_needed:
+        print(f"🔍 Clipping '{in_raster.name}' to boundary '{boundary_name}'...")
+        with rasterio.open(in_raster) as src:
+            if gdf.crs != src.crs:
+                utils.print_update(PRINT_LEVEL_BASE,
+                           f"{__name__}🔄 Reprojecting boundary from {gdf.crs} to {src.crs}")
+                gdf = gdf.to_crs(src.crs)
+
+            if not box(*src.bounds).intersects(gdf.unary_union):
+                raise ValueError(f"❌ Boundary '{boundary_name}' does not overlap with raster.")
+
+            if clip_to_geom:
+                out_image, out_transform = mask(src, gdf.geometry, crop=True)
+            else:
+                window = rasterio.windows.from_bounds(*gdf.total_bounds, transform=src.transform)
+                out_image = src.read(window=window)
+                out_transform = src.window_transform(window)
+
+            out_meta = src.meta.copy()
+            out_meta.update({
+                "height": out_image.shape[1],
+                "width": out_image.shape[2],
+                "transform": out_transform
+            })
+
+        with rasterio.open(clipped_path, "w", **out_meta) as dst:
+            dst.write(out_image)
+        utils.print_update(PRINT_LEVEL_BASE,
+                           f"{__name__}✅ Clipped raster saved: {clipped_path.name}")
+    else:
+        utils.print_update(PRINT_LEVEL_BASE,
+                           f"{__name__}ℹ️ Skipping clipping {raster_name} — using existing file.")
+
+    # === 3. Handle resampling ===
+    if target_res is None:
+        target_res=int(in_raster_config.get('target_res_meters'),None)
+        if target_res is None:
+            print("⚙️ No target resolution specified — returning clipped raster.")
+            return clipped_path
+
+    with rasterio.open(clipped_path) as src:
+        res_x, res_y = src.res
+        utils.print_update(PRINT_LEVEL_BASE,
+                           f"{__name__}ℹ️ Current resolution: {res_x:.2f} × {res_y:.2f} m")
+
+        if res_x >= target_res and res_y >= target_res:
+           utils.print_update(PRINT_LEVEL_BASE,
+                           f"{__name__}⚠️ Already coarser than {target_res} m — skipping resample.")
+           return clipped_path
+
+        # Detect categorical vs continuous
+        center_window = rasterio.windows.Window(
+            src.width // 4, src.height // 4, src.width // 2, src.height // 2
+        )
+        sample = src.read(1, window=center_window)
+        sample = sample[~np.isnan(sample)] if np.issubdtype(sample.dtype, np.floating) else sample
+        unique_vals = np.unique(sample)
+
+        categorical = (
+            len(unique_vals) < categorical_threshold
+            and np.all(unique_vals.astype(int) == unique_vals)
+        )
+        resampling_method = Resampling.mode if categorical else Resampling.average
+        kind = "categorical (mode)" if categorical else "continuous (average)"
+
+        scale_factor = target_res / res_x
+        new_width = int(src.width / scale_factor)
+        new_height = int(src.height / scale_factor)
+        new_transform = src.transform * Affine.scale(scale_factor, scale_factor)
+
+        profile = src.profile.copy()
+        profile.update({
+            "height": new_height,
+            "width": new_width,
+            "transform": new_transform
+        })
+
+        data = src.read(
+            out_shape=(src.count, new_height, new_width),
+            resampling=resampling_method
+        )
+
+    with rasterio.open(out_path, "w", **profile) as dst:
+        dst.write(data)
+
+    utils.print_update(PRINT_LEVEL_BASE,
+                           f"{__name__}✅ Resampled to {int(target_res)} m ({kind})")
+    utils.print_update(PRINT_LEVEL_BASE,
+                           f"{__name__}📁 Output saved: {out_path.name}")
+    return out_path
+    
+
+    # === 4. Verification ===
+    # try:
+    #     with rasterio.open(out_path) as src:
+    #         utils.print_update(PRINT_LEVEL_BASE,
+    #                        f"{__name__}🔍 Verification: {src.width} x {src.height} pixels at {src.res[0]:.2f} m")
+    #     # Return loaded xarray.DataArray for immediate use
+    #     raster_data = rxr.open_rasterio(out_path, masked=True)
+    #     return raster_data
+
+    # except Exception as e:
+    #     utils.print_update(PRINT_LEVEL_BASE,
+    #                        f"{__name__}⚠️ Verification failed: {e}")
+    #     try:
+    #         utils.print_update(PRINT_LEVEL_BASE,
+    #                        f"{__name__}Recheck raster {out_path}")
+    #     except NameError:
+    #         utils.print_update(PRINT_LEVEL_BASE,
+    #                        f"{__name__}⚠️ Please recheck raster {out_path}")
+    #     return None
+
+
+@staticmethod
+def plot_raster_class_distribution(
+    raster_da,
+    legend_df=None,
+    class_col="class",
+    desc_col="description",
+    color_col="color",
+    exclude_classes=None,
+    title="Raster Class Distribution",
+    save_path=None,
+    region_code=None,
+    country_kwd=None,
+    figsize=(10, 6),
+    dpi=500,
+    show=False,
+    save_csv=False,
+    ignore_zero_class=True
+):
+    """
+    Plot the percentage distribution of categorical raster classes (generic for any raster).
+
+    Parameters
+    ----------
+    raster_da : xarray.DataArray or numpy.ndarray
+        Raster data array with integer or categorical class codes.
+    legend_df : pandas.DataFrame, optional
+        DataFrame with at least columns: [class_col, desc_col, color_col].
+        If None, generic class labels and colors will be generated.
+    class_col : str, optional
+        Column name for class codes in legend_df.
+    desc_col : str, optional
+        Column name for class descriptions in legend_df.
+    color_col : str, optional
+        Column name for HEX color codes in legend_df.
+    exclude_classes : list, optional
+        List of class codes to exclude (e.g., NoData, Unclassified).
+    title : str, optional
+        Plot title.
+    save_path : str or Path, optional
+        Directory to save figure (and optionally CSV). If None, nothing is saved.
+    region_code : str, optional
+        Region identifier for filename.
+    country_kwd : str, optional
+        Country keyword for filename hierarchy.
+    figsize : tuple, optional
+        Figure size.
+    dpi : int, optional
+        Plot resolution.
+    show : bool, optional
+        Whether to display the plot interactively.
+    save_csv : bool, optional
+        Whether to save the computed class percentages to CSV.
+
+    Returns
+    -------
+    df_plot : pandas.DataFrame
+        DataFrame containing class, percentage, and metadata (merged with legend if available).
+        
+    Notes:
+    """
+    raster_da = np.nan_to_num(raster_da.values.squeeze(), nan=0).astype("int32")
+    # --- Extract numeric data from raster ---
+    if hasattr(raster_da, "values"):
+        data = raster_da.values
+        
+    else:
+        data = np.array(raster_da)
+
+    # Flatten and clean
+    data_flat = data.flatten()
+    data_flat = data_flat[~np.isnan(data_flat)]  # remove NaN
+    # Always exclude class 0 (often NoData)
+    exclude_classes = exclude_classes or []
+    if ignore_zero_class and 0 not in exclude_classes:
+        exclude_classes.append(0)
+
+    if exclude_classes:
+        data_flat = np.array([v for v in data_flat if v not in exclude_classes])
+
+    if len(data_flat) == 0:
+        raise ValueError("Raster contains no valid data after filtering.")
+
+    # --- Compute percentages ---
+    unique, counts = np.unique(data_flat, return_counts=True)
+    total = counts.sum()
+    percentages = (counts / total) * 100
+
+    df = pd.DataFrame({"class": unique.astype(int), "Percentage": percentages})
+
+        # --- Merge legend if available ---
+    if legend_df is not None:
+        legend_df = legend_df.rename(
+            columns={class_col: "class", desc_col: "description", color_col: "color"}
+        )
+
+        # Clean up color codes
+        legend_df["color"] = legend_df["color"].astype(str).str.strip().str.lower()
+
+        df_plot = pd.merge(df, legend_df, on="class", how="left")
+
+        # Check for missing legend entries
+        missing_colors = df_plot["color"].isna().sum()
+        if missing_colors > 0:
+            print(f"⚠️ {missing_colors} class(es) missing color — assigning fallback colors.")
+            import matplotlib.cm as cm
+            cmap = cm.get_cmap("tab20", len(df_plot))
+            fallback_colors = [
+                f"#{int(255*r):02X}{int(255*g):02X}{int(255*b):02X}"
+                for r, g, b, _ in cmap(np.linspace(0, 1, len(df_plot)))
+            ]
+            df_plot["color"] = df_plot["color"].fillna(pd.Series(fallback_colors))
+
+    else:
+        # Generate fallback description and colors
+        import matplotlib.cm as cm
+        cmap = cm.get_cmap("tab20", len(unique))
+        colors = [
+            f"#{int(255*r):02X}{int(255*g):02X}{int(255*b):02X}"
+            for r, g, b, _ in cmap(np.linspace(0, 1, len(unique)))
+        ]
+        df_plot = df.copy()
+        df_plot["description"] = df_plot["class"].astype(str)
+        df_plot["color"] = colors
+
+
+        # --- Combine label for axis ---
+    df_plot["label"] = df_plot.apply(
+        lambda row: f"{int(row['class'])}: {row['description']}", axis=1
+    )
+    df_plot = df_plot.sort_values("Percentage", ascending=True)
+
+    # --- Plot ---
+    fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
+    bars = ax.barh(
+        df_plot["label"],
+        df_plot["Percentage"],
+        color=df_plot["color"],
+        edgecolor="black"
+    )
+
+    # Annotate each bar
+    for bar, pct in zip(bars, df_plot["Percentage"]):
+        width = bar.get_width()
+        ax.text(
+            width / 2,
+            bar.get_y() + bar.get_height() / 2,
+            f"{pct:.1f}%",
+            ha="center",
+            va="center",
+            fontsize=8,
+            color="white" if width > 5 else "black",
+            bbox=dict(
+                facecolor="black" if width > 5 else "white",
+                alpha=0.5,
+                boxstyle="round,pad=0.2",
+                edgecolor="none",
+            ),
+        )
+
+    # --- Labels & layout ---
+    ax.set_xlabel("Percentage of Total Area (%)", fontsize=10)
+    ax.set_ylabel("Raster Class (code: description)", fontsize=10)
+    ax.set_title(title, fontsize=12, fontweight="bold")
+    ax.grid(axis="x", linestyle="--", alpha=0.4)
+    plt.tight_layout()
+
+
+    # --- Save results ---
+    if save_path:
+        save_dir = Path(save_path)
+        if country_kwd:
+            save_dir = save_dir / country_kwd
+        if region_code:
+            save_dir = save_dir / region_code
+            
+    save_path = Path(save_path)
+
+    # If user passed a file (has suffix like .png, .jpg)
+    if save_path.suffix:
+        save_dir = save_path.parent
+        save_dir.mkdir(parents=True, exist_ok=True)
+        out_path = save_path
+    else:
+        # If user passed just a directory
+        save_path.mkdir(parents=True, exist_ok=True)
+        out_path = save_path / f"Raster_class_distribution_{region_code}.png"
+
+    plt.savefig(out_path, bbox_inches="tight")
+    print(f"✅ Saved figure: {out_path}")
+
+
+    if save_csv:
+            out_csv = save_dir / f"{title.replace(' ', '_').lower()}.csv"
+            df_plot.to_csv(out_csv, index=False)
+            print(f"✅ Saved CSV: {out_csv}")
+
+    if show:
+        plt.show()
+    else:
+        plt.close(fig)
+    print(f"🧮 Excluding classes: {exclude_classes}")
+
+    return df_plot
+
+
+
+
+def assign_raster_class_to_points(
+    gdf: gpd.GeoDataFrame,
+    raster_da: xr.DataArray,
+    legend_df: Optional[pd.DataFrame] = None,
+    raster_crs: Optional[str] = None,
+    class_col_name: str = None,
+) -> gpd.GeoDataFrame:
+    """
+    Assigns raster class values (from a single-band xarray DataArray)
+    to point geometries in a GeoDataFrame and optionally maps them to
+    legend descriptions and colors. Adds all resulting columns with the
+    provided class_col_name as suffix to maintain clarity.
+
+    Parameters
+    ----------
+    gdf : geopandas.GeoDataFrame
+        GeoDataFrame containing point geometries.
+    raster_da : xarray.DataArray
+        2D raster data (single-band) with coordinates 'x' and 'y'.
+    legend_df : pandas.DataFrame, optional
+        Table with columns ['class', 'description', 'color'] for mapping.
+    raster_crs : str, optional
+        CRS of the raster. If None, tries to infer from raster_da.
+    class_col_name : str, required
+        Base name of the output column. Example: 'landcover' → columns
+        'landcover_class', 'landcover_description', 'landcover_color'.
+
+    Returns
+    -------
+    geopandas.GeoDataFrame
+        Original GeoDataFrame with additional columns:
+        - <class_col_name>_class : extracted class values
+        - <class_col_name>_description, <class_col_name>_color : if legend_df provided
+    """
+
+    # --- Type checks ---
+    if not class_col_name:
+        raise ValueError("class_col_name must be provided.")
+    if not isinstance(gdf, gpd.GeoDataFrame):
+        raise TypeError("gdf must be a GeoDataFrame.")
+    if not isinstance(raster_da, xr.DataArray):
+        raise TypeError("raster_da must be an xarray.DataArray.")
+    if "x" not in raster_da.coords or "y" not in raster_da.coords:
+        raise ValueError("raster_da must have 'x' and 'y' coordinates.")
+    if legend_df is not None:
+        if not isinstance(legend_df, pd.DataFrame):
+            raise TypeError("legend_df must be a pandas.DataFrame.")
+        required_cols = {"class", "description", "color"}
+        if not required_cols.issubset(legend_df.columns):
+            raise ValueError(f"legend_df must contain {required_cols} columns.")
+
+    # --- CRS handling ---
+    if raster_crs is None:
+        if "spatial_ref" in raster_da.coords:
+            try:
+                raster_crs = raster_da.spatial_ref.crs_wkt
+            except Exception:
+                raise ValueError("CRS could not be inferred from raster DataArray.")
+        else:
+            raise ValueError("raster_crs must be provided if not embedded in raster_da.")
+
+    if gdf.crs is None:
+        raise ValueError("GeoDataFrame must have a valid CRS.")
+    if str(gdf.crs) != str(raster_crs):
+        gdf = gdf.to_crs(raster_crs)
+
+    # --- Extract raster arrays ---
+    x_coords = raster_da["x"].values
+    y_coords = raster_da["y"].values
+    data = raster_da.values
+
+    # --- Sampling function ---
+    def get_pixel_value(x, y):
+        ix = np.abs(x_coords - x).argmin()
+        iy = np.abs(y_coords - y).argmin()
+        val = data[iy, ix]
+        return None if np.isnan(val) else int(val)
+
+    # --- Extract classes for each geometry ---
+    class_col = f"{class_col_name}_class"
+    gdf[class_col] = [get_pixel_value(pt.x, pt.y) for pt in gdf.geometry]
+
+    # --- Merge legend if provided ---
+    if legend_df is not None:
+        temp = gdf.merge(
+            legend_df,
+            how="left",
+            left_on=class_col,
+            right_on="class",
+        ).drop(columns=["class"], errors="ignore")
+
+        # Rename merged columns with suffix
+        temp.rename(
+            columns={
+                "description": f"{class_col_name}_description",
+                "color": f"{class_col_name}_color",
+            },
+            inplace=True,
+        )
+        gdf = temp
+    summary = (
+        gdf.groupby(f"{class_col_name}_description")
+        .size()
+        .reset_index(name="site_count")
+        .sort_values("site_count", ascending=False)
+    )
+    utils.print_banner(f"{__name__}| Summary of {class_col_name} class distribution for assigned points:")
+    utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{summary}")
+    print("\n")
+    return gdf
