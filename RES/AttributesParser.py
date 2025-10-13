@@ -126,7 +126,8 @@ class AttributesParser:
         """
         return self.config.get('multi_country_flag', False)
     
-    
+    def get_custom_land_layers_config(self):
+        return self.config.get('custom_land_layers', {})
     def is_region_code_valid(self)-> bool:
         """
         Args:
