@@ -491,7 +491,7 @@ document.write(`
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "22365ec6309947898efeb059c15eadf3", "version_major": 2, "version_minor": 0}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "36d44cff4ba24ef9a1bf0fd6ba9fcb4f", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -711,7 +711,7 @@ document.write(`
 <li><p>creating both degrees and meters projection</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">boundary</span> <span class="o">=</span> <span class="n">BC_dfs_policy</span><span class="p">[</span><span class="s1">&#39;boundary&#39;</span><span class="p">]</span>
@@ -744,7 +744,7 @@ document.write(`
 <li><p>Extracting bounds for clipping purposes</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">boundary_aggr</span><span class="o">=</span><span class="n">boundary</span><span class="o">.</span><span class="n">dissolve</span><span class="p">()</span>
@@ -766,7 +766,7 @@ document.write(`
 <section id="Rasters">
 <h2>Rasters<a class="headerlink" href="#Rasters" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">custom_rasters</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="n">cfg_policy</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;custom_land_layers&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rasters&#39;</span><span class="p">)</span>
@@ -782,8 +782,8 @@ document.write(`
 <li><p><a class="reference external" href="https://osdp-psdo.canada.ca/dp/en/search/metadata/NRCAN-FGP-1-ee1580ab-a23d-4f86-a09b-79763677eb47">About data</a></p></li>
 <li><p><a class="reference external" href="https://developers.google.com/earth-engine/datasets/catalog/USGS_NLCD_RELEASES_2020_REL_NALCMS">About classes</a>, and <a class="reference external" href="https://publications.gc.ca/collections/collection_2025/statcan/16-510-x2025001-eng.pdf?utm_source=chatgpt.com">more</a></p></li>
 </ul>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CanGov_landcover_path</span><span class="o">=</span><span class="s1">&#39;../data/downloaded_data/Gov/LandCover/landcover-2020-classification_clipped_BC_100m.tif&#39;</span>
@@ -792,8 +792,19 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+✅ Loaded DataArray: landcover-2020-classification_clipped_BC_100m.tif
+   ├─ shape: (17915, 10199)
+   ├─ CRS: EPSG:3979
+   └─ res: (100.0, -100.0)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">existing_VREs_gdf_with_landcover</span> <span class="o">=</span> <span class="n">lands</span><span class="o">.</span><span class="n">assign_raster_class_to_points</span><span class="p">(</span>
@@ -813,33 +824,70 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">summary</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">committed_VREs_gdf_with_landcover</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;CanGov_landcover_description&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">size</span><span class="p">()</span>
-    <span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="n">summary</span>
-<br/></pre></div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-green-intense-fg ansi-bold">******************************************************************************</span>
+<span class="ansi-green-intense-fg ansi-bold">RES.lands| Summary of CanGov_landcover class distribution for assigned points:</span>
+<span class="ansi-green-intense-fg ansi-bold">******************************************************************************</span>
+<span class="ansi-white-intense-fg">  └&gt;                CanGov_landcover_description  site_count
+2          Temperate or sub-polar grassland           3
+3  Temperate or sub-polar needleleaf forest           3
+1                              Mixed forest           2
+0                               Barren land           1
+4          Temperate or sub-polar shrubland           1</span>
+
+
+<span class="ansi-green-intense-fg ansi-bold">******************************************************************************</span>
+<span class="ansi-green-intense-fg ansi-bold">RES.lands| Summary of CanGov_landcover class distribution for assigned points:</span>
+<span class="ansi-green-intense-fg ansi-bold">******************************************************************************</span>
+<span class="ansi-white-intense-fg">  └&gt;                CanGov_landcover_description  site_count
+1          Temperate or sub-polar grassland           4
+2  Temperate or sub-polar needleleaf forest           3
+3          Temperate or sub-polar shrubland           2
+0                              Mixed forest           1</span>
+
+
+</pre></div></div>
 </div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">LandCover_CANgov2020_class_distribution</span><span class="o">=</span><span class="n">lands</span><span class="o">.</span><span class="n">plot_raster_class_distribution</span><span class="p">(</span><span class="n">CanGov_landcover_da</span><span class="p">,</span>
                                      <span class="n">CanGov_landcover_legends</span><span class="p">,</span>
                                      <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                     <span class="n">save_path</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">/LandCover_CANgov2020_class_distribution_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">)</span>
+                                     <span class="n">save_path</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">/LandCover_CANgov_class_distribution_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+✅ Saved figure: ../vis/Canada/BC/LandCover_CANgov_class_distribution_BC.png
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_34_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_34_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+🧮 Excluding classes: [0]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><span></span><span class="c1"># land_cover_cfg= next((item for item in cfg_policy.get(&#39;GAEZ&#39;).get(&#39;raster_types&#39;) if &#39;land_cover&#39; in item.get(&#39;name&#39;, &#39;&#39;)), None)</span>
@@ -885,6 +933,35 @@ document.write(`
     <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;plot saved to: </span><span class="si">{</span><span class="n">POLICY_vis_save_to</span><span class="si">}</span><span class="s2">/CanGov_Landcover_with_existing_VREs.png&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+✅ Raster clipped to boundary &#39;Country&#39; region, shape: (13440, 15702)
+<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
+<span class="ansi-cyan-fg"> └&gt; Using &#39;wind_turbine_capacity&#39; for marker sizes.</span>
+<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
+<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
+<span class="ansi-yellow-fg">└&gt; Saved map with excluded overlay → ../vis/Canada/BC/CANgov_Landcover_with_existing_VREs.png</span>
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_35_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_35_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-yellow-fg">└&gt; plot saved to:: ../docs/source/_static/CanGov_Landcover_with_existing_VREs.png</span>
+<span class="ansi-yellow-fg">└&gt; plot saved to: ../vis/Canada/BC/strict_policy_aeroway_CPCAD_buffer/CanGov_Landcover_with_existing_VREs.png</span>
+</pre></div></div>
 </div>
 </section>
 </section>
@@ -1163,8 +1240,8 @@ document.write(`
 <h3>GAEZ<a class="headerlink" href="#GAEZ" title="Link to this heading">#</a></h3>
 <section id="id1">
 <h4>Landcover<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">GAEZ_landcover_raster_path</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;../data/downloaded_data/GAEZ/Rasters_in_use/LR/ter/slpmed30s_clipped_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">.tif&#39;</span>
@@ -1174,63 +1251,94 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+✅ Loaded DataArray: slpmed30s_clipped_BC.tif
+   ├─ shape: (1403, 2999)
+   ├─ CRS: EPSG:4326
+   └─ res: (0.008333333333333333, -0.008333333333333333)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">land_cover_cfg</span><span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">cfg_policy</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;GAEZ&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;raster_types&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="s1">&#39;land_cover&#39;</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)),</span> <span class="kc">None</span><span class="p">)</span>
-<span class="n">layers_included</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="n">land_cover_cfg</span><span class="p">[</span><span class="s1">&#39;class_inclusion&#39;</span><span class="p">]</span>
-
-<span class="n">lands</span><span class="o">.</span><span class="n">plot_raster_class_distribution</span><span class="p">(</span><span class="n">GAEZ_landcover_raster_da</span><span class="p">,</span>
-                                     <span class="n">GAEZ_landcover_raster_legends</span><span class="p">,</span>
-                                     <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                     <span class="n">save_path</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">/GAEZ_landcover_class_distribution_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">)</span>
-
-<span class="c1"># Unique CLC codes in your clipped area</span>
-<span class="n">unique_classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">GAEZ_landcover_raster_da</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">GAEZ_landcover_raster_da</span><span class="o">.</span><span class="n">values</span><span class="p">)])</span>
-
-<span class="n">layers_excluded</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="n">tech</span><span class="p">:</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">unique_classes</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">layers_included</span><span class="p">[</span><span class="n">tech</span><span class="p">]</span> <span class="ow">and</span> <span class="n">c</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">tech</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;solar&#39;</span><span class="p">,</span> <span class="s1">&#39;wind&#39;</span><span class="p">]</span>
-<span class="p">}</span>
-
-<span class="n">classes_to_plot</span> <span class="o">=</span> <span class="n">layers_included</span>
-
-<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">,</span><span class="n">save_to</span><span class="o">=</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_developable_land_and_vres</span><span class="p">(</span>
-    <span class="n">target_crs</span><span class="o">=</span><span class="n">CRS_m</span><span class="p">,</span>
-    <span class="n">raster_data</span><span class="o">=</span><span class="n">GAEZ_landcover_raster_da</span><span class="p">,</span>
-    <span class="n">raster_legends</span><span class="o">=</span><span class="n">GAEZ_landcover_raster_legends</span><span class="p">,</span>
-    <span class="n">classes_to_plot</span><span class="o">=</span><span class="n">classes_to_plot</span><span class="p">,</span> <span class="c1">#layers_included,                 # &lt;- all classes</span>
-    <span class="n">boundary</span><span class="o">=</span><span class="n">boundary</span><span class="p">,</span>
-    <span class="n">existing_VREs_gdf</span><span class="o">=</span><span class="n">existing_VREs_gdf</span><span class="p">,</span>
-    <span class="n">committed_VREs_gdf</span><span class="o">=</span><span class="n">committed_VREs_gdf</span><span class="p">,</span>
-        <span class="n">marker_scale_existing</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
-    <span class="n">marker_scale_committed</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
-    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Terrains (GAEZ_v4 slop median 0.5)&quot;</span><span class="p">,</span>
-    <span class="n">existing_marker_col</span><span class="o">=</span><span class="s2">&quot;wind_turbine_capacity&quot;</span><span class="p">,</span>
-    <span class="n">output_path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">/GAEZ_terrains_with_existing_VREs.png&quot;</span><span class="p">,</span>
-    <span class="n">legend_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">.73</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="p">)</span>
-
-<span class="k">if</span> <span class="n">classes_to_plot</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">utils</span><span class="o">.</span><span class="n">print_warning</span><span class="p">(</span><span class="s2">&quot;[WARN] All classes are being plotted. This may lead to a cluttered visualization.&quot;</span><span class="p">)</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">POLICY_vis_save_to</span><span class="si">}</span><span class="s2">/GAEZ_landcover_AllClasses_with_existing_VREs.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">land_cover_cfg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;[ERROR] &#39;land_cover&#39; configuration not found in config file.&quot;</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[INFO] Plotting specified classes: </span><span class="si">{</span><span class="n">classes_to_plot</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="c1"># Update DOC contents (if needed)</span>
-    <span class="n">doc_save_to</span><span class="o">=</span><span class="s2">&quot;../docs/source/_static/GAEZ_landcover_with_existing_VREs.png&quot;</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">doc_save_to</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
-    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;plot saved to: </span><span class="si">{</span><span class="n">doc_save_to</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">POLICY_vis_save_to</span><span class="si">}</span><span class="s2">/GAEZ_landcover_SuitableLands_with_existing_VREs.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
-    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;plot saved to: </span><span class="si">{</span><span class="n">POLICY_vis_save_to</span><span class="si">}</span><span class="s2">/GAEZ_landcover_SuitableLands_with_existing_VREs.png&quot;</span><span class="p">)</span>
+    <span class="n">layers_included</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="n">land_cover_cfg</span><span class="p">[</span><span class="s1">&#39;class_inclusion&#39;</span><span class="p">]</span>
+
+    <span class="n">lands</span><span class="o">.</span><span class="n">plot_raster_class_distribution</span><span class="p">(</span><span class="n">GAEZ_landcover_raster_da</span><span class="p">,</span>
+                                        <span class="n">GAEZ_landcover_raster_legends</span><span class="p">,</span>
+                                        <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                        <span class="n">save_path</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">/GAEZ_landcover_class_distribution_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Unique CLC codes in your clipped area</span>
+    <span class="n">unique_classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">GAEZ_landcover_raster_da</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">GAEZ_landcover_raster_da</span><span class="o">.</span><span class="n">values</span><span class="p">)])</span>
+
+    <span class="n">layers_excluded</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">tech</span><span class="p">:</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">unique_classes</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">layers_included</span><span class="p">[</span><span class="n">tech</span><span class="p">]</span> <span class="ow">and</span> <span class="n">c</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">tech</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;solar&#39;</span><span class="p">,</span> <span class="s1">&#39;wind&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="n">classes_to_plot</span> <span class="o">=</span> <span class="n">layers_included</span>
+
+    <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">,</span><span class="n">save_to</span><span class="o">=</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_developable_land_and_vres</span><span class="p">(</span>
+        <span class="n">target_crs</span><span class="o">=</span><span class="n">CRS_m</span><span class="p">,</span>
+        <span class="n">raster_data</span><span class="o">=</span><span class="n">GAEZ_landcover_raster_da</span><span class="p">,</span>
+        <span class="n">raster_legends</span><span class="o">=</span><span class="n">GAEZ_landcover_raster_legends</span><span class="p">,</span>
+        <span class="n">classes_to_plot</span><span class="o">=</span><span class="n">classes_to_plot</span><span class="p">,</span> <span class="c1">#layers_included,                 # &lt;- all classes</span>
+        <span class="n">boundary</span><span class="o">=</span><span class="n">boundary</span><span class="p">,</span>
+        <span class="n">existing_VREs_gdf</span><span class="o">=</span><span class="n">existing_VREs_gdf</span><span class="p">,</span>
+        <span class="n">committed_VREs_gdf</span><span class="o">=</span><span class="n">committed_VREs_gdf</span><span class="p">,</span>
+            <span class="n">marker_scale_existing</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+        <span class="n">marker_scale_committed</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Terrains (GAEZ_v4 slop median 0.5)&quot;</span><span class="p">,</span>
+        <span class="n">existing_marker_col</span><span class="o">=</span><span class="s2">&quot;wind_turbine_capacity&quot;</span><span class="p">,</span>
+        <span class="n">output_path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">/GAEZ_terrains_with_existing_VREs.png&quot;</span><span class="p">,</span>
+        <span class="n">legend_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">.73</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">classes_to_plot</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_warning</span><span class="p">(</span><span class="s2">&quot;[WARN] All classes are being plotted. This may lead to a cluttered visualization.&quot;</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">POLICY_vis_save_to</span><span class="si">}</span><span class="s2">/GAEZ_landcover_AllClasses_with_existing_VREs.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[INFO] Plotting specified classes: </span><span class="si">{</span><span class="n">classes_to_plot</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># Update DOC contents (if needed)</span>
+        <span class="n">doc_save_to</span><span class="o">=</span><span class="s2">&quot;../docs/source/_static/GAEZ_landcover_with_existing_VREs.png&quot;</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">doc_save_to</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;plot saved to: </span><span class="si">{</span><span class="n">doc_save_to</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">POLICY_vis_save_to</span><span class="si">}</span><span class="s2">/GAEZ_landcover_SuitableLands_with_existing_VREs.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;plot saved to: </span><span class="si">{</span><span class="n">POLICY_vis_save_to</span><span class="si">}</span><span class="s2">/GAEZ_landcover_SuitableLands_with_existing_VREs.png&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
+<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[18]</span><span class="ansi-green-fg">, line 3</span>
+<span class="ansi-green-fg">      1</span> land_cover_cfg= <span style="color: rgb(0,135,0)">next</span>((item <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> item <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> cfg_policy.get(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">GAEZ</span><span class="ansi-yellow-fg">&#39;</span>).get(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">raster_types</span><span class="ansi-yellow-fg">&#39;</span>) <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">land_cover</span><span class="ansi-yellow-fg">&#39;</span> <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> item.get(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">name</span><span class="ansi-yellow-fg">&#39;</span>, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">&#39;</span>)), <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>)
+<span class="ansi-green-fg">      2</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> land_cover_cfg <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>:
+<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">3</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ValueError</span>(<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">[ERROR] </span><span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">land_cover</span><span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg"> configuration not found in config file.</span><span class="ansi-yellow-fg">&#34;</span>)
+<span class="ansi-green-fg">      4</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg">      5</span>     layers_included:<span style="color: rgb(0,135,0)">dict</span>=land_cover_cfg[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">class_inclusion</span><span class="ansi-yellow-fg">&#39;</span>]
+
+<span class="ansi-red-fg">ValueError</span>: [ERROR] &#39;land_cover&#39; configuration not found in config file.
+</pre></div></div>
 </div>
 </section>
 <section id="Terrain">
 <h4>Terrain<a class="headerlink" href="#Terrain" title="Link to this heading">#</a></h4>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">GAEZ_terrain_raster_path</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;../data/downloaded_data/GAEZ/Rasters_in_use/LR/ter/slpmed30s_clipped_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">.tif&#39;</span>
@@ -1240,8 +1348,19 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+✅ Loaded DataArray: slpmed30s_clipped_BC.tif
+   ├─ shape: (1403, 2999)
+   ├─ CRS: EPSG:4326
+   └─ res: (0.008333333333333333, -0.008333333333333333)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">land_cover_cfg</span><span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">cfg_policy</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;GAEZ&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;raster_types&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="s1">&#39;terrain_resources&#39;</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)),</span> <span class="kc">None</span><span class="p">)</span>
@@ -1292,12 +1411,57 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+✅ Saved figure: ../vis/Canada/BC/GAEZ_terrains_class_distribution_BC.png
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_50_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_50_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+🧮 Excluding classes: [0]
+✅ Raster clipped to boundary &#39;Country&#39; region, shape: (2190, 2558)
+<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
+<span class="ansi-cyan-fg"> └&gt; Using &#39;wind_turbine_capacity&#39; for marker sizes.</span>
+<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
+<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
+<span class="ansi-yellow-fg">└&gt; Saved map with excluded overlay → ../vis/Canada/BC/GAEZ_terrains_with_existing_VREs.png</span>
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_50_3.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_50_3.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-yellow-fg">└&gt; plot saved to: ../docs/source/_static/GAEZ_terrains_with_existing_VREs.png</span>
+<span class="ansi-yellow-fg">└&gt; plot saved to: ../vis/Canada/BC/strict_policy_aeroway_CPCAD_buffer/GAEZ_terrains_with_existing_VREs.png</span>
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><span></span><span class="n">excld_raster_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;../data/downloaded_data/GAEZ/Rasters_in_use/LR/excl/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">_exclusion_2017.tif&quot;</span>
-<span class="n">excld_raster_legends</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data/legends/exclusion_2017_legend.csv&quot;</span><span class="p">)</span>
+<span class="n">excld_raster_legends</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data/legends/gaez_exclusion_legend.csv&quot;</span><span class="p">)</span>
 <span class="n">excld_cover_cfg</span><span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">cfg_policy</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;GAEZ&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;raster_types&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="s1">&#39;exclusion_areas&#39;</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)),</span> <span class="kc">None</span><span class="p">)</span>
 <span class="n">layers_excluded</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="n">excld_cover_cfg</span><span class="p">[</span><span class="s1">&#39;class_exclusion&#39;</span><span class="p">]</span>
 
@@ -1305,7 +1469,7 @@ document.write(`
 <span class="n">lands</span><span class="o">.</span><span class="n">plot_raster_class_distribution</span><span class="p">(</span><span class="n">excld_raster_data</span><span class="p">,</span>
                                      <span class="n">excld_raster_legends</span><span class="p">,</span>
                                      <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                     <span class="n">save_path</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">/Exclusion_2017_class_distribution_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">)</span>
+                                     <span class="n">save_path</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">/GAEZ_Exclusion_class_distribution_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">)</span>
 <span class="c1"># Unique CLC codes in your clipped area</span>
 <span class="n">unique_classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">excld_raster_data</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">excld_raster_data</span><span class="o">.</span><span class="n">values</span><span class="p">)])</span>
 <span class="n">layers_included</span> <span class="o">=</span> <span class="p">{</span>
@@ -1325,7 +1489,7 @@ document.write(`
     <span class="n">marker_scale_committed</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
     <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Globally Protected Areas (GAEZ_v4 exclusion 2017)&quot;</span><span class="p">,</span>
     <span class="n">existing_marker_col</span><span class="o">=</span><span class="s2">&quot;wind_turbine_capacity&quot;</span><span class="p">,</span>
-    <span class="n">output_path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">/exclusion_global_with_existing_VREs.svg&quot;</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">/GAEZ_exclusion_global_with_existing_VREs.png&quot;</span><span class="p">,</span>
     <span class="n">legend_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">.73</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
         <span class="n">marker_highlight_width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="p">)</span>
@@ -1333,7 +1497,7 @@ document.write(`
 
 <span class="k">if</span> <span class="n">classes_to_plot</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">utils</span><span class="o">.</span><span class="n">print_warning</span><span class="p">(</span><span class="s2">&quot;[WARN] All classes are being plotted. This may lead to a cluttered visualization.&quot;</span><span class="p">)</span>
-    <span class="n">fig3</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">POLICY_vis_save_to</span><span class="si">}</span><span class="s2">/exclusion_global_AllClasses_with_existing_VREs.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+    <span class="n">fig3</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">POLICY_vis_save_to</span><span class="si">}</span><span class="s2">/GAEZ_exclusion_global_with_existing_VREs.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
     <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[INFO] Plotting all classes.&quot;</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="c1"># Update DOC contents (if needed)</span>
@@ -1346,6 +1510,56 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+✅ Loaded DataArray: BC_exclusion_2017.tif
+   ├─ shape: (1403, 3001)
+   ├─ CRS: EPSG:4326
+   └─ res: (0.008333333333333333, -0.008333333333333333)
+✅ Saved figure: ../vis/Canada/BC/GAEZ_Exclusion_class_distribution_BC.png
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_51_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_51_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+🧮 Excluding classes: [0]
+✅ Raster clipped to boundary &#39;Country&#39; region, shape: (2190, 2559)
+<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
+<span class="ansi-cyan-fg"> └&gt; Using &#39;wind_turbine_capacity&#39; for marker sizes.</span>
+<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
+<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
+<span class="ansi-yellow-fg">└&gt; Saved map with excluded overlay → ../vis/Canada/BC/GAEZ_exclusion_global_with_existing_VREs.png</span>
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_51_3.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_51_3.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-yellow-fg">└&gt; Unique land-cover classes in the area: ../vis/Canada/BC/GAEZ_terrains_with_existing_VREs.png</span>
+<span class="ansi-yellow-fg">└&gt; plot saved to: ../docs/source/_static/GAEZ_exclusion_global_with_existing_VREs.png</span>
+<span class="ansi-yellow-fg">└&gt; plot saved to: ../vis/Canada/BC/strict_policy_aeroway_CPCAD_buffer/GAEZ_exclusion_global_with_existing_VREs.png</span>
+</pre></div></div>
+</div>
 </section>
 </section>
 </section>
@@ -1353,8 +1567,8 @@ document.write(`
 <h2>Vectors<a class="headerlink" href="#Vectors" title="Link to this heading">#</a></h2>
 <section id="Aeroway">
 <h3>Aeroway<a class="headerlink" href="#Aeroway" title="Link to this heading">#</a></h3>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aeroway</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../data/downloaded_data/OSM/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">_aeroway.geojson&#39;</span><span class="p">)</span>
@@ -1364,6 +1578,15 @@ document.write(`
     <span class="n">aeroway</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">CRS_m</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/localhome/mei3/miniconda3/envs/RESource/lib/python3.12/site-packages/pyogrio/raw.py:198: RuntimeWarning: Several features with id = 1374701 have been found. Altering it to be unique. This warning will not be emitted anymore for this layer
+  return ogr_read(
+</pre></div></div>
 </div>
 <ul class="simple">
 <li><p>Load_policy_config</p></li>

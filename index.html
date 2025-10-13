@@ -508,13 +508,13 @@ unzip<span class="w"> </span>RESource_data.zip<span class="w"> </span>-d<span cl
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span></code></p></td>
-<td><p>Run with default config (Canadian provinces)</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_CAN_baseline.yaml</span></code></p></td>
+<td><p>Run Canadian analysis (all provinces)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">config/config_WB6.yaml</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_WB6.yaml</span></code></p></td>
 <td><p>Run Western Balkans analysis (all regions)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">config/config_WB6.yaml</span> <span class="pre">-r</span> <span class="pre">AL</span> <span class="pre">BA</span> <span class="pre">XK</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_WB6.yaml</span> <span class="pre">-r</span> <span class="pre">AL</span> <span class="pre">BA</span> <span class="pre">XK</span></code></p></td>
 <td><p>Run specific regions only</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">--help</span></code></p></td>
@@ -541,10 +541,10 @@ unzip<span class="w"> </span>RESource_data.zip<span class="w"> </span>-d<span cl
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--config</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">-c</span></code></p></td>
-<td><p>Configuration file path</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">-c</span> <span class="pre">config/config_WB6.yaml</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_FILE</span></code></p></td>
+<td><p>-</p></td>
+<td><p>Configuration file path (required)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">config/config_WB6.yaml</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--regions</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">-r</span></code></p></td>
@@ -562,17 +562,17 @@ unzip<span class="w"> </span>RESource_data.zip<span class="w"> </span>-d<span cl
 </section>
 <section id="example-workflows">
 <h4>Example Workflows<a class="headerlink" href="#example-workflows" title="Link to this heading">#</a></h4>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Canadian Analysis (Default)</span>
-python3<span class="w"> </span>run.py<span class="w">                                    </span><span class="c1"># All Canadian provinces</span>
-python3<span class="w"> </span>run.py<span class="w"> </span>--regions<span class="w"> </span>BC<span class="w"> </span>QC<span class="w"> </span>AB<span class="w">                </span><span class="c1"># Specific provinces only</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Canadian Analysis</span>
+python3<span class="w"> </span>run.py<span class="w"> </span>config/config_CAN_baseline.yaml<span class="w">              </span><span class="c1"># All Canadian provinces</span>
+python3<span class="w"> </span>run.py<span class="w"> </span>config/config_CAN_baseline.yaml<span class="w"> </span>-r<span class="w"> </span>BC<span class="w"> </span>QC<span class="w"> </span>AB<span class="w">  </span><span class="c1"># Specific provinces only</span>
 
 <span class="c1"># Western Balkans Analysis  </span>
-python3<span class="w"> </span>run.py<span class="w"> </span>-c<span class="w"> </span>config/config_WB6.yaml<span class="w">         </span><span class="c1"># All WB6 countries</span>
-python3<span class="w"> </span>run.py<span class="w"> </span>-c<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>-r<span class="w"> </span>AL<span class="w"> </span>BA<span class="w"> </span><span class="c1"># Albania &amp; Bosnia only</span>
+python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml<span class="w">            </span><span class="c1"># All WB6 countries</span>
+python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>-r<span class="w"> </span>AL<span class="w"> </span>BA<span class="w">   </span><span class="c1"># Albania &amp; Bosnia only</span>
 
 <span class="c1"># Error Handling Examples</span>
-python3<span class="w"> </span>run.py<span class="w"> </span>-c<span class="w"> </span>nonexistent.yaml<span class="w">               </span><span class="c1"># Shows available configs</span>
-python3<span class="w"> </span>run.py<span class="w"> </span>-c<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>-r<span class="w"> </span>INVALID<span class="w"> </span><span class="c1"># Shows valid regions</span>
+python3<span class="w"> </span>run.py<span class="w"> </span>nonexistent.yaml<span class="w">                  </span><span class="c1"># Shows available configs</span>
+python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>-r<span class="w"> </span>INVALID<span class="w"> </span><span class="c1"># Shows valid regions</span>
 </pre></div>
 </div>
 <blockquote>

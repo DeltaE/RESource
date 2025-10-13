@@ -723,19 +723,12 @@ document.write(`
                    <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| ✓ Capacity Matrix processed for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="si">}</span><span class="s2">. &quot;</span><span class="p">)</span>
         
     <span class="c1">## 2.1 convert the Availability Matrix to dataframe.</span>
-        <span class="c1"># _provincial_cell_capacity_df:pd.DataFrame=self.capacity_matrix.to_dataframe()</span>
+
         <span class="n">_df_flat</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity_matrix</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span>
-        <span class="c1"># _df_flat = _df_flat.drop(columns=[&#39;x&#39;, &#39;y&#39;])</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">}</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">_df_flat</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
             <span class="n">_df_flat</span> <span class="o">=</span> <span class="n">_df_flat</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
 
-        <span class="c1"># _df_flat = _df_flat.drop(columns=&#39;dim_0&#39;)  # optional</span>
-        <span class="c1"># _df_flat = _df_flat.drop_duplicates(subset=[&#39;y&#39;, &#39;x&#39;], keep=&#39;first&#39;)</span>
-        <span class="c1"># filter the cells that has no lands (i.e. no potential capacity)</span>
-        <span class="c1"># _provincial_cell_capacity_df = _provincial_cell_capacity[_provincial_cell_capacity[&quot;potential_capacity&quot;] != 0]</span>
-
-        <span class="c1"># The xarray doesn&#39;t create cell geometries by default. We hav to create it.</span>
-        <span class="c1"># Apply the bounding box (cell) creation to the DataFrame&#39;s x,y coordinates (centroid of the cells)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">provincial_cell_capacity_gdf</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
             <span class="n">_df_flat</span><span class="p">,</span>
             <span class="n">geometry</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__create_cell_geom__</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">_df_flat</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">_df_flat</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])],</span>

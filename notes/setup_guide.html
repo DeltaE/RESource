@@ -624,19 +624,19 @@ bash<span class="w"> </span>Miniconda3-latest-MacOSX-x86_64.sh
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span></code></p></td>
-<td><p>Default config (Canadian provinces)</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_CAN_baseline.yaml</span></code></p></td>
+<td><p>Canadian analysis (all provinces)</p></td>
 <td><p>🟢 Success messages</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">config/config_WB6.yaml</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_WB6.yaml</span></code></p></td>
 <td><p>Western Balkans (all regions)</p></td>
 <td><p>🔵 Info messages</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">config/config_WB6.yaml</span> <span class="pre">-r</span> <span class="pre">AL</span> <span class="pre">BA</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_WB6.yaml</span> <span class="pre">-r</span> <span class="pre">AL</span> <span class="pre">BA</span></code></p></td>
 <td><p>Specific regions only</p></td>
 <td><p>🟡 Warnings</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">invalid.yaml</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">invalid.yaml</span></code></p></td>
 <td><p>Shows available configs</p></td>
 <td><p>🔴 Error messages</p></td>
 </tr>
@@ -660,15 +660,15 @@ bash<span class="w"> </span>Miniconda3-latest-MacOSX-x86_64.sh
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">config_CAN_baseline.yaml</span></code></p></td>
 <td><p>AB, BC, MB, NB, NL, NS, ON, PE, QC, SK</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">--regions</span> <span class="pre">BC</span> <span class="pre">QC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_CAN_baseline.yaml</span> <span class="pre">-r</span> <span class="pre">BC</span> <span class="pre">QC</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">config_CAN_policy1.yaml</span></code></p></td>
 <td><p>AB, BC, MB, NB, NL, NS, ON, PE, QC, SK</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">config/config_CAN_policy1.yaml</span> <span class="pre">-r</span> <span class="pre">BC</span> <span class="pre">ON</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_CAN_policy1.yaml</span> <span class="pre">-r</span> <span class="pre">BC</span> <span class="pre">ON</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">config_WB6.yaml</span></code></p></td>
 <td><p>AL, BA, XK, ME, MK, RS</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">config/config_WB6.yaml</span> <span class="pre">-r</span> <span class="pre">AL</span> <span class="pre">BA</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_WB6.yaml</span> <span class="pre">-r</span> <span class="pre">AL</span> <span class="pre">BA</span></code></p></td>
 </tr>
 </tbody>
 </table>
@@ -677,7 +677,7 @@ bash<span class="w"> </span>Miniconda3-latest-MacOSX-x86_64.sh
 <section id="error-handling-examples">
 <h4>Error Handling Examples<a class="headerlink" href="#error-handling-examples" title="Link to this heading">#</a></h4>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Invalid config file - shows available options</span>
-python3<span class="w"> </span>run.py<span class="w"> </span>-c<span class="w"> </span>nonexistent.yaml
+python3<span class="w"> </span>run.py<span class="w"> </span>nonexistent.yaml
 <span class="c1"># Output: ✗ Configuration file &#39;nonexistent.yaml&#39; not found.</span>
 <span class="c1">#         💡 Available config files:</span>
 <span class="c1">#            • config/config_CAN_baseline.yaml (Canadian provinces - baseline)</span>
@@ -685,11 +685,11 @@ python3<span class="w"> </span>run.py<span class="w"> </span>-c<span class="w"> 
 <span class="c1">#            • config/config_WB6.yaml (Western Balkans)</span>
 
 <span class="c1"># Invalid regions - shows valid options  </span>
-python3<span class="w"> </span>run.py<span class="w"> </span>-c<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>-r<span class="w"> </span>INVALID
+python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>-r<span class="w"> </span>INVALID
 <span class="c1"># Output: ✗ Invalid region(s): [&#39;INVALID&#39;]</span>
 <span class="c1">#         ⚠️  Available regions in config: [&#39;AL&#39;, &#39;BA&#39;, &#39;XK&#39;, &#39;ME&#39;, &#39;MK&#39;, &#39;RS&#39;]</span>
 <span class="c1">#         💡 Examples of valid commands:</span>
-<span class="c1">#            • python3 run.py -c config/config_WB6.yaml --regions AL BA XK</span>
+<span class="c1">#            • python3 run.py config/config_WB6.yaml --regions AL BA XK</span>
 </pre></div>
 </div>
 </section>

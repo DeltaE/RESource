@@ -7,7 +7,7 @@ The enhanced `run.py` script provides a user-friendly interface for renewable en
 ### Command Syntax
 
 ```bash
-python3 run.py [--config CONFIG_FILE] [--regions REGION1 REGION2 ...]
+python3 run.py CONFIG_FILE [--regions REGION1 REGION2 ...]
 ```
 
 ### Key Features
@@ -26,11 +26,11 @@ python3 run.py [--config CONFIG_FILE] [--regions REGION1 REGION2 ...]
 
 | Command Pattern | Example | Description |
 |-----------------|---------|-------------|
-| **Default Config** | `python3 run.py` | Canadian provinces (all) |
-| **Custom Config** | `python3 run.py -c config/config_WB6.yaml` | Western Balkans (all) |
-| **Specific Regions** | `python3 run.py -c config/config_WB6.yaml -r AL BA` | Selected regions only |
-| **Multiple Regions** | `python3 run.py --regions BC QC AB` | Multiple Canadian provinces |
-| **Single Region** | `python3 run.py -c config/config_WB6.yaml -r AL` | Single region analysis |
+| **Canadian Config** | `python3 run.py config/config_CAN_baseline.yaml` | Canadian provinces (all) |
+| **Western Balkans** | `python3 run.py config/config_WB6.yaml` | Western Balkans (all) |
+| **Specific Regions** | `python3 run.py config/config_WB6.yaml -r AL BA` | Selected regions only |
+| **Multiple Regions** | `python3 run.py config/config_CAN_baseline.yaml -r BC QC AB` | Multiple Canadian provinces |
+| **Single Region** | `python3 run.py config/config_WB6.yaml -r AL` | Single region analysis |
 | **Help** | `python3 run.py --help` | Show all options |
 
 ---
@@ -82,7 +82,7 @@ python3 run.py [--config CONFIG_FILE] [--regions REGION1 REGION2 ...]
 #### Successful Configuration Load
 
 ```bash
-$ python3 run.py -c config/config_WB6.yaml
+$ python3 run.py config/config_WB6.yaml
 ✓ Configuration file loaded: config/config_WB6.yaml
 📍 Available regions in config: ['AL', 'BA', 'XK', 'ME', 'MK', 'RS']
 🌍 Processing all regions from config: ['AL', 'BA', 'XK', 'ME', 'MK', 'RS']
@@ -91,27 +91,27 @@ $ python3 run.py -c config/config_WB6.yaml
 #### Invalid Configuration File
 
 ```bash
-$ python3 run.py -c nonexistent.yaml
+$ python3 run.py nonexistent.yaml
 ✗ Configuration file 'nonexistent.yaml' not found.
 💡 Available config files:
    • config/config_CAN_baseline.yaml (Canadian provinces)
    • config/config_WB6.yaml (Western Balkans)
-   • config/config_CAN.yaml (Canadian default)
-💡 Example: python3 run.py -c config/config_WB6.yaml
+   • config/config_CAN_policy1.yaml (Canadian policy scenario)
+💡 Example: python3 run.py config/config_WB6.yaml
 ```
 
 #### Invalid Region Selection
 
 ```bash
-$ python3 run.py -c config/config_WB6.yaml -r INVALID TEST
+$ python3 run.py config/config_WB6.yaml -r INVALID TEST
 ✓ Configuration file loaded: config/config_WB6.yaml
 📍 Available regions in config: ['AL', 'BA', 'XK', 'ME', 'MK', 'RS']  
 ✗ Invalid region(s): ['INVALID', 'TEST']
 ⚠️ Available regions in config: ['AL', 'BA', 'XK', 'ME', 'MK', 'RS']
 💡 Examples of valid commands:
-   • python3 run.py -c config/config_WB6.yaml --regions AL BA XK
-   • python3 run.py -c config/config_WB6.yaml --regions AL
-   • python3 run.py -c config/config_WB6.yaml (process all regions)
+   • python3 run.py config/config_WB6.yaml --regions AL BA XK
+   • python3 run.py config/config_WB6.yaml --regions AL
+   • python3 run.py config/config_WB6.yaml (process all regions)
 ```
 
 ---
@@ -122,26 +122,26 @@ $ python3 run.py -c config/config_WB6.yaml -r INVALID TEST
 
 ```bash
 # Process first 3 Western Balkan countries
-python3 run.py -c config/config_WB6.yaml -r AL BA XK
+python3 run.py config/config_WB6.yaml -r AL BA XK
 
 # Process specific Canadian provinces
-python3 run.py --regions BC QC AB
+python3 run.py config/config_CAN_baseline.yaml -r BC QC AB
 
 # Single region development/testing
-python3 run.py -c config/config_WB6.yaml -r AL
+python3 run.py config/config_WB6.yaml -r AL
 ```
 
 ### Development Workflows
 
 ```bash
 # Test configuration without full run
-python3 run.py -c config/config_WB6.yaml -r AL | head -20
+python3 run.py config/config_WB6.yaml -r AL | head -20
 
 # Check available regions in new config
-python3 run.py -c path/to/new_config.yaml -r INVALID
+python3 run.py path/to/new_config.yaml -r INVALID
 
 # Quick validation of region codes
-python3 run.py -c config/config_WB6.yaml --help
+python3 run.py --help
 ```
 
 ### Error Recovery
@@ -149,10 +149,10 @@ python3 run.py -c config/config_WB6.yaml --help
 ```bash
 # If colorama is missing (fallback mode)
 pip install colorama
-python3 run.py -c config/config_WB6.yaml
+python3 run.py config/config_WB6.yaml
 
 # Process interrupted - resume with specific regions
-python3 run.py -c config/config_WB6.yaml -r ME MK RS
+python3 run.py config/config_WB6.yaml -r ME MK RS
 ```
 
 ---
