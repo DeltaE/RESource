@@ -413,17 +413,12 @@ class CellCapacityProcessor(AttributesParser):
                    message=f"{__name__}| ✓ Capacity Matrix processed for {self.region_name}. ")
         
     ## 2.1 convert the Availability Matrix to dataframe.
-        # _provincial_cell_capacity_df:pd.DataFrame=self.capacity_matrix.to_dataframe()
-        _df_flat:pd.DataFrame=self.capacity_matrix.to_dataframe()
-        # _df_flat = _df_flat.drop(columns=['x', 'y'])
-        _df_flat = _df_flat.reset_index()
-        # _df_flat = _df_flat.drop(columns='dim_0')  # optional
-        # _df_flat = _df_flat.drop_duplicates(subset=['y', 'x'], keep='first')
-        # filter the cells that has no lands (i.e. no potential capacity)
-        # _provincial_cell_capacity_df = _provincial_cell_capacity[_provincial_cell_capacity["potential_capacity"] != 0]
 
-        # The xarray doesn't create cell geometries by default. We hav to create it.
-        # Apply the bounding box (cell) creation to the DataFrame's x,y coordinates (centroid of the cells)
+        _df_flat:pd.DataFrame=self.capacity_matrix.to_dataframe()
+
+        if not {'x', 'y'}.issubset(_df_flat.columns):
+            _df_flat = _df_flat.reset_index()
+
         self.provincial_cell_capacity_gdf:gpd.GeoDataFrame = gpd.GeoDataFrame(
             _df_flat,
             geometry=[self.__create_cell_geom__(x, y) for x, y in zip(_df_flat['x'], _df_flat['y'])],
@@ -564,7 +559,7 @@ class CellCapacityProcessor(AttributesParser):
         vis_save_to_root=self.get_vis_dir()
         plot_save_to=Path(vis_save_to_root)/'lands'
         utils.ensure_path(plot_save_to)
-        plt.savefig(f'{plot_save_to}/land_availability_ERA5grid_{self.region_short_code}_{self.resource_type}.svg',dpi=500)
+        plt.savefig(f'{plot_save_to}/land_availability_ERA5grid_{self.region_short_code}_{self.resource_type}.png',dpi=500)
         utils.print_update(level=PRINT_LEVEL_BASE+3,message=f"{__name__}|Land availability (grid cells) map saved at {vis_save_to_root}")
         # return fig
         
@@ -590,8 +585,8 @@ class CellCapacityProcessor(AttributesParser):
         vis_save_to_root=self.get_vis_dir()
         plot_save_to=Path(vis_save_to_root)/'lands'
         utils.ensure_path(plot_save_to)
-        plt.savefig(f'{plot_save_to}/land_availability_excluderResolution_{self.region_name}.svg',dpi=500)
-        utils.print_update(level=PRINT_LEVEL_BASE+3,message=f"{__name__}|Land availability map (excluder resolution) saved to {plot_save_to}/land_availability_excluderResolution_{self.region_name}.svg")
+        plt.savefig(f'{plot_save_to}/land_availability_excluderResolution_{self.region_name}.png',dpi=500)
+        utils.print_update(level=PRINT_LEVEL_BASE+3,message=f"{__name__}|Land availability map (excluder resolution) saved to {plot_save_to}/land_availability_excluderResolution_{self.region_name}.png")
         return fig
     
 @staticmethod
