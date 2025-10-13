@@ -41,18 +41,17 @@ Dependencies:
     - Spatial data sources (ERA5, Global Wind Atlas, etc.)
 
 Usage:
-    python run.py [--config CONFIG_FILE] [--regions REGION1 REGION2 ...]
+    python run.py CONFIG_FILE [--regions REGION1 REGION2 ...]
     
 Arguments:
-    --config, -c     Path to configuration file (default: config/config_CAN_baseline.yaml)
+    CONFIG_FILE      Path to configuration file (required)
     --regions, -r    Specific regions to process (default: all regions from config)
 
 Examples:
-    python run.py                                           # Use default config with all regions
-    python run.py --config config/config_WB6.yaml          # Use Western Balkan config with all regions
-    python run.py -c config/config_CAN_baseline.yaml       # Use Canadian config (short form)
-    python run.py -c config/config_WB6.yaml -r AL BA XK    # Use WB6 config with specific regions
-    python run.py --regions BC QC AB                       # Use default config with specific regions
+    python run.py config/config_CAN_baseline.yaml          # Use Canadian config with all regions
+    python run.py config/config_WB6.yaml                   # Use Western Balkan config with all regions
+    python run.py config/config_WB6.yaml -r AL BA XK       # Use WB6 config with specific regions
+    python run.py config/config_CAN_baseline.yaml -r BC QC AB  # Use Canadian config with specific regions
 
 Notes:
     - Requires proper conda environment setup (see env/environment.yml)
@@ -119,19 +118,16 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python run.py                                           # Use default config with all regions
-  python run.py --config config/config_WB6.yaml          # Use Western Balkan config with all regions
-  python run.py -c config/config_CAN_baseline.yaml       # Use Canadian config (short form)
-  python run.py -c config/config_WB6.yaml -r AL BA XK    # Use WB6 config with specific regions
-  python run.py --regions BC QC AB                       # Use default config with specific Canadian regions
+  python run.py config/config_CAN_baseline.yaml          # Use Canadian config with all regions
+  python run.py config/config_WB6.yaml                   # Use Western Balkan config with all regions
+  python run.py config/config_WB6.yaml -r AL BA XK       # Use WB6 config with specific regions
+  python run.py config/config_CAN_baseline.yaml -r BC QC AB  # Use Canadian config with specific regions
         """
     )
     
     parser.add_argument(
-        '--config', '-c',
-        type=str,
-        default='config/config_CAN_baseline.yaml',
-        help='Path to configuration file (default: config/config_CAN_baseline.yaml)'
+        'config',
+        help='Path to configuration file'
     )
     
     parser.add_argument(
@@ -153,7 +149,7 @@ Examples:
         print_info("   - config/config_CAN_baseline.yaml (Canadian provinces - baseline)")
         print_info("   - config/config_CAN_policy1.yaml (Canadian provinces - policy scenario)")
         print_info("   - config/config_WB6.yaml (Western Balkans)")
-        print_suggestion("? Example: python3 run.py -c config/config_WB6.yaml")
+        print_suggestion("? Example: python3 run.py config/config_WB6.yaml")
         sys.exit(1)
     except Exception as e:
         print_error("? Error loading configuration file: {}".format(e))
@@ -184,12 +180,12 @@ Examples:
             # Generate helpful suggestions based on available regions
             if len(available_regions) >= 3:
                 sample_regions = available_regions[:3]
-                print_info("   - python3 run.py -c {} --regions {}".format(
+                print_info("   - python3 run.py {} --regions {}".format(
                     args.config, ' '.join(sample_regions)))
             if len(available_regions) >= 1:
-                print_info("   - python3 run.py -c {} --regions {}".format(
+                print_info("   - python3 run.py {} --regions {}".format(
                     args.config, available_regions[0]))
-            print_info("   - python3 run.py -c {} (process all regions)".format(args.config))
+            print_info("   - python3 run.py {} (process all regions)".format(args.config))
             sys.exit(1)
         regions = args.regions
         print_success("> Processing specified regions: {}".format(regions))
