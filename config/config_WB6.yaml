@@ -121,21 +121,6 @@ OSM_data:
     substation:
       tags: [ 'transmission', 'distribution', 'minor_distribution', 'industrial' ]
 
-custom_land_layers:
-  rasters:
-    raster_1:
-      # You can define any name here
-      'raster': {} #Raster or path to raster which to exclude.
-      'class_exclusion': {} #Raster Classes
-      'buffer': {}
-      'invert': 'False' # TRUE = inclusion. FALSE = Exclusion
-  vectors:
-    vector_1:
-      # You can define any name here
-      'geometry': {} #Raster path
-      'buffer':
-      'invert': 'False'
-
 GAEZ:
   root: 'data/downloaded_data/GAEZ'
   self.: 'https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip'
@@ -167,7 +152,8 @@ GAEZ:
 
   # GAEZ v4 Median slope class compiled from 3 arc-second SRTM data 
   - name: 'terrain_resources'
-    raster: "slpmed05.tif" # Median terrain slope classes; 8 classes ; (5 arc-minute)
+    # raster: "slpmed05.tif" # Median terrain slope classes; 8 classes ; (5 arc-minute)
+    raster: "slpmed30s.tif" # Median terrain slope classes; 8 classes ; (30 arc-second)
     zip_extract_direct: 'LR/ter'
     color_map: 'terrain'
     stepwise_plot_title: "Excluding Terrain Slope"
