@@ -6,10 +6,14 @@
 help:
 	@echo "RESource Project - Available Commands:"
 	@echo ""
+	@echo "Setup:"
+	@echo "  📚 See SETUP.md for complete setup guide"
+	@echo ""
 	@echo "Environment:"
-	@echo "  setupenv    - Setup conda environment from env/environment.yml"
-	@echo "  updateenv   - Update existing conda environment"
-	@echo "  exportenv   - Export current environment to env/environment.yml"
+	@echo "  setupenv       - Setup conda environment from env/environment.yml (RECOMMENDED)"
+	@echo "  setupenv-clean - Setup tested working environment (manual method)"
+	@echo "  updateenv      - Update existing conda environment"
+	@echo "  exportenv      - Export current environment to env/environment.yml"
 	@echo ""
 	@echo "Documentation:"
 	@echo "  docs        - Build and deploy documentation"
@@ -20,6 +24,26 @@ help:
 	@echo "  clean       - Clean build files and cache"
 
 # Environment Management
+setupenv-clean:
+	@echo "🚀 Setting up clean, tested RESource environment..."
+	@if conda env list | grep -q "^RESource "; then \
+		echo "⚠️  Environment 'RESource' already exists."; \
+		echo "To replace with clean version, run: conda env remove -n RESource && make setupenv-clean"; \
+	else \
+		echo "📦 Creating conda environment with Python 3.12..."; \
+		conda create -n RESource python=3.12 -y; \
+		echo "📦 Installing core geospatial packages..."; \
+		conda run -n RESource pip install numpy pandas geopandas==1.0.1 shapely==2.0.6 \
+			dask-geopandas==0.4.2 fiona==1.10.1 pyproj==3.6.1 rasterio==1.4.3; \
+		echo "📦 Installing additional packages..."; \
+		conda run -n RESource pip install atlite xarray netcdf4 matplotlib seaborn jupyter \
+			ipywidgets h5py scikit-learn requests pyyaml tqdm geojson rioxarray colorama \
+			pygadm osmnx plotly tables progressbar memory-profiler configparser lxml \
+			pyogrio openpyxl; \
+		echo "✅ Clean RESource environment setup completed!"; \
+		echo "💡 Activate with: conda activate RESource"; \
+	fi
+
 setupenv:
 	@echo "Setting up conda environment 'RESource'..."
 	@if conda env list | grep -q "^RESource "; then \
@@ -65,12 +89,12 @@ run:
 docs:
 	@echo "Building and deploying documentation..."
 	@if conda env list | grep -q "^RESource "; then \
-		mkdir -p docs/build/html; \
+		mkdir -p docs/_build/html; \
 		mkdir -p docs/source/notebooks; \
 		cp notebooks/*.ipynb docs/source/notebooks/ 2>/dev/null || true; \
-		conda run -n RESource sphinx-build -b html docs/source docs/build/html; \
-		echo "" > docs/build/html/.nojekyll; \
-		conda run -n RESource ghp-import -n -p -f docs/build/html; \
+		conda run -n RESource sphinx-build -b html docs/source docs/_build/html; \
+		echo "" > docs/_build/html/.nojekyll; \
+		conda run -n RESource ghp-import -n -p -f docs/_build/html; \
 		echo "✅ Documentation deployed to GitHub Pages!"; \
 	else \
 		echo "❌ Environment 'RESource' not found. Run 'make setupenv' first."; \
@@ -83,7 +107,7 @@ autobuild:
 		mkdir -p docs/source/notebooks; \
 		cp notebooks/*.ipynb docs/source/notebooks/ 2>/dev/null || true; \
 		echo "🔄 Server: http://127.0.0.1:8000"; \
-		conda run -n RESource sphinx-autobuild docs/source docs/build --host 127.0.0.1 --port 8000; \
+		conda run -n RESource sphinx-autobuild docs/source docs/_build/html --host 127.0.0.1 --port 8000; \
 	else \
 		echo "❌ Environment 'RESource' not found. Run 'make setupenv' first."; \
 		exit 1; \
@@ -92,7 +116,7 @@ autobuild:
 deploy:
 	@echo "Deploying documentation to GitHub Pages..."
 	@if conda env list | grep -q "^RESource "; then \
-		conda run -n RESource ghp-import -n -p -f docs/build/html; \
+		conda run -n RESource ghp-import -n -p -f docs/_build/html; \
 		echo "✅ Documentation deployed!"; \
 		echo "🌐 Visit: https://deltae.github.io/RESource/"; \
 	else \

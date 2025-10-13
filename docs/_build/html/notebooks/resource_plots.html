@@ -1,0 +1,901 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Check the store if the results are ready &#8212; RESource 2025.07 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=e9b82cb4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/resource_plots';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../notes/config.html">How to use the CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/learning.html">Best Practices and Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/developers.html">Contributing Developers</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Store_explorer.html">Explore data store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Visuals_BC.html">Example Visuals for BC</a></li>
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notes/api.html">RES API References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/documentation_guide.html">Documentation Build Guide</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/resource_plots.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Check the store if the results are ready</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">RES.RESources</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">RES</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">RES.RESources</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">RES</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+
+<span class="c1"># Iterate over provinces for both solar and wind resources</span>
+<span class="n">resource_types</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;wind&#39;</span><span class="p">]</span>  <span class="c1">#,&#39;solar&#39;</span>
+<span class="n">provinces</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;BC&#39;</span><span class="p">]</span>  <span class="c1">#,&#39;AB&#39;,&#39;SK&#39;,&#39;ON&#39;,&#39;NS&#39;,&#39;MB&#39;</span>
+<span class="k">for</span> <span class="n">province_code</span> <span class="ow">in</span> <span class="n">provinces</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">resource_type</span> <span class="ow">in</span> <span class="n">resource_types</span><span class="p">:</span>
+        <span class="n">required_args</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;config_file_path&quot;</span><span class="p">:</span> <span class="s1">&#39;config/config_CAN.yaml&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;region_short_code&quot;</span><span class="p">:</span> <span class="n">province_code</span><span class="p">,</span>
+            <span class="s2">&quot;resource_type&quot;</span><span class="p">:</span> <span class="n">resource_type</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Create an instance of Resources and execute the module</span>
+        <span class="n">RES_module</span> <span class="o">=</span> <span class="n">RES</span><span class="o">.</span><span class="n">RESources_builder</span><span class="p">(</span><span class="o">**</span><span class="n">required_args</span><span class="p">)</span>
+        <span class="c1"># RES_module.build(select_top_sites=True,</span>
+        <span class="c1">#                  use_pypsa_buses=False)</span>
+</pre></div>
+</div>
+</div>
+<section id="Check-the-store-if-the-results-are-ready">
+<h1>Check the store if the results are ready<a class="headerlink" href="#Check-the-store-if-the-results-are-ready" title="Link to this heading">#</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">RES.hdf5_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataHandler</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">RES.visuals</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">vis</span>
+<span class="n">store</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/store/resources_</span><span class="si">{</span><span class="n">provinces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">.h5&quot;</span>
+<span class="n">res_data</span><span class="o">=</span><span class="n">DataHandler</span><span class="p">(</span><span class="n">store</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells</span><span class="o">=</span><span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;cells&#39;</span><span class="p">)</span>
+<span class="n">boundary</span><span class="o">=</span><span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;boundary&#39;</span><span class="p">)</span>
+<span class="n">solar_clusters</span><span class="o">=</span><span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;clusters/solar&#39;</span><span class="p">)</span>
+<span class="n">wind_clusters</span><span class="o">=</span><span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;clusters/wind&#39;</span><span class="p">)</span>
+<span class="n">solar_clusters_ts</span><span class="o">=</span><span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;timeseries/clusters/solar&#39;</span><span class="p">)</span>
+<span class="n">wind_clusters_ts</span><span class="o">=</span><span class="n">res_data</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;timeseries/clusters/wind&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">resource_clusters_solar</span><span class="p">,</span><span class="n">cluster_timeseries_solar</span><span class="o">=</span><span class="n">RES_module</span><span class="o">.</span><span class="n">select_top_sites</span><span class="p">(</span><span class="n">solar_clusters</span><span class="p">,</span>
+                                                                <span class="n">solar_clusters_ts</span><span class="p">,</span>
+                                                                    <span class="n">resource_max_capacity</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">resource_clusters_wind</span><span class="p">,</span><span class="n">cluster_timeseries_wind</span><span class="o">=</span><span class="n">RES_module</span><span class="o">.</span><span class="n">select_top_sites</span><span class="p">(</span><span class="n">wind_clusters</span><span class="p">,</span>
+                                                                <span class="n">wind_clusters_ts</span><span class="p">,</span>
+                                                                    <span class="n">resource_max_capacity</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">legend_x_ax_offset</span><span class="o">=</span><span class="mi">1</span>
+
+<span class="c1"># Ensure &#39;Region&#39; is in the columns for both boundary and cells</span>
+<span class="k">if</span> <span class="s1">&#39;Region&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">boundary</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="n">boundary</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Assign a number to each region</span>
+<span class="n">boundary</span><span class="p">[</span><span class="s1">&#39;Region_Number&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">boundary</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Define custom bins and labels for solar and wind capacity</span>
+<span class="n">solar_bins</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)]</span>  <span class="c1"># Custom ranges</span>
+<span class="n">solar_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&lt;100&#39;</span><span class="p">,</span><span class="s1">&#39;100-200&#39;</span><span class="p">,</span> <span class="s1">&#39;200-300&#39;</span><span class="p">,</span> <span class="s1">&#39;300-500&#39;</span><span class="p">,</span><span class="s1">&#39;&gt;500&#39;</span><span class="p">]</span>  <span class="c1"># Labels for legend</span>
+
+<span class="c1"># Define custom bins and labels for solar and wind capacity</span>
+<span class="n">wind_bins</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span><span class="mi">3000</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)]</span>  <span class="c1"># Custom ranges</span>
+<span class="n">wind_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&lt;300&#39;</span><span class="p">,</span><span class="s1">&#39;300-500&#39;</span><span class="p">,</span> <span class="s1">&#39;500-1000&#39;</span><span class="p">,</span> <span class="s1">&#39;1000-2000&#39;</span><span class="p">,</span><span class="s1">&#39;2000-3000&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;3000&#39;</span><span class="p">]</span>  <span class="c1"># Labels for legend</span>
+
+<span class="c1"># Categorize potential_capacity_solar and potential_capacity_wind into bins</span>
+<span class="n">resource_clusters_solar</span><span class="p">[</span><span class="s1">&#39;solar_category&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">resource_clusters_solar</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="n">solar_bins</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">solar_labels</span><span class="p">,</span> <span class="n">include_lowest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">resource_clusters_wind</span><span class="p">[</span><span class="s1">&#39;wind_category&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">resource_clusters_wind</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="n">wind_bins</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">wind_labels</span><span class="p">,</span> <span class="n">include_lowest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Create figure and axes for side-by-side plotting</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Potential Sites for Targeted Capacity Investments&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span><span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="c1"># Set axis off for both subplots</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+
+<span class="c1"># Shadow effect offset</span>
+<span class="n">shadow_offset</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+<span class="c1"># Plot solar map on ax1</span>
+<span class="c1"># Add shadow effect for solar map</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">)</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>  <span class="c1"># Shadow layer</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">)</span>
+
+<span class="c1"># Plot solar cells</span>
+<span class="n">resource_clusters_solar</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;solar_category&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Wistia&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+           <span class="n">legend_kwds</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s2">&quot;Solar Capacity (MW)&quot;</span><span class="p">,</span> <span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper right&#39;</span><span class="p">,</span><span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:(</span><span class="n">legend_x_ax_offset</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;frameon&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+
+<span class="c1"># Plot actual boundary for solar map</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># Annotate region numbers for solar map</span>
+<span class="sd">for idx, row in boundary.iterrows():</span>
+<span class="sd">    centroid = row.geometry.centroid</span>
+<span class="sd">    ax1.annotate(f&quot;{row[&#39;Region_Number&#39;]}&quot;,</span>
+<span class="sd">                 xy=(centroid.x, centroid.y),</span>
+<span class="sd">                 ha=&#39;center&#39;, va=&#39;center&#39;,</span>
+<span class="sd">                 fontsize=7, color=&#39;black&#39;,</span>
+<span class="sd">                 bbox=dict(facecolor=&#39;white&#39;, edgecolor=&#39;none&#39;, alpha=0.7, boxstyle=&#39;round,pad=0.2&#39;))</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># Plot wind map on ax2</span>
+<span class="c1"># Add shadow effect for wind map</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">)</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>  <span class="c1"># Shadow layer</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">xoff</span><span class="o">=-</span><span class="n">shadow_offset</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=</span><span class="n">shadow_offset</span><span class="p">)</span>
+
+<span class="c1"># Plot wind cells</span>
+<span class="n">resource_clusters_wind</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;wind_category&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;summer&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+           <span class="n">legend_kwds</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s2">&quot;Wind Capacity (MW)&quot;</span><span class="p">,</span> <span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:(</span><span class="n">legend_x_ax_offset</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;frameon&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+
+<span class="c1"># Plot actual boundary for wind map</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># Annotate region numbers for wind map</span>
+<span class="sd">for idx, row in boundary.iterrows():</span>
+<span class="sd">    centroid = row.geometry.centroid</span>
+<span class="sd">    ax2.annotate(f&quot;{row[&#39;Region_Number&#39;]}&quot;,</span>
+<span class="sd">                 xy=(centroid.x, centroid.y),</span>
+<span class="sd">                 ha=&#39;center&#39;, va=&#39;center&#39;,</span>
+<span class="sd">                 fontsize=8, color=&#39;black&#39;,</span>
+<span class="sd">                 bbox=dict(facecolor=&#39;white&#39;, edgecolor=&#39;none&#39;, alpha=0.7, boxstyle=&#39;round,pad=0.2&#39;))</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># Adjust layout for cleaner appearance</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># Make figure background transparent</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+
+<span class="c1"># Add annotation for solar capacity</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Targeted Capacity: </span><span class="se">\n</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">resource_clusters_solar</span><span class="o">.</span><span class="n">potential_capacity</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="mf">1e3</span><span class="p">)</span><span class="si">}</span><span class="s2"> GW&quot;</span><span class="p">,</span>
+             <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="c1"># Add annotation for wind capacity</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Targeted Capacity: </span><span class="se">\n</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">resource_clusters_wind</span><span class="o">.</span><span class="n">potential_capacity</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="mf">1e3</span><span class="p">)</span><span class="si">}</span><span class="s2"> GW&quot;</span><span class="p">,</span>
+             <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="c1"># Show the side-by-side plot</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;solar_wind_capacity_map.png&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ensure &#39;Region&#39; is in the columns for both boundary and cells</span>
+<span class="k">if</span> <span class="s1">&#39;Region&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">boundary</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="n">boundary</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Assign a number to each region</span>
+<span class="n">boundary</span><span class="p">[</span><span class="s1">&#39;Region_Number&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">boundary</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CFP24</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;ROD_2024/BCH_CFP24.geojson&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CFP24</span><span class="o">.</span><span class="n">potential_capacity</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> MW&quot;</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">contextily</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ctx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cartopy.crs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ccrs</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpatches</span>
+
+<span class="c1"># Create figure and axis</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()})</span>
+
+<span class="c1"># Plot boundaries</span>
+<span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+
+<span class="c1"># Define color map manually</span>
+<span class="n">color_map</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;wind&#39;</span><span class="p">:</span> <span class="s1">&#39;skyblue&#39;</span><span class="p">,</span> <span class="s1">&#39;solar&#39;</span><span class="p">:</span> <span class="s1">&#39;orangered&#39;</span><span class="p">}</span>
+
+<span class="c1"># Plot each resource type separately for manual control</span>
+<span class="k">for</span> <span class="n">resource</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="n">color_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">CFP24</span><span class="p">[</span><span class="n">CFP24</span><span class="p">[</span><span class="s1">&#39;resource_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">resource</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">markersize</span><span class="o">=</span><span class="n">CFP24</span><span class="p">[</span><span class="n">CFP24</span><span class="p">[</span><span class="s1">&#39;resource_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">resource</span><span class="p">][</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">],</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+        <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+        <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
+    <span class="p">)</span>
+
+<span class="c1"># Annotate region numbers</span>
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">boundary</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">centroid</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">centroid</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">centroid</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">centroid</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;Region_Number&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+            <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">boxstyle</span><span class="o">=</span><span class="s1">&#39;round,pad=0.2&#39;</span><span class="p">),</span>
+            <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+
+<span class="c1"># Add clean basemap</span>
+<span class="c1"># ctx.add_basemap(ax, source=ctx.providers.CartoDB.Positron, crs=ccrs.PlateCarree())</span>
+
+<span class="c1"># Remove all borders and ticks</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+<span class="k">for</span> <span class="n">spine</span> <span class="ow">in</span> <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+    <span class="n">spine</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Add custom legend</span>
+<span class="n">legend_elements</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">mpatches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;skyblue&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Wind&#39;</span><span class="p">),</span>
+    <span class="n">mpatches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;orangered&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Solar&#39;</span><span class="p">)</span>
+<span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">legend_elements</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Resource Type&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Set clean title</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Call for Power 2024&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;vis/misc/CFP24.png&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the data</span>
+<span class="n">elec_demand</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;selection    region  scenario        year    value   unit    dataset</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2006    59275.791       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2009    60242.043       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2012    71623.218       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2015    71424.0277      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2022    69480.63812     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2025    72669.74578     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2028    75894.67904     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2031    88877.03508     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2035    95995.44909     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2038    103741.5152     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2010    60100.721       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2013    65157.5056      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2016    69609.4231      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2019    64333.814       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2026    73624.51074     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2029    80393.60758     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2032    92119.87512     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2039    106544.5794     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2042    115409.7581     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2045    124941.8985     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2048    134525.4109     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2005    65664.38        GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2007    69444.68        GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2014    66746.246       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2017    74089.1426      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2020    72029.63959     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2023    68914.107       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2030    84346.61932     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2033    95297.11161     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2036    98734.17747     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2043    118344.8613     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2046    128302.1161     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2049    137567.7422     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2005    65664.38        GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2008    63722.706       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2011    68674.245       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2018    69235.603       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2021    71664.14946     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2024    68544.93829     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2027    74930.45612     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2034    98808.616       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2037    101306.3085     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2040    108914.6025     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2047    131414.1098     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2050    140535.5229     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2041    112546.5104     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CANADA NET-ZERO 2044    122012.3367     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2007    69444.68        GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2014    66746.246       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2017    74089.1426      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2020    72029.63959     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2027    74106.7382      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2030    78827.14789     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2033    86395.54112     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2036    91401.70727     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2043    104506.326      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2046    110423.5666     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2049    116686.678      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2007    69444.68        GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2010    60100.721       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2013    65157.5056      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2016    69609.4231      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2023    67905.55895     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2026    73805.58902     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2029    79448.88859     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2006    59275.791       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2009    60242.043       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2012    71623.218       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2015    71424.0277      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2022    69294.96197     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2025    72423.33708     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2028    74785.93617     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2035    89598.7052      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2038    95484.99029     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2041    101716.4014     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2044    106693.1114     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2005    65664.38        GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2008    63722.706       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2015    71424.0277      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2018    69235.603       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2021    71664.14946     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2028    75637.04349     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2031    84843.23499     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2034    88143.67894     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2037    93240.239       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2008    63722.706       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2011    68674.245       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2018    69235.603       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2021    71664.14946     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2024    68497.30631     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2031    80946.24884     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2034    88177.92442     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2037    93499.60938     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2040    99526.85806     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2047    112440.621      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2050    119125.9488     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2011    68674.245       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2014    66746.246       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2017    74089.1426      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2020    72029.63959     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2024    67448.14469     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2027    74378.60682     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2030    81367.2863      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2033    85337.18522     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2040    103281.9867     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2036    89811.78063     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2039    100121.8502     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2042    108220.4955     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2045    114829.3728     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2044    113299.4396     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2047    120156.7013     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2050    131591.3452     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2043    110416.54       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2046    117076.9464     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2049    127448.8815     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2010    60100.721       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2013    65157.5056      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2016    69609.4231      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2019    64333.814       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2023    68848.46089     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2026    73384.78226     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2029    76965.87804     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2032    83877.61135     GW.h    2023</span>
+<span class="s1"># ELECTRICITY GENERATION    BRITISH COLUMBIA        CURRENT MEASURES        2039    97928.33036     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2042    103146.367      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2045    108333.9304     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        CURRENT MEASURES        2048    114568.6573     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2006    59275.791       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2009    60242.043       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2012    71623.218       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2019    64333.814       GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2022    68186.53229     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2025    73204.28801     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2032    83378.80551     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2035    86435.69762     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2038    96588.7449      GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2041    106125.3583     GW.h    2023</span>
+<span class="s1">ELECTRICITY GENERATION      BRITISH COLUMBIA        GLOBAL NET-ZERO 2048    123585.8601     GW.h    2023</span>
+
+<span class="s1">...</span>
+<span class="s1">&#39;&#39;&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plt.figure(figsize=(12, 6))</span>
+
+<span class="c1"># # Plot each scenario with specific styling</span>
+<span class="c1"># for scenario in df[&#39;scenario&#39;].unique():</span>
+<span class="c1">#     if scenario == &#39;CURRENT MEASURES&#39;:</span>
+<span class="c1">#         sns.lineplot(</span>
+<span class="c1">#             data=df[df[&#39;scenario&#39;] == scenario],</span>
+<span class="c1">#             x=&#39;year&#39;,</span>
+<span class="c1">#             y=&#39;value&#39;,</span>
+<span class="c1">#             label=scenario,</span>
+<span class="c1">#             color=&#39;k&#39;,</span>
+<span class="c1">#             linewidth=5,  # Bold line</span>
+<span class="c1">#             alpha=.8</span>
+<span class="c1">#         )</span>
+<span class="c1">#     else:</span>
+<span class="c1">#         sns.lineplot(</span>
+<span class="c1">#             data=df[df[&#39;scenario&#39;] == scenario],</span>
+<span class="c1">#             x=&#39;year&#39;,</span>
+<span class="c1">#             y=&#39;value&#39;,</span>
+<span class="c1">#             label=scenario,</span>
+<span class="c1">#             linewidth=3,</span>
+<span class="c1">#             alpha=0.8  # Transparent lines</span>
+<span class="c1">#         )</span>
+
+<span class="c1"># # Vertical line for current year</span>
+<span class="c1"># plt.axvline(x=current_year, color=&#39;grey&#39;, linestyle=&#39;--&#39;, linewidth=1.5)</span>
+<span class="c1"># plt.text(current_year + 0.5, plt.ylim()[1]*0.95, str(current_year), color=&#39;k&#39;)</span>
+
+<span class="c1"># # Set axis label colors</span>
+<span class="c1"># plt.ylabel(&#39;Electricity Generation (GWh)&#39;, color=&#39;grey&#39;)</span>
+
+<span class="c1"># # Set tick label colors</span>
+<span class="c1"># plt.tick_params(axis=&#39;x&#39;, colors=&#39;grey&#39;)</span>
+<span class="c1"># plt.tick_params(axis=&#39;y&#39;, colors=&#39;grey&#39;)</span>
+
+<span class="c1"># # Remove box and spines</span>
+<span class="c1"># for spine in plt.gca().spines.values():</span>
+<span class="c1">#     spine.set_visible(False)</span>
+
+<span class="c1"># # Legend</span>
+<span class="c1"># plt.legend(title=&#39;Canada Energy Future 2023, CER&#39;, title_fontsize=14, fontsize=11, loc=&#39;upper left&#39;, frameon=False)</span>
+
+<span class="c1"># plt.title(&#39;Electricity Generation in British Columbia by Scenario&#39;, fontsize=16, weight=&#39;bold&#39;)</span>
+<span class="c1"># plt.tight_layout()</span>
+<span class="c1"># plt.savefig(&#39;CEF_BC_ELEC_DEMAND.png&#39;, dpi=600, transparent=True)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+
+<span class="c1"># Create a dictionary mapping Region_Number to Region</span>
+<span class="n">region_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;Region_Number&#39;</span><span class="p">]:</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">boundary</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()}</span>
+
+<span class="c1"># Export the mapping to a CSV file</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;region_mapping.csv&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;Region_Number&#39;</span><span class="p">,</span> <span class="s1">&#39;Region&#39;</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">region_number</span><span class="p">,</span> <span class="n">region_name</span> <span class="ow">in</span> <span class="n">region_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">region_number</span><span class="p">,</span> <span class="n">region_name</span><span class="p">])</span>
+
+<span class="c1"># Display the mapping outside of the plot</span>
+<span class="k">for</span> <span class="n">region_number</span><span class="p">,</span> <span class="n">region_name</span> <span class="ow">in</span> <span class="n">region_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">region_number</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">region_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
