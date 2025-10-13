@@ -412,6 +412,26 @@ class CellCapacityProcessor(AttributesParser):
         utils.print_update(level=PRINT_LEVEL_BASE+2,
                    message=f"{__name__}| ✓ Capacity Matrix processed for {self.region_name}. ")
         
+    ## ## 2.1 convert the Availability Matrix to dataframe.
+        # Keep x/y coordinates! self.capacity_matrix has a stacked 'spatial' MultiIndex (y,x).
+        # Using reset_index(drop=True) discards those coordinates, so DON'T drop=True.
+
+        # First try the straightforward path:
+        _df_flat = self.capacity_matrix.to_dataframe().reset_index()
+
+        # If for any reason x/y didn’t appear (older xarray/pandas edge cases), fall back to Series:
+        if ("x" not in _df_flat.columns) or ("y" not in _df_flat.columns):
+            s = self.capacity_matrix.to_series()  # expands MultiIndex levels to columns on reset_index()
+            _df_flat = s.reset_index()
+            # ensure the value column is correctly named
+            value_col = self.capacity_matrix.name or f"potential_capacity_{self.resource_type}"
+            if 0 in _df_flat.columns:
+                _df_flat.rename(columns={0: value_col}, inplace=True)
+
+        # Optional cleanups: remove obvious empties
+        # _df_flat = _df_flat.drop_duplicates(subset=["y", "x"], keep="first")
+        # _df_flat = _df_flat[_df_flat[value_col] > 0]
+
     ## 2.1 convert the Availability Matrix to dataframe.
 
         _df_flat:pd.DataFrame=self.capacity_matrix.to_dataframe()
