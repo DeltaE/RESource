@@ -127,13 +127,13 @@ OSM_data:
 
 GAEZ:
   root: 'data/downloaded_data/GAEZ'
-  self.: 'https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip'
+  source: 'https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip'
   zip_file: 'LR.zip'
   Rasters_in_use_direct: 'Rasters_in_use'
   raster_types:
   # GAEZ exclusion layer
   - name: 'exclusion_areas'
-    raster: "exclusion_2017_uint8.tif"
+    raster: "exclusion_2017.tif"
     zip_extract_direct: 'LR/excl'
     color_map: 'OrRd'
     dtype: uint8
@@ -145,20 +145,20 @@ GAEZ:
       buffer:
         solar: 0
         wind: 0
-  # # GAEZ terrain slope layer
-  # - name: 'terrain_resources'
-  #   raster: "slpmed05_uint8.tif"
-  #   zip_extract_direct: 'LR/ter'
-  #   color_map: 'terrain'
-  #   dtype: uint8
-  #   fill_value: 255
-  #   stepwise_plot_title: "Excluding Terrain Slope"
-  #   class_exclusion:
-  #     solar: [6, 7, 8, 9]
-  #     wind:  [6, 7, 8, 9]
-  #     buffer:
-  #       solar: 0
-  #       wind:  0
+  # GAEZ terrain slope layer
+  - name: 'terrain_resources'
+    raster: "slpmed30s.tif"
+    zip_extract_direct: 'LR/ter'
+    color_map: 'terrain'
+    dtype: uint8
+    fill_value: 255
+    stepwise_plot_title: "Excluding Terrain Slope"
+    class_exclusion:
+      solar: [ 8, 9 ]
+      wind: [ 7, 8, 9 ]
+      buffer:
+        solar: 0
+        wind: 0
 
 EU_DEM:
   root: 'data/downloaded_data/EU_DEM'
@@ -222,12 +222,14 @@ EU_DEM:
     #     solar: [ 2, 3, 5, 6, 8, 9 ]
     #     wind: [ 2, 3, 5, 6, 8, 9 ]
 
+
 CORINE:
   root: 'data/downloaded_data/CORINE'
   raster_types:
   - name: 'CORINE_land_cover'
     source: 'https://copernicus-fme.eea.europa.eu/fmedatadownload/results/13521.zip'
-    raster: 'U2018_CLC2018_V2020_20u1_uint8.tif'
+    root: 'data/downloaded_data/CORINE'
+    raster: 'U2018_CLC2018_V2020_20u1.tif'
     color_map: 'tab20'
     dtype: uint8
     fill_value: 255

@@ -52,6 +52,7 @@ from rasterio.enums import Resampling
 from rasterio.mask import mask
 from rasterio.plot import show
 from rasterio.transform import Affine
+from rasterio.warp import Resampling, calculate_default_transform, reproject
 from shapely.geometry import box
 from shapely.geometry.base import BaseGeometry
 
@@ -826,7 +827,9 @@ class LandContainer(AttributesParser):
 
 
         for CLC_raster_config_item in CLC_raster_configs:
-            CLC_raster_config_item["filepath"]=Path(self.CLC_config.get('root'))/CLC_raster_config_item['raster']
+            # CLC_raster_config_item["filepath"]=Path(self.CLC_config.get('root'))/CLC_raster_config_item['raster']
+            CLC_raster_config_item["filepath"]=clip_to_boundary_and_resample_raster(in_raster_config=             CLC_raster_config_item,                                                                                   boundary_name= self.region_short_code,
+            boundary=self.region_boundary)
                 
         utils.print_update(level=PRINT_LEVEL_BASE+3,
                            message= f"{__name__}| Raster Layers Loaded")
@@ -1293,11 +1296,13 @@ def ensure_uint8_raster(filepath):
 @staticmethod
 
 def clip_to_boundary_and_resample_raster(
-    in_raster_config: dict,
+    in_raster_config: dict,   
     boundary_name: str,
     boundary: gpd.GeoDataFrame | str | Path,
+    CRS_meters: str = "EPSG:3005",
     clip_to_geom: bool = True,
-    target_res: Optional[int | None] = 100,
+    source_raster_path: str | Path = None,
+    target_res_meters: Optional[int | None] = 100,
     categorical_threshold: int = 50,
 ):
     """
@@ -1349,10 +1354,13 @@ def clip_to_boundary_and_resample_raster(
     - Intermediate clipped files are reused if target resolution changes
     """
     raster_name:str=in_raster_config.get('name')
-    in_raster:str|Path=Path(in_raster_config.get('root'))/in_raster_config.get('raster')
     
     
-    in_raster = Path(in_raster)
+    if source_raster_path is not None:
+        in_raster=Path(source_raster_path)
+    else:
+        in_raster:str|Path=Path(in_raster_config.get('root'))/in_raster_config.get('raster')
+        in_raster = Path(in_raster)
     if not in_raster.exists():
         try:
             source_url=in_raster_config.get('source',None)
@@ -1364,11 +1372,12 @@ def clip_to_boundary_and_resample_raster(
 
     # --- Define output paths ---
     clipped_path = in_raster.with_name(f"{in_raster.stem}_clipped_{boundary_name}{in_raster.suffix}")
+
     out_path = (
         in_raster.with_name(
-            f"{in_raster.stem}_clipped_{boundary_name}_{int(target_res)}m{in_raster.suffix}"
+            f"{in_raster.stem}_clipped_{boundary_name}_{int(target_res_meters)}m{in_raster.suffix}"
         )
-        if target_res is not None
+        if target_res_meters is not None
         else clipped_path
     )
 
@@ -1378,12 +1387,12 @@ def clip_to_boundary_and_resample_raster(
                            f"{__name__}✅ Final output already exists: {out_path.name} — skipping all processing.")
         return out_path
 
-    if clipped_path.exists() and (target_res is None):
+    if clipped_path.exists() and (target_res_meters is None):
         utils.print_update(PRINT_LEVEL_BASE,
                            f"{__name__}✅ Clipped raster exists: {clipped_path.name} — no resampling requested.")
         return clipped_path
 
-    if clipped_path.exists() and (target_res is not None):
+    if clipped_path.exists() and (target_res_meters is not None):
         utils.print_update(PRINT_LEVEL_BASE,
                            f"{__name__}✅ Using existing clipped raster for resampling: {clipped_path.name}")
         clip_needed = False
@@ -1433,9 +1442,9 @@ def clip_to_boundary_and_resample_raster(
                            f"{__name__}ℹ️ Skipping clipping {raster_name} — using existing file.")
 
     # === 3. Handle resampling ===
-    if target_res is None:
-        target_res=int(in_raster_config.get('target_res_meters'),None)
-        if target_res is None:
+    if target_res_meters is None:
+        target_res_meters = int(in_raster_config.get('target_res_meters'), None)
+        if target_res_meters is None:
             print("⚙️ No target resolution specified — returning clipped raster.")
             return clipped_path
 
@@ -1444,9 +1453,9 @@ def clip_to_boundary_and_resample_raster(
         utils.print_update(PRINT_LEVEL_BASE,
                            f"{__name__}ℹ️ Current resolution: {res_x:.2f} × {res_y:.2f} m")
 
-        if res_x >= target_res and res_y >= target_res:
+        if res_x >= target_res_meters and res_y >= target_res_meters:
            utils.print_update(PRINT_LEVEL_BASE,
-                           f"{__name__}⚠️ Already coarser than {target_res} m — skipping resample.")
+                           f"{__name__}⚠️ Already coarser than {target_res_meters} m — skipping resample.")
            return clipped_path
 
         # Detect categorical vs continuous
@@ -1464,7 +1473,7 @@ def clip_to_boundary_and_resample_raster(
         resampling_method = Resampling.mode if categorical else Resampling.average
         kind = "categorical (mode)" if categorical else "continuous (average)"
 
-        scale_factor = target_res / res_x
+        scale_factor = target_res_meters / res_x
         new_width = int(src.width / scale_factor)
         new_height = int(src.height / scale_factor)
         new_transform = src.transform * Affine.scale(scale_factor, scale_factor)
@@ -1485,7 +1494,7 @@ def clip_to_boundary_and_resample_raster(
         dst.write(data)
 
     utils.print_update(PRINT_LEVEL_BASE,
-                           f"{__name__}✅ Resampled to {int(target_res)} m ({kind})")
+                           f"{__name__}✅ Resampled to {int(target_res_meters)} m ({kind})")
     utils.print_update(PRINT_LEVEL_BASE,
                            f"{__name__}📁 Output saved: {out_path.name}")
     return out_path
@@ -1528,62 +1537,29 @@ def plot_raster_class_distribution(
     dpi=500,
     show=False,
     save_csv=False,
-    ignore_zero_class=True
+    ignore_zero_class=True,
+    pct_threshold=0.0,  # New argument
 ):
     """
     Plot the percentage distribution of categorical raster classes (generic for any raster).
 
     Parameters
     ----------
-    raster_da : xarray.DataArray or numpy.ndarray
-        Raster data array with integer or categorical class codes.
-    legend_df : pandas.DataFrame, optional
-        DataFrame with at least columns: [class_col, desc_col, color_col].
-        If None, generic class labels and colors will be generated.
-    class_col : str, optional
-        Column name for class codes in legend_df.
-    desc_col : str, optional
-        Column name for class descriptions in legend_df.
-    color_col : str, optional
-        Column name for HEX color codes in legend_df.
-    exclude_classes : list, optional
-        List of class codes to exclude (e.g., NoData, Unclassified).
-    title : str, optional
-        Plot title.
-    save_path : str or Path, optional
-        Directory to save figure (and optionally CSV). If None, nothing is saved.
-    region_code : str, optional
-        Region identifier for filename.
-    country_kwd : str, optional
-        Country keyword for filename hierarchy.
-    figsize : tuple, optional
-        Figure size.
-    dpi : int, optional
-        Plot resolution.
-    show : bool, optional
-        Whether to display the plot interactively.
-    save_csv : bool, optional
-        Whether to save the computed class percentages to CSV.
-
-    Returns
-    -------
-    df_plot : pandas.DataFrame
-        DataFrame containing class, percentage, and metadata (merged with legend if available).
-        
-    Notes:
+    pct_threshold : float, optional
+        Minimum percentage threshold. Classes below this value are excluded from the plot.
+        Example: 0.5 means exclude classes < 0.5% of total area.
     """
+    # --- Handle data array ---
     raster_da = np.nan_to_num(raster_da.values.squeeze(), nan=0).astype("int32")
-    # --- Extract numeric data from raster ---
     if hasattr(raster_da, "values"):
         data = raster_da.values
-        
     else:
         data = np.array(raster_da)
 
-    # Flatten and clean
     data_flat = data.flatten()
     data_flat = data_flat[~np.isnan(data_flat)]  # remove NaN
-    # Always exclude class 0 (often NoData)
+
+    # Exclude unwanted classes
     exclude_classes = exclude_classes or []
     if ignore_zero_class and 0 not in exclude_classes:
         exclude_classes.append(0)
@@ -1598,21 +1574,24 @@ def plot_raster_class_distribution(
     unique, counts = np.unique(data_flat, return_counts=True)
     total = counts.sum()
     percentages = (counts / total) * 100
-
     df = pd.DataFrame({"class": unique.astype(int), "Percentage": percentages})
 
-        # --- Merge legend if available ---
+    # --- Apply threshold ---
+    if pct_threshold > 0:
+        df = df[df["Percentage"] >= pct_threshold]
+        if df.empty:
+            raise ValueError(
+                f"No classes remain after applying threshold of {pct_threshold}%."
+            )
+
+    # --- Merge legend if available ---
     if legend_df is not None:
         legend_df = legend_df.rename(
             columns={class_col: "class", desc_col: "description", color_col: "color"}
         )
-
-        # Clean up color codes
         legend_df["color"] = legend_df["color"].astype(str).str.strip().str.lower()
-
         df_plot = pd.merge(df, legend_df, on="class", how="left")
 
-        # Check for missing legend entries
         missing_colors = df_plot["color"].isna().sum()
         if missing_colors > 0:
             print(f"⚠️ {missing_colors} class(es) missing color — assigning fallback colors.")
@@ -1623,21 +1602,18 @@ def plot_raster_class_distribution(
                 for r, g, b, _ in cmap(np.linspace(0, 1, len(df_plot)))
             ]
             df_plot["color"] = df_plot["color"].fillna(pd.Series(fallback_colors))
-
     else:
-        # Generate fallback description and colors
         import matplotlib.cm as cm
-        cmap = cm.get_cmap("tab20", len(unique))
+        cmap = cm.get_cmap("tab20", len(df))
         colors = [
             f"#{int(255*r):02X}{int(255*g):02X}{int(255*b):02X}"
-            for r, g, b, _ in cmap(np.linspace(0, 1, len(unique)))
+            for r, g, b, _ in cmap(np.linspace(0, 1, len(df)))
         ]
         df_plot = df.copy()
         df_plot["description"] = df_plot["class"].astype(str)
         df_plot["color"] = colors
 
-
-        # --- Combine label for axis ---
+    # --- Label and sorting ---
     df_plot["label"] = df_plot.apply(
         lambda row: f"{int(row['class'])}: {row['description']}", axis=1
     )
@@ -1652,7 +1628,7 @@ def plot_raster_class_distribution(
         edgecolor="black"
     )
 
-    # Annotate each bar
+    # Annotate bars
     for bar, pct in zip(bars, df_plot["Percentage"]):
         width = bar.get_width()
         ax.text(
@@ -1671,39 +1647,34 @@ def plot_raster_class_distribution(
             ),
         )
 
-    # --- Labels & layout ---
+    # --- Layout ---
     ax.set_xlabel("Percentage of Total Area (%)", fontsize=10)
     ax.set_ylabel("Raster Class (code: description)", fontsize=10)
     ax.set_title(title, fontsize=12, fontweight="bold")
     ax.grid(axis="x", linestyle="--", alpha=0.4)
     plt.tight_layout()
 
-
-    # --- Save results ---
+    # --- Save ---
     if save_path:
         save_dir = Path(save_path)
         if country_kwd:
             save_dir = save_dir / country_kwd
         if region_code:
             save_dir = save_dir / region_code
-            
-    save_path = Path(save_path)
 
-    # If user passed a file (has suffix like .png, .jpg)
-    if save_path.suffix:
-        save_dir = save_path.parent
-        save_dir.mkdir(parents=True, exist_ok=True)
-        out_path = save_path
-    else:
-        # If user passed just a directory
-        save_path.mkdir(parents=True, exist_ok=True)
-        out_path = save_path / f"Raster_class_distribution_{region_code}.png"
+        save_path = Path(save_path)
+        if save_path.suffix:
+            save_dir = save_path.parent
+            save_dir.mkdir(parents=True, exist_ok=True)
+            out_path = save_path
+        else:
+            save_path.mkdir(parents=True, exist_ok=True)
+            out_path = save_path / f"Raster_class_distribution_{region_code}.png"
 
-    plt.savefig(out_path, bbox_inches="tight")
-    print(f"✅ Saved figure: {out_path}")
+        plt.savefig(out_path, bbox_inches="tight")
+        print(f"✅ Saved figure: {out_path}")
 
-
-    if save_csv:
+        if save_csv:
             out_csv = save_dir / f"{title.replace(' ', '_').lower()}.csv"
             df_plot.to_csv(out_csv, index=False)
             print(f"✅ Saved CSV: {out_csv}")
@@ -1712,10 +1683,9 @@ def plot_raster_class_distribution(
         plt.show()
     else:
         plt.close(fig)
-    print(f"🧮 Excluding classes: {exclude_classes}")
 
+    print(f"🧮 Excluding classes: {exclude_classes} | Applied threshold: {pct_threshold}%")
     return df_plot
-
 
 
 
@@ -1725,12 +1695,15 @@ def assign_raster_class_to_points(
     legend_df: Optional[pd.DataFrame] = None,
     raster_crs: Optional[str] = None,
     class_col_name: str = None,
+    resource_type_col_name: Optional[str] = None,
 ) -> gpd.GeoDataFrame:
     """
     Assigns raster class values (from a single-band xarray DataArray)
     to point geometries in a GeoDataFrame and optionally maps them to
     legend descriptions and colors. Adds all resulting columns with the
     provided class_col_name as suffix to maintain clarity.
+
+    Optionally, computes site counts for each unique resource type.
 
     Parameters
     ----------
@@ -1745,6 +1718,9 @@ def assign_raster_class_to_points(
     class_col_name : str, required
         Base name of the output column. Example: 'landcover' → columns
         'landcover_class', 'landcover_description', 'landcover_color'.
+    resource_col : str, optional
+        Column name in gdf that defines different resource types
+        (e.g., 'ResourceType') for group-wise site count summaries.
 
     Returns
     -------
@@ -1752,7 +1728,13 @@ def assign_raster_class_to_points(
         Original GeoDataFrame with additional columns:
         - <class_col_name>_class : extracted class values
         - <class_col_name>_description, <class_col_name>_color : if legend_df provided
+        Prints summary of class and resource-type distributions.
     """
+
+    import geopandas as gpd
+    import numpy as np
+    import pandas as pd
+    import xarray as xr
 
     # --- Type checks ---
     if not class_col_name:
@@ -1803,29 +1785,42 @@ def assign_raster_class_to_points(
 
     # --- Merge legend if provided ---
     if legend_df is not None:
-        temp = gdf.merge(
+        gdf = gdf.merge(
             legend_df,
             how="left",
             left_on=class_col,
             right_on="class",
         ).drop(columns=["class"], errors="ignore")
 
-        # Rename merged columns with suffix
-        temp.rename(
+        gdf.rename(
             columns={
                 "description": f"{class_col_name}_description",
                 "color": f"{class_col_name}_color",
             },
             inplace=True,
         )
-        gdf = temp
+
+    # --- Summaries ---
+
+    # Assuming your dataframe is named df
     summary = (
-        gdf.groupby(f"{class_col_name}_description")
+        gdf.groupby([f"{class_col_name}_description", resource_type_col_name])
         .size()
-        .reset_index(name="site_count")
-        .sort_values("site_count", ascending=False)
+        .reset_index(name="site_count")          # count sites per (landcover, tech)
+        .pivot_table(                            # pivot into wide format
+            index=f"{class_col_name}_description",
+            columns=resource_type_col_name,
+            values="site_count",
+            fill_value=0
+        )
+        .reset_index()
     )
-    utils.print_banner(f"{__name__}| Summary of {class_col_name} class distribution for assigned points:")
-    utils.print_update(level=PRINT_LEVEL_BASE+1,message=f"{summary}")
+
+    # Optionally rename columns for clarity
+    summary.columns = [
+        f"{class_col_name}_description"
+    ] + [f"SiteCount_{col}" for col in summary.columns[1:]]
+
+
     print("\n")
-    return gdf
+    return gdf,summary
