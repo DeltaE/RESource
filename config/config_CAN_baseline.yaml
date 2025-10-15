@@ -7,13 +7,11 @@ Scenario:
   run_id: BASELINE
   Description: No buffer applied
 country: Canada
-
 default_CRS:
   degrees: EPSG:4326
   meters: EPSG:3347
-
 region_mapping:
-  'AB':
+  AB:
     name: Alberta
     land_area_km2: 642,317
     percentage_national_land_area: 7.1%
@@ -21,18 +19,15 @@ region_mapping:
     sub_region_mapping: {}
     GWA_country_code: CAN
     CRS_meters: EPSG:3577
-
-  'BC':
+  BC:
     name: British Columbia
     land_area_km2: 925,186
     percentage_national_land_area: 10.4%
-
     timezone_convert: Etc/GMT+7
     sub_region_mapping: {}
     GWA_country_code: CAN
     CRS_meters: EPSG:3005
-
-  'MB':
+  MB:
     name: Manitoba
     land_area_km2: 553,556
     percentage_national_land_area: 6.1%
@@ -40,7 +35,7 @@ region_mapping:
     sub_region_mapping: {}
     GWA_country_code: CAN
     CRS_meters: EPSG:3978
-  'NB':
+  NB:
     name: New Brunswick
     land_area_km2: 71,450
     percentage_national_land_area: 0.8%
@@ -48,7 +43,7 @@ region_mapping:
     sub_region_mapping: {}
     GWA_country_code: CAN
     CRS_meters: EPSG:2950
-  'NL':
+  NL:
     name: Newfoundland and Labrador
     land_area_km2: 373,872
     percentage_national_land_area: 4.1%
@@ -56,7 +51,7 @@ region_mapping:
     sub_region_mapping: {}
     GWA_country_code: CAN
     CRS_meters: EPSG:3347
-  'NS':
+  NS:
     name: Nova Scotia
     land_area_km2: 53,338
     percentage_national_land_area: 0.6%
@@ -73,7 +68,7 @@ region_mapping:
     sub_region_mapping: {}
     GWA_country_code: CAN
     CRS_meters: EPSG:3978
-  'PE':
+  PE:
     name: Prince Edward Island
     land_area_km2: 5,660
     land_area_mi2: 2,185
@@ -82,7 +77,7 @@ region_mapping:
     sub_region_mapping: {}
     GWA_country_code: CAN
     CRS_meters: EPSG:2950
-  'QC':
+  QC:
     name: Québec
     land_area_km2: 1,365,128
     land_area_mi2: 527,088
@@ -91,7 +86,7 @@ region_mapping:
     sub_region_mapping: {}
     GWA_country_code: CAN
     CRS_meters: EPSG:3978
-  'SK':
+  SK:
     name: Saskatchewan
     land_area_km2: 591,670
     land_area_mi2: 228,449
@@ -234,10 +229,9 @@ CODERS:
     root: data/downloaded_data/CODERS
     substations: network
     transmission_lines: network
-
 GAEZ:
   root: data/downloaded_data/GAEZ
-  self.: https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip
+  source: https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip
   zip_file: LR.zip
   Rasters_in_use_direct: Rasters_in_use
   raster_types:
@@ -265,7 +259,7 @@ GAEZ:
         solar: 0
         wind: 0
   - name: terrain_resources
-    raster: slpmed05.tif
+    raster: slpmed30s.tif
     zip_extract_direct: LR/ter
     color_map: terrain
     stepwise_plot_title: Excluding Terrain Slope
@@ -280,25 +274,6 @@ GAEZ:
       buffer:
         solar: 0
         wind: 0
-  # - name: land_cover
-  #   raster: faocmb_2010.tif
-  #   zip_extract_direct: LR/lco
-  #   color_map: YlGn
-  #   stepwise_plot_title: Excluding not-Suitable Landcovers
-  #   class_inclusion:
-  #     solar:
-  #     - 2
-  #     - 3
-  #     - 5
-  #     - 8
-  #     - 9
-  #     wind:
-  #     - 2
-  #     - 3
-  #     - 5
-  #     - 6
-  #     - 8
-  #     - 9
 WorldPop:
   root: data/downloaded_data/WorldPop
   source:
@@ -360,15 +335,15 @@ capacity_disaggregation:
     - conserved_lands:
         buffer_mapping_key: IUCN_CAT_desc
         buffer_mapping_key_buffers:
-          'Strict Nature Reserve': 1000
-          'Wilderness Area': 1000
-          'National Park': 1000
-          'Natural Monument or Feature': 500
-          'Habitat/Species Management Area': 500
-          'Protected Landscape/Seascape': 500
-          'Protected Area with Sustainable Use of Natural Resources': 500
-          'Interim Sites (unknown specifics)': 500
-          'OECM areas': 100
+          Strict Nature Reserve: 1000
+          Wilderness Area: 1000
+          National Park: 1000
+          Natural Monument or Feature: 500
+          Habitat/Species Management Area: 500
+          Protected Landscape/Seascape: 500
+          Protected Area with Sustainable Use of Natural Resources: 500
+          Interim Sites (unknown specifics): 500
+          OECM areas: 100
   wind:
     max_capacity: 15
     landuse_intensity: 3
@@ -415,15 +390,15 @@ capacity_disaggregation:
     - conserved_lands:
         buffer_mapping_key: IUCN_CAT_desc
         buffer_mapping_key_buffers:
-          'Strict Nature Reserve': 1000
-          'Wilderness Area': 1000
-          'National Park': 1000
-          'Natural Monument or Feature': 500
-          'Habitat/Species Management Area': 500
-          'Protected Landscape/Seascape': 500
-          'Protected Area with Sustainable Use of Natural Resources': 500
-          'Interim Sites (unknown specifics)': 500
-          'OECM areas': 100
+          Strict Nature Reserve: 1000
+          Wilderness Area: 1000
+          National Park: 1000
+          Natural Monument or Feature: 500
+          Habitat/Species Management Area: 500
+          Protected Landscape/Seascape: 500
+          Protected Area with Sustainable Use of Natural Resources: 500
+          Interim Sites (unknown specifics): 500
+          OECM areas: 100
   bess:
     max_capacity: 10
     cost_data: data/processed_data/bess/bess_LI_6hr_cost_moderate_NREL_ATB2024.csv
@@ -443,27 +418,31 @@ capacity_disaggregation:
     proximity_filter: 200
     buses: data/processed_data/buses_BC.csv
     lines: data/processed_data/lines_BC.csv
-# Custom Rasters and Vectors can be added below
 custom_land_layers:
   rasters:
-  # Explicitly for Canadian Government Data
   - name: CanGov_LandCover_2020
     source: https://datacube-prod-data-public.s3.ca-central-1.amazonaws.com/store/land/landcover/landcover-2020-classification.tif
-    root: 'data/downloaded_data/Gov/LandCover'
-    raster: landcover-2020-classification.tif #resampled from original (30m) to 100m
+    root: data/downloaded_data/Gov/LandCover
+    raster: landcover-2020-classification.tif
     data_license: https://open.canada.ca/en/open-government-licence-canada
-    source_res_meters: 30 #meters
+    source_res_meters: 30
     target_res_meters: 100
-    legends: 'data/legends/LandCover_CANgov_2020_legend.csv'
+    legends: data/legends/LandCover_CANgov_2020_legend.csv
     class_inclusion:
-      'solar': [ 10, 15, 16, 8, 13, 17 ]
-      # solar_include: [10, 15, 16, 8]
-      # solar_conditional: [13, 17]
-      # solar_exclude: [0, 1, 2, 5, 6, 11, 12, 14, 18, 19]
-
-      'wind': [ 8, 10, 15, 16, 1, 2, 5, 6, 13 ]
-      # wind_include: [8, 10, 15, 16,]
-      # wind_conditional: [1, 2, 5, 6, 13]
-      # wind_exclude: [0, 11, 12, 14, 17, 18, 19]
-
-      # vectors: {}
+      solar:
+      - 10
+      - 15
+      - 16
+      - 8
+      - 13
+      - 17
+      wind:
+      - 8
+      - 10
+      - 15
+      - 16
+      - 1
+      - 2
+      - 5
+      - 6
+      - 13

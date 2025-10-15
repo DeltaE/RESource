@@ -30,6 +30,7 @@ Dependencies:
 from __future__ import annotations
 
 import os
+import textwrap
 from pathlib import Path
 from typing import Iterable, Mapping, Sequence
 
@@ -2046,6 +2047,7 @@ def plot_developable_land_and_vres(
     output_path: Path | str | None = None,
     figsize: tuple[float, float] = (12, 12),
     legend_anchor: tuple[float, float] | None = None,
+    legend_fontsize: float = 10.0,
     dpi: int = 500,
     show: bool = True,
 ) -> tuple[plt.Figure, plt.Axes, Path | None]:
@@ -2229,7 +2231,7 @@ def plot_developable_land_and_vres(
             handles=legend_all,
             loc="upper left",
             bbox_to_anchor=legend_anchor if legend_anchor else (0.98, 0.98),
-            fontsize=10, frameon=True, facecolor="white", edgecolor="none",
+            fontsize=legend_fontsize, frameon=True, facecolor="white", edgecolor="none",
             framealpha=0.9, labelspacing=0.4, handlelength=1.4,
         )
 
@@ -2255,3 +2257,93 @@ def plot_developable_land_and_vres(
 
     return fig, ax, saved
 
+
+def plot_vre_sites_by_landcover(
+    df: pd.DataFrame,
+    class_col: str = None,
+    count_prefix: str = "SiteCount_",
+    title: str = "Existing VRE Sites by Land-Cover Class and Technology",
+    figsize=(8, 6),
+    wrap_width: int = 25,
+    fontsize: int = 8,
+    colors: list = None,
+    save_to: str = None,
+    show=True
+):
+    """
+    Plots a horizontal stacked bar chart of VRE site counts by land-cover class and technology.
+    Wraps long class labels and annotates total counts.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        DataFrame containing land-cover description and site count columns.
+    class_col : str, default "CLC_landcover_description"
+        Column containing the land-cover class names.
+    count_prefix : str, default "SiteCount_"
+        Prefix used to identify count columns (e.g. "SiteCount_Solar", "SiteCount_Wind").
+    title : str
+        Plot title.
+    figsize : tuple, default (8, 6)
+        Figure size in inches.
+    wrap_width : int, default 25
+        Maximum character width before wrapping y-axis labels.
+    fontsize : int, default 8
+        Font size for y-axis labels and annotations.
+    colors : list, optional
+        List of color hex codes for stacked bars. Defaults to Matplotlib’s default palette.
+    """
+    if class_col is None:
+         utils.print_error("'class_col' must be defined. Check the dataframe for this column")
+    
+    # --- Identify count columns ---
+    count_cols = [c for c in df.columns if c.startswith(count_prefix)]
+    if not count_cols:
+        raise ValueError(f"No columns found starting with '{count_prefix}'.")
+
+    # --- Compute totals and sort ---
+    df = df.copy()
+    df["Total"] = df[count_cols].sum(axis=1)
+    df = df.sort_values("Total", ascending=True)
+
+    # --- Use landcover as index ---
+    df = df.set_index(class_col)
+
+    # --- Create wrapped labels ---
+    wrapped_labels = ["\n".join(textwrap.wrap(lbl, width=wrap_width)) for lbl in df.index]
+
+    # --- Plot ---
+    ax = df[count_cols].plot(
+        kind="barh",
+        stacked=True,
+        figsize=figsize,
+        color=colors or ["#1f77b4", "#ff7f0e"]
+    )
+
+    # --- Apply wrapped y-labels ---
+    ax.set_yticks(range(len(wrapped_labels)))
+    ax.set_yticklabels(wrapped_labels, fontsize=fontsize)
+
+    # --- Titles and labels ---
+    ax.set_title(title, pad=12)
+    ax.set_xlabel("Number of Sites")
+    ax.set_ylabel("Raster Class")
+
+    # --- Annotate total counts ---
+    for i, total in enumerate(df["Total"].values):
+        ax.text(total + 0.3, i, f"{int(total)}", va="center", fontsize=fontsize)
+
+    # --- Layout ---
+    plt.tight_layout()
+
+    
+    if save_to is not None:
+         if isinstance(save_to, str):
+             save_to = Path(save_to)
+         save_to.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(save_to, dpi=300, bbox_inches='tight')
+    
+    if show:
+        plt.show()
+    else:
+        plt.close()
