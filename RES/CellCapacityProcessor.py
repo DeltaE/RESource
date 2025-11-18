@@ -401,7 +401,7 @@ class CellCapacityProcessor(AttributesParser):
         self.plot_ERAF5_grid_land_availability()
         self.plot_excluder_land_availability(excluder=self.composite_excluder)
         
-        area = self.cutout.grid.set_index(["y", "x"]).to_crs(self.crs_m).area / 1e6 # This crs is fit for area calculation
+        area = self.cutout.grid.set_index(["y", "x"]).to_crs(self.crs_m).area / 1e6 # in Sq. km
         area = xr.DataArray(area, dims=("spatial"))
         
         utils.print_update(level=PRINT_LEVEL_BASE+1,
@@ -598,9 +598,9 @@ class CellCapacityProcessor(AttributesParser):
             excluder = self.composite_excluder
             
         fig, ax = plt.subplots(figsize=(9, 6),constrained_layout=True)
-        excluder.plot_shape_availability(self.region_shape,
-                                              plot_kwargs={'facecolor':'none','edgecolor':'black'},
-                                              ax=ax)
+        excluder.plot_shape_availability(geometry=self.region_shape,
+                                        plot_kwargs={'facecolor':'none','edgecolor':'black'},
+                                        ax=ax)
         ax.axis("off")
         vis_save_to_root=self.get_vis_dir()
         plot_save_to=Path(vis_save_to_root)/'lands'

@@ -37,6 +37,7 @@ from typing import Iterable, Mapping, Sequence
 import folium
 import geopandas as gpd
 import matplotlib as mpl
+import matplotlib
 import matplotlib.cm as cm
 import matplotlib.colors as mcolors
 import matplotlib.patches as mpatches
@@ -63,7 +64,7 @@ from matplotlib.font_manager import FontProperties
 from matplotlib.gridspec import GridSpec
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch, Rectangle, RegularPolygon
-from matplotlib.ticker import FuncFormatter, MultipleLocator
+from matplotlib.ticker import FuncFormatter, MaxNLocator, MultipleLocator,PercentFormatter
 from plotly.subplots import make_subplots
 from rasterio.warp import Resampling, calculate_default_transform, reproject
 
@@ -1900,6 +1901,7 @@ def get_existing_committed_VRE_plot(
     existing_VRE_type_column: str = "gen_type",
     existing_marker_col: str = "facility_installed_capacity",
     committed_marker_col: str = "potential_capacity",
+    committed_VRE_type_column: str = "resource_type",
     target_crs: str = "EPSG:4326",
     marker_scale_existing: float = 10.0,
     marker_scale_committed: float = 2.0,
@@ -2257,7 +2259,6 @@ def plot_developable_land_and_vres(
 
     return fig, ax, saved
 
-
 def plot_vre_sites_by_landcover(
     df: pd.DataFrame,
     class_col: str = None,
@@ -2267,82 +2268,107 @@ def plot_vre_sites_by_landcover(
     wrap_width: int = 25,
     fontsize: int = 8,
     colors: list = None,
+    normalize: bool = False,
     save_to: str = None,
     show=True
 ):
     """
     Plots a horizontal stacked bar chart of VRE site counts by land-cover class and technology.
-    Wraps long class labels and annotates total counts.
-
+    Can plot either absolute site counts or normalized shares (percentage within each class).
+    
     Parameters
     ----------
     df : pd.DataFrame
-        DataFrame containing land-cover description and site count columns.
-    class_col : str, default "CLC_landcover_description"
-        Column containing the land-cover class names.
-    count_prefix : str, default "SiteCount_"
-        Prefix used to identify count columns (e.g. "SiteCount_Solar", "SiteCount_Wind").
-    title : str
-        Plot title.
-    figsize : tuple, default (8, 6)
-        Figure size in inches.
-    wrap_width : int, default 25
-        Maximum character width before wrapping y-axis labels.
-    fontsize : int, default 8
-        Font size for y-axis labels and annotations.
-    colors : list, optional
-        List of color hex codes for stacked bars. Defaults to Matplotlib’s default palette.
+        Must include one land-cover column and one or more site count columns prefixed with `count_prefix`.
+    class_col : str
+        Column name for land-cover class.
+    count_prefix : str
+        Prefix to identify count columns (e.g. 'SiteCount_').
+    normalize : bool, default False
+        If True, plot percentage share of each technology within each land-cover class.
     """
     if class_col is None:
-         utils.print_error("'class_col' must be defined. Check the dataframe for this column")
+        raise ValueError("'class_col' must be defined. Check the dataframe for this column.")
     
     # --- Identify count columns ---
     count_cols = [c for c in df.columns if c.startswith(count_prefix)]
     if not count_cols:
         raise ValueError(f"No columns found starting with '{count_prefix}'.")
 
-    # --- Compute totals and sort ---
     df = df.copy()
     df["Total"] = df[count_cols].sum(axis=1)
     df = df.sort_values("Total", ascending=True)
-
-    # --- Use landcover as index ---
     df = df.set_index(class_col)
 
-    # --- Create wrapped labels ---
+    # --- Optional normalization ---
+    if normalize:
+        df_norm = df[count_cols].div(df["Total"], axis=0) * 100
+        plot_data = df_norm
+        x_label = "Share of Sites (%)"
+        ann_format = lambda v: f"{v:.1f}%"
+    else:
+        plot_data = df[count_cols]
+        x_label = "Number of Sites"
+        ann_format = lambda v: f"{int(v)}"
+
+    # --- Wrap long labels ---
     wrapped_labels = ["\n".join(textwrap.wrap(lbl, width=wrap_width)) for lbl in df.index]
 
     # --- Plot ---
-    ax = df[count_cols].plot(
+    ax = plot_data.plot(
         kind="barh",
         stacked=True,
         figsize=figsize,
         color=colors or ["#1f77b4", "#ff7f0e"]
     )
 
-    # --- Apply wrapped y-labels ---
+    # --- Clean aesthetics ---
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.grid(axis='x', linestyle='--', alpha=0.4)
+    ax.set_axisbelow(True)
+
+    # --- Axis labels & titles ---
+    ax.set_title(title, pad=12)
+    ax.set_xlabel(x_label, fontsize=fontsize+1)
+    ax.set_ylabel("Raster Class", fontsize=fontsize+1)
     ax.set_yticks(range(len(wrapped_labels)))
     ax.set_yticklabels(wrapped_labels, fontsize=fontsize)
 
-    # --- Titles and labels ---
-    ax.set_title(title, pad=12)
-    ax.set_xlabel("Number of Sites")
-    ax.set_ylabel("Raster Class")
+    # --- Tick format ---
+    if normalize:
+        ax.xaxis.set_major_formatter(PercentFormatter())
+    else:
+        ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 
-    # --- Annotate total counts ---
+
+# --- Annotate totals or 100% ---
+    xlim = ax.get_xlim()
+    x_range = xlim[1] - xlim[0]
+    offset = x_range * 0.01  # 1% of axis width
+
     for i, total in enumerate(df["Total"].values):
-        ax.text(total + 0.3, i, f"{int(total)}", va="center", fontsize=fontsize)
+        if normalize:
+            ax.text(100 + offset / 2, i, "100%", va="center", fontsize=fontsize)
+        else:
+            ax.text(total + offset, i, f"{int(total)}", va="center", fontsize=fontsize)
 
-    # --- Layout ---
+    # --- Fix spacing for single-column case ---
+    if len(count_cols) == 1:
+        bars = ax.patches
+        for b in bars:
+            b.set_height(0.6)
+        ax.margins(y=0.02)
+
     plt.tight_layout()
 
-    
+    # --- Save output ---
     if save_to is not None:
-         if isinstance(save_to, str):
-             save_to = Path(save_to)
-         save_to.parent.mkdir(parents=True, exist_ok=True)
-    plt.savefig(save_to, dpi=300, bbox_inches='tight')
-    
+        save_to = Path(save_to)
+        save_to.parent.mkdir(parents=True, exist_ok=True)
+        plt.savefig(save_to, dpi=300, bbox_inches='tight')
+
     if show:
         plt.show()
     else:

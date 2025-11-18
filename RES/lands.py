@@ -32,7 +32,7 @@ configurable and extensible for different regions and data sources.
 
 
 """
-
+import os
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import Optional
@@ -45,6 +45,7 @@ import numpy as np
 import pandas as pd
 import rasterio
 import xarray as xr
+from affine import Affine
 from atlite.gis import ExclusionContainer
 from matplotlib.axes import Axes
 from matplotlib.colors import ListedColormap
@@ -52,6 +53,7 @@ from rasterio.enums import Resampling
 from rasterio.mask import mask
 from rasterio.plot import show
 from rasterio.transform import Affine
+from rasterio.vrt import WarpedVRT
 from rasterio.warp import Resampling, calculate_default_transform, reproject
 from shapely.geometry import box
 from shapely.geometry.base import BaseGeometry
@@ -63,6 +65,8 @@ from RES.era5_cutout import ERA5Cutout
 from RES.gaez import GAEZRasterProcessor
 from RES.osm import OSMData
 
+# Enable GDAL parallel threads
+os.environ.setdefault("GDAL_NUM_THREADS", "ALL_CPUS")
 PRINT_LEVEL_BASE: int = 2  # handles the print level for the utils.print_update function
 class ConservationLands(AttributesParser):
     """
@@ -862,10 +866,6 @@ class LandContainer(AttributesParser):
                                                     boundary_name=self.region_short_code,
                                                     boundary=self.region_boundary)
                 
-                # custom_raster_config_item["filepath"] = (
-                #     Path(custom_raster_config_item["root"]) /
-                #     custom_raster_config_item["raster"]
-                # )
 
             # Merge raster_configs and CLC_raster_config into a single list
             raster_configs = raster_configs + CLC_raster_configs + custom_raster_configs
@@ -1087,7 +1087,10 @@ def load_layers_to_excluder(
     utils.print_info(f"{__name__}| The order of loading raster layers mimics the given order in config file under keys: 'GAEZ' and then 'raster_types'")
     # 3. Raster layers
     for i, r in enumerate(raster_configs):
-        
+        if disregard_other_layers:
+            utils.print_warning(f"{__name__}| 'disregard_other_layers' is set to TRUE. Re-initializing ExclusionContainer for plotting purpose to showcase individual layer impact")
+            excluder=ExclusionContainer(crs=crs_meters)
+            utils.print_warning(f"Excluder crs set to {crs_meters}")
 
         utils.print_update(
             level=PRINT_LEVEL_BASE + 2,
@@ -1130,6 +1133,7 @@ def load_layers_to_excluder(
     # 4. Vector layers
     for i, v in enumerate(vector_configs):
         if disregard_other_layers:
+            utils.print_warning(f"{__name__}| 'disregard_other_layers' is set to TRUE. Re-initializing ExclusionContainer for plotting purpose to showcase individual layer impact")
             excluder=ExclusionContainer(crs=crs_meters)
             utils.print_warning(f"Excluder crs set to {crs_meters}")
         utils.print_update(
@@ -1270,7 +1274,6 @@ def get_eligible_share(region_shape, excluder: ExclusionContainer) -> tuple:
 
 @staticmethod
 
-
 def ensure_uint8_raster(filepath):
     """
     Ensure the raster is in uint8 format with nodata as 255. If not, convert it and save to a temporary file.
@@ -1294,7 +1297,6 @@ def ensure_uint8_raster(filepath):
 
 
 @staticmethod
-
 def clip_to_boundary_and_resample_raster(
     in_raster_config: dict,   
     boundary_name: str,
@@ -1302,223 +1304,122 @@ def clip_to_boundary_and_resample_raster(
     CRS_meters: str = "EPSG:3005",
     clip_to_geom: bool = True,
     source_raster_path: str | Path = None,
-    target_res_meters: Optional[int | None] = 100,
+    target_res_meters: int | None = 100,
     categorical_threshold: int = 50,
 ):
-    """
-    Clips a raster to a boundary and optionally resamples to target resolution.
-    Automatically detects categorical vs continuous data and applies appropriate
-    resampling method. Skips processing if intermediate or final outputs already exist.
+    """Optimized version of raster clip + resample with reprojection (GDAL-accelerated)."""
+    
+    # raster_name = in_raster_config.get('name')
 
-    Parameters
-    ----------
-    in_raster_config : dict
-        Dictionary containing raster configuration with keys:
-        - 'name': str, raster identifier name
-        - 'root': str or Path, root directory path
-        - 'raster': str, raster filename
-        - 'target_res_meters': int, optional target resolution in meters
-    boundary_name : str
-        Label used for naming output files (e.g., region code).
-    boundary : str, Path, or GeoDataFrame
-        Vector boundary file (Shapefile/GeoJSON) or GeoDataFrame for clipping.
-    clip_to_geom : bool, default=True
-        If True, clips to exact geometry boundary. If False, clips to bounding box.
-    target_res : float, optional
-        Desired output resolution in meters. If None, uses 'target_res_meters' from config.
-    categorical_threshold : int, default=50
-        Maximum number of unique values to classify raster as categorical.
-        Categorical rasters use 'mode' resampling, continuous use 'average'.
-        
-    Returns
-    -------
-    xarray.DataArray or None
-        Loaded raster data as xarray DataArray if successful, None if verification fails.
-        The returned data array is masked and ready for spatial analysis.
-        
-    Raises
-    ------
-    FileNotFoundError
-        If input raster file does not exist.
-    TypeError
-        If boundary parameter is not a valid file path or GeoDataFrame.
-    ValueError
-        If boundary does not overlap with raster extent.
-        
-    Notes
-    -----
-    - Output files are named: {stem}_clipped_{boundary_name}[_{resolution}m].tif
-    - Categorical detection uses center window sampling for efficiency
-    - Resampling is skipped if current resolution is already coarser than target
-    - CRS reprojection is handled automatically when boundary CRS differs from raster
-    - Intermediate clipped files are reused if target resolution changes
-    """
-    raster_name:str=in_raster_config.get('name')
-    
-    
-    if source_raster_path is not None:
-        in_raster=Path(source_raster_path)
-    else:
-        in_raster:str|Path=Path(in_raster_config.get('root'))/in_raster_config.get('raster')
-        in_raster = Path(in_raster)
+    # --- Input paths ---
+    in_raster = Path(source_raster_path) if source_raster_path else Path(in_raster_config['root']) / in_raster_config['raster']
     if not in_raster.exists():
-        try:
-            source_url=in_raster_config.get('source',None)
-            if source_url is not None:
-                utils.download_data(source_url,in_raster)
-        except Exception as e:
-            utils.print_error(f"{__name__}|❌ Failed to locate and download raster from {source_url}: {e}")
+        raise FileNotFoundError(f"Input raster not found: {in_raster}")
 
-
-    # --- Define output paths ---
     clipped_path = in_raster.with_name(f"{in_raster.stem}_clipped_{boundary_name}{in_raster.suffix}")
+    out_path = in_raster.with_name(f"{in_raster.stem}_clipped_{boundary_name}_{int(target_res_meters)}m{in_raster.suffix}")
 
-    out_path = (
-        in_raster.with_name(
-            f"{in_raster.stem}_clipped_{boundary_name}_{int(target_res_meters)}m{in_raster.suffix}"
-        )
-        if target_res_meters is not None
-        else clipped_path
-    )
-
-    # === 0. Skip logic ===
+    # --- Early exits ---
     if out_path.exists():
-        utils.print_update(PRINT_LEVEL_BASE,
-                           f"{__name__}✅ Final output already exists: {out_path.name} — skipping all processing.")
         return out_path
-
-    if clipped_path.exists() and (target_res_meters is None):
-        utils.print_update(PRINT_LEVEL_BASE,
-                           f"{__name__}✅ Clipped raster exists: {clipped_path.name} — no resampling requested.")
+    if clipped_path.exists() and target_res_meters is None:
         return clipped_path
 
-    if clipped_path.exists() and (target_res_meters is not None):
-        utils.print_update(PRINT_LEVEL_BASE,
-                           f"{__name__}✅ Using existing clipped raster for resampling: {clipped_path.name}")
-        clip_needed = False
-    else:
-        clip_needed = True
-
-    # === 1. Load boundary ===
+    # --- Boundary ---
     if isinstance(boundary, (str, Path)):
         gdf = gpd.read_file(boundary)
     elif isinstance(boundary, gpd.GeoDataFrame):
         gdf = boundary.copy()
     else:
-        raise TypeError("Boundary must be a file path or a GeoDataFrame.")
+        raise TypeError("Boundary must be a file path or GeoDataFrame.")
 
-    # === 2. Clip (if not already done) ===
-    if clip_needed:
-        print(f"🔍 Clipping '{in_raster.name}' to boundary '{boundary_name}'...")
-        with rasterio.open(in_raster) as src:
-            if gdf.crs != src.crs:
-                utils.print_update(PRINT_LEVEL_BASE,
-                           f"{__name__}🔄 Reprojecting boundary from {gdf.crs} to {src.crs}")
-                gdf = gdf.to_crs(src.crs)
+    # === 1. Reproject on-the-fly using WarpedVRT (faster than writing _reproj.tif) ===
+    with rasterio.open(in_raster) as src:
+        if src.crs is None:
+            raise ValueError(f"❌ Input raster {in_raster} has no CRS information.")
 
-            if not box(*src.bounds).intersects(gdf.unary_union):
-                raise ValueError(f"❌ Boundary '{boundary_name}' does not overlap with raster.")
+        # Only reproject if needed
+        if src.crs != CRS_meters:
+            vrt_options = {
+                "crs": CRS_meters,
+                "resampling": Resampling.nearest,
+                "res": (target_res_meters, target_res_meters),
+            }
+            vrt = WarpedVRT(src, **vrt_options)
 
-            if clip_to_geom:
-                out_image, out_transform = mask(src, gdf.geometry, crop=True)
-            else:
-                window = rasterio.windows.from_bounds(*gdf.total_bounds, transform=src.transform)
-                out_image = src.read(window=window)
-                out_transform = src.window_transform(window)
 
-            out_meta = src.meta.copy()
-            out_meta.update({
-                "height": out_image.shape[1],
-                "width": out_image.shape[2],
-                "transform": out_transform
-            })
+        else:
+            vrt = src  # already correct CRS
 
-        with rasterio.open(clipped_path, "w", **out_meta) as dst:
-            dst.write(out_image)
-        utils.print_update(PRINT_LEVEL_BASE,
-                           f"{__name__}✅ Clipped raster saved: {clipped_path.name}")
-    else:
-        utils.print_update(PRINT_LEVEL_BASE,
-                           f"{__name__}ℹ️ Skipping clipping {raster_name} — using existing file.")
+        # Align boundary CRS
+        if gdf.crs != vrt.crs:
+            gdf = gdf.to_crs(vrt.crs)
 
-    # === 3. Handle resampling ===
+        # --- Clip ---
+        if clip_to_geom:
+            geoms = [g for g in gdf.geometry if g.is_valid and not g.is_empty]
+            out_image, out_transform = mask(vrt, geoms, crop=True)
+        else:
+            window = rasterio.windows.from_bounds(*gdf.total_bounds, transform=vrt.transform)
+            out_image = vrt.read(window=window)
+            out_transform = vrt.window_transform(window)
+
+        out_meta = vrt.profile.copy()
+        out_meta.update({
+            "driver": "GTiff",
+            "height": out_image.shape[1],
+            "width": out_image.shape[2],
+            "transform": out_transform,
+            "tiled": True,
+            "compress": "deflate",
+            "blockxsize": 256,
+            "blockysize": 256
+        })
+
+    # Save clipped result
+    with rasterio.open(clipped_path, "w", **out_meta) as dst:
+        dst.write(out_image)
+
+    # === 2. Resample (only if needed) ===
     if target_res_meters is None:
-        target_res_meters = int(in_raster_config.get('target_res_meters'), None)
-        if target_res_meters is None:
-            print("⚙️ No target resolution specified — returning clipped raster.")
-            return clipped_path
+        return clipped_path
 
     with rasterio.open(clipped_path) as src:
         res_x, res_y = src.res
-        utils.print_update(PRINT_LEVEL_BASE,
-                           f"{__name__}ℹ️ Current resolution: {res_x:.2f} × {res_y:.2f} m")
 
+        # Skip resampling if already coarse enough
         if res_x >= target_res_meters and res_y >= target_res_meters:
-           utils.print_update(PRINT_LEVEL_BASE,
-                           f"{__name__}⚠️ Already coarser than {target_res_meters} m — skipping resample.")
-           return clipped_path
+            return clipped_path
 
-        # Detect categorical vs continuous
-        center_window = rasterio.windows.Window(
-            src.width // 4, src.height // 4, src.width // 2, src.height // 2
-        )
-        sample = src.read(1, window=center_window)
-        sample = sample[~np.isnan(sample)] if np.issubdtype(sample.dtype, np.floating) else sample
+        # Fast sampling window for categorical check
+        win = rasterio.windows.Window(src.width//4, src.height//4, src.width//8, src.height//8)
+        sample = src.read(1, window=win)
+        sample = sample[np.isfinite(sample)]
         unique_vals = np.unique(sample)
-
-        categorical = (
-            len(unique_vals) < categorical_threshold
-            and np.all(unique_vals.astype(int) == unique_vals)
-        )
+        categorical = (len(unique_vals) < categorical_threshold and np.all(unique_vals.astype(int) == unique_vals))
         resampling_method = Resampling.mode if categorical else Resampling.average
-        kind = "categorical (mode)" if categorical else "continuous (average)"
 
         scale_factor = target_res_meters / res_x
-        new_width = int(src.width / scale_factor)
-        new_height = int(src.height / scale_factor)
+        new_width, new_height = int(src.width / scale_factor), int(src.height / scale_factor)
         new_transform = src.transform * Affine.scale(scale_factor, scale_factor)
 
         profile = src.profile.copy()
         profile.update({
             "height": new_height,
             "width": new_width,
-            "transform": new_transform
+            "transform": new_transform,
+            "tiled": True,
+            "compress": "deflate",
+            "blockxsize": 256,
+            "blockysize": 256
         })
 
-        data = src.read(
-            out_shape=(src.count, new_height, new_width),
-            resampling=resampling_method
-        )
+        data = src.read(out_shape=(src.count, new_height, new_width), resampling=resampling_method)
 
     with rasterio.open(out_path, "w", **profile) as dst:
         dst.write(data)
 
-    utils.print_update(PRINT_LEVEL_BASE,
-                           f"{__name__}✅ Resampled to {int(target_res_meters)} m ({kind})")
-    utils.print_update(PRINT_LEVEL_BASE,
-                           f"{__name__}📁 Output saved: {out_path.name}")
     return out_path
-    
-
-    # === 4. Verification ===
-    # try:
-    #     with rasterio.open(out_path) as src:
-    #         utils.print_update(PRINT_LEVEL_BASE,
-    #                        f"{__name__}🔍 Verification: {src.width} x {src.height} pixels at {src.res[0]:.2f} m")
-    #     # Return loaded xarray.DataArray for immediate use
-    #     raster_data = rxr.open_rasterio(out_path, masked=True)
-    #     return raster_data
-
-    # except Exception as e:
-    #     utils.print_update(PRINT_LEVEL_BASE,
-    #                        f"{__name__}⚠️ Verification failed: {e}")
-    #     try:
-    #         utils.print_update(PRINT_LEVEL_BASE,
-    #                        f"{__name__}Recheck raster {out_path}")
-    #     except NameError:
-    #         utils.print_update(PRINT_LEVEL_BASE,
-    #                        f"{__name__}⚠️ Please recheck raster {out_path}")
-    #     return None
 
 
 @staticmethod
@@ -1649,7 +1550,7 @@ def plot_raster_class_distribution(
 
     # --- Layout ---
     ax.set_xlabel("Percentage of Total Area (%)", fontsize=10)
-    ax.set_ylabel("Raster Class (code: description)", fontsize=10)
+    ax.set_ylabel("Raster Class", fontsize=10)
     ax.set_title(title, fontsize=12, fontweight="bold")
     ax.grid(axis="x", linestyle="--", alpha=0.4)
     plt.tight_layout()
@@ -1686,7 +1587,6 @@ def plot_raster_class_distribution(
 
     print(f"🧮 Excluding classes: {exclude_classes} | Applied threshold: {pct_threshold}%")
     return df_plot
-
 
 
 def assign_raster_class_to_points(
