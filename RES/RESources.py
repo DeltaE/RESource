@@ -740,182 +740,182 @@ class RESources_builder(AttributesParser):
         #     utils.print_module_title(f"All Sites (clusters) from {self.resource_type} module saved to {self.store} for {self.get_region_name()}...")
     
             
-            self.export_results(self.resource_type,
+            export_results(self.resource_type,
                                 self.region_name,
                                 resource_clusters,
                                 cluster_timeseries,
                                 self.results_save_to)
         
-            sites_summary:str=self.create_summary_info(self.resource_type,
+            sites_summary:str=create_summary_info(self.resource_type,
                                                     self.region_name,
                                                     resource_clusters,
                                                     cluster_timeseries)
-            self.dump_export_metadata(sites_summary,
+            dump_export_metadata(sites_summary,
                                     self.results_save_to)
 
 
-    @staticmethod
-    def export_results(resource_type:str,
-                       region:str,
-                    resource_clusters:pd.DataFrame,
-                    cluster_timeseries:pd.DataFrame,
-                    save_to : Optional[Path]=Path('results')):
-        """
-        Export processed resource cluster results (geodataframe) to standard datafield csvs as input for downstream models.
-        ### Args
-        - **resource_type**: The type of resource ('solar' or 'wind').
-        - **resource_clusters**: A DataFrame containing resource cluster information.
-        - **output_dir** [optional]: The directory to save the output files. Default to : 'results/*.csv'
-        
-        > Currently supports: CLEWs, PyPSA
-        """
-        # Check if resource_clusters is a DataFrame or GeoDataFrame
-        if not isinstance(resource_clusters, (pd.DataFrame, gpd.GeoDataFrame)):
-            raise TypeError(
-                f"Invalid input: resource_clusters must be a Pandas DataFrame or GeoDataFrame, "
-                f"but got {type(resource_clusters).__name__}."
-            )
-        
-        if not isinstance(cluster_timeseries, (pd.DataFrame)):
-            raise TypeError(
-                f"Invalid input: resource_clusters must be a Pandas DataFrame or GeoDataFrame, "
-                f"but got {type(resource_clusters).__name__}."
-            )
-        # Exclude all columns containing geometry-related data as these are not required for downstream models in consideration i.e. CLEWs, PyPSA
-        resource_clusters_excld_geom = resource_clusters[[col for col in resource_clusters.columns if col != 'geometry']]
-
-        # CSV -> Save to 
-        save_to=utils.ensure_path(save_to)
-        save_to.mkdir(parents=True,exist_ok=True)
-        
-        resource_clusters_excld_geom.to_csv(save_to/f'resource_options_{resource_type}_{region}.csv', index=True)
-        cluster_timeseries.to_csv(save_to/f'resource_options_{resource_type}_{region}_timeseries.csv', index=True)
-
-        utils.print_update(level=2, message=f"{resource_type} clusters exported to :{save_to/f'resource_options_{resource_type}_{region}_timeseries.csv'}")
-
-    @staticmethod
-    def create_summary_info(resource_type:str,
-                            region:str,
-                            sites:pd.DataFrame,
-                            timeseries:pd.DataFrame)->str:
-        
-        """
-        Creates summary information to be exported alongside results data.
-        """
-        
-        formatted_time = current_local_time.strftime("%H:%M:%S")
-        
-        info = (
-            f"{'_'*25} Top Block Represents the latest results' summary <{'_'*25}\n"
-            f"{'-'*100}\n"
-            f"* {resource_type.upper()} for {region.upper()}*\n"
-            f"Total Capacity of the Sites: {sites['potential_capacity'].sum() / 1e3} GW\n"
-            f">> No. of Sites (Clusters): {len(sites)}\n"
-            f" >> Snapshot Points: {len(timeseries)}"
-            f"\n Results Generated on Local Time (hh:mm:ss): {formatted_time}\n"
-            f"{'-'*100}\n"
-        )
-        return info
+@staticmethod
+def export_results(resource_type:str,
+                    region:str,
+                resource_clusters:pd.DataFrame,
+                cluster_timeseries:pd.DataFrame,
+                save_to : Optional[Path]=Path('results')):
+    """
+    Export processed resource cluster results (geodataframe) to standard datafield csvs as input for downstream models.
+    ### Args
+    - **resource_type**: The type of resource ('solar' or 'wind').
+    - **resource_clusters**: A DataFrame containing resource cluster information.
+    - **output_dir** [optional]: The directory to save the output files. Default to : 'results/*.csv'
     
-    @staticmethod
-    def dump_export_metadata(info: str, save_to: Optional[Path] = 'results/linking'):
-        """
-        Dumps the metadata summary information to a file. If the file already exists,
-        it prepends the new info at the top of the file.
-        """
-        save_to = utils.ensure_path(save_to)  # Ensures that the provided save path is a Path object
-        file_name = "Resource_options_summary.txt"
-        # File path
-        file_path = save_to / file_name
+    > Currently supports: CLEWs, PyPSA
+    """
+    # Check if resource_clusters is a DataFrame or GeoDataFrame
+    if not isinstance(resource_clusters, (pd.DataFrame, gpd.GeoDataFrame)):
+        raise TypeError(
+            f"Invalid input: resource_clusters must be a Pandas DataFrame or GeoDataFrame, "
+            f"but got {type(resource_clusters).__name__}."
+        )
+    
+    if not isinstance(cluster_timeseries, (pd.DataFrame)):
+        raise TypeError(
+            f"Invalid input: resource_clusters must be a Pandas DataFrame or GeoDataFrame, "
+            f"but got {type(resource_clusters).__name__}."
+        )
+    # Exclude all columns containing geometry-related data as these are not required for downstream models in consideration i.e. CLEWs, PyPSA
+    resource_clusters_excld_geom = resource_clusters[[col for col in resource_clusters.columns if col != 'geometry']]
 
-        # Check if the file exists and read the existing content
-        if file_path.exists():
-            with open(file_path, "r") as file:
-                existing_content = file.read()
-        else:
-            existing_content = ""
+    # CSV -> Save to 
+    save_to=utils.ensure_path(save_to)
+    save_to.mkdir(parents=True,exist_ok=True)
+    
+    resource_clusters_excld_geom.to_csv(save_to/f'resource_options_{resource_type}_{region}.csv', index=True)
+    cluster_timeseries.to_csv(save_to/f'resource_options_{resource_type}_{region}_timeseries.csv', index=True)
 
-        # Prepend the new info to the existing content
-        updated_content = info + "\n" + existing_content
+    utils.print_update(level=2, message=f"{resource_type} clusters exported to :{save_to/f'resource_options_{resource_type}_{region}_timeseries.csv'}")
 
-        # Save the updated content to the file
-        with open(file_path, "w") as file:
-            file.write(updated_content)
+@staticmethod
+def create_summary_info(resource_type:str,
+                        region:str,
+                        sites:pd.DataFrame,
+                        timeseries:pd.DataFrame)->str:
+    
+    """
+    Creates summary information to be exported alongside results data.
+    """
+    
+    formatted_time = current_local_time.strftime("%H:%M:%S")
+    
+    info = (
+        f"{'_'*25} Top Block Represents the latest results' summary <{'_'*25}\n"
+        f"{'-'*100}\n"
+        f"* {resource_type.upper()} for {region.upper()}*\n"
+        f"Total Capacity of the Sites: {sites['potential_capacity'].sum() / 1e3} GW\n"
+        f">> No. of Sites (Clusters): {len(sites)}\n"
+        f" >> Snapshot Points: {len(timeseries)}"
+        f"\n Results Generated on Local Time (hh:mm:ss): {formatted_time}\n"
+        f"{'-'*100}\n"
+    )
+    return info
 
-    @staticmethod    
-    def select_top_sites(sites:Union[gpd.GeoDataFrame, pd.DataFrame],
-                        sites_timeseries:pd.DataFrame,
-                        resource_max_capacity:float,
-                        )-> Tuple[Union[gpd.GeoDataFrame, pd.DataFrame], pd.DataFrame]:
-        print(f">>> Selecting TOP Sites to for {resource_max_capacity} GW Capacity Investment in BC...")
-        """
-        Select the top sites based on potential capacity and a maximum resource capacity limit.
+@staticmethod
+def dump_export_metadata(info: str, save_to: Optional[Path] = 'results/linking'):
+    """
+    Dumps the metadata summary information to a file. If the file already exists,
+    it prepends the new info at the top of the file.
+    """
+    save_to = utils.ensure_path(save_to)  # Ensures that the provided save path is a Path object
+    file_name = "Resource_options_summary.txt"
+    # File path
+    file_path = save_to / file_name
 
-        Args:
-            sites_gdf: GeoDataFrame containing  cell and bucket information.
-            resource_max_capacity (float) : Maximum allowable  capacity in GW.
+    # Check if the file exists and read the existing content
+    if file_path.exists():
+        with open(file_path, "r") as file:
+            existing_content = file.read()
+    else:
+        existing_content = ""
 
-        Returns:
-        - selected_sites: GeoDataFrame with the selected top sites.
-        """
-        print(f"{'_'*100}")
-        print(f"Selecting the Top Ranked Sites to invest in {resource_max_capacity} GW PV in BC")
-        print(f"{'_'*100}")
-     
-        # Initialize variables
-        selected_rows:list = []
-        total_capacity:float = 0.0
+    # Prepend the new info to the existing content
+    updated_content = info + "\n" + existing_content
 
-        top_sites:gpd.GeoDataFrame = sites.copy()
+    # Save the updated content to the file
+    with open(file_path, "w") as file:
+        file.write(updated_content)
 
-        if top_sites['potential_capacity'].iloc[0] < resource_max_capacity * 1000:
-            # Iterate through the sorted GeoDataFrame
-            for index, row in top_sites.iterrows():
-                # Check if adding the current row's capacity exceeds resource capacity
-                if total_capacity + row['potential_capacity'] <= resource_max_capacity * 1000:
-                    selected_rows.append(index)  # Add the row to the selection
-                    # Update the total capacity
-                    total_capacity += row['potential_capacity']
-                # If adding the current row's capacity would exceed max resource capacity, stop the loop
-                else:
-                    break
+@staticmethod    
+def select_top_sites(sites:Union[gpd.GeoDataFrame, pd.DataFrame],
+                    sites_timeseries:pd.DataFrame,
+                    resource_max_capacity:float,
+                    )-> Tuple[Union[gpd.GeoDataFrame, pd.DataFrame], pd.DataFrame]:
+    print(f">>> Selecting TOP Sites to for {resource_max_capacity} GW Capacity Investment in BC...")
+    """
+    Select the top sites based on potential capacity and a maximum resource capacity limit.
 
-            # Create a new GeoDataFrame with the selected rows
-            top_sites:gpd.GeoDataFrame = top_sites.loc[selected_rows]
+    Args:
+        sites_gdf: GeoDataFrame containing  cell and bucket information.
+        resource_max_capacity (float) : Maximum allowable  capacity in GW.
 
-            # Apply the additional logic
-            # mask = sites['cluster_id'] > top_sites['cluster_id'].max()
-            mask = sites.index > top_sites.index.max()
-            selected_additional_sites:gpd.GeoDataFrame = sites[mask].head(1)
-            
-            remaining_capacity:float = resource_max_capacity * 1000 - top_sites['potential_capacity'].sum()
+    Returns:
+    - selected_sites: GeoDataFrame with the selected top sites.
+    """
+    print(f"{'_'*100}")
+    print(f"Selecting the Top Ranked Sites to invest in {resource_max_capacity} GW PV in BC")
+    print(f"{'_'*100}")
+    
+    # Initialize variables
+    selected_rows:list = []
+    total_capacity:float = 0.0
 
-            if remaining_capacity > 0:
-                
-                if len(selected_additional_sites) > 0:
-                    print(f"\n!! Note: The Last cluster ({selected_additional_sites.index[-1]}) originally had {round(selected_additional_sites['potential_capacity'].iloc[0] / 1000,2)} GW potential capacity."
-                        f"To fit the maximum capacity investment of {resource_max_capacity} GW, it has been adjusted to {round(remaining_capacity / 1000,2)} GW\n")
-                else:
-                    print(f"\n!! Note: No additional sites selected. Remaining capacity: {round(remaining_capacity / 1000,2)} GW\n")
-                selected_additional_sites['potential_capacity'] = remaining_capacity
-            # Concatenate the DataFrames
-            top_sites = pd.concat([top_sites, selected_additional_sites])
-        else:
-            original_capacity = sites['potential_capacity'].iloc[0]
+    top_sites:gpd.GeoDataFrame = sites.copy()
 
-            print(f"!!Note: The first cluster originally had {round(original_capacity / 1000,2)} GW potential capacity.\n"
-                f"To fit the maximum capacity investment of {resource_max_capacity} GW, it has been adjusted. \n")
+    if top_sites['potential_capacity'].iloc[0] < resource_max_capacity * 1000:
+        # Iterate through the sorted GeoDataFrame
+        for index, row in top_sites.iterrows():
+            # Check if adding the current row's capacity exceeds resource capacity
+            if total_capacity + row['potential_capacity'] <= resource_max_capacity * 1000:
+                selected_rows.append(index)  # Add the row to the selection
+                # Update the total capacity
+                total_capacity += row['potential_capacity']
+            # If adding the current row's capacity would exceed max resource capacity, stop the loop
+            else:
+                break
 
-            top_sites = top_sites.iloc[:1]  # Keep only the first row
-            # Adjust the potential_capacity of the first row
-            top_sites.at[top_sites.index[0], 'potential_capacity'] = resource_max_capacity * 1000
+        # Create a new GeoDataFrame with the selected rows
+        top_sites:gpd.GeoDataFrame = top_sites.loc[selected_rows]
+
+        # Apply the additional logic
+        # mask = sites['cluster_id'] > top_sites['cluster_id'].max()
+        mask = sites.index > top_sites.index.max()
+        selected_additional_sites:gpd.GeoDataFrame = sites[mask].head(1)
         
-        # top_sites_ts = sites_timeseries[top_sites.index.astype(str)]
-        # sites_timeseries.columns = sites_timeseries.columns.str.strip()
-        # top_sites.index = top_sites.index.str.strip()
-        top_sites_ts = sites_timeseries[top_sites.index]
+        remaining_capacity:float = resource_max_capacity * 1000 - top_sites['potential_capacity'].sum()
 
-        return top_sites ,top_sites_ts  # gdf
+        if remaining_capacity > 0:
+            
+            if len(selected_additional_sites) > 0:
+                print(f"\n!! Note: The Last cluster ({selected_additional_sites.index[-1]}) originally had {round(selected_additional_sites['potential_capacity'].iloc[0] / 1000,2)} GW potential capacity."
+                    f"To fit the maximum capacity investment of {resource_max_capacity} GW, it has been adjusted to {round(remaining_capacity / 1000,2)} GW\n")
+            else:
+                print(f"\n!! Note: No additional sites selected. Remaining capacity: {round(remaining_capacity / 1000,2)} GW\n")
+            selected_additional_sites['potential_capacity'] = remaining_capacity
+        # Concatenate the DataFrames
+        top_sites = pd.concat([top_sites, selected_additional_sites])
+    else:
+        original_capacity = sites['potential_capacity'].iloc[0]
+
+        print(f"!!Note: The first cluster originally had {round(original_capacity / 1000,2)} GW potential capacity.\n"
+            f"To fit the maximum capacity investment of {resource_max_capacity} GW, it has been adjusted. \n")
+
+        top_sites = top_sites.iloc[:1]  # Keep only the first row
+        # Adjust the potential_capacity of the first row
+        top_sites.at[top_sites.index[0], 'potential_capacity'] = resource_max_capacity * 1000
+    
+    # top_sites_ts = sites_timeseries[top_sites.index.astype(str)]
+    # sites_timeseries.columns = sites_timeseries.columns.str.strip()
+    # top_sites.index = top_sites.index.str.strip()
+    top_sites_ts = sites_timeseries[top_sites.index]
+
+    return top_sites ,top_sites_ts  # gdf
 
 def build_resources(regions:list,
                     resource_types: list, 

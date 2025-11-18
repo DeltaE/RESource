@@ -78,9 +78,9 @@ For running custom analyses beyond the provided case study data, some data sourc
 
 | Command | Description |
 |---------|-------------|
-| `python3 run.py` | Run with default config (Canadian provinces) |
-| `python3 run.py -c config/config_WB6.yaml` | Run Western Balkans analysis (all regions) |
-| `python3 run.py -c config/config_WB6.yaml -r AL BA XK` | Run specific regions only |
+| `python3 run.py config/config_CAN_baseline.yaml` | Run Canadian analysis (all provinces) |
+| `python3 run.py config/config_WB6.yaml` | Run Western Balkans analysis (all regions) |
+| `python3 run.py config/config_WB6.yaml -r AL BA XK` | Run specific regions only |
 | `python3 run.py --help` | Show all available options |
 
 **Key Features:**
@@ -94,24 +94,24 @@ For running custom analyses beyond the provided case study data, some data sourc
 
 | Option | Short | Description | Example |
 |--------|-------|-------------|---------|
-| `--config` | `-c` | Configuration file path | `-c config/config_WB6.yaml` |
+| `CONFIG_FILE` | - | Configuration file path (required) | `config/config_WB6.yaml` |
 | `--regions` | `-r` | Specific regions to process | `-r AL BA XK ME` |
 | `--help` | `-h` | Show help message | `--help` |
 
 #### Example Workflows
 
 ```bash
-# Canadian Analysis (Default)
-python3 run.py                                    # All Canadian provinces
-python3 run.py --regions BC QC AB                # Specific provinces only
+# Canadian Analysis
+python3 run.py config/config_CAN_baseline.yaml              # All Canadian provinces
+python3 run.py config/config_CAN_baseline.yaml -r BC QC AB  # Specific provinces only
 
 # Western Balkans Analysis  
-python3 run.py -c config/config_WB6.yaml         # All WB6 countries
-python3 run.py -c config/config_WB6.yaml -r AL BA # Albania & Bosnia only
+python3 run.py config/config_WB6.yaml            # All WB6 countries
+python3 run.py config/config_WB6.yaml -r AL BA   # Albania & Bosnia only
 
 # Error Handling Examples
-python3 run.py -c nonexistent.yaml               # Shows available configs
-python3 run.py -c config/config_WB6.yaml -r INVALID # Shows valid regions
+python3 run.py nonexistent.yaml                  # Shows available configs
+python3 run.py config/config_WB6.yaml -r INVALID # Shows valid regions
 ```
 > the 'RES' conda environment activated while you run this script.
 
@@ -283,5 +283,5 @@ If you encounter issues not covered above, you can reach out to the development 
 **🎯 Ready to analyze renewable energy resources? Run `make run` and explore the results!**
 
 ```{tip}
-For more detailed setup and development information, see the [Complete Setup Guide](setup_guide.md).
+For more detailed setup and development information, see the [Complete Setup Guide](../../../SETUP.md).
 ```

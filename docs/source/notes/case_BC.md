@@ -49,9 +49,19 @@ The key question we want to ask is __Can We Build Without Overlapping Nature?__
 
 Key parameters are configurable to reflect geographic constraints (e.g., slope, protected areas). We applied the spatial screening process using global raster datasets from the GAEZ to systematically identify suitable VRE sites by filtering land based on land cover, terrain slope, and exclusion zones. Land cover data layers are used to selectively include classes such as croplands, grasslands, shrubs, and bare soil while excluding artificial surfaces, dense forests, and water bodies. Terrain slope rasters helped eliminate areas with steep gradients over 30%, which pose construction and accessibility challenges. Additionally, exclusion zones—compiled from global biodiversity, wetland, and protected area databases—were entirely filtered out from consideration to respect environmental conservation boundaries. This layered geospatial filtering ensures that selected sites align with both technical feasibility and ecological integrity. We extracted the land availability map from this spatial screening process.
 
-<img src="../_static/exclusion_global_with_existing_VREs.png" alt="exclusion_global_with_existing_VREs" width="800"/>
-<img src="../_static/Landcover_with_existing_VREs.png" alt="Landcover_with_existing_VREs" width="800"/>
-<img src="../_static/terrains_with_existing_VREs.png" alt="terrains_with_existing_VREs" width="800"/>
+<img src="../_static/CanGov_Landcover_with_existing_VREs.png" alt="Canadian Landcover_with_existing_VREs" width="800"/>
+<img src="../_static/LandCover_CANgov_class_distribution_BC.png" alt="LandCover_CANgov_class_distribution_BC" width="600"/>
+
+<img src="../_static/GAEZ_terrains_with_existing_VREs.png" alt="terrains_with_existing_VREs" width="800"/>
+<img src="../_static/GAEZ_terrains_class_distribution_BC.png" alt="GAEZ_terrains_class_distribution_BC" width="600"/>
+
+<img src="../_static/GAEZ_exclusion_global_with_existing_VREs.png" alt="exclusion_global_with_existing_VREs" width="800"/>
+<img src="../_static/GAEZ_Exclusion_class_distribution_BC.png" alt="GAEZ_Exclusion_class_distribution_BC" width="600"/>
+
+
+
+<!-- <img src="../_static/Landcover_with_existing_VREs.png" alt="Landcover_with_existing_VREs" width="500"/> -->
+
 
 > For full details on the raster classes, refer to the [Global Agro-Ecological Zones v4 – Model documentation](https://openknowledge.fao.org/items/039f7ec9-98af-49e1-8d24-850122c69bef); Chapter 2.Page 17 for Elevation and terrain-slope data, page 18 for Land Cover data and page 20 for Exclusion zones.
 
@@ -181,11 +191,11 @@ These results highlight the scale of capacity foregone when balancing renewable 
 
 <img src="../_static/SupplyCurve_BASELINEvsPOLICY.jpg" alt="SupplyCurve_BASELINEvsPOLICY" width="800"/>
 
-> We constrained the supply curve to 10,000 GWh of solar and 40,000 GWh of wind to match the provincial integrated resource planner, BC Hydro(BCH)’s supply-curve backed by Resource Options Database (RODAT). In BC Hydro’s publicly available version of 2021 IRP RODAT ([section 3](https://www.bchydro.com/content/dam/BCHydro/customer-portal/documents/corporate/regulatory-planning-documents/regulatory-matters/rou-resource-options-database-2021-irp-appendix-j-20211221-v01.pdf)), about 10,000 GWh of wind is available below USD 60/MWh, extending to 40,000 GWh below USD 100/MWh. Solar starts higher, around USD 90–110/MWh. Our curves have a similar shape. Wind shows a large pool of low-cost resources, while solar is shorter and steeper. The absolute cost levels differ. This is because our scoring is a relative metric based on capacity factor, distance, capex, and O&M. BC Hydro’s 2021 IRP RODAT used 2020 CAD and ATB-2019 assumptions; our scoring uses ATB-2024 values in 2024 USD. We therefore compare only qualitatively. An updated list of potential site-wise list from BCH is available at [2013 Resource Options Report Update](https://www.bchydro.com/content/dam/BCHydro/customer-portal/documents/corporate/regulatory-planning-documents/integrated-resource-plans/current-plan/ror-update-appx-3-20130802.pdf).
+> To benchmark the modeled supply curves, RESource outputs were aligned with the BC Hydro’s Resource Options Database (RODAT). In BC Hydro’s publicly available version of , The 2013 Resource Options Report Update (Appendix 3 of [73]) catalogued only on-shore wind projects, while the 2021 2021 IRP RODAT ([section 3](https://www.bchydro.com/content/dam/BCHydro/customer-portal/documents/corporate/regulatory-planning-documents/regulatory-matters/rou-resource-options-database-2021-irp-appendix-j-20211221-v01.pdf))  RODAT replaced those site-specific listings with aggregate supply curves for wind and solar. In 2021 RODAT (Figure J-2), approximately 10 000 GWh of wind lie below 60 CAD /MWh, expanding to ≈ 40 000 GWh below 100 CAD /MWh. Solar potential extends to ≈ 10 000 GWh near 55–75 CAD /MWh (2020 CAD). These represent developer-optimized , grid-adjacent costs that omit spatial penalties or siting heterogeneity. An updated list of potential site-wise list from BCH is available at [2013 Resource Options Report Update](https://www.bchydro.com/content/dam/BCHydro/customer-portal/documents/corporate/regulatory-planning-documents/integrated-resource-plans/current-plan/ror-update-appx-3-20130802.pdf).
 
-Land-use policy restrictions affect the two technologies differently. For solar, the constrained curve follows the baseline cost but ends sooner. This means fewer sites are available, but cost competitiveness remains. For wind, restrictions cut potential in half—from ~40,000 GWh to ~20,000 GWh. They also remove most of the lowest-cost options (< USD 40/MWh), pushing the curve into higher-cost ranges.
 
 Solar’s policy challenge is therefore one of limited availability. Wind’s challenge is the loss of both low-cost and diverse options. These patterns show that policy design matters. Expanding siting flexibility could support solar. Preserving access to competitive sites is critical for wind. Technology-specific planning will be more effective than uniform buffer rules.
+
 Tightening buffers primarily truncates the solar supply curve (availability loss) while simultaneously removing the lowest‑score wind sites (competitiveness loss). Because the score embeds grid distance, a portion of the upward shift reflects grid access exposure; sites that remain attractive tend to be closer to substations or rated lines. Such availability constraints for solar and competitiveness constraints for wind have direct planning implications for transmission staging and siting policy.
 
 ### Grid connectivity as a key planning bottleneck
@@ -197,9 +207,6 @@ Grid accessibility plays a critical role in assessing economic viability of the 
 
 Building on the spatial insights from scores and potential capacity distributions, Figure 13 offers a complementary capacity-focused view that further clarifies how these sites scores translate into aggregated development potential for expected energy yields.  As the relative cost scoring is sensitive to proximity to transmission infrastructure, it helps translate technical resource potential into practical investment prioritization. Figure 13 provides overview of the renewable energy landscape by plotting three critical dimensions that drive investment decisions: potential capacity (approximate bubble size), average capacity factor (y-axis), and siting score (x-axis) for both solar and wind resources. Big bubbles (orange for solar, purple for wind) at lower end of Y-axis indicate comparatively high potential capacity for relatively lower costs. These represents the best candidates for site development.
 
-<img src="../_static/CFvsScore_POLICY.jpg" alt="CFvsScore_POLICY" width="1000"/>
-
-This helps stakeholders to quickly identify the most attractive development opportunities by highlighting sites that combine high energy output potential (large bubbles), excellent resource quality (high-capacity factors), and favorable economics including grid access (low relative cost scores). The scatter pattern reveals the trade-offs inherent in renewable energy development, where some sites may offer exceptional resource quality but face transmission challenges, while others provide grid-accessible locations with moderate resource potential. For energy planners and developers, this integrated view supports strategic decision-making. The same configuration can be re-run by public agencies and communities to test local policy buffers, supporting more inclusive deliberation over siting trade-offs.
 
 ## Modeling assumptions and site ranking
 While RESource improves spatial transparency, several assumptions introduce uncertainties that must be carefully managed by the user:

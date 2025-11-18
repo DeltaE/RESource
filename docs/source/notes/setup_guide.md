@@ -1,30 +1,31 @@
-# RESource Project - Complete Setup & Development Guide
+# RESource Setup Guide (Deprecated)
 
-## 🎯 Quick Start (New Users)
+> **🚨 This guide has been moved and consolidated!**
+>
+> **📚 Please use the new complete setup guide: [SETUP.md](../../../SETUP.md) in the repository root.**
+>
+> This page is kept for backward compatibility but will be removed in a future version.
 
-### Prerequisites
-- **Python 3.11+**
-- **Git**
-- **Conda or Miniconda** (strongly recommended for better package management)
-- **Linux environment** (native Linux, WSL2 on Windows, or macOS)
+---
 
-### 1. Clone and Navigate
+## Quick Migration to New Setup
+
+The setup process is now simplified to a single command:
+
 ```bash
+# Clone repository
 git clone https://github.com/DeltaE/RESource.git
 cd RESource
-```
 
-### 2. Environment Setup (One Command)
-```bash
-# Create conda environment with all dependencies
-make setupenv
-
-# Activate environment
+# Create environment (ONE COMMAND!)
+conda env create -f env/environment.yml
 conda activate RESource
 
-# Test installation
-python -c "import RES; print('✅ RESource is ready!')"
+# Verify installation
+python run.py --help
 ```
+
+**For complete instructions, troubleshooting, and all setup options, please see [SETUP.md](../../../SETUP.md).**
 
 ---
 
@@ -173,26 +174,26 @@ conda activate RESource
 
 | Command | Description | Output Colors |
 |---------|-------------|---------------|
-| `python3 run.py` | Default config (Canadian provinces) | 🟢 Success messages |
-| `python3 run.py -c config/config_WB6.yaml` | Western Balkans (all regions) | 🔵 Info messages |
-| `python3 run.py -c config/config_WB6.yaml -r AL BA` | Specific regions only | 🟡 Warnings |
-| `python3 run.py -c invalid.yaml` | Shows available configs | 🔴 Error messages |
+| `python3 run.py config/config_CAN_baseline.yaml` | Canadian analysis (all provinces) | 🟢 Success messages |
+| `python3 run.py config/config_WB6.yaml` | Western Balkans (all regions) | 🔵 Info messages |
+| `python3 run.py config/config_WB6.yaml -r AL BA` | Specific regions only | 🟡 Warnings |
+| `python3 run.py invalid.yaml` | Shows available configs | 🔴 Error messages |
 | `python3 run.py --help` | Display all options | - |
 
 #### Regional Configurations
 
 | Config File | Regions Available | Example Usage |
 |-------------|-------------------|---------------|
-| `config_CAN_baseline.yaml` | AB, BC, MB, NB, NL, NS, ON, PE, QC, SK | `python3 run.py --regions BC QC` |
-| `config_CAN_policy1.yaml` | AB, BC, MB, NB, NL, NS, ON, PE, QC, SK | `python3 run.py -c config/config_CAN_policy1.yaml -r BC ON` |
-| `config_WB6.yaml` | AL, BA, XK, ME, MK, RS | `python3 run.py -c config/config_WB6.yaml -r AL BA` |
+| `config_CAN_baseline.yaml` | AB, BC, MB, NB, NL, NS, ON, PE, QC, SK | `python3 run.py config/config_CAN_baseline.yaml -r BC QC` |
+| `config_CAN_policy1.yaml` | AB, BC, MB, NB, NL, NS, ON, PE, QC, SK | `python3 run.py config/config_CAN_policy1.yaml -r BC ON` |
+| `config_WB6.yaml` | AL, BA, XK, ME, MK, RS | `python3 run.py config/config_WB6.yaml -r AL BA` |
 
 
 #### Error Handling Examples
 
 ```bash
 # Invalid config file - shows available options
-python3 run.py -c nonexistent.yaml
+python3 run.py nonexistent.yaml
 # Output: ✗ Configuration file 'nonexistent.yaml' not found.
 #         💡 Available config files:
 #            • config/config_CAN_baseline.yaml (Canadian provinces - baseline)
@@ -200,11 +201,11 @@ python3 run.py -c nonexistent.yaml
 #            • config/config_WB6.yaml (Western Balkans)
 
 # Invalid regions - shows valid options  
-python3 run.py -c config/config_WB6.yaml -r INVALID
+python3 run.py config/config_WB6.yaml -r INVALID
 # Output: ✗ Invalid region(s): ['INVALID']
 #         ⚠️  Available regions in config: ['AL', 'BA', 'XK', 'ME', 'MK', 'RS']
 #         💡 Examples of valid commands:
-#            • python3 run.py -c config/config_WB6.yaml --regions AL BA XK
+#            • python3 run.py config/config_WB6.yaml --regions AL BA XK
 ```
 
 #### Alternative Development Methods

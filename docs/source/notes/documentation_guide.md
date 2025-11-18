@@ -57,7 +57,7 @@ docs/
 │   ├── _static/              # Static assets (images, CSS)
 │   ├── _templates/           # Custom templates
 │   ├── notes/                # Documentation pages
-│   │   ├── setup_guide.md    # Complete setup guide
+│   │   ├── setup_guide.md    # Deprecated (see SETUP.md in root)
 │   │   ├── api.md            # API documentation
 │   │   ├── developers.md     # Developer guide
 │   │   └── ...
@@ -183,7 +183,7 @@ This is a warning box
 
 **Cross-references:**
 ```markdown
-{doc}`notes/setup_guide`  # Link to another doc
+[Setup Guide](../../../SETUP.md)  # Link to consolidated setup guide
 {ref}`section-label`      # Link to section
 ```
 
@@ -305,7 +305,7 @@ python -c "from docs.source.conf import extensions; print(extensions)"
 ## 💡 Best Practices
 
 ### Content Organization
-- Keep setup/installation info in `setup_guide.md`
+- Keep setup/installation info in `SETUP.md` (repository root)
 - API documentation in `api.md`
 - Developer guides in `developers.md`
 - Use descriptive filenames without spaces
