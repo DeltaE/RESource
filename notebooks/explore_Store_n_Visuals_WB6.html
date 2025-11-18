@@ -446,7 +446,7 @@ document.write(`
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "8535090058194cb982982524c25c220f", "version_major": 2, "version_minor": 0}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "869c100f9f354b419cada3fff541640b", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -484,7 +484,7 @@ document.write(`
 <section id="Define-run/scenario">
 <h2>Define run/scenario<a class="headerlink" href="#Define-run/scenario" title="Link to this heading">#</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the directory and search pattern</span>
@@ -517,7 +517,90 @@ document.write(`
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a630c8af5f024d6389a1948017218d5e", "version_major": 2, "version_minor": 0}</script></div>
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">StopIteration</span>                             Traceback (most recent call last)
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/ipywidgets/widgets/widget_selection.py:133</span>, in <span class="ansi-cyan-fg">findvalue</span><span class="ansi-blue-fg">(array, value, compare)</span>
+<span class="ansi-green-fg">    132</span> <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
+<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">133</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">next</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">x</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">for</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">x</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(175,0,255)">in</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">array</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">if</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">compare</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">x</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">value</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">    134</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">StopIteration</span>:
+
+<span class="ansi-red-fg">StopIteration</span>:
+
+During handling of the above exception, another exception occurred:
+
+<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/ipywidgets/widgets/widget_selection.py:242</span>, in <span class="ansi-cyan-fg">_Selection._validate_value</span><span class="ansi-blue-fg">(self, proposal)</span>
+<span class="ansi-green-fg">    241</span> <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
+<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">242</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">findvalue</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_options_values</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">value</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">equals</span><span class="ansi-yellow-bg">)</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> value <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>
+<span class="ansi-green-fg">    243</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ValueError</span>:
+
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/ipywidgets/widgets/widget_selection.py:135</span>, in <span class="ansi-cyan-fg">findvalue</span><span class="ansi-blue-fg">(array, value, compare)</span>
+<span class="ansi-green-fg">    134</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">StopIteration</span>:
+<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">135</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ValueError</span>(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-bold" style="color: rgb(175,95,135)">%r</span><span class="ansi-yellow-fg"> not in array</span><span class="ansi-yellow-fg">&#39;</span>%value)
+
+<span class="ansi-red-fg">ValueError</span>: &#39;default&#39; not in array
+
+During handling of the above exception, another exception occurred:
+
+<span class="ansi-red-fg">TraitError</span>                                Traceback (most recent call last)
+<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[4]</span><span class="ansi-green-fg">, line 16</span>
+<span class="ansi-green-fg">     13</span> RUN_ID=<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">default</span><span class="ansi-yellow-fg">&#34;</span>
+<span class="ansi-green-fg">     15</span> <span style="color: rgb(95,135,135)"># Create dropdown widget</span>
+<span class="ansi-green-fg">---&gt; </span><span class="ansi-green-fg">16</span> run_id_dropdown = <span class="ansi-yellow-bg">widgets</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">Dropdown</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-fg">     17</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">options</span><span class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">run_ids</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">     18</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">value</span><span class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">RUN_ID</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">     19</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">description</span><span class="ansi-yellow-bg">=</span><span class="ansi-yellow-fg ansi-yellow-bg">&#39;</span><span class="ansi-yellow-fg ansi-yellow-bg">Run ID:</span><span class="ansi-yellow-fg ansi-yellow-bg">&#39;</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">     20</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">disabled</span><span class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">False</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">     21</span> <span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">     23</span> display(run_id_dropdown)
+
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/ipywidgets/widgets/widget_selection.py:186</span>, in <span class="ansi-cyan-fg">_Selection.__init__</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
+<span class="ansi-green-fg">    183</span>     kwargs[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">index</span><span class="ansi-yellow-fg">&#39;</span>] = <span class="ansi-green-fg">0</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> nonempty <span class="ansi-bold" style="color: rgb(0,135,0)">else</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>
+<span class="ansi-green-fg">    184</span>     kwargs[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">label</span><span class="ansi-yellow-fg">&#39;</span>], kwargs[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">value</span><span class="ansi-yellow-fg">&#39;</span>] = options[<span class="ansi-green-fg">0</span>] <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> nonempty <span class="ansi-bold" style="color: rgb(0,135,0)">else</span> (<span class="ansi-bold" style="color: rgb(0,135,0)">None</span>, <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>)
+<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">186</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">super</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">.</span><span class="ansi-blue-fg ansi-yellow-bg">__init__</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">args</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">    187</span> <span style="color: rgb(0,135,0)">self</span>._initializing_traits_ = <span class="ansi-bold" style="color: rgb(0,135,0)">False</span>
+
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/ipywidgets/widgets/widget_description.py:35</span>, in <span class="ansi-cyan-fg">DescriptionWidget.__init__</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
+<span class="ansi-green-fg">     33</span>     kwargs.setdefault(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">tooltip</span><span class="ansi-yellow-fg">&#39;</span>, kwargs[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">description_tooltip</span><span class="ansi-yellow-fg">&#39;</span>])
+<span class="ansi-green-fg">     34</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">del</span> kwargs[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">description_tooltip</span><span class="ansi-yellow-fg">&#39;</span>]
+<span class="ansi-green-fg">---&gt; </span><span class="ansi-green-fg">35</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">super</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">.</span><span class="ansi-blue-fg ansi-yellow-bg">__init__</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">args</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
+
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/ipywidgets/widgets/widget.py:503</span>, in <span class="ansi-cyan-fg">Widget.__init__</span><span class="ansi-blue-fg">(self, **kwargs)</span>
+<span class="ansi-green-fg">    501</span> <span class="ansi-yellow-fg">&#34;&#34;&#34;Public constructor&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">    502</span> <span style="color: rgb(0,135,0)">self</span>._model_id = kwargs.pop(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">model_id</span><span class="ansi-yellow-fg">&#39;</span>, <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>)
+<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">503</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">super</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">.</span><span class="ansi-blue-fg ansi-yellow-bg">__init__</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">    505</span> Widget._call_widget_constructed(<span style="color: rgb(0,135,0)">self</span>)
+<span class="ansi-green-fg">    506</span> <span style="color: rgb(0,135,0)">self</span>.open()
+
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/traitlets/traitlets.py:1369</span>, in <span class="ansi-cyan-fg">HasTraits.__init__</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
+<span class="ansi-green-fg">   1367</span> changed = <span style="color: rgb(0,135,0)">set</span>(kwargs) &amp; <span style="color: rgb(0,135,0)">set</span>(<span style="color: rgb(0,135,0)">self</span>._traits)
+<span class="ansi-green-fg">   1368</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> key <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> changed:
+<span class="ansi-green-fg">-&gt; </span><span class="ansi-green-fg">1369</span>     value = <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_traits</span><span class="ansi-yellow-bg">[</span><span class="ansi-yellow-bg">key</span><span class="ansi-yellow-bg">]</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_cross_validate</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">getattr</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">key</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">   1370</span>     <span style="color: rgb(0,135,0)">self</span>.set_trait(key, value)
+<span class="ansi-green-fg">   1371</span>     changes[key][<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">new</span><span class="ansi-yellow-fg">&#34;</span>] = value
+
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/traitlets/traitlets.py:730</span>, in <span class="ansi-cyan-fg">TraitType._cross_validate</span><span class="ansi-blue-fg">(self, obj, value)</span>
+<span class="ansi-green-fg">    728</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">self</span>.name <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> obj._trait_validators:
+<span class="ansi-green-fg">    729</span>     proposal = Bunch({<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">trait</span><span class="ansi-yellow-fg">&#34;</span>: <span style="color: rgb(0,135,0)">self</span>, <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">value</span><span class="ansi-yellow-fg">&#34;</span>: value, <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">owner</span><span class="ansi-yellow-fg">&#34;</span>: obj})
+<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">730</span>     value = <span class="ansi-yellow-bg">obj</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_trait_validators</span><span class="ansi-yellow-bg">[</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">name</span><span class="ansi-yellow-bg">]</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">obj</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">proposal</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">    731</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> <span style="color: rgb(0,135,0)">hasattr</span>(obj, <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">_</span><span class="ansi-bold" style="color: rgb(175,95,135)">%s</span><span class="ansi-yellow-fg">_validate</span><span class="ansi-yellow-fg">&#34;</span> % <span style="color: rgb(0,135,0)">self</span>.name):
+<span class="ansi-green-fg">    732</span>     meth_name = <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">_</span><span class="ansi-bold" style="color: rgb(175,95,135)">%s</span><span class="ansi-yellow-fg">_validate</span><span class="ansi-yellow-fg">&#34;</span> % <span style="color: rgb(0,135,0)">self</span>.name
+
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/traitlets/traitlets.py:1241</span>, in <span class="ansi-cyan-fg">EventHandler.__call__</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
+<span class="ansi-green-fg">   1239</span> <span class="ansi-yellow-fg">&#34;&#34;&#34;Pass `*args` and `**kwargs` to the handler&#39;s function if it exists.&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">   1240</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">hasattr</span>(<span style="color: rgb(0,135,0)">self</span>, <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">func</span><span class="ansi-yellow-fg">&#34;</span>):
+<span class="ansi-green-fg">-&gt; </span><span class="ansi-green-fg">1241</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">func</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">args</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">   1242</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg">   1243</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span>._init_call(*args, **kwargs)
+
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/ipywidgets/widgets/widget_selection.py:244</span>, in <span class="ansi-cyan-fg">_Selection._validate_value</span><span class="ansi-blue-fg">(self, proposal)</span>
+<span class="ansi-green-fg">    242</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> findvalue(<span style="color: rgb(0,135,0)">self</span>._options_values, value, <span style="color: rgb(0,135,0)">self</span>.equals) <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> value <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>
+<span class="ansi-green-fg">    243</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ValueError</span>:
+<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">244</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> TraitError(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">Invalid selection: value not found</span><span class="ansi-yellow-fg">&#39;</span>)
+
+<span class="ansi-red-fg">TraitError</span>: Invalid selection: value not found
+</pre></div></div>
 </div>
 </section>
 <section id="Load-Store">

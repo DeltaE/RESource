@@ -1071,196 +1071,184 @@ document.write(`
         <span class="c1">#     utils.print_module_title(f&quot;All Sites (clusters) from {self.resource_type} module saved to {self.store} for {self.get_region_name()}...&quot;)</span>
     
             
-            <span class="bp">self</span><span class="o">.</span><span class="n">export_results</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="p">,</span>
+            <span class="n">export_results</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="p">,</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="p">,</span>
                                 <span class="n">resource_clusters</span><span class="p">,</span>
                                 <span class="n">cluster_timeseries</span><span class="p">,</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">results_save_to</span><span class="p">)</span>
         
-            <span class="n">sites_summary</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">create_summary_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="p">,</span>
+            <span class="n">sites_summary</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="n">create_summary_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="p">,</span>
                                                     <span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="p">,</span>
                                                     <span class="n">resource_clusters</span><span class="p">,</span>
                                                     <span class="n">cluster_timeseries</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dump_export_metadata</span><span class="p">(</span><span class="n">sites_summary</span><span class="p">,</span>
+            <span class="n">dump_export_metadata</span><span class="p">(</span><span class="n">sites_summary</span><span class="p">,</span>
                                     <span class="bp">self</span><span class="o">.</span><span class="n">results_save_to</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="RESources_builder.export_results">
-<a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.export_results">[docs]</a>
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">export_results</span><span class="p">(</span><span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
-                       <span class="n">region</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
-                    <span class="n">resource_clusters</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-                    <span class="n">cluster_timeseries</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-                    <span class="n">save_to</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">)):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Export processed resource cluster results (geodataframe) to standard datafield csvs as input for downstream models.</span>
-<span class="sd">        ### Args</span>
-<span class="sd">        - **resource_type**: The type of resource (&#39;solar&#39; or &#39;wind&#39;).</span>
-<span class="sd">        - **resource_clusters**: A DataFrame containing resource cluster information.</span>
-<span class="sd">        - **output_dir** [optional]: The directory to save the output files. Default to : &#39;results/*.csv&#39;</span>
-<span class="sd">        </span>
-<span class="sd">        &gt; Currently supports: CLEWs, PyPSA</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Check if resource_clusters is a DataFrame or GeoDataFrame</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resource_clusters</span><span class="p">,</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Invalid input: resource_clusters must be a Pandas DataFrame or GeoDataFrame, &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">resource_clusters</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.&quot;</span>
-            <span class="p">)</span>
-        
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cluster_timeseries</span><span class="p">,</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Invalid input: resource_clusters must be a Pandas DataFrame or GeoDataFrame, &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">resource_clusters</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.&quot;</span>
-            <span class="p">)</span>
-        <span class="c1"># Exclude all columns containing geometry-related data as these are not required for downstream models in consideration i.e. CLEWs, PyPSA</span>
-        <span class="n">resource_clusters_excld_geom</span> <span class="o">=</span> <span class="n">resource_clusters</span><span class="p">[[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">resource_clusters</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span> <span class="o">!=</span> <span class="s1">&#39;geometry&#39;</span><span class="p">]]</span>
-
-        <span class="c1"># CSV -&gt; Save to </span>
-        <span class="n">save_to</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">ensure_path</span><span class="p">(</span><span class="n">save_to</span><span class="p">)</span>
-        <span class="n">save_to</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        
-        <span class="n">resource_clusters_excld_geom</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">save_to</span><span class="o">/</span><span class="sa">f</span><span class="s1">&#39;resource_options_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">cluster_timeseries</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">save_to</span><span class="o">/</span><span class="sa">f</span><span class="s1">&#39;resource_options_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s1">_timeseries.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s2"> clusters exported to :</span><span class="si">{</span><span class="n">save_to</span><span class="o">/</span><span class="sa">f</span><span class="s1">&#39;resource_options_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s1">_timeseries.csv&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="RESources_builder.create_summary_info">
-<a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.create_summary_info">[docs]</a>
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">create_summary_info</span><span class="p">(</span><span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
-                            <span class="n">region</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
-                            <span class="n">sites</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-                            <span class="n">timeseries</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Creates summary information to be exported alongside results data.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        
-        <span class="n">formatted_time</span> <span class="o">=</span> <span class="n">current_local_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S&quot;</span><span class="p">)</span>
-        
-        <span class="n">info</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;_&#39;</span><span class="o">*</span><span class="mi">25</span><span class="si">}</span><span class="s2"> Top Block Represents the latest results&#39; summary &lt;</span><span class="si">{</span><span class="s1">&#39;_&#39;</span><span class="o">*</span><span class="mi">25</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">100</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;* </span><span class="si">{</span><span class="n">resource_type</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">region</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">*</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Total Capacity of the Sites: </span><span class="si">{</span><span class="n">sites</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e3</span><span class="si">}</span><span class="s2"> GW</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;&gt;&gt; No. of Sites (Clusters): </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sites</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot; &gt;&gt; Snapshot Points: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">timeseries</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> Results Generated on Local Time (hh:mm:ss): </span><span class="si">{</span><span class="n">formatted_time</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">100</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="p">)</span>
-        <span class="k">return</span> <span class="n">info</span></div>
-
-    
-<div class="viewcode-block" id="RESources_builder.dump_export_metadata">
-<a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.dump_export_metadata">[docs]</a>
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">dump_export_metadata</span><span class="p">(</span><span class="n">info</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">save_to</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;results/linking&#39;</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Dumps the metadata summary information to a file. If the file already exists,</span>
-<span class="sd">        it prepends the new info at the top of the file.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">save_to</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">ensure_path</span><span class="p">(</span><span class="n">save_to</span><span class="p">)</span>  <span class="c1"># Ensures that the provided save path is a Path object</span>
-        <span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;Resource_options_summary.txt&quot;</span>
-        <span class="c1"># File path</span>
-        <span class="n">file_path</span> <span class="o">=</span> <span class="n">save_to</span> <span class="o">/</span> <span class="n">file_name</span>
-
-        <span class="c1"># Check if the file exists and read the existing content</span>
-        <span class="k">if</span> <span class="n">file_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-                <span class="n">existing_content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">existing_content</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-        <span class="c1"># Prepend the new info to the existing content</span>
-        <span class="n">updated_content</span> <span class="o">=</span> <span class="n">info</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">existing_content</span>
-
-        <span class="c1"># Save the updated content to the file</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">updated_content</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="RESources_builder.select_top_sites">
-<a class="viewcode-back" href="../../notes/api.html#RES.RESources.RESources_builder.select_top_sites">[docs]</a>
-    <span class="nd">@staticmethod</span>    
-    <span class="k">def</span><span class="w"> </span><span class="nf">select_top_sites</span><span class="p">(</span><span class="n">sites</span><span class="p">:</span><span class="n">Union</span><span class="p">[</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span>
-                        <span class="n">sites_timeseries</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-                        <span class="n">resource_max_capacity</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span>
-                        <span class="p">)</span><span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; Selecting TOP Sites to for </span><span class="si">{</span><span class="n">resource_max_capacity</span><span class="si">}</span><span class="s2"> GW Capacity Investment in BC...&quot;</span><span class="p">)</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Select the top sites based on potential capacity and a maximum resource capacity limit.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            sites_gdf: GeoDataFrame containing  cell and bucket information.</span>
-<span class="sd">            resource_max_capacity (float) : Maximum allowable  capacity in GW.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">        - selected_sites: GeoDataFrame with the selected top sites.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;_&#39;</span><span class="o">*</span><span class="mi">100</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Selecting the Top Ranked Sites to invest in </span><span class="si">{</span><span class="n">resource_max_capacity</span><span class="si">}</span><span class="s2"> GW PV in BC&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;_&#39;</span><span class="o">*</span><span class="mi">100</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-     
-        <span class="c1"># Initialize variables</span>
-        <span class="n">selected_rows</span><span class="p">:</span><span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">total_capacity</span><span class="p">:</span><span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
-
-        <span class="n">top_sites</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span> <span class="o">=</span> <span class="n">sites</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="n">top_sites</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">resource_max_capacity</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">:</span>
-            <span class="c1"># Iterate through the sorted GeoDataFrame</span>
-            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">top_sites</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-                <span class="c1"># Check if adding the current row&#39;s capacity exceeds resource capacity</span>
-                <span class="k">if</span> <span class="n">total_capacity</span> <span class="o">+</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">resource_max_capacity</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">:</span>
-                    <span class="n">selected_rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>  <span class="c1"># Add the row to the selection</span>
-                    <span class="c1"># Update the total capacity</span>
-                    <span class="n">total_capacity</span> <span class="o">+=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span>
-                <span class="c1"># If adding the current row&#39;s capacity would exceed max resource capacity, stop the loop</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">break</span>
-
-            <span class="c1"># Create a new GeoDataFrame with the selected rows</span>
-            <span class="n">top_sites</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span> <span class="o">=</span> <span class="n">top_sites</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">selected_rows</span><span class="p">]</span>
-
-            <span class="c1"># Apply the additional logic</span>
-            <span class="c1"># mask = sites[&#39;cluster_id&#39;] &gt; top_sites[&#39;cluster_id&#39;].max()</span>
-            <span class="n">mask</span> <span class="o">=</span> <span class="n">sites</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;</span> <span class="n">top_sites</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-            <span class="n">selected_additional_sites</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span> <span class="o">=</span> <span class="n">sites</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-            
-            <span class="n">remaining_capacity</span><span class="p">:</span><span class="nb">float</span> <span class="o">=</span> <span class="n">resource_max_capacity</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">-</span> <span class="n">top_sites</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-
-            <span class="k">if</span> <span class="n">remaining_capacity</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_additional_sites</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">!! Note: The Last cluster (</span><span class="si">{</span><span class="n">selected_additional_sites</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">) originally had </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">selected_additional_sites</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2"> GW potential capacity.&quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;To fit the maximum capacity investment of </span><span class="si">{</span><span class="n">resource_max_capacity</span><span class="si">}</span><span class="s2"> GW, it has been adjusted to </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">remaining_capacity</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2"> GW</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">!! Note: No additional sites selected. Remaining capacity: </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">remaining_capacity</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2"> GW</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">selected_additional_sites</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">remaining_capacity</span>
-            <span class="c1"># Concatenate the DataFrames</span>
-            <span class="n">top_sites</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">top_sites</span><span class="p">,</span> <span class="n">selected_additional_sites</span><span class="p">])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">original_capacity</span> <span class="o">=</span> <span class="n">sites</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;!!Note: The first cluster originally had </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">original_capacity</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2"> GW potential capacity.</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;To fit the maximum capacity investment of </span><span class="si">{</span><span class="n">resource_max_capacity</span><span class="si">}</span><span class="s2"> GW, it has been adjusted. </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
-            <span class="n">top_sites</span> <span class="o">=</span> <span class="n">top_sites</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Keep only the first row</span>
-            <span class="c1"># Adjust the potential_capacity of the first row</span>
-            <span class="n">top_sites</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">top_sites</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resource_max_capacity</span> <span class="o">*</span> <span class="mi">1000</span>
-        
-        <span class="c1"># top_sites_ts = sites_timeseries[top_sites.index.astype(str)]</span>
-        <span class="c1"># sites_timeseries.columns = sites_timeseries.columns.str.strip()</span>
-        <span class="c1"># top_sites.index = top_sites.index.str.strip()</span>
-        <span class="n">top_sites_ts</span> <span class="o">=</span> <span class="n">sites_timeseries</span><span class="p">[</span><span class="n">top_sites</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
-
-        <span class="k">return</span> <span class="n">top_sites</span> <span class="p">,</span><span class="n">top_sites_ts</span>  <span class="c1"># gdf</span></div>
 </div>
 
+
+
+<span class="nd">@staticmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">export_results</span><span class="p">(</span><span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+                    <span class="n">region</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+                <span class="n">resource_clusters</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                <span class="n">cluster_timeseries</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                <span class="n">save_to</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Export processed resource cluster results (geodataframe) to standard datafield csvs as input for downstream models.</span>
+<span class="sd">    ### Args</span>
+<span class="sd">    - **resource_type**: The type of resource (&#39;solar&#39; or &#39;wind&#39;).</span>
+<span class="sd">    - **resource_clusters**: A DataFrame containing resource cluster information.</span>
+<span class="sd">    - **output_dir** [optional]: The directory to save the output files. Default to : &#39;results/*.csv&#39;</span>
+<span class="sd">    </span>
+<span class="sd">    &gt; Currently supports: CLEWs, PyPSA</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check if resource_clusters is a DataFrame or GeoDataFrame</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resource_clusters</span><span class="p">,</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Invalid input: resource_clusters must be a Pandas DataFrame or GeoDataFrame, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">resource_clusters</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cluster_timeseries</span><span class="p">,</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Invalid input: resource_clusters must be a Pandas DataFrame or GeoDataFrame, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">resource_clusters</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+    <span class="c1"># Exclude all columns containing geometry-related data as these are not required for downstream models in consideration i.e. CLEWs, PyPSA</span>
+    <span class="n">resource_clusters_excld_geom</span> <span class="o">=</span> <span class="n">resource_clusters</span><span class="p">[[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">resource_clusters</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span> <span class="o">!=</span> <span class="s1">&#39;geometry&#39;</span><span class="p">]]</span>
+
+    <span class="c1"># CSV -&gt; Save to </span>
+    <span class="n">save_to</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">ensure_path</span><span class="p">(</span><span class="n">save_to</span><span class="p">)</span>
+    <span class="n">save_to</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">resource_clusters_excld_geom</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">save_to</span><span class="o">/</span><span class="sa">f</span><span class="s1">&#39;resource_options_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">cluster_timeseries</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">save_to</span><span class="o">/</span><span class="sa">f</span><span class="s1">&#39;resource_options_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s1">_timeseries.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s2"> clusters exported to :</span><span class="si">{</span><span class="n">save_to</span><span class="o">/</span><span class="sa">f</span><span class="s1">&#39;resource_options_</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s1">_timeseries.csv&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nd">@staticmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_summary_info</span><span class="p">(</span><span class="n">resource_type</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+                        <span class="n">region</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+                        <span class="n">sites</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                        <span class="n">timeseries</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates summary information to be exported alongside results data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">formatted_time</span> <span class="o">=</span> <span class="n">current_local_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S&quot;</span><span class="p">)</span>
+    
+    <span class="n">info</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;_&#39;</span><span class="o">*</span><span class="mi">25</span><span class="si">}</span><span class="s2"> Top Block Represents the latest results&#39; summary &lt;</span><span class="si">{</span><span class="s1">&#39;_&#39;</span><span class="o">*</span><span class="mi">25</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">100</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;* </span><span class="si">{</span><span class="n">resource_type</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">region</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">*</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;Total Capacity of the Sites: </span><span class="si">{</span><span class="n">sites</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e3</span><span class="si">}</span><span class="s2"> GW</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;&gt;&gt; No. of Sites (Clusters): </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sites</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot; &gt;&gt; Snapshot Points: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">timeseries</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> Results Generated on Local Time (hh:mm:ss): </span><span class="si">{</span><span class="n">formatted_time</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">100</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span>
+
+<span class="nd">@staticmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dump_export_metadata</span><span class="p">(</span><span class="n">info</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">save_to</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;results/linking&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dumps the metadata summary information to a file. If the file already exists,</span>
+<span class="sd">    it prepends the new info at the top of the file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">save_to</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">ensure_path</span><span class="p">(</span><span class="n">save_to</span><span class="p">)</span>  <span class="c1"># Ensures that the provided save path is a Path object</span>
+    <span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;Resource_options_summary.txt&quot;</span>
+    <span class="c1"># File path</span>
+    <span class="n">file_path</span> <span class="o">=</span> <span class="n">save_to</span> <span class="o">/</span> <span class="n">file_name</span>
+
+    <span class="c1"># Check if the file exists and read the existing content</span>
+    <span class="k">if</span> <span class="n">file_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">existing_content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">existing_content</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="c1"># Prepend the new info to the existing content</span>
+    <span class="n">updated_content</span> <span class="o">=</span> <span class="n">info</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">existing_content</span>
+
+    <span class="c1"># Save the updated content to the file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">updated_content</span><span class="p">)</span>
+
+<span class="nd">@staticmethod</span>    
+<span class="k">def</span><span class="w"> </span><span class="nf">select_top_sites</span><span class="p">(</span><span class="n">sites</span><span class="p">:</span><span class="n">Union</span><span class="p">[</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span>
+                    <span class="n">sites_timeseries</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                    <span class="n">resource_max_capacity</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span>
+                    <span class="p">)</span><span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; Selecting TOP Sites to for </span><span class="si">{</span><span class="n">resource_max_capacity</span><span class="si">}</span><span class="s2"> GW Capacity Investment in BC...&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Select the top sites based on potential capacity and a maximum resource capacity limit.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sites_gdf: GeoDataFrame containing  cell and bucket information.</span>
+<span class="sd">        resource_max_capacity (float) : Maximum allowable  capacity in GW.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    - selected_sites: GeoDataFrame with the selected top sites.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;_&#39;</span><span class="o">*</span><span class="mi">100</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Selecting the Top Ranked Sites to invest in </span><span class="si">{</span><span class="n">resource_max_capacity</span><span class="si">}</span><span class="s2"> GW PV in BC&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;_&#39;</span><span class="o">*</span><span class="mi">100</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Initialize variables</span>
+    <span class="n">selected_rows</span><span class="p">:</span><span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">total_capacity</span><span class="p">:</span><span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="n">top_sites</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span> <span class="o">=</span> <span class="n">sites</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">top_sites</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">resource_max_capacity</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">:</span>
+        <span class="c1"># Iterate through the sorted GeoDataFrame</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">top_sites</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="c1"># Check if adding the current row&#39;s capacity exceeds resource capacity</span>
+            <span class="k">if</span> <span class="n">total_capacity</span> <span class="o">+</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">resource_max_capacity</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">:</span>
+                <span class="n">selected_rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>  <span class="c1"># Add the row to the selection</span>
+                <span class="c1"># Update the total capacity</span>
+                <span class="n">total_capacity</span> <span class="o">+=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span>
+            <span class="c1"># If adding the current row&#39;s capacity would exceed max resource capacity, stop the loop</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="c1"># Create a new GeoDataFrame with the selected rows</span>
+        <span class="n">top_sites</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span> <span class="o">=</span> <span class="n">top_sites</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">selected_rows</span><span class="p">]</span>
+
+        <span class="c1"># Apply the additional logic</span>
+        <span class="c1"># mask = sites[&#39;cluster_id&#39;] &gt; top_sites[&#39;cluster_id&#39;].max()</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">sites</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;</span> <span class="n">top_sites</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">selected_additional_sites</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span> <span class="o">=</span> <span class="n">sites</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="n">remaining_capacity</span><span class="p">:</span><span class="nb">float</span> <span class="o">=</span> <span class="n">resource_max_capacity</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">-</span> <span class="n">top_sites</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">remaining_capacity</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_additional_sites</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">!! Note: The Last cluster (</span><span class="si">{</span><span class="n">selected_additional_sites</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">) originally had </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">selected_additional_sites</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2"> GW potential capacity.&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;To fit the maximum capacity investment of </span><span class="si">{</span><span class="n">resource_max_capacity</span><span class="si">}</span><span class="s2"> GW, it has been adjusted to </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">remaining_capacity</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2"> GW</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">!! Note: No additional sites selected. Remaining capacity: </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">remaining_capacity</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2"> GW</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">selected_additional_sites</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">remaining_capacity</span>
+        <span class="c1"># Concatenate the DataFrames</span>
+        <span class="n">top_sites</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">top_sites</span><span class="p">,</span> <span class="n">selected_additional_sites</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">original_capacity</span> <span class="o">=</span> <span class="n">sites</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;!!Note: The first cluster originally had </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">original_capacity</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2"> GW potential capacity.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;To fit the maximum capacity investment of </span><span class="si">{</span><span class="n">resource_max_capacity</span><span class="si">}</span><span class="s2"> GW, it has been adjusted. </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">top_sites</span> <span class="o">=</span> <span class="n">top_sites</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Keep only the first row</span>
+        <span class="c1"># Adjust the potential_capacity of the first row</span>
+        <span class="n">top_sites</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">top_sites</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resource_max_capacity</span> <span class="o">*</span> <span class="mi">1000</span>
+    
+    <span class="c1"># top_sites_ts = sites_timeseries[top_sites.index.astype(str)]</span>
+    <span class="c1"># sites_timeseries.columns = sites_timeseries.columns.str.strip()</span>
+    <span class="c1"># top_sites.index = top_sites.index.str.strip()</span>
+    <span class="n">top_sites_ts</span> <span class="o">=</span> <span class="n">sites_timeseries</span><span class="p">[</span><span class="n">top_sites</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">top_sites</span> <span class="p">,</span><span class="n">top_sites_ts</span>  <span class="c1"># gdf</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">build_resources</span><span class="p">(</span><span class="n">regions</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span>
                     <span class="n">resource_types</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> 
