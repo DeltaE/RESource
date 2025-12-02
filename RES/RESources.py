@@ -727,7 +727,7 @@ class RESources_builder(AttributesParser):
             utils.print_banner("Step 7 : Top Site Selections for Targeted Capacity Investments/Plans")
             resource_max_capacity=self.resource_disaggregation_config.get('max_capacity',10) # Collects max_capacity from resource_disaggregation_config (if set), otherwise defaults to 10 GW
             
-            resource_clusters,cluster_timeseries=self.select_top_sites(self.get_clusters().clusters,
+            resource_clusters,cluster_timeseries=select_top_sites(self.get_clusters().clusters,
                                                                         self.get_cluster_timeseries(),
                                                                         resource_max_capacity=resource_max_capacity)
                
