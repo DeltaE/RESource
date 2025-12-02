@@ -57,6 +57,7 @@ from rasterio.vrt import WarpedVRT
 from rasterio.warp import Resampling, calculate_default_transform, reproject
 from shapely.geometry import box
 from shapely.geometry.base import BaseGeometry
+from shapely.ops import polygonize, unary_union
 
 from RES import utility as utils
 from RES.AttributesParser import AttributesParser
@@ -799,10 +800,104 @@ class LandContainer(AttributesParser):
         return excluder_with_layers
 
     def get_layers(self):
-        """Load all raster and vector layers for the specified region.
-        Returns:
-            tuple: A tuple containing two lists - raster_configs and vector_configs.
         """
+    Load all raster and vector layers for the specified region.
+
+    Returns
+    -------
+    raster_configs : list of dict
+        List of raster-layer configuration dictionaries. Each entry describes
+        a single raster layer (GAEZ, CORINE/CLC, or custom), with at least:
+
+        Required keys
+        -------------
+        name : str
+            Logical name of the raster layer (used as an identifier across
+            the RESource pipeline).
+        filepath : str
+            Absolute or project-relative path to the *processed* raster for
+            this region (already clipped and/or resampled).
+
+        Common optional keys
+        --------------------
+        source : str
+            Original data source (URL, dataset name, or citation).
+        root : str
+            Directory containing the *raw* raster file.
+        raster : str
+            Filename or relative path of the raw raster under ``root``.
+        data_license : str
+            License or terms of use for the dataset.
+        source_res_meters : int
+            Native spatial resolution of the source raster (in meters).
+        target_res_meters : int
+            Target spatial resolution after resampling (in meters).
+        legends : str
+            Path to a legend file (e.g., CSV) mapping raster classes to
+            human-readable labels.
+        class_inclusion : dict[str, list[int]]
+            Mapping from resource type (e.g. ``"solar"``, ``"wind"``) to the
+            list of raster class codes that are allowed / considered suitable
+            for that resource.
+
+        Notes
+        -----
+        - For GAEZ and CORINE layers, ``filepath`` points to the region-
+          specific, clipped/resampled raster returned by the internal
+          processing functions.
+        - For custom layers, ``filepath`` is similarly the processed raster
+          derived from the user-defined configuration in ``custom_land_layers``.
+
+    vector_configs : list of dict
+        List of vector-layer configuration dictionaries. Each entry describes
+        a *single* buffered exclusion layer (e.g. conserved lands, aeroways,
+        ALR, or other custom polygons) after all preprocessing.
+
+        Required keys
+        -------------
+        gdf : geopandas.GeoDataFrame
+            Geometry of the exclusion layer *after* reprojection, clipping to
+            the region boundary, and application of any buffers.
+        stepwise_plot_title : str
+            Human-readable title used when plotting this exclusion step in
+            the stepwise land-screening visualizations.
+
+        Common optional keys
+        --------------------
+        buffer_mapping_key : str
+            Identifier for this exclusion group, used to look up buffer
+            distances and to name output files (e.g. area-comparison CSVs).
+        buffer_mapping_key_buffers : str
+            Name of the buffer profile in the buffer configuration (mapping
+            from feature categories to buffer distances).
+        area_comparison : pandas.DataFrame
+            Summary of pre-/post-buffer area statistics for this exclusion
+            layer (with additional columns such as ``Resource_Type``,
+            ``Region``, ``Scenario``).
+        filepath : str
+            Path to the underlying raw or merged vector file (e.g. GeoJSON
+            or Parquet) for custom layers.
+        name : str
+            Logical name of the vector layer (e.g. ``"ALR"``, ``"aeroway"``,
+            ``"conserved_lands"``).
+        source : str
+            Original data source (URL, dataset name, or citation).
+        root : str
+            Directory containing the raw vector data (if applicable).
+        crs : str
+            CRS string (e.g. ``"EPSG:3005"``) used when reading or
+            harmonizing the vector layer.
+
+        Notes
+        -----
+        - Core “built-in” exclusion layers (e.g. conserved lands, aeroways)
+          are constructed from their respective data providers and then
+          buffered using ``buffer_mapping_key`` / ``buffer_mapping_key_buffers``.
+        - Custom vector layers defined under ``custom_land_layers.vectors``
+          (e.g. ALR from GeoJSON/Parquet) are loaded, reprojected, clipped
+          to the region, and then included in ``vector_configs`` with their
+          ``gdf`` and metadata attached.
+    """
     # load GAEZ Raster Layers
         utils.print_update(
             level=PRINT_LEVEL_BASE + 2,
@@ -875,6 +970,7 @@ class LandContainer(AttributesParser):
             level=PRINT_LEVEL_BASE + 2,
             message=f"{__name__}| Loading vector layers for {self.region_name}...",
         )
+        
         vector_configs: list[dict] = self.resource_disaggregation_config[
             "vector_buffers"
         ]
@@ -935,35 +1031,126 @@ class LandContainer(AttributesParser):
                 gdf=vector_gdf,
                 crs_meters=self.crs_m,
                 crs_degrees=self.crs_d,
-                buffer_mapping=   vector_config_item[vector_name]["buffer_mapping_key_buffers"],
-                buffer_mapping_key= vector_config_item[vector_name]["buffer_mapping_key"],
+                buffer_mapping=   vector_config_item[vector_name].get("buffer_mapping_key_buffers",None),
+                buffer_mapping_key= vector_config_item[vector_name].get("buffer_mapping_key",None),
             )
             vector_config_item[vector_name]["gdf"] = vector_gdf_with_buffer
             vector_area_comparison['Resource_Type']=self.resource_type
             vector_area_comparison['Region']=self.region_name
             vector_area_comparison['Scenario']=self.get_RUN_ID()
-            # Save the area comparison to a CSV file
-            area_comparison_save_path = (
-                Path("data/processed_data/lands")
-                / f"{vector_config_item[vector_name]['buffer_mapping_key']}_area_comparisons_{self.region_name}_{self.resource_type}_{self.RUN_ID}.csv"
-            )
-            area_comparison_save_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            if vector_config_item[vector_name].get('buffer_mapping_key',None) is None:
+                utils.print_warning(f"{__name__}| 'buffer_mapping_key' not found in vector config for {vector_name}. Area comparison CSV will be named 'unknown_area_comparisons_...'") 
+            else:
+                utils.print_update(
+                    level=PRINT_LEVEL_BASE + 2,
+                    message=f"{__name__}| Buffer applied to {vector_name} areas for {self.region_name}. Area comparison computed.",
+                )
+                # Save the area comparison to a CSV file
+                area_comparison_save_path = (
+                    Path("data/processed_data/lands")
+                    / f"{vector_config_item[vector_name].get('buffer_mapping_key', 'unknown')}_area_comparisons_{self.region_name}_{self.resource_type}_{self.RUN_ID}.csv"
+                )
+                area_comparison_save_path.parent.mkdir(parents=True, exist_ok=True)
 
-            # Save the area comparison DataFrame to CSV
-            vector_area_comparison.to_csv(area_comparison_save_path)
-            utils.print_update(
-                level=PRINT_LEVEL_BASE + 2,
-                message=f"{__name__}| Vector Area comparison for {vector_config_item[vector_name]['buffer_mapping_key']} saved to {area_comparison_save_path}",
-            )
-            vector_config_item[vector_name]["area_comparison"] = vector_area_comparison
-
+                # Save the area comparison DataFrame to CSV
+                vector_area_comparison.to_csv(area_comparison_save_path)
+                utils.print_update(
+                    level=PRINT_LEVEL_BASE + 2,
+                    message=f"{__name__}| Vector Area comparison for {vector_config_item[vector_name]['buffer_mapping_key']} saved to {area_comparison_save_path}",
+                )
+                vector_config_item[vector_name]["area_comparison"] = vector_area_comparison
+        
         # We want to flat list of dictionaries without vector_name in the keys
         vector_configs = [list(d.values())[0] for d in vector_configs]
+        
+        # --- Custom vector layers from config (GeoJSON / Parquet) ---
+                # --- Custom vector layers from config (GeoJSON / Parquet) ---
+        raw_custom_vector_configs: list[dict] = self.custom_land_layers.get("vectors", []) or []
+
+        if not raw_custom_vector_configs:
+            utils.print_update(
+                level=PRINT_LEVEL_BASE + 1,
+                message=f"{__name__}| No custom vector layers found in config for {self.region_name}.",
+            )
+        else:
+            utils.print_update(
+                level=PRINT_LEVEL_BASE + 2,
+                message=f"{__name__}| Found {len(raw_custom_vector_configs)} custom vector layers for {self.region_name}.",
+            )
+
+            for custom_cfg in raw_custom_vector_configs:
+                name = custom_cfg.get("name", "Unnamed")
+                utils.print_update(
+                    level=PRINT_LEVEL_BASE + 2,
+                    message=f"{__name__}| Loading custom vector layer '{name}' for {self.region_name}",
+                )
+
+                # loader returns an updated config dict (with 'gdf' inside)
+                custom_cfg = load_custom_vector_layer(custom_cfg)
+
+                gdf = custom_cfg.get("gdf")
+                if gdf is None or gdf.empty:
+                    utils.print_update(
+                        level=PRINT_LEVEL_BASE + 1,
+                        message=f"{__name__}| Custom vector layer '{name}' is empty or could not be loaded. Skipping.",
+                        alert=True,
+                    )
+                    continue
+                vector_configs.append(custom_cfg)
+        # utils.print_update(
+        #     level=PRINT_LEVEL_BASE + 3,
+        #     message=f"{__name__}|✓ Vector Layers Loaded (base: {len(vector_configs) - len(custom_vector_configs)}, custom: {len(custom_vector_configs)})",
+        # )
+        
         utils.print_update(level=PRINT_LEVEL_BASE+3,
                            message= f"{__name__}|✓ Vector Layers Loaded")
 
         return raster_configs, vector_configs
+@staticmethod
+def load_custom_vector_layer(vector_cfg: dict) -> gpd.GeoDataFrame:
+    """
+    Load a custom vector layer from Parquet (preferred) or GeoJSON,
+    reproject and clip to the region boundary if available.
+    """
+    root = Path(vector_cfg["root"])
 
+    # Prefer Parquet if available
+    gdf = None
+    if vector_cfg.get("parquet"):
+        fp = root / vector_cfg["parquet"]
+        gdf = gpd.read_parquet(fp)
+        source_path = fp
+    elif vector_cfg.get("geojson"):
+        fp = root / vector_cfg["geojson"]
+        gdf = gpd.read_file(fp)
+        source_path = fp
+    else:
+        utils.print_update(
+            level=PRINT_LEVEL_BASE + 1,
+            message=f"{__name__}| No 'parquet' or 'geojson' path defined for custom vector '{vector_cfg.get('name')}'. Skipping.",
+            alert=True,
+        )
+        return None
+
+    # Set or enforce CRS if provided
+    crs_str = vector_cfg.get("crs")
+    if crs_str:
+        if gdf.crs is None:
+            gdf = gdf.set_crs(crs_str)
+        else:
+            gdf = gdf.to_crs(crs_str)
+
+    vector_cfg["filepath"] = str(source_path)
+    vector_cfg["gdf"] = gdf
+    vector_cfg["stepwise_plot_title"] = f"Excluding {vector_cfg.get('name', 'Custom Layer')}"
+
+    utils.print_update(
+        level=PRINT_LEVEL_BASE + 2,
+        message=f"{__name__}| Loaded custom vector '{vector_cfg.get('name')}' from {source_path}",
+    )
+
+    return vector_cfg
 
 @staticmethod
 def add_and_plot_exclusion_layer(
@@ -1040,6 +1227,46 @@ def add_and_plot_exclusion_layer(
     excluder_with_layers: ExclusionContainer = excluder
 
     return excluder_with_layers
+
+@staticmethod
+def process_vectors_to_single_polygon(*layers: gpd.GeoDataFrame,
+                                      target_crs=None) -> gpd.GeoDataFrame:
+    """
+    Take any number of GeoDataFrames (lines and/or polygons),
+    polygonize the lines, merge with polygons, and dissolve to one geometry.
+    """
+    # pick CRS from first layer if target_crs is not provided
+    if target_crs is None:
+        target_crs = next(layer.crs for layer in layers if layer is not None)
+
+    line_geoms = []
+    poly_geoms = []
+
+    # separate lines and polygons
+    for layer in layers:
+        if layer is None:
+            continue
+        gdf = layer.to_crs(target_crs)
+
+        for geom in gdf.geometry:
+            if geom is None:
+                continue
+            if geom.geom_type in ("LineString", "MultiLineString"):
+                line_geoms.append(geom)
+            elif geom.geom_type in ("Polygon", "MultiPolygon"):
+                poly_geoms.append(geom)
+
+    # polygonize all lines
+    if line_geoms:
+        lines_union = unary_union(line_geoms)
+        polys_from_lines = list(polygonize(lines_union))
+    else:
+        polys_from_lines = []
+
+    all_polys = poly_geoms + polys_from_lines
+    merged_geom = unary_union(all_polys)
+
+    return gpd.GeoDataFrame(geometry=[merged_geom], crs=target_crs)
 
 
 @staticmethod
@@ -1136,10 +1363,11 @@ def load_layers_to_excluder(
             utils.print_warning(f"{__name__}| 'disregard_other_layers' is set to TRUE. Re-initializing ExclusionContainer for plotting purpose to showcase individual layer impact")
             excluder=ExclusionContainer(crs=crs_meters)
             utils.print_warning(f"Excluder crs set to {crs_meters}")
-        utils.print_update(
-            level=PRINT_LEVEL_BASE + 2,
-            message=f"{__name__}| Loading vector layer {i+1} for '{list(vector_configs[i]['buffer_mapping_key_buffers'].keys())}' to ExclusionContainer ...",
-        )
+        
+        # utils.print_update(
+        #     level=PRINT_LEVEL_BASE + 2,
+        #     message=f"{__name__}| Loading vector layer {i+1} for '{list(vector_configs[i]['buffer_mapping_key_buffers'].keys())}' to ExclusionContainer ...",
+        # )
         # Assert that the geometries in vector_configs are in the same CRS as excluder
         if v["gdf"].crs != excluder.crs:
             v["gdf"] = v["gdf"].to_crs(excluder.crs)
@@ -1251,7 +1479,7 @@ def apply_buffer_to_vector(
     # 7. Reproject back to degree based crs
     if gdf_buffered.crs != crs_degrees:
         gdf_buffered = gdf_buffered.to_crs(crs_degrees)
-    print(f"{__name__}| Buffer applied to vector layer with key '{buffer_mapping_key}'. Area comparison:\n{area_comparison}")
+    
     return gdf_buffered, area_comparison
 
 
