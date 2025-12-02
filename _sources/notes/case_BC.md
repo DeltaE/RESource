@@ -49,25 +49,32 @@ The key question we want to ask is __Can We Build Without Overlapping Nature?__
 
 Key parameters are configurable to reflect geographic constraints (e.g., slope, protected areas). We applied the spatial screening process using global raster datasets from the GAEZ to systematically identify suitable VRE sites by filtering land based on land cover, terrain slope, and exclusion zones. Land cover data layers are used to selectively include classes such as croplands, grasslands, shrubs, and bare soil while excluding artificial surfaces, dense forests, and water bodies. Terrain slope rasters helped eliminate areas with steep gradients over 30%, which pose construction and accessibility challenges. Additionally, exclusion zones—compiled from global biodiversity, wetland, and protected area databases—were entirely filtered out from consideration to respect environmental conservation boundaries. This layered geospatial filtering ensures that selected sites align with both technical feasibility and ecological integrity. We extracted the land availability map from this spatial screening process.
 
+### Landcover
 <img src="../_static/CanGov_Landcover_with_existing_VREs.png" alt="Canadian Landcover_with_existing_VREs" width="800"/>
 <img src="../_static/LandCover_CANgov_class_distribution_BC.png" alt="LandCover_CANgov_class_distribution_BC" width="600"/>
 
+### Terrain
 <img src="../_static/GAEZ_terrains_with_existing_VREs.png" alt="terrains_with_existing_VREs" width="800"/>
 <img src="../_static/GAEZ_terrains_class_distribution_BC.png" alt="GAEZ_terrains_class_distribution_BC" width="600"/>
 
+### Global Exclusions
 <img src="../_static/GAEZ_exclusion_global_with_existing_VREs.png" alt="exclusion_global_with_existing_VREs" width="800"/>
 <img src="../_static/GAEZ_Exclusion_class_distribution_BC.png" alt="GAEZ_Exclusion_class_distribution_BC" width="600"/>
 
 
-
-<!-- <img src="../_static/Landcover_with_existing_VREs.png" alt="Landcover_with_existing_VREs" width="500"/> -->
-
-
 > For full details on the raster classes, refer to the [Global Agro-Ecological Zones v4 – Model documentation](https://openknowledge.fao.org/items/039f7ec9-98af-49e1-8d24-850122c69bef); Chapter 2.Page 17 for Elevation and terrain-slope data, page 18 for Land Cover data and page 20 for Exclusion zones.
+
+### Agricultural Land Reserve (ALR)
+  <img src="../_static/ALR_within_study_boundary_BC.png" alt="ALR_within_study_boundary_BC" width="800"/>
+
+  > [Geospatial Data Source for this Map](https://www.alc.gov.bc.ca/alr-maps), More about [ALR in BC](https://www2.gov.bc.ca/gov/content/industry/agriculture-seafood/agricultural-land-and-environment/agricultural-land-reserve/the-agricultural-land-reserve)
+
+
+### National/Provincial Conserved and Protected Lands
 
 <img src="../_static/CPCAD_BC.png" alt="CPCAD_BC" width="800"/>
 
-### Land-use Restriction Buffers
+#### Land-use Restriction Buffers
 
 | Scenario Name | Buffer Applied | Description |
 |--------------|----------------|-------------|
@@ -93,7 +100,6 @@ Key parameters are configurable to reflect geographic constraints (e.g., slope, 
 | | Other Effective area-based Conservation Measures [(OECM) areas](https://www.canada.ca/en/environment-climate-change/services/nature-legacy/other-effective-area-based-measures.html) | 500 | 1,000 |
 
 > *Note: Some global protected areas overlap with Canadian conservation and protected lands.*
-
 
 Here is a visual on how the no-go zones for site development looks like:
 

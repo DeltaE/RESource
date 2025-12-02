@@ -346,7 +346,12 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coordinate-reference-system-crs">Coordinate Reference System (CRS)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-districts-to-data-grids-unlocking-finer-detail">From Districts to Data Grids: Unlocking Finer Detail</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spatial-screening-and-land-availability">Spatial Screening and Land Availability</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#land-use-restriction-buffers">Land-use Restriction Buffers</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#landcover">Landcover</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#terrain">Terrain</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-exclusions">Global Exclusions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#agricultural-land-reserve-alr">Agricultural Land Reserve (ALR)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#national-provincial-conserved-and-protected-lands">National/Provincial Conserved and Protected Lands</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#land-use-restriction-buffers">Land-use Restriction Buffers</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#baseline">BASELINE</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#restricted-land-use-policy-scenario">Restricted Land-use POLICY scenario:</a></li>
 </ul>
@@ -457,19 +462,36 @@ Here is a quick overview of the data sources used in this case study:</p>
 <h2>Spatial Screening and Land Availability<a class="headerlink" href="#spatial-screening-and-land-availability" title="Link to this heading">#</a></h2>
 <p>The key question we want to ask is <strong>Can We Build Without Overlapping Nature?</strong></p>
 <p>Key parameters are configurable to reflect geographic constraints (e.g., slope, protected areas). We applied the spatial screening process using global raster datasets from the GAEZ to systematically identify suitable VRE sites by filtering land based on land cover, terrain slope, and exclusion zones. Land cover data layers are used to selectively include classes such as croplands, grasslands, shrubs, and bare soil while excluding artificial surfaces, dense forests, and water bodies. Terrain slope rasters helped eliminate areas with steep gradients over 30%, which pose construction and accessibility challenges. Additionally, exclusion zones—compiled from global biodiversity, wetland, and protected area databases—were entirely filtered out from consideration to respect environmental conservation boundaries. This layered geospatial filtering ensures that selected sites align with both technical feasibility and ecological integrity. We extracted the land availability map from this spatial screening process.</p>
+<section id="landcover">
+<h3>Landcover<a class="headerlink" href="#landcover" title="Link to this heading">#</a></h3>
 <img src="../_static/CanGov_Landcover_with_existing_VREs.png" alt="Canadian Landcover_with_existing_VREs" width="800"/>
 <img src="../_static/LandCover_CANgov_class_distribution_BC.png" alt="LandCover_CANgov_class_distribution_BC" width="600"/>
+</section>
+<section id="terrain">
+<h3>Terrain<a class="headerlink" href="#terrain" title="Link to this heading">#</a></h3>
 <img src="../_static/GAEZ_terrains_with_existing_VREs.png" alt="terrains_with_existing_VREs" width="800"/>
 <img src="../_static/GAEZ_terrains_class_distribution_BC.png" alt="GAEZ_terrains_class_distribution_BC" width="600"/>
+</section>
+<section id="global-exclusions">
+<h3>Global Exclusions<a class="headerlink" href="#global-exclusions" title="Link to this heading">#</a></h3>
 <img src="../_static/GAEZ_exclusion_global_with_existing_VREs.png" alt="exclusion_global_with_existing_VREs" width="800"/>
 <img src="../_static/GAEZ_Exclusion_class_distribution_BC.png" alt="GAEZ_Exclusion_class_distribution_BC" width="600"/>
-<!-- <img src="../_static/Landcover_with_existing_VREs.png" alt="Landcover_with_existing_VREs" width="500"/> -->
 <blockquote>
 <div><p>For full details on the raster classes, refer to the <a class="reference external" href="https://openknowledge.fao.org/items/039f7ec9-98af-49e1-8d24-850122c69bef">Global Agro-Ecological Zones v4 – Model documentation</a>; Chapter 2.Page 17 for Elevation and terrain-slope data, page 18 for Land Cover data and page 20 for Exclusion zones.</p>
 </div></blockquote>
+</section>
+<section id="agricultural-land-reserve-alr">
+<h3>Agricultural Land Reserve (ALR)<a class="headerlink" href="#agricultural-land-reserve-alr" title="Link to this heading">#</a></h3>
+  <img src="../_static/ALR_within_study_boundary_BC.png" alt="ALR_within_study_boundary_BC" width="800"/>
+<blockquote>
+<div><p><a class="reference external" href="https://www.alc.gov.bc.ca/alr-maps">Geospatial Data Source for this Map</a>, More about <a class="reference external" href="https://www2.gov.bc.ca/gov/content/industry/agriculture-seafood/agricultural-land-and-environment/agricultural-land-reserve/the-agricultural-land-reserve">ALR in BC</a></p>
+</div></blockquote>
+</section>
+<section id="national-provincial-conserved-and-protected-lands">
+<h3>National/Provincial Conserved and Protected Lands<a class="headerlink" href="#national-provincial-conserved-and-protected-lands" title="Link to this heading">#</a></h3>
 <img src="../_static/CPCAD_BC.png" alt="CPCAD_BC" width="800"/>
 <section id="land-use-restriction-buffers">
-<h3>Land-use Restriction Buffers<a class="headerlink" href="#land-use-restriction-buffers" title="Link to this heading">#</a></h3>
+<h4>Land-use Restriction Buffers<a class="headerlink" href="#land-use-restriction-buffers" title="Link to this heading">#</a></h4>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Scenario Name</p></th>
@@ -489,6 +511,7 @@ Here is a quick overview of the data sources used in this case study:</p>
 </tbody>
 </table>
 </div>
+</section>
 <section id="baseline">
 <h4>BASELINE<a class="headerlink" href="#baseline" title="Link to this heading">#</a></h4>
 <div class="pst-scrollable-table-container"><table class="table">
@@ -877,7 +900,12 @@ Here is a quick overview of the data sources used in this case study:</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coordinate-reference-system-crs">Coordinate Reference System (CRS)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-districts-to-data-grids-unlocking-finer-detail">From Districts to Data Grids: Unlocking Finer Detail</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spatial-screening-and-land-availability">Spatial Screening and Land Availability</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#land-use-restriction-buffers">Land-use Restriction Buffers</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#landcover">Landcover</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#terrain">Terrain</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-exclusions">Global Exclusions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#agricultural-land-reserve-alr">Agricultural Land Reserve (ALR)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#national-provincial-conserved-and-protected-lands">National/Provincial Conserved and Protected Lands</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#land-use-restriction-buffers">Land-use Restriction Buffers</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#baseline">BASELINE</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#restricted-land-use-policy-scenario">Restricted Land-use POLICY scenario:</a></li>
 </ul>
