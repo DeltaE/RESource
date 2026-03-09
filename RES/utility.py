@@ -33,11 +33,10 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 import rasterio as rio
-import requests
-import rioxarray as rxr
-import xarray as xr
-import yaml
-from colorama import Fore, Style
+import numpy as np
+from RES.logger import setup_logger
+import logging
+logger = setup_logger(__name__, level=logging.DEBUG)
 
 now = datetime.datetime.now()
 date_time_str = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -341,126 +340,10 @@ def download_data(source_URL: str, file_path: str) -> str:
         return print_update(level=2, message=f"{__name__}| Please download the data manually from {source_URL} and save it to {file_path}")
 
 
-def load_raster_file(raster_path: str | Path, band: int = 1) -> np.ndarray:
-    """
-    Loads a GeoTIFF raster as a NumPy array (single band).
-    Designed for lightweight array processing.
+def load_raster_file(raster_path:str|Path)->np.ndarray :
+    raster_path=Path(raster_path)
+    with rio.open(raster_path) as f:
+        raster_data: np.ndarray = f.read(1)
+        f.close()  
+    return raster_data
 
-    Parameters
-    ----------
-    raster_path : str or Path
-        Path to the GeoTIFF raster.
-    band : int, default=1
-        Raster band to read.
-
-    Returns
-    -------
-    np.ndarray
-        2D array of raster values, or None on failure.
-    """
-    raster_path = Path(raster_path)
-    if not raster_path.exists():
-        print(f"❌ File not found: {raster_path}")
-        return None
-
-    if raster_path.suffix.lower() not in [".tif", ".tiff"]:
-        print(f"❌ Invalid raster format: {raster_path.suffix} (expected .tif or .tiff)")
-        return None
-
-    try:
-        with rio.open(raster_path) as src:
-            data = src.read(band)
-            print(f"✅ Loaded raster ({src.width}×{src.height}), res: {src.res[0]:.2f} m")
-        return data
-    except Exception as e:
-        print(f"⚠️ Failed to read raster {raster_path.name}: {e}")
-        return None
-
-
-def get_raster_da(raster_path: str | Path, masked: bool = True):
-    """
-    Loads a GeoTIFF raster as a rioxarray DataArray with CRS, transform, and resolution metadata.
-    Drops all-NaN rows/cols for cleaner data structure.
-
-    Parameters
-    ----------
-    raster_path : str or Path
-        Path to the raster file.
-    masked : bool, default=True
-        Whether to mask nodata values.
-
-    Returns
-    -------
-    xarray.DataArray
-        Geospatial raster object with CRS and transform metadata.
-    """
-    raster_path = Path(raster_path)
-    if not raster_path.exists():
-        print(f"❌ Raster does not exist: {raster_path}")
-        return None
-
-    if raster_path.suffix.lower() not in [".tif", ".tiff"]:
-        print(f"❌ Invalid raster file: {raster_path}")
-        return None
-
-    try:
-        da = (
-            rxr.open_rasterio(raster_path, masked=masked)
-            .squeeze(drop=True)
-            .dropna(dim="x", how="all")
-            .dropna(dim="y", how="all")
-        )
-
-        print(f"✅ Loaded DataArray: {raster_path.name}")
-        print(f"   ├─ shape: {da.shape}")
-        print(f"   ├─ CRS: {da.rio.crs}")
-        print(f"   └─ res: {da.rio.resolution()}")
-        return da
-
-    except Exception as e:
-        print(f"⚠️ Failed to load DataArray from {raster_path.name}: {e}")
-        loading_via_rioxarray_fails = True
-
-        if loading_via_rioxarray_fails:
-            fallback = load_raster_file(raster_path)
-            return fallback
-
-
-
-def check_raster_classes(source_da:xr.DataArray, 
-                         clipped_da:xr.DataArray, 
-                         boundary_gdf:gpd.GeoDataFrame):
-    """
-    Scientifically validates if class loss is due to spatial absence 
-    or clipping artifacts.
-    """
-    # 1. Clean data: Remove NoData/NaN to focus on thematic classes
-    def get_clean_unique(da):
-        vals = da.values.flatten()
-        return np.unique(vals[~np.isnan(vals) & (vals != 0)])
-
-    clipped_classes = get_clean_unique(clipped_da)
-    
-    # 2. Critical Step: Find what SHOULD be there based on the geometry
-    # We use the bounding box of the boundary to slice the source first
-    bbox = boundary_gdf.total_bounds
-    source_subset = source_da.rio.clip_box(
-        minx=bbox[0], miny=bbox[1], maxx=bbox[2], maxy=bbox[3]
-    )
-    expected_classes = get_clean_unique(source_subset)
-
-    # 3. Identify actual artifacts (Lost despite being in the geographic extent)
-    lost_artifacts = np.setdiff1d(expected_classes, clipped_classes)
-
-    print(f"--- Raster Integrity Report ---")
-    print(f"Unique classes in Geographic Extent: {len(expected_classes)}")
-    print(f"Unique classes in Clipped Result:    {len(clipped_classes)}")
-
-    if len(lost_artifacts) > 0:
-        print(f"❌ Artifact Alert: {len(lost_artifacts)} classes lost due to clipping logic.")
-        print(f"Missing IDs: {lost_artifacts}")
-    else:
-        print("✅ Rigor Check Passed: No classes were lost during the geometric clip.")
-
-# Example usage:
-# check_raster_classes(CLC_da, CLC_raster_WB6_da, WB6_boundary_dissolved_reproj)
