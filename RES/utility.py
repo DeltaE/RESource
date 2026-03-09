@@ -21,22 +21,53 @@ Development Year: 2024-2025
 """
 
 import datetime
+"""
+Utility functions and helper methods for RESource renewable energy assessment framework.
+
+This module provides common functionality used across the RESource workflow including
+configuration management, data I/O operations, coordinate transformations
+utilities, and validation functions. It serves as a central repository for shared
+code that supports the modular architecture of the assessment framework.
+
+Key Functions:
+    - Configuration parsing and validation
+    - File I/O operations (YAML, JSON, pickle, geospatial formats)
+    - Coordinate system transformations and spatial utilities
+    - Data validation and error handling
+    - URL downloading and caching mechanisms
+    - String formatting and output styling
+
+Author: Md Eliasinul Islam
+Affiliation: Delta E+ lab, Simon Fraser University  
+Version: 1.0
+Development Year: 2024-2025
+"""
+
+import datetime
 import json
+import os
 import os
 import pickle
 import zipfile
+import zipfile
 from pathlib import Path
+from typing import Optional
+
 from typing import Optional
 
 import geojson as gj
 import geopandas as gpd
 import numpy as np
 import pandas as pd
-import rasterio as rio
+import geopandas as gpd
 import numpy as np
-from RES.logger import setup_logger
-import logging
-logger = setup_logger(__name__, level=logging.DEBUG)
+import pandas as pd
+import rasterio as rio
+import requests
+import rioxarray as rxr
+import xarray as xr
+import yaml
+from colorama import Fore, Style
 
 now = datetime.datetime.now()
 date_time_str = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -70,6 +101,9 @@ def print_update(level: int=None,
 def print_error(message):
     print(f"{Fore.RED} └ ❌ > {message}{Style.RESET_ALL}")
 
+def print_error(message):
+    print(f"{Fore.RED} └ ❌ > {message}{Style.RESET_ALL}")
+
 def print_module_title(text, Length_Char_inLine=60):
     print(f"{Fore.LIGHTCYAN_EX}{Length_Char_inLine * '_'}{Style.RESET_ALL}\n"
           f"{Fore.LIGHTGREEN_EX}{5 * ' '}{text}{Style.RESET_ALL}\n"
@@ -83,6 +117,17 @@ def print_banner(message: str):
 
 def print_info(info:str):
     print(f"{Fore.LIGHTBLACK_EX}{Style.BRIGHT}ℹ️  {info}{Style.RESET_ALL}")
+
+def print_warning(info: str):
+    print(f"{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}⚠️  {info}{Style.RESET_ALL}")
+
+
+def extract_from_zip(zip_path, extract_dir):
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall(extract_dir)
+    extracted_folders = [f for f in Path(extract_dir).iterdir() if f.is_dir()]
+    print_update(level=2,message=f"Extracted folders: {extracted_folders}")
+    return extracted_folders
 
 def print_warning(info: str):
     print(f"{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}⚠️  {info}{Style.RESET_ALL}")
@@ -118,12 +163,14 @@ def load_geojson_file(geojson_file_path:str|Path)->list:
 # Function to generate a unique index from region name and coordinates
 def assign_cell_id(cells: gpd.GeoDataFrame, 
                   source_column: str = None, 
+                  source_column: str = None, 
                   index_name: str = 'cell') -> gpd.GeoDataFrame:
     """
     Assigns unique cell IDs to each region in the specified GeoDataFrame.
 
     Parameters:
     cells (gpd.GeoDataFrame): Input GeoDataFrame containing spatial data with 'x' and 'y' coordinates.
+    source_column (str): Sub-national unit named column to be used for generating unique IDs (e.g. Region, Municipality). To be configured in the config file under 'GADM' key
     source_column (str): Sub-national unit named column to be used for generating unique IDs (e.g. Region, Municipality). To be configured in the config file under 'GADM' key
     index_name (str): Name for the new index column to be created.
 
@@ -132,6 +179,7 @@ def assign_cell_id(cells: gpd.GeoDataFrame,
     """
     # Ensure the source column exists
     if source_column not in cells.columns:
+        raise ValueError(f"'{source_column}' does not exist in the GeoDataFrame. Try reconfiguring the 'sub-national_unit_tag' in 'GADM' section in the config file.")
         raise ValueError(f"'{source_column}' does not exist in the GeoDataFrame. Try reconfiguring the 'sub-national_unit_tag' in 'GADM' section in the config file.")
 
     # Remove spaces in the region names for consistency
@@ -154,8 +202,18 @@ def assign_cell_id(cells: gpd.GeoDataFrame,
     
     # Remove duplicated index values, keeping the first occurrence
     cells = cells[~cells.index.duplicated(keep='first')]
+    
+    # Remove duplicated index values, keeping the first occurrence
+    cells = cells[~cells.index.duplicated(keep='first')]
 
     return cells
+
+def get_available_column(dataframe:list, alternatives:list):
+    """Return the first column name that exists in the dataframe"""
+    for col in alternatives:
+        if col in dataframe.columns:
+            return col
+    return None
 
 def get_available_column(dataframe:list, alternatives:list):
     """Return the first column name that exists in the dataframe"""
@@ -178,6 +236,7 @@ def ensure_path(save_to: str | Path) -> Path:
     if not isinstance(save_to, Path):
         Warning(f">> Given instance for 'destination (save_to)' is of type: {type(save_to)}. Converting it to a Path")
         save_to = Path(save_to)
+    save_to.mkdir(parents=True, exist_ok=True)
     save_to.mkdir(parents=True, exist_ok=True)
     return save_to
 
@@ -269,6 +328,35 @@ def save_to_yaml(data: dict,
         yaml.dump(data, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
     print_info(f"{__name__}| A copy of the dictionary saved to : '{file_path}'")
 
+    
+
+def save_to_yaml(data: dict, 
+                 file_path: str | Path, 
+                 default_name: str = "config.yaml"):
+    """
+    Saves a dictionary to a YAML file.
+
+    If file_path is a directory, saves to default_name inside that directory.
+
+    Parameters:
+        data (dict): The dictionary to save.
+        file_path (str|Path): Path to the YAML file or directory.
+        default_name (str): Default filename if a directory is given.
+    """
+    file_path = Path(file_path)
+
+    # If path is a directory, append default filename
+    if file_path.exists() and file_path.is_dir():
+        file_path = file_path / default_name
+
+    # Ensure parent directories exist
+    file_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Save YAML
+    with open(file_path, 'w', encoding='utf-8') as f:
+        yaml.dump(data, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
+    print_info(f"{__name__}| A copy of the dictionary saved to : '{file_path}'")
+
 
 def check_LocalCopy_and_run_function(
         directory_path:str, 
@@ -325,6 +413,8 @@ def download_data(source_URL: str, file_path: str) -> str:
         response = requests.get(source_URL, headers=headers, timeout=30)
         ensure_path(Path(file_path).parent)
         print_update(level=3,message=f"{__name__}| ⏬ Downloading data from {source_URL} ...")
+        ensure_path(Path(file_path).parent)
+        print_update(level=3,message=f"{__name__}| ⏬ Downloading data from {source_URL} ...")
         
         # Check if the request was successful
         if response.status_code == 200:
@@ -340,10 +430,126 @@ def download_data(source_URL: str, file_path: str) -> str:
         return print_update(level=2, message=f"{__name__}| Please download the data manually from {source_URL} and save it to {file_path}")
 
 
-def load_raster_file(raster_path:str|Path)->np.ndarray :
-    raster_path=Path(raster_path)
-    with rio.open(raster_path) as f:
-        raster_data: np.ndarray = f.read(1)
-        f.close()  
-    return raster_data
+def load_raster_file(raster_path: str | Path, band: int = 1) -> np.ndarray:
+    """
+    Loads a GeoTIFF raster as a NumPy array (single band).
+    Designed for lightweight array processing.
 
+    Parameters
+    ----------
+    raster_path : str or Path
+        Path to the GeoTIFF raster.
+    band : int, default=1
+        Raster band to read.
+
+    Returns
+    -------
+    np.ndarray
+        2D array of raster values, or None on failure.
+    """
+    raster_path = Path(raster_path)
+    if not raster_path.exists():
+        print(f"❌ File not found: {raster_path}")
+        return None
+
+    if raster_path.suffix.lower() not in [".tif", ".tiff"]:
+        print(f"❌ Invalid raster format: {raster_path.suffix} (expected .tif or .tiff)")
+        return None
+
+    try:
+        with rio.open(raster_path) as src:
+            data = src.read(band)
+            print(f"✅ Loaded raster ({src.width}×{src.height}), res: {src.res[0]:.2f} m")
+        return data
+    except Exception as e:
+        print(f"⚠️ Failed to read raster {raster_path.name}: {e}")
+        return None
+
+
+def get_raster_da(raster_path: str | Path, masked: bool = True):
+    """
+    Loads a GeoTIFF raster as a rioxarray DataArray with CRS, transform, and resolution metadata.
+    Drops all-NaN rows/cols for cleaner data structure.
+
+    Parameters
+    ----------
+    raster_path : str or Path
+        Path to the raster file.
+    masked : bool, default=True
+        Whether to mask nodata values.
+
+    Returns
+    -------
+    xarray.DataArray
+        Geospatial raster object with CRS and transform metadata.
+    """
+    raster_path = Path(raster_path)
+    if not raster_path.exists():
+        print(f"❌ Raster does not exist: {raster_path}")
+        return None
+
+    if raster_path.suffix.lower() not in [".tif", ".tiff"]:
+        print(f"❌ Invalid raster file: {raster_path}")
+        return None
+
+    try:
+        da = (
+            rxr.open_rasterio(raster_path, masked=masked)
+            .squeeze(drop=True)
+            .dropna(dim="x", how="all")
+            .dropna(dim="y", how="all")
+        )
+
+        print(f"✅ Loaded DataArray: {raster_path.name}")
+        print(f"   ├─ shape: {da.shape}")
+        print(f"   ├─ CRS: {da.rio.crs}")
+        print(f"   └─ res: {da.rio.resolution()}")
+        return da
+
+    except Exception as e:
+        print(f"⚠️ Failed to load DataArray from {raster_path.name}: {e}")
+        loading_via_rioxarray_fails = True
+
+        if loading_via_rioxarray_fails:
+            fallback = load_raster_file(raster_path)
+            return fallback
+
+
+
+def check_raster_classes(source_da:xr.DataArray, 
+                         clipped_da:xr.DataArray, 
+                         boundary_gdf:gpd.GeoDataFrame):
+    """
+    Scientifically validates if class loss is due to spatial absence 
+    or clipping artifacts.
+    """
+    # 1. Clean data: Remove NoData/NaN to focus on thematic classes
+    def get_clean_unique(da):
+        vals = da.values.flatten()
+        return np.unique(vals[~np.isnan(vals) & (vals != 0)])
+
+    clipped_classes = get_clean_unique(clipped_da)
+    
+    # 2. Critical Step: Find what SHOULD be there based on the geometry
+    # We use the bounding box of the boundary to slice the source first
+    bbox = boundary_gdf.total_bounds
+    source_subset = source_da.rio.clip_box(
+        minx=bbox[0], miny=bbox[1], maxx=bbox[2], maxy=bbox[3]
+    )
+    expected_classes = get_clean_unique(source_subset)
+
+    # 3. Identify actual artifacts (Lost despite being in the geographic extent)
+    lost_artifacts = np.setdiff1d(expected_classes, clipped_classes)
+
+    print(f"--- Raster Integrity Report ---")
+    print(f"Unique classes in Geographic Extent: {len(expected_classes)}")
+    print(f"Unique classes in Clipped Result:    {len(clipped_classes)}")
+
+    if len(lost_artifacts) > 0:
+        print(f"❌ Artifact Alert: {len(lost_artifacts)} classes lost due to clipping logic.")
+        print(f"Missing IDs: {lost_artifacts}")
+    else:
+        print("✅ Rigor Check Passed: No classes were lost during the geometric clip.")
+
+# Example usage:
+# check_raster_classes(CLC_da, CLC_raster_WB6_da, WB6_boundary_dissolved_reproj)
