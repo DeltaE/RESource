@@ -2095,7 +2095,7 @@ def plot_developable_land_and_vres(
                 boundary_for_clip.crs,
                 drop=True,
                 invert=False,
-                all_touched=False,   # <— STRICT geometry clipping
+                all_touched=True,   # <— STRICT geometry clipping
             )
         print(f"✅ Raster clipped to boundary '{label_column}' region, shape: {raster_clipped.shape}")
         raster_plot = raster_clipped

@@ -35,6 +35,7 @@ import pandas as pd
 import rasterio as rio
 import requests
 import rioxarray as rxr
+import xarray as xr
 import yaml
 from colorama import Fore, Style
 
@@ -423,3 +424,43 @@ def get_raster_da(raster_path: str | Path, masked: bool = True):
         if loading_via_rioxarray_fails:
             fallback = load_raster_file(raster_path)
             return fallback
+
+
+
+def check_raster_classes(source_da:xr.DataArray, 
+                         clipped_da:xr.DataArray, 
+                         boundary_gdf:gpd.GeoDataFrame):
+    """
+    Scientifically validates if class loss is due to spatial absence 
+    or clipping artifacts.
+    """
+    # 1. Clean data: Remove NoData/NaN to focus on thematic classes
+    def get_clean_unique(da):
+        vals = da.values.flatten()
+        return np.unique(vals[~np.isnan(vals) & (vals != 0)])
+
+    clipped_classes = get_clean_unique(clipped_da)
+    
+    # 2. Critical Step: Find what SHOULD be there based on the geometry
+    # We use the bounding box of the boundary to slice the source first
+    bbox = boundary_gdf.total_bounds
+    source_subset = source_da.rio.clip_box(
+        minx=bbox[0], miny=bbox[1], maxx=bbox[2], maxy=bbox[3]
+    )
+    expected_classes = get_clean_unique(source_subset)
+
+    # 3. Identify actual artifacts (Lost despite being in the geographic extent)
+    lost_artifacts = np.setdiff1d(expected_classes, clipped_classes)
+
+    print(f"--- Raster Integrity Report ---")
+    print(f"Unique classes in Geographic Extent: {len(expected_classes)}")
+    print(f"Unique classes in Clipped Result:    {len(clipped_classes)}")
+
+    if len(lost_artifacts) > 0:
+        print(f"❌ Artifact Alert: {len(lost_artifacts)} classes lost due to clipping logic.")
+        print(f"Missing IDs: {lost_artifacts}")
+    else:
+        print("✅ Rigor Check Passed: No classes were lost during the geometric clip.")
+
+# Example usage:
+# check_raster_classes(CLC_da, CLC_raster_WB6_da, WB6_boundary_dissolved_reproj)

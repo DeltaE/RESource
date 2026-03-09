@@ -520,7 +520,8 @@ class RESources_builder(AttributesParser):
             self.datahandler.refresh()
             self.not_scored_cells=self.datahandler.from_store('cells')
             
-        self.scored_cells = self.scorer.get_cell_score(self.not_scored_cells,f'{self.resource_type}_CF_mean') # 
+        self.scored_cells = self.scorer.get_cell_score(cells=self.not_scored_cells,
+                                                       CF_column=f'{self.resource_type}_CF_mean') # 
         
         # # Add new columns to the existing DataFrame
         # for column in self.scored_cells.columns:

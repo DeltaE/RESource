@@ -58,7 +58,7 @@ class CellCapacityProcessor(AttributesParser):
     - __get_unified_region_shape__(): Create unified regional boundary geometry (private)
     - __create_cell_geom__(x, y): Create grid cell geometry from coordinates (private)
     - get_capacity(): Main method to process and calculate renewable energy capacity
-    - plot_ERAF5_grid_land_availability(): Visualize land availability on ERA5 grid
+    - plot_ERA5_grid_land_availability(): Visualize land availability on ERA5 grid
     - plot_excluder_land_availability(): Visualize land availability at excluder resolution
     
     Parameters
@@ -133,7 +133,7 @@ class CellCapacityProcessor(AttributesParser):
         Create square grid cell geometry from center coordinates
     get_capacity() -> tuple[gpd.GeoDataFrame, xr.DataArray]
         Main processing method to calculate renewable energy capacity with constraints
-    plot_ERAF5_grid_land_availability(...) -> matplotlib.figure.Figure
+    plot_ERA5_grid_land_availability(...) -> matplotlib.figure.Figure
         Create visualization of land availability on ERA5 grid resolution
     plot_excluder_land_availability(...) -> matplotlib.figure.Figure
         Create visualization of land availability at excluder resolution
@@ -269,69 +269,244 @@ class CellCapacityProcessor(AttributesParser):
         self.region_shape=self.LandContainer.region_shape.dissolve(by=self.gadm_config.get('datafield_mapping').get('NAME_0')) # .drop(columns =['Region'])
         self.region_shape = self.region_shape[['geometry']]
         return self.region_shape
-    
-    def load_cost(self,
-                  resource_atb:pd.DataFrame):
+
+
+#     def load_cost(self,
+#                   resource_atb:pd.DataFrame=None):
+#         """
+#         Extracts cost parameters from the NREL ATB DataFrame and converts them to million $/MW.
+
+#         Args:
+#             resource_atb (pd.DataFrame): DataFrame containing NREL ATB cost data for the resource type.
+
+#         Returns:
+#             dict: A dictionary containing the following cost parameters:
+#                 - resource_capex: Capital expenditure in million $/MW
+#                 - resource_vom: Variable operation and maintenance cost in million $/MW
+#                 - resource_fom: Fixed operation and maintenance cost in million $/MW
+#                 - grid_connection_cost_per_km: Grid connection cost per kilometer in million $
+#                 - tx_line_rebuild_cost: Transmission line rebuild cost in million $
+#         """
+        
+#         utils.print_update(level=PRINT_LEVEL_BASE+1,
+#                            message=f"{__name__}| Extracting cost attributes...")
+#         self.transmission_config = self.config.get('capacity_disaggregation', {}).get('transmission', {}) # INHERITED ATTRIBUTE from AttributesParser
+#         grid_connection_cost_per_km = self.transmission_config.get('grid_connection_cost_per_Km', 0)
+#         utils.print_info(f"{__name__}| @ Line: {inspect.currentframe().f_lineno-1} | `grid_connection_cost_per_km` is set to {grid_connection_cost_per_km} million $/km. If this is not set in the config, it will be set to 0.")
+        
+#         tx_line_rebuild_cost = self.disaggregation_config.get('transmission', {}).get('tx_line_rebuild_cost', 0)
+#         utils.print_info(f"{__name__}| @ Line: {inspect.currentframe().f_lineno-1} | `tx_line_rebuild_cost` is set to {tx_line_rebuild_cost} million $. If this is not set in the config, it will be set to 0.")
+        
+#         if resource_atb is None:
+#             utils.print_info((f"{__name__}| No ATB cost data set for {self.resource_type}. Attempting to extract from resource disaggregation config..."))
+#             resource_capex:float=float(self.resource_disaggregation_config.get('capex', None))
+#             if resource_capex is None:
+#                 raise ValueError(f"CAPEX value is missing for {self.resource_type} in the resource disaggregation config.")
+#             resource_fom:float=float(self.resource_disaggregation_config.get('fom', None))
+#             if resource_fom is None:
+#                 raise ValueError(f"FOM value is missing for {self.resource_type} in the resource disaggregation config.")
+#             resource_vom:float=float(self.resource_disaggregation_config.get('vom', None))
+#             if resource_vom is None:
+#                 raise ValueError(f"VOM value is missing for {self.resource_type} in the resource disaggregation config.")
+            
+#         else:
+#             self.ATB:Dict[str,dict]=super().get_atb_config()
+#             source_column:str= self.ATB.get('column',{})
+#             cost_params_mapping:Dict[str,str]=self.ATB.get('cost_params',{})
+            
+#             # capex,fom,vom in NREL is given in US$/kw and we need to convert it to million $/MW
+#             resource_capex:float=resource_atb[resource_atb[source_column]==cost_params_mapping.get('capex',{})].value.iloc[0]/ 1E3  # Convert to million $/MW
+#             resource_fom:float=resource_atb[resource_atb[source_column]==cost_params_mapping.get('fom',{})].value.iloc[0] /1E3  # Convert to million $/MW
+            
+#             # Initialize resource_vom based on the availability of 'vom' in cost_params_mapping
+#             resource_vom = 0.0
+
+#             if cost_params_mapping.get('vom') is not None:
+#                 # Check if the DataFrame 'utility_scale_cost' is not empty and get the value for 'vom'
+#                 if not resource_atb.empty:
+#                     vom_row = resource_atb[resource_atb[source_column] == cost_params_mapping['vom']]
+#                     if not vom_row.empty:
+#                         resource_vom = vom_row['value'].iloc[0] / 1E3  # Convert to million $/MW
+        
+#         cost_components:dict={
+#             'resource_capex': resource_capex,                    # million $/MW
+#             'resource_vom': resource_vom,                        # million $/MW
+#             'resource_fom': resource_fom,                        # million $/MW
+#             'grid_connection_cost_per_km': grid_connection_cost_per_km,  # million $
+#             'tx_line_rebuild_cost': tx_line_rebuild_cost         # million $
+#         }
+        
+#         # Validation
+#         expected_keys = ['resource_capex', 'resource_vom', 'resource_fom', 
+#                         'grid_connection_cost_per_km', 'tx_line_rebuild_cost']
+        
+#         assert all(key in cost_components for key in expected_keys), "Missing cost components"
+#         assert all(isinstance(value, (int, float)) for value in cost_components.values()), "All values must be numeric"
+        
+#         # Return as ordered dictionary
+#         return cost_components
+# """ 
+    def load_cost(self, resource_atb: pd.DataFrame = None) -> dict:
         """
-        Extracts cost parameters from the NREL ATB DataFrame and converts them to million $/MW.
+        Extract cost parameters for the resource and return them in million $/MW.
+
+        Precedence for each resource cost parameter (capex, fom, vom):
+        1. resource_disaggregation_config
+        2. NREL ATB (if provided)
+        3. default / error handling
+
+        Rules:
+        - capex: required
+        - fom: required
+        - vom: optional, defaults to 0.0 if missing in both config and ATB
 
         Args:
-            resource_atb (pd.DataFrame): DataFrame containing NREL ATB cost data for the resource type.
+            resource_atb (pd.DataFrame, optional):
+                DataFrame containing NREL ATB cost data for the resource type.
 
         Returns:
-            dict: A dictionary containing the following cost parameters:
-                - resource_capex: Capital expenditure in million $/MW
-                - resource_vom: Variable operation and maintenance cost in million $/MW
-                - resource_fom: Fixed operation and maintenance cost in million $/MW
-                - grid_connection_cost_per_km: Grid connection cost per kilometer in million $
-                - tx_line_rebuild_cost: Transmission line rebuild cost in million $
+            dict:
+                {
+                    'resource_capex': float,               # million $/MW
+                    'resource_vom': float,                 # million $/MW
+                    'resource_fom': float,                 # million $/MW
+                    'grid_connection_cost_per_km': float, # million $/km
+                    'tx_line_rebuild_cost': float         # million $
+                }
         """
-        
-        utils.print_update(level=PRINT_LEVEL_BASE+1,
-                           message=f"{__name__}| Extracting cost attributes...")
-        self.transmission_config = self.config.get('capacity_disaggregation', {}).get('transmission', {}) # INHERITED ATTRIBUTE from AttributesParser
-        grid_connection_cost_per_km = self.transmission_config.get('grid_connection_cost_per_Km', 0)
-        utils.print_info(f"{__name__}| @ Line: {inspect.currentframe().f_lineno-1} | `grid_connection_cost_per_km` is set to {grid_connection_cost_per_km} million $/km. If this is not set in the config, it will be set to 0.")
-        
-        tx_line_rebuild_cost = self.disaggregation_config.get('transmission', {}).get('tx_line_rebuild_cost', 0)
-        utils.print_info(f"{__name__}| @ Line: {inspect.currentframe().f_lineno-1} | `grid_connection_cost_per_km` is set to {grid_connection_cost_per_km} million $/km. If this is not set in the config, it will be set to 0.")
-        
-        
-        self.ATB:Dict[str,dict]=super().get_atb_config()
-        source_column:str= self.ATB.get('column',{})
-        cost_params_mapping:Dict[str,str]=self.ATB.get('cost_params',{})
-        
-        
-        # capex,fom,vom in NREL is given in US$/kw and we need to convert it to million $/MW
-        resource_capex:float=resource_atb[resource_atb[source_column]==cost_params_mapping.get('capex',{})].value.iloc[0]/ 1E3  # Convert to million $/MW
-        resource_fom:float=resource_atb[resource_atb[source_column]==cost_params_mapping.get('fom',{})].value.iloc[0] /1E3  # Convert to million $/MW
-        
-        # Initialize resource_vom based on the availability of 'vom' in cost_params_mapping
-        resource_vom = 0.0
 
-        if cost_params_mapping.get('vom') is not None:
-            # Check if the DataFrame 'utility_scale_cost' is not empty and get the value for 'vom'
-            if not resource_atb.empty:
-                vom_row = resource_atb[resource_atb[source_column] == cost_params_mapping['vom']]
-                if not vom_row.empty:
-                    resource_vom = vom_row['value'].iloc[0] / 1E3  # Convert to million $/MW
-        
-        cost_components:dict={
-            'resource_capex': resource_capex,                    # million $/MW
-            'resource_vom': resource_vom,                        # million $/MW
-            'resource_fom': resource_fom,                        # million $/MW
-            'grid_connection_cost_per_km': grid_connection_cost_per_km,  # million $
-            'tx_line_rebuild_cost': tx_line_rebuild_cost         # million $
+        utils.print_update(
+            level=PRINT_LEVEL_BASE + 1,
+            message=f"{__name__}| Extracting cost attributes..."
+        )
+
+        self.transmission_config = self.config.get("capacity_disaggregation", {}).get("transmission", {})
+        grid_connection_cost_per_km = float(
+            self.transmission_config.get("grid_connection_cost_per_Km", 0)
+        )
+        utils.print_info(
+            f"{__name__}| `grid_connection_cost_per_km` = {grid_connection_cost_per_km} million $/km."
+        )
+
+        tx_line_rebuild_cost = float(
+            self.disaggregation_config.get("transmission", {}).get("tx_line_rebuild_cost", 0)
+        )
+        utils.print_info(
+            f"{__name__}| `tx_line_rebuild_cost` = {tx_line_rebuild_cost} million $."
+        )
+
+        resource_cfg = self.resource_disaggregation_config or {}
+
+        source_column = None
+        cost_params_mapping = {}
+
+        if resource_atb is not None:
+            self.ATB: Dict[str, dict] = super().get_atb_config()
+            source_column = self.ATB.get("column")
+            cost_params_mapping = self.ATB.get("cost_params", {})
+
+            if source_column is None:
+                raise ValueError("ATB config is missing the 'column' definition.")
+
+        def _get_cfg_value(param_name: str):
+            """
+            Return float(config[param_name]) if present and not None, else None.
+            """
+            value = resource_cfg.get(param_name)
+            if value is None:
+                return None
+            try:
+                return float(value)
+            except (TypeError, ValueError) as e:
+                raise ValueError(
+                    f"Invalid {param_name} value in resource_disaggregation_config "
+                    f"for {self.resource_type}: {value}"
+                ) from e
+
+        def _get_atb_value(param_name: str):
+            """
+            Return float value from ATB (converted from US$/kW to million $/MW),
+            or None if unavailable.
+            """
+            if resource_atb is None or resource_atb.empty:
+                return None
+
+            atb_label = cost_params_mapping.get(param_name)
+            if atb_label is None:
+                return None
+
+            row = resource_atb[resource_atb[source_column] == atb_label]
+            if row.empty:
+                return None
+
+            try:
+                return float(row["value"].iloc[0]) / 1e3
+            except (TypeError, ValueError, KeyError, IndexError) as e:
+                raise ValueError(
+                    f"Could not extract ATB value for '{param_name}' "
+                    f"for {self.resource_type}."
+                ) from e
+
+        def _resolve_cost(param_name: str, required: bool = True, default=None) -> float:
+            """
+            Resolve cost parameter using priority:
+            config -> ATB -> default/error
+            """
+            cfg_value = _get_cfg_value(param_name)
+            if cfg_value is not None:
+                utils.print_info(
+                    f"{__name__}| Using '{param_name}' from resource_disaggregation_config "
+                    f"for {self.resource_type}: {cfg_value}"
+                )
+                return cfg_value
+
+            atb_value = _get_atb_value(param_name)
+            if atb_value is not None:
+                utils.print_info(
+                    f"{__name__}| Using '{param_name}' from ATB for {self.resource_type}: "
+                    f"{atb_value}"
+                )
+                return atb_value
+
+            if default is not None:
+                utils.print_info(
+                    f"{__name__}| '{param_name}' missing in both config and ATB for "
+                    f"{self.resource_type}. Using default = {default}"
+                )
+                return float(default)
+
+            if required:
+                raise ValueError(
+                    f"Missing required cost parameter '{param_name}' for {self.resource_type}. "
+                    f"Not found in resource_disaggregation_config or ATB."
+                )
+
+            return None
+
+        resource_capex = _resolve_cost("capex", required=True)
+        resource_fom = _resolve_cost("fom", required=True)
+        resource_vom = _resolve_cost("vom", required=False, default=0.0)
+
+        cost_components = {
+            "resource_capex": resource_capex,                      # million $/MW
+            "resource_vom": resource_vom,                          # million $/MW
+            "resource_fom": resource_fom,                          # million $/MW
+            "grid_connection_cost_per_km": grid_connection_cost_per_km,  # million $/km
+            "tx_line_rebuild_cost": tx_line_rebuild_cost          # million $
         }
-        
-        # Validation
-        expected_keys = ['resource_capex', 'resource_vom', 'resource_fom', 
-                        'grid_connection_cost_per_km', 'tx_line_rebuild_cost']
-        
+
+        expected_keys = [
+            "resource_capex",
+            "resource_vom",
+            "resource_fom",
+            "grid_connection_cost_per_km",
+            "tx_line_rebuild_cost",
+        ]
+
         assert all(key in cost_components for key in expected_keys), "Missing cost components"
-        assert all(isinstance(value, (int, float)) for value in cost_components.values()), "All values must be numeric"
-        
-        # Return as ordered dictionary
+        assert all(isinstance(value, (int, float)) for value in cost_components.values()), \
+            "All values must be numeric"
+
         return cost_components
     
     # Define a function to create bounding boxes (of cell) directly from coordinates (x, y) and resolution
@@ -398,7 +573,7 @@ class CellCapacityProcessor(AttributesParser):
         
         utils.print_update(level=PRINT_LEVEL_BASE+1,
                            message=f"{__name__}| Creating visuals for land-availability")
-        self.plot_ERAF5_grid_land_availability()
+        self.plot_ERA5_grid_land_availability()
         self.plot_excluder_land_availability(excluder=self.composite_excluder)
         
         area = self.cutout.grid.set_index(["y", "x"]).to_crs(self.crs_m).area / 1e6 # in Sq. km
@@ -417,10 +592,11 @@ class CellCapacityProcessor(AttributesParser):
         # Using reset_index(drop=True) discards those coordinates, so DON'T drop=True.
 
         # First try the straightforward path:
-        _df_flat = self.capacity_matrix.to_dataframe().reset_index()
+        _df_flat = self.capacity_matrix.to_dataframe()#.reset_index()
 
         # If for any reason x/y didn’t appear (older xarray/pandas edge cases), fall back to Series:
         if ("x" not in _df_flat.columns) or ("y" not in _df_flat.columns):
+            _df_flat   =_df_flat.reset_index()
             s = self.capacity_matrix.to_series()  # expands MultiIndex levels to columns on reset_index()
             _df_flat = s.reset_index()
             # ensure the value column is correctly named
@@ -482,7 +658,7 @@ class CellCapacityProcessor(AttributesParser):
     
     
 ## Visuals 
-    def plot_ERAF5_grid_land_availability(self,
+    def plot_ERA5_grid_land_availability(self,
                                           region_boundary:gpd.GeoDataFrame=None,
                                           Availability_matrix:xr.DataArray=None,
                                           figsize=(8, 6),
@@ -534,7 +710,7 @@ class CellCapacityProcessor(AttributesParser):
         
         
         # Categorize availability into bins
-        Availability_df["availability_category"] = pd.cut(Availability_df["availability"], bins=bins, labels=labels, include_lowest=True)
+        # Availability_df["availability_category"] = pd.cut(Availability_df["availability"], bins=bins, labels=labels, include_lowest=True)
 
         # Convert to GeoDataFrame
         A_gdf:gpd.GeoDataFrame = gpd.GeoDataFrame(
@@ -544,9 +720,11 @@ class CellCapacityProcessor(AttributesParser):
                 )
                 
         A_gdf=A_gdf.overlay(region_boundary)
+        A_gdf = A_gdf.rename(columns={"availability": f"LandAvailability_{self.resource_type}"})
+        self.datahandler.to_store(A_gdf,"LandAvailability")
 
         # Categorize availability into bins
-        A_gdf["availability_category"] = pd.cut(A_gdf["availability"], bins=bins, labels=labels, include_lowest=True)
+        A_gdf[f"LandAvailability_{self.resource_type}_category"] = pd.cut(A_gdf[f"LandAvailability_{self.resource_type}"], bins=bins, labels=labels, include_lowest=True)
         # Create figure and axes for side-by-side plotting
         fig, ax = plt.subplots(figsize=figsize,constrained_layout=True)
 
@@ -567,7 +745,7 @@ class CellCapacityProcessor(AttributesParser):
         # region_boundary_proj.plot(ax=ax, facecolor='none', edgecolor='gray', linewidth=2, alpha=0.3)  # Shadow layer
 
         # Plot solar cells
-        A_gdf_proj.plot(column='availability_category', ax=ax, cmap='Greens', legend=True, 
+        A_gdf_proj.plot(column=f'LandAvailability_{self.resource_type}_category', ax=ax, cmap='Greens', legend=True, 
                 legend_kwds={'title': "Land Availability", 'loc': 'upper right', 'bbox_to_anchor': legend_box_x_y,'borderpad': 1,'frameon': False})
 
         # Plot actual boundary for solar map
