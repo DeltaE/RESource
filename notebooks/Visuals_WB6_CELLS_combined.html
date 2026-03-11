@@ -384,7 +384,7 @@ document.write(`
 <section id="Define-RUN-TAG">
 <h2>Define RUN TAG<a class="headerlink" href="#Define-RUN-TAG" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RUN_ID</span> <span class="o">=</span> <span class="s1">&#39;vre_low_20260311&#39;</span>
@@ -396,7 +396,7 @@ document.write(`
 <li><p>load packages</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
@@ -420,7 +420,7 @@ document.write(`
 <li><p>Load Configs</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cfg</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../config/</span><span class="si">{</span><span class="n">config_name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -440,8 +440,8 @@ document.write(`
 </section>
 <section id="Load-Store">
 <h2>Load Store<a class="headerlink" href="#Load-Store" title="Link to this heading">#</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="c1">#All the regions should have RUN_ID results available</span>
@@ -465,25 +465,11 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-yellow-fg">└&gt; Loading data stores for WB6 regions with RUN_ID: vre_low_20260311 and Regions: [&#39;AL&#39;, &#39;BA&#39;, &#39;XK&#39;, &#39;ME&#39;, &#39;RS&#39;, &#39;MK&#39;]</span>
-<span class="ansi-cyan-fg"> └&gt; ✓ Loaded data for region: AL</span>
-<span class="ansi-cyan-fg"> └&gt; ✓ Loaded data for region: BA</span>
-<span class="ansi-cyan-fg"> └&gt; ✓ Loaded data for region: XK</span>
-<span class="ansi-cyan-fg"> └&gt; ✓ Loaded data for region: ME</span>
-<span class="ansi-cyan-fg"> └&gt; ✓ Loaded data for region: RS</span>
-<span class="ansi-cyan-fg"> └&gt; ✓ Loaded data for region: MK</span>
-</pre></div></div>
-</div>
 </section>
 <section id="Load-All-Cells">
 <h2>Load All Cells<a class="headerlink" href="#Load-All-Cells" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_cells_df</span><span class="o">=</span><span class="p">[</span><span class="n">WB6_store</span><span class="p">[</span><span class="n">region</span><span class="p">][</span><span class="s1">&#39;cells&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">WB6_store</span><span class="p">]</span>
@@ -496,7 +482,7 @@ document.write(`
 <section id="Interactive-Map">
 <h1>Interactive Map<a class="headerlink" href="#Interactive-Map" title="Link to this heading">#</a></h1>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">make_lcoe_map</span><span class="p">(</span>
@@ -513,8 +499,8 @@ document.write(`
 </section>
 <section id="Load-Test/Validation-data">
 <h1>Load Test/Validation data<a class="headerlink" href="#Load-Test/Validation-data" title="Link to this heading">#</a></h1>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">existing_VREs_data_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;../data/validation_data/existing_VREs_WB6.csv&quot;</span><span class="p">)</span>
@@ -528,14 +514,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-yellow-fg">└&gt; ✓ Loaded validation data for existing VREs from ../data/validation_data/existing_VREs_WB6.csv</span>
-</pre></div></div>
-</div>
 </section>
 <section id="Boundary">
 <h1>Boundary<a class="headerlink" href="#Boundary" title="Link to this heading">#</a></h1>
@@ -543,7 +521,7 @@ document.write(`
 <li><p>Prepare WB6 boundary</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Combine all region boundaries into a single GeoDataFrame</span>
@@ -557,7 +535,7 @@ document.write(`
 <li><p>Process the boundary info for raster plotting</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">WB6_boundary_dissolved_reproj</span><span class="o">=</span><span class="n">WB6_boundary_dissolved</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">CRS_m</span><span class="p">)</span>
@@ -578,7 +556,7 @@ document.write(`
 <li><p>Create cells' instance for plotting (CRS-m)</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">WB6_cells</span><span class="o">.</span><span class="n">crs</span> <span class="o">!=</span> <span class="n">CRS_m</span><span class="p">:</span>
@@ -588,40 +566,19 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">WB6_cells_plot</span><span class="o">.</span><span class="n">columns</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Municipality&#39;, &#39;geometry&#39;, &#39;centroid&#39;,
-       &#39;nearest_connection_point&#39;, &#39;nearest_distance&#39;,
-       &#39;LandAvailability_ERA5_wind&#39;, &#39;geom_area_km2&#39;, &#39;Developable_area_wind&#39;,
-       &#39;potential_capacity_wind&#39;, &#39;capex_wind&#39;, &#39;fom_wind&#39;, &#39;vom_wind&#39;,
-       &#39;grid_connection_cost_per_km_wind&#39;, &#39;tx_line_rebuild_cost_wind&#39;,
-       &#39;Operational_life_wind&#39;, &#39;windspeed_ERA5&#39;, &#39;y_1&#39;, &#39;x_1&#39;,
-       &#39;windspeed_gwa&#39;, &#39;CF_IEC1&#39;, &#39;CF_IEC2&#39;, &#39;CF_IEC3&#39;, &#39;wind_CF_mean&#39;,
-       &#39;lcoe_wind&#39;, &#39;lcoe_actualCap_wind&#39;, &#39;LandAvailability_ERA5_solar&#39;,
-       &#39;Developable_area_solar&#39;, &#39;potential_capacity_solar&#39;, &#39;capex_solar&#39;,
-       &#39;fom_solar&#39;, &#39;vom_solar&#39;, &#39;grid_connection_cost_per_km_solar&#39;,
-       &#39;tx_line_rebuild_cost_solar&#39;, &#39;Operational_life_solar&#39;, &#39;solar_CF_mean&#39;,
-       &#39;lcoe_solar&#39;, &#39;lcoe_actualCap_solar&#39;],
-      dtype=&#39;object&#39;)
-</pre></div></div>
-</div>
 <ul class="simple">
 <li><p>Plot combined Availability</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -704,20 +661,13 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Municipality&#39;, &#39
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_WB6_CELLS_combined_24_0.png" src="../_images/notebooks_Visuals_WB6_CELLS_combined_24_0.png" />
-</div>
-</div>
 </section>
 <section id="Attribute-Maps">
 <h1>Attribute Maps<a class="headerlink" href="#Attribute-Maps" title="Link to this heading">#</a></h1>
 <section id="Load-Capacity-and-Scores">
 <h2>Load Capacity and Scores<a class="headerlink" href="#Load-Capacity-and-Scores" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">existing_VREs_gdf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">existing_VREs_gdf</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
@@ -733,8 +683,8 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Municipality&#39;, &#39
 <ul class="simple">
 <li><p>Calculate</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">RES.CellCapacityProcessor</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_sub_nationally_aggregated_capacity</span>
@@ -750,87 +700,11 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Municipality&#39;, &#39
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Country</th>
-      <th>potential_capacity_solar_GW</th>
-      <th>potential_capacity_wind_GW</th>
-      <th>geometry</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Albania</td>
-      <td>9.151</td>
-      <td>20.865</td>
-      <td>MULTIPOLYGON (((20.1153 39.6623, 20.0897 39.67...</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Bosnia and Herzegovina</td>
-      <td>21.494</td>
-      <td>60.841</td>
-      <td>POLYGON ((18.9897 44.8614, 19.01 44.8644, 19.0...</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Kosovo</td>
-      <td>3.761</td>
-      <td>9.625</td>
-      <td>POLYGON ((20.5829 41.9061, 20.5822 41.9114, 20...</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Montenegro</td>
-      <td>1.982</td>
-      <td>9.544</td>
-      <td>MULTIPOLYGON (((19.1379 41.9935, 19.1393 41.99...</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>North Macedonia</td>
-      <td>2.590</td>
-      <td>8.715</td>
-      <td>POLYGON ((20.9335 40.9208, 20.9114 40.9139, 20...</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>Serbia</td>
-      <td>43.738</td>
-      <td>98.592</td>
-      <td>MULTIPOLYGON (((20.4512 42.9111, 20.4577 42.90...</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
 <ul class="simple">
 <li><p>plot</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">WB6_capacity_map</span><span class="o">.</span><span class="n">crs</span> <span class="o">!=</span> <span class="n">CRS_m</span><span class="p">:</span>
@@ -840,8 +714,8 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Municipality&#39;, &#39
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.patheffects</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pe</span>
@@ -955,33 +829,11 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Municipality&#39;, &#39
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3035</span>
-<span class="ansi-cyan-fg"> └&gt; ⚠️ &#39;facility_installed_capacity&#39; not found. Using constant marker size = 1.0.</span>
-<span class="ansi-cyan-fg"> └&gt; No committed VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3035</span>
-<span class="ansi-cyan-fg"> └&gt; ⚠️ &#39;facility_installed_capacity&#39; not found. Using constant marker size = 1.0.</span>
-<span class="ansi-cyan-fg"> └&gt; No committed VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_WB6_CELLS_combined_33_1.png" src="../_images/notebooks_Visuals_WB6_CELLS_combined_33_1.png" />
-</div>
-</div>
 </section>
 <section id="Aggregated-Capacity-with-LCOE-thresholds">
 <h3>Aggregated Capacity with LCOE thresholds<a class="headerlink" href="#Aggregated-Capacity-with-LCOE-thresholds" title="Link to this heading">#</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">WB6_cells_plot_solar</span><span class="o">=</span><span class="n">WB6_cells_plot</span><span class="p">[</span><span class="n">WB6_cells_plot</span><span class="p">[</span><span class="s1">&#39;lcoe_solar&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">70</span><span class="p">]</span>
@@ -991,8 +843,8 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Municipality&#39;, &#39
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">RES.CellCapacityProcessor</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_sub_nationally_aggregated_capacity</span>
@@ -1010,87 +862,11 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Municipality&#39;, &#39
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Country</th>
-      <th>potential_capacity_solar_GW</th>
-      <th>potential_capacity_wind_GW</th>
-      <th>geometry</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Albania</td>
-      <td>7.2328</td>
-      <td>6.7728</td>
-      <td>MULTIPOLYGON (((5190975.432 1899124.388, 51885...</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Bosnia and Herzegovina</td>
-      <td>17.1336</td>
-      <td>16.1814</td>
-      <td>POLYGON ((5030843.786 2459442.94, 5032399.725 ...</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Kosovo</td>
-      <td>3.0088</td>
-      <td>4.5252</td>
-      <td>POLYGON ((5199067.813 2150908.499, 5198933.893...</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Montenegro</td>
-      <td>1.5856</td>
-      <td>4.7106</td>
-      <td>MULTIPOLYGON (((5078806.694 2144840.268, 50789...</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>North Macedonia</td>
-      <td>2.0712</td>
-      <td>1.3818</td>
-      <td>POLYGON ((5242487.64 2046897.103, 5240740.767 ...</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>Serbia</td>
-      <td>34.9456</td>
-      <td>47.8008</td>
-      <td>MULTIPOLYGON (((5173846.865 2259864.759, 51744...</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
 <ul class="simple">
 <li><p>plot</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -1239,33 +1015,10 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Municipality&#39;, &#39
 <br/></pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3035</span>
-<span class="ansi-cyan-fg"> └&gt; ⚠️ &#39;facility_installed_capacity&#39; not found. Using constant marker size = 1.0.</span>
-<span class="ansi-cyan-fg"> └&gt; No committed VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3035</span>
-<span class="ansi-cyan-fg"> └&gt; ⚠️ &#39;facility_installed_capacity&#39; not found. Using constant marker size = 1.0.</span>
-<span class="ansi-cyan-fg"> └&gt; No committed VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_WB6_CELLS_combined_38_1.png" src="../_images/notebooks_Visuals_WB6_CELLS_combined_38_1.png" />
-</div>
-</div>
 <section id="Assumption-2-no-haircuts">
 <h4>Assumption 2 no haircuts<a class="headerlink" href="#Assumption-2-no-haircuts" title="Link to this heading">#</a></h4>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">WB6_cells_plot_solar</span><span class="o">=</span><span class="n">WB6_cells_plot</span><span class="p">[</span><span class="n">WB6_cells_plot</span><span class="p">[</span><span class="s1">&#39;lcoe_solar&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">70</span><span class="p">]</span>
@@ -1286,87 +1039,11 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Municipality&#39;, &#39
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Country</th>
-      <th>potential_capacity_solar_GW</th>
-      <th>potential_capacity_wind_GW</th>
-      <th>geometry</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Albania</td>
-      <td>9.041</td>
-      <td>7.880</td>
-      <td>MULTIPOLYGON (((5190975.432 1899124.388, 51885...</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Bosnia and Herzegovina</td>
-      <td>21.417</td>
-      <td>18.685</td>
-      <td>POLYGON ((5030843.786 2459442.94, 5032399.725 ...</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Kosovo</td>
-      <td>3.761</td>
-      <td>5.460</td>
-      <td>POLYGON ((5199067.813 2150908.499, 5198933.893...</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Montenegro</td>
-      <td>1.982</td>
-      <td>5.718</td>
-      <td>MULTIPOLYGON (((5078806.694 2144840.268, 50789...</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>North Macedonia</td>
-      <td>2.589</td>
-      <td>1.036</td>
-      <td>POLYGON ((5242487.64 2046897.103, 5240740.767 ...</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>Serbia</td>
-      <td>43.682</td>
-      <td>59.408</td>
-      <td>MULTIPOLYGON (((5173846.865 2259864.759, 51744...</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
 <ul class="simple">
 <li><p>plot</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -1515,29 +1192,6 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Municipality&#39;, &#39
 <br/></pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3035</span>
-<span class="ansi-cyan-fg"> └&gt; ⚠️ &#39;facility_installed_capacity&#39; not found. Using constant marker size = 1.0.</span>
-<span class="ansi-cyan-fg"> └&gt; No committed VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3035</span>
-<span class="ansi-cyan-fg"> └&gt; ⚠️ &#39;facility_installed_capacity&#39; not found. Using constant marker size = 1.0.</span>
-<span class="ansi-cyan-fg"> └&gt; No committed VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_WB6_CELLS_combined_42_1.png" src="../_images/notebooks_Visuals_WB6_CELLS_combined_42_1.png" />
-</div>
-</div>
 </section>
 </section>
 <section id="Capacity-Factor">
@@ -1545,8 +1199,8 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Municipality&#39;, &#39
 <ul class="simple">
 <li><p>Individual Maps</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
@@ -1647,34 +1301,11 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Municipality&#39;, &#39
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3035</span>
-<span class="ansi-cyan-fg"> └&gt; ⚠️ &#39;facility_installed_capacity&#39; not found. Using constant marker size = 1.0.</span>
-<span class="ansi-cyan-fg"> └&gt; No committed VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3035</span>
-<span class="ansi-cyan-fg"> └&gt; ⚠️ &#39;facility_installed_capacity&#39; not found. Using constant marker size = 1.0.</span>
-<span class="ansi-cyan-fg"> └&gt; No committed VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_WB6_CELLS_combined_45_1.png" src="../_images/notebooks_Visuals_WB6_CELLS_combined_45_1.png" />
-</div>
-</div>
 </section>
 <section id="Capacity">
 <h3>Capacity<a class="headerlink" href="#Capacity" title="Link to this heading">#</a></h3>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -1803,34 +1434,11 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Municipality&#39;, &#39
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3035</span>
-<span class="ansi-cyan-fg"> └&gt; ⚠️ &#39;facility_installed_capacity&#39; not found. Using constant marker size = 1.0.</span>
-<span class="ansi-cyan-fg"> └&gt; No committed VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3035</span>
-<span class="ansi-cyan-fg"> └&gt; ⚠️ &#39;facility_installed_capacity&#39; not found. Using constant marker size = 1.0.</span>
-<span class="ansi-cyan-fg"> └&gt; No committed VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_WB6_CELLS_combined_47_1.png" src="../_images/notebooks_Visuals_WB6_CELLS_combined_47_1.png" />
-</div>
-</div>
 </section>
 <section id="Score">
 <h3>Score<a class="headerlink" href="#Score" title="Link to this heading">#</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">WB6_cells_clean_solar</span> <span class="o">=</span> <span class="n">WB6_cells_plot</span><span class="p">[(</span><span class="n">WB6_cells_plot</span><span class="p">[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span><span class="p">(</span><span class="n">WB6_cells_plot</span><span class="p">[</span><span class="s1">&#39;solar_CF_mean&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)]</span>
@@ -1841,8 +1449,8 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Municipality&#39;, &#39
 <ul class="simple">
 <li><p>Score with Capacity</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -2002,29 +1610,6 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Municipality&#39;, &#39
 <br/></pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3035</span>
-<span class="ansi-cyan-fg"> └&gt; ⚠️ &#39;facility_installed_capacity&#39; not found. Using constant marker size = 1.0.</span>
-<span class="ansi-cyan-fg"> └&gt; No committed VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3035</span>
-<span class="ansi-cyan-fg"> └&gt; ⚠️ &#39;facility_installed_capacity&#39; not found. Using constant marker size = 1.0.</span>
-<span class="ansi-cyan-fg"> └&gt; No committed VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_WB6_CELLS_combined_51_1.png" src="../_images/notebooks_Visuals_WB6_CELLS_combined_51_1.png" />
-</div>
-</div>
 </section>
 </section>
 </section>
@@ -2034,7 +1619,7 @@ Index([&#39;x&#39;, &#39;y&#39;, &#39;Country&#39;, &#39;Municipality&#39;, &#39
 <li><p>Cleanup Solar and Wind cells</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">make_lcoe_map</span><span class="p">(</span>
