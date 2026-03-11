@@ -161,6 +161,7 @@
 
 <li class="toctree-l1"><a class="reference internal" href="../../notes/config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">Best Practices and Guidelines</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
@@ -802,7 +803,7 @@ document.write(`
         <span class="c1"># Check that all required columns were found</span>
         <span class="n">missing_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">required_columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">missing_columns</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;Missing required columns or alternatives not found&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Required columns </span><span class="si">{</span><span class="nb">set</span><span class="p">(</span><span class="n">missing_columns</span><span class="p">)</span><span class="si">}</span><span class="s2">or alternatives not found&quot;</span><span class="p">)</span>
         
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
                        <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Calculating score for cells...&quot;</span><span class="p">)</span> 

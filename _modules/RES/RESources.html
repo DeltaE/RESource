@@ -161,6 +161,7 @@
 
 <li class="toctree-l1"><a class="reference internal" href="../../notes/config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">Best Practices and Guidelines</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
@@ -563,8 +564,7 @@ document.write(`
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Preparing Grid Cells...&quot;</span><span class="p">)</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">region_grid_cells</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gridcells</span><span class="o">.</span><span class="n">get_default_grid</span><span class="p">()</span>
-        
+        <span class="bp">self</span><span class="o">.</span><span class="n">region_grid_cells</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gridcells</span><span class="o">.</span><span class="n">get_default_grid</span><span class="p">()</span>        
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Grid Cells updated.&quot;</span><span class="p">)</span>
         
@@ -586,13 +586,18 @@ document.write(`
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
                            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Preparing Cells&#39; capacity...&quot;</span><span class="p">)</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">cells_with_capacity</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity_matrix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_processor</span><span class="o">.</span><span class="n">get_capacity</span><span class="p">()</span>
+        <span class="c1"># self.cells_with_capacity,self.capacity_matrix=self.cell_processor.get_capacity()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cells_with_capacity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_processor</span><span class="o">.</span><span class="n">get_capacity</span><span class="p">()</span>
         
+        <span class="c1"># self.datahandler.refresh()</span>
+        <span class="c1"># self.cell_capacity_gdf=self.datahandler.from_store(&#39;cells&#39;)</span>
                 
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
-                           <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Cells&#39; capacity updated.&quot;</span><span class="p">)</span>
-        
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells_with_capacity</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity_matrix</span> <span class="c1"># returns a namedtuple with `data` and `matrix attributes</span></div>
+                           <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">| Cells&#39; actual capacity updated.&quot;</span><span class="p">)</span>
+        <span class="c1"># self.datahandler.to_store(self.cell_capacity_gdf,&#39;cells&#39;)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells_with_capacity</span><span class="c1">#,self.capacity_matrix # returns a namedtuple with `data` and `matrix attributes</span></div>
+
+    
 
     
 <div class="viewcode-block" id="RESources_builder.extract_weather_data">
@@ -842,7 +847,8 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">not_scored_cells</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;cells&#39;</span><span class="p">)</span>
             
-        <span class="bp">self</span><span class="o">.</span><span class="n">scored_cells</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scorer</span><span class="o">.</span><span class="n">get_cell_score</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">not_scored_cells</span><span class="p">,</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">_CF_mean&#39;</span><span class="p">)</span> <span class="c1"># </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scored_cells</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scorer</span><span class="o">.</span><span class="n">get_cell_score</span><span class="p">(</span><span class="n">cells</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">not_scored_cells</span><span class="p">,</span>
+                                                       <span class="n">CF_column</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="si">}</span><span class="s1">_CF_mean&#39;</span><span class="p">)</span> <span class="c1"># </span>
         
         <span class="c1"># # Add new columns to the existing DataFrame</span>
         <span class="c1"># for column in self.scored_cells.columns:</span>

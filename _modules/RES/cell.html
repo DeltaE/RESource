@@ -161,6 +161,7 @@
 
 <li class="toctree-l1"><a class="reference internal" href="../../notes/config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">Best Practices and Guidelines</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
@@ -563,13 +564,36 @@ document.write(`
 <div class="viewcode-block" id="GridCells.get_default_grid">
 <a class="viewcode-back" href="../../notes/api.html#RES.cell.GridCells.get_default_grid">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_default_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ERA5Cutout</span><span class="o">.</span><span class="n">get_era5_cutout</span><span class="p">()</span>
-        <span class="n">_era5_grid_cells_gdf_</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="o">.</span><span class="n">grid</span>
-        <span class="n">_resource_grid_cells_gdf_</span><span class="o">=</span><span class="n">_era5_grid_cells_gdf_</span><span class="o">.</span><span class="n">overlay</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">resource_grid_cells</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">assign_cell_id</span><span class="p">(</span><span class="n">_resource_grid_cells_gdf_</span><span class="p">,</span>
-            <span class="n">source_column</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gadmBoundary</span><span class="o">.</span><span class="n">sub_national_unit_tag</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_grid_cells</span><span class="p">,</span><span class="s1">&#39;cells&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="p">,</span><span class="s1">&#39;boundary&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ERA5Cutout</span><span class="o">.</span><span class="n">get_era5_cutout</span><span class="p">()</span>
+
+        <span class="n">resource_grid_cells</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="o">.</span><span class="n">grid</span>
+            <span class="c1"># .to_crs(self.crs_m)</span>
+            <span class="c1"># .assign(ERA5_cell_area_km2=lambda df: df.geometry.area / 1e6)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># region_boundary_m = self.region_boundary.to_crs(self.crs_m)</span>
+
+        <span class="n">resource_grid_cells</span><span class="o">=</span> <span class="n">resource_grid_cells</span><span class="o">.</span><span class="n">overlay</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="p">,</span>
+            <span class="n">how</span><span class="o">=</span><span class="s2">&quot;intersection&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_grid_cells</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">assign_cell_id</span><span class="p">(</span>
+            <span class="n">resource_grid_cells</span><span class="p">,</span>
+            <span class="n">source_column</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gadmBoundary</span><span class="o">.</span><span class="n">sub_national_unit_tag</span>
+        <span class="p">)</span>
+
+        <span class="c1"># self.resource_grid_cells_gdf_m[&quot;geom_area_km2&quot;] = self.resource_grid_cells_gdf_m.geometry.area / 1e6</span>
+        <span class="c1"># self.resource_grid_cells_gdf_m[&quot;geom_area_share&quot;] = (</span>
+        <span class="c1">#     self.resource_grid_cells_gdf_m[&quot;geom_area_km2&quot;] /</span>
+        <span class="c1">#     self.resource_grid_cells_gdf_m[&quot;ERA5_cell_area_km2&quot;]</span>
+        <span class="c1"># )</span>
+        
+        <span class="c1"># self.resource_grid_cells=self.resource_grid_cells_gdf.to_crs(self.crs_d)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_grid_cells</span><span class="p">,</span> <span class="s2">&quot;cells&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">to_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="p">,</span> <span class="s2">&quot;boundary&quot;</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_grid_cells</span></div>
 </div>
 

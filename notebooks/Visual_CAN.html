@@ -42,8 +42,6 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/Visual_CAN';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -162,8 +160,10 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../notes/resource_builder.html">RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../notes/config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/learning.html">Best Practices and Guidelines</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../notes/data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/developers.html">Contributing Developers</a></li>
 </ul>
@@ -419,16 +419,16 @@ document.write(`
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[2]</span><span class="ansi-green-fg">, line 1</span>
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">1</span> cfg=<span class="ansi-yellow-bg">utils</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">load_config</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-fg ansi-yellow-bg">&#39;</span><span class="ansi-yellow-fg ansi-yellow-bg">../config/config_CAN.yaml</span><span class="ansi-yellow-fg ansi-yellow-bg">&#39;</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-fg">      2</span> sub_national_unit_tag=cfg.get(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">GADM</span><span class="ansi-yellow-fg">&#39;</span>).get(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">datafield_mapping</span><span class="ansi-yellow-fg">&#39;</span>).get(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">NAME_2</span><span class="ansi-yellow-fg">&#39;</span>)
-<span class="ansi-green-fg">      3</span> country_name=cfg.get(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">country</span><span class="ansi-yellow-fg">&#39;</span>,<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">Canada</span><span class="ansi-yellow-fg">&#39;</span>) <span style="color: rgb(95,135,135)"># type: ignore</span>
+Cell <span class="ansi-green-fg">In[2], line 1</span>
+<span class="ansi-green-fg">----&gt; 1</span> cfg<span style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">utils</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">load_config</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">../config/config_CAN.yaml</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> sub_national_unit_tag<span style="color: rgb(98,98,98)">=</span>cfg<span style="color: rgb(98,98,98)">.</span>get(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">GADM</span><span style="color: rgb(175,0,0)">&#39;</span>)<span style="color: rgb(98,98,98)">.</span>get(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">datafield_mapping</span><span style="color: rgb(175,0,0)">&#39;</span>)<span style="color: rgb(98,98,98)">.</span>get(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">NAME_2</span><span style="color: rgb(175,0,0)">&#39;</span>)
+<span class="ansi-green-intense-fg ansi-bold">      3</span> country_name<span style="color: rgb(98,98,98)">=</span>cfg<span style="color: rgb(98,98,98)">.</span>get(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">country</span><span style="color: rgb(175,0,0)">&#39;</span>,<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">Canada</span><span style="color: rgb(175,0,0)">&#39;</span>) <span style="color: rgb(95,135,135)"># type: ignore</span>
 
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">/local-scratch/localhome/mei3/eliasinul/work/RESource/RES/utility.py:302</span>, in <span class="ansi-cyan-fg">load_config</span><span class="ansi-blue-fg">(file_path)</span>
-<span class="ansi-green-fg">    300</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span><span style="color: rgb(188,188,188)"> </span><span class="ansi-blue-fg">load_config</span>(file_path):
-<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">302</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">with</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">open</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">file_path</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-fg ansi-yellow-bg">&#39;</span><span class="ansi-yellow-fg ansi-yellow-bg">r</span><span class="ansi-yellow-fg ansi-yellow-bg">&#39;</span><span class="ansi-yellow-bg">)</span> <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> file:
-<span class="ansi-green-fg">    303</span>         data = yaml.safe_load(file)
-<span class="ansi-green-fg">    305</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> data
+File <span class="ansi-green-fg">/local-scratch/localhome/mei3/eliasinul/work/RESource/RES/utility.py:297</span>, in <span class="ansi-cyan-fg">load_config</span><span class="ansi-blue-fg">(file_path)</span>
+<span class="ansi-green-intense-fg ansi-bold">    295</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">load_config</span>(file_path):
+<span class="ansi-green-fg">--&gt; 297</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">with</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">open</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">file_path</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">r</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg">)</span> <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> file:
+<span class="ansi-green-intense-fg ansi-bold">    298</span>         data <span style="color: rgb(98,98,98)">=</span> yaml<span style="color: rgb(98,98,98)">.</span>safe_load(file)
+<span class="ansi-green-intense-fg ansi-bold">    300</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> data
 
 <span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;../config/config_CAN.yaml&#39;
 </pre></div></div>

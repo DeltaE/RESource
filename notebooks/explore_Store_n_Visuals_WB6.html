@@ -42,8 +42,6 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/explore_Store_n_Visuals_WB6';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -162,8 +160,10 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../notes/resource_builder.html">RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../notes/config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/learning.html">Best Practices and Guidelines</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../notes/data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/developers.html">Contributing Developers</a></li>
 </ul>
@@ -445,7 +445,7 @@ document.write(`
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "869c100f9f354b419cada3fff541640b", "version_major": 2, "version_minor": 0}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d7010bec77dc4d4aa32935dd9627e0ac", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -483,7 +483,7 @@ document.write(`
 <section id="Define-run/scenario">
 <h2>Define run/scenario<a class="headerlink" href="#Define-run/scenario" title="Link to this heading">#</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the directory and search pattern</span>
@@ -498,7 +498,7 @@ document.write(`
 
 
 
-<span class="n">RUN_ID</span><span class="o">=</span><span class="s2">&quot;default&quot;</span>
+<span class="n">RUN_ID</span><span class="o">=</span><span class="s2">&quot;vre_low&quot;</span>
 
 <span class="c1"># Create dropdown widget</span>
 <span class="n">run_id_dropdown</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
@@ -516,90 +516,7 @@ document.write(`
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">StopIteration</span>                             Traceback (most recent call last)
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/ipywidgets/widgets/widget_selection.py:133</span>, in <span class="ansi-cyan-fg">findvalue</span><span class="ansi-blue-fg">(array, value, compare)</span>
-<span class="ansi-green-fg">    132</span> <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
-<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">133</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">next</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">x</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">for</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">x</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(175,0,255)">in</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">array</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">if</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">compare</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">x</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">value</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-fg">    134</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">StopIteration</span>:
-
-<span class="ansi-red-fg">StopIteration</span>:
-
-During handling of the above exception, another exception occurred:
-
-<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/ipywidgets/widgets/widget_selection.py:242</span>, in <span class="ansi-cyan-fg">_Selection._validate_value</span><span class="ansi-blue-fg">(self, proposal)</span>
-<span class="ansi-green-fg">    241</span> <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
-<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">242</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">findvalue</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_options_values</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">value</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">equals</span><span class="ansi-yellow-bg">)</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> value <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>
-<span class="ansi-green-fg">    243</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ValueError</span>:
-
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/ipywidgets/widgets/widget_selection.py:135</span>, in <span class="ansi-cyan-fg">findvalue</span><span class="ansi-blue-fg">(array, value, compare)</span>
-<span class="ansi-green-fg">    134</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">StopIteration</span>:
-<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">135</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ValueError</span>(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-bold" style="color: rgb(175,95,135)">%r</span><span class="ansi-yellow-fg"> not in array</span><span class="ansi-yellow-fg">&#39;</span>%value)
-
-<span class="ansi-red-fg">ValueError</span>: &#39;default&#39; not in array
-
-During handling of the above exception, another exception occurred:
-
-<span class="ansi-red-fg">TraitError</span>                                Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[4]</span><span class="ansi-green-fg">, line 16</span>
-<span class="ansi-green-fg">     13</span> RUN_ID=<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">default</span><span class="ansi-yellow-fg">&#34;</span>
-<span class="ansi-green-fg">     15</span> <span style="color: rgb(95,135,135)"># Create dropdown widget</span>
-<span class="ansi-green-fg">---&gt; </span><span class="ansi-green-fg">16</span> run_id_dropdown = <span class="ansi-yellow-bg">widgets</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">Dropdown</span><span class="ansi-yellow-bg">(</span>
-<span class="ansi-green-fg">     17</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">options</span><span class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">run_ids</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-fg">     18</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">value</span><span class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">RUN_ID</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-fg">     19</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">description</span><span class="ansi-yellow-bg">=</span><span class="ansi-yellow-fg ansi-yellow-bg">&#39;</span><span class="ansi-yellow-fg ansi-yellow-bg">Run ID:</span><span class="ansi-yellow-fg ansi-yellow-bg">&#39;</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-fg">     20</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">disabled</span><span class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">False</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-fg">     21</span> <span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-fg">     23</span> display(run_id_dropdown)
-
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/ipywidgets/widgets/widget_selection.py:186</span>, in <span class="ansi-cyan-fg">_Selection.__init__</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
-<span class="ansi-green-fg">    183</span>     kwargs[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">index</span><span class="ansi-yellow-fg">&#39;</span>] = <span class="ansi-green-fg">0</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> nonempty <span class="ansi-bold" style="color: rgb(0,135,0)">else</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>
-<span class="ansi-green-fg">    184</span>     kwargs[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">label</span><span class="ansi-yellow-fg">&#39;</span>], kwargs[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">value</span><span class="ansi-yellow-fg">&#39;</span>] = options[<span class="ansi-green-fg">0</span>] <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> nonempty <span class="ansi-bold" style="color: rgb(0,135,0)">else</span> (<span class="ansi-bold" style="color: rgb(0,135,0)">None</span>, <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>)
-<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">186</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">super</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">.</span><span class="ansi-blue-fg ansi-yellow-bg">__init__</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">args</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-fg">    187</span> <span style="color: rgb(0,135,0)">self</span>._initializing_traits_ = <span class="ansi-bold" style="color: rgb(0,135,0)">False</span>
-
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/ipywidgets/widgets/widget_description.py:35</span>, in <span class="ansi-cyan-fg">DescriptionWidget.__init__</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
-<span class="ansi-green-fg">     33</span>     kwargs.setdefault(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">tooltip</span><span class="ansi-yellow-fg">&#39;</span>, kwargs[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">description_tooltip</span><span class="ansi-yellow-fg">&#39;</span>])
-<span class="ansi-green-fg">     34</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">del</span> kwargs[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">description_tooltip</span><span class="ansi-yellow-fg">&#39;</span>]
-<span class="ansi-green-fg">---&gt; </span><span class="ansi-green-fg">35</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">super</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">.</span><span class="ansi-blue-fg ansi-yellow-bg">__init__</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">args</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
-
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/ipywidgets/widgets/widget.py:503</span>, in <span class="ansi-cyan-fg">Widget.__init__</span><span class="ansi-blue-fg">(self, **kwargs)</span>
-<span class="ansi-green-fg">    501</span> <span class="ansi-yellow-fg">&#34;&#34;&#34;Public constructor&#34;&#34;&#34;</span>
-<span class="ansi-green-fg">    502</span> <span style="color: rgb(0,135,0)">self</span>._model_id = kwargs.pop(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">model_id</span><span class="ansi-yellow-fg">&#39;</span>, <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>)
-<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">503</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">super</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">.</span><span class="ansi-blue-fg ansi-yellow-bg">__init__</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-fg">    505</span> Widget._call_widget_constructed(<span style="color: rgb(0,135,0)">self</span>)
-<span class="ansi-green-fg">    506</span> <span style="color: rgb(0,135,0)">self</span>.open()
-
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/traitlets/traitlets.py:1369</span>, in <span class="ansi-cyan-fg">HasTraits.__init__</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
-<span class="ansi-green-fg">   1367</span> changed = <span style="color: rgb(0,135,0)">set</span>(kwargs) &amp; <span style="color: rgb(0,135,0)">set</span>(<span style="color: rgb(0,135,0)">self</span>._traits)
-<span class="ansi-green-fg">   1368</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> key <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> changed:
-<span class="ansi-green-fg">-&gt; </span><span class="ansi-green-fg">1369</span>     value = <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_traits</span><span class="ansi-yellow-bg">[</span><span class="ansi-yellow-bg">key</span><span class="ansi-yellow-bg">]</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_cross_validate</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">getattr</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">key</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-fg">   1370</span>     <span style="color: rgb(0,135,0)">self</span>.set_trait(key, value)
-<span class="ansi-green-fg">   1371</span>     changes[key][<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">new</span><span class="ansi-yellow-fg">&#34;</span>] = value
-
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/traitlets/traitlets.py:730</span>, in <span class="ansi-cyan-fg">TraitType._cross_validate</span><span class="ansi-blue-fg">(self, obj, value)</span>
-<span class="ansi-green-fg">    728</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">self</span>.name <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> obj._trait_validators:
-<span class="ansi-green-fg">    729</span>     proposal = Bunch({<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">trait</span><span class="ansi-yellow-fg">&#34;</span>: <span style="color: rgb(0,135,0)">self</span>, <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">value</span><span class="ansi-yellow-fg">&#34;</span>: value, <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">owner</span><span class="ansi-yellow-fg">&#34;</span>: obj})
-<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">730</span>     value = <span class="ansi-yellow-bg">obj</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_trait_validators</span><span class="ansi-yellow-bg">[</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">name</span><span class="ansi-yellow-bg">]</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">obj</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">proposal</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-fg">    731</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> <span style="color: rgb(0,135,0)">hasattr</span>(obj, <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">_</span><span class="ansi-bold" style="color: rgb(175,95,135)">%s</span><span class="ansi-yellow-fg">_validate</span><span class="ansi-yellow-fg">&#34;</span> % <span style="color: rgb(0,135,0)">self</span>.name):
-<span class="ansi-green-fg">    732</span>     meth_name = <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">_</span><span class="ansi-bold" style="color: rgb(175,95,135)">%s</span><span class="ansi-yellow-fg">_validate</span><span class="ansi-yellow-fg">&#34;</span> % <span style="color: rgb(0,135,0)">self</span>.name
-
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/traitlets/traitlets.py:1241</span>, in <span class="ansi-cyan-fg">EventHandler.__call__</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
-<span class="ansi-green-fg">   1239</span> <span class="ansi-yellow-fg">&#34;&#34;&#34;Pass `*args` and `**kwargs` to the handler&#39;s function if it exists.&#34;&#34;&#34;</span>
-<span class="ansi-green-fg">   1240</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">hasattr</span>(<span style="color: rgb(0,135,0)">self</span>, <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">func</span><span class="ansi-yellow-fg">&#34;</span>):
-<span class="ansi-green-fg">-&gt; </span><span class="ansi-green-fg">1241</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">func</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">args</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-fg">   1242</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
-<span class="ansi-green-fg">   1243</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span>._init_call(*args, **kwargs)
-
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/ipywidgets/widgets/widget_selection.py:244</span>, in <span class="ansi-cyan-fg">_Selection._validate_value</span><span class="ansi-blue-fg">(self, proposal)</span>
-<span class="ansi-green-fg">    242</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> findvalue(<span style="color: rgb(0,135,0)">self</span>._options_values, value, <span style="color: rgb(0,135,0)">self</span>.equals) <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> value <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>
-<span class="ansi-green-fg">    243</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ValueError</span>:
-<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">244</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> TraitError(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">Invalid selection: value not found</span><span class="ansi-yellow-fg">&#39;</span>)
-
-<span class="ansi-red-fg">TraitError</span>: Invalid selection: value not found
-</pre></div></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "421df8a09a0a463e9420424e3fbb0183", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 </section>
 <section id="Load-Store">
@@ -618,8 +535,8 @@ During handling of the above exception, another exception occurred:
 </section>
 <section id="Load-Data-from-Store">
 <h1>Load Data from Store<a class="headerlink" href="#Load-Data-from-Store" title="Link to this heading">#</a></h1>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loading Geodataframes</span>
@@ -639,11 +556,20 @@ During handling of the above exception, another exception occurred:
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| 💾 Updated &#39;lines&#39; saved to ../data/store/resources_WesternBalkanRegions_BA_vre_low.h5 with key &#39;lines&#39;</span>
+<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| ❌ Error: Key &#39;substations&#39; not found in ../data/store/resources_WesternBalkanRegions_BA_vre_low.h5</span>
+</pre></div></div>
+</div>
 <ul class="simple">
 <li><p>load Validation data (whatever we have)</p></li>
 </ul>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">existing_VREs_data_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;../data/validation_data/existing_VRE_WB6.csv&quot;</span><span class="p">)</span>
@@ -656,11 +582,19 @@ During handling of the above exception, another exception occurred:
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-yellow-intense-fg ansi-bold">⚠️  Validation data for existing VREs not found at ../data/validation_data/existing_VRE_WB6.csv</span>
+</pre></div></div>
+</div>
 </section>
 <section id="CF-checks">
 <h1>CF checks<a class="headerlink" href="#CF-checks" title="Link to this heading">#</a></h1>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gwa_country_code</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;region_mapping&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">region_code</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;GWA_country_code&#39;</span><span class="p">)</span>
@@ -668,8 +602,18 @@ During handling of the above exception, another exception occurred:
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-green-intense-fg ansi-bold">******************************</span>
+<span class="ansi-green-intense-fg ansi-bold">GWA Country Code Selected: BIH</span>
+<span class="ansi-green-intense-fg ansi-bold">******************************</span>
+</pre></div></div>
+</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># boundary.to_crs(epsg=3035,inplace=True)</span>
@@ -691,7 +635,7 @@ During handling of the above exception, another exception occurred:
 <li><p>Load Wind CF raster (Benchmark)</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">rioxarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rxr</span>
@@ -965,7 +909,7 @@ During handling of the above exception, another exception occurred:
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clusters_wind_f</span><span class="o">=</span><span class="n">clusters_wind</span><span class="p">[</span><span class="n">clusters_wind</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>
@@ -973,8 +917,8 @@ During handling of the above exception, another exception occurred:
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total sites </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">clusters_wind_f</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -986,8 +930,18 @@ During handling of the above exception, another exception occurred:
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Total sites 8
+Total Capacity 88 GW
+Top 5 sites (62% site) capacity 44 GW (50% of total capacity)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total sites </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">clusters_solar_f</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -999,8 +953,18 @@ During handling of the above exception, another exception occurred:
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Total sites 9
+Total Capacity 43 GW
+Top 5 sites (56% site) capacity 19 GW (45% of total capacity)
+</pre></div></div>
+</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clusters_wind_f</span><span class="o">=</span><span class="n">clusters_wind</span><span class="p">[</span><span class="n">clusters_wind</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>
@@ -1011,15 +975,15 @@ During handling of the above exception, another exception occurred:
 <section id="Aeroway-plots">
 <h2>Aeroway plots<a class="headerlink" href="#Aeroway-plots" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aeroway</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../data/downloaded_data/OSM/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">_aeroway.geojson&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -1052,6 +1016,97 @@ During handling of the above exception, another exception occurred:
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../vis/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">/lands/Aeroway_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
+<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[17]</span><span class="ansi-green-fg">, line 29</span>
+<span class="ansi-green-fg">     27</span> ax.axis(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">off</span><span class="ansi-yellow-fg">&#39;</span>)
+<span class="ansi-green-fg">     28</span> plt.tight_layout()
+<span class="ansi-green-fg">---&gt; </span><span class="ansi-green-fg">29</span> <span class="ansi-yellow-bg">plt</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">savefig</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-fg ansi-yellow-bg">f</span><span class="ansi-yellow-fg ansi-yellow-bg">&#39;</span><span class="ansi-yellow-fg ansi-yellow-bg">../vis/</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(175,95,135)">{</span><span class="ansi-yellow-bg">region_code</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(175,95,135)">}</span><span class="ansi-yellow-fg ansi-yellow-bg">/lands/Aeroway_</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(175,95,135)">{</span><span class="ansi-yellow-bg">region_code</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(175,95,135)">}</span><span class="ansi-yellow-fg ansi-yellow-bg">.png</span><span class="ansi-yellow-fg ansi-yellow-bg">&#39;</span><span class="ansi-yellow-bg">)</span>
+
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/matplotlib/pyplot.py:1228</span>, in <span class="ansi-cyan-fg">savefig</span><span class="ansi-blue-fg">(*args, **kwargs)</span>
+<span class="ansi-green-fg">   1225</span> fig = gcf()
+<span class="ansi-green-fg">   1226</span> <span style="color: rgb(95,135,135)"># savefig default implementation has no return, so mypy is unhappy</span>
+<span class="ansi-green-fg">   1227</span> <span style="color: rgb(95,135,135)"># presumably this is here because subclasses can return?</span>
+<span class="ansi-green-fg">-&gt; </span><span class="ansi-green-fg">1228</span> res = <span class="ansi-yellow-bg">fig</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">savefig</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">args</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>  <span style="color: rgb(95,135,135)"># type: ignore[func-returns-value]</span>
+<span class="ansi-green-fg">   1229</span> fig.canvas.draw_idle()  <span style="color: rgb(95,135,135)"># Need this if &#39;transparent=True&#39;, to reset colors.</span>
+<span class="ansi-green-fg">   1230</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> res
+
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/matplotlib/figure.py:3395</span>, in <span class="ansi-cyan-fg">Figure.savefig</span><span class="ansi-blue-fg">(self, fname, transparent, **kwargs)</span>
+<span class="ansi-green-fg">   3393</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> ax <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span>.axes:
+<span class="ansi-green-fg">   3394</span>         _recursively_make_axes_transparent(stack, ax)
+<span class="ansi-green-fg">-&gt; </span><span class="ansi-green-fg">3395</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">canvas</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">print_figure</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">fname</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
+
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/matplotlib/backend_bases.py:2204</span>, in <span class="ansi-cyan-fg">FigureCanvasBase.print_figure</span><span class="ansi-blue-fg">(self, filename, dpi, facecolor, edgecolor, orientation, format, bbox_inches, pad_inches, bbox_extra_artists, backend, **kwargs)</span>
+<span class="ansi-green-fg">   2200</span> <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
+<span class="ansi-green-fg">   2201</span>     <span style="color: rgb(95,135,135)"># _get_renderer may change the figure dpi (as vector formats</span>
+<span class="ansi-green-fg">   2202</span>     <span style="color: rgb(95,135,135)"># force the figure dpi to 72), so we need to set it again here.</span>
+<span class="ansi-green-fg">   2203</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">with</span> cbook._setattr_cm(<span style="color: rgb(0,135,0)">self</span>.figure, dpi=dpi):
+<span class="ansi-green-fg">-&gt; </span><span class="ansi-green-fg">2204</span>         result = <span class="ansi-yellow-bg">print_method</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-fg">   2205</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">filename</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">   2206</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">facecolor</span><span class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">facecolor</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">   2207</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">edgecolor</span><span class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">edgecolor</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">   2208</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">orientation</span><span class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">orientation</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">   2209</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">bbox_inches_restore</span><span class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">_bbox_inches_restore</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">   2210</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">   2211</span> <span class="ansi-bold" style="color: rgb(0,135,0)">finally</span>:
+<span class="ansi-green-fg">   2212</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> bbox_inches <span class="ansi-bold" style="color: rgb(175,0,255)">and</span> restore_bbox:
+
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/matplotlib/backend_bases.py:2054</span>, in <span class="ansi-cyan-fg">FigureCanvasBase._switch_canvas_and_return_print_method.&lt;locals&gt;.&lt;lambda&gt;</span><span class="ansi-blue-fg">(*args, **kwargs)</span>
+<span class="ansi-green-fg">   2050</span>     optional_kws = {  <span style="color: rgb(95,135,135)"># Passed by print_figure for other renderers.</span>
+<span class="ansi-green-fg">   2051</span>         <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">dpi</span><span class="ansi-yellow-fg">&#34;</span>, <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">facecolor</span><span class="ansi-yellow-fg">&#34;</span>, <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">edgecolor</span><span class="ansi-yellow-fg">&#34;</span>, <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">orientation</span><span class="ansi-yellow-fg">&#34;</span>,
+<span class="ansi-green-fg">   2052</span>         <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">bbox_inches_restore</span><span class="ansi-yellow-fg">&#34;</span>}
+<span class="ansi-green-fg">   2053</span>     skip = optional_kws - {*inspect.signature(meth).parameters}
+<span class="ansi-green-fg">-&gt; </span><span class="ansi-green-fg">2054</span>     print_method = functools.wraps(meth)(<span class="ansi-bold" style="color: rgb(0,135,0)">lambda</span> *args, **kwargs: <span class="ansi-yellow-bg">meth</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-fg">   2055</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">args</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">{</span><span class="ansi-yellow-bg">k</span><span class="ansi-yellow-bg">:</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">v</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">for</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">k</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">v</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(175,0,255)">in</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">items</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">if</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">k</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(175,0,255)">not</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(175,0,255)">in</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">skip</span><span class="ansi-yellow-bg">}</span><span class="ansi-yellow-bg">)</span>)
+<span class="ansi-green-fg">   2056</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:  <span style="color: rgb(95,135,135)"># Let third-parties do as they see fit.</span>
+<span class="ansi-green-fg">   2057</span>     print_method = meth
+
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/matplotlib/backends/backend_agg.py:496</span>, in <span class="ansi-cyan-fg">FigureCanvasAgg.print_png</span><span class="ansi-blue-fg">(self, filename_or_obj, metadata, pil_kwargs)</span>
+<span class="ansi-green-fg">    449</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span><span style="color: rgb(188,188,188)"> </span><span class="ansi-blue-fg">print_png</span>(<span style="color: rgb(0,135,0)">self</span>, filename_or_obj, *, metadata=<span class="ansi-bold" style="color: rgb(0,135,0)">None</span>, pil_kwargs=<span class="ansi-bold" style="color: rgb(0,135,0)">None</span>):
+<span class="ansi-green-fg">    450</span> <span style="color: rgb(188,188,188)">    </span><span class="ansi-yellow-fg">&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">    451</span> <span class="ansi-yellow-fg">    Write the figure to a PNG file.</span>
+<span class="ansi-green-fg">    452</span>
+<span class="ansi-green-fg">   (...)</span><span class="ansi-green-fg">    494</span> <span class="ansi-yellow-fg">        *metadata*, including the default &#39;Software&#39; key.</span>
+<span class="ansi-green-fg">    495</span> <span class="ansi-yellow-fg">    &#34;&#34;&#34;</span>
+<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">496</span>     <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_print_pil</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">filename_or_obj</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-fg ansi-yellow-bg">&#34;</span><span class="ansi-yellow-fg ansi-yellow-bg">png</span><span class="ansi-yellow-fg ansi-yellow-bg">&#34;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">pil_kwargs</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">metadata</span><span class="ansi-yellow-bg">)</span>
+
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/matplotlib/backends/backend_agg.py:445</span>, in <span class="ansi-cyan-fg">FigureCanvasAgg._print_pil</span><span class="ansi-blue-fg">(self, filename_or_obj, fmt, pil_kwargs, metadata)</span>
+<span class="ansi-green-fg">    440</span> <span class="ansi-yellow-fg">&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">    441</span> <span class="ansi-yellow-fg">Draw the canvas, then save it using `.image.imsave` (to which</span>
+<span class="ansi-green-fg">    442</span> <span class="ansi-yellow-fg">*pil_kwargs* and *metadata* are forwarded).</span>
+<span class="ansi-green-fg">    443</span> <span class="ansi-yellow-fg">&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">    444</span> FigureCanvasAgg.draw(<span style="color: rgb(0,135,0)">self</span>)
+<span class="ansi-green-fg">--&gt; </span><span class="ansi-green-fg">445</span> <span class="ansi-yellow-bg">mpl</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">image</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">imsave</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-fg">    446</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">filename_or_obj</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">buffer_rgba</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">format</span><span class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">fmt</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">origin</span><span class="ansi-yellow-bg">=</span><span class="ansi-yellow-fg ansi-yellow-bg">&#34;</span><span class="ansi-yellow-fg ansi-yellow-bg">upper</span><span class="ansi-yellow-fg ansi-yellow-bg">&#34;</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">    447</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">dpi</span><span class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">figure</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">dpi</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">metadata</span><span class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">metadata</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">pil_kwargs</span><span class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">pil_kwargs</span><span class="ansi-yellow-bg">)</span>
+
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/matplotlib/image.py:1676</span>, in <span class="ansi-cyan-fg">imsave</span><span class="ansi-blue-fg">(fname, arr, vmin, vmax, cmap, format, origin, dpi, metadata, pil_kwargs)</span>
+<span class="ansi-green-fg">   1674</span> pil_kwargs.setdefault(<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">format</span><span class="ansi-yellow-fg">&#34;</span>, <span style="color: rgb(0,135,0)">format</span>)
+<span class="ansi-green-fg">   1675</span> pil_kwargs.setdefault(<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">dpi</span><span class="ansi-yellow-fg">&#34;</span>, (dpi, dpi))
+<span class="ansi-green-fg">-&gt; </span><span class="ansi-green-fg">1676</span> <span class="ansi-yellow-bg">image</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">save</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">fname</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">pil_kwargs</span><span class="ansi-yellow-bg">)</span>
+
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/miniconda3/envs/RESource/lib/python3.12/site-packages/PIL/Image.py:2600</span>, in <span class="ansi-cyan-fg">Image.save</span><span class="ansi-blue-fg">(self, fp, format, **params)</span>
+<span class="ansi-green-fg">   2598</span>         fp = builtins.open(filename, <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">r+b</span><span class="ansi-yellow-fg">&#34;</span>)
+<span class="ansi-green-fg">   2599</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg">-&gt; </span><span class="ansi-green-fg">2600</span>         fp = <span class="ansi-yellow-bg">builtins</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">open</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">filename</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-fg ansi-yellow-bg">&#34;</span><span class="ansi-yellow-fg ansi-yellow-bg">w+b</span><span class="ansi-yellow-fg ansi-yellow-bg">&#34;</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">   2601</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg">   2602</span>     fp = cast(IO[<span style="color: rgb(0,135,0)">bytes</span>], fp)
+
+<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/local-scratch/localhome/mei3/eliasinul/work/RESource/vis/BA/lands/Aeroway_BA.png&#39;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_explore_Store_n_Visuals_WB6_39_1.png" src="../_images/notebooks_explore_Store_n_Visuals_WB6_39_1.png" />
 </div>
 </div>
 </section>

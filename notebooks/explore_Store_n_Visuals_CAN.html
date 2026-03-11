@@ -42,8 +42,6 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/explore_Store_n_Visuals_CAN';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -162,8 +160,10 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../notes/resource_builder.html">RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../notes/config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/learning.html">Best Practices and Guidelines</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../notes/data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/developers.html">Contributing Developers</a></li>
 </ul>
@@ -399,7 +399,6 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Vectors">Vectors</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ALR">ALR</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Aeroway">Aeroway</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#CPCAD">CPCAD</a></li>
 </ul>
@@ -424,7 +423,7 @@ document.write(`
 <li><p>load packages</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
@@ -462,8 +461,8 @@ document.write(`
 </section>
 <section id="Define-Province-Code">
 <h1>Define Province Code<a class="headerlink" href="#Define-Province-Code" title="Link to this heading">#</a></h1>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Construct region_options as a list of tuples: (name, code)</span>
@@ -478,20 +477,10 @@ document.write(`
 <br/></pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-green-intense-fg ansi-bold">**************************************</span>
-<span class="ansi-green-intense-fg ansi-bold">Selected Region: British Columbia (BC)</span>
-<span class="ansi-green-intense-fg ansi-bold">**************************************</span>
-</pre></div></div>
-</div>
 <section id="Define-run/scenario">
 <h2>Define run/scenario<a class="headerlink" href="#Define-run/scenario" title="Link to this heading">#</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the directory and search pattern</span>
@@ -519,24 +508,14 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-yellow-fg">└&gt; Results Available for Run IDs | BC: </span>
-<span class="ansi-cyan-fg"> └&gt; BASELINE
-    strict_policy_aeroway_CPCAD_buffer</span>
-</pre></div></div>
-</div>
 </section>
 </section>
 <section id="Load-Validation-data">
 <h1>Load Validation data<a class="headerlink" href="#Load-Validation-data" title="Link to this heading">#</a></h1>
 <section id="Existing-VRE-sites">
 <h2>Existing VRE sites<a class="headerlink" href="#Existing-VRE-sites" title="Link to this heading">#</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">existing_VREs_data_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;../data/downloaded_data/CODERS/data-pull/supply/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">_wind_generators.csv&quot;</span><span class="p">)</span>
@@ -567,19 +546,11 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-yellow-fg">└&gt; Validation data for existing VREs loaded from ../data/downloaded_data/CODERS/data-pull/supply/BC_wind_generators.csv</span>
-</pre></div></div>
-</div>
 </section>
 <section id="Committed-VRE-Sites-(BCH-CFPs)">
 <h2>Committed VRE Sites (BCH CFPs)<a class="headerlink" href="#Committed-VRE-Sites-(BCH-CFPs)" title="Link to this heading">#</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">committed_VREs_data_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;../ROD_2024/BCH_CFP24.geojson&quot;</span><span class="p">)</span>
@@ -615,22 +586,14 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-yellow-fg">└&gt; Committed VREs data loaded from ../ROD_2024/BCH_CFP24.geojson</span>
-</pre></div></div>
-</div>
 </section>
 </section>
 <section id="Load-Data-from-Store">
 <h1>Load Data from Store<a class="headerlink" href="#Load-Data-from-Store" title="Link to this heading">#</a></h1>
 <section id="Load-Store">
 <h2>Load Store<a class="headerlink" href="#Load-Store" title="Link to this heading">#</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">store_all_runs</span><span class="o">=</span><span class="p">{}</span>
@@ -644,21 +607,11 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-yellow-fg">└&gt; Loaded store for 2 runs for BC:</span>
-<span class="ansi-cyan-fg"> └&gt; BASELINE
-    strict_policy_aeroway_CPCAD_buffer</span>
-</pre></div></div>
-</div>
 <ul class="simple">
 <li><p>If Lines was not used/pulled</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># lines=gpd.read_file(&#39;../data/downloaded_data/OSM/BC_power.geojson&#39;)</span>
@@ -677,8 +630,8 @@ document.write(`
 <ul class="simple">
 <li><p>load dfs</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">BC_dfs_all_runs</span><span class="o">=</span><span class="p">{}</span>
@@ -704,18 +657,8 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-yellow-fg">└&gt; Loading dataframes for POLICY: BASELINE</span>
-<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| ❌ Error: Key &#39;lines&#39; not found in ../data/store/resources_Canada_BC_BASELINE.h5</span>
-<span class="ansi-yellow-fg">└&gt; Loading dataframes for POLICY: strict_policy_aeroway_CPCAD_buffer</span>
-</pre></div></div>
-</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clusters_wind_BASELINE</span><span class="o">=</span><span class="n">BC_dfs_all_runs</span><span class="p">[</span><span class="s1">&#39;BASELINE&#39;</span><span class="p">][</span><span class="s1">&#39;clusters_wind&#39;</span><span class="p">]</span>
@@ -725,12 +668,12 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">RES.RESources</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">RES_module</span>
-<span class="n">top_sites_save_to</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;../results/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">/TOP_sites&#39;</span>
+<span class="n">top_sites_save_to</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;results/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">/TOP_sites&#39;</span>
 
 <span class="n">resource_clusters_solar</span><span class="p">,</span><span class="n">cluster_timeseries_solar</span><span class="o">=</span><span class="n">RES_module</span><span class="o">.</span><span class="n">select_top_sites</span><span class="p">(</span><span class="n">clusters_solar_BASELINE</span><span class="p">,</span>
                                                                 <span class="n">clusters_ts_solar_BASELINE</span><span class="p">,</span>
@@ -768,29 +711,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&gt;&gt;&gt; Selecting TOP Sites to for 10 GW Capacity Investment in BC...
-____________________________________________________________________________________________________
-Selecting the Top Ranked Sites to invest in 10 GW PV in BC
-____________________________________________________________________________________________________
-
-!! Note: The Last cluster (Thompson-Nicola_1) originally had 4.89 GW potential capacity.To fit the maximum capacity investment of 10 GW, it has been adjusted to 1.81 GW
-
-<span class="ansi-cyan-fg"> └&gt; solar clusters exported to :../results/Canada/BC/TOP_sites/resource_options_solar_BC_timeseries.csv</span>
-&gt;&gt;&gt; Selecting TOP Sites to for 50 GW Capacity Investment in BC...
-____________________________________________________________________________________________________
-Selecting the Top Ranked Sites to invest in 50 GW PV in BC
-____________________________________________________________________________________________________
-
-!! Note: The Last cluster (Thompson-Nicola_2) originally had 13.92 GW potential capacity.To fit the maximum capacity investment of 50 GW, it has been adjusted to 0.99 GW
-
-<span class="ansi-cyan-fg"> └&gt; wind clusters exported to :../results/Canada/BC/TOP_sites/resource_options_wind_BC_timeseries.csv</span>
-</pre></div></div>
-</div>
 </section>
 <section id="Extract-the-Boundary-from-Store">
 <h2>Extract the Boundary from Store<a class="headerlink" href="#Extract-the-Boundary-from-Store" title="Link to this heading">#</a></h2>
@@ -798,7 +718,7 @@ ________________________________________________________________________________
 <li><p>creating both degrees and meters projection</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">boundary</span> <span class="o">=</span> <span class="n">BC_dfs_policy</span><span class="p">[</span><span class="s1">&#39;boundary&#39;</span><span class="p">]</span>
@@ -831,7 +751,7 @@ ________________________________________________________________________________
 <li><p>Extracting bounds for clipping purposes</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">boundary_aggr</span><span class="o">=</span><span class="n">boundary</span><span class="o">.</span><span class="n">dissolve</span><span class="p">()</span>
@@ -856,8 +776,8 @@ ________________________________________________________________________________
 <blockquote>
 <div><p>Run the default scenario results first to set the benchmark</p>
 </div></blockquote>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot; Available run ids: &quot;</span><span class="p">)</span>
@@ -865,21 +785,11 @@ ________________________________________________________________________________
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-yellow-fg">└&gt;  Available run ids: </span>
-<span class="ansi-cyan-fg"> └&gt; BASELINE
-    strict_policy_aeroway_CPCAD_buffer</span>
-</pre></div></div>
-</div>
 <ul class="simple">
 <li><p>Define POLICY from the available results</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">POLICY</span><span class="o">=</span><span class="s1">&#39;strict_policy_aeroway_CPCAD_buffer&#39;</span>
@@ -891,7 +801,7 @@ ________________________________________________________________________________
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_scenario</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">=</span><span class="n">BC_dfs_all_runs</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">POLICY</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">][</span><span class="s1">&#39;cells&#39;</span><span class="p">]</span>
@@ -913,7 +823,7 @@ ________________________________________________________________________________
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clusters_baseline_solar</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">=</span><span class="n">BC_dfs_all_runs</span><span class="p">[</span><span class="s1">&#39;BASELINE&#39;</span><span class="p">][</span><span class="s1">&#39;clusters_solar&#39;</span><span class="p">]</span>
@@ -925,7 +835,7 @@ ________________________________________________________________________________
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clusters_scenario_wind</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">POLICY_results_save_to</span><span class="o">/</span><span class="sa">f</span><span class="s1">&#39;BC_clusters_scenario_wind_</span><span class="si">{</span><span class="n">POLICY</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -933,8 +843,8 @@ ________________________________________________________________________________
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load your df (assuming it&#39;s named res_df)</span>
@@ -975,75 +885,8 @@ ________________________________________________________________________________
 <br/></pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>BCHydroRegion</th>
-      <th>clusters</th>
-      <th>total_potential_MW</th>
-      <th>mean_CF</th>
-      <th>mean_LCOE</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>North Coast</td>
-      <td>11</td>
-      <td>52758.995076</td>
-      <td>0.342663</td>
-      <td>85.140645</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Peace</td>
-      <td>12</td>
-      <td>154521.069825</td>
-      <td>0.242986</td>
-      <td>124.319539</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Southern Interior</td>
-      <td>22</td>
-      <td>41831.592051</td>
-      <td>0.219500</td>
-      <td>119.697814</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Vancouver Island</td>
-      <td>15</td>
-      <td>2823.993201</td>
-      <td>0.172997</td>
-      <td>123.527398</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># bc_df = pd.read_csv(&quot;../data/validation_data/BC/extracts/BC_onshore_wind_sites.csv&quot;)</span>
@@ -1070,7 +913,7 @@ ________________________________________________________________________________
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># comparison = pd.merge(</span>
@@ -1091,7 +934,7 @@ ________________________________________________________________________________
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># comparison[&quot;official_capacity_GW&quot;] = comparison[&quot;official_capacity_MW&quot;] / 1000</span>
@@ -1127,8 +970,8 @@ ________________________________________________________________________________
 <ul class="simple">
 <li><p>Calculate Aggregated capacity to Regions</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">RES.CellCapacityProcessor</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_sub_nationally_aggregated_capacity</span>
@@ -1160,207 +1003,19 @@ ________________________________________________________________________________
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; Calculating aggregated capacity for Region | BASELINE...</span>
-<span class="ansi-white-intense-fg">  └&gt; Aggregated cells by&#39;Region&#39; saved to &#39;../results/Canada/BC/BASELINE/cells_aggregated_by_Region_BC_BASELINE.csv&#39;</span>
-<span class="ansi-cyan-fg"> └&gt; Calculating aggregated capacity for Region | strict_policy_aeroway_CPCAD_buffer...</span>
-<span class="ansi-white-intense-fg">  └&gt; Aggregated cells by&#39;Region&#39; saved to &#39;../results/Canada/BC/strict_policy_aeroway_CPCAD_buffer/cells_aggregated_by_Region_BC_strict_policy_aeroway_CPCAD_buffer.csv&#39;</span>
-</pre></div></div>
-</div>
 <ul class="simple">
 <li><p>Calculate Capacity variations</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_aggrs_region_BASELINE</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>potential_capacity_solar</th>
-      <th>potential_capacity_wind</th>
-    </tr>
-    <tr>
-      <th>Region</th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Alberni-Clayoquot</th>
-      <td>782</td>
-      <td>4406</td>
-    </tr>
-    <tr>
-      <th>Bulkley-Nechako</th>
-      <td>29043</td>
-      <td>182716</td>
-    </tr>
-    <tr>
-      <th>Capital</th>
-      <td>553</td>
-      <td>1489</td>
-    </tr>
-    <tr>
-      <th>Cariboo</th>
-      <td>31918</td>
-      <td>179205</td>
-    </tr>
-    <tr>
-      <th>CentralCoast</th>
-      <td>2575</td>
-      <td>14239</td>
-    </tr>
-    <tr>
-      <th>CentralKootenay</th>
-      <td>6929</td>
-      <td>19571</td>
-    </tr>
-    <tr>
-      <th>CentralOkanagan</th>
-      <td>2691</td>
-      <td>13250</td>
-    </tr>
-    <tr>
-      <th>Columbia-Shuswap</th>
-      <td>10344</td>
-      <td>25628</td>
-    </tr>
-    <tr>
-      <th>Comox-Strathcona</th>
-      <td>4122</td>
-      <td>16683</td>
-    </tr>
-    <tr>
-      <th>CowichanValley</th>
-      <td>871</td>
-      <td>2896</td>
-    </tr>
-    <tr>
-      <th>EastKootenay</th>
-      <td>7579</td>
-      <td>25964</td>
-    </tr>
-    <tr>
-      <th>Fraser-FortGeorge</th>
-      <td>20904</td>
-      <td>109618</td>
-    </tr>
-    <tr>
-      <th>FraserValley</th>
-      <td>2715</td>
-      <td>8436</td>
-    </tr>
-    <tr>
-      <th>GreaterVancouver</th>
-      <td>1511</td>
-      <td>2029</td>
-    </tr>
-    <tr>
-      <th>Kitimat-Stikine</th>
-      <td>20618</td>
-      <td>83599</td>
-    </tr>
-    <tr>
-      <th>KootenayBoundary</th>
-      <td>4143</td>
-      <td>20338</td>
-    </tr>
-    <tr>
-      <th>MountWaddington</th>
-      <td>4100</td>
-      <td>20703</td>
-    </tr>
-    <tr>
-      <th>Nanaimo</th>
-      <td>817</td>
-      <td>3314</td>
-    </tr>
-    <tr>
-      <th>NorthOkanagan</th>
-      <td>6238</td>
-      <td>24340</td>
-    </tr>
-    <tr>
-      <th>NorthernRockies</th>
-      <td>11822</td>
-      <td>170400</td>
-    </tr>
-    <tr>
-      <th>Okanagan-Similkameen</th>
-      <td>4817</td>
-      <td>25591</td>
-    </tr>
-    <tr>
-      <th>PeaceRiver</th>
-      <td>31526</td>
-      <td>222624</td>
-    </tr>
-    <tr>
-      <th>PowellRiver</th>
-      <td>937</td>
-      <td>3750</td>
-    </tr>
-    <tr>
-      <th>Skeena-QueenCharlotte</th>
-      <td>1599</td>
-      <td>16978</td>
-    </tr>
-    <tr>
-      <th>Squamish-Lillooet</th>
-      <td>3507</td>
-      <td>10884</td>
-    </tr>
-    <tr>
-      <th>Stikine</th>
-      <td>44468</td>
-      <td>220259</td>
-    </tr>
-    <tr>
-      <th>SunshineCoast</th>
-      <td>788</td>
-      <td>3059</td>
-    </tr>
-    <tr>
-      <th>Thompson-Nicola</th>
-      <td>20172</td>
-      <td>86557</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">delta_cells_aggrs_region</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="n">cells_aggrs_region_BASELINE</span><span class="o">-</span><span class="n">cells_aggrs_region_scenario</span><span class="p">)</span>
@@ -1376,282 +1031,19 @@ ________________________________________________________________________________
 <br/></pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-yellow-fg">└&gt; Differences in aggregated capacities between BASELINE and strict_policy_aeroway_CPCAD_buffer scenarios:</span>
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-potential_capacity_solar     11.754
-potential_capacity_wind     164.302
-dtype: float64
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&#39;in GW&#39;
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">delta_cells_aggrs_region</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>potential_capacity_solar</th>
-      <th>potential_capacity_wind</th>
-      <th>percent_change_solar</th>
-      <th>percent_change_wind</th>
-    </tr>
-    <tr>
-      <th>Region</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Alberni-Clayoquot</th>
-      <td>78</td>
-      <td>1540</td>
-      <td>9.97</td>
-      <td>34.95</td>
-    </tr>
-    <tr>
-      <th>Bulkley-Nechako</th>
-      <td>943</td>
-      <td>17501</td>
-      <td>3.25</td>
-      <td>9.58</td>
-    </tr>
-    <tr>
-      <th>Capital</th>
-      <td>270</td>
-      <td>1104</td>
-      <td>48.82</td>
-      <td>74.14</td>
-    </tr>
-    <tr>
-      <th>Cariboo</th>
-      <td>1183</td>
-      <td>29813</td>
-      <td>3.71</td>
-      <td>16.64</td>
-    </tr>
-    <tr>
-      <th>CentralCoast</th>
-      <td>132</td>
-      <td>3375</td>
-      <td>5.13</td>
-      <td>23.70</td>
-    </tr>
-    <tr>
-      <th>CentralKootenay</th>
-      <td>337</td>
-      <td>2438</td>
-      <td>4.86</td>
-      <td>12.46</td>
-    </tr>
-    <tr>
-      <th>CentralOkanagan</th>
-      <td>371</td>
-      <td>1912</td>
-      <td>13.79</td>
-      <td>14.43</td>
-    </tr>
-    <tr>
-      <th>Columbia-Shuswap</th>
-      <td>428</td>
-      <td>3798</td>
-      <td>4.14</td>
-      <td>14.82</td>
-    </tr>
-    <tr>
-      <th>Comox-Strathcona</th>
-      <td>378</td>
-      <td>4759</td>
-      <td>9.17</td>
-      <td>28.53</td>
-    </tr>
-    <tr>
-      <th>CowichanValley</th>
-      <td>321</td>
-      <td>1933</td>
-      <td>36.85</td>
-      <td>66.75</td>
-    </tr>
-    <tr>
-      <th>EastKootenay</th>
-      <td>616</td>
-      <td>4538</td>
-      <td>8.13</td>
-      <td>17.48</td>
-    </tr>
-    <tr>
-      <th>Fraser-FortGeorge</th>
-      <td>571</td>
-      <td>8143</td>
-      <td>2.73</td>
-      <td>7.43</td>
-    </tr>
-    <tr>
-      <th>FraserValley</th>
-      <td>543</td>
-      <td>2928</td>
-      <td>20.00</td>
-      <td>34.71</td>
-    </tr>
-    <tr>
-      <th>GreaterVancouver</th>
-      <td>476</td>
-      <td>1337</td>
-      <td>31.50</td>
-      <td>65.89</td>
-    </tr>
-    <tr>
-      <th>Kitimat-Stikine</th>
-      <td>696</td>
-      <td>12214</td>
-      <td>3.38</td>
-      <td>14.61</td>
-    </tr>
-    <tr>
-      <th>KootenayBoundary</th>
-      <td>322</td>
-      <td>2530</td>
-      <td>7.77</td>
-      <td>12.44</td>
-    </tr>
-    <tr>
-      <th>MountWaddington</th>
-      <td>155</td>
-      <td>4966</td>
-      <td>3.78</td>
-      <td>23.99</td>
-    </tr>
-    <tr>
-      <th>Nanaimo</th>
-      <td>211</td>
-      <td>1578</td>
-      <td>25.83</td>
-      <td>47.62</td>
-    </tr>
-    <tr>
-      <th>NorthOkanagan</th>
-      <td>450</td>
-      <td>3206</td>
-      <td>7.21</td>
-      <td>13.17</td>
-    </tr>
-    <tr>
-      <th>NorthernRockies</th>
-      <td>133</td>
-      <td>5369</td>
-      <td>1.13</td>
-      <td>3.15</td>
-    </tr>
-    <tr>
-      <th>Okanagan-Similkameen</th>
-      <td>394</td>
-      <td>3071</td>
-      <td>8.18</td>
-      <td>12.00</td>
-    </tr>
-    <tr>
-      <th>PeaceRiver</th>
-      <td>897</td>
-      <td>15463</td>
-      <td>2.85</td>
-      <td>6.95</td>
-    </tr>
-    <tr>
-      <th>PowellRiver</th>
-      <td>94</td>
-      <td>1486</td>
-      <td>10.03</td>
-      <td>39.63</td>
-    </tr>
-    <tr>
-      <th>Skeena-QueenCharlotte</th>
-      <td>85</td>
-      <td>3204</td>
-      <td>5.32</td>
-      <td>18.87</td>
-    </tr>
-    <tr>
-      <th>Squamish-Lillooet</th>
-      <td>129</td>
-      <td>1990</td>
-      <td>3.68</td>
-      <td>18.28</td>
-    </tr>
-    <tr>
-      <th>Stikine</th>
-      <td>669</td>
-      <td>8148</td>
-      <td>1.50</td>
-      <td>3.70</td>
-    </tr>
-    <tr>
-      <th>SunshineCoast</th>
-      <td>60</td>
-      <td>1208</td>
-      <td>7.61</td>
-      <td>39.49</td>
-    </tr>
-    <tr>
-      <th>Thompson-Nicola</th>
-      <td>812</td>
-      <td>14750</td>
-      <td>4.03</td>
-      <td>17.04</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
 <ul class="simple">
 <li><p>Spatial- mapping the delta of capacity to Regions</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">delta_cells_aggrs_region</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
@@ -1675,7 +1067,7 @@ dtype: float64
 <li><p>plot in map</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot configuration</span>
@@ -1683,8 +1075,8 @@ dtype: float64
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># --- Helper: Plot with shadow + top 5 highlights ---</span>
@@ -1754,15 +1146,8 @@ dtype: float64
 <br/></pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_51_0.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_51_0.png" />
-</div>
-</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">policy</span><span class="o">=</span><span class="s1">&#39;strict_policy_aeroway_CPCAD_buffer&#39;</span>
@@ -1770,7 +1155,7 @@ dtype: float64
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells</span><span class="o">=</span> <span class="n">BC_dfs_all_runs</span><span class="p">[</span><span class="n">policy</span><span class="p">][</span><span class="s1">&#39;cells&#39;</span><span class="p">]</span>
@@ -1783,7 +1168,7 @@ dtype: float64
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_clean_solar</span> <span class="o">=</span> <span class="n">cells_plot</span><span class="p">[(</span><span class="n">cells_plot</span><span class="p">[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span><span class="p">(</span><span class="n">cells_plot</span><span class="p">[</span><span class="s1">&#39;solar_CF_mean&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)]</span>
@@ -1792,15 +1177,15 @@ dtype: float64
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">score_threshold</span><span class="o">=</span><span class="mi">200</span> <span class="c1"># $/MWh</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpatches</span>
@@ -1999,29 +1384,6 @@ dtype: float64
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; No existing VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;facility_installed_capacity&#39; for marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_57_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_57_1.png" />
-</div>
-</div>
 </section>
 <section id="Maps">
 <h1>Maps<a class="headerlink" href="#Maps" title="Link to this heading">#</a></h1>
@@ -2029,15 +1391,15 @@ dtype: float64
 <li><p>Combined Map</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">supported_datafields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;CF&#39;</span><span class="p">,</span><span class="s1">&#39;CAPACITY&#39;</span><span class="p">]</span> <span class="c1"># that&#39;s what I configured in the plot func</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">datafield</span> <span class="ow">in</span> <span class="n">supported_datafields</span><span class="p">:</span>
@@ -2124,111 +1486,11 @@ dtype: float64
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Generating combined resource plots for datafield: CF | policy: BASELINE...
-<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; No existing VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;facility_installed_capacity&#39; for marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Combined resource plot for datafield: CF | policy: BASELINE saved to ../vis/Canada/BC/BASELINE/Resources_combined_CF_BASELINE.png</span>
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_61_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_61_1.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Generating combined resource plots for datafield: CF | policy: strict_policy_aeroway_CPCAD_buffer...
-<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; No existing VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;facility_installed_capacity&#39; for marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Combined resource plot for datafield: CF | policy: strict_policy_aeroway_CPCAD_buffer saved to ../vis/Canada/BC/strict_policy_aeroway_CPCAD_buffer/Resources_combined_CF_strict_policy_aeroway_CPCAD_buffer.png</span>
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_61_3.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_61_3.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Generating combined resource plots for datafield: CAPACITY | policy: BASELINE...
-<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; No existing VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;facility_installed_capacity&#39; for marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Combined resource plot for datafield: CAPACITY | policy: BASELINE saved to ../vis/Canada/BC/BASELINE/Resources_combined_CAPACITY_BASELINE.png</span>
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_61_5.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_61_5.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Generating combined resource plots for datafield: CAPACITY | policy: strict_policy_aeroway_CPCAD_buffer...
-<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; No existing VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;facility_installed_capacity&#39; for marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Combined resource plot for datafield: CAPACITY | policy: strict_policy_aeroway_CPCAD_buffer saved to ../vis/Canada/BC/strict_policy_aeroway_CPCAD_buffer/Resources_combined_CAPACITY_strict_policy_aeroway_CPCAD_buffer.png</span>
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_61_7.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_61_7.png" />
-</div>
-</div>
 <ul class="simple">
 <li><p>Prepare Cells</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells</span><span class="o">=</span> <span class="n">BC_dfs_all_runs</span><span class="p">[</span><span class="n">policy</span><span class="p">][</span><span class="s1">&#39;cells&#39;</span><span class="p">]</span>
@@ -2241,7 +1503,7 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_clean_solar</span> <span class="o">=</span> <span class="n">cells_plot</span><span class="p">[(</span><span class="n">cells_plot</span><span class="p">[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span><span class="p">(</span><span class="n">cells_plot</span><span class="p">[</span><span class="s1">&#39;solar_CF_mean&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)]</span>
@@ -2250,7 +1512,7 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">score_threshold_solar</span><span class="o">=</span><span class="mi">120</span> <span class="c1"># $/MWh</span>
@@ -2259,7 +1521,7 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_solar_filtered</span><span class="o">=</span><span class="n">cells_clean_solar</span><span class="p">[</span><span class="n">cells_clean_solar</span><span class="p">[</span><span class="s1">&#39;lcoe_solar&#39;</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">score_threshold_solar</span><span class="p">]</span>
@@ -2271,7 +1533,7 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 <li><p>Score Mapping (bins)</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define custom bins and labels for solar and wind capacity</span>
@@ -2284,7 +1546,7 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Categorize potential_capacity_solar and potential_capacity_wind into bins</span>
@@ -2300,7 +1562,7 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 <li><p>Prepare Aggregated Capacity for map overlay layer</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_aggrs_solar</span><span class="o">=</span><span class="n">get_sub_nationally_aggregated_capacity</span><span class="p">(</span><span class="n">cells_plot_solar</span><span class="p">,</span><span class="n">sub_national_unit_tag</span><span class="p">)</span>
@@ -2309,7 +1571,7 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_aggr_solar_plot</span><span class="o">=</span><span class="n">boundary_plot</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -2323,7 +1585,7 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_aggr_wind_plot</span><span class="o">=</span><span class="n">boundary_plot</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -2339,8 +1601,8 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 <ul class="simple">
 <li><p>Plot</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">textwrap</span>
@@ -2535,30 +1797,8 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; No existing VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;facility_installed_capacity&#39; for marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_77_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_77_1.png" />
-</div>
-</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.cm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cm</span>
@@ -2594,8 +1834,8 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### Solar Plot (Horizontal, lowest cost on top) ###</span>
@@ -2623,15 +1863,8 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_79_0.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_79_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### Wind Plot (Horizontal, lowest cost on top) ###</span>
@@ -2659,17 +1892,10 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_80_0.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_80_0.png" />
-</div>
-</div>
 <section id="CF-checks">
 <h2>CF checks<a class="headerlink" href="#CF-checks" title="Link to this heading">#</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gwa_country_code</span><span class="o">=</span><span class="n">cfg_policy</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;region_mapping&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">region_code</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;GWA_country_code&#39;</span><span class="p">)</span>
@@ -2677,20 +1903,10 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-green-intense-fg ansi-bold">******************************</span>
-<span class="ansi-green-intense-fg ansi-bold">GWA Country Code Selected: CAN</span>
-<span class="ansi-green-intense-fg ansi-bold">******************************</span>
-</pre></div></div>
-</div>
 <section id="Wind">
 <h3>Wind<a class="headerlink" href="#Wind" title="Link to this heading">#</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get total bounds from boundary GeoDataFrame</span>
@@ -2707,7 +1923,7 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">rioxarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rxr</span>
@@ -2724,7 +1940,7 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import matplotlib.pyplot as plt</span>
@@ -2739,7 +1955,7 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># vis.get_CF_wind_check_plot(cells,</span>
@@ -2752,8 +1968,8 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -2803,20 +2019,13 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_88_0.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_88_0.png" />
-</div>
-</div>
 </section>
 </section>
 </section>
 <section id="Clusters">
 <h1>Clusters<a class="headerlink" href="#Clusters" title="Link to this heading">#</a></h1>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clusters_wind</span><span class="o">=</span><span class="n">BC_dfs_all_runs</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">POLICY</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">][</span><span class="s1">&#39;clusters_wind&#39;</span><span class="p">]</span>
@@ -2825,7 +2034,7 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clusters_wind_f</span><span class="o">=</span><span class="n">clusters_wind</span><span class="p">[</span><span class="n">clusters_wind</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>
@@ -2833,8 +2042,8 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total sites </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">clusters_wind_f</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -2846,18 +2055,8 @@ Generating combined resource plots for datafield: CAPACITY | policy: strict_poli
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Total sites 145
-Total Capacity 737 GW
-Top 5 sites (3% site) capacity 29 GW (4% of total capacity)
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total sites </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">clusters_solar_f</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -2869,18 +2068,8 @@ Top 5 sites (3% site) capacity 29 GW (4% of total capacity)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Total sites 191
-Total Capacity 185 GW
-Top 5 sites (3% site) capacity 4 GW (2% of total capacity)
-</pre></div></div>
-</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[59]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clusters_wind_f</span><span class="o">=</span><span class="n">clusters_wind</span><span class="p">[</span><span class="n">clusters_wind</span><span class="p">[</span><span class="s1">&#39;potential_capacity&#39;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>
@@ -2891,7 +2080,7 @@ Top 5 sites (3% site) capacity 4 GW (2% of total capacity)
 <section id="Cluster-Timeseries">
 <h2>Cluster-Timeseries<a class="headerlink" href="#Cluster-Timeseries" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[60]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dissolved_indices_solar</span><span class="o">=</span><span class="n">store_all_runs</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">POLICY</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;dissolved_indices/solar&#39;</span><span class="p">)</span>
@@ -2902,7 +2091,7 @@ Top 5 sites (3% site) capacity 4 GW (2% of total capacity)
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[61]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
@@ -2991,7 +2180,7 @@ Top 5 sites (3% site) capacity 4 GW (2% of total capacity)
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[62]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">timeseries_clusters_solar</span><span class="o">=</span><span class="n">BC_dfs_all_runs</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">POLICY</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">][</span><span class="s1">&#39;timeseries_clusters_solar&#39;</span><span class="p">]</span>
@@ -2999,8 +2188,8 @@ Top 5 sites (3% site) capacity 4 GW (2% of total capacity)
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[63]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">get_cluster_vs_cells_profile</span><span class="p">(</span><span class="s1">&#39;EastKootenay&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;solar&#39;</span><span class="p">,</span><span class="n">cell_ts_solar</span><span class="p">,</span> <span class="n">dissolved_indices_solar</span><span class="p">,</span> <span class="n">timeseries_clusters_solar</span><span class="p">)</span>
@@ -3008,38 +2197,8 @@ Top 5 sites (3% site) capacity 4 GW (2% of total capacity)
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; Cluster vs Cells profile plot saved to ../vis/Canada/BC/strict_policy_aeroway_CPCAD_buffer/solar_cluster_EastKootenay_1_vs_cells_profile.svg</span>
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_99_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_99_1.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; Cluster vs Cells profile plot saved to ../vis/Canada/BC/strict_policy_aeroway_CPCAD_buffer/wind_cluster_PeaceRiver_1_vs_cells_profile.svg</span>
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_99_3.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_99_3.png" />
-</div>
-</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[64]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># resource_clusters_solar,cluster_timeseries_solar=Builder.select_top_sites(solar_clusters,</span>
@@ -3053,7 +2212,7 @@ Top 5 sites (3% site) capacity 4 GW (2% of total capacity)
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[65]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import matplotlib.pyplot as plt</span>
@@ -3161,7 +2320,7 @@ Top 5 sites (3% site) capacity 4 GW (2% of total capacity)
 <section id="Energy-Calculations">
 <h1>Energy Calculations<a class="headerlink" href="#Energy-Calculations" title="Link to this heading">#</a></h1>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[66]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># GRID_PROXIMITY_KM:int=30 #km</span>
@@ -3180,8 +2339,8 @@ Top 5 sites (3% site) capacity 4 GW (2% of total capacity)
 <ul class="simple">
 <li><p>Analysing 10000 GWh solar resource’s supply curve</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[67]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">policy</span> <span class="ow">in</span> <span class="n">POLICYs</span><span class="p">:</span>
@@ -3238,60 +2397,11 @@ Top 5 sites (3% site) capacity 4 GW (2% of total capacity)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Policy: BASELINE
-----------------------------------------------------------------------------------------------------
-Total potential solar capacity: 278.09 GW
-Total potential wind capacity: 1518.53 GW
-
-..........
-&lt;=10,000 GWh from Solar
-..........
-Total potential solar energy: 9762.49 GWh
-Number of cells needed (solar): 26
-4.98 GW potential solar capacity
-Mean Score : 54.88 $/MWH
-..........
-&lt;=40,000 GWh from Wind
-..........
-Total potential wind energy: 35252.21 GWh
-Number of cells needed (wind): 38
- 8.49 GW potential wind capacity
- Mean Score : 41.04 $/MWH
-
-
-Policy: strict_policy_aeroway_CPCAD_buffer
-----------------------------------------------------------------------------------------------------
-Total potential solar capacity: 266.34 GW
-Total potential wind capacity: 1354.23 GW
-
-..........
-&lt;=10,000 GWh from Solar
-..........
-Total potential solar energy: 9208.97 GWh
-Number of cells needed (solar): 31
-4.70 GW potential solar capacity
-Mean Score : 55.18 $/MWH
-..........
-&lt;=40,000 GWh from Wind
-..........
-Total potential wind energy: 38188.61 GWh
-Number of cells needed (wind): 44
- 9.45 GW potential wind capacity
- Mean Score : 41.79 $/MWH
-
-
-</pre></div></div>
-</div>
 <ul class="simple">
 <li><p>Analysing 40000 GWh wind resource’s supply curve</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[68]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lcoe_threshold_solar</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">57</span> <span class="c1">#$/MWH</span>
@@ -3331,42 +2441,11 @@ Number of cells needed (wind): 44
 <br/></pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Policy: BASELINE
-----------------------------------------------------------------------------------------------------
-Total potential solar capacity: 278.09 GW
-Total potential wind capacity: 1518.53 GW
-
-..........
-Total potential solar capacity &lt;=57 $/MWh LCOE threshold: 6.19 GW
-Total potential wind capacity &lt;=50 $/MWh LCOE threshold: 23.27 GW
-Total potential solar energy @ &lt;=57 $/MWh LCOE threshold: 12118.91 GWh
-Total potential wind energy @ &lt;=50 $/MWh LCOE threshold: 90125.18 GWh
-
-
-Policy: strict_policy_aeroway_CPCAD_buffer
-----------------------------------------------------------------------------------------------------
-Total potential solar capacity: 266.34 GW
-Total potential wind capacity: 1354.23 GW
-
-..........
-Total potential solar capacity &lt;=57 $/MWh LCOE threshold: 5.15 GW
-Total potential wind capacity &lt;=50 $/MWh LCOE threshold: 20.06 GW
-Total potential solar energy @ &lt;=57 $/MWh LCOE threshold: 10073.06 GWh
-Total potential wind energy @ &lt;=50 $/MWh LCOE threshold: 78481.67 GWh
-
-
-</pre></div></div>
-</div>
 <ul class="simple">
 <li><p>Load BASELINE cells</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[69]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">solar_cells_filtered_default</span><span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">BASELINE_results_save_to</span><span class="si">}</span><span class="s2">/solar_cells_below_</span><span class="si">{</span><span class="n">lcoe_threshold_solar</span><span class="si">}</span><span class="s2">_$pMWh_BC_BASELINE.csv&quot;</span><span class="p">)</span>
@@ -3377,8 +2456,8 @@ Total potential wind energy @ &lt;=50 $/MWh LCOE threshold: 78481.67 GWh
 <ul class="simple">
 <li><p>Compare with Default (baseline)</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[70]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -3472,18 +2551,11 @@ Total potential wind energy @ &lt;=50 $/MWh LCOE threshold: 78481.67 GWh
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_113_0.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_113_0.png" />
-</div>
-</div>
 <ul class="simple">
 <li><p>Extract the co-located Resources (cells)</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[71]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">common_idx</span> <span class="o">=</span> <span class="n">solar_cells_filtered</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">wind_cells_filtered</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
@@ -3497,22 +2569,12 @@ Total potential wind energy @ &lt;=50 $/MWh LCOE threshold: 78481.67 GWh
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Common index count: 3
-Solar capacity (GW) in common cells: 0.44
-Wind capacity (GW) in common cells: 0.90
-</pre></div></div>
-</div>
 </section>
 </section>
 <section id="id1">
 <h1>Clusters<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[72]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vis</span><span class="o">.</span><span class="n">plot_region_complementarity</span><span class="p">(</span><span class="n">timeseries_solar</span><span class="o">=</span><span class="n">timeseries_clusters_solar</span><span class="p">,</span>
@@ -3525,77 +2587,8 @@ Wind capacity (GW) in common cells: 0.90
 <br/></pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_117_0.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_117_0.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[72]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(month        1         2         3         4         5         6         7   \
- hour
- 0           NaN       NaN       NaN       NaN       NaN       NaN       NaN
- 1           NaN       NaN       NaN       NaN       NaN       NaN       NaN
- 2           NaN       NaN       NaN       NaN       NaN       NaN       NaN
- 3           NaN       NaN       NaN       NaN       NaN       NaN       NaN
- 4           NaN       NaN       NaN       NaN       NaN       NaN       NaN
- 5           NaN       NaN       NaN       NaN  0.093056 -0.354793  0.362186
- 6           NaN       NaN       NaN -0.265129 -0.218490 -0.264481  0.062223
- 7           NaN       NaN  0.206975 -0.257423 -0.275897 -0.286816 -0.267348
- 8           NaN       NaN -0.457981 -0.565374 -0.327365 -0.414059 -0.403512
- 9     -0.366259 -0.318745 -0.565223 -0.643879 -0.431807 -0.517629 -0.488360
- 10    -0.327525 -0.312480 -0.594492 -0.718344 -0.463399 -0.552626 -0.578099
- 11    -0.324654 -0.284134 -0.587417 -0.740211 -0.433403 -0.511232 -0.602013
- 12    -0.317443 -0.307373 -0.600357 -0.770440 -0.394825 -0.508556 -0.556835
- 13    -0.230217 -0.361287 -0.594539 -0.775486 -0.289133 -0.426320 -0.500185
- 14    -0.137953 -0.390364 -0.612395 -0.784446 -0.241373 -0.354990 -0.406997
- 15    -0.112071 -0.328262 -0.630508 -0.726745 -0.197265 -0.287483 -0.340536
- 16    -0.079457 -0.302878 -0.624813 -0.696110 -0.164188 -0.206965 -0.238562
- 17    -0.072038 -0.334608 -0.594916 -0.633902 -0.125824 -0.092888 -0.166204
- 18    -0.057909 -0.341013 -0.603287 -0.577427 -0.096741 -0.039156 -0.073160
- 19          NaN -0.174154 -0.596005 -0.480409 -0.022998  0.037524 -0.046681
- 20          NaN       NaN -0.247774 -0.458290  0.057075  0.052237 -0.026714
- 21          NaN       NaN       NaN -0.200175  0.262397  0.006749  0.015448
- 22          NaN       NaN       NaN       NaN  0.324477 -0.338088  0.014690
- 23          NaN       NaN       NaN       NaN       NaN -0.534953       NaN
-
- month        8         9         10        11        12
- hour
- 0           NaN       NaN       NaN       NaN       NaN
- 1           NaN       NaN       NaN       NaN       NaN
- 2           NaN       NaN       NaN       NaN       NaN
- 3           NaN       NaN       NaN       NaN       NaN
- 4           NaN       NaN       NaN       NaN       NaN
- 5           NaN       NaN       NaN       NaN       NaN
- 6     -0.461241       NaN       NaN       NaN       NaN
- 7     -0.022507 -0.212257       NaN       NaN       NaN
- 8     -0.117072 -0.303276  0.031170       NaN       NaN
- 9     -0.219205 -0.364582 -0.327215 -0.082668  0.191429
- 10    -0.274750 -0.483275 -0.448031 -0.482516 -0.160550
- 11    -0.271430 -0.479766 -0.602514 -0.541384 -0.264380
- 12    -0.221326 -0.394300 -0.621450 -0.492979 -0.400314
- 13    -0.197916 -0.346540 -0.599715 -0.496499 -0.403799
- 14    -0.164223 -0.334120 -0.565974 -0.473927 -0.325326
- 15    -0.122193 -0.208775 -0.551017 -0.420844 -0.326519
- 16    -0.037509 -0.269913 -0.529444 -0.408348 -0.304697
- 17     0.071638 -0.269961 -0.502187 -0.331007 -0.280298
- 18     0.129158 -0.286558 -0.353930  0.197462       NaN
- 19     0.174010 -0.323871 -0.100321       NaN       NaN
- 20     0.231758 -0.252855       NaN       NaN       NaN
- 21    -0.032738       NaN       NaN       NaN       NaN
- 22    -0.250702       NaN       NaN       NaN       NaN
- 23          NaN       NaN       NaN       NaN       NaN  ,
- np.float64(0.3242499426684563))
-</pre></div></div>
-</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[73]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># # Calculate standard deviation of difference for each cluster vs PeaceRiver_1</span>
@@ -3610,7 +2603,7 @@ Wind capacity (GW) in common cells: 0.90
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[74]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># timeseries_clusters_wind[most_deviated_cluster].to_csv(f&quot;../results/temp/timeseries_clusters_wind_{RUN_ID}_{most_deviated_cluster}.csv&quot;)</span>
@@ -3618,7 +2611,7 @@ Wind capacity (GW) in common cells: 0.90
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[75]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># # Compute daily means for PeaceRiver_1 and most_deviated_cluster</span>
@@ -3640,8 +2633,8 @@ Wind capacity (GW) in common cells: 0.90
 </div>
 <section id="Regional-Outlines-(not-sensitive-to-Policies)">
 <h2>Regional Outlines (not sensitive to Policies)<a class="headerlink" href="#Regional-Outlines-(not-sensitive-to-Policies)" title="Link to this heading">#</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[76]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
@@ -3704,15 +2697,8 @@ Wind capacity (GW) in common cells: 0.90
 <br/></pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_123_0.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_123_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[77]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">cells</span><span class="o">.</span><span class="n">crs</span><span class="o">!=</span><span class="n">boundary_plot</span><span class="o">.</span><span class="n">crs</span><span class="p">:</span>
@@ -3729,18 +2715,11 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_124_0.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_124_0.png" />
-</div>
-</div>
 </section>
 <section id="Grid">
 <h2>Grid<a class="headerlink" href="#Grid" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[78]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lines</span><span class="o">=</span><span class="n">BC_dfs_all_runs</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">POLICY</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">][</span><span class="s1">&#39;lines&#39;</span><span class="p">]</span>
@@ -3752,7 +2731,7 @@ Wind capacity (GW) in common cells: 0.90
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[79]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for columns in lines.columns:</span>
@@ -3763,7 +2742,7 @@ Wind capacity (GW) in common cells: 0.90
 <section id="lines">
 <h3>lines<a class="headerlink" href="#lines" title="Link to this heading">#</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[80]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_grid_lines</span><span class="p">(</span>
@@ -3894,8 +2873,8 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[81]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lines_new</span><span class="o">=</span><span class="n">plot_grid_lines</span><span class="p">(</span>
@@ -3911,34 +2890,11 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; No existing VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;facility_installed_capacity&#39; for marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Transmission Lines for British Columbia saved to ../vis/Canada/BC/general_PLOTS/transmission_lines_BC.svg</span>
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_130_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_130_1.png" />
-</div>
-</div>
 </section>
 <section id="Grid-Proximity">
 <h3>Grid Proximity<a class="headerlink" href="#Grid-Proximity" title="Link to this heading">#</a></h3>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[82]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
@@ -4054,28 +3010,6 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; No existing VREs data provided or GeoDataFrame is empty.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;facility_installed_capacity&#39; for marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_132_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_132_1.png" />
-</div>
-</div>
 </section>
 </section>
 </section>
@@ -4084,8 +3018,8 @@ Wind capacity (GW) in common cells: 0.90
 <ul class="simple">
 <li><p>Plot wind CF raster (benchmark) vs Calculated CF for ERA5 Cells</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[83]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gwa_country_code</span><span class="o">=</span><span class="n">cfg_policy</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;region_mapping&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">region_code</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;GWA_country_code&#39;</span><span class="p">)</span>
@@ -4093,18 +3027,8 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-green-intense-fg ansi-bold">******************************</span>
-<span class="ansi-green-intense-fg ansi-bold">GWA Country Code Selected: CAN</span>
-<span class="ansi-green-intense-fg ansi-bold">******************************</span>
-</pre></div></div>
-</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[84]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">rioxarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rxr</span>
@@ -4121,7 +3045,7 @@ Wind capacity (GW) in common cells: 0.90
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[85]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import matplotlib.pyplot as plt</span>
@@ -4136,7 +3060,7 @@ Wind capacity (GW) in common cells: 0.90
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[86]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">gwa_raster_data</span><span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">crs</span> <span class="o">!=</span> <span class="n">CRS_m</span><span class="p">:</span>
@@ -4152,7 +3076,7 @@ Wind capacity (GW) in common cells: 0.90
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[87]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># vis.get_CF_wind_check_plot(cells_baseline,</span>
@@ -4167,8 +3091,8 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[88]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vis</span><span class="o">.</span><span class="n">get_CF_wind_check_plot</span><span class="p">(</span><span class="n">cells_scenario_proj</span><span class="p">,</span>
@@ -4183,82 +3107,8 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-yellow-fg">└&gt; Wind CF comparison plot created and saved to: ../vis/Canada/BC/general_PLOTS/Wind_CF_comparison.png</span>
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area rendered_html docutils container">
-<style type="text/css">
-</style>
-<table id="T_50c35">
-  <caption>Summary Statistics for CF_IEC3 and calibrated Wind CF_mean</caption>
-  <thead>
-    <tr>
-      <th class="blank level0" >&nbsp;</th>
-      <th id="T_50c35_level0_col0" class="col_heading level0 col0" >CF_IEC3</th>
-      <th id="T_50c35_level0_col1" class="col_heading level0 col1" >wind_CF_mean</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th id="T_50c35_level0_row0" class="row_heading level0 row0" >count</th>
-      <td id="T_50c35_row0_col0" class="data row0 col0" >2948.00</td>
-      <td id="T_50c35_row0_col1" class="data row0 col1" >2956.00</td>
-    </tr>
-    <tr>
-      <th id="T_50c35_level0_row1" class="row_heading level0 row1" >mean</th>
-      <td id="T_50c35_row1_col0" class="data row1 col0" >0.29</td>
-      <td id="T_50c35_row1_col1" class="data row1 col1" >0.26</td>
-    </tr>
-    <tr>
-      <th id="T_50c35_level0_row2" class="row_heading level0 row2" >std</th>
-      <td id="T_50c35_row2_col0" class="data row2 col0" >0.09</td>
-      <td id="T_50c35_row2_col1" class="data row2 col1" >0.12</td>
-    </tr>
-    <tr>
-      <th id="T_50c35_level0_row3" class="row_heading level0 row3" >min</th>
-      <td id="T_50c35_row3_col0" class="data row3 col0" >0.07</td>
-      <td id="T_50c35_row3_col1" class="data row3 col1" >0.00</td>
-    </tr>
-    <tr>
-      <th id="T_50c35_level0_row4" class="row_heading level0 row4" >25%</th>
-      <td id="T_50c35_row4_col0" class="data row4 col0" >0.22</td>
-      <td id="T_50c35_row4_col1" class="data row4 col1" >0.17</td>
-    </tr>
-    <tr>
-      <th id="T_50c35_level0_row5" class="row_heading level0 row5" >50%</th>
-      <td id="T_50c35_row5_col0" class="data row5 col0" >0.28</td>
-      <td id="T_50c35_row5_col1" class="data row5 col1" >0.24</td>
-    </tr>
-    <tr>
-      <th id="T_50c35_level0_row6" class="row_heading level0 row6" >75%</th>
-      <td id="T_50c35_row6_col0" class="data row6 col0" >0.35</td>
-      <td id="T_50c35_row6_col1" class="data row6 col1" >0.33</td>
-    </tr>
-    <tr>
-      <th id="T_50c35_level0_row7" class="row_heading level0 row7" >max</th>
-      <td id="T_50c35_row7_col0" class="data row7 col0" >0.63</td>
-      <td id="T_50c35_row7_col1" class="data row7 col1" >0.71</td>
-    </tr>
-  </tbody>
-</table></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_140_2.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_140_2.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[89]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -4309,13 +3159,6 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_141_0.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_141_0.png" />
-</div>
-</div>
 <section id="#-Lands">
 <h2># Lands<a class="headerlink" href="##-Lands" title="Link to this heading">#</a></h2>
 </section>
@@ -4327,7 +3170,7 @@ Wind capacity (GW) in common cells: 0.90
 <div><p>Loaded as Custom Raster</p>
 </div></blockquote>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[90]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">custom_rasters</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="n">cfg_policy</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;custom_land_layers&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rasters&#39;</span><span class="p">)</span>
@@ -4344,8 +3187,8 @@ Wind capacity (GW) in common cells: 0.90
 <ul class="simple">
 <li><p>Load Raster (clipped to BC and 100m Resolution), legends</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[91]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CanGov_landcover_path</span><span class="o">=</span><span class="s1">&#39;../data/downloaded_data/Gov/LandCover/landcover-2020-classification_clipped_BC_100m.tif&#39;</span>
@@ -4354,22 +3197,11 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-✅ Loaded DataArray: landcover-2020-classification_clipped_BC_100m.tif
-   ├─ shape: (17915, 10199)
-   ├─ CRS: EPSG:3979
-   └─ res: (100.0, -100.0)
-</pre></div></div>
-</div>
 <ul class="simple">
 <li><p>Review Existing facilities and Landcover mapping</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[92]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">existing_VREs_gdf_with_landcover</span><span class="p">,</span><span class="n">existing_VREs_summary</span> <span class="o">=</span> <span class="n">lands</span><span class="o">.</span><span class="n">assign_raster_class_to_points</span><span class="p">(</span>
@@ -4395,27 +3227,11 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_150_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_150_1.png" />
-</div>
-</div>
 <ul class="simple">
 <li><p>Review class distribution and find the dominant classes</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[93]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">LandCover_CANgov2020_class_distribution</span><span class="o">=</span><span class="n">lands</span><span class="o">.</span><span class="n">plot_raster_class_distribution</span><span class="p">(</span><span class="n">CanGov_landcover_da</span><span class="p">,</span>
@@ -4429,178 +3245,8 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-✅ Saved figure: ../vis/Canada/BC/general_PLOTS/LandCover_CANgov_class_distribution_BC.png
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_152_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_152_1.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-🧮 Excluding classes: [0] | Applied threshold: 0.0%
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[93]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>class</th>
-      <th>Percentage</th>
-      <th>description</th>
-      <th>color</th>
-      <th>label</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1</td>
-      <td>54.258998</td>
-      <td>Temperate or sub-polar needleleaf forest</td>
-      <td>#003d00</td>
-      <td>1: Temperate or sub-polar needleleaf forest</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>16</td>
-      <td>11.459634</td>
-      <td>Barren land</td>
-      <td>#a8abae</td>
-      <td>16: Barren land</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>8</td>
-      <td>11.349882</td>
-      <td>Temperate or sub-polar shrubland</td>
-      <td>#0ed186ff</td>
-      <td>8: Temperate or sub-polar shrubland</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>10</td>
-      <td>7.154917</td>
-      <td>Temperate or sub-polar grassland</td>
-      <td>#4ff26aff</td>
-      <td>10: Temperate or sub-polar grassland</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>6</td>
-      <td>4.961482</td>
-      <td>Mixed forest</td>
-      <td>#5b752b</td>
-      <td>6: Mixed forest</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>18</td>
-      <td>3.285340</td>
-      <td>Water</td>
-      <td>#4c70a3</td>
-      <td>18: Water</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>19</td>
-      <td>2.979003</td>
-      <td>Snow and ice</td>
-      <td>#d2ccd2ff</td>
-      <td>19: Snow and ice</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>14</td>
-      <td>2.265056</td>
-      <td>Wetland</td>
-      <td>#3fd7c5ff</td>
-      <td>14: Wetland</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>15</td>
-      <td>0.869056</td>
-      <td>Cropland</td>
-      <td>#b3f62cff</td>
-      <td>15: Cropland</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>5</td>
-      <td>0.862585</td>
-      <td>Temperate or sub-polar broadleaf deciduous forest</td>
-      <td>#148c3d</td>
-      <td>5: Temperate or sub-polar broadleaf deciduous ...</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>17</td>
-      <td>0.544668</td>
-      <td>Urban and built-up</td>
-      <td>#dc2126</td>
-      <td>17: Urban and built-up</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>12</td>
-      <td>0.005723</td>
-      <td>Sub-polar or polar grassland-lichen-moss</td>
-      <td>#bad48f</td>
-      <td>12: Sub-polar or polar grassland-lichen-moss</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2</td>
-      <td>0.002991</td>
-      <td>Sub-polar taiga needleleaf forest</td>
-      <td>#949c70</td>
-      <td>2: Sub-polar taiga needleleaf forest</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>11</td>
-      <td>0.000664</td>
-      <td>Sub-polar or polar shrubland-lichen-moss</td>
-      <td>#9c7554</td>
-      <td>11: Sub-polar or polar shrubland-lichen-moss</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[94]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">selected_classes_solar</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">]</span>
@@ -4608,249 +3254,27 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[95]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">LC_test</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[95]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>class</th>
-      <th>Percentage</th>
-      <th>description</th>
-      <th>color</th>
-      <th>label</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>10</th>
-      <td>16</td>
-      <td>11.459634</td>
-      <td>Barren land</td>
-      <td>#a8abae</td>
-      <td>16: Barren land</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>8</td>
-      <td>11.349882</td>
-      <td>Temperate or sub-polar shrubland</td>
-      <td>#0ed186ff</td>
-      <td>8: Temperate or sub-polar shrubland</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>10</td>
-      <td>7.154917</td>
-      <td>Temperate or sub-polar grassland</td>
-      <td>#4ff26aff</td>
-      <td>10: Temperate or sub-polar grassland</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>15</td>
-      <td>0.869056</td>
-      <td>Cropland</td>
-      <td>#b3f62cff</td>
-      <td>15: Cropland</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>17</td>
-      <td>0.544668</td>
-      <td>Urban and built-up</td>
-      <td>#dc2126</td>
-      <td>17: Urban and built-up</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[96]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">LandCover_CANgov2020_class_distribution</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[96]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>class</th>
-      <th>Percentage</th>
-      <th>description</th>
-      <th>color</th>
-      <th>label</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1</td>
-      <td>54.258998</td>
-      <td>Temperate or sub-polar needleleaf forest</td>
-      <td>#003d00</td>
-      <td>1: Temperate or sub-polar needleleaf forest</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>16</td>
-      <td>11.459634</td>
-      <td>Barren land</td>
-      <td>#a8abae</td>
-      <td>16: Barren land</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>8</td>
-      <td>11.349882</td>
-      <td>Temperate or sub-polar shrubland</td>
-      <td>#0ed186ff</td>
-      <td>8: Temperate or sub-polar shrubland</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>10</td>
-      <td>7.154917</td>
-      <td>Temperate or sub-polar grassland</td>
-      <td>#4ff26aff</td>
-      <td>10: Temperate or sub-polar grassland</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>6</td>
-      <td>4.961482</td>
-      <td>Mixed forest</td>
-      <td>#5b752b</td>
-      <td>6: Mixed forest</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>18</td>
-      <td>3.285340</td>
-      <td>Water</td>
-      <td>#4c70a3</td>
-      <td>18: Water</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>19</td>
-      <td>2.979003</td>
-      <td>Snow and ice</td>
-      <td>#d2ccd2ff</td>
-      <td>19: Snow and ice</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>14</td>
-      <td>2.265056</td>
-      <td>Wetland</td>
-      <td>#3fd7c5ff</td>
-      <td>14: Wetland</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>15</td>
-      <td>0.869056</td>
-      <td>Cropland</td>
-      <td>#b3f62cff</td>
-      <td>15: Cropland</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>5</td>
-      <td>0.862585</td>
-      <td>Temperate or sub-polar broadleaf deciduous forest</td>
-      <td>#148c3d</td>
-      <td>5: Temperate or sub-polar broadleaf deciduous ...</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>17</td>
-      <td>0.544668</td>
-      <td>Urban and built-up</td>
-      <td>#dc2126</td>
-      <td>17: Urban and built-up</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>12</td>
-      <td>0.005723</td>
-      <td>Sub-polar or polar grassland-lichen-moss</td>
-      <td>#bad48f</td>
-      <td>12: Sub-polar or polar grassland-lichen-moss</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2</td>
-      <td>0.002991</td>
-      <td>Sub-polar taiga needleleaf forest</td>
-      <td>#949c70</td>
-      <td>2: Sub-polar taiga needleleaf forest</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>11</td>
-      <td>0.000664</td>
-      <td>Sub-polar or polar shrubland-lichen-moss</td>
-      <td>#9c7554</td>
-      <td>11: Sub-polar or polar shrubland-lichen-moss</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
 <ul class="simple">
 <li><p>Define layers for plotting in Map</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[97]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">land_cover_cfg</span><span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">cfg_policy</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;custom_land_layers&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rasters&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="s1">&#39;CanGov_LandCover_2020&#39;</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)),</span> <span class="kc">None</span><span class="p">)</span>
@@ -4861,7 +3285,7 @@ Wind capacity (GW) in common cells: 0.90
 <ul class="simple">
 <li><p>Review the spatial filters</p></li>
 </ul>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
@@ -4900,19 +3324,6 @@ Wind capacity (GW) in common cells: 0.90
 <span class="c1"># fig1.savefig(doc_save_to, bbox_inches=&quot;tight&quot;)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-yellow-fg">└&gt; Plotting selected classes: {&#39;solar&#39;: [8, 10, 13, 15, 16, 17], &#39;wind&#39;: [2, 5, 6, 8, 10, 13, 15, 16]}</span>
-✅ Raster clipped to boundary &#39;Country&#39; region, shape: (13440, 15702)
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;wind_turbine_capacity&#39; for marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-</pre></div></div>
 </div>
 </section>
 </section>
@@ -5007,7 +3418,7 @@ Wind capacity (GW) in common cells: 0.90
 <ul class="simple">
 <li><p>Load Raster (clipped to BC),</p></li>
 </ul>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
@@ -5015,17 +3426,6 @@ Wind capacity (GW) in common cells: 0.90
 <span class="n">GAEZ_terrain_raster_da</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_raster_da</span><span class="p">(</span><span class="n">GAEZ_terrain_raster_path</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-✅ Loaded DataArray: slpmed30s_clipped_BC.tif
-   ├─ shape: (5168, 6038)
-   ├─ CRS: EPSG:3005
-   └─ res: (264.44058442587914, -264.4378948622617)
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
@@ -5044,7 +3444,7 @@ Wind capacity (GW) in common cells: 0.90
 <ul class="simple">
 <li><p>Review the existing sites mapping to terrain layers</p></li>
 </ul>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
@@ -5056,139 +3456,10 @@ Wind capacity (GW) in common cells: 0.90
 <br/></pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-✅ Saved figure: ../vis/Canada/BC/general_PLOTS/GAEZ_terrains_class_distribution_BC.png
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_171_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_171_1.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-🧮 Excluding classes: [0] | Applied threshold: 0.0%
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>class</th>
-      <th>Percentage</th>
-      <th>description</th>
-      <th>color</th>
-      <th>label</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1</td>
-      <td>0.227380</td>
-      <td>flat (0-0.5%)</td>
-      <td>#eeefedff</td>
-      <td>1: flat (0-0.5%)</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>9</td>
-      <td>1.338509</td>
-      <td>Water</td>
-      <td>#6bb5eaff</td>
-      <td>9: Water</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2</td>
-      <td>5.831253</td>
-      <td>flat (0.5-2%)</td>
-      <td>#e2dfe3ff</td>
-      <td>2: flat (0.5-2%)</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>4</td>
-      <td>9.197896</td>
-      <td>low slope (5-8%)</td>
-      <td>#bdb19bff</td>
-      <td>4: low slope (5-8%)</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>3</td>
-      <td>11.559066</td>
-      <td>low slope (2-5%)</td>
-      <td>#d1cdc3ff</td>
-      <td>3: low slope (2-5%)</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>7</td>
-      <td>15.489455</td>
-      <td>high slope (30-45%)</td>
-      <td>#86652cff</td>
-      <td>7: high slope (30-45%)</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>5</td>
-      <td>16.693172</td>
-      <td>moderate slope (8-16%)</td>
-      <td>#b09c79ff</td>
-      <td>5: moderate slope (8-16%)</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>6</td>
-      <td>18.094073</td>
-      <td>moderate slope (16-30%)</td>
-      <td>#917544ff</td>
-      <td>6: moderate slope (16-30%)</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>8</td>
-      <td>21.569196</td>
-      <td>high slope (&gt;45%)</td>
-      <td>#452001ff</td>
-      <td>8: high slope (&gt;45%)</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
 <ul class="simple">
 <li><p>Review Existing facilities' mapping to layers</p></li>
 </ul>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
@@ -5215,22 +3486,6 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_173_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_173_1.png" />
-</div>
-</div>
 <ul class="simple">
 <li><p>Load layers to be plotted in map</p></li>
 </ul>
@@ -5253,7 +3508,7 @@ Wind capacity (GW) in common cells: 0.90
 <ul class="simple">
 <li><p>Plot in Map</p></li>
 </ul>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
@@ -5290,35 +3545,6 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-yellow-fg">└&gt; Plotting selected classes: {&#39;solar&#39;: [np.float32(1.0), np.float32(2.0), np.float32(3.0), np.float32(4.0), np.float32(5.0), np.float32(6.0), np.float32(7.0)], &#39;wind&#39;: [np.float32(1.0), np.float32(2.0), np.float32(3.0), np.float32(4.0), np.float32(5.0), np.float32(6.0)]}</span>
-✅ Raster clipped to boundary &#39;Country&#39; region, shape: (5168, 6038)
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;wind_turbine_capacity&#39; for marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-yellow-fg">└&gt; Saved map with excluded overlay → ../vis/Canada/BC/strict_policy_aeroway_CPCAD_buffer/GAEZ_terrains_SelectedClasses_with_existing_VREs.png</span>
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_177_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_177_1.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-yellow-fg">└&gt; plot saved to:: ../vis/Canada/BC/strict_policy_aeroway_CPCAD_buffer/GAEZ_terrains_SelectedClasses_with_existing_VREs.png</span>
-</pre></div></div>
-</div>
 </section>
 <section id="Exclusions">
 <h4>Exclusions<a class="headerlink" href="#Exclusions" title="Link to this heading">#</a></h4>
@@ -5351,7 +3577,7 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
@@ -5360,21 +3586,10 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-✅ Loaded DataArray: exclusion_2017_clipped_BC.tif
-   ├─ shape: (5169, 6039)
-   ├─ CRS: EPSG:3005
-   └─ res: (264.44058442587914, -264.4378948622617)
-</pre></div></div>
-</div>
 <ul class="simple">
 <li><p>Review Class Distribution of raster</p></li>
 </ul>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
@@ -5386,123 +3601,10 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-✅ Saved figure: ../vis/Canada/BC/general_PLOTS/GAEZ_Exclusion_class_distribution_BC.png
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_185_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_185_1.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-🧮 Excluding classes: [0] | Applied threshold: 0.0%
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>class</th>
-      <th>Percentage</th>
-      <th>description</th>
-      <th>color</th>
-      <th>label</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>4</th>
-      <td>5</td>
-      <td>0.000287</td>
-      <td>GLWD-3 class 4-9 and outside protected area an...</td>
-      <td>#a50f15</td>
-      <td>5: GLWD-3 class 4-9 and outside protected area...</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>3</td>
-      <td>0.016715</td>
-      <td>WDPA and not an IUCN category</td>
-      <td>#fb6a4a</td>
-      <td>3: WDPA and not an IUCN category</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>4</td>
-      <td>1.037123</td>
-      <td>KBA and outside protected areas</td>
-      <td>#de2d26</td>
-      <td>4: KBA and outside protected areas</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>7</td>
-      <td>1.344653</td>
-      <td>water</td>
-      <td>#66c2a5</td>
-      <td>7: water</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>6</td>
-      <td>2.802356</td>
-      <td>buffers around protected areas (30arc sec buffer)</td>
-      <td>#67000d</td>
-      <td>6: buffers around protected areas (30arc sec b...</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2</td>
-      <td>15.002108</td>
-      <td>IUCN category in WDPA</td>
-      <td>#fcae91</td>
-      <td>2: IUCN category in WDPA</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>1</td>
-      <td>79.796759</td>
-      <td>no exclusion</td>
-      <td>#75ae79ff</td>
-      <td>1: no exclusion</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
 <ul class="simple">
 <li><p>Review Existing sites mapping to layers</p></li>
 </ul>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
@@ -5529,22 +3631,6 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_187_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_187_1.png" />
-</div>
-</div>
 <ul class="simple">
 <li><p>Define Layers to plot</p></li>
 </ul>
@@ -5566,7 +3652,7 @@ Wind capacity (GW) in common cells: 0.90
 <ul class="simple">
 <li><p>Plot in Map</p></li>
 </ul>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
@@ -5604,224 +3690,11 @@ Wind capacity (GW) in common cells: 0.90
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-yellow-fg">└&gt; Plotting selected classes: {&#39;solar&#39;: [np.float32(1.0)], &#39;wind&#39;: [np.float32(1.0)]}</span>
-✅ Raster clipped to boundary &#39;Country&#39; region, shape: (5168, 6038)
-<span class="ansi-cyan-fg"> └&gt; Reprojecting VRE GeoDataFrames to target CRS: EPSG:3005</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;wind_turbine_capacity&#39; for marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Using &#39;potential_capacity&#39; for committed marker sizes.</span>
-<span class="ansi-cyan-fg"> └&gt; Plotting existing and committed VREs.</span>
-<span class="ansi-yellow-fg">└&gt; Saved map with excluded overlay → ../vis/Canada/BC/strict_policy_aeroway_CPCAD_buffer/GAEZ_exclusion_SelectedClasses_with_existing_VREs.png</span>
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_191_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_191_1.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-yellow-fg">└&gt; plot saved to:: ../vis/Canada/BC/strict_policy_aeroway_CPCAD_buffer/GAEZ_exclusion_SelectedClasses_with_existing_VREs.png</span>
-</pre></div></div>
-</div>
 </section>
 </section>
 </section>
 <section id="Vectors">
 <h2>Vectors<a class="headerlink" href="#Vectors" title="Link to this heading">#</a></h2>
-<section id="ALR">
-<h3>ALR<a class="headerlink" href="#ALR" title="Link to this heading">#</a></h3>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alr</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;../data/downloaded_data/Gov/ALC/alr_merged.geojson&#39;</span><span class="p">)</span>
-<span class="k">if</span> <span class="n">alr</span><span class="o">.</span><span class="n">crs</span> <span class="o">!=</span> <span class="n">CRS_m</span><span class="p">:</span>
-    <span class="n">alr</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">CRS_m</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.lines</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line2D</span>  <span class="c1"># for manual legend handle</span>
-
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
-
-<span class="c1"># Plot boundary first</span>
-<span class="n">boundary_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-    <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
-    <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
-    <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="c1"># Plot ALR on top</span>
-<span class="n">alr</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-    <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
-    <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;tab:green&quot;</span><span class="p">,</span>
-    <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
-    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="c1"># Clean look: no axes</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
-
-<span class="c1"># Manual legend: only Agricultural reserved land</span>
-<span class="n">custom_handle</span> <span class="o">=</span> <span class="n">Line2D</span><span class="p">(</span>
-    <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:green&quot;</span><span class="p">,</span>
-    <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
-    <span class="n">handles</span><span class="o">=</span><span class="p">[</span><span class="n">custom_handle</span><span class="p">],</span>
-    <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Agricultural reserved land&quot;</span><span class="p">],</span>
-    <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">,</span>
-    <span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">framealpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">common_vis_save_to</span><span class="si">}</span><span class="s2">/ALR_within_study_boundary_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">,</span>
-            <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
-
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;../docs/source/_static/ALR_within_study_boundary_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">,</span>
-            <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
-<br/></pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_195_0.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_195_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.lines</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line2D</span>  <span class="c1"># for manual legend handle</span>
-
-<span class="c1"># --- 1) Area statistics (ALR + BC) ---</span>
-<span class="c1"># Use an equal-area CRS for BC (NAD83 / BC Albers)</span>
-<span class="n">target_crs</span> <span class="o">=</span> <span class="s2">&quot;EPSG:3005&quot;</span>
-
-<span class="n">alr_eq</span> <span class="o">=</span> <span class="n">alr</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">target_crs</span><span class="p">)</span>
-<span class="n">bc_eq</span> <span class="o">=</span> <span class="n">boundary_plot</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">target_crs</span><span class="p">)</span>
-
-<span class="c1"># Area in km²</span>
-<span class="n">alr_area_sqkm</span> <span class="o">=</span> <span class="n">alr_eq</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">area</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="mf">1e6</span>
-<span class="n">bc_area_sqkm</span>  <span class="o">=</span> <span class="n">bc_eq</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">area</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="mf">1e6</span>
-<span class="n">share_pct</span> <span class="o">=</span> <span class="n">alr_area_sqkm</span> <span class="o">/</span> <span class="n">bc_area_sqkm</span> <span class="o">*</span> <span class="mi">100</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ALR area: </span><span class="si">{</span><span class="n">alr_area_sqkm</span><span class="si">:</span><span class="s2">,.1f</span><span class="si">}</span><span class="s2"> km²&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;BC area:  </span><span class="si">{</span><span class="n">bc_area_sqkm</span><span class="si">:</span><span class="s2">,.1f</span><span class="si">}</span><span class="s2"> km²&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ALR share of BC: </span><span class="si">{</span><span class="n">share_pct</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> %&quot;</span><span class="p">)</span>
-
-<span class="c1"># --- 2) Plotting ---</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
-
-<span class="c1"># Plot boundary first</span>
-<span class="n">boundary_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-    <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
-    <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
-    <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="c1"># Plot ALR on top</span>
-<span class="n">alr</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-    <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
-    <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;tab:green&quot;</span><span class="p">,</span>
-    <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
-    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="c1"># Clean look: no axes</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
-
-<span class="c1"># Manual legend: only Agricultural reserved land</span>
-<span class="n">custom_handle</span> <span class="o">=</span> <span class="n">Line2D</span><span class="p">(</span>
-    <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:green&quot;</span><span class="p">,</span>
-    <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
-    <span class="n">handles</span><span class="o">=</span><span class="p">[</span><span class="n">custom_handle</span><span class="p">],</span>
-    <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Agricultural reserved land&quot;</span><span class="p">],</span>
-    <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">,</span>
-    <span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">framealpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="c1"># Optional: small stats box inside the figure</span>
-<span class="n">stats_text</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="sa">f</span><span class="s2">&quot;ALR area: </span><span class="si">{</span><span class="n">alr_area_sqkm</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2"> km²</span><span class="se">\n</span><span class="s2">&quot;</span>
-    <span class="sa">f</span><span class="s2">&quot;Share of BC: </span><span class="si">{</span><span class="n">share_pct</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span>
-<span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
-    <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span>
-    <span class="n">stats_text</span><span class="p">,</span>
-    <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
-    <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
-    <span class="n">va</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
-    <span class="n">fontsize</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
-    <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s2">&quot;round,pad=0.2&quot;</span><span class="p">,</span>
-              <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
-              <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
-              <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
-<span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">common_vis_save_to</span><span class="si">}</span><span class="s2">/ALR_within_study_boundary_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">,</span>
-    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
-    <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-    <span class="sa">f</span><span class="s2">&quot;../docs/source/_static/ALR_within_study_boundary_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">,</span>
-    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-<br/></pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-ALR area: 47,207.3 km²
-BC area:  955,748.0 km²
-ALR share of BC: 4.94 %
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_196_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_196_1.png" />
-</div>
-</div>
-</section>
 <section id="Aeroway">
 <h3>Aeroway<a class="headerlink" href="#Aeroway" title="Link to this heading">#</a></h3>
 <div class="nbinput nblast docutils container">
@@ -5882,7 +3755,12 @@ ALR share of BC: 4.94 %
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><br/><span></span><span class="k">if</span> <span class="n">aeroway_buffer_solar_gdf</span><span class="o">.</span><span class="n">crs</span> <span class="o">!=</span> <span class="n">CRS_m</span><span class="p">:</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">boundary</span><span class="o">.</span><span class="n">crs</span> <span class="o">!=</span> <span class="n">CRS_m</span><span class="p">:</span>
+    <span class="n">boundary_proj</span><span class="o">=</span><span class="n">boundary</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">CRS_m</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">boundary_proj</span><span class="o">=</span><span class="n">boundary</span>
+
+<span class="k">if</span> <span class="n">aeroway_buffer_solar_gdf</span><span class="o">.</span><span class="n">crs</span> <span class="o">!=</span> <span class="n">CRS_m</span><span class="p">:</span>
     <span class="n">aeroway_buffer_solar_gdf_proj</span><span class="o">=</span><span class="n">aeroway_buffer_solar_gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">CRS_m</span><span class="p">)</span>
     <span class="n">aeroway_buffer_wind_gdf_proj</span><span class="o">=</span><span class="n">aeroway_buffer_wind_gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">CRS_m</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
@@ -5891,7 +3769,7 @@ ALR share of BC: 4.94 %
 <br/></pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
@@ -5960,34 +3838,6 @@ ALR share of BC: 4.94 %
 <span class="c1"># fig.savefig(&#39;../docs/source/_static/aeroway_buffers.svg&#39;, bbox_inches=&#39;tight&#39;)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_to_root</span><span class="si">}</span><span class="s1">/aeroway_buffers.svg&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[148]</span><span class="ansi-green-fg">, line 27</span>
-<span class="ansi-green-fg">     25</span> fig.suptitle(<span class="ansi-yellow-fg">f</span><span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">Aeroway Buffers (BASELINE)</span><span class="ansi-yellow-fg">&#34;</span>, weight=<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">bold</span><span class="ansi-yellow-fg">&#39;</span>, fontsize=<span class="ansi-green-fg">12</span>,y=<span class="ansi-green-fg">0.93</span>)
-<span class="ansi-green-fg">     26</span> <span style="color: rgb(95,135,135)"># Solar buffers</span>
-<span class="ansi-green-fg">---&gt; </span><span class="ansi-green-fg">27</span> <span class="ansi-yellow-bg">boundary_proj</span>.plot(ax=ax1, facecolor=<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">grey</span><span class="ansi-yellow-fg">&#34;</span>, edgecolor=<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">k</span><span class="ansi-yellow-fg">&#34;</span>, linewidth=<span class="ansi-green-fg">0.4</span>, alpha=<span class="ansi-green-fg">0.1</span>, zorder=<span class="ansi-green-fg">3</span>)
-<span class="ansi-green-fg">     28</span> aeroway_buffer_solar_gdf_proj.centroid.plot(
-<span class="ansi-green-fg">     29</span>     ax=ax1,
-<span class="ansi-green-fg">     30</span>     color=aeroway_buffer_solar_gdf_proj[<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">color</span><span class="ansi-yellow-fg">&#34;</span>],
-<span class="ansi-green-fg">   (...)</span><span class="ansi-green-fg">     33</span>     alpha=<span class="ansi-green-fg">0.4</span>
-<span class="ansi-green-fg">     34</span> )
-<span class="ansi-green-fg">     35</span> ax1.set_title(<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">No-go Buffers (Solar)</span><span class="ansi-yellow-fg">&#34;</span>,fontweight=<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">bold</span><span class="ansi-yellow-fg">&#39;</span>,fontsize=<span class="ansi-green-fg">10</span>,y=<span class="ansi-green-fg">0.95</span>)
-
-<span class="ansi-red-fg">NameError</span>: name &#39;boundary_proj&#39; is not defined
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_explore_Store_n_Visuals_CAN_204_1.png" src="../_images/notebooks_explore_Store_n_Visuals_CAN_204_1.png" />
 </div>
 </div>
 </section>
@@ -6298,7 +4148,6 @@ ALR share of BC: 4.94 %
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Vectors">Vectors</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ALR">ALR</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Aeroway">Aeroway</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#CPCAD">CPCAD</a></li>
 </ul>
