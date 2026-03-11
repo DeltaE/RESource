@@ -16,8 +16,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict
 import RES.utility as utils
-
+from datetime import datetime
 import yaml
+today_str = datetime.now().strftime("%Y%m%d")
 
 
 @dataclass
@@ -56,7 +57,7 @@ class AttributesParser:
 
 
         # Define the store file path and filename
-        self.store = Path(f"data/store/resources_{self.country.replace(' ', '')}_{self.region_short_code}_{self.RUN_ID}.h5")
+        self.store = Path(f"data/store/{self.country_kwd}/resources_{self.country_kwd}_{self.region_short_code}_{self.RUN_ID}.h5")
         self.store.parent.mkdir(parents=True, exist_ok=True)
         self.default_crs_cfg:dict=self.config.get('default_CRS',None)
         self.crs_d,self.crs_m=self.get_CRS()
@@ -155,7 +156,8 @@ class AttributesParser:
         The RUN_ID is used to identify the specific run of the scenario.
         It is typically used to differentiate between different runs of the same scenario, especially when multiple runs are performed with different parameters or configurations.
         """
-        return self.config.get('Scenario').get('run_id')
+        return f"{self.config.get('Scenario').get('run_id')}_{today_str}"
+
     
     def load_snapshot(self)->tuple:
         start_date = self.config.get('cutout', {}).get('snapshots', {}).get('start', [[]])[0]
@@ -201,7 +203,7 @@ class AttributesParser:
     
     def get_vis_dir(self) -> Path:
         vis_path = Path(
-            f"vis/{self.country_kwd}/{self.region_short_code}/{self.RUN_ID}/"
+            f"vis/{self.country_kwd}/{self.RUN_ID}/{self.region_short_code}/"
             f"{self.resource_type if self.resource_type else f'misc/{self.region_short_code}'}"
         )
 

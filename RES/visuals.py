@@ -29,16 +29,14 @@ Dependencies:
 
 from __future__ import annotations
 
+import json
+import numbers
 import os
-import textwrap
 from pathlib import Path
-from typing import Iterable, Mapping, Sequence
-
 import folium
 import geopandas as gpd
-import matplotlib as mpl
 import matplotlib
-import matplotlib.cm as cm
+import matplotlib as mpl
 import matplotlib.colors as mcolors
 import matplotlib.patches as mpatches
 import matplotlib.patheffects as pe
@@ -50,27 +48,25 @@ import plotly.graph_objects as go
 import rasterio
 import seaborn as sns
 import xarray
-import xarray as xr
 from atlite import ExclusionContainer
 from IPython.display import display
 from matplotlib import lines as mlines
 from matplotlib.colors import (
-    BoundaryNorm,
     LinearSegmentedColormap,
-    ListedColormap,
-    to_rgba,
 )
 from matplotlib.font_manager import FontProperties
 from matplotlib.gridspec import GridSpec
 from matplotlib.lines import Line2D
-from matplotlib.patches import Patch, Rectangle, RegularPolygon
-from matplotlib.ticker import FuncFormatter, MaxNLocator, MultipleLocator,PercentFormatter
+from matplotlib.patches import Rectangle, RegularPolygon
+from matplotlib.ticker import (
+    FuncFormatter,
+    MultipleLocator,
+)
 from plotly.subplots import make_subplots
-from rasterio.warp import Resampling, calculate_default_transform, reproject
-
 import RES.lands as lands
 import RES.utility as utils
 import RES.visual_styles as styles
+import xyzservices.providers as xyz
 
 style_path = Path(styles.__file__).parent / "elsevier.mplstyle"
 plt.style.use(style_path)# Custom style for publication quality figures
@@ -1034,8 +1030,136 @@ def plot_with_matched_cells(ax, cells: gpd.GeoDataFrame, filtered_cells: gpd.Geo
 #         plt.savefig(f"vis/linking/solar/Selected_cells_solar_{province_short_code}.png", bbox_inches='tight')
 #     plt.tight_layout()
 #     plt.show()  # Optional: Show the plot if desired
+def get_existing_committed_VRE_plot(
+    ax: plt.Axes,
+    existing_VREs_gdf: gpd.GeoDataFrame,
+    committed_VREs_gdf: gpd.GeoDataFrame = None,
+    existing_VRE_type_column: str = "gen_type",
+    existing_marker_col: str = "facility_installed_capacity",
+    committed_marker_col: str = "potential_capacity",
+    committed_VRE_type_column: str = "resource_type",
+    target_crs: str = "EPSG:4326",
+    marker_scale_existing: float = 10.0,
+    marker_scale_committed: float = 2.0,
+    sites_legend_handle_scale: float = 8.0,
+    marker_highlight_width: float = 5.0,
+):
+    """
+    Plots existing and committed Variable Renewable Energy (VRE) sites on a given Axes.
+    Handles missing marker columns gracefully by using constant marker size.
+    """
 
+    # === CRS Handling ===
+    vre_proj = None
+    committed_proj = None
+    if target_crs is None:
+        utils.print_update(2, f"No target CRS provided. Using default ({target_crs}) of VRE GeoDataFrames.")
+    else:
+        utils.print_update(2, f"Reprojecting VRE GeoDataFrames to target CRS: {target_crs}")
 
+    # === Existing VREs ===
+    if existing_VREs_gdf is not None and not existing_VREs_gdf.empty:
+        vre_proj = existing_VREs_gdf.to_crs(target_crs).copy()
+        if existing_VRE_type_column not in vre_proj.columns:
+            vre_proj[existing_VRE_type_column] = ""
+        vre_proj[existing_VRE_type_column] = vre_proj[existing_VRE_type_column].fillna("").astype(str)
+
+        # --- Safe size extraction ---
+        if existing_marker_col in vre_proj.columns:
+            sizes = pd.to_numeric(vre_proj[existing_marker_col], errors="coerce").fillna(1.0)
+            utils.print_update(2, f"Using '{existing_marker_col}' for marker sizes.")
+        else:
+            sizes = pd.Series(1.0, index=vre_proj.index)
+            utils.print_update(2, f"⚠️ '{existing_marker_col}' not found. Using constant marker size = 1.0.")
+
+        # Scale sizes
+        sizes = sizes * marker_scale_existing
+
+        # Defensive: ensure array-like
+        if np.isscalar(sizes) or len(sizes) != len(vre_proj):
+            sizes = np.full(len(vre_proj), marker_scale_existing)
+
+        # --- Type filters ---
+        is_wind = vre_proj[existing_VRE_type_column].str.lower().str.contains("wind", regex=False)
+        is_solar = vre_proj[existing_VRE_type_column].str.lower().str.contains("solar", regex=False)
+
+    else:
+        utils.print_update(2, "No existing VREs data provided or GeoDataFrame is empty.")
+        vre_proj = None
+
+    # === Committed VREs ===
+    if committed_VREs_gdf is not None and not committed_VREs_gdf.empty:
+        committed_proj = committed_VREs_gdf.to_crs(target_crs).copy()
+        if existing_VRE_type_column not in committed_proj.columns:
+            committed_proj[existing_VRE_type_column] = ""
+        committed_proj[existing_VRE_type_column] = committed_proj[existing_VRE_type_column].fillna("").astype(str)
+
+        if committed_marker_col in committed_proj.columns:
+            sizes_c = pd.to_numeric(committed_proj[committed_marker_col], errors="coerce").fillna(1.0)
+            utils.print_update(2, f"Using '{committed_marker_col}' for committed marker sizes.")
+        else:
+            sizes_c = pd.Series(1.0, index=committed_proj.index)
+            utils.print_update(2, f"⚠️ '{committed_marker_col}' not found. Using constant marker size = 1.0.")
+
+        sizes_c = sizes_c * marker_scale_committed
+        if np.isscalar(sizes_c) or len(sizes_c) != len(committed_proj):
+            sizes_c = np.full(len(committed_proj), marker_scale_committed)
+
+        is_wind_c = committed_proj["resource_type"].str.lower().str.contains("wind", regex=False)
+        is_solar_c = committed_proj["resource_type"].str.lower().str.contains("solar", regex=False)
+    else:
+        utils.print_update(2, "No committed VREs data provided or GeoDataFrame is empty.")
+        committed_proj = None
+
+    # === Nothing to plot ===
+    if vre_proj is None and committed_proj is None:
+        utils.print_update(2, "No VRE data available to plot.")
+        return ax, []
+
+    utils.print_update(2, "Plotting existing and committed VREs.")
+    legend_handles = []
+
+    # === Plot Existing VREs ===
+    if vre_proj is not None and not vre_proj.empty:
+        if is_wind.any():
+            vre_proj.loc[is_wind].plot(
+                ax=ax, facecolor="None", edgecolor="blue",
+                markersize=sizes[is_wind], marker="s", alpha=1, zorder=4,
+                path_effects=[pe.withStroke(linewidth=marker_highlight_width, foreground="yellow", alpha=0.6)],
+            )
+            legend_handles.append(Line2D([0], [0], marker="s", color="blue", linestyle="None",
+                                         markersize=8, markerfacecolor="None", label="Existing Wind"))
+
+        if is_solar.any():
+            vre_proj.loc[is_solar].plot(
+                ax=ax, facecolor="None", edgecolor="red",
+                markersize=sizes[is_solar], marker="s", alpha=1, zorder=4,
+                path_effects=[pe.withStroke(linewidth=marker_highlight_width, foreground="yellow", alpha=0.6)],
+            )
+            legend_handles.append(Line2D([0], [0], marker="s", color="red", linestyle="None",
+                                         markersize=8, markerfacecolor="None", label="Existing Solar"))
+
+    # === Plot Committed VREs ===
+    if committed_proj is not None and not committed_proj.empty:
+        if is_wind_c.any():
+            committed_proj.loc[is_wind_c].plot(
+                ax=ax, facecolor="None", edgecolor="fuchsia",
+                markersize=sizes_c[is_wind_c], marker="^", alpha=1, zorder=5,
+                path_effects=[pe.withStroke(linewidth=marker_highlight_width, foreground="yellow", alpha=0.6)],
+            )
+            legend_handles.append(Line2D([0], [0], marker="^", color="fuchsia", linestyle="None",
+                                         markersize=sites_legend_handle_scale, markerfacecolor="None", label="Committed Wind"))
+
+        if is_solar_c.any():
+            committed_proj.loc[is_solar_c].plot(
+                ax=ax, facecolor="None", edgecolor="coral",
+                markersize=sizes_c[is_solar_c], marker="D", alpha=1, zorder=5,
+                path_effects=[pe.withStroke(linewidth=marker_highlight_width, foreground="yellow", alpha=0.6)],
+            )
+            legend_handles.append(Line2D([0], [0], marker="D", color="coral", linestyle="None",
+                                         markersize=sites_legend_handle_scale, markerfacecolor="None", label="Committed Solar"))
+
+    return ax, legend_handles
 def create_raster_image_with_legend(
         raster:str, 
         cmap:str, 
@@ -1048,11 +1172,11 @@ def create_raster_image_with_legend(
         raster_data = src.read(1)
 
         # Get the spatial information
-        transform = src.transform
-        min_x = transform[2]
-        max_y = transform[5]
-        max_x = min_x + transform[0] * src.width
-        min_y = max_y + transform[4] * src.height
+        # transform = src.transform
+        # min_x = transform[2]
+        # max_y = transform[5]
+        # max_x = min_x + transform[0] * src.width
+        # min_y = max_y + transform[4] * src.height
 
         # Get unique values (classes) in the raster
         unique_classes = np.unique(raster_data)
@@ -1064,7 +1188,7 @@ def create_raster_image_with_legend(
 
         # Display the raster using imshow
         fig, ax = plt.subplots()
-        im = ax.imshow(colormap.to_rgba(raster_data), extent=[min_x, max_x, min_y, max_y], interpolation='none')
+        # im = ax.imshow(colormap.to_rgba(raster_data), extent=[min_x, max_x, min_y, max_y], interpolation='none')
 
         # Create legend patches
         legend_patches = [mpatches.Patch(color=colormap.to_rgba(cls), label=f'Class {cls}') for cls in unique_classes]
@@ -1789,3 +1913,334 @@ def get_stepwise_availability_plots(excluder:ExclusionContainer,
         save_to.parent.mkdir(parents=True, exist_ok=True)
     plt.savefig(save_to, bbox_inches='tight', dpi=300)
     utils.print_update(level=3, message=f"Stepwise Availability Plots saved to {save_to}")
+    
+
+def make_lcoe_map(
+    wind_gdf: gpd.GeoDataFrame | None = None,
+    solar_gdf: gpd.GeoDataFrame | None = None,
+    save_path=None,
+    center=None,
+    zoom_start=7,
+    basemap_tiles="Esri WorldGrayCanvas",
+    show_wind=True,
+    show_solar=False,
+    wind_lcoe_min=None,
+    wind_lcoe_max=None,
+    solar_lcoe_min=None,
+    solar_lcoe_max=None,
+):
+    """
+    Build an interactive folium map from separate wind and solar GeoDataFrames.
+
+    Parameters
+    ----------
+    wind_gdf : GeoDataFrame or None
+        GeoDataFrame containing wind cells and wind attributes.
+    solar_gdf : GeoDataFrame or None
+        GeoDataFrame containing solar cells and solar attributes.
+    save_path : str | Path | None
+        If provided, save the map as HTML.
+    center : [lat, lon] or None
+        Map center. If None, auto-computed from available geometry.
+    zoom_start : int
+        Initial zoom level.
+    tiles : str
+        Default basemap name to show initially.
+    show_wind : bool
+        Whether wind layer is shown initially.
+    show_solar : bool
+        Whether solar layer is shown initially.
+    wind_lcoe_min, wind_lcoe_max : float or None
+        Optional display color scale bounds for wind LCOE.
+    solar_lcoe_min, solar_lcoe_max : float or None
+        Optional display color scale bounds for solar LCOE.
+
+    Returns
+    -------
+    folium.Map
+    """
+
+    if wind_gdf is None and solar_gdf is None:
+        raise ValueError("At least one of wind_gdf or solar_gdf must be provided.")
+
+    def prep_gdf(gdf):
+        if gdf is None:
+            return None
+
+        gdf = gdf.copy()
+
+        if gdf.crs is None:
+            raise ValueError("Input GeoDataFrame must have a CRS.")
+
+        if gdf.crs.to_string() != "EPSG:4326":
+            gdf = gdf.to_crs(epsg=4326)
+
+        for col in gdf.columns:
+            if hasattr(gdf[col], "dtype") and gdf[col].dtype.kind in "fc":
+                gdf[col] = gdf[col].round(3)
+
+        gdf = gdf[gdf.geometry.notna()].copy()
+        return gdf
+
+    wind_gdf = prep_gdf(wind_gdf)
+    solar_gdf = prep_gdf(solar_gdf)
+
+    if center is None:
+        centroids = []
+        if wind_gdf is not None and not wind_gdf.empty:
+            centroids.append(
+                [wind_gdf.geometry.centroid.y.mean(), wind_gdf.geometry.centroid.x.mean()]
+            )
+        if solar_gdf is not None and not solar_gdf.empty:
+            centroids.append(
+                [solar_gdf.geometry.centroid.y.mean(), solar_gdf.geometry.centroid.x.mean()]
+            )
+
+        if len(centroids) == 0:
+            raise ValueError("Provided GeoDataFrame(s) contain no valid geometry.")
+
+        center = [
+            sum(c[0] for c in centroids) / len(centroids),
+            sum(c[1] for c in centroids) / len(centroids),
+        ]
+
+    m = folium.Map(location=center, zoom_start=zoom_start, tiles=None)
+
+    base_maps = {
+        "CartoDB Positron": xyz.CartoDB.Positron,
+        "CartoDB Positron No Labels": xyz.CartoDB.PositronNoLabels,
+        "CartoDB Dark Matter": xyz.CartoDB.DarkMatter,
+        "CartoDB Dark Matter No Labels": xyz.CartoDB.DarkMatterNoLabels,
+        "CartoDB Voyager": xyz.CartoDB.Voyager,
+        "Esri WorldStreetMap": xyz.Esri.WorldStreetMap,
+        "Esri WorldTopoMap": xyz.Esri.WorldTopoMap,
+        "Esri WorldImagery": xyz.Esri.WorldImagery,
+        "Esri WorldTerrain": xyz.Esri.WorldTerrain,
+        "Esri OceanBasemap": xyz.Esri.OceanBasemap,
+        "Esri WorldGrayCanvas": xyz.Esri.WorldGrayCanvas,
+    }
+
+    if basemap_tiles not in base_maps:
+        raise ValueError(
+            f"basemap_tiles='{basemap_tiles}' not found in base_maps. Choose one of: {list(base_maps.keys())}"
+        )
+
+    for name, tile in base_maps.items():
+        folium.TileLayer(
+            tiles=tile,
+            name=name,
+            overlay=False,
+            control=True,
+            show=(name == basemap_tiles),
+        ).add_to(m)
+
+    def fmt(v, scale=1):
+        if pd.isna(v):
+            return "NA"
+        v = v * scale
+        if isinstance(v, float):
+            return f"{v:.5f}"
+        if "numpy" in str(type(v)).lower() and isinstance(v, numbers.Real):
+            return f"{float(v):.5f}" if not float(v).is_integer() else str(int(v))
+        return v
+
+    def make_wind_popup(props):
+        return f"""
+        <div style="
+            width: 320px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.35;
+        ">
+            <h4 style="margin: 0 0 8px 0;">Wind Cell Info</h4>
+
+            <div style="margin-bottom: 8px;">
+                <div><b>Cell ID:</b> {fmt(props.get('cell_id'))}</div>
+                <div><b>Country:</b> {fmt(props.get('Country'))}</div>
+                <div><b>Municipality:</b> {fmt(props.get('Municipality'))}</div>
+                <div><b>Land availability (%):</b> {fmt(props.get('LandAvailability_wind'), scale=100)}</div>
+                <div><b>Distance to nearest grid-node (km):</b> {fmt(props.get('nearest_distance'))}</div>
+            </div>
+
+            <div style="
+                padding: 8px;
+                border: 1px solid #c7d7f0;
+                border-radius: 6px;
+                background-color: #f4f8ff;
+            ">
+                <div><b>Potential capacity (MW):</b> {fmt(props.get('potential_capacity_wind'))}</div>
+                <div><b>CAPEX (mUSD/MW):</b> {fmt(props.get('capex_wind'))}</div>
+                <div><b>FOM (mUSD/MW/year):</b> {fmt(props.get('fom_wind'))}</div>
+                <div><b>VOM (mUSD/MWh):</b> {fmt(props.get('vom_wind'))}</div>
+                <div><b>Grid connection cost (mUSD/km):</b> {fmt(props.get('grid_connection_cost_per_km_wind'))}</div>
+                <div><b>TX rebuild cost (mUSD):</b> {fmt(props.get('tx_line_rebuild_cost_wind'))}</div>
+                <div><b>Operational life (years):</b> {fmt(props.get('Operational_life_wind'))}</div>
+                <div><b>ERA5 windspeed (m/s):</b> {fmt(props.get('windspeed_ERA5'))}</div>
+                <div><b>GWA windspeed (m/s):</b> {fmt(props.get('windspeed_gwa'))}</div>
+                <div><b>CF IEC1 (GWA):</b> {fmt(props.get('CF_IEC1'))}</div>
+                <div><b>CF IEC2 (GWA):</b> {fmt(props.get('CF_IEC2'))}</div>
+                <div><b>CF IEC3 (GWA):</b> {fmt(props.get('CF_IEC3'))}</div>
+                <div><b>Mean wind CF (GWA):</b> {fmt(props.get('wind_CF_mean'))}</div>
+                <div><b>LCOE RefCap wind (USD/MWh):</b> {fmt(props.get('lcoe_wind'))}</div>
+                <div><b>LCOE actualCap wind (USD/MWh):</b> {fmt(props.get('lcoe_actualCap_wind'))}</div>
+            </div>
+        </div>
+        """
+
+    def make_solar_popup(props):
+        return f"""
+        <div style="
+            width: 320px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.35;
+        ">
+            <h4 style="margin: 0 0 8px 0;">Solar Cell Info</h4>
+
+            <div style="margin-bottom: 8px;">
+                <div><b>Cell ID:</b> {fmt(props.get('cell_id'))}</div>
+                <div><b>Country:</b> {fmt(props.get('Country'))}</div>
+                <div><b>Municipality:</b> {fmt(props.get('Municipality'))}</div>
+                <div><b>Land availability (%):</b> {fmt(props.get('LandAvailability_solar'), scale=100)}</div>
+                <div><b>Distance to nearest grid-node (km):</b> {fmt(props.get('nearest_distance'))}</div>
+            </div>
+
+            <div style="
+                padding: 8px;
+                border: 1px solid #f0d2a6;
+                border-radius: 6px;
+                background-color: #fff8ef;
+            ">
+                <div><b>Potential capacity (MW):</b> {fmt(props.get('potential_capacity_solar'))}</div>
+                <div><b>CAPEX (mUSD/MW):</b> {fmt(props.get('capex_solar'))}</div>
+                <div><b>FOM (mUSD/MW/year):</b> {fmt(props.get('fom_solar'))}</div>
+                <div><b>VOM (mUSD/MWh):</b> {fmt(props.get('vom_solar'))}</div>
+                <div><b>Grid connection cost (mUSD/km):</b> {fmt(props.get('grid_connection_cost_per_km_solar'))}</div>
+                <div><b>TX rebuild cost (mUSD):</b> {fmt(props.get('tx_line_rebuild_cost_solar'))}</div>
+                <div><b>Operational life (years):</b> {fmt(props.get('Operational_life_solar'))}</div>
+                <div><b>Mean solar CF:</b> {fmt(props.get('solar_CF_mean'))}</div>
+                <div><b>LCOE RefCap solar (USD/MWh):</b> {fmt(props.get('lcoe_solar'))}</div>
+                <div><b>LCOE actualCap solar (USD/MWh):</b> {fmt(props.get('lcoe_actualCap_solar'))}</div>
+            </div>
+        </div>
+        """
+
+    def add_layer(
+        gdf,
+        value_col,
+        popup_builder,
+        layer_name,
+        tooltip_alias,
+        cmap_name,
+        show,
+        vmin=None,
+        vmax=None,
+    ):
+        gdf = gdf.copy()
+        gdf["cell_id"] = gdf.index.astype(str)   # preserve original index as popup field
+        gdf[value_col] = pd.to_numeric(gdf[value_col], errors="coerce")
+        gdf["popup_html"] = gdf.apply(lambda row: popup_builder(row), axis=1)
+
+        geojson_dict = json.loads(gdf.to_json())
+
+        vals = gdf[value_col].dropna()
+        data_min = vals.min() if len(vals) > 0 else None
+        data_max = vals.max() if len(vals) > 0 else None
+        cmap = matplotlib.colormaps[cmap_name]
+
+        plot_vmin = data_min if vmin is None else vmin
+        plot_vmax = data_max if vmax is None else vmax
+
+        if len(vals) == 0 or plot_vmin is None or plot_vmax is None:
+            norm = None
+        else:
+            norm = None if plot_vmin == plot_vmax else mcolors.Normalize(vmin=plot_vmin, vmax=plot_vmax)
+
+        def style_function(feature):
+            val = feature["properties"].get(value_col)
+
+            if val is None or pd.isna(val):
+                fill = "#bdbdbd"
+            elif norm is None:
+                fill = mcolors.to_hex(cmap(0.6))
+            else:
+                clipped_val = min(max(val, plot_vmin), plot_vmax)
+                fill = mcolors.to_hex(cmap(norm(clipped_val)))
+
+            return {
+                "fillColor": fill,
+                "color": "#333333",
+                "weight": 0.3,
+                "fillOpacity": 0.9,
+            }
+
+        def highlight_function(feature):
+            return {
+                "weight": 2,
+                "color": "yellow",
+                "fillOpacity": 0.95,
+            }
+
+        if data_max is None:
+            layer_label = f"{layer_name} (no valid {value_col})"
+        else:
+            layer_label = (
+                f"{layer_name} "
+                f"(shown range: {plot_vmin:.3f}–{plot_vmax:.3f} USD/MWh)"
+            )
+
+        folium.GeoJson(
+            data=geojson_dict,
+            name=layer_label,
+            style_function=style_function,
+            highlight_function=highlight_function,
+            tooltip=folium.GeoJsonTooltip(
+                fields=["cell_id", "Country", "Municipality", value_col],
+                aliases=["Cell ID", "Country", "Municipality", tooltip_alias],
+                localize=True,
+            ),
+            popup=folium.GeoJsonPopup(
+                fields=["popup_html"],
+                labels=False,
+                parse_html=True,
+                max_width=400,
+            ),
+            show=show,
+        ).add_to(m)
+
+    if wind_gdf is not None and not wind_gdf.empty:
+        add_layer(
+            gdf=wind_gdf,
+            value_col="lcoe_wind",
+            popup_builder=make_wind_popup,
+            layer_name="LCOE Wind",
+            tooltip_alias="Wind LCOE",
+            cmap_name="BuPu",
+            show=show_wind,
+            vmin=wind_lcoe_min,
+            vmax=wind_lcoe_max,
+        )
+
+    if solar_gdf is not None and not solar_gdf.empty:
+        add_layer(
+            gdf=solar_gdf,
+            value_col="lcoe_solar",
+            popup_builder=make_solar_popup,
+            layer_name="LCOE Solar",
+            tooltip_alias="Solar LCOE",
+            cmap_name="YlOrRd",
+            show=show_solar,
+            vmin=solar_lcoe_min,
+            vmax=solar_lcoe_max,
+        )
+
+    folium.LayerControl(collapsed=False).add_to(m)
+
+    if save_path is not None:
+        m.save(str(save_path))
+
+    return m

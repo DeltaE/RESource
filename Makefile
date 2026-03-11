@@ -1,6 +1,10 @@
 # RESource Project Makefile
 
-.PHONY: help setupenv updateenv exportenv run docs autobuild deploy jupyter clean
+.PHONY: help setupenv updateenv exportenv run run-wb6 run-wb6-region run-can run-can-region run-can-policy run-bgd docs autobuild deploy jupyter clean
+
+# Default config / regions (overridable on the command line)
+CONFIG    ?= config/config_WB6.yaml
+REGIONS   ?=
 
 # Default target
 help:
@@ -14,6 +18,29 @@ help:
 	@echo "  setupenv-clean - Setup tested working environment (manual method)"
 	@echo "  updateenv      - Update existing conda environment"
 	@echo "  exportenv      - Export current environment to env/environment.yml"
+	@echo ""
+	@echo "Run Pipeline:"
+	@echo "  run              - Run with custom CONFIG= and optional REGIONS= (see examples below)"
+	@echo "  run-wb6          - Run Western Balkans config (all 6 countries: AL BA XK ME MK RS)"
+	@echo "  run-wb6-region   - Run Western Balkans config for specific REGIONS="
+	@echo "  run-can          - Run Canada baseline config (all provinces)"
+	@echo "  run-can-region   - Run Canada baseline config for specific REGIONS="
+	@echo "  run-can-policy   - Run Canada policy1 config (all provinces)"
+	@echo "  run-bgd          - Run Bangladesh config (all regions)"
+	@echo ""
+	@echo "  Examples:"
+	@echo "    make run CONFIG=config/config_WB6.yaml                    # WB6, all regions"
+	@echo "    make run CONFIG=config/config_WB6.yaml REGIONS='AL MK'    # WB6, Albania + N. Macedonia only"
+	@echo "    make run CONFIG=config/config_CAN_baseline.yaml           # Canada baseline, all provinces"
+	@echo "    make run CONFIG=config/config_CAN_baseline.yaml REGIONS='BC QC AB'  # Canada, 3 provinces"
+	@echo "    make run CONFIG=config/config_CAN_policy1.yaml REGIONS=ON # Canada policy1, Ontario only"
+	@echo "    make run CONFIG=config/config_BGD.yaml                    # Bangladesh, all regions"
+	@echo "    make run-wb6-region REGIONS='BA XK RS'                    # WB6 shortcut with regions"
+	@echo "    make run-can-region REGIONS='BC AB SK MB ON QC'           # CAN shortcut with regions"
+	@echo ""
+	@echo "  Western Balkans regions : AL (Albania) BA (Bosnia) XK (Kosovo)"
+	@echo "                            ME (Montenegro) MK (N. Macedonia) RS (Serbia)"
+	@echo "  Canada provinces        : AB BC MB NB NL NS ON PE QC SK"
 	@echo ""
 	@echo "Documentation:"
 	@echo "  docs        - Build and deploy documentation"
@@ -76,14 +103,52 @@ exportenv:
 	fi
 
 # Running Code
+# ─────────────────────────────────────────────────────────────────────────────
+# Generic entry point – accepts any CONFIG= and optional REGIONS= on the CLI.
+#   make run CONFIG=config/config_WB6.yaml
+#   make run CONFIG=config/config_WB6.yaml REGIONS='AL MK RS'
+#   make run CONFIG=config/config_CAN_baseline.yaml REGIONS='BC QC AB'
+# ─────────────────────────────────────────────────────────────────────────────
 run:
-	@echo "Running main RESource script..."
+	@echo "Running RESource pipeline with CONFIG=$(CONFIG)$(if $(REGIONS), regions: $(REGIONS))..."
 	@if conda env list | grep -q "^RESource "; then \
-		conda run -n RESource python run.py $(ARGS); \
+		conda run -n RESource python run.py $(CONFIG) $(if $(REGIONS),-r $(REGIONS)); \
 	else \
 		echo "❌ Environment 'RESource' not found. Run 'make setupenv' first."; \
 		exit 1; \
 	fi
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Western Balkans shortcuts
+#   Regions: AL (Albania) BA (Bosnia & Herzegovina) XK (Kosovo)
+#            ME (Montenegro) MK (North Macedonia) RS (Serbia)
+# ─────────────────────────────────────────────────────────────────────────────
+run-wb6:
+	$(MAKE) run CONFIG=config/config_WB6.yaml
+
+# Usage: make run-wb6-region REGIONS='AL MK'
+run-wb6-region:
+	$(MAKE) run CONFIG=config/config_WB6.yaml
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Canada shortcuts
+#   Provinces: AB BC MB NB NL NS ON PE QC SK
+# ─────────────────────────────────────────────────────────────────────────────
+run-can:
+	$(MAKE) run CONFIG=config/config_CAN_baseline.yaml
+
+# Usage: make run-can-region REGIONS='BC QC AB'
+run-can-region:
+	$(MAKE) run CONFIG=config/config_CAN_baseline.yaml
+
+run-can-policy:
+	$(MAKE) run CONFIG=config/config_CAN_policy1.yaml
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Bangladesh shortcut
+# ─────────────────────────────────────────────────────────────────────────────
+run-bgd:
+	$(MAKE) run CONFIG=config/config_BGD.yaml
 
 # Documentation
 docs:

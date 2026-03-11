@@ -58,11 +58,7 @@ class CellCapacityProcessor(AttributesParser):
     - __get_unified_region_shape__(): Create unified regional boundary geometry (private)
     - __create_cell_geom__(x, y): Create grid cell geometry from coordinates (private)
     - get_capacity(): Main method to process and calculate renewable energy capacity
-<<<<<<< HEAD
     - plot_ERA5_grid_land_availability(): Visualize land availability on ERA5 grid
-=======
-    - plot_ERAF5_grid_land_availability(): Visualize land availability on ERA5 grid
->>>>>>> b9d45cc43180e063f1624803c6092a01ca603b0f
     - plot_excluder_land_availability(): Visualize land availability at excluder resolution
     
     Parameters
@@ -137,11 +133,7 @@ class CellCapacityProcessor(AttributesParser):
         Create square grid cell geometry from center coordinates
     get_capacity() -> tuple[gpd.GeoDataFrame, xr.DataArray]
         Main processing method to calculate renewable energy capacity with constraints
-<<<<<<< HEAD
     plot_ERA5_grid_land_availability(...) -> matplotlib.figure.Figure
-=======
-    plot_ERAF5_grid_land_availability(...) -> matplotlib.figure.Figure
->>>>>>> b9d45cc43180e063f1624803c6092a01ca603b0f
         Create visualization of land availability on ERA5 grid resolution
     plot_excluder_land_availability(...) -> matplotlib.figure.Figure
         Create visualization of land availability at excluder resolution
@@ -277,7 +269,6 @@ class CellCapacityProcessor(AttributesParser):
         self.region_shape=self.LandContainer.region_shape.dissolve(by=self.gadm_config.get('datafield_mapping').get('NAME_0')) # .drop(columns =['Region'])
         self.region_shape = self.region_shape[['geometry']]
         return self.region_shape
-<<<<<<< HEAD
 
 
 #     def load_cost(self,
@@ -516,71 +507,6 @@ class CellCapacityProcessor(AttributesParser):
         assert all(isinstance(value, (int, float)) for value in cost_components.values()), \
             "All values must be numeric"
 
-=======
-    
-    def load_cost(self,
-                  resource_atb:pd.DataFrame):
-        """
-        Extracts cost parameters from the NREL ATB DataFrame and converts them to million $/MW.
-
-        Args:
-            resource_atb (pd.DataFrame): DataFrame containing NREL ATB cost data for the resource type.
-
-        Returns:
-            dict: A dictionary containing the following cost parameters:
-                - resource_capex: Capital expenditure in million $/MW
-                - resource_vom: Variable operation and maintenance cost in million $/MW
-                - resource_fom: Fixed operation and maintenance cost in million $/MW
-                - grid_connection_cost_per_km: Grid connection cost per kilometer in million $
-                - tx_line_rebuild_cost: Transmission line rebuild cost in million $
-        """
-        
-        utils.print_update(level=PRINT_LEVEL_BASE+1,
-                           message=f"{__name__}| Extracting cost attributes...")
-        self.transmission_config = self.config.get('capacity_disaggregation', {}).get('transmission', {}) # INHERITED ATTRIBUTE from AttributesParser
-        grid_connection_cost_per_km = self.transmission_config.get('grid_connection_cost_per_Km', 0)
-        utils.print_info(f"{__name__}| @ Line: {inspect.currentframe().f_lineno-1} | `grid_connection_cost_per_km` is set to {grid_connection_cost_per_km} million $/km. If this is not set in the config, it will be set to 0.")
-        
-        tx_line_rebuild_cost = self.disaggregation_config.get('transmission', {}).get('tx_line_rebuild_cost', 0)
-        utils.print_info(f"{__name__}| @ Line: {inspect.currentframe().f_lineno-1} | `grid_connection_cost_per_km` is set to {grid_connection_cost_per_km} million $/km. If this is not set in the config, it will be set to 0.")
-        
-        
-        self.ATB:Dict[str,dict]=super().get_atb_config()
-        source_column:str= self.ATB.get('column',{})
-        cost_params_mapping:Dict[str,str]=self.ATB.get('cost_params',{})
-        
-        
-        # capex,fom,vom in NREL is given in US$/kw and we need to convert it to million $/MW
-        resource_capex:float=resource_atb[resource_atb[source_column]==cost_params_mapping.get('capex',{})].value.iloc[0]/ 1E3  # Convert to million $/MW
-        resource_fom:float=resource_atb[resource_atb[source_column]==cost_params_mapping.get('fom',{})].value.iloc[0] /1E3  # Convert to million $/MW
-        
-        # Initialize resource_vom based on the availability of 'vom' in cost_params_mapping
-        resource_vom = 0.0
-
-        if cost_params_mapping.get('vom') is not None:
-            # Check if the DataFrame 'utility_scale_cost' is not empty and get the value for 'vom'
-            if not resource_atb.empty:
-                vom_row = resource_atb[resource_atb[source_column] == cost_params_mapping['vom']]
-                if not vom_row.empty:
-                    resource_vom = vom_row['value'].iloc[0] / 1E3  # Convert to million $/MW
-        
-        cost_components:dict={
-            'resource_capex': resource_capex,                    # million $/MW
-            'resource_vom': resource_vom,                        # million $/MW
-            'resource_fom': resource_fom,                        # million $/MW
-            'grid_connection_cost_per_km': grid_connection_cost_per_km,  # million $
-            'tx_line_rebuild_cost': tx_line_rebuild_cost         # million $
-        }
-        
-        # Validation
-        expected_keys = ['resource_capex', 'resource_vom', 'resource_fom', 
-                        'grid_connection_cost_per_km', 'tx_line_rebuild_cost']
-        
-        assert all(key in cost_components for key in expected_keys), "Missing cost components"
-        assert all(isinstance(value, (int, float)) for value in cost_components.values()), "All values must be numeric"
-        
-        # Return as ordered dictionary
->>>>>>> b9d45cc43180e063f1624803c6092a01ca603b0f
         return cost_components
     
     # Define a function to create bounding boxes (of cell) directly from coordinates (x, y) and resolution
@@ -647,11 +573,7 @@ class CellCapacityProcessor(AttributesParser):
         
         utils.print_update(level=PRINT_LEVEL_BASE+1,
                            message=f"{__name__}| Creating visuals for land-availability")
-<<<<<<< HEAD
-        self.plot_ERA5_grid_land_availability()
-=======
-        self.plot_ERAF5_grid_land_availability()
->>>>>>> b9d45cc43180e063f1624803c6092a01ca603b0f
+        self.availability_gdf=self.plot_ERA5_grid_land_availability()
         self.plot_excluder_land_availability(excluder=self.composite_excluder)
         
         area = self.cutout.grid.set_index(["y", "x"]).to_crs(self.crs_m).area / 1e6 # in Sq. km
@@ -670,18 +592,11 @@ class CellCapacityProcessor(AttributesParser):
         # Using reset_index(drop=True) discards those coordinates, so DON'T drop=True.
 
         # First try the straightforward path:
-<<<<<<< HEAD
         _df_flat = self.capacity_matrix.to_dataframe()#.reset_index()
 
         # If for any reason x/y didn’t appear (older xarray/pandas edge cases), fall back to Series:
         if ("x" not in _df_flat.columns) or ("y" not in _df_flat.columns):
             _df_flat   =_df_flat.reset_index()
-=======
-        _df_flat = self.capacity_matrix.to_dataframe().reset_index()
-
-        # If for any reason x/y didn’t appear (older xarray/pandas edge cases), fall back to Series:
-        if ("x" not in _df_flat.columns) or ("y" not in _df_flat.columns):
->>>>>>> b9d45cc43180e063f1624803c6092a01ca603b0f
             s = self.capacity_matrix.to_series()  # expands MultiIndex levels to columns on reset_index()
             _df_flat = s.reset_index()
             # ensure the value column is correctly named
@@ -729,6 +644,10 @@ class CellCapacityProcessor(AttributesParser):
         
         self.provincial_cells=utils.assign_cell_id(cells= self.provincial_cell_capacity_gdf,
             source_column=self.sub_national_unit_tag)
+        self.provincial_cells_with_LandAvailability = self.provincial_cells.join(
+            self.availability_gdf[[f"LandAvailability_{self.resource_type}"]],
+            how="left"
+        )
         
         utils.print_update(level=PRINT_LEVEL_BASE+2,
                    message=f"{__name__}| ✓ Capacity dataframe cleaned and processed")
@@ -736,18 +655,14 @@ class CellCapacityProcessor(AttributesParser):
         utils.print_update(level=PRINT_LEVEL_BASE+1,
                    message=f"{__name__}| ERA5 cells' capacity loaded for : {len(self.provincial_cell_capacity_gdf)} Cells [each with .025 deg. (~30km) resolution ]")
        
-        self.datahandler.to_store(self.provincial_cell_capacity_gdf,'cells')
+        self.datahandler.to_store(self.provincial_cells_with_LandAvailability,'cells')
      
-        return  self.provincial_cell_capacity_gdf,self.capacity_matrix
+        return  self.provincial_cells_with_LandAvailability,self.capacity_matrix
     
     
     
 ## Visuals 
-<<<<<<< HEAD
     def plot_ERA5_grid_land_availability(self,
-=======
-    def plot_ERAF5_grid_land_availability(self,
->>>>>>> b9d45cc43180e063f1624803c6092a01ca603b0f
                                           region_boundary:gpd.GeoDataFrame=None,
                                           Availability_matrix:xr.DataArray=None,
                                           figsize=(8, 6),
@@ -799,11 +714,7 @@ class CellCapacityProcessor(AttributesParser):
         
         
         # Categorize availability into bins
-<<<<<<< HEAD
         # Availability_df["availability_category"] = pd.cut(Availability_df["availability"], bins=bins, labels=labels, include_lowest=True)
-=======
-        Availability_df["availability_category"] = pd.cut(Availability_df["availability"], bins=bins, labels=labels, include_lowest=True)
->>>>>>> b9d45cc43180e063f1624803c6092a01ca603b0f
 
         # Convert to GeoDataFrame
         A_gdf:gpd.GeoDataFrame = gpd.GeoDataFrame(
@@ -814,10 +725,12 @@ class CellCapacityProcessor(AttributesParser):
                 
         A_gdf=A_gdf.overlay(region_boundary)
         A_gdf = A_gdf.rename(columns={"availability": f"LandAvailability_{self.resource_type}"})
+        A_gdf=utils.assign_cell_id(cells=A_gdf, source_column=self.sub_national_unit_tag)
         self.datahandler.to_store(A_gdf,"LandAvailability")
 
         # Categorize availability into bins
-        A_gdf[f"LandAvailability_{self.resource_type}_category"] = pd.cut(A_gdf[f"LandAvailability_{self.resource_type}"], bins=bins, labels=labels, include_lowest=True)
+        A_gdf_categorized=A_gdf.copy()
+        A_gdf_categorized[f"LandAvailability_{self.resource_type}_category"] = pd.cut(A_gdf_categorized[f"LandAvailability_{self.resource_type}"], bins=bins, labels=labels, include_lowest=True)
         # Create figure and axes for side-by-side plotting
         fig, ax = plt.subplots(figsize=figsize,constrained_layout=True)
 
@@ -829,7 +742,7 @@ class CellCapacityProcessor(AttributesParser):
 
         if region_boundary.crs is None or region_boundary.crs.to_string() != self.crs_m:
             region_boundary_proj = region_boundary.to_crs(self.crs_m)
-            A_gdf_proj = A_gdf.to_crs(self.crs_m)
+            A_gdf_proj = A_gdf_categorized.to_crs(self.crs_m)
             utils.print_update(level=PRINT_LEVEL_BASE+2,
                                message=f"{__name__}| Converted region boundary and availability GeoDataFrame to {self.crs_m} for plotting.")
         # Plot solar map on ax1
@@ -838,11 +751,7 @@ class CellCapacityProcessor(AttributesParser):
         # region_boundary_proj.plot(ax=ax, facecolor='none', edgecolor='gray', linewidth=2, alpha=0.3)  # Shadow layer
 
         # Plot solar cells
-<<<<<<< HEAD
         A_gdf_proj.plot(column=f'LandAvailability_{self.resource_type}_category', ax=ax, cmap='Greens', legend=True, 
-=======
-        A_gdf_proj.plot(column='availability_category', ax=ax, cmap='Greens', legend=True, 
->>>>>>> b9d45cc43180e063f1624803c6092a01ca603b0f
                 legend_kwds={'title': "Land Availability", 'loc': 'upper right', 'bbox_to_anchor': legend_box_x_y,'borderpad': 1,'frameon': False})
 
         # Plot actual boundary for solar map
@@ -856,7 +765,7 @@ class CellCapacityProcessor(AttributesParser):
         utils.ensure_path(plot_save_to)
         plt.savefig(f'{plot_save_to}/land_availability_ERA5grid_{self.region_short_code}_{self.resource_type}.png',dpi=500)
         utils.print_update(level=PRINT_LEVEL_BASE+3,message=f"{__name__}|Land availability (grid cells) map saved at {vis_save_to_root}")
-        # return fig
+        return A_gdf
         
 
     def plot_excluder_land_availability(self,

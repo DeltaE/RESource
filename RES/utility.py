@@ -163,7 +163,6 @@ def load_geojson_file(geojson_file_path:str|Path)->list:
 # Function to generate a unique index from region name and coordinates
 def assign_cell_id(cells: gpd.GeoDataFrame, 
                   source_column: str = None, 
-                  source_column: str = None, 
                   index_name: str = 'cell') -> gpd.GeoDataFrame:
     """
     Assigns unique cell IDs to each region in the specified GeoDataFrame.
@@ -237,7 +236,7 @@ def ensure_path(save_to: str | Path) -> Path:
         Warning(f">> Given instance for 'destination (save_to)' is of type: {type(save_to)}. Converting it to a Path")
         save_to = Path(save_to)
     save_to.mkdir(parents=True, exist_ok=True)
-    save_to.mkdir(parents=True, exist_ok=True)
+
     return save_to
 
 
