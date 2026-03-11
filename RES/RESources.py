@@ -259,8 +259,7 @@ class RESources_builder(AttributesParser):
         utils.print_update(level=PRINT_LEVEL_BASE+1,
                            message=f"{__name__}| Preparing Grid Cells...")
         
-        self.region_grid_cells:gpd.GeoDataFrame=self.gridcells.get_default_grid()
-        
+        self.region_grid_cells:gpd.GeoDataFrame=self.gridcells.get_default_grid()        
         utils.print_update(level=PRINT_LEVEL_BASE+2,
                            message=f"{__name__}| Grid Cells updated.")
         
@@ -279,13 +278,18 @@ class RESources_builder(AttributesParser):
         utils.print_update(level=PRINT_LEVEL_BASE+1,
                            message=f"{__name__}| Preparing Cells' capacity...")
         
-        self.cells_with_capacity,self.capacity_matrix=self.cell_processor.get_capacity()
+        # self.cells_with_capacity,self.capacity_matrix=self.cell_processor.get_capacity()
+        self.cells_with_capacity=self.cell_processor.get_capacity()
         
+        # self.datahandler.refresh()
+        # self.cell_capacity_gdf=self.datahandler.from_store('cells')
                 
         utils.print_update(level=PRINT_LEVEL_BASE+2,
-                           message=f"{__name__}| Cells' capacity updated.")
-        
-        return self.cells_with_capacity,self.capacity_matrix # returns a namedtuple with `data` and `matrix attributes
+                           message=f"{__name__}| Cells' actual capacity updated.")
+        # self.datahandler.to_store(self.cell_capacity_gdf,'cells')
+        return self.cells_with_capacity#,self.capacity_matrix # returns a namedtuple with `data` and `matrix attributes
+    
+
     
     def extract_weather_data(self):
         """Extract meteorological data for renewable energy resource assessment.

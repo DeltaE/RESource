@@ -1501,7 +1501,6 @@ def get_eligible_share(region_shape, excluder: ExclusionContainer) -> tuple:
     return masked, transform, eligible_share
 
 @staticmethod
-
 def ensure_uint8_raster(filepath):
     """
     Ensure the raster is in uint8 format with nodata as 255. If not, convert it and save to a temporary file.

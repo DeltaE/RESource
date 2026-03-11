@@ -57,7 +57,7 @@ class AttributesParser:
 
 
         # Define the store file path and filename
-        self.store = Path(f"data/store/{self.country_kwd}/resources_{self.country_kwd}_{self.region_short_code}_{self.RUN_ID}.h5")
+        self.store = Path(f"data/store/{self.country_kwd}/{self.RUN_ID}/resources_{self.country_kwd}_{self.region_short_code}_{self.RUN_ID}.h5")
         self.store.parent.mkdir(parents=True, exist_ok=True)
         self.default_crs_cfg:dict=self.config.get('default_CRS',None)
         self.crs_d,self.crs_m=self.get_CRS()

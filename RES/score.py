@@ -480,7 +480,7 @@ class CellScorer(AttributesParser):
         # Check that all required columns were found
         missing_columns = [col for col in required_columns if col is None or col not in dataframe.columns]
         if missing_columns:
-            raise AssertionError("Missing required columns or alternatives not found")
+            raise AssertionError(f"Required columns {set(missing_columns)}or alternatives not found")
         
         utils.print_update(level=PRINT_LEVEL_BASE+2,
                        message=f"{__name__}| Calculating score for cells...") 

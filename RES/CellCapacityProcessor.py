@@ -257,12 +257,23 @@ class CellCapacityProcessor(AttributesParser):
         
         ## Initiate the Store and Datahandler (interfacing with the Store)
         self.datahandler=DataHandler(self.store)  # INHERITED ATTRIBUTE from AttributesParser
-        
+
         ### Exclusion Layer Container
         self.composite_excluder:ExclusionContainer=None
         ### ERA5 Cutout Resolution
         self.cell_resolution=self.cutout_config['dx']
-    
+        
+    @property
+    def landavail_col(self) -> str:
+        return f"LandAvailability_ERA5_{self.resource_type}"
+
+    @property
+    def developable_col(self) -> str:
+        return f"Developable_area_{self.resource_type}"
+
+    @property
+    def capacity_col(self) -> str:
+        return f"potential_capacity_{self.resource_type}"
     
     def __get_unified_region_shape__(self):
         # if self.sub_national_unit_tag in self.LandContainer.region_shape.columns:
@@ -518,7 +529,45 @@ class CellCapacityProcessor(AttributesParser):
             (x + half_res, y + half_res),  # Top-right
             (x - half_res, y + half_res)   # Top-left
         ])
+    
+    def get_shapes_for_availability(self,
+                                    cells:gpd.geodataframe=None):
+        if cells is not None:
+            self.grid_cells=cells
+        else:
+            self.datahandler.refresh()
+            self.grid_cells=self.datahandler.from_store("cells")
         
+        gdf = self.grid_cells.dissolve(by=self.sub_national_unit_tag).reset_index()
+
+        # Drop null geometry rows
+        gdf = gdf[gdf.geometry.notna()].copy()
+
+        # Drop empty geometries
+        gdf = gdf[~gdf.geometry.is_empty].copy()
+
+        # Repair invalid geometries
+        gdf["geometry"] = gdf.geometry.make_valid()
+
+        # Sometimes make_valid returns GeometryCollection with empty content;
+        # buffer(0) can help for polygon cleanup in some cases
+        gdf["geometry"] = gdf.geometry.buffer(0)
+
+        # Drop anything still bad
+        gdf = gdf[gdf.geometry.notna()].copy()
+        gdf = gdf[~gdf.geometry.is_empty].copy()
+        gdf = gdf[gdf.geometry.is_valid].copy()
+
+        # Optional: remove zero-area geometries after projecting to metric CRS
+        gdf_m = gdf.to_crs(self.crs_m)
+        gdf = gdf.loc[gdf_m.geometry.area > 0].copy()
+
+        # Ensure same CRS as excluder
+        # gdf = gdf.to_crs(self.composite_excluder.crs)
+
+        gdf = gdf.set_index(self.sub_national_unit_tag)
+        return gdf
+    
     def get_capacity(self)->tuple:
         """
         This method processes the capacity of the resources based on the availability matrix and other parameters.
@@ -531,16 +580,16 @@ class CellCapacityProcessor(AttributesParser):
         utils.print_update(level=PRINT_LEVEL_BASE+1,
                            message=f"{__name__}| Cell capacity processor initiated...")
         
-    #a. load cutout and region boundary for which the cutout has been created.
+        #a. load cutout and region boundary for which the cutout has been created.
         self.cutout,self.region_boundary=self.ERA5Cutout.get_era5_cutout()
         
-    #b. load excluder
+        #b. load excluder
         self.composite_excluder=self.LandContainer.set_excluder()
         
         
-    #d. Load costs (float)
+        #d. Load costs (float)
     
-    # Load cost data as dictionary
+        # Load cost data as dictionary
         cost_components:dict = self.load_cost(
                                     resource_atb=(
                                         self.utility_pv_cost if self.resource_type == 'solar' else
@@ -560,22 +609,22 @@ class CellCapacityProcessor(AttributesParser):
         utils.print_update(level=PRINT_LEVEL_BASE+2,
                            message=f"{__name__}| ✓ Cost parameters loaded for {self.resource_type} resources.")
         
-    ## 2.1 Compute availability Matrix
-        self.region_shape= self.__get_unified_region_shape__() # we need to pass the unified region shape to the availability matrix calculation.
+    ## Step-1 : Compute availability Matrix
+        # self.region_shape= self.__get_unified_region_shape__() #  unified region shape to the availability matrix calculation.
         utils.print_update(level=PRINT_LEVEL_BASE+1,
                    message=f"{__name__}| Processing Availability Matrix... ")
-        self.Availability_matrix:xr = self.cutout.availabilitymatrix(self.region_shape, self.composite_excluder)
         
+        # self.Availability_matrix:xr = self.cutout.availabilitymatrix(self.region_shape, self.composite_excluder)
+        self.shapes_for_availability=self.get_shapes_for_availability()
+        self.AvailabilityMatrix:xr = self.cutout.availabilitymatrix(self.shapes_for_availability, self.composite_excluder)
+                
+    
         utils.print_info(f"{__name__}| @ Line: {inspect.currentframe().f_lineno-1} | We need to pass the unified `region_shape` to the cutout to calculate availability for the entire region as in one of the dimensions e.g. here 'Province'. If we pass multipolygons/geoms of each Regional district (sub-provincial) we will get availability for each regional district as a dimension; which adds additional step to produce our intended data. For this analysis, one unified shape for entire region is sufficient")
         
         utils.print_update(level=PRINT_LEVEL_BASE+2,
                    message=f"{__name__}| ✓ Availability Matrix processed for {self.region_name}. ")
         
-        utils.print_update(level=PRINT_LEVEL_BASE+1,
-                           message=f"{__name__}| Creating visuals for land-availability")
-        self.availability_gdf=self.plot_ERA5_grid_land_availability()
-        self.plot_excluder_land_availability(excluder=self.composite_excluder)
-        
+        """ 
         area = self.cutout.grid.set_index(["y", "x"]).to_crs(self.crs_m).area / 1e6 # in Sq. km
         area = xr.DataArray(area, dims=("spatial"))
         
@@ -583,45 +632,18 @@ class CellCapacityProcessor(AttributesParser):
                message=f"{__name__}| Calculating capacity matrix, using land-use intensity for {self.resource_type} resources: {self.resource_landuse_intensity} MW/km²")
         capacity_matrix:xr.DataArray = self.Availability_matrix.stack(spatial=["y", "x"]) * area * self.resource_landuse_intensity
         
-        self.capacity_matrix=capacity_matrix.rename(f'potential_capacity_{self.resource_type}')
+        self.capacity_matrix=capacity_matrix.rename(f'potential_capacity_ERA5_{self.resource_type}')
         utils.print_update(level=PRINT_LEVEL_BASE+2,
-                   message=f"{__name__}| ✓ Capacity Matrix processed for {self.region_name}. ")
+                #    message=f"{__name__}| ✓ Capacity Matrix processed for {self.region_name}. ")
+        """
+            
+    ## Step-3: build cell polygons       
+        self.availability_gdf=self.get_availability_gdf(self.AvailabilityMatrix)
         
-    ## ## 2.1 convert the Availability Matrix to dataframe.
-        # Keep x/y coordinates! self.capacity_matrix has a stacked 'spatial' MultiIndex (y,x).
-        # Using reset_index(drop=True) discards those coordinates, so DON'T drop=True.
-
-        # First try the straightforward path:
-        _df_flat = self.capacity_matrix.to_dataframe()#.reset_index()
-
-        # If for any reason x/y didn’t appear (older xarray/pandas edge cases), fall back to Series:
-        if ("x" not in _df_flat.columns) or ("y" not in _df_flat.columns):
-            _df_flat   =_df_flat.reset_index()
-            s = self.capacity_matrix.to_series()  # expands MultiIndex levels to columns on reset_index()
-            _df_flat = s.reset_index()
-            # ensure the value column is correctly named
-            value_col = self.capacity_matrix.name or f"potential_capacity_{self.resource_type}"
-            if 0 in _df_flat.columns:
-                _df_flat.rename(columns={0: value_col}, inplace=True)
-
-        # Optional cleanups: remove obvious empties
-        # _df_flat = _df_flat.drop_duplicates(subset=["y", "x"], keep="first")
-        # _df_flat = _df_flat[_df_flat[value_col] > 0]
-
-    ## 2.1 convert the Availability Matrix to dataframe.
-
-        _df_flat:pd.DataFrame=self.capacity_matrix.to_dataframe()
-
-        if not {'x', 'y'}.issubset(_df_flat.columns):
-            _df_flat = _df_flat.reset_index()
-
-        self.provincial_cell_capacity_gdf:gpd.GeoDataFrame = gpd.GeoDataFrame(
-            _df_flat,
-            geometry=[self.__create_cell_geom__(x, y) for x, y in zip(_df_flat['x'], _df_flat['y'])],
-            crs=self.crs_d  # INHERITED METHOD from AttributesParser
-        )
+    ## Step-5: compute area on final geometries   
+        self.cell_capacity_gdf = self.get_actual_capacity(self.availability_gdf)  
         
-    ## 3 Assign Static exogenous Costs after potential capacity calculation
+    ## Step-6: Assign Static exogenous Costs after potential capacity calculation
         parameters_to_add = {
             'capex': self.resource_capex, # m$/MW
             'fom': self.resource_fom, # m$/MW
@@ -635,37 +657,106 @@ class CellCapacityProcessor(AttributesParser):
         stylized_columns = {f'{key}_{self.resource_type}': value for key, value in parameters_to_add.items()}
 
         # Assign the new stylized columns to the DataFrame
-        self.provincial_cell_capacity_gdf =  self.provincial_cell_capacity_gdf.assign(**stylized_columns)
-
-    ## 4 Trim the cells to sub-provincial boundaries instead of overlapping cell (boxes) in the regional boundaries.
-        self.provincial_cell_capacity_gdf= self.provincial_cell_capacity_gdf.overlay(self.region_boundary)
-        
-        # print(_provincial_cell_capacity_gdf.columns) # debugging purpose
-        
-        self.provincial_cells=utils.assign_cell_id(cells= self.provincial_cell_capacity_gdf,
-            source_column=self.sub_national_unit_tag)
-        self.provincial_cells_with_LandAvailability = self.provincial_cells.join(
-            self.availability_gdf[[f"LandAvailability_{self.resource_type}"]],
-            how="left"
-        )
-        
-        utils.print_update(level=PRINT_LEVEL_BASE+2,
-                   message=f"{__name__}| ✓ Capacity dataframe cleaned and processed")
+        self.cell_capacity_gdf =  self.cell_capacity_gdf.assign(**stylized_columns)
         
         utils.print_update(level=PRINT_LEVEL_BASE+1,
-                   message=f"{__name__}| ERA5 cells' capacity loaded for : {len(self.provincial_cell_capacity_gdf)} Cells [each with .025 deg. (~30km) resolution ]")
+                   message=f"{__name__}| cells' capacity loaded for : {len(self.cell_capacity_gdf)} Cells with potential capacity for {self.resource_type} resources. ")
        
-        self.datahandler.to_store(self.provincial_cells_with_LandAvailability,'cells')
-     
-        return  self.provincial_cells_with_LandAvailability,self.capacity_matrix
+        self.datahandler.to_store(self.cell_capacity_gdf,'cells')
+        
+        self.plot_ERA5_grid_land_availability()
+        self.plot_excluder_land_availability(excluder=self.composite_excluder)
+        
+        return  self.cell_capacity_gdf # ,self.capacity_matrix
     
+    def _add_geom_area_metrics(self, gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+        gdf = gdf.copy()
+        gdf["geom_area_km2"] = gdf.geometry.area / 1e6
+        # gdf["geom_area_share"] = gdf["geom_area_km2"] / gdf["ERA5_cell_area_km2"]
+        return gdf
+
+    def _add_developable_area(self, gdf):
+        gdf = gdf.copy()
+        gdf[self.developable_col] = gdf[self.landavail_col] * gdf["geom_area_km2"]
+        return gdf
+
+    def _add_potential_capacity(self, gdf):
+        gdf = gdf.copy()
+        gdf[self.capacity_col] = gdf[self.developable_col] * self.resource_landuse_intensity
+        return gdf
     
+    def get_actual_capacity(self,
+                            gdf:gpd.GeoDataFrame=None):
+        """
+        This method calculates the actual developable area and potential capacity for each cell based on the land availability and the geometric area of the cells. It returns a GeoDataFrame with the calculated attributes.
+        Returns:
+            gpd.GeoDataFrame: A GeoDataFrame containing the original cell geometries along with the following new columns:
+                - geom_area_km2: The area of each cell geometry in square kilometers.
+                - geom_area_share: The share of the cell's area relative to the original ERA5 cell area.
+                - Developable_area_{resource_type}: The developable area for the resource type, calculated as the land availability multiplied by the cell area.
+                - potential_capacity_{resource_type}: The potential capacity for the resource type, calculated as the developable area multiplied by the land-use intensity for the resource type.
+        
+        """
+        
+        if gdf is None:
+            gdf = self.availability_gdf
+        
+        if gdf.crs is None or gdf.crs.to_string() != self.crs_m:
+            utils.print_update(level=PRINT_LEVEL_BASE+2,
+                                message=f"{__name__}| cell_capacity_gdf CRS is None or not in {self.crs_m}, converting to {self.crs_m} for area calculations.")
+            gdf_m= gdf.to_crs(self.crs_m)
+        else:
+            gdf_m=gdf.copy()
+        
+        gdf_m = self._add_geom_area_metrics(gdf_m)
+        gdf_m = self._add_developable_area(gdf_m)
+        gdf_m = self._add_potential_capacity(gdf_m)
+        
+        gdf_with_actual_capacity=gdf_m.to_crs(self.crs_d)
+        
+        return gdf_with_actual_capacity
     
-## Visuals 
+    def get_availability_gdf(self,
+                             AvailabilityMatrix:xr=None):
+        if AvailabilityMatrix is None:
+            AvailabilityMatrix=self.AvailabilityMatrix
+        else:
+            AvailabilityMatrix=AvailabilityMatrix
+            
+        avail_col = f"LandAvailability_ERA5_{self.resource_type}"
+                
+        self.datahandler.refresh()
+        self.grid_cells=self.datahandler.from_store('cells')
+        
+        _avail_df = (
+            AvailabilityMatrix
+            .rename(avail_col)
+            .to_dataframe()
+            .reset_index()
+        )
+
+        # keep only positive/meaningful rows
+        _avail_df = _avail_df[_avail_df[avail_col] > 0].copy()
+        
+        # # merge onto original split-cell geometries
+        availability_gdf = self.grid_cells.merge(
+            _avail_df[[f"{self.sub_national_unit_tag}", "x", "y", avail_col]],
+            on=[f"{self.sub_national_unit_tag}", "x", "y"],
+            how="left"
+        )
+
+        availability_gdf[avail_col] = availability_gdf[avail_col].fillna(0)
+        self.availability_gdf=utils.assign_cell_id(cells=availability_gdf, source_column=self.sub_national_unit_tag)
+
+        return self.availability_gdf
+
+## Visuals
     def plot_ERA5_grid_land_availability(self,
                                           region_boundary:gpd.GeoDataFrame=None,
-                                          Availability_matrix:xr.DataArray=None,
+                                          availability_gdf:gpd.GeoDataFrame=None,
                                           figsize=(8, 6),
+                                          shadow_offset=0.004,
+                                          cbar_orientation='vertical',
                                           legend_box_x_y:tuple=(1.2, 1)):
         
         """
@@ -673,99 +764,56 @@ class CellCapacityProcessor(AttributesParser):
         Args:
             region_boundary (gpd.GeoDataFrame, optional): The region boundary to plot. If
                 not provided, the default region boundary will be used.
-            Availability_matrix (xr.DataArray, optional): The availability matrix to plot.
-                If not provided, the default Availability matrix will be used.
+            availability_gdf (gpd.GeoDataFrame, optional): The availability GeoDataFrame to plot.
+                If not provided, the default availability GeoDataFrame will be used.
             figsize (tuple, optional): The size of the figure to create. Defaults to (8, 6).
             legend_box_x_y (tuple, optional): The position of the legend box in the plot.
                 Defaults to (1.2, 1).
         Returns:
             fig (matplotlib.figure.Figure): The figure object containing the plot.
         """
-        if region_boundary is None:
-            utils.print_update(level=PRINT_LEVEL_BASE+2,
-                               message=f"{__name__}| No region boundary provided, using the default region boundary.")
-            # Use the default region boundary if not provided   
-            region_boundary = self.region_boundary
-        else:
-            utils.print_update(level=PRINT_LEVEL_BASE+2,
-                               message=f"{__name__}| Using provided region boundary for plotting.")
-        # Ensure the region boundary is in the correct CRS
-        if region_boundary.crs is None or region_boundary.crs.to_string() != 'EPSG:4326'    :
-            utils.print_update(level=PRINT_LEVEL_BASE+2,
-                               message=f"{__name__}| Region boundary CRS is None, setting to EPSG:4326.")
-            region_boundary = region_boundary.set_crs('EPSG:4326')
-        
-        # Load availability data
-        if Availability_matrix is None:
-            utils.print_update(level=PRINT_LEVEL_BASE+2,
-                               message=f"{__name__}| No Availability matrix provided, using the default Availability matrix.")
-            # Use the default Availability matrix if not provided
-            Availability_matrix:xr.DataArray = self.Availability_matrix
-        else:
-            utils.print_update(level=PRINT_LEVEL_BASE+2,
-                               message=f"{__name__}| Using provided Availability matrix for plotting.")
-            Availability_matrix:xr.DataArray = Availability_matrix
-            
-        Availability_df=Availability_matrix.to_dataframe(name="availability").reset_index()
-        
-        # Define bins and labels
-        bins = [x / 100 for x in [1, 10, 30, 60, 90, 100]]  # Define bin edges
-        labels = ["1-10%", "10-30%", "30-60%", "60-90%", ">90%"]
-        
-        
-        # Categorize availability into bins
-        # Availability_df["availability_category"] = pd.cut(Availability_df["availability"], bins=bins, labels=labels, include_lowest=True)
+        availability_gdf=availability_gdf if availability_gdf is not None else self.availability_gdf 
+        region_boundary=self.region_boundary if region_boundary is not None else self.region_boundary
+        availability_gdf[f'LandAvailability_ERA5_{self.resource_type}_pct'] = availability_gdf[f'LandAvailability_ERA5_{self.resource_type}'] * 100
 
-        # Convert to GeoDataFrame
-        A_gdf:gpd.GeoDataFrame = gpd.GeoDataFrame(
-                    Availability_df,
-                    geometry=[self.__create_cell_geom__(x, y) for x, y in zip(Availability_df['x'], Availability_df['y'])],
-                    crs='EPSG:4326'
-                )
-                
-        A_gdf=A_gdf.overlay(region_boundary)
-        A_gdf = A_gdf.rename(columns={"availability": f"LandAvailability_{self.resource_type}"})
-        A_gdf=utils.assign_cell_id(cells=A_gdf, source_column=self.sub_national_unit_tag)
-        self.datahandler.to_store(A_gdf,"LandAvailability")
-
-        # Categorize availability into bins
-        A_gdf_categorized=A_gdf.copy()
-        A_gdf_categorized[f"LandAvailability_{self.resource_type}_category"] = pd.cut(A_gdf_categorized[f"LandAvailability_{self.resource_type}"], bins=bins, labels=labels, include_lowest=True)
-        # Create figure and axes for side-by-side plotting
         fig, ax = plt.subplots(figsize=figsize,constrained_layout=True)
 
         # Set axis off for both subplots
         ax.set_axis_off()
 
-        # Shadow effect offset
-        # shadow_offset = 0.004
+
 
         if region_boundary.crs is None or region_boundary.crs.to_string() != self.crs_m:
-            region_boundary_proj = region_boundary.to_crs(self.crs_m)
-            A_gdf_proj = A_gdf_categorized.to_crs(self.crs_m)
+            region_boundary_plot = region_boundary.to_crs(self.crs_m)
+            availability_gdf_plot = availability_gdf.to_crs(self.crs_m)
             utils.print_update(level=PRINT_LEVEL_BASE+2,
                                message=f"{__name__}| Converted region boundary and availability GeoDataFrame to {self.crs_m} for plotting.")
-        # Plot solar map on ax1
-        # Add shadow effect for solar map
-        # region_boundary_proj.geometry = region_boundary_proj.geometry.translate(xoff=shadow_offset, yoff=-shadow_offset)
-        # region_boundary_proj.plot(ax=ax, facecolor='none', edgecolor='gray', linewidth=2, alpha=0.3)  # Shadow layer
+        else:
+            region_boundary_plot=region_boundary
+            availability_gdf_plot=availability_gdf
+            
+        # Add shadow effects
+        region_boundary_plot.geometry = region_boundary_plot.geometry.translate(xoff=shadow_offset, yoff=-shadow_offset)
+        region_boundary_plot.plot(ax=ax, facecolor='none', edgecolor='gray', linewidth=2, alpha=0.3)  # Shadow layer
 
-        # Plot solar cells
-        A_gdf_proj.plot(column=f'LandAvailability_{self.resource_type}_category', ax=ax, cmap='Greens', legend=True, 
-                legend_kwds={'title': "Land Availability", 'loc': 'upper right', 'bbox_to_anchor': legend_box_x_y,'borderpad': 1,'frameon': False})
-
+        availability_gdf_plot.plot(column=f'LandAvailability_ERA5_{self.resource_type}_pct', 
+                                   ax=ax, 
+                                   cmap='Greens', 
+                                   legend=True, 
+                                   legend_kwds={
+                                        "label": "Land Availability (%)",
+                                        "orientation": cbar_orientation,
+                                            })  
         # Plot actual boundary for solar map
-        region_boundary_proj.plot(ax=ax, facecolor='none', edgecolor='black', linewidth=0.2, alpha=0.9)
+        region_boundary_plot.plot(ax=ax, facecolor='none', edgecolor='black', linewidth=0.2, alpha=0.9)
         plt.subplots_adjust(right=0.85)  # Increase space on the right
         ax.set_title(f"Land Availability for {self.resource_type} resources ({self.region_name})", fontsize=14)
-        # Adjust layout for cleaner appearance
-        plt.tight_layout()
+        fig.subplots_adjust(left=0.02, right=0.98, top=0.93, bottom=0.05)
         vis_save_to_root=self.get_vis_dir()
         plot_save_to=Path(vis_save_to_root)/'lands'
         utils.ensure_path(plot_save_to)
         plt.savefig(f'{plot_save_to}/land_availability_ERA5grid_{self.region_short_code}_{self.resource_type}.png',dpi=500)
         utils.print_update(level=PRINT_LEVEL_BASE+3,message=f"{__name__}|Land availability (grid cells) map saved at {vis_save_to_root}")
-        return A_gdf
         
 
     def plot_excluder_land_availability(self,
@@ -782,7 +830,8 @@ class CellCapacityProcessor(AttributesParser):
             excluder = self.composite_excluder
             
         fig, ax = plt.subplots(figsize=(9, 6),constrained_layout=True)
-        excluder.plot_shape_availability(geometry=self.region_shape,
+        region_shape=self.__get_unified_region_shape__()
+        excluder.plot_shape_availability(geometry=region_shape,
                                         plot_kwargs={'facecolor':'none','edgecolor':'black'},
                                         ax=ax)
         ax.axis("off")
@@ -791,7 +840,8 @@ class CellCapacityProcessor(AttributesParser):
         utils.ensure_path(plot_save_to)
         plt.savefig(f'{plot_save_to}/land_availability_excluderResolution_{self.region_name}.png',dpi=500)
         utils.print_update(level=PRINT_LEVEL_BASE+3,message=f"{__name__}|Land availability map (excluder resolution) saved to {plot_save_to}/land_availability_excluderResolution_{self.region_name}.png")
-        return fig
+        plt.close()
+        # return fig
     
 @staticmethod
 def get_sub_nationally_aggregated_capacity(cells_with_capacity:gpd.GeoDataFrame=None,
@@ -800,7 +850,7 @@ def get_sub_nationally_aggregated_capacity(cells_with_capacity:gpd.GeoDataFrame=
     if cells_with_capacity is None or not isinstance(cells_with_capacity, gpd.GeoDataFrame):
         raise ValueError("The input must be a valid GeoDataFrame with capacity data.")
     if 'potential_capacity_solar' not in cells_with_capacity.columns or 'potential_capacity_wind' not in cells_with_capacity.columns:
-        raise ValueError("The input GeoDataFrame must contain 'potential_capacity_solar' and 'potential_capacity_wind' columns.")
+        raise ValueError("The input GeoDataFrame must contain 'potential_capacity_actual_solar' and 'potential_capacity_actual_wind' columns.")
     if sub_national_unit_tag is None or sub_national_unit_tag not in cells_with_capacity.columns:
         raise ValueError("The input GeoDataFrame must contain 'sub_national_unit_tag' column for aggregation.")
     

@@ -2060,7 +2060,8 @@ def make_lcoe_map(
                 <div><b>Cell ID:</b> {fmt(props.get('cell_id'))}</div>
                 <div><b>Country:</b> {fmt(props.get('Country'))}</div>
                 <div><b>Municipality:</b> {fmt(props.get('Municipality'))}</div>
-                <div><b>Land availability (%):</b> {fmt(props.get('LandAvailability_wind'), scale=100)}</div>
+                <div><b>Land availability (%):</b> {fmt(props.get('LandAvailability_ERA5_wind'), scale=100)}</div>
+                <div><b>Area (Km2):</b> {fmt(props.get('geom_area_km2'))}</div>
                 <div><b>Distance to nearest grid-node (km):</b> {fmt(props.get('nearest_distance'))}</div>
             </div>
 
@@ -2105,7 +2106,8 @@ def make_lcoe_map(
                 <div><b>Cell ID:</b> {fmt(props.get('cell_id'))}</div>
                 <div><b>Country:</b> {fmt(props.get('Country'))}</div>
                 <div><b>Municipality:</b> {fmt(props.get('Municipality'))}</div>
-                <div><b>Land availability (%):</b> {fmt(props.get('LandAvailability_solar'), scale=100)}</div>
+                <div><b>Land availability (%):</b> {fmt(props.get('LandAvailability_EAR5_solar'), scale=100)}</div>
+                <div><b>Area (Km2):</b> {fmt(props.get('geom_area_km2'))}</div>
                 <div><b>Distance to nearest grid-node (km):</b> {fmt(props.get('nearest_distance'))}</div>
             </div>
 
@@ -2139,10 +2141,27 @@ def make_lcoe_map(
         show,
         vmin=None,
         vmax=None,
+        capacity_col=None,
+        capacity_alias="Potential capacity (MW)",
+        filter_values=True,
     ):
         gdf = gdf.copy()
-        gdf["cell_id"] = gdf.index.astype(str)   # preserve original index as popup field
+        gdf["cell_id"] = gdf.index.astype(str)
         gdf[value_col] = pd.to_numeric(gdf[value_col], errors="coerce")
+
+        if capacity_col is not None and capacity_col in gdf.columns:
+            gdf[capacity_col] = pd.to_numeric(gdf[capacity_col], errors="coerce")
+        # --- real filtering step ---
+        if filter_values:
+            mask = gdf[value_col].notna()
+            if vmin is not None:
+                mask &= gdf[value_col] >= vmin
+            if vmax is not None:
+                mask &= gdf[value_col] <= vmax
+            gdf = gdf.loc[mask].copy()
+
+        if gdf.empty:
+            return
         gdf["popup_html"] = gdf.apply(lambda row: popup_builder(row), axis=1)
 
         geojson_dict = json.loads(gdf.to_json())
@@ -2193,14 +2212,21 @@ def make_lcoe_map(
                 f"(shown range: {plot_vmin:.3f}–{plot_vmax:.3f} USD/MWh)"
             )
 
+        tooltip_fields = ["cell_id", "Country", "Municipality", value_col]
+        tooltip_aliases = ["Cell ID", "Country", "Municipality", tooltip_alias]
+
+        if capacity_col is not None and capacity_col in gdf.columns:
+            tooltip_fields.append(capacity_col)
+            tooltip_aliases.append(capacity_alias)
+
         folium.GeoJson(
             data=geojson_dict,
             name=layer_label,
             style_function=style_function,
             highlight_function=highlight_function,
             tooltip=folium.GeoJsonTooltip(
-                fields=["cell_id", "Country", "Municipality", value_col],
-                aliases=["Cell ID", "Country", "Municipality", tooltip_alias],
+                fields=tooltip_fields,
+                aliases=tooltip_aliases,
                 localize=True,
             ),
             popup=folium.GeoJsonPopup(
@@ -2223,6 +2249,8 @@ def make_lcoe_map(
             show=show_wind,
             vmin=wind_lcoe_min,
             vmax=wind_lcoe_max,
+            capacity_col="potential_capacity_wind",
+            capacity_alias="Wind Potential (MW)",
         )
 
     if solar_gdf is not None and not solar_gdf.empty:
@@ -2236,6 +2264,8 @@ def make_lcoe_map(
             show=show_solar,
             vmin=solar_lcoe_min,
             vmax=solar_lcoe_max,
+            capacity_col="potential_capacity_solar",
+            capacity_alias="Solar Potential (MW)",
         )
 
     folium.LayerControl(collapsed=False).add_to(m)

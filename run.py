@@ -70,6 +70,9 @@ import argparse
 import sys
 import RES.RESources as RES
 from RES.utility import load_config
+from datetime import datetime
+import time
+from pathlib import Path
 
 try:
     from colorama import init, Fore, Back, Style
@@ -84,7 +87,34 @@ except ImportError:
         BRIGHT = DIM = ''
     Fore = Back = Style = MockColor()
 
+def write_runtime_log(config_path, 
+                      regions, 
+                      status, 
+                      start_dt, 
+                      end_dt, 
+                      runtime_seconds,
+                      log_file="results/runtime_log.txt"):
+    """Append runtime information for the script to a text file."""
+    log_path = Path(log_file)
+    log_path.parent.mkdir(parents=True, exist_ok=True)
 
+    region_str = ", ".join(regions) if regions else "None"
+    line = (
+        f"[{end_dt.strftime('%Y-%m-%d %H:%M:%S')}] "
+        f"status={status} | "
+        f"start={start_dt.strftime('%Y-%m-%d %H:%M:%S')} | "
+        f"end={end_dt.strftime('%Y-%m-%d %H:%M:%S')} | "
+        f"runtime_s={runtime_seconds:.2f} | "
+        f"runtime_hms={int(runtime_seconds//3600):02d}:"
+        f"{int((runtime_seconds%3600)//60):02d}:"
+        f"{int(runtime_seconds%60):02d} | "
+        f"config={config_path} | "
+        f"regions=[{region_str}]\n"
+    )
+
+    with open(log_path, "a", encoding="utf-8") as f:
+        f.write(line)
+        
 def print_error(message):
     """Print error message in red."""
     print("{}{}{}".format(Fore.RED + Style.BRIGHT, message, Style.RESET_ALL))
@@ -111,18 +141,21 @@ def print_suggestion(message):
 
 
 def main():
-    """Main function to execute the renewable energy resource analysis pipeline."""
+    """Main function to execute the renewable energy resource analysis pipeline.
+    """
+    
     # Set up command-line argument parsing
     parser = argparse.ArgumentParser(
-        description='Renewable Energy Resource Analysis and Processing Pipeline',
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-Examples:
-  python run.py config/config_CAN_baseline.yaml          # Use Canadian config with all regions
-  python run.py config/config_WB6.yaml                   # Use Western Balkan config with all regions
-  python run.py config/config_WB6.yaml -r AL BA XK       # Use WB6 config with specific regions
-  python run.py config/config_CAN_baseline.yaml -r BC QC AB  # Use Canadian config with specific regions
-        """
+            description='Renewable Energy Resource Analysis and Processing Pipeline',
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+            epilog=
+    """
+    Examples:
+    python run.py config/config_CAN_baseline.yaml          # Use Canadian config with all regions
+    python run.py config/config_WB6.yaml                   # Use Western Balkan config with all regions
+    python run.py config/config_WB6.yaml -r AL BA XK       # Use WB6 config with specific regions
+    python run.py config/config_CAN_baseline.yaml -r BC QC AB  # Use Canadian config with specific regions
+    """
     )
     
     parser.add_argument(
@@ -212,8 +245,9 @@ Examples:
             
             try:
                 # Create an instance of Resources and execute the module
-                RES_module = RES.RESources_builder(**required_args)
-                RES_module.build(select_top_sites=True,
+                Builder = RES.RESources_builder(**required_args)
+                # Builder.clean_data_store()
+                Builder.build(select_top_sites=True,
                                  use_pypsa_buses=False,
                                  get_clusters=True,
                                  clean_store=False)
@@ -228,14 +262,55 @@ Examples:
     print_info("? Results stored in data/store/ and results/ directories")
     print("="*70)
 
+    # =====================
+    script_end_dt = datetime.now()
+    runtime_seconds = time.perf_counter() - script_start_perf
+    runtime_mins=int(runtime_seconds/60)
+
+    write_runtime_log(
+        config_path=args.config,
+        regions=regions,
+        status="SUCCESS",
+        start_dt=script_start_dt,
+        end_dt=script_end_dt,
+        runtime_mins=runtime_mins,
+        log_file="runtime_log.txt"
+    )
+
 
 if __name__ == '__main__':
+    
+    script_start_dt = datetime.now()
+    script_start_perf = time.perf_counter()
+    
     try:
         main()
     except KeyboardInterrupt:
+        end_dt = datetime.now()
+        runtime_seconds = time.perf_counter() - script_start_perf
         print_warning("\n!  Process interrupted by user (Ctrl+C)")
         print_info("? Partial results may be available in data/store/ directory")
+        write_runtime_log(
+            config_path="unknown",
+            regions=[],
+            status="INTERRUPTED",
+            start_dt=script_start_dt,
+            end_dt=end_dt,
+            runtime_mins=runtime_mins,
+            log_file="runtime_log.txt"
+        )
         sys.exit(130)
     except Exception as e:
+        end_dt = datetime.now()
+        runtime_seconds = time.perf_counter() - script_start_perf
         print_error("? Unexpected error: {}".format(str(e)))
+        write_runtime_log(
+            config_path="unknown",
+            regions=[],
+            status=f"FAILED: {str(e)}",
+            start_dt=script_start_dt,
+            end_dt=end_dt,
+            runtime_mins=runtime_mins,
+            log_file="runtime_log.txt"
+        )
         sys.exit(1)

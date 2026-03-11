@@ -253,13 +253,36 @@ class GridCells(AttributesParser):
     #     return self.grid_cells
     
     def get_default_grid(self):
-        self.cutout,self.region_boundary=self.ERA5Cutout.get_era5_cutout()
-        _era5_grid_cells_gdf_=self.cutout.grid
-        _resource_grid_cells_gdf_=_era5_grid_cells_gdf_.overlay(self.region_boundary)
-        self.resource_grid_cells=utils.assign_cell_id(_resource_grid_cells_gdf_,
-            source_column=self.gadmBoundary.sub_national_unit_tag)
-        self.datahandler.to_store(self.resource_grid_cells,'cells')
-        self.datahandler.to_store(self.region_boundary,'boundary')
+        self.cutout, self.region_boundary = self.ERA5Cutout.get_era5_cutout()
+
+        resource_grid_cells = (
+            self.cutout.grid
+            # .to_crs(self.crs_m)
+            # .assign(ERA5_cell_area_km2=lambda df: df.geometry.area / 1e6)
+        )
+
+        # region_boundary_m = self.region_boundary.to_crs(self.crs_m)
+
+        resource_grid_cells= resource_grid_cells.overlay(
+            self.region_boundary,
+            how="intersection"
+        )
+
+        self.resource_grid_cells = utils.assign_cell_id(
+            resource_grid_cells,
+            source_column=self.gadmBoundary.sub_national_unit_tag
+        )
+
+        # self.resource_grid_cells_gdf_m["geom_area_km2"] = self.resource_grid_cells_gdf_m.geometry.area / 1e6
+        # self.resource_grid_cells_gdf_m["geom_area_share"] = (
+        #     self.resource_grid_cells_gdf_m["geom_area_km2"] /
+        #     self.resource_grid_cells_gdf_m["ERA5_cell_area_km2"]
+        # )
+        
+        # self.resource_grid_cells=self.resource_grid_cells_gdf.to_crs(self.crs_d)
+        self.datahandler.to_store(self.resource_grid_cells, "cells")
+        self.datahandler.to_store(self.region_boundary, "boundary")
+
         return self.resource_grid_cells
     
    

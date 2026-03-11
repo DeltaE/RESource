@@ -119,3 +119,114 @@ Typical tags associated with Aeroway: ['aerodrome', 'aeroway', 'apron', 'control
 * We used custom filters to extract data for our target key 'aeroway'
  > [How to read and visualize Point of Interests?](https://pyrosm.readthedocs.io/en/latest/basics.html#read-points-of-interest)
  > [How to custom filter OSM data](https://pyrosm.readthedocs.io/en/latest/basics.html#read-osm-data-with-custom-filter)
+
+# Why subnational dissolved polygons were used instead of a single country boundary
+
+## Core issue
+
+In the earlier workflow, boundary cells at the national edge could be unintentionally **double counted or misallocated** when an ERA5 cell intersected multiple geometries. This happened because the availability and capacity calculations were first performed at the **country-dissolved ERA5-cell level**, and only afterward the trimmed cell was overlaid with smaller internal geometries.
+
+A critical distinction is that the final “sites” in this workflow are **not the ERA5 cells themselves**. Rather, the sites are the **geometries inside the ERA5 cells**, which emerge after applying higher-resolution raster and vector constraints. These internal geometries are therefore the planning-relevant units for capacity allocation.
+
+## Why a single country boundary was not sufficient
+
+Using a single dissolved country boundary is adequate for **national masking**, but it is not adequate for **intra-national attribution**. It only answers whether a cell lies inside the country, not how capacity should be distributed across subnational units within that cell.
+
+To preserve intra-national spatial resolution, polygons dissolved by **subnational administrative units** were used instead of a single country geometry. This allows each resulting geometry to be assigned to a planning-relevant administrative region, enabling region-wise aggregation of:
+
+- land availability,
+- capacity potential,
+- and cost metrics such as LCOE.
+
+In contrast, a single country polygon removes the internal regional structure that is needed for subnational energy planning and municipal or regional investment prioritization.
+
+## Example
+
+
+| Example                 | What Happened ?                              | 
+|--------------------------|----------------------------------------------|
+| <img src="../_static/NorthMacedonia_example_learning.png" alt="NorthMacedonia_example_learning" width="300"/>       | the **purple trimmed ERA5 cell**, represents a single ERA5 cell after clipping by the country or regional boundary, the **five internal shapes** represent municipality-level geometries within that same ERA5 cell, and because they originate from the same ERA5 cell, they initially inherit the same cell-level spatial context|
+
+The earlier workflow was:
+
+1. pass the **country-dissolved geometry** into the availability matrix,
+2. calculate the **capacity matrix**,
+3. derive capacity at the **ERA5-cell level**,
+4. then overlay the trimmed ERA5 cell with municipality geometries.
+
+The problem with this sequence is that each municipality geometry could end up absorbing the **same cell-level capacity**, even though those geometries may differ strongly in their actual developable land. In other words, the boundary trimming created multiple internal geometries, but the capacity signal was still inherited from the undifferentiated ERA5 cell.
+
+## Two possible correction methods
+
+### Method A: Area-proportional scaling
+
+One correction is to assume that land availability within the ERA5 cell is **uniformly distributed** across all internal geometries. Under that assumption, municipal capacity can be scaled as:
+
+**municipal capacity = ERA5-cell availability × municipality geometry area**
+
+This is simple and internally consistent if no better spatial information exists. However, it assumes that developable land is spread evenly within the ERA5 cell. Where municipalities differ strongly in land cover, slope, protected areas, buffers, or other siting constraints, this can become spatially misleading. It may allocate too much capacity to municipalities with little suitable land and too little to those with more developable land.
+
+### Method B: Geometry-level availability breakdown
+
+The second correction is to calculate availability at the **municipality-geometry level**, rather than only at the ERA5-cell level. In this case, each internal geometry receives its own availability estimate derived from the finer-resolution spatial data. Capacity is then calculated from that geometry-specific availability.
+
+This approach preserves the true spatial heterogeneity of developable land within a single ERA5 cell and avoids the artificial assumption of uniform distribution.
+
+## Method applied here
+
+**Method B was applied.**
+
+This is preferable because the workflow already uses **high-resolution spatial inputs**, including raster and vector constraints, to determine land availability. Since those data capture internal differences within the ERA5 cell, capacity allocation should also reflect those differences.
+
+This makes the results more spatially defensible, especially when municipalities within the same ERA5 cell differ substantially in their actual developable land.
+
+## Why this is justified with 100 m data
+
+The use of high-resolution data is important here. Availability was derived using **100 m raster information together with vector exclusions/constraints**, so the workflow is not relying on coarse cell-wide assumptions alone. If a municipality geometry contains many 100 m pixels, then its developable fraction is meaningfully estimated from actual spatial detail rather than from a uniform average.
+
+This means the geometry-level availability values are not arbitrary subdivisions of the ERA5 cell. They are grounded in the spatial pattern of:
+
+- land cover,
+- exclusion zones,
+- protected areas,
+- buffers,
+- and other vector/raster siting constraints.
+
+As a result, geometry-level capacity estimates are relevant for municipal or subregional interpretation, provided the geometry is large enough to be represented meaningfully at the 100 m resolution.
+
+## Role of raster and vector data in atlite availability calculations
+
+In `atlite`, availability is typically computed by evaluating which parts of a grid cell remain suitable after applying exclusion layers. In this workflow, that logic is enriched by combining:
+
+- **high-resolution raster layers** (for example land cover or gridded suitability data), and
+- **vector layers** (for example administrative boundaries, protected areas, lakes, buffers, or other exclusion geometries).
+
+Conceptually, the process is:
+
+1. start from the coarse ERA5 grid cell,
+2. evaluate suitability inside that cell using fine-resolution raster data,
+3. exclude or trim unsuitable portions using vector constraints,
+4. retain only the eligible land fragments,
+5. aggregate those eligible fragments into geometry-level availability values.
+
+Because of this raster–vector combination, the final “site” is better interpreted as a **reality-corrected developable geometry inside an ERA5 cell**, not as the ERA5 cell itself.
+
+## Why this matters even if capacities are later aggregated
+
+Even if the final model aggregates all municipal geometries into a single resource or supply option, the spatial breakdown remains valuable.
+
+It helps answer questions such as:
+
+- where the aggregated capacity is actually located,
+- which municipalities or subregions contribute most,
+- whether investment potential is spatially concentrated or dispersed,
+- and which areas may deserve prioritization for planning, infrastructure, or permitting.
+
+So although the optimization model may later collapse these sites into a larger resource class, the finer spatial decomposition still provides important planning intelligence. It supports interpretation, transparency, and investment prioritization in ways that a single aggregated number cannot.
+
+The key methodological shift was moving from **country-level ERA5-cell capacity allocation** to **subnational geometry-level availability and capacity allocation**. This avoided misallocation at boundaries, preserved intra-national spatial structure, and better reflected the true distribution of developable land captured by the 100 m raster and vector exclusion workflow.
+
+In short:
+
+- a **single country boundary** is sufficient for national masking,
+- but **subnational dissolved polygons plus geometry-level availability** are needed for spatially just and planning-relevant capacity allocation.
