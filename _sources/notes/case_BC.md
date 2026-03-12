@@ -30,6 +30,10 @@ Here is a summary of the CRS used in this tool and study.
 ```{tip}
 Users of this tool (or in any other geospatial analysis!) should critically review the preferred CRS for area calculation. Check EPSG Resources for more details on regional coordinate system suitability. Meter/degree-based (default/explicit for regions) CRS is configurable in RESource. 
 ```
+
+---
 ```{warning}
 This library is under heavy development and the publication is under review process. The detailed report is restricted as a requirement from publishers.
 ```
+
+<img src="../_static/Abstract_book_data_review.png" alt="Abstract_book_data_review" width="900"/>
