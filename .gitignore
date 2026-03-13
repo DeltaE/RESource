@@ -1,75 +1,80 @@
-# Temp and Garbage control
-.snakemake
-.github
-.vscode
-*/__pycache__
-archive
-cache
-workflow/scripts/__pycache__
+# =============================================================================
+# Python artifacts
+# =============================================================================
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyo
+RES.egg-info/
 
+# =============================================================================
+# IDE and tools
+# =============================================================================
+.vscode/
+.snakemake/
+.github/
 
-# DATA related directories
-## CODERS API file
-data/downloaded_data/CODERS/coders_api.yaml 
-data/downloaded_data/CORINE/*
-data/downloaded_data/CODERS/*
-data/downloaded_data/cutout/*
-data/downloaded_data/GADM/*
-data/downloaded_data/GAEZ/*
-data/downloaded_data/Gov/*
-data/downloaded_data/GWA/*
-data/downloaded_data/lands
-# data/downloaded_data/NREL/ATB     # This data stays to github as example
-# data/downloaded_data/OEDB        # This data stays to github as example
-data/downloaded_data/OSM/*
-data/store/*
-data/test_data
-
-# RESULTS
-results/archived
-results/RESources/*
-
-# Docs/Page resources
-docs/build/*
+# =============================================================================
+# Build and generated docs
+# =============================================================================
+docs/_build/
+docs/build/
 docs/*.html
-ROD_2024/*.xlsm
-ROD_2024/*.pkl
-AB_temp_analysis/*
-ROD_2024/*.html
+.doctrees/
 
-data/processed_data/regions/*.geojson
-ROD_2024/ROD_2024/*.html
-Lines_BC.png
-notebooks/vis/*
+# =============================================================================
+# Data — downloaded sources
+# =============================================================================
+data/downloaded_data/CODERS/coders_api.yaml
+data/downloaded_data/CODERS/
+data/downloaded_data/CORINE/
+data/downloaded_data/cutout/
+data/downloaded_data/EU_DEM/
+data/downloaded_data/GADM/
+data/downloaded_data/GAEZ/
+data/downloaded_data/Gov/
+data/downloaded_data/GWA/
+data/downloaded_data/lands/
+data/downloaded_data/OSM/
+# data/downloaded_data/NREL/ATB  # kept as example
+# data/downloaded_data/OEDB      # kept as example
 
-RES/__pycache__/*
-*.pyc
-*/*/*.pyc
-RES/__pycache__
+# =============================================================================
+# Data — processed and stored
+# =============================================================================
+data/store/
+data/test_data/
 data/*.xlsx
 data/processed_data/*.csv
-RES/__pycache__
-RES/__pycache__/AttributesParser.cpython-312.pyc
+data/processed_data/lands/
+data/processed_data/regions/*.geojson
+data/processed_data/EU_DEM/
 
-docs/build/*
+# =============================================================================
+# Results
+# =============================================================================
+results/
 
-ui
-vis/*
-data/processed_data/lands
-
-data/processed_data/lands
-
-docs/build/*
-results/RESources/AB
-results/RESources/MB
-data/processed_data/lands/*.csv
-results/RESources/BC/cells_aggregated_region_BC_default.csv
-# .gitignore
-.doctrees/
-_static/*.svg
-results/*
-RES.egg-info
+# =============================================================================
+# Notebooks
+# =============================================================================
+notebooks/vis/
 notebooks/*.tif
-data/downloaded_data/EU_DEM
-docs/_build
-data/processed_data/EU_DEM
+
+# =============================================================================
+# Temporary / scratch directories
+# =============================================================================
+archive/
+cache/
+ui/
+vis/
+AB_temp_analysis/
+Lines_BC.png
+
+# =============================================================================
+# ROD analysis
+# =============================================================================
+ROD_2024/*.xlsm
+ROD_2024/*.pkl
+ROD_2024/*.html
+ROD_2024/ROD_2024/*.html

@@ -843,20 +843,97 @@ class CellCapacityProcessor(AttributesParser):
         plt.close()
         # return fig
     
-@staticmethod
-def get_sub_nationally_aggregated_capacity(cells_with_capacity:gpd.GeoDataFrame=None,
-                                           sub_national_unit_tag:str=None):
+# @staticmethod
+# def get_sub_nationally_aggregated_capacity(cells_with_capacity:gpd.GeoDataFrame=None,
+#                                            sub_national_unit_tag:str=None):
     
-    if cells_with_capacity is None or not isinstance(cells_with_capacity, gpd.GeoDataFrame):
-        raise ValueError("The input must be a valid GeoDataFrame with capacity data.")
-    if 'potential_capacity_solar' not in cells_with_capacity.columns or 'potential_capacity_wind' not in cells_with_capacity.columns:
-        raise ValueError("The input GeoDataFrame must contain 'potential_capacity_actual_solar' and 'potential_capacity_actual_wind' columns.")
-    if sub_national_unit_tag is None or sub_national_unit_tag not in cells_with_capacity.columns:
-        raise ValueError("The input GeoDataFrame must contain 'sub_national_unit_tag' column for aggregation.")
+#     if cells_with_capacity is None or not isinstance(cells_with_capacity, gpd.GeoDataFrame):
+#         raise ValueError("The input must be a valid GeoDataFrame with capacity data.")
+#     if 'potential_capacity_solar' not in cells_with_capacity.columns or 'potential_capacity_wind' not in cells_with_capacity.columns:
+#         raise ValueError("The input GeoDataFrame must contain 'potential_capacity_actual_solar' and 'potential_capacity_actual_wind' columns.")
+#     if sub_national_unit_tag is None or sub_national_unit_tag not in cells_with_capacity.columns:
+#         raise ValueError("The input GeoDataFrame must contain 'sub_national_unit_tag' column for aggregation.")
     
         
-    cells_aggr=cells_with_capacity.groupby(sub_national_unit_tag).aggregate({'potential_capacity_solar':'sum','potential_capacity_wind':'sum'})
+#     cells_aggr=cells_with_capacity.groupby(sub_national_unit_tag).aggregate({'potential_capacity_solar':'sum','potential_capacity_wind':'sum','geom_area_km2':'sum'}).reset_index()
 
-    cells_aggr[['potential_capacity_solar', 'potential_capacity_wind']] = cells_aggr[['potential_capacity_solar', 'potential_capacity_wind']].round().astype(int)
+#     cells_aggr[['potential_capacity_solar', 'potential_capacity_wind', 'geom_area_km2']] = cells_aggr[['potential_capacity_solar', 'potential_capacity_wind', 'geom_area_km2']].round().astype(int)
+
+#     return cells_aggr
+@staticmethod
+def get_sub_nationally_aggregated_capacity(
+    cells_with_capacity: gpd.GeoDataFrame,
+    sub_national_unit_tag: str,
+    capacity_cols: list[str] | None = None,
+    area_col: str = "geom_area_km2",
+    round_digits: int | None = 0,
+    dropna_group: bool = True,
+) -> pd.DataFrame:
+    """
+    Aggregate capacity and area by sub-national unit.
+
+    Parameters
+    ----------
+    cells_with_capacity : gpd.GeoDataFrame
+        Input GeoDataFrame containing sub-national tags and capacity columns.
+    sub_national_unit_tag : str
+        Column name used to group rows by sub-national unit.
+    capacity_cols : list[str] | None, default None
+        Capacity columns to aggregate. If None, defaults to:
+        ['potential_capacity_solar', 'potential_capacity_wind'].
+    area_col : str, default 'geom_area_km2'
+        Area column to include in aggregation.
+    round_digits : int | None, default 0
+        Number of digits to round numeric outputs to.
+        Use None to skip rounding.
+    dropna_group : bool, default True
+        Whether to exclude rows where the grouping column is missing.
+
+    Returns
+    -------
+    pd.DataFrame
+        Aggregated table by sub-national unit.
+    """
+    if not isinstance(cells_with_capacity, gpd.GeoDataFrame):
+        raise TypeError("cells_with_capacity must be a GeoDataFrame.")
+
+    if not sub_national_unit_tag or sub_national_unit_tag not in cells_with_capacity.columns:
+        raise ValueError(
+            f"Grouping column '{sub_national_unit_tag}' not found in input GeoDataFrame."
+        )
+
+    if capacity_cols is None:
+        capacity_cols = ["potential_capacity_solar", "potential_capacity_wind"]
+
+    cols_to_aggregate = capacity_cols + [area_col]
+
+    missing_cols = [col for col in cols_to_aggregate if col not in cells_with_capacity.columns]
+    if missing_cols:
+        raise ValueError(
+            f"Missing required columns: {missing_cols}. "
+            f"Available columns are: {list(cells_with_capacity.columns)}"
+        )
+
+    df = cells_with_capacity.copy()
+
+    if dropna_group:
+        df = df[df[sub_national_unit_tag].notna()].copy()
+
+    # Force numeric conversion safely
+    for col in cols_to_aggregate:
+        df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
+
+    agg_dict = {col: "sum" for col in cols_to_aggregate}
+
+    cells_aggr = (
+        df.groupby(sub_national_unit_tag, dropna=not dropna_group)
+        .agg(agg_dict)
+        .reset_index()
+    )
+
+    if round_digits is not None:
+        cells_aggr[cols_to_aggregate] = cells_aggr[cols_to_aggregate].round(round_digits)
+        if round_digits == 0:
+            cells_aggr[cols_to_aggregate] = cells_aggr[cols_to_aggregate].astype(int)
 
     return cells_aggr
