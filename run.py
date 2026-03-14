@@ -93,13 +93,14 @@ def write_runtime_log(config_path,
                       start_dt, 
                       end_dt, 
                       runtime_seconds,
-                      log_file="results/runtime_log.txt"):
+                      log_file=None):
     """Append runtime information for the script to a text file."""
-    log_path = Path(log_file)
+    log_path = Path(log_file) if log_file else Path("results/logs/runtime_log.txt")
     log_path.parent.mkdir(parents=True, exist_ok=True)
 
     region_str = ", ".join(regions) if regions else "None"
     line = (
+        f"--------------------------------------------------------------------------------\n"
         f"[{end_dt.strftime('%Y-%m-%d %H:%M:%S')}] "
         f"status={status} | "
         f"start={start_dt.strftime('%Y-%m-%d %H:%M:%S')} | "
@@ -110,6 +111,7 @@ def write_runtime_log(config_path,
         f"{int(runtime_seconds%60):02d} | "
         f"config={config_path} | "
         f"regions=[{region_str}]\n"
+        f"--------------------------------------------------------------------------------\n"
     )
 
     with open(log_path, "a", encoding="utf-8") as f:
@@ -249,6 +251,7 @@ def main():
                 # Builder.clean_data_store()
                 Builder.build(select_top_sites=True,
                                  use_pypsa_buses=False,
+                                 use_grid_lines=True,
                                  get_clusters=True,
                                  clean_store=False)
                 print_success("? Completed {} {} processing".format(region, resource_type))
@@ -265,7 +268,6 @@ def main():
     # =====================
     script_end_dt = datetime.now()
     runtime_seconds = time.perf_counter() - script_start_perf
-    runtime_mins=int(runtime_seconds/60)
 
     write_runtime_log(
         config_path=args.config,
@@ -273,7 +275,7 @@ def main():
         status="SUCCESS",
         start_dt=script_start_dt,
         end_dt=script_end_dt,
-        runtime_mins=runtime_mins,
+        runtime_seconds=runtime_seconds,
         log_file="runtime_log.txt"
     )
 
@@ -296,7 +298,7 @@ if __name__ == '__main__':
             status="INTERRUPTED",
             start_dt=script_start_dt,
             end_dt=end_dt,
-            runtime_mins=runtime_mins,
+            runtime_seconds=runtime_seconds,
             log_file="runtime_log.txt"
         )
         sys.exit(130)
@@ -310,7 +312,7 @@ if __name__ == '__main__':
             status=f"FAILED: {str(e)}",
             start_dt=script_start_dt,
             end_dt=end_dt,
-            runtime_mins=runtime_mins,
+            runtime_seconds=runtime_seconds,
             log_file="runtime_log.txt"
         )
         sys.exit(1)

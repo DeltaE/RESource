@@ -26,17 +26,18 @@ Dependencies:
     - geopandas: Spatial data visualization
     - xarray: Multi-dimensional data plotting
 """
-
 from __future__ import annotations
 
-import json
-import numbers
 import os
+import textwrap
 from pathlib import Path
+from typing import Iterable, Mapping, Sequence
+
 import folium
 import geopandas as gpd
 import matplotlib
 import matplotlib as mpl
+import matplotlib.cm as cm
 import matplotlib.colors as mcolors
 import matplotlib.patches as mpatches
 import matplotlib.patheffects as pe
@@ -48,25 +49,33 @@ import plotly.graph_objects as go
 import rasterio
 import seaborn as sns
 import xarray
+import xarray as xr
 from atlite import ExclusionContainer
 from IPython.display import display
 from matplotlib import lines as mlines
 from matplotlib.colors import (
+    BoundaryNorm,
     LinearSegmentedColormap,
+    ListedColormap,
+    to_rgba,
 )
 from matplotlib.font_manager import FontProperties
 from matplotlib.gridspec import GridSpec
 from matplotlib.lines import Line2D
-from matplotlib.patches import Rectangle, RegularPolygon
+from matplotlib.patches import Patch, Rectangle, RegularPolygon
 from matplotlib.ticker import (
     FuncFormatter,
+    MaxNLocator,
     MultipleLocator,
+    PercentFormatter,
 )
+import json
 from plotly.subplots import make_subplots
+from rasterio.warp import Resampling, calculate_default_transform, reproject
+import xyzservices.providers as xyz
 import RES.lands as lands
 import RES.utility as utils
 import RES.visual_styles as styles
-import xyzservices.providers as xyz
 
 style_path = Path(styles.__file__).parent / "elsevier.mplstyle"
 plt.style.use(style_path)# Custom style for publication quality figures
@@ -1447,6 +1456,8 @@ def get_data_in_map_plot(cells,
                     datafield:str=None,
                     title:str=None,
                     ax=None,
+                    cell_edge_color:str='white',
+                    cell_linewidth:float=0.2,
                     compass_size:float=10,
                     font_family:str=None,
                     score_threshold:float=200,
@@ -1516,7 +1527,7 @@ def get_data_in_map_plot(cells,
             # Main layer
 
             
-            cells.plot(column=column, cmap=cmap, ax=ax, edgecolor='k', alpha=1, linewidth=0.15, zorder=2)
+            cells.plot(column=column, cmap=cmap, ax=ax, edgecolor=cell_edge_color, alpha=0.8, linewidth=cell_linewidth, zorder=2)
 
             # Colorbar
             sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
@@ -1918,6 +1929,7 @@ def get_stepwise_availability_plots(excluder:ExclusionContainer,
 def make_lcoe_map(
     wind_gdf: gpd.GeoDataFrame | None = None,
     solar_gdf: gpd.GeoDataFrame | None = None,
+    sub_national_unit_tag:str=None,
     save_path=None,
     center=None,
     zoom_start=7,
@@ -1962,7 +1974,8 @@ def make_lcoe_map(
 
     if wind_gdf is None and solar_gdf is None:
         raise ValueError("At least one of wind_gdf or solar_gdf must be provided.")
-
+    if sub_national_unit_tag is None:
+        raise ValueError(" 'sub_national_unit_tag' must be provided to display in popups.")
     def prep_gdf(gdf):
         if gdf is None:
             return None
@@ -2059,7 +2072,7 @@ def make_lcoe_map(
             <div style="margin-bottom: 8px;">
                 <div><b>Cell ID:</b> {fmt(props.get('cell_id'))}</div>
                 <div><b>Country:</b> {fmt(props.get('Country'))}</div>
-                <div><b>Municipality:</b> {fmt(props.get('Municipality'))}</div>
+                <div><b>{sub_national_unit_tag}:</b> {fmt(props.get(f'{sub_national_unit_tag}'))}</div>
                 <div><b>Land availability (%):</b> {fmt(props.get('LandAvailability_ERA5_wind'), scale=100)}</div>
                 <div><b>Area (Km2):</b> {fmt(props.get('geom_area_km2'))}</div>
                 <div><b>Distance to nearest grid-node (km):</b> {fmt(props.get('nearest_distance'))}</div>
@@ -2105,7 +2118,7 @@ def make_lcoe_map(
             <div style="margin-bottom: 8px;">
                 <div><b>Cell ID:</b> {fmt(props.get('cell_id'))}</div>
                 <div><b>Country:</b> {fmt(props.get('Country'))}</div>
-                <div><b>Municipality:</b> {fmt(props.get('Municipality'))}</div>
+                <div><b>{sub_national_unit_tag}:</b> {fmt(props.get(f'{sub_national_unit_tag}'))}</div>
                 <div><b>Land availability (%):</b> {fmt(props.get('LandAvailability_EAR5_solar'), scale=100)}</div>
                 <div><b>Area (Km2):</b> {fmt(props.get('geom_area_km2'))}</div>
                 <div><b>Distance to nearest grid-node (km):</b> {fmt(props.get('nearest_distance'))}</div>
@@ -2212,8 +2225,8 @@ def make_lcoe_map(
                 f"(shown range: {plot_vmin:.3f}–{plot_vmax:.3f} USD/MWh)"
             )
 
-        tooltip_fields = ["cell_id", "Country", "Municipality", value_col]
-        tooltip_aliases = ["Cell ID", "Country", "Municipality", tooltip_alias]
+        tooltip_fields = ["cell_id", "Country", f"{sub_national_unit_tag}", value_col]
+        tooltip_aliases = ["Cell ID", "Country", f"{sub_national_unit_tag}", tooltip_alias]
 
         if capacity_col is not None and capacity_col in gdf.columns:
             tooltip_fields.append(capacity_col)
@@ -2274,3 +2287,353 @@ def make_lcoe_map(
         m.save(str(save_path))
 
     return m
+
+
+
+def plot_developable_land_and_vres(
+    *,
+    target_crs: str = 'EPSG:4326',
+    raster_data: xr.DataArray,
+    raster_legends: pd.DataFrame,
+    classes_to_plot: Mapping[str, Sequence[int]] | None = None,  # {"solar":[...], "wind":[...]} or None -> ALL
+    boundary: gpd.GeoDataFrame,
+    existing_VREs_gdf: gpd.GeoDataFrame | None = None,
+    include_tags: Iterable[str] = ("solar", "wind"),
+    existing_marker_col: str = "wind_turbine_capacity",
+    committed_VREs_gdf: gpd.GeoDataFrame | None = None,
+    committed_marker_col: str = "potential_capacity",
+    marker_scale_existing: float = 7.0,
+    marker_scale_committed: float = 4.0,
+    marker_highlight_width: float = 1.0,
+    area_labels: bool = False,
+    title: str = "Developable Land with Existing & Committed VREs",
+    fallback_crs: str = "EPSG:4326",
+    label_column: str = "Country",
+    vre_type_column: str = "gen_type",
+    output_path: Path | str | None = None,
+    figsize: tuple[float, float] = (12, 12),
+    legend_anchor: tuple[float, float] | None = None,
+    legend_fontsize: float = 10.0,
+    dpi: int = 500,
+    show: bool = True,
+) -> tuple[plt.Figure, plt.Axes, Path | None]:
+    """
+    Plot developable land from a categorical raster with boundaries and existing/committed VRE sites.
+    Highlights excluded land classes in semi-transparent red if a subset of classes is provided.
+    """
+
+    # ---------- Legend helpers ----------
+    id_to_name = dict(zip(raster_legends["class"].astype(int),
+                          raster_legends["description"].astype(str)))
+    id_to_hex = dict(zip(raster_legends["class"].astype(int),
+                         raster_legends["color"].astype(str)))
+
+    # ---------- CRS handling ----------
+    if raster_data.rio.crs is None:
+        raster_data = raster_data.rio.write_crs(target_crs, inplace=False)
+    if raster_data.rio.crs != target_crs:
+        try:
+            raster_plot = raster_data.rio.reproject(target_crs)
+        except Exception:
+            print("⚠️ Reprojection failed, using original CRS instead.")
+            raster_plot = raster_data
+    else:
+        raster_plot = raster_data
+
+    if boundary.crs != target_crs:
+        boundary_proj = boundary.to_crs(target_crs)
+        
+    else:
+        boundary_proj = boundary
+    
+    # ---------- Clip raster to boundary ----------
+    try:
+        # Ensure boundary CRS matches raster CRS
+        if boundary_proj.crs != raster_plot.rio.crs:
+            boundary_for_clip = boundary_proj.to_crs(raster_plot.rio.crs)
+        else:
+            boundary_for_clip = boundary_proj
+
+        raster_clipped = raster_plot.rio.clip(
+                boundary_for_clip.geometry,
+                boundary_for_clip.crs,
+                drop=True,
+                invert=False,
+                all_touched=False,   # <— STRICT geometry clipping
+            )
+        print(f"✅ Raster clipped to boundary '{label_column}' region, shape: {raster_clipped.shape}")
+        raster_plot = raster_clipped
+    except Exception as e:
+        print(f"⚠️ Raster clipping failed, using full raster extent instead. Reason: {e}")
+
+
+    # ---------- Raster + masking ----------
+    # raster = raster_plot.values.squeeze().astype("int32", copy=False)
+    raster = np.nan_to_num(raster_plot.values.squeeze(), nan=0).astype("int32")
+
+    codes_present = np.unique(raster)
+
+    if classes_to_plot is None:
+        selected_codes = set(int(c) for c in codes_present.tolist())
+        selected_codes.discard(0)
+        use_masking = False
+    else:
+        selected_codes = set()
+        for tag in include_tags:
+            if tag in classes_to_plot:
+                selected_codes.update(int(c) for c in classes_to_plot[tag])
+        selected_codes.discard(0)
+        use_masking = True
+
+    # Mask raster for plotting
+    if use_masking:
+        mask = np.isin(raster, list(selected_codes))
+        raster_masked = raster.copy()
+        raster_masked[~mask] = -1  # mark excluded
+        excluded_mask = (~mask) & (raster != 0)
+        values_to_color = sorted(selected_codes)
+    else:
+        raster_masked = raster
+        excluded_mask = np.zeros_like(raster, dtype=bool)
+        values_to_color = sorted(set(int(v) for v in codes_present.tolist()))
+
+    # ---------- Colormap ----------
+    color_map_dict: dict[int, tuple] = {}
+    for c in values_to_color:
+        color_map_dict[c] = to_rgba(id_to_hex.get(c, "#FFFFFF"))
+    if use_masking:
+        color_map_dict[-1] = (0, 0, 0, 0)  # transparent base for excluded
+
+    all_vals = sorted(color_map_dict.keys())
+    cmap = ListedColormap([color_map_dict[v] for v in all_vals])
+    last_edge = (all_vals[-1] + 1) if all_vals else 1
+    norm = BoundaryNorm(np.array(all_vals + [last_edge]), cmap.N)
+
+    # ---------- Extent ----------
+    x = raster_plot.coords["x"].values
+    y = raster_plot.coords["y"].values
+    extent = [float(x.min()), float(x.max()), float(y.min()), float(y.max())]
+    origin = "upper" if y[0] > y[-1] else "lower"
+
+    xmin, ymin, xmax, ymax = boundary_proj.total_bounds
+    aspect_ratio = (ymax - ymin) / (xmax - xmin)
+    fig_width = 9
+    fig_height = fig_width * aspect_ratio * 1.1
+    fig, ax = plt.subplots(figsize=(fig_width, fig_height), facecolor="white")
+    ax.set_facecolor("white")
+
+    # ---------- Base raster ----------
+    ax.imshow(
+        raster_masked,
+        extent=extent,
+        origin=origin,
+        cmap=cmap,
+        norm=norm,
+        interpolation="nearest",
+        zorder=0,
+    )
+
+    # ---------- Overlay excluded (semi-transparent red) ----------
+    if use_masking:
+        ax.imshow(
+            np.where(excluded_mask, 1, np.nan),
+            extent=extent,
+            origin=origin,
+            cmap=ListedColormap([(1, 0, 0, 0.3)]),  # semi-transparent red
+            interpolation="nearest",
+            zorder=10,
+        )
+
+    # ---------- Boundary & labels ----------
+    if not boundary_proj.empty:
+        boundary_proj.plot(ax=ax, facecolor="none", edgecolor="black", linewidth=0.2, zorder=3)
+
+    if area_labels and label_column in boundary_proj.columns:
+        for _, row in boundary_proj.iterrows():
+            c = row.geometry.centroid
+            ax.annotate(
+                str(row[label_column]),
+                (c.x, c.y),
+                ha="center", va="center",
+                fontsize=12, fontweight="bold", color="black",
+                path_effects=[pe.withStroke(linewidth=3, foreground="white")],
+            )
+
+    # ---------- VRE plotting ----------
+    legend_all: list[Patch] = []
+    ax, VRE_legend_handles = get_existing_committed_VRE_plot(
+        ax=ax,
+        target_crs=target_crs,
+        existing_VREs_gdf=existing_VREs_gdf,
+        committed_VREs_gdf=committed_VREs_gdf,
+        existing_VRE_type_column=vre_type_column,
+        existing_marker_col=existing_marker_col,
+        committed_marker_col=committed_marker_col,
+        marker_scale_existing=marker_scale_existing,
+        marker_scale_committed=marker_scale_committed,
+        marker_highlight_width=marker_highlight_width,
+    )
+    legend_all.extend(VRE_legend_handles)
+
+    # ---------- Legend ----------
+    handles_classes: list[Patch] = []
+    for c in values_to_color:
+        base_label = f"{c}: {id_to_name.get(c, f'Class {c}')}"
+        tag_note = [tag.capitalize() for tag in include_tags
+                    if classes_to_plot and tag in classes_to_plot
+                    and c in set(int(v) for v in classes_to_plot[tag])]
+        label = f"{base_label} ({' & '.join(tag_note)})" if tag_note else base_label
+        handles_classes.append(Patch(facecolor=id_to_hex.get(c, "#888888"),
+                                     edgecolor="none", label=label))
+    legend_all.extend(handles_classes)
+
+    if use_masking:
+        legend_all.append(Patch(facecolor=(1, 0, 0, 0.3),
+                                edgecolor=None,
+                                label="Excluded Land (outside selected classes)"))
+
+    if legend_all:
+        ax.legend(
+            handles=legend_all,
+            loc="upper left",
+            bbox_to_anchor=legend_anchor if legend_anchor else (0.98, 0.98),
+            fontsize=legend_fontsize, frameon=True, facecolor="white", edgecolor="none",
+            framealpha=0.9, labelspacing=0.4, handlelength=1.4,
+        )
+
+    ax.set_title(title, fontsize=16, fontweight="bold")
+    ax.axis("off")
+    plt.tight_layout()
+
+    saved: Path | None = None
+    if output_path is not None:
+        saved = Path(output_path)
+        saved.parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(saved, dpi=dpi, bbox_inches="tight")
+        utils.print_update(level=1, message=f"Saved map with excluded overlay → {saved}")
+
+    if show:
+        plt.show()
+    else:
+        plt.close(fig)
+
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(ymin, ymax)
+    ax.set_aspect('equal', adjustable='box')
+
+    return fig, ax, saved
+
+def plot_vre_sites_by_landcover(
+    df: pd.DataFrame,
+    class_col: str = None,
+    count_prefix: str = "SiteCount_",
+    title: str = "Existing VRE Sites by Land-Cover Class and Technology",
+    figsize=(8, 6),
+    wrap_width: int = 25,
+    fontsize: int = 8,
+    colors: list = None,
+    normalize: bool = False,
+    save_to: str = None,
+    show=True
+):
+    """
+    Plots a horizontal stacked bar chart of VRE site counts by land-cover class and technology.
+    Can plot either absolute site counts or normalized shares (percentage within each class).
+    
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Must include one land-cover column and one or more site count columns prefixed with `count_prefix`.
+    class_col : str
+        Column name for land-cover class.
+    count_prefix : str
+        Prefix to identify count columns (e.g. 'SiteCount_').
+    normalize : bool, default False
+        If True, plot percentage share of each technology within each land-cover class.
+    """
+    if class_col is None:
+        raise ValueError("'class_col' must be defined. Check the dataframe for this column.")
+    
+    # --- Identify count columns ---
+    count_cols = [c for c in df.columns if c.startswith(count_prefix)]
+    if not count_cols:
+        raise ValueError(f"No columns found starting with '{count_prefix}'.")
+
+    df = df.copy()
+    df["Total"] = df[count_cols].sum(axis=1)
+    df = df.sort_values("Total", ascending=True)
+    df = df.set_index(class_col)
+
+    # --- Optional normalization ---
+    if normalize:
+        df_norm = df[count_cols].div(df["Total"], axis=0) * 100
+        plot_data = df_norm
+        x_label = "Share of Sites (%)"
+        ann_format = lambda v: f"{v:.1f}%"
+    else:
+        plot_data = df[count_cols]
+        x_label = "Number of Sites"
+        ann_format = lambda v: f"{int(v)}"
+
+    # --- Wrap long labels ---
+    wrapped_labels = ["\n".join(textwrap.wrap(lbl, width=wrap_width)) for lbl in df.index]
+
+    # --- Plot ---
+    ax = plot_data.plot(
+        kind="barh",
+        stacked=True,
+        figsize=figsize,
+        color=colors or ["#1f77b4", "#ff7f0e"]
+    )
+
+    # --- Clean aesthetics ---
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.grid(axis='x', linestyle='--', alpha=0.4)
+    ax.set_axisbelow(True)
+
+    # --- Axis labels & titles ---
+    ax.set_title(title, pad=12)
+    ax.set_xlabel(x_label, fontsize=fontsize+1)
+    ax.set_ylabel("Raster Class", fontsize=fontsize+1)
+    ax.set_yticks(range(len(wrapped_labels)))
+    ax.set_yticklabels(wrapped_labels, fontsize=fontsize)
+
+    # --- Tick format ---
+    if normalize:
+        ax.xaxis.set_major_formatter(PercentFormatter())
+    else:
+        ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+
+
+# --- Annotate totals or 100% ---
+    xlim = ax.get_xlim()
+    x_range = xlim[1] - xlim[0]
+    offset = x_range * 0.01  # 1% of axis width
+
+    for i, total in enumerate(df["Total"].values):
+        if normalize:
+            ax.text(100 + offset / 2, i, "100%", va="center", fontsize=fontsize)
+        else:
+            ax.text(total + offset, i, f"{int(total)}", va="center", fontsize=fontsize)
+
+    # --- Fix spacing for single-column case ---
+    if len(count_cols) == 1:
+        bars = ax.patches
+        for b in bars:
+            b.set_height(0.6)
+        ax.margins(y=0.02)
+
+    plt.tight_layout()
+
+    # --- Save output ---
+    if save_to is not None:
+        save_to = Path(save_to)
+        save_to.parent.mkdir(parents=True, exist_ok=True)
+        plt.savefig(save_to, dpi=300, bbox_inches='tight')
+
+    if show:
+        plt.show()
+    else:
+        plt.close()

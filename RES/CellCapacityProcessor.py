@@ -866,6 +866,7 @@ def get_sub_nationally_aggregated_capacity(
     sub_national_unit_tag: str,
     capacity_cols: list[str] | None = None,
     area_col: str = "geom_area_km2",
+    developable_col_prefix: str = "Developable_area_",
     round_digits: int | None = 0,
     dropna_group: bool = True,
 ) -> pd.DataFrame:
@@ -905,7 +906,7 @@ def get_sub_nationally_aggregated_capacity(
     if capacity_cols is None:
         capacity_cols = ["potential_capacity_solar", "potential_capacity_wind"]
 
-    cols_to_aggregate = capacity_cols + [area_col]
+    cols_to_aggregate = capacity_cols + [area_col]+ [col for col in cells_with_capacity.columns if col.startswith(developable_col_prefix)]
 
     missing_cols = [col for col in cols_to_aggregate if col not in cells_with_capacity.columns]
     if missing_cols:

@@ -242,7 +242,7 @@ class ERA5Cutout(AttributesParser):
         file_name = f"{self.region_short_code}_{suffix}.nc"
         
         # Join the base directory and file name to form the full path
-        file_path:Path = base_dir / file_name
+        file_path:Path = base_dir / self.country_kwd / file_name
         
         return file_path
 
