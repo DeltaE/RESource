@@ -571,7 +571,6 @@ class RESources_builder(AttributesParser):
         
         self.resource_disaggregation_config=self.get_resource_disaggregation_config()
         self.wcss_tolerance=wcss_tolerance if wcss_tolerance else self.get_wcss_tolerance()
-        self.scored_cells=scored_cells
         self.gadm_config=self.get_gadm_config()
         
 
@@ -582,18 +581,18 @@ class RESources_builder(AttributesParser):
         utils.print_update(level=PRINT_LEVEL_BASE+2,
                            message=f"{__name__}| Clustering requires scored cells. The default scoring method is set to 'lcoe'. Checking for 'lcoe' in datafields...")
         
-        if not hasattr(self, f'lcoe_{self.resource_type}') or self.scored_cells is None:
+        if not hasattr(self, f'lcoe_{self.resource_type}') and self.scored_cells is None:
             utils.print_update(level=PRINT_LEVEL_BASE+3,
                            message=f"{__name__}| 'lcoe_{self.resource_type}' not found in available datafields...") 
-            self.scored_cells = self.score_cells()
+            scored_cells = self.score_cells()
         
                
         utils.print_warning(f"{__name__}| Filtering scored cells with score tolerance <= {score_tolerance} $/MWh and grid proximity threshold <= {self.get_grid_proximity_km()} km")
         
-        node_distance_col:str = utils.get_available_column(self.scored_cells, ['nearest_station_distance_km', 'nearest_distance'])
-        self.scored_cells_FILTERED = self.scored_cells[
-            (self.scored_cells[f'lcoe_{self.resource_type}'] <= score_tolerance) &
-            (self.scored_cells[node_distance_col] <= self.gridNodesProcessor.grid_proximity_threshold_km)
+        node_distance_col:str = utils.get_available_column(scored_cells, ['nearest_station_distance_km', 'nearest_distance'])
+        scored_cells_FILTERED = scored_cells[
+            (scored_cells[f'lcoe_{self.resource_type}'] <= score_tolerance) &
+            (scored_cells[node_distance_col] <= self.gridNodesProcessor.grid_proximity_threshold_km)
         ]
             
 
@@ -601,7 +600,7 @@ class RESources_builder(AttributesParser):
         self.vis_dir=self.get_vis_dir()
       
         
-        self.ERA5_cells_cluster_map, self.region_optimal_k_df = cluster.cells_to_cluster_mapping(self.scored_cells_FILTERED, 
+        self.ERA5_cells_cluster_map, self.region_optimal_k_df = cluster.cells_to_cluster_mapping(scored_cells_FILTERED, 
                                                                                                  self.vis_dir, 
                                                                                                  self.wcss_tolerance,
                                                                                                  self.sub_national_unit_tag,
@@ -744,12 +743,12 @@ class RESources_builder(AttributesParser):
     
         #     utils.print_module_title(f"All Sites (clusters) from {self.resource_type} module saved to {self.store} for {self.get_region_name()}...")
     
-            
+            self.clusters_save_to=self.results_save_to/'clusters'
             export_results(self.resource_type,
                                 self.region_name,
                                 resource_clusters,
                                 cluster_timeseries,
-                                self.results_save_to)
+                                self.clusters_save_to)
         
             sites_summary:str=create_summary_info(self.resource_type,
                                                     self.region_name,

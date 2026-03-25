@@ -252,7 +252,7 @@ def main():
                 Builder.build(select_top_sites=True,
                                  use_pypsa_buses=False,
                                  use_grid_lines=True,
-                                 get_clusters=True,
+                                 get_clusters=False,
                                  clean_store=False)
                 print_success("? Completed {} {} processing".format(region, resource_type))
             except Exception as e:

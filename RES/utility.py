@@ -550,5 +550,10 @@ def check_raster_classes(source_da:xr.DataArray,
     else:
         print("✅ Rigor Check Passed: No classes were lost during the geometric clip.")
 
-# Example usage:
+
+def standardize_tags(name: str) -> str:
+    """Remove all whitespace from a string for use in IDs, file names, etc."""
+    if not isinstance(name, str):
+        return name
+    return name.replace(" ", "")
 # check_raster_classes(CLC_da, CLC_raster_WB6_da, WB6_boundary_dissolved_reproj)

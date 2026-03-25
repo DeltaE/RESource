@@ -727,6 +727,8 @@ class CellCapacityProcessor(AttributesParser):
                 
         self.datahandler.refresh()
         self.grid_cells=self.datahandler.from_store('cells')
+        if avail_col in self.grid_cells.columns: # Replacing the residual availability column if it already exists in the grid_cells gdf to avoid confusion with the new availability analytics we are merging from the cutout.
+            self.grid_cells.drop(columns=[avail_col], inplace=True)
         
         _avail_df = (
             AvailabilityMatrix

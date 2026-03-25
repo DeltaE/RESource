@@ -557,8 +557,8 @@ def pre_process_cluster_mapping(
         # Replace inf/-inf with NaN so they can be imputed
         data_for_clustering.replace([np.inf, -np.inf], np.nan, inplace=True)
         
-        print("Data before imputation:")
-        print(data_for_clustering.describe())
+        # print("Data before imputation:")
+        # print(data_for_clustering.describe())
 
         # Drop columns that are entirely NaN
         data_for_clustering.dropna(axis=1, how='all', inplace=True)
