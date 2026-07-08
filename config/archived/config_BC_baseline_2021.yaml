@@ -1,0 +1,357 @@
+Title: User Configuration for RESource Tool
+Developer: Md Eliasinul Islam (Elias Islam)
+Affiliation: Sustainable Energy Engineering, Simon Fraser University, BC, Canada
+version: 1.0
+Release_Year: 2025
+Scenario:
+  run_id: BASELINE
+  Description: Baseline scenario with standard regulatory buffers around aeroways and conservation lands
+country: Canada
+default_CRS:
+  degrees: EPSG:4326
+  meters: EPSG:3347
+region_mapping:
+  BC:
+    name: British Columbia
+    land_area_km2: 925,186
+    percentage_national_land_area: 10.4%
+    timezone_convert: Etc/GMT+8
+    sub_region_mapping: {}
+    GWA_country_code: CAN
+    CRS_meters: EPSG:3005
+GADM:
+  root: data/downloaded_data/GADM
+  processed: data/processed_data/regions
+  admin_level: 2
+  datafield_mapping:
+    NAME_0: Country
+    NAME_1: Province
+    NAME_2: Region
+
+economic_parameters:
+  discount_rate: 0.07 # WACC; used to compute CRF for LCOE proxy
+
+Gov:
+  conservation_lands:
+    url: https://data-donnees.az.ec.gc.ca/api/file?path=%2Fspecies%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FDatabases%2FProtectedConservedArea_2023.zip
+    root: data/downloaded_data/Gov/Conservation_Lands
+    data_name: ProtectedConservedArea
+    gdb_layer: ProtectedConservedArea_2023
+    IUCN_CAT_mapping:
+      1: Strict Nature Reserve
+      2: Wilderness Area
+      3: National Park
+      4: Natural Monument or Feature
+      5: Habitat/Species Management Area
+      6: Protected Landscape/Seascape
+      7: Protected Area with Sustainable Use of Natural Resources
+      8: Interim Sites (unknown specifics)
+      9: OECM areas
+    LOCATION_mapping:
+      Alberta: 1
+      British Columbia: 2
+      Manitoba: 3
+      New Brunswick: 4
+      Newfoundland and Labrador: 5
+      Northwest Territories: 6
+      Nova Scotia: 7
+      Nunavut: 8
+      Ontario: 9
+      Prince Edward Island: 10
+      Quebec: 11
+      Saskatchewan: 12
+      Yukon: 13
+      Coastal Arctic Marine: 14
+      Coastal Atlantic Marine: 15
+      Coastal Pacific Marine: 16
+      Offshore Arctic Marine: 17
+      Offshore Atlantic Marine: 18
+      Offshore Pacific Marine: 19
+      Arctic Marine Coastal/Offshore: 20
+      Offshore Arctic/Atlantic Marine: 21
+    LAND_OWNER_mapping:
+      1: Federal Govt.
+      2: Provincial / territorial Govt
+      3: Municipal government
+      4: Indigenous Community/People
+      5: Communal ownership
+      6: Individual landowners
+      7: For-profit organizations
+      8: Non-profit organizations
+      9: Joint ownership
+      10: Multiple ownership
+      11: Contested Ownership
+      12: not known or reported
+    data_license: https://catalogue.ec.gc.ca/geonetwork/oilsands/api/records/6c343726-1e92-451a-876a-76e17d398a1c
+  Population:
+    root: data/downloaded_data/Gov/Population
+    datafile: Population_Projections.csv
+    skiprows: 6
+    different_name_mapping:
+      Columbia Shuswap: Columbia-Shuswap
+      Strathcona: Comox-Strathcona
+      Metro Vancouver: Greater Vancouver
+      Metro-Vancouver: Greater Vancouver
+      qathet: Powell River
+      North Coast: Skeena-Queen Charlotte
+      Stikine (Census Division): Stikine
+      Northern Rockies (Census Division): Northern Rockies
+  CEEI:
+    root: data/downloaded_data/Gov/CEEI
+    datafile:
+      buildings: bc_utilities_energy_and_emissions_data_at_the_community_level.xlsx
+      transportation: bc_on_road_transportation_data_at_the_community_level.xlsx
+      waste: bc_municipal_solid_waste_data_at_the_community_level.xlsx
+    source:
+      buildings: https://www2.gov.bc.ca/assets/gov/environment/climate-change/data/ceei/bc_utilities_energy_and_emissions_data_at_the_community_level.xlsx
+      transportation: https://www2.gov.bc.ca/assets/gov/environment/climate-change/data/ceei/bc_on_road_transportation_data_at_the_community_level.xlsx
+      waste: https://www2.gov.bc.ca/assets/gov/environment/climate-change/data/ceei/bc_municipal_solid_waste_data_at_the_community_level.xlsx
+NREL:
+  ATB:
+    root: data/downloaded_data/NREL/ATB
+    source:
+      csv: https://oedi-data-lake.s3.amazonaws.com/ATB/electricity/csv/2024/ATBe.csv
+      parquet: https://oedi-data-lake.s3.amazonaws.com/ATB/electricity/parquet/2024/v3.0.0/ATBe.parquet
+    datafile:
+      csv: ATBe.csv
+      parquet: ATBe.parquet
+    about: https://atb.nrel.gov/electricity/2024/technologies
+    column: core_metric_parameter
+    cost_params:
+      capex: OCC
+      fom: Fixed O&M
+      vom: None
+OSM_data:
+  root: data/downloaded_data/OSM
+  data_keys:
+    aeroway:
+      tags:
+      - aerodrome
+      - runway
+      - taxiway
+      - helipad
+      - apron
+      - gate
+    power:
+      tags:
+      - line
+      - cable
+      - minor_line
+      - substation
+      - tower
+      - pole
+      - generator
+      - plant
+      - terminal
+    substation:
+      tags:
+      - transmission
+      - distribution
+      - minor_distribution
+      - industrial
+CODERS:
+  url_1: https://sesit.dev/
+  url_2: http://206.12.95.102/
+  api_documentation: https://sesit.dev/api/docs
+  data_pull:
+    root: data/downloaded_data/CODERS
+    substations: network
+    transmission_lines: network
+GAEZ:
+  root: data/downloaded_data/GAEZ
+  source: https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip
+  zip_file: LR.zip
+  Rasters_in_use_direct: Rasters_in_use
+  raster_types:
+  - name: exclusion_areas
+    raster: exclusion_2017.tif
+    zip_extract_direct: LR/excl
+    color_map: OrRd
+    stepwise_plot_title: Excluding Global Exclusion Areas
+    class_exclusion:
+      solar:
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      wind:
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+  - name: terrain_resources
+    raster: slpmed30s.tif
+    zip_extract_direct: LR/ter
+    color_map: terrain
+    stepwise_plot_title: Excluding Terrain Slope
+    class_exclusion:
+      solar:
+      - 8
+      - 9
+      wind:
+      - 7
+      - 8
+      - 9
+WorldPop:
+  root: data/downloaded_data/WorldPop
+  source:
+    population_density_CAN: https://data.worldpop.org/GIS/Population_Density/Global_2000_2020_1km_UNadj/2020/CAN/can_pd_2020_1km_UNadj_ASCII_XYZ.zip
+    population_count_CAN: https://data.worldpop.org/GIS/Population/Global_2000_2020_1km_UNadj/2020/CAN/can_ppp_2020_1km_UNadj_ASCII_XYZ.zip
+    weighted_population_density_EARTH: https://data.worldpop.org/GIS/Population_Weighted_Density/Unconstrained_Subnational/1km/PWD_1km_sub_national_geojson.zip
+cutout:
+  root: data/downloaded_data/cutout/
+  module: era5
+  dx: 0.25
+  dy: 0.25
+  snapshots:
+    start:
+    - '2021-01-01 07:00:00'
+    end:
+    - '2022-01-01 06:00:00'
+GWA:
+  root: data/downloaded_data/GWA
+  datafields:
+  - windspeed_gwa
+  - CF_IEC2
+  - CF_IEC3
+  sources:
+    windspeed_gwa: https://globalwindatlas.info/api/gis/country/GWA_country_code/wind-speed/100
+    CF_IEC2: https://globalwindatlas.info/api/gis/country/GWA_country_code/capacity-factor_IEC2
+    CF_IEC3: https://globalwindatlas.info/api/gis/country/GWA_country_code/capacity-factor_IEC3
+    IEC_Class_ExLoads: https://globalwindatlas.info/api/gis/country/GWA_country_code/IEC-class-extreme-loads/
+  rasters:
+    windspeed_gwa: Canada_wspd_100m.tif
+    CF_IEC2: CAN_capacity-factor_IEC2.tif
+    CF_IEC3: CAN_capacity-factor_IEC3.tif
+    IEC_Class_ExLoads: CAN.IEC-class-extreme-loads.tif
+  filter:
+    windspeed_low: 7
+    windspeed_high: 40
+capacity_disaggregation:
+
+  solar:
+    max_capacity: 5
+    landuse_intensity: 1.45
+    cost_data: data/processed_data/solar/utility_PV_Class7_cost_moderate_NREL_ATB2024.csv
+    NREL_ATB_technology: UtilityPV
+    NREL_ATB_type: Class7 # ATB UtilityPV Class 7 was selected as the closest proxy for BC's southern interior solar resource (annual GHI ≈ 4.8–5.2 kWh/m²/day); capacity factors are derived independently from ERA5 reanalysis and are not taken from ATB class-embedded assumptions
+    atlite_panel: CSi
+    tracking: dual
+    operational_life: 25 # ATB UtilityPV operational life was selected as the closest proxy for BC's solar resource, which is predominantly a mix of older and newer panel models; this is a conservative assumption that may underestimate the potential of newer, longer-lived panels, but it provides a reasonable baseline for comparison
+    cell_static_CF_tolerance: 0.16
+    cell_capacity_tolerance: 1
+    WCSS_tolerance: 0.03
+    vector_buffers:
+    - aeroway:
+        buffer_mapping_key: aeroway
+        buffer_mapping_key_buffers:
+          aerodrome: 2000
+          runway: 1500
+          taxiway: 500
+          helipad: 1000
+          apron: 500
+          gate: 500
+    - conserved_lands:
+        buffer_mapping_key: IUCN_CAT_desc
+        buffer_mapping_key_buffers:
+          Strict Nature Reserve: 1000
+          Wilderness Area: 1000
+          National Park: 1000
+          Natural Monument or Feature: 500
+          Habitat/Species Management Area: 500
+          Protected Landscape/Seascape: 500
+          Protected Area with Sustainable Use of Natural Resources: 500
+          Interim Sites (unknown specifics): 500
+          OECM areas: 100
+  wind:
+    max_capacity: 15
+    landuse_intensity: 3
+    cost_data: data/processed_data/wind/land_based_wind_T3_cost_moderate_NREL_ATB2024.csv
+    WCSS_tolerance: 0.03
+    CF_low: 0.2
+    CF_high: 1
+    NREL_ATB_technology: LandbasedWind
+    operational_life: 20 # ATB LandbasedWind operational life was selected as the closest proxy for BC's wind resource, which is predominantly onshore and has a mix of older and newer turbine models; this is a conservative assumption that may underestimate the potential of newer, longer-lived turbines, but it provides a reasonable baseline for comparison
+    turbines:
+      NREL_ATB_type: Wind Turbine Technology 3
+      atlite:
+        1:
+          name: Enercon_E82_3000kW
+          ID: {}
+          P: 3
+        2:
+          name: Vestas_V90_3MW
+          ID: {}
+          P: 3
+      OEDB:
+        source: https://openenergy-platform.org/api/v0/schema/supply/tables/wind_turbine_library/rows
+        models:
+          1:
+            name: GE2.75_120
+            ID: 116
+            P: 2.75
+            manufacturer: GE Wind
+          2:
+            name: 3.2M114_NES
+            ID: 93
+            P: 3.2
+            manufacturer: Senvion/REpower
+            config: data/downloaded_data/OEDB/3.2M114_NES.yaml
+    vector_buffers:
+    - aeroway:
+        buffer_mapping_key: aeroway
+        buffer_mapping_key_buffers:
+          aerodrome: 5000
+          runway: 3000
+          taxiway: 500
+          helipad: 1500
+          apron: 1000
+          gate: 1000
+    - conserved_lands:
+        buffer_mapping_key: IUCN_CAT_desc
+        buffer_mapping_key_buffers:
+          Strict Nature Reserve: 1000
+          Wilderness Area: 1000
+          National Park: 1000
+          Natural Monument or Feature: 500
+          Habitat/Species Management Area: 500
+          Protected Landscape/Seascape: 500
+          Protected Area with Sustainable Use of Natural Resources: 500
+          Interim Sites (unknown specifics): 500
+          OECM areas: 100
+  transmission:
+    grid_connection_cost_per_Km: 2.6
+    tx_line_rebuild_cost: 0.56
+    proximity_filter: 150 #km
+    buses: data/processed_data/buses_BC.csv
+    lines: data/processed_data/lines_BC.csv
+custom_land_layers:
+  rasters:
+  - name: CanGov_LandCover_2020
+    source: https://datacube-prod-data-public.s3.ca-central-1.amazonaws.com/store/land/landcover/landcover-2020-classification.tif
+    root: data/downloaded_data/Gov/LandCover
+    raster: landcover-2020-classification.tif
+    data_license: https://open.canada.ca/en/open-government-licence-canada
+    source_res_meters: 30
+    target_res_meters: 100
+    legends: data/legends/LandCover_CANgov_2020_legend.csv
+    class_inclusion:
+      solar:
+      - 8
+      - 10
+      - 13
+      - 15
+      - 16
+      wind:
+      - 2
+      - 5
+      - 6
+      - 8
+      - 10
+      - 13
+      - 15
+      - 16

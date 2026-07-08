@@ -103,6 +103,7 @@ class CellScorer(AttributesParser):
     def __post_init__(self):
 
         super().__post_init__()
+       
         
     def get_CRF(self,
                 r: float, 
@@ -405,7 +406,10 @@ class CellScorer(AttributesParser):
     def get_cell_score(self, 
                     cells: pd.DataFrame,
                     CF_column:str,
-                    interest_rate:float=0.03) -> pd.DataFrame:
+                    # The above code is defining a variable named `interest_rate` in Python. However,
+                    # the code snippet provided is incomplete and does not show the value assigned to
+                    # the `interest_rate` variable.
+                    interest_rate:float=None) -> pd.DataFrame:
         """
         Calculate LCOE scores for all grid cells in a DataFrame and return ranked results.
         
@@ -464,6 +468,9 @@ class CellScorer(AttributesParser):
             - Method handles edge cases like zero capacity factors gracefully
             - LCOE values are in $/MWh for standard industry comparison
         """
+        if interest_rate is None:
+            interest_rate = self.discount_rate  # Use default from config if not provided
+            
         dataframe = cells.copy()  # Use the input DataFrame for calculations
 
         node_distance_col = utils.get_available_column(dataframe, ['nearest_station_distance_km', 'nearest_distance'])

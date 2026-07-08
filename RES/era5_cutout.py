@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-
+import pandas as pd
 import atlite
 
 import RES.utility as utils
@@ -103,9 +103,6 @@ class ERA5Cutout(AttributesParser):
       module: "era5"        # Data source module
       dx: 0.25             # Longitude resolution (degrees)
       dy: 0.25             # Latitude resolution (degrees)
-      snapshots:
-        start: ["2020-01-01"]  # Start date
-        end: ["2020-12-31"]    # End date
     ```
     
     Data Processing Workflow
@@ -206,16 +203,10 @@ class ERA5Cutout(AttributesParser):
         }
 
         self.gadmBoundary= GADMBoundaries(**self.required_args)
-        # Set the targeted data specific attributes
         self.cutout_config:dict = super().get_cutout_config()  # INHERITED METHOD from AttributesParser
-        
-        # Extract start and end years
-        self.start_year = self.cutout_config["snapshots"]["start"][0][:4]
-        self.end_year = self.cutout_config["snapshots"]["end"][0][:4]
-        self.cutout_path:Path = self.get_cutout_path()
-
-        
-    def get_cutout_path(self)->Path:
+    
+    def get_cutout_path(self, 
+                        weather_year=None)->Path:
         '''
         ### takes:
         cutout configuration dictionary. Specifically the snapshot information.
@@ -228,18 +219,12 @@ class ERA5Cutout(AttributesParser):
         file path + unique name for the cutout described by selections in the
         cutout configuration.
         '''
-        
+        weather_year=weather_year if weather_year is not None else self.weather_year
         # Get the base directory and region name
         base_dir = Path(self.cutout_config['root'])
         
-        # Construct the file name based on whether it's a single year or multi-year file
-        if self.start_year == self.end_year:
-            suffix = self.start_year
-        else:
-            suffix = "_".join([self.start_year, self.end_year])
-        
         # Combine region and year(s) to form the file name
-        file_name = f"{self.region_short_code}_{suffix}.nc"
+        file_name = f"{self.region_short_code}_{weather_year}.nc"
         
         # Join the base directory and file name to form the full path
         file_path:Path = base_dir / self.country_kwd / file_name
@@ -247,7 +232,8 @@ class ERA5Cutout(AttributesParser):
         return file_path
 
         
-    def get_era5_cutout(self) -> atlite.Cutout:
+    def get_era5_cutout(self, 
+                        weather_year=None) -> tuple[atlite.Cutout, any]:
         """
         This method creates a cutout based on data for ERA5.
 
@@ -267,29 +253,35 @@ class ERA5Cutout(AttributesParser):
         """
         utils.print_update(level=print_level_base+1,
                            message=f"{__name__}|  Processing ERA5's cutout...")
-
+        
+        weather_year=weather_year if weather_year is not None else self.weather_year
         MBR,region_boundary=self.gadmBoundary.get_bounding_box()
         utils.print_update(level=print_level_base+2,
                    message=f"{__name__}| ✓ MBR and regional boundary created. ")
         
         # Extract parameters from the configuration file
         dx, dy = self.cutout_config["dx"], self.cutout_config['dy']
-        time_horizon = slice(self.cutout_config["snapshots"]['start'][0], self.cutout_config["snapshots"]['end'][0])
+        
         min_x, max_x, min_y, max_y = MBR.values()
 
         # Create the cutout based on bounds found from above
         cutout = atlite.Cutout(
-            path=self.cutout_path,
+            path=self.get_cutout_path(weather_year=weather_year),  # Unique path for this cutout
             module=self.cutout_config["module"],
             x=slice(min_x - dx, max_x + dx),  # Longitude
             y=slice(min_y - dy, max_y + dy),  # Latitude
             dx=dx,
             dy=dy,
-            time=time_horizon
+            time=slice(*self.get_snapshot(year=weather_year))
         )
 
         cutout.prepare(monthly_requests=True, 
-                       concurrent_requests=False)  # Prepare the cutout data
+                    concurrent_requests=False,
+                    show_progress=False )  # Prepare the cutout data
+        
+        self.audit_cutout(year=weather_year) 
+        self.validate_cutout_nc(cutout.path)
+        
         utils.print_info(info=""" Memory management remarks:
     * After execution, all downloaded data is stored at cutout.path. By default, it is not loaded into memory, but into dask arrays. This keeps the memory consumption extremely low.
     * The data is accessible in cutout.data, which is an xarray.Dataset. Querying the cutout gives us some basic information on which data is contained in it.
@@ -301,3 +293,40 @@ class ERA5Cutout(AttributesParser):
                    message=f"{__name__}| ✓ Cutout and regional boundary processed. ")
         return cutout,region_boundary
     
+    def audit_cutout(self,
+                      year: int) -> pd.DataFrame:
+        """
+        Inspect if a cutout file already exists on disk for the specified year.
+        Restores the instance's original snapshot state after probing.
+        """
+        _org_path=str(self.get_cutout_path(weather_year=year))
+        _org_year=str(self.weather_year)
+        path_template = _org_path.replace(_org_year, '{year}')
+
+        rows = []
+        p       = Path(path_template.format(year=year))
+        exists  = p.exists()
+        size_mb = round(p.stat().st_size / 1e6, 1) if exists else 0
+        rows.append({"year": year, "path": str(p), "exists": exists, "size_MB": size_mb})
+
+
+        return pd.DataFrame(rows)
+
+    def validate_cutout_nc(self, 
+                           nc_path: Path) -> dict:
+        """Open a NetCDF cutout and return basic temporal coverage metadata."""
+        import xarray as xr
+        if not nc_path.exists():
+            return None
+        try:
+            ds         = xr.open_dataset(nc_path, engine="netcdf4")
+            time_coord = ds.coords.get("time", ds.coords.get("valid_time", None))
+            return {
+                "n_timesteps" : int(time_coord.size) if time_coord is not None else "N/A",
+                "t_start"     : str(time_coord.values[0])[:19]  if time_coord is not None else "N/A",
+                "t_end"       : str(time_coord.values[-1])[:19] if time_coord is not None else "N/A",
+                "variables"   : list(ds.data_vars),
+                "size_MB"     : round(nc_path.stat().st_size / 1e6, 1),
+            }
+        except Exception as exc:
+            return {"error": str(exc)}

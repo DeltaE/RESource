@@ -1133,7 +1133,7 @@ def get_existing_committed_VRE_plot(
         if is_wind.any():
             vre_proj.loc[is_wind].plot(
                 ax=ax, facecolor="None", edgecolor="blue",
-                markersize=sizes[is_wind], marker="s", alpha=1, zorder=4,
+                markersize=sizes[is_wind], marker="s", alpha=1, zorder=4,linewidth=0.5,
                 path_effects=[pe.withStroke(linewidth=marker_highlight_width, foreground="yellow", alpha=0.6)],
             )
             legend_handles.append(Line2D([0], [0], marker="s", color="blue", linestyle="None",
@@ -1142,7 +1142,7 @@ def get_existing_committed_VRE_plot(
         if is_solar.any():
             vre_proj.loc[is_solar].plot(
                 ax=ax, facecolor="None", edgecolor="red",
-                markersize=sizes[is_solar], marker="s", alpha=1, zorder=4,
+                markersize=sizes[is_solar], marker="s", alpha=1, zorder=4,linewidth=0.5,
                 path_effects=[pe.withStroke(linewidth=marker_highlight_width, foreground="yellow", alpha=0.6)],
             )
             legend_handles.append(Line2D([0], [0], marker="s", color="red", linestyle="None",
@@ -1153,7 +1153,7 @@ def get_existing_committed_VRE_plot(
         if is_wind_c.any():
             committed_proj.loc[is_wind_c].plot(
                 ax=ax, facecolor="None", edgecolor="fuchsia",
-                markersize=sizes_c[is_wind_c], marker="^", alpha=1, zorder=5,
+                markersize=sizes_c[is_wind_c], marker="^", alpha=1, zorder=5,linewidth=0.5,
                 path_effects=[pe.withStroke(linewidth=marker_highlight_width, foreground="yellow", alpha=0.6)],
             )
             legend_handles.append(Line2D([0], [0], marker="^", color="fuchsia", linestyle="None",
@@ -1162,7 +1162,7 @@ def get_existing_committed_VRE_plot(
         if is_solar_c.any():
             committed_proj.loc[is_solar_c].plot(
                 ax=ax, facecolor="None", edgecolor="coral",
-                markersize=sizes_c[is_solar_c], marker="D", alpha=1, zorder=5,
+                markersize=sizes_c[is_solar_c], marker="D", alpha=1, zorder=5,linewidth=0.5,
                 path_effects=[pe.withStroke(linewidth=marker_highlight_width, foreground="yellow", alpha=0.6)],
             )
             legend_handles.append(Line2D([0], [0], marker="D", color="coral", linestyle="None",
@@ -2316,10 +2316,59 @@ def plot_developable_land_and_vres(
     legend_fontsize: float = 10.0,
     dpi: int = 500,
     show: bool = True,
+    codes_to_plot=None,  # Developer's special use parameter, will be ignored if classes_to_plot is provided
 ) -> tuple[plt.Figure, plt.Axes, Path | None]:
     """
     Plot developable land from a categorical raster with boundaries and existing/committed VRE sites.
     Highlights excluded land classes in semi-transparent red if a subset of classes is provided.
+    
+    Parameters
+    ----------
+    target_crs : str
+        CRS to use for plotting. Raster and vector data will be reprojected if needed.
+    raster_data : xr.DataArray          
+        Categorical raster data with integer class codes.
+    raster_legends : pd.DataFrame
+        DataFrame mapping raster class codes to descriptions and hex colors. Must contain columns: 'class', 'description', 'color'.
+    classes_to_plot : Mapping[str, Sequence[int]] | None
+        Optional mapping of tags (e.g., "solar", "wind") to lists of raster class codes to include. If None, all classes present in the raster will be plotted without masking. If provided, only the specified classes will be plotted, and the rest (except code 0) will be highlighted as excluded.
+    boundary : gpd.GeoDataFrame
+        GeoDataFrame containing the boundary to plot and clip the raster to. Must contain a column specified by `label_column` for labeling areas.
+    existing_VREs_gdf : gpd.GeoDataFrame | None
+        GeoDataFrame of existing VRE sites to plot as markers. Must contain a column specified by `existing_marker_col` for marker sizing and `vre_type_column` for distinguishing solar vs wind (if both are present).
+    committed_VREs_gdf : gpd.GeoDataFrame | None
+        GeoDataFrame of committed/planned VRE sites to plot as markers. Must contain a column specified by `committed_marker_col` for marker sizing and `vre_type_column` for distinguishing solar vs wind (if both are present).
+    marker_scale_existing : float
+        Scaling factor for existing VRE site markers.
+    marker_scale_committed : float
+        Scaling factor for committed VRE site markers.
+    marker_highlight_width : float
+        Line width for highlighting markers on hover.       
+    area_labels : bool
+        Whether to display area labels.
+    title : str
+        Title of the plot.
+    fallback_crs : str
+        CRS to use if raster CRS is not available.
+    label_column : str
+        Column name in the boundary GeoDataFrame to use for labeling areas.
+    vre_type_column : str
+        Column name in the VRE GeoDataFrames to distinguish between different types of VREs.
+    output_path : Path | str | None
+        Path to save the plot. If None, the plot will not be saved.
+    figsize : tuple[float, float]
+        Figure size.
+    legend_anchor : tuple[float, float] | None
+        Anchor position for the legend. If None, a default position will be used.
+    legend_fontsize : float
+        Font size for the legend.
+    dpi : int
+        Dots per inch for the plot.
+    show : bool
+        Whether to display the plot.
+    codes_to_plot : Iterable[int] | None
+        Developer's special use parameter to plot specific codes disregarding site preferences, will be ignored if classes_to_plot is provided.
+
     """
 
     # ---------- Legend helpers ----------
@@ -2372,11 +2421,19 @@ def plot_developable_land_and_vres(
     raster = np.nan_to_num(raster_plot.values.squeeze(), nan=0).astype("int32")
 
     codes_present = np.unique(raster)
+    codes_to_plot = set(int(c) for c in codes_to_plot) if codes_to_plot is not None else None
 
     if classes_to_plot is None:
-        selected_codes = set(int(c) for c in codes_present.tolist())
+        if codes_to_plot is not None:
+            selected_codes = set(c for c in codes_present.tolist() if c in codes_to_plot)
+            use_masking = True
+            show_excluded_overlay = False  # codes_to_plot: just show selected layers, no red overlay
+        else:
+            selected_codes = set(int(c) for c in codes_present.tolist())
+            use_masking = False
+            show_excluded_overlay = False
         selected_codes.discard(0)
-        use_masking = False
+
     else:
         selected_codes = set()
         for tag in include_tags:
@@ -2384,6 +2441,7 @@ def plot_developable_land_and_vres(
                 selected_codes.update(int(c) for c in classes_to_plot[tag])
         selected_codes.discard(0)
         use_masking = True
+        show_excluded_overlay = True  # classes_to_plot: show excluded land in red
 
     # Mask raster for plotting
     if use_masking:
@@ -2434,7 +2492,7 @@ def plot_developable_land_and_vres(
     )
 
     # ---------- Overlay excluded (semi-transparent red) ----------
-    if use_masking:
+    if show_excluded_overlay:
         ax.imshow(
             np.where(excluded_mask, 1, np.nan),
             extent=extent,
@@ -2487,7 +2545,7 @@ def plot_developable_land_and_vres(
                                      edgecolor="none", label=label))
     legend_all.extend(handles_classes)
 
-    if use_masking:
+    if show_excluded_overlay:
         legend_all.append(Patch(facecolor=(1, 0, 0, 0.3),
                                 edgecolor=None,
                                 label="Excluded Land (outside selected classes)"))
@@ -2637,3 +2695,4 @@ def plot_vre_sites_by_landcover(
         plt.show()
     else:
         plt.close()
+        

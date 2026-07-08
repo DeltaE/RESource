@@ -237,7 +237,8 @@ class CellCapacityProcessor(AttributesParser):
         self.required_args = { #order doesn't matter
                 "config_file_path": self.config_file_path,  # INHERITED ATTRIBUTE from AttributesParser
                 "region_short_code": self.region_short_code,  # INHERITED ATTRIBUTE from AttributesParser
-                "resource_type": self.resource_type  # INHERITED ATTRIBUTE from AttributesParser
+                "resource_type": self.resource_type,  # INHERITED ATTRIBUTE from AttributesParser
+                "weather_year": self.weather_year  # INHERITED ATTRIBUTE from AttributesParser
             }
         self.ERA5Cutout=ERA5Cutout(**self.required_args)
         self.LandContainer=LandContainer(**self.required_args)
@@ -650,7 +651,7 @@ class CellCapacityProcessor(AttributesParser):
             'vom': round(self.resource_vom, 4), # m$/MW
             'grid_connection_cost_per_km': self.grid_connection_cost_per_km, # m$/km
             'tx_line_rebuild_cost': self.tx_line_rebuild_cost,  # m$/km
-            'Operational_life': int(25) if self.resource_type == 'solar' else int(20) if self.resource_type == 'wind' else 0   # years
+            'Operational_life': self.resource_disaggregation_config.get('operational_life', 20)  # years
         }
 
         # Create a new dictionary with stylized keys

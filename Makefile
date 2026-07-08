@@ -1,54 +1,54 @@
 # RESource Project Makefile
 
-.PHONY: help setupenv updateenv exportenv run run-wb6 run-wb6-region run-can run-can-region run-can-policy run-bgd docs autobuild deploy jupyter clean
+.PHONY: help setupenv setupenv-clean updateenv exportenv \
+        run run-wb6 run-wb6-region run-can run-can-region run-can-policy run-bgd \
+        docs autobuild deploy clean
 
-# Default config / regions (overridable on the command line)
-CONFIG    ?= config/config_WB6.yaml
-REGIONS   ?=
+# ── Defaults (override on the command line) ───────────────────────────────────
+CONFIG  ?= config/config_WB6.yaml
+YEAR    ?=
+REGIONS ?=
+
+# ── Internal helpers ──────────────────────────────────────────────────────────
+_YEAR_FLAG   = $(if $(YEAR),--year $(YEAR))
+_REGION_FLAG = $(if $(REGIONS),-r $(REGIONS))
+_ENV_CHECK   = @conda env list | grep -q "^RESource " || \
+               { echo "❌  Environment 'RESource' not found. Run 'make setupenv' first."; exit 1; }
 
 # Default target
 help:
-	@echo "RESource Project - Available Commands:"
-	@echo ""
-	@echo "Setup:"
-	@echo "  📚 See SETUP.md for complete setup guide"
+	@echo "RESource — Available Commands"
 	@echo ""
 	@echo "Environment:"
-	@echo "  setupenv       - Setup conda environment from env/environment.yml (RECOMMENDED)"
-	@echo "  setupenv-clean - Setup tested working environment (manual method)"
-	@echo "  updateenv      - Update existing conda environment"
-	@echo "  exportenv      - Export current environment to env/environment.yml"
+	@echo "  setupenv        Set up conda environment from env/environment.yml"
+	@echo "  setupenv-clean  Set up tested clean environment (manual pin)"
+	@echo "  updateenv       Update existing environment"
+	@echo "  exportenv       Export environment to env/environment.yml"
 	@echo ""
-	@echo "Run Pipeline:"
-	@echo "  run              - Run with custom CONFIG= and optional REGIONS= (see examples below)"
-	@echo "  run-wb6          - Run Western Balkans config (all 6 countries: AL BA XK ME MK RS)"
-	@echo "  run-wb6-region   - Run Western Balkans config for specific REGIONS="
-	@echo "  run-can          - Run Canada baseline config (all provinces)"
-	@echo "  run-can-region   - Run Canada baseline config for specific REGIONS="
-	@echo "  run-can-policy   - Run Canada policy1 config (all provinces)"
-	@echo "  run-bgd          - Run Bangladesh config (all regions)"
+	@echo "Run pipeline:  make <target> [YEAR=YYYY] [REGIONS='R1 R2']"
+	@echo "  run             Generic entry point (requires CONFIG=)"
+	@echo "  run-wb6         Western Balkans, all regions"
+	@echo "  run-wb6-region  Western Balkans, REGIONS= required"
+	@echo "  run-can         Canada baseline, all provinces"
+	@echo "  run-can-region  Canada baseline, REGIONS= required"
+	@echo "  run-can-policy  Canada policy1, all provinces"
+	@echo "  run-bgd         Bangladesh, all regions"
 	@echo ""
-	@echo "  Examples:"
-	@echo "    make run CONFIG=config/config_WB6.yaml                    # WB6, all regions"
-	@echo "    make run CONFIG=config/config_WB6.yaml REGIONS='AL MK'    # WB6, Albania + N. Macedonia only"
-	@echo "    make run CONFIG=config/config_CAN_baseline.yaml           # Canada baseline, all provinces"
-	@echo "    make run CONFIG=config/config_CAN_baseline.yaml REGIONS='BC QC AB'  # Canada, 3 provinces"
-	@echo "    make run CONFIG=config/config_CAN_policy1.yaml REGIONS=ON # Canada policy1, Ontario only"
-	@echo "    make run CONFIG=config/config_BGD.yaml                    # Bangladesh, all regions"
-	@echo "    make run-wb6-region REGIONS='BA XK RS'                    # WB6 shortcut with regions"
-	@echo "    make run-can-region REGIONS='BC AB SK MB ON QC'           # CAN shortcut with regions"
+	@echo "  Western Balkans : AL BA XK ME MK RS"
+	@echo "  Canada          : AB BC MB NB NL NS ON PE QC SK"
 	@echo ""
-	@echo "  Western Balkans regions : AL (Albania) BA (Bosnia) XK (Kosovo)"
-	@echo "                            ME (Montenegro) MK (N. Macedonia) RS (Serbia)"
-	@echo "  Canada provinces        : AB BC MB NB NL NS ON PE QC SK"
-	@echo ""
-	@echo "Documentation:"
-	@echo "  docs        - Build and deploy documentation"
-	@echo "  autobuild   - Live rebuild documentation (port 8000)"
-	@echo "  deploy      - Deploy documentation to GitHub Pages"
+	@echo "Examples:"
+	@echo "  make run-can YEAR=2020"
+	@echo "  make run-can-region YEAR=2020 REGIONS='BC AB'"
+	@echo "  make run-wb6 YEAR=2019"
+	@echo "  make run-wb6-region YEAR=2019 REGIONS='AL MK RS'"
+	@echo "  make run CONFIG=config/config_BGD.yaml YEAR=2021"
+	@echo "  make run CONFIG=config/config_WB6.yaml YEAR=2020 REGIONS='BA RS'"
 	@echo ""
 	@echo "Utilities:"
-	@echo "  clean       - Clean build files and cache"
+	@echo "  docs        Build and deploy documentation"
+	@echo "  autobuild   Live documentation rebuild (port 8000)"
+	@echo "  clean       Remove build files and cache"
 
 # Environment Management
 setupenv-clean:
@@ -82,112 +82,67 @@ setupenv:
 	fi
 
 updateenv:
-	@echo "Updating conda environment 'RESource'..."
-	@if conda env list | grep -q "^RESource "; then \
-		conda env update -f env/environment.yml; \
-		conda run -n RESource pip install -e .; \
-		echo "✅ Environment updated!"; \
-	else \
-		echo "❌ Environment 'RESource' not found. Run 'make setupenv' first."; \
-	fi
+	$(_ENV_CHECK)
+	conda env update -f env/environment.yml
+	conda run -n RESource pip install -e .
+	@echo "✅ Environment updated."
 
 exportenv:
-	@echo "Exporting conda environment 'RESource' to env/environment.yml..."
-	@if conda env list | grep -q "^RESource "; then \
-		mkdir -p env; \
-		conda env export -n RESource > env/environment.yml; \
-		echo "✅ Environment exported to env/environment.yml"; \
-	else \
-		echo "❌ Environment 'RESource' not found. Run 'make setupenv' first."; \
-		exit 1; \
-	fi
+	$(_ENV_CHECK)
+	@mkdir -p env
+	conda env export -n RESource > env/environment.yml
+	@echo "✅ Exported to env/environment.yml"
 
-# Running Code
-# ─────────────────────────────────────────────────────────────────────────────
-# Generic entry point – accepts any CONFIG= and optional REGIONS= on the CLI.
-#   make run CONFIG=config/config_WB6.yaml
-#   make run CONFIG=config/config_WB6.yaml REGIONS='AL MK RS'
-#   make run CONFIG=config/config_CAN_baseline.yaml REGIONS='BC QC AB'
-# ─────────────────────────────────────────────────────────────────────────────
+# ── Pipeline ──────────────────────────────────────────────────────────────────
 run:
-	@echo "Running RESource pipeline with CONFIG=$(CONFIG)$(if $(REGIONS), regions: $(REGIONS))..."
-	@if conda env list | grep -q "^RESource "; then \
-		conda run -n RESource python run.py $(CONFIG) $(if $(REGIONS),-r $(REGIONS)); \
-	else \
-		echo "❌ Environment 'RESource' not found. Run 'make setupenv' first."; \
-		exit 1; \
-	fi
+	$(_ENV_CHECK)
+	conda run -n RESource python run.py $(CONFIG) $(_YEAR_FLAG) $(_REGION_FLAG)
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Western Balkans shortcuts
-#   Regions: AL (Albania) BA (Bosnia & Herzegovina) XK (Kosovo)
-#            ME (Montenegro) MK (North Macedonia) RS (Serbia)
-# ─────────────────────────────────────────────────────────────────────────────
 run-wb6:
-	$(MAKE) run CONFIG=config/config_WB6.yaml
+	$(MAKE) run CONFIG=config/WB6_baseline.yaml
 
-# Usage: make run-wb6-region REGIONS='AL MK'
 run-wb6-region:
-	$(MAKE) run CONFIG=config/config_WB6.yaml
+ifndef REGIONS
+	$(error REGIONS is required. Example: make run-wb6-region YEAR=2019 REGIONS='AL MK RS')
+endif
+	$(MAKE) run CONFIG=config/WB6_baseline.yaml
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Canada shortcuts
-#   Provinces: AB BC MB NB NL NS ON PE QC SK
-# ─────────────────────────────────────────────────────────────────────────────
 run-can:
-	$(MAKE) run CONFIG=config/config_CAN_baseline.yaml
+	$(MAKE) run CONFIG=config/CAN_baseline.yaml
 
-# Usage: make run-can-region REGIONS='BC QC AB'
 run-can-region:
-	$(MAKE) run CONFIG=config/config_CAN_baseline.yaml
+ifndef REGIONS
+	$(error REGIONS is required. Example: make run-can-region YEAR=2020 REGIONS='BC AB')
+endif
+	$(MAKE) run CONFIG=config/CAN_baseline.yaml
 
 run-can-policy:
-	$(MAKE) run CONFIG=config/config_CAN_policy1.yaml
+	$(MAKE) run CONFIG=config/CAN_policy1.yaml
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Bangladesh shortcut
-# ─────────────────────────────────────────────────────────────────────────────
 run-bgd:
 	$(MAKE) run CONFIG=config/config_BGD.yaml
 
-# Documentation
+# ── Documentation ─────────────────────────────────────────────────────────────
 docs:
-	@echo "Building and deploying documentation..."
-	@if conda env list | grep -q "^RESource "; then \
-		mkdir -p docs/_build/html; \
-		mkdir -p docs/source/notebooks; \
-		cp notebooks/*.ipynb docs/source/notebooks/ 2>/dev/null || true; \
-		conda run -n RESource sphinx-build -b html docs/source docs/_build/html; \
-		echo "" > docs/_build/html/.nojekyll; \
-		conda run -n RESource ghp-import -n -p -f docs/_build/html; \
-		echo "✅ Documentation deployed to GitHub Pages!"; \
-	else \
-		echo "❌ Environment 'RESource' not found. Run 'make setupenv' first."; \
-		exit 1; \
-	fi
+	$(_ENV_CHECK)
+	@mkdir -p docs/_build/html docs/source/notebooks
+	@cp notebooks/*.ipynb docs/source/notebooks/ 2>/dev/null || true
+	conda run -n RESource sphinx-build -b html docs/source docs/_build/html
+	@echo "" > docs/_build/html/.nojekyll
+	conda run -n RESource ghp-import -n -p -f docs/_build/html
+	@echo "✅ Documentation deployed."
 
 autobuild:
-	@echo "Starting live documentation rebuild on port 8000..."
-	@if conda env list | grep -q "^RESource "; then \
-		mkdir -p docs/source/notebooks; \
-		cp notebooks/*.ipynb docs/source/notebooks/ 2>/dev/null || true; \
-		echo "🔄 Server: http://127.0.0.1:8000"; \
-		conda run -n RESource sphinx-autobuild docs/source docs/_build/html --host 127.0.0.1 --port 8000; \
-	else \
-		echo "❌ Environment 'RESource' not found. Run 'make setupenv' first."; \
-		exit 1; \
-	fi
+	$(_ENV_CHECK)
+	@mkdir -p docs/source/notebooks
+	@cp notebooks/*.ipynb docs/source/notebooks/ 2>/dev/null || true
+	conda run -n RESource sphinx-autobuild docs/source docs/_build/html \
+		--host 127.0.0.1 --port 8000
 
 deploy:
-	@echo "Deploying documentation to GitHub Pages..."
-	@if conda env list | grep -q "^RESource "; then \
-		conda run -n RESource ghp-import -n -p -f docs/_build/html; \
-		echo "✅ Documentation deployed!"; \
-		echo "🌐 Visit: https://deltae.github.io/RESource/"; \
-	else \
-		echo "❌ Environment 'RESource' not found. Run 'make setupenv' first."; \
-		exit 1; \
-	fi
+	$(_ENV_CHECK)
+	conda run -n RESource ghp-import -n -p -f docs/_build/html
+	@echo "✅ Deployed to GitHub Pages."
 
 # Cleanup
 clean:

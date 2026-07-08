@@ -13,11 +13,14 @@
 """
 
 from dataclasses import dataclass, field
+from datetime import datetime
 from pathlib import Path
 from typing import Dict
-import RES.utility as utils
-from datetime import datetime
+
 import yaml
+
+import RES.utility as utils
+
 today_str = datetime.now().strftime("%Y%m%d")
 
 
@@ -31,10 +34,10 @@ class AttributesParser:
     config_file_path: Path = field(default=None)
     region_short_code: str = field(default=None)
     resource_type: str = field(default=None)
+    weather_year: str = field(default=None)  # CLI override; falls back to config key if None
     
     def __post_init__(self):
         self.site_index='cell'
-
 
         # Convert region_short_code to uppercase to handle user types regarding case-sensitive letter inputs.
         if self.region_short_code is not None:
@@ -44,20 +47,37 @@ class AttributesParser:
         
         # Load the user configuration master file by using the method
         self.config:Dict[str,dict] = self.load_config(self.config_file_path)
+        
+        # Resolve weather_year: CLI-supplied field takes precedence over config key.
+        if self.weather_year is None:
+            _yr = self.config.get('weather_year')
+            if _yr is None:
+                raise ValueError(
+                    "weather_year not set. Pass --year YYYY via CLI "
+                    "or add 'weather_year: YYYY' to your config YAML."
+                )
+            self.weather_year = int(_yr)
+        else:
+            self.weather_year = int(self.weather_year)
+            
+        ## Process the attributes that are required for the workflow and are extracted from the config file. These attributes will be used by the child classes to perform the data supply-chain steps.
         self.disaggregation_config:Dict[str,dict] = self.config.get('capacity_disaggregation','')
         self.resource_disaggregation_config=self.get_resource_disaggregation_config()
         self.region_code_validity=self.is_region_code_valid()
         gadm_config = self.get_gadm_config().get('datafield_mapping', {})
         self.sub_national_unit_tag = gadm_config.get('NAME_2') if 'NAME_2' in gadm_config else gadm_config.get('NAME_1')
-        self.multi_country_flag = self.get_multi_country_flag  # This will set the multi_country_flag based on the config file.
+        self.multi_country_flag = self.get_multi_country_flag # This will set the multi_country_flag based on the config file.
         self.RUN_ID=self.get_RUN_ID() 
         self.country=self.get_country()
         self.country_kwd=self.country.replace(' ','')
         self.results_save_to=self.get_results_save_to_path()
+        
 
+            
 
+        
         # Define the store file path and filename
-        self.store = Path(f"data/store/{self.country_kwd}/{self.RUN_ID}/resources_{self.country_kwd}_{self.region_short_code}_{self.RUN_ID}.h5")
+        self.store = Path(f"data/store/{self.country_kwd}/{self.region_short_code}/resources_{self.country_kwd}_{self.region_short_code}_{self.RUN_ID}.h5")
         self.store.parent.mkdir(parents=True, exist_ok=True)
         self.default_crs_cfg:dict=self.config.get('default_CRS',None)
         self.crs_d,self.crs_m=self.get_CRS()
@@ -118,7 +138,79 @@ class AttributesParser:
         results_save_to=utils.ensure_path(f"results/{self.country_kwd}/{self.region_short_code}/{self.RUN_ID}")
         
         return results_save_to
-    
+
+        
+    @property
+    def region_timezone(self) -> str:
+        region_cfg = (
+            self.config
+            .get('region_mapping', {})
+            .get(self.region_short_code, {})
+        )
+        if not region_cfg:
+            raise KeyError(
+                f"Region '{self.region_short_code}' not found in config 'region_mapping'. "
+                f"Available codes: {list(self.config.get('region_mapping', {}).keys())}"
+            )
+        tz = region_cfg.get('timezone_convert')
+        
+        if tz is None:
+            raise KeyError(
+                f"'timezone_convert' not defined for region '{self.region_short_code}' "
+                f"in config 'region_mapping'. Add e.g. timezone_convert: 'Etc/GMT+8'."
+            )
+        return tz
+   
+    def get_snapshot(self,
+                year=None) -> tuple:
+        """
+        Derive UTC-aligned ERA5 snapshot strings for a single calendar year from
+        the region's timezone_convert config field.
+
+        Converts local midnight Jan 1 of `year` → UTC (start) and local midnight
+        Jan 1 of `year + 1` − 1 h → UTC (end), producing a closed hourly interval
+        that covers exactly one local calendar year with no overlap between adjacent
+        years.
+
+        Format matches load_snapshot() and atlite.Cutout(time=slice(start, end)).
+
+        Returns
+        -------
+        tuple[str, str]
+            (start_str, end_str) as naive UTC strings 'YYYY-MM-DD HH:MM:SS'.
+
+        Notes
+        -----
+        POSIX / IANA Etc/GMT±N sign convention (counterintuitive but standard):
+            'Etc/GMT+8'  →  UTC-8  (PST, British Columbia)
+            'Etc/GMT-2'  →  UTC+2  (CEST, Western Balkans)
+        zoneinfo handles this correctly; do not parse the offset manually.
+
+        Leap year awareness is automatic: 2020 yields 8784 h, 2019 yields 8760 h.
+
+        Raises
+        ------
+        KeyError
+            If timezone_convert is absent for this region in the config.
+        ZoneInfoNotFoundError
+            If the timezone string is not a recognised IANA identifier.
+        """
+        from datetime import datetime, timedelta, timezone
+        from zoneinfo import ZoneInfo
+
+        tz_name = self.region_timezone   # reads region_mapping[region_short_code]['timezone_convert']
+        tz      = ZoneInfo(tz_name)
+
+        year = int(year) if year is not None else self.weather_year
+        
+        utc_start = datetime(year,     1, 1, tzinfo=tz).astimezone(timezone.utc)
+        utc_end   = datetime(year + 1, 1, 1, tzinfo=tz).astimezone(timezone.utc) - timedelta(hours=1)
+
+        return (
+            utc_start.strftime('%Y-%m-%d %H:%M:%S'),
+            utc_end.strftime('%Y-%m-%d %H:%M:%S'),
+        )
+        
     @property
     def get_multi_country_flag(self) -> bool:
         """
@@ -129,6 +221,7 @@ class AttributesParser:
     
     def get_custom_land_layers_config(self):
         return self.config.get('custom_land_layers', {})
+    
     def is_region_code_valid(self)-> bool:
         """
         Args:
@@ -156,14 +249,8 @@ class AttributesParser:
         The RUN_ID is used to identify the specific run of the scenario.
         It is typically used to differentiate between different runs of the same scenario, especially when multiple runs are performed with different parameters or configurations.
         """
-        return f"{self.config.get('Scenario').get('run_id')}_{today_str}"
+        return f"{self.config.get('Scenario').get('run_id')}_{self.weather_year}_{today_str}"
 
-    
-    def load_snapshot(self)->tuple:
-        start_date = self.config.get('cutout', {}).get('snapshots', {}).get('start', [[]])[0]
-        end_date = self.config.get('cutout', {}).get('snapshots', {}).get('end', [[]])[0]
-        return start_date, end_date
-    
     def get_conserved_lands_CAN_args(self)->dict:
         if self.country=='Canada':
             return {
@@ -175,6 +262,10 @@ class AttributesParser:
             print("Conservation Lands data supply chain is configured for Canada only")
             return None
 
+    @property
+    def discount_rate(self):
+        return self.config.get('economic_parameters', {}).get('discount_rate', 0.03)
+    
     @property
     def default_font_size(self):
         return 14
@@ -203,7 +294,7 @@ class AttributesParser:
     
     def get_vis_dir(self) -> Path:
         vis_path = Path(
-            f"vis/{self.country_kwd}/{self.RUN_ID}/{self.region_short_code}/"
+            f"vis/{self.country_kwd}/{self.region_short_code}/{self.RUN_ID}/"
             f"{self.resource_type if self.resource_type else f'misc/{self.region_short_code}'}"
         )
 
@@ -234,14 +325,15 @@ class AttributesParser:
     def get_osm_config(self):
         return self.config['OSM_data']
     
-    def get_region_timezone(self):
-        return self.config['region_mapping'][self.region_short_code]['timezone_convert']
+    # def get_region_timezone(self): # upgraded the method to include error handling and more informative messages.
+    #     return self.config['region_mapping'][self.region_short_code]['timezone_convert']
+
     
     def get_cell_resolution(self):
         return self.config.get('grid_cell_resolution',{})
     
     def get_buses_path(self):
-        return utils.ensure_path('data/processed_data/network')
+        return Path('data/downloaded_data/CODERS/data-pull/network/substations.csv')
     
     def get_turbines_config(self):
         return self.resource_disaggregation_config['turbines']

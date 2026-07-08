@@ -53,6 +53,7 @@ class NREL_ATBProcessor:
     config_file_path: Path = field(default_factory=lambda: Path('config/config.yaml'))
     region_short_code: str = field(default='None')
     resource_type: str = field(default='None')
+    weather_year: int = field(default=2024)
     
     def __post_init__(self):
         """
@@ -81,7 +82,8 @@ class NREL_ATBProcessor:
         self.attributes_parser = AttributesParser(
             config_file_path=self.config_file_path,
             region_short_code=self.region_short_code,
-            resource_type=self.resource_type
+            resource_type=self.resource_type,
+            weather_year=self.weather_year
         )
         
         # Access configuration through the attributes_parser

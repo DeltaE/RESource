@@ -253,7 +253,7 @@ class GridCells(AttributesParser):
     #     return self.grid_cells
     
     def get_default_grid(self):
-        self.cutout, self.region_boundary = self.ERA5Cutout.get_era5_cutout()
+        self.cutout, self.region_boundary = self.ERA5Cutout.get_era5_cutout(weather_year=self.weather_year)
 
         resource_grid_cells = (
             self.cutout.grid

@@ -13,7 +13,11 @@ Scenario:
   Description: Baseline scenario for Bangladesh renewable energy resource assessment
 
 country: 'Bangladesh'
+
 multi_country_flag: False # Single country with sub-national divisions
+weather_year: 2024 # calendar year to target for ERA5 cutout and associated timeseries; should be a recent year with typical weather patterns; used by AttributesParser.weather_year() property to derive cutout snapshot aligned to local midnight; also used in scenario naming for clear documentation of weather assumptions
+economic_parameters:
+  discount_rate: 0.07 # WACC; used to compute CRF for LCOE proxy
 
 default_CRS:
   degrees: EPSG:4326

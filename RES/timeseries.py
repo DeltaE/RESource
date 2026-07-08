@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Optional
 
 import atlite
 import geopandas as gpd
@@ -149,15 +150,16 @@ class Timeseries(AttributesParser):
         }
         self.gwa_cells=GWACells(**self.required_args)
         self.region_name=self.get_region_name()
-        self.region_timezone=self.get_region_timezone()
     
     def get_timeseries(self,
-                       cells:gpd.GeoDataFrame)-> tuple:
+                       cells:gpd.GeoDataFrame,
+                       weather_year: Optional[int] = None)-> tuple:
         """
         Retrieves the capacity factor (CF) timeseries for the cells.
         
         Args:
             cells (gpd.GeoDataFrame): Cells with their coordinates, geometry, and unique cell ids.
+            weather_year (int, optional): Year of weather data to use for timeseries generation.
             force_update (bool): If True, forces the update of the CF timeseries data.
         Returns:
             tuple: A namedtuple containing the cells with their timeseries data.
@@ -168,13 +170,15 @@ class Timeseries(AttributesParser):
         Notes
             Plug-in multiple sources to fit timeseries data e.g. [NSRDB, NREL](https://nsrdb.nrel.gov/data-sets/how-to-access-data)
         """
+        weather_year = weather_year if weather_year is not None else self.weather_year
+        
         if self.resource_type=='solar':
             # Step 1: Set-up Technology parameters and extract the synthetic timeseries data for all sites
-            self.sites_profile:xr.DataArray = self.__process_PV_timeseries__(cells)
+            self.sites_profile:xr.DataArray = self.__process_PV_timeseries__(cells, weather_year=weather_year)
             
         elif self.resource_type=='wind':
             # Step 1: Set-up Technology parameters and extract the synthetic timeseries data for all sites
-            self.sites_profile:xr.DataArray = self.__process_WIND_timeseries__(cells,'OEDB',2)
+            self.sites_profile:xr.DataArray = self.__process_WIND_timeseries__(cells,'OEDB',2, weather_year=weather_year)
         
         # Here, 'sites_profile_profile' is a 2D array i.e. cell(Region_xcoord_ycoord) and timestamps. 
         # For xarray.DataArray.to_pandas we use DataArray.to_pandas() thus, 2D -> pandas.DataFrame
@@ -198,7 +202,6 @@ class Timeseries(AttributesParser):
         # here, "_CF_ts_df_" will provide same data formate alike .to_pandas() method, just have to use "_CF_ts_df_.PV"  ("solar" or "wind" is the xarray name)
         
         # Step 3: Convert the timeseries data to the appropriate region timezone
-        self.region_timezone=self.get_region_timezone()
         self.CF_ts_df = self.__fix_timezone__(self._CF_ts_df_).tz_localize(None)
 
 
@@ -227,13 +230,14 @@ class Timeseries(AttributesParser):
         return cells,self.CF_ts_df
 
     def __process_PV_timeseries__(self,
-                                  cells:gpd.GeoDataFrame):
+                                  cells:gpd.GeoDataFrame,
+                                  weather_year: Optional[int] = None):
         """ 
         A wrapper that leverage Atlite's _cutout.pv_ method to convert downward-shortwave, upward-shortwave radiation flux and ambient temperature into a pv generation time-series.
         """
         
         # Step 1.1: Get the Atlite's Cutout Object loaded
-        self.cutout,self.region_boundary=self.ERA5Cutout.get_era5_cutout()
+        self.cutout,self.region_boundary=self.ERA5Cutout.get_era5_cutout(weather_year=weather_year)
 
         # Step 1.2: Get the region Grid Cells from Store. Ideally these cells should have same resolution as the Cutout (the indices are prepared from x,y coords and Region names)
          # Initialize the local store for updated data
@@ -345,7 +349,8 @@ class Timeseries(AttributesParser):
     def __process_WIND_timeseries__(self,
                                     cells:gpd.GeoDataFrame,
                                     turbine_model_source:str='OEDB',
-                                    model:int=2):
+                                    model:int=2,
+                                    weather_year: Optional[int] = None,):
         """ 
         - A wrapper that leverage Atlite's _cutout.wind_ method to convert wind speed to wind generation CF timeseries.
         - Extrapolates 10m wind speed with monthly surface roughness to hub height and evaluates the power curve.
@@ -357,7 +362,8 @@ class Timeseries(AttributesParser):
         # self.gwa_cells=GWACells(region_short_code=self.region_short_code,
         #                         resource_type=self.resource_type)
         
-        self.cutout,self.region_boundary=self.ERA5Cutout.get_era5_cutout()
+        weather_year = weather_year if weather_year is not None else self.weather_year
+        self.cutout,self.region_boundary=self.ERA5Cutout.get_era5_cutout(weather_year=weather_year)
         utils.print_update(level=PRINT_LEVEL_BASE,message=f">> {len(cells)} Grid Cells from Store Cutout")
     
         
