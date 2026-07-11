@@ -1,6 +1,6 @@
 <img src="../_static/graphic_RES_banner_BC.jpg" alt="assessment_steps" width="800"/>
 
-:sparkle:Resource is now published :  [Mapping feasible renewable transition space: Land-use, conservation, and grid-access constraints on wind and solar in British Columbia](https://doi.org/10.1016/j.energ.2026.100077)
+:sparkle: Resource is now published :  [Mapping feasible renewable transition space: Land-use, conservation, and grid-access constraints on wind and solar in British Columbia](https://doi.org/10.1016/j.energ.2026.100077)
 
 
 # Case study: VRE site selection in British Columbia
