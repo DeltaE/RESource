@@ -10,8 +10,12 @@ __One of the many solutions ?__
 
 __A Modular and Transparent Open-Source Framework for Sub-National Assessment of Solar and Land-based Wind Potential.__
 
+> [!NOTE]
+> Resource is now published! [Mapping feasible renewable transition space: Land-use, conservation, and grid-access constraints on wind and solar in British Columbia](https://doi.org/10.1016/j.energ.2026.100077)
+
+
 ```{warning}
-This library is under heavy development and the publication is under review process.
+This library is under active development.
 ```
 
 RESource is developed to enable reproducible, adaptable assessments of VRE potential that are sensitive to local constraints and planning priorities. We developed a structured, modular workflow that integrates geospatial, temporal, economic, and regulatory data to evaluate site suitability for solar and wind energy development. This structured methodology ensures transparency and transferability, allowing RESource to be adapted for different regions and scaled for long-term strategic energy planning.

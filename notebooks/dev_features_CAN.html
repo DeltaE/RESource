@@ -159,7 +159,8 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Data sources</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../notes/config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/learning.html">Best Practices and Guidelines</a></li>
 
@@ -442,8 +443,8 @@ document.write(`
 <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;../RES/visual_styles/elsevier.mplstyle&#39;</span><span class="p">)</span>
 <span class="c1"># Suppress specific warnings</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
-<span class="n">cfg_BASELINE</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="s1">&#39;../config/config_CAN_baseline.yaml&#39;</span><span class="p">)</span>
-<span class="n">cfg_policy</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="s1">&#39;../config/config_CAN_policy1.yaml&#39;</span><span class="p">)</span>
+<span class="n">cfg_BASELINE</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="s1">&#39;../config/CAN_baseline.yaml&#39;</span><span class="p">)</span>
+<span class="n">cfg_policy</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="s1">&#39;../config/CAN_policy1.yaml&#39;</span><span class="p">)</span>
 
 
 <span class="n">CRS_m</span> <span class="o">=</span> <span class="n">cfg_policy</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;region_mapping&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;BC&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;CRS_meters&#39;</span><span class="p">)</span>  <span class="c1"># Default metric CRS</span>
@@ -479,8 +480,8 @@ document.write(`
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the directory and search pattern</span>
-<span class="n">data_store_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;../data/store/&quot;</span><span class="p">)</span>
-<span class="n">search_keyword</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;resources_</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">_&quot;</span>
+<span class="n">data_store_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;../data/store/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">search_keyword</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;resources_</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">_BASELINE_2024&quot;</span>
 
 <span class="c1"># List files containing the search pattern</span>
 <span class="n">matching_files</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">data_store_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">search_keyword</span><span class="si">}</span><span class="s2">*&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">is_file</span><span class="p">()]</span>
@@ -556,13 +557,24 @@ document.write(`
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">store_all_runs</span><span class="o">=</span><span class="p">{}</span>
-<span class="k">for</span> <span class="n">POLICY</span> <span class="ow">in</span> <span class="n">POLICYs</span><span class="p">:</span>
-    <span class="n">store</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;../data/store/resources_</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">POLICY</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="c1"># f&quot;../data/store/resources_{province_code}.h5&quot;</span>
-    <span class="n">res_data</span><span class="o">=</span><span class="n">DataHandler</span><span class="p">(</span><span class="n">store</span><span class="p">,</span><span class="n">show_structure</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># the DataHandler object could be initiated without the store definition as well.</span>
-    <span class="n">store_all_runs</span><span class="p">[</span><span class="n">POLICY</span><span class="p">]</span><span class="o">=</span><span class="n">res_data</span>
+<span class="n">store</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;../data/store/Canada/BC/resources_Canada_BC_BASELINE_2024_20260524.h5&quot;</span><span class="c1"># f&quot;../data/store/resources_{province_code}.h5&quot;</span>
+<span class="n">res_data</span><span class="o">=</span><span class="n">DataHandler</span><span class="p">(</span><span class="n">store</span><span class="p">,</span><span class="n">show_structure</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># the DataHandler object could be initiated without the store definition as well.</span>
+<span class="n">store_all_runs</span><span class="p">[</span><span class="s1">&#39;BASELINE&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">res_data</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># store_all_runs={}</span>
+<span class="c1"># for POLICY in POLICYs:</span>
+<span class="c1">#     store=f&quot;../data/store/resources_{country_kwd}_{region_code}_{POLICY}.h5&quot;# f&quot;../data/store/resources_{province_code}.h5&quot;</span>
+<span class="c1">#     res_data=DataHandler(store,show_structure=False) # the DataHandler object could be initiated without the store definition as well.</span>
+<span class="c1">#     store_all_runs[POLICY]=res_data</span>
 
-<span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Loaded store for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">store_all_runs</span><span class="p">)</span><span class="si">}</span><span class="s2"> runs for </span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
-<span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">    &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">store_all_runs</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="c1"># utils.print_update(level=1,message=f&quot;Loaded store for {len(store_all_runs)} runs for {region_code}:&quot;)</span>
+<span class="c1"># utils.print_update(level=2,message=&quot;\n    &quot;.join(store_all_runs.keys()))</span>
 </pre></div>
 </div>
 </div>
@@ -1857,13 +1869,13 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_scenario</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">=</span><span class="n">BC_dfs_all_runs</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">POLICY</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">][</span><span class="s1">&#39;cells&#39;</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># cells_scenario:pd.DataFrame=BC_dfs_all_runs[f&#39;{POLICY}&#39;][&#39;cells&#39;]</span>
 <span class="n">cells_baseline</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">=</span><span class="n">BC_dfs_all_runs</span><span class="p">[</span><span class="s1">&#39;BASELINE&#39;</span><span class="p">][</span><span class="s1">&#39;cells&#39;</span><span class="p">]</span>
 
-<span class="k">if</span> <span class="n">cells_scenario</span><span class="o">.</span><span class="n">crs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">cells_scenario</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="n">CRS_d</span><span class="p">,</span> <span class="n">allow_override</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">if</span> <span class="n">cells_scenario</span><span class="o">.</span><span class="n">crs</span> <span class="o">!=</span> <span class="n">CRS_m</span><span class="p">:</span>
-    <span class="n">cells_scenario_proj</span><span class="o">=</span><span class="n">cells_scenario</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">CRS_m</span><span class="p">)</span>
+<span class="c1"># if cells_scenario.crs is None:</span>
+<span class="c1">#     cells_scenario.set_crs(CRS_d, allow_override=True, inplace=True)</span>
+<span class="c1"># if cells_scenario.crs != CRS_m:</span>
+<span class="c1">#     cells_scenario_proj=cells_scenario.to_crs(CRS_m)</span>
 
 <span class="k">if</span> <span class="n">cells_baseline</span><span class="o">.</span><span class="n">crs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">cells_baseline</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="n">CRS_d</span><span class="p">,</span> <span class="n">allow_override</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1896,8 +1908,8 @@ document.write(`
 <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                         <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Calculating aggregated capacity for </span><span class="si">{</span><span class="n">sub_national_unit_tag</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">POLICY</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
 <span class="c1"># Calculate for POLICY</span>
-<span class="n">cells_aggrs_region_scenario</span><span class="o">=</span><span class="n">get_sub_nationally_aggregated_capacity</span><span class="p">(</span><span class="n">cells_scenario</span><span class="p">,</span><span class="n">sub_national_unit_tag</span><span class="p">)</span>
-<span class="n">cells_aggrs_region_scenario</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">file_path_scenario</span><span class="p">)</span>
+<span class="c1"># cells_aggrs_region_scenario=get_sub_nationally_aggregated_capacity(cells_scenario,sub_national_unit_tag)</span>
+<span class="c1"># cells_aggrs_region_scenario.to_csv(file_path_scenario)</span>
 
 
 <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>

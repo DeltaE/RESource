@@ -157,10 +157,11 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Data sources</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="../../notes/config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">Best Practices and Guidelines</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 </ul>
@@ -297,6 +298,7 @@ document.write(`
   <h1>Source code for RES.timeseries</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">atlite</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
@@ -448,17 +450,18 @@ document.write(`
         <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gwa_cells</span><span class="o">=</span><span class="n">GWACells</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">required_args</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">region_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_region_name</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">region_timezone</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_region_timezone</span><span class="p">()</span>
     
 <div class="viewcode-block" id="Timeseries.get_timeseries">
 <a class="viewcode-back" href="../../notes/api.html#RES.timeseries.Timeseries.get_timeseries">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_timeseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                       <span class="n">cells</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+                       <span class="n">cells</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+                       <span class="n">weather_year</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieves the capacity factor (CF) timeseries for the cells.</span>
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
 <span class="sd">            cells (gpd.GeoDataFrame): Cells with their coordinates, geometry, and unique cell ids.</span>
+<span class="sd">            weather_year (int, optional): Year of weather data to use for timeseries generation.</span>
 <span class="sd">            force_update (bool): If True, forces the update of the CF timeseries data.</span>
 <span class="sd">        Returns:</span>
 <span class="sd">            tuple: A namedtuple containing the cells with their timeseries data.</span>
@@ -469,13 +472,15 @@ document.write(`
 <span class="sd">        Notes</span>
 <span class="sd">            Plug-in multiple sources to fit timeseries data e.g. [NSRDB, NREL](https://nsrdb.nrel.gov/data-sets/how-to-access-data)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">weather_year</span> <span class="o">=</span> <span class="n">weather_year</span> <span class="k">if</span> <span class="n">weather_year</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">weather_year</span>
+        
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="o">==</span><span class="s1">&#39;solar&#39;</span><span class="p">:</span>
             <span class="c1"># Step 1: Set-up Technology parameters and extract the synthetic timeseries data for all sites</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sites_profile</span><span class="p">:</span><span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__process_PV_timeseries__</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sites_profile</span><span class="p">:</span><span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__process_PV_timeseries__</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span> <span class="n">weather_year</span><span class="o">=</span><span class="n">weather_year</span><span class="p">)</span>
             
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="o">==</span><span class="s1">&#39;wind&#39;</span><span class="p">:</span>
             <span class="c1"># Step 1: Set-up Technology parameters and extract the synthetic timeseries data for all sites</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sites_profile</span><span class="p">:</span><span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__process_WIND_timeseries__</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span><span class="s1">&#39;OEDB&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sites_profile</span><span class="p">:</span><span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__process_WIND_timeseries__</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span><span class="s1">&#39;OEDB&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">weather_year</span><span class="o">=</span><span class="n">weather_year</span><span class="p">)</span>
         
         <span class="c1"># Here, &#39;sites_profile_profile&#39; is a 2D array i.e. cell(Region_xcoord_ycoord) and timestamps. </span>
         <span class="c1"># For xarray.DataArray.to_pandas we use DataArray.to_pandas() thus, 2D -&gt; pandas.DataFrame</span>
@@ -499,7 +504,6 @@ document.write(`
         <span class="c1"># here, &quot;_CF_ts_df_&quot; will provide same data formate alike .to_pandas() method, just have to use &quot;_CF_ts_df_.PV&quot;  (&quot;solar&quot; or &quot;wind&quot; is the xarray name)</span>
         
         <span class="c1"># Step 3: Convert the timeseries data to the appropriate region timezone</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">region_timezone</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_region_timezone</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">CF_ts_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fix_timezone__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_CF_ts_df_</span><span class="p">)</span><span class="o">.</span><span class="n">tz_localize</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 
 
@@ -531,13 +535,14 @@ document.write(`
 <div class="viewcode-block" id="Timeseries.__process_PV_timeseries__">
 <a class="viewcode-back" href="../../notes/api.html#RES.timeseries.Timeseries.__process_PV_timeseries__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">__process_PV_timeseries__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                                  <span class="n">cells</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">):</span>
+                                  <span class="n">cells</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+                                  <span class="n">weather_year</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">        A wrapper that leverage Atlite&#39;s _cutout.pv_ method to convert downward-shortwave, upward-shortwave radiation flux and ambient temperature into a pv generation time-series.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="c1"># Step 1.1: Get the Atlite&#39;s Cutout Object loaded</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ERA5Cutout</span><span class="o">.</span><span class="n">get_era5_cutout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ERA5Cutout</span><span class="o">.</span><span class="n">get_era5_cutout</span><span class="p">(</span><span class="n">weather_year</span><span class="o">=</span><span class="n">weather_year</span><span class="p">)</span>
 
         <span class="c1"># Step 1.2: Get the region Grid Cells from Store. Ideally these cells should have same resolution as the Cutout (the indices are prepared from x,y coords and Region names)</span>
          <span class="c1"># Initialize the local store for updated data</span>
@@ -661,7 +666,8 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="nf">__process_WIND_timeseries__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                     <span class="n">cells</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
                                     <span class="n">turbine_model_source</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">&#39;OEDB&#39;</span><span class="p">,</span>
-                                    <span class="n">model</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+                                    <span class="n">model</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                    <span class="n">weather_year</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">        - A wrapper that leverage Atlite&#39;s _cutout.wind_ method to convert wind speed to wind generation CF timeseries.</span>
 <span class="sd">        - Extrapolates 10m wind speed with monthly surface roughness to hub height and evaluates the power curve.</span>
@@ -673,7 +679,8 @@ document.write(`
         <span class="c1"># self.gwa_cells=GWACells(region_short_code=self.region_short_code,</span>
         <span class="c1">#                         resource_type=self.resource_type)</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ERA5Cutout</span><span class="o">.</span><span class="n">get_era5_cutout</span><span class="p">()</span>
+        <span class="n">weather_year</span> <span class="o">=</span> <span class="n">weather_year</span> <span class="k">if</span> <span class="n">weather_year</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">weather_year</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">region_boundary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ERA5Cutout</span><span class="o">.</span><span class="n">get_era5_cutout</span><span class="p">(</span><span class="n">weather_year</span><span class="o">=</span><span class="n">weather_year</span><span class="p">)</span>
         <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">PRINT_LEVEL_BASE</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt; </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span><span class="si">}</span><span class="s2"> Grid Cells from Store Cutout&quot;</span><span class="p">)</span>
 <span class="w">    </span>
 <span class="w">        </span>

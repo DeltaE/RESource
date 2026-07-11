@@ -159,7 +159,8 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Data sources</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../notes/config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/learning.html">Best Practices and Guidelines</a></li>
 
@@ -418,6 +419,14 @@ document.write(`
                   
   <section id="Canadian-Studies">
 <h1>Canadian Studies<a class="headerlink" href="#Canadian-Studies" title="Link to this heading">#</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">datetime_stamp</span><span class="o">=</span><span class="s1">&#39;20260313&#39;</span>
+</pre></div>
+</div>
+</div>
 <ul class="simple">
 <li><p>load packages</p></li>
 </ul>
@@ -482,28 +491,116 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the directory and search pattern</span>
-<span class="n">data_store_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;../data/store/&quot;</span><span class="p">)</span>
-<span class="n">search_keyword</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;resources_</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">_&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># # Define the directory and search pattern</span>
+<span class="c1"># data_store_dir = Path(f&quot;../data/store/{country_kwd}&quot;)</span>
+<span class="c1"># search_keyword = f&quot;resources_{country_kwd}_{region_code}_&quot;</span>
+
+<span class="c1"># # List files containing the search pattern</span>
+<span class="c1"># matching_files = [str(f) for f in data_store_dir.glob(f&quot;*{search_keyword}*&quot;) if f.is_file()]</span>
+
+<span class="c1"># # Extract run IDs from matching_files</span>
+<span class="c1"># POLICYs = [f.replace(str(data_store_dir) + &#39;/&#39;, &#39;&#39;).replace(search_keyword, &#39;&#39;).replace(&quot;.h5&quot;, &#39;&#39;) for f in matching_files]</span>
+<span class="c1"># utils.print_update(level=1,message=f&quot;Results Available for Run IDs | {region_code}: &quot;)</span>
+<span class="c1"># utils.print_update(level=2, message=&quot;\n    &quot;.join(POLICYs))</span>
+
+
+<span class="c1"># BASELINE_vis_save_to=Path(f&#39;../vis/{country_kwd}/{region_code}/BASELINE&#39;)</span>
+
+<span class="c1"># policy_name=POLICYs[1]# cfg_policy.get(&#39;Scenario&#39;).get(&#39;run_id&#39;)</span>
+<span class="c1"># POLICY_vis_save_to=Path(f&#39;../vis/{country_kwd}/{region_code}/{policy_name}&#39;)</span>
+
+<span class="c1"># BASELINE_results_save_to=Path(f&#39;../results/{country_kwd}/{region_code}/BASELINE&#39;)</span>
+<span class="c1"># POLICY_results_save_to=Path(f&#39;../results/{country_kwd}/{region_code}/{policy_name}&#39;)</span>
+
+<span class="c1"># common_vis_save_to=utils.ensure_path(f&#39;../vis/{country_kwd}/{region_code}/general_PLOTS&#39;)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="c1"># Define the directory and search pattern</span>
+<span class="n">data_store_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;../data/store/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">search_prefix</span>  <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;resources_</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">_&quot;</span>
 
 <span class="c1"># List files containing the search pattern</span>
-<span class="n">matching_files</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">data_store_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">search_keyword</span><span class="si">}</span><span class="s2">*&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">is_file</span><span class="p">()]</span>
+<span class="c1"># Recursively find matching .h5 files</span>
+<span class="n">matching_files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">data_store_dir</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">search_prefix</span><span class="w"> </span><span class="si">}</span><span class="s2">*.h5&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">is_file</span><span class="p">()]</span>
+<span class="p">)</span>
+<span class="c1"># Extract full run IDs from filenames</span>
+<span class="c1"># Example:</span>
+<span class="c1"># resources_Canada_BC_BASELINE_20260313.h5</span>
+<span class="c1"># -&gt; BASELINE_20260313</span>
+<span class="n">run_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">stem</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">search_prefix</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">matching_files</span><span class="p">]</span>
 
-<span class="c1"># Extract run IDs from matching_files</span>
-<span class="n">POLICYs</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">data_store_dir</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">search_keyword</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.h5&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">matching_files</span><span class="p">]</span>
-<span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Results Available for Run IDs | </span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">: &quot;</span><span class="p">)</span>
-<span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">    &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">POLICYs</span><span class="p">))</span>
+<span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Results Available for Run IDs | </span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+<span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">    &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">run_ids</span><span class="p">)</span> <span class="k">if</span> <span class="n">run_ids</span> <span class="k">else</span> <span class="s2">&quot;No matching runs found.&quot;</span><span class="p">)</span>
+
+<span class="c1"># ---------------------------------------</span>
+<span class="c1"># Parse scenario name and date timestamp</span>
+<span class="c1"># ---------------------------------------</span>
+<span class="n">scenario_info</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">run_id</span> <span class="ow">in</span> <span class="n">run_ids</span><span class="p">:</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?P&lt;scenario_name&gt;.+)_(?P&lt;datetimestamp&gt;\d</span><span class="si">{8}</span><span class="s2">)$&quot;</span><span class="p">,</span> <span class="n">run_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+        <span class="n">scenario_info</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;run_id&quot;</span><span class="p">:</span> <span class="n">run_id</span><span class="p">,</span>
+            <span class="s2">&quot;scenario_name&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;scenario_name&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;datetimestamp&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;datetimestamp&quot;</span><span class="p">),</span>
+        <span class="p">})</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">scenario_info</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;run_id&quot;</span><span class="p">:</span> <span class="n">run_id</span><span class="p">,</span>
+            <span class="s2">&quot;scenario_name&quot;</span><span class="p">:</span> <span class="n">run_id</span><span class="p">,</span>
+            <span class="s2">&quot;datetimestamp&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">})</span>
+
+<span class="c1"># Unique available timestamps</span>
+<span class="n">available_scenario_datetimestamps</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">({</span>
+    <span class="n">x</span><span class="p">[</span><span class="s2">&quot;datetimestamp&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">scenario_info</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;datetimestamp&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<span class="p">})</span>
+
+<span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Available scenario datetimestamps | </span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+<span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span>
+    <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">message</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">    &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">available_scenario_datetimestamps</span><span class="p">)</span> <span class="k">if</span> <span class="n">available_scenario_datetimestamps</span> <span class="k">else</span> <span class="s2">&quot;No datetimestamps found.&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Optional: group by timestamp</span>
+<span class="n">scenario_by_timestamp</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">scenario_info</span><span class="p">:</span>
+    <span class="n">ts</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;datetimestamp&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">ts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">scenario_by_timestamp</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;scenario_name&quot;</span><span class="p">])</span>
+
+<span class="k">for</span> <span class="n">ts</span><span class="p">,</span> <span class="n">scenarios</span> <span class="ow">in</span> <span class="n">scenario_by_timestamp</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Scenarios available for </span><span class="si">{</span><span class="n">ts</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">    &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">scenarios</span><span class="p">)))</span>
 
 
-<span class="n">BASELINE_vis_save_to</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">/BASELINE&#39;</span><span class="p">)</span>
+<span class="n">filtered_run_ids</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">x</span><span class="p">[</span><span class="s2">&quot;run_id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">scenario_info</span>
+    <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;datetimestamp&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">datetime_stamp</span>
+<span class="p">]</span>
 
-<span class="n">policy_name</span><span class="o">=</span><span class="n">POLICYs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="c1"># cfg_policy.get(&#39;Scenario&#39;).get(&#39;run_id&#39;)</span>
-<span class="n">POLICY_vis_save_to</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">policy_name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Run IDs for datetimestamp </span><span class="si">{</span><span class="n">datetime_stamp</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+<span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span>
+    <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">message</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">    &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">filtered_run_ids</span><span class="p">)</span> <span class="k">if</span> <span class="n">filtered_run_ids</span> <span class="k">else</span> <span class="s2">&quot;No runs found for this datetimestamp.&quot;</span>
+<span class="p">)</span>
 
-<span class="n">BASELINE_results_save_to</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../results/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">/BASELINE&#39;</span><span class="p">)</span>
-<span class="n">POLICY_results_save_to</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../results/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">policy_name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">BASELINE_vis_save_to</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">/BASELINE&quot;</span><span class="p">)</span>
 
-<span class="n">common_vis_save_to</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">ensure_path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s1">/general_PLOTS&#39;</span><span class="p">)</span>
+<span class="n">policy_name</span> <span class="o">=</span> <span class="n">filtered_run_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">POLICY_vis_save_to</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">policy_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">BASELINE_results_save_to</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;../results/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">/BASELINE&quot;</span><span class="p">)</span>
+<span class="n">POLICY_results_save_to</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;../results/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">policy_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">common_vis_save_to</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">ensure_path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;../vis/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">/general_PLOTS&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -595,9 +692,17 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">POLICYs</span><span class="o">=</span><span class="n">scenarios</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">store_all_runs</span><span class="o">=</span><span class="p">{}</span>
 <span class="k">for</span> <span class="n">POLICY</span> <span class="ow">in</span> <span class="n">POLICYs</span><span class="p">:</span>
-    <span class="n">store</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;../data/store/resources_</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">POLICY</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="c1"># f&quot;../data/store/resources_{province_code}.h5&quot;</span>
+    <span class="n">store</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;../data/store/</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">POLICY</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">datetime_stamp</span><span class="si">}</span><span class="s2">/resources_</span><span class="si">{</span><span class="n">country_kwd</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">POLICY</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">datetime_stamp</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="c1"># f&quot;../data/store/resources_{province_code}.h5&quot;</span>
     <span class="n">res_data</span><span class="o">=</span><span class="n">DataHandler</span><span class="p">(</span><span class="n">store</span><span class="p">,</span><span class="n">show_structure</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># the DataHandler object could be initiated without the store definition as well.</span>
     <span class="n">store_all_runs</span><span class="p">[</span><span class="n">POLICY</span><span class="p">]</span><span class="o">=</span><span class="n">res_data</span>
 
@@ -1009,7 +1114,7 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_aggrs_region_BASELINE</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_aggrs_region_BASELINE</span><span class="o">.</span><span class="n">columns</span>
 </pre></div>
 </div>
 </div>
@@ -1017,51 +1122,66 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">delta_cells_aggrs_region</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="n">cells_aggrs_region_BASELINE</span><span class="o">-</span><span class="n">cells_aggrs_region_scenario</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">key_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Region&quot;</span><span class="p">]</span>   <span class="c1"># adjust to your actual identifier columns</span>
 
-<span class="k">if</span> <span class="n">delta_cells_aggrs_region</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+<span class="n">base</span> <span class="o">=</span> <span class="n">cells_aggrs_region_BASELINE</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">key_cols</span><span class="p">)</span>
+<span class="n">scen</span> <span class="o">=</span> <span class="n">cells_aggrs_region_scenario</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">key_cols</span><span class="p">)</span>
+
+<span class="n">num_cols</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="s2">&quot;number&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span>
+
+<span class="n">delta_cells_aggrs_region</span> <span class="o">=</span> <span class="p">(</span><span class="n">base</span><span class="p">[</span><span class="n">num_cols</span><span class="p">]</span> <span class="o">-</span> <span class="n">scen</span><span class="p">[</span><span class="n">num_cols</span><span class="p">])</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">delta_cells_aggrs_region_gdf</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="n">delta_cells_aggrs_region_gdf</span><span class="p">[</span><span class="s2">&quot;region_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">delta_cells_aggrs_region_gdf</span><span class="p">[</span><span class="s2">&quot;Region&quot;</span><span class="p">]</span>
+    <span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">delta_cells_aggrs_region_merge</span> <span class="o">=</span> <span class="n">delta_cells_aggrs_region</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">delta_cells_aggrs_region_merge</span><span class="p">[</span><span class="s2">&quot;region_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">delta_cells_aggrs_region_merge</span><span class="p">[</span><span class="s2">&quot;Region&quot;</span><span class="p">]</span>
+    <span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">delta_cells_aggrs_region_gdf</span> <span class="o">=</span> <span class="n">delta_cells_aggrs_region_gdf</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+    <span class="n">delta_cells_aggrs_region_merge</span><span class="p">[</span>
+        <span class="p">[</span><span class="s2">&quot;region_key&quot;</span><span class="p">,</span> <span class="s2">&quot;potential_capacity_solar&quot;</span><span class="p">,</span> <span class="s2">&quot;potential_capacity_wind&quot;</span><span class="p">]</span>
+    <span class="p">],</span>
+    <span class="n">on</span><span class="o">=</span><span class="s2">&quot;region_key&quot;</span><span class="p">,</span>
+    <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">delta_cells_aggrs_region_gdf</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
     <span class="n">utils</span><span class="o">.</span><span class="n">print_warning</span><span class="p">(</span><span class="s2">&quot;No differences in aggregated capacities between BASELINE and POLICY scenarios.&quot;</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Differences in aggregated capacities between BASELINE and </span><span class="si">{</span><span class="n">POLICY</span><span class="si">}</span><span class="s2"> scenarios:&quot;</span><span class="p">)</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">delta_cells_aggrs_region</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="mf">1E3</span><span class="p">,</span><span class="s2">&quot;in GW&quot;</span><span class="p">)</span>
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Differences in aggregated capacities between BASELINE and </span><span class="si">{</span><span class="n">POLICY</span><span class="si">}</span><span class="s2"> scenarios: </span><span class="se">\n</span><span class="s2">&quot;</span>
+                                        <span class="sa">f</span><span class="s2">&quot;Solar: </span><span class="si">{</span><span class="n">delta_cells_aggrs_region_gdf</span><span class="o">.</span><span class="n">potential_capacity_solar</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="mf">1E3</span><span class="si">}</span><span class="s2"> GW&quot;</span>
+                                        <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> Wind: </span><span class="si">{</span><span class="n">delta_cells_aggrs_region_gdf</span><span class="o">.</span><span class="n">potential_capacity_wind</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="mf">1E3</span><span class="si">}</span><span class="s2"> GW&quot;</span><span class="p">)</span>
 
-<span class="n">delta_cells_aggrs_region</span><span class="p">[</span><span class="s1">&#39;percent_change_solar&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">round</span><span class="p">((</span><span class="n">cells_aggrs_region_BASELINE</span><span class="p">[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">cells_aggrs_region_scenario</span><span class="p">[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">])</span><span class="o">/</span><span class="n">cells_aggrs_region_BASELINE</span><span class="p">[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">delta_cells_aggrs_region</span><span class="p">[</span><span class="s1">&#39;percent_change_wind&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">round</span><span class="p">((</span><span class="n">cells_aggrs_region_BASELINE</span><span class="p">[</span><span class="s1">&#39;potential_capacity_wind&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">cells_aggrs_region_scenario</span><span class="p">[</span><span class="s1">&#39;potential_capacity_wind&#39;</span><span class="p">])</span><span class="o">/</span><span class="n">cells_aggrs_region_BASELINE</span><span class="p">[</span><span class="s1">&#39;potential_capacity_wind&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-<br/></pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">delta_cells_aggrs_region</span>
+<span class="n">delta_cells_aggrs_region_gdf</span><span class="p">[</span><span class="s1">&#39;percent_change_solar&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">round</span><span class="p">((</span><span class="n">cells_aggrs_region_BASELINE</span><span class="p">[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">cells_aggrs_region_scenario</span><span class="p">[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">])</span><span class="o">/</span><span class="n">cells_aggrs_region_BASELINE</span><span class="p">[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">delta_cells_aggrs_region_gdf</span><span class="p">[</span><span class="s1">&#39;percent_change_wind&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">round</span><span class="p">((</span><span class="n">cells_aggrs_region_BASELINE</span><span class="p">[</span><span class="s1">&#39;potential_capacity_wind&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">cells_aggrs_region_scenario</span><span class="p">[</span><span class="s1">&#39;potential_capacity_wind&#39;</span><span class="p">])</span><span class="o">/</span><span class="n">cells_aggrs_region_BASELINE</span><span class="p">[</span><span class="s1">&#39;potential_capacity_wind&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">delta_cells_aggrs_region_gdf</span><span class="p">[</span><span class="s2">&quot;potential_capacity_solar_GW&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">delta_cells_aggrs_region_gdf</span><span class="p">[</span><span class="s2">&quot;potential_capacity_solar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">/</span> <span class="mf">1E3</span><span class="p">)</span> <span class="c1"># GW</span>
+<span class="n">delta_cells_aggrs_region_gdf</span><span class="p">[</span><span class="s2">&quot;potential_capacity_wind_GW&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">delta_cells_aggrs_region_gdf</span><span class="p">[</span><span class="s2">&quot;potential_capacity_wind&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">/</span> <span class="mf">1E3</span><span class="p">)</span> <span class="c1"># GW</span>
 </pre></div>
 </div>
 </div>
 <ul class="simple">
 <li><p>Spatial- mapping the delta of capacity to Regions</p></li>
 </ul>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">delta_cells_aggrs_region</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
-    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                      <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;No differences found between default and scenario aggregated cells for </span><span class="si">{</span><span class="n">sub_national_unit_tag</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-    <span class="n">utils</span><span class="o">.</span><span class="n">print_warning</span><span class="p">(</span><span class="s2">&quot;Perhaps we are looking at the same scenario?&quot;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">delta_cells_aggrs_region_gdf</span><span class="o">=</span><span class="n">boundary</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
-    <span class="c1"># - For plotting, Update Boundary (gdf) with this delta_Capacity</span>
-    <span class="n">delta_cells_aggrs_region_gdf</span><span class="p">[</span><span class="s2">&quot;potential_capacity_solar&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">delta_cells_aggrs_region_gdf</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">delta_cells_aggrs_region</span><span class="p">[</span><span class="s2">&quot;potential_capacity_solar&quot;</span><span class="p">])</span>
-    <span class="n">delta_cells_aggrs_region_gdf</span><span class="p">[</span><span class="s2">&quot;potential_capacity_wind&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">delta_cells_aggrs_region_gdf</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">delta_cells_aggrs_region</span><span class="p">[</span><span class="s2">&quot;potential_capacity_wind&quot;</span><span class="p">])</span>
-
-    <span class="c1"># Map Population and GDP to gdf using Region</span>
-    <span class="n">delta_cells_aggrs_region_gdf</span><span class="p">[</span><span class="s2">&quot;potential_capacity_solar_GW&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">delta_cells_aggrs_region_gdf</span><span class="p">[</span><span class="s2">&quot;potential_capacity_solar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">/</span> <span class="mf">1E3</span><span class="p">)</span> <span class="c1"># GW</span>
-    <span class="n">delta_cells_aggrs_region_gdf</span><span class="p">[</span><span class="s2">&quot;potential_capacity_wind_GW&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">delta_cells_aggrs_region_gdf</span><span class="p">[</span><span class="s2">&quot;potential_capacity_wind&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">/</span> <span class="mf">1E3</span><span class="p">)</span> <span class="c1"># GW</span>
-</pre></div>
-</div>
-</div>
 <ul class="simple">
 <li><p>plot in map</p></li>
 </ul>
@@ -1079,7 +1199,12 @@ document.write(`
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># --- Helper: Plot with shadow + top 5 highlights ---</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">plot_map_with_shadow</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">delta_capacity_gdf</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">shadow_offset</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">12</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_map_with_shadow</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span>
+                         <span class="n">delta_capacity_gdf</span><span class="p">,</span>
+                         <span class="n">column</span><span class="p">,</span>
+                         <span class="n">cmap</span><span class="p">,</span>
+                         <span class="n">shadow_offset</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span>
+                         <span class="n">top_n</span><span class="o">=</span><span class="mi">12</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot map with shadow effect and highlight top-N rows.&quot;&quot;&quot;</span>
 
     <span class="c1"># Ensure CRS consistency</span>
@@ -1573,27 +1698,75 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_aggr_solar_plot</span><span class="o">=</span><span class="n">boundary_plot</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="c1"># - For plotting, Update Boundary (gdf) with this delta_Capacity</span>
-<span class="n">cells_aggr_solar_plot</span><span class="p">[</span><span class="s2">&quot;potential_capacity_solar&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">boundary_plot</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">cells_aggrs_region_scenario</span><span class="p">[</span><span class="s2">&quot;potential_capacity_solar&quot;</span><span class="p">])</span>
-<span class="n">cells_aggr_solar_plot</span><span class="p">[</span><span class="s2">&quot;potential_capacity_wind&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">boundary_plot</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">cells_aggrs_region_scenario</span><span class="p">[</span><span class="s2">&quot;potential_capacity_wind&quot;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">normalize_region</span><span class="p">(</span><span class="n">series</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">series</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+              <span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+              <span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^a-z0-9]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">)</span>
 
-<span class="c1"># # Map Population and GDP to gdf using Region</span>
-<span class="n">cells_aggr_solar_plot</span><span class="p">[</span><span class="s2">&quot;potential_capacity_solar_GW&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cells_aggr_solar_plot</span><span class="p">[</span><span class="s2">&quot;potential_capacity_solar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">/</span> <span class="mf">1E3</span><span class="p">)</span> <span class="c1"># GW</span>
-<br/></pre></div>
+<span class="c1"># Copy boundary for plotting</span>
+<span class="n">cells_aggr_solar_plot</span> <span class="o">=</span> <span class="n">boundary_plot</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c1"># Build lookup table from aggregated scenario data</span>
+<span class="n">scenario_lookup</span> <span class="o">=</span> <span class="n">cells_aggrs_region_scenario</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">scenario_lookup</span><span class="p">[</span><span class="s2">&quot;region_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalize_region</span><span class="p">(</span><span class="n">scenario_lookup</span><span class="p">[</span><span class="s2">&quot;Region&quot;</span><span class="p">])</span>
+
+<span class="c1"># Add normalized key to plotting boundary</span>
+<span class="n">cells_aggr_solar_plot</span><span class="p">[</span><span class="s2">&quot;region_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalize_region</span><span class="p">(</span><span class="n">cells_aggr_solar_plot</span><span class="p">[</span><span class="s2">&quot;Region&quot;</span><span class="p">])</span>
+
+<span class="c1"># Merge scenario values into boundary</span>
+<span class="n">cells_aggr_solar_plot</span> <span class="o">=</span> <span class="n">cells_aggr_solar_plot</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+    <span class="n">scenario_lookup</span><span class="p">[</span>
+        <span class="p">[</span><span class="s2">&quot;region_key&quot;</span><span class="p">,</span> <span class="s2">&quot;potential_capacity_solar&quot;</span><span class="p">,</span> <span class="s2">&quot;potential_capacity_wind&quot;</span><span class="p">]</span>
+    <span class="p">],</span>
+    <span class="n">on</span><span class="o">=</span><span class="s2">&quot;region_key&quot;</span><span class="p">,</span>
+    <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Unit conversion</span>
+<span class="n">cells_aggr_solar_plot</span><span class="p">[</span><span class="s2">&quot;potential_capacity_solar_GW&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">cells_aggr_solar_plot</span><span class="p">[</span><span class="s2">&quot;potential_capacity_solar&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e3</span>
+<span class="p">)</span>
+<span class="n">cells_aggr_solar_plot</span><span class="p">[</span><span class="s2">&quot;potential_capacity_wind_GW&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">cells_aggr_solar_plot</span><span class="p">[</span><span class="s2">&quot;potential_capacity_wind&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e3</span>
+<span class="p">)</span>
+
+<span class="c1"># Optional cleanup</span>
+<span class="n">cells_aggr_solar_plot</span> <span class="o">=</span> <span class="n">cells_aggr_solar_plot</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;region_key&quot;</span><span class="p">)</span>
+</pre></div>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_aggr_wind_plot</span><span class="o">=</span><span class="n">boundary_plot</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="c1"># - For plotting, Update Boundary (gdf) with this delta_Capacity</span>
-<span class="n">cells_aggr_wind_plot</span><span class="p">[</span><span class="s2">&quot;potential_capacity_solar&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">boundary_plot</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">cells_aggrs_region_scenario</span><span class="p">[</span><span class="s2">&quot;potential_capacity_solar&quot;</span><span class="p">])</span>
-<span class="n">cells_aggr_wind_plot</span><span class="p">[</span><span class="s2">&quot;potential_capacity_wind&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">boundary_plot</span><span class="p">[</span><span class="s1">&#39;Region&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">cells_aggrs_region_scenario</span><span class="p">[</span><span class="s2">&quot;potential_capacity_wind&quot;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Copy boundary for plotting</span>
+<span class="n">cells_aggr_wind_plot</span> <span class="o">=</span> <span class="n">boundary_plot</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-<span class="c1"># # Map Population and GDP to gdf using Region</span>
-<span class="n">cells_aggr_wind_plot</span><span class="p">[</span><span class="s2">&quot;potential_capacity_wind_GW&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cells_aggr_wind_plot</span><span class="p">[</span><span class="s2">&quot;potential_capacity_wind&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">/</span> <span class="mf">1E3</span><span class="p">)</span> <span class="c1"># GW</span>
+<span class="c1"># Build lookup table from aggregated scenario data</span>
+<span class="n">scenario_lookup</span> <span class="o">=</span> <span class="n">cells_aggrs_region_scenario</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">scenario_lookup</span><span class="p">[</span><span class="s2">&quot;region_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalize_region</span><span class="p">(</span><span class="n">scenario_lookup</span><span class="p">[</span><span class="s2">&quot;Region&quot;</span><span class="p">])</span>
+
+<span class="c1"># Add normalized key to plotting boundary</span>
+<span class="n">cells_aggr_wind_plot</span><span class="p">[</span><span class="s2">&quot;region_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalize_region</span><span class="p">(</span><span class="n">cells_aggr_wind_plot</span><span class="p">[</span><span class="s2">&quot;Region&quot;</span><span class="p">])</span>
+
+<span class="c1"># Merge scenario values into boundary</span>
+<span class="n">cells_aggr_wind_plot</span> <span class="o">=</span> <span class="n">cells_aggr_wind_plot</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+    <span class="n">scenario_lookup</span><span class="p">[</span>
+        <span class="p">[</span><span class="s2">&quot;region_key&quot;</span><span class="p">,</span> <span class="s2">&quot;potential_capacity_solar&quot;</span><span class="p">,</span> <span class="s2">&quot;potential_capacity_wind&quot;</span><span class="p">]</span>
+    <span class="p">],</span>
+    <span class="n">on</span><span class="o">=</span><span class="s2">&quot;region_key&quot;</span><span class="p">,</span>
+    <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Unit conversion</span>
+<span class="n">cells_aggr_wind_plot</span><span class="p">[</span><span class="s2">&quot;potential_capacity_wind_GW&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">cells_aggr_wind_plot</span><span class="p">[</span><span class="s2">&quot;potential_capacity_wind&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e3</span>
+<span class="p">)</span>
+
+<span class="c1"># Optional cleanup</span>
+<span class="n">cells_aggr_wind_plot</span> <span class="o">=</span> <span class="n">cells_aggr_wind_plot</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;region_key&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1792,7 +1965,7 @@ document.write(`
 
 
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">common_vis_save_to</span><span class="o">/</span><span class="s2">&quot;Resources_and_Capacity_Combined.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># plt.savefig(common_vis_save_to/&quot;Resources_and_Capacity_Combined.png&quot;, bbox_inches=&#39;tight&#39;, transparent=True)</span>
 </pre></div>
 </div>
 </div>
@@ -1858,7 +2031,7 @@ document.write(`
     <span class="n">spine</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">ax1</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">common_vis_save_to</span><span class="si">}</span><span class="s1">/cost_barchart_solar.svg&#39;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># plt.savefig(f&#39;{common_vis_save_to}/cost_barchart_solar.svg&#39;, transparent=True)</span>
 </pre></div>
 </div>
 </div>
@@ -1887,7 +2060,7 @@ document.write(`
     <span class="n">spine</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">ax2</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">common_vis_save_to</span><span class="si">}</span><span class="s1">/cost_barchart_wind.svg&#39;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># plt.savefig(f&#39;{common_vis_save_to}/cost_barchart_wind.svg&#39;, transparent=True)</span>
 </pre></div>
 </div>
 </div>

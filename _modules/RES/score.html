@@ -157,7 +157,7 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Data sources</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="../../notes/config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">Best Practices and Guidelines</a></li>
@@ -403,6 +403,7 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__post_init__</span><span class="p">()</span>
+       
         
 <div class="viewcode-block" id="CellScorer.get_CRF">
 <a class="viewcode-back" href="../../notes/api.html#RES.score.CellScorer.get_CRF">[docs]</a>
@@ -728,7 +729,10 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="nf">get_cell_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
                     <span class="n">cells</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                     <span class="n">CF_column</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
-                    <span class="n">interest_rate</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="mf">0.03</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+                    <span class="c1"># The above code is defining a variable named `interest_rate` in Python. However,</span>
+                    <span class="c1"># the code snippet provided is incomplete and does not show the value assigned to</span>
+                    <span class="c1"># the `interest_rate` variable.</span>
+                    <span class="n">interest_rate</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate LCOE scores for all grid cells in a DataFrame and return ranked results.</span>
 <span class="sd">        </span>
@@ -787,6 +791,9 @@ document.write(`
 <span class="sd">            - Method handles edge cases like zero capacity factors gracefully</span>
 <span class="sd">            - LCOE values are in $/MWh for standard industry comparison</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">interest_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">interest_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discount_rate</span>  <span class="c1"># Use default from config if not provided</span>
+            
         <span class="n">dataframe</span> <span class="o">=</span> <span class="n">cells</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># Use the input DataFrame for calculations</span>
 
         <span class="n">node_distance_col</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_available_column</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;nearest_station_distance_km&#39;</span><span class="p">,</span> <span class="s1">&#39;nearest_distance&#39;</span><span class="p">])</span>

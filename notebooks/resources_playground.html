@@ -159,7 +159,8 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Data sources</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../notes/config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/learning.html">Best Practices and Guidelines</a></li>
 
@@ -364,8 +365,8 @@ document.write(`
                   
   <section id="Resources-Plots">
 <h1>Resources Plots<a class="headerlink" href="#Resources-Plots" title="Link to this heading">#</a></h1>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
@@ -389,20 +390,11 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; CODERS API key loaded from: data/downloaded_data/CODERS/coders_api.yaml</span>
-<span class="ansi-white-intense-fg">  └&gt; user Elias: w0OksqQKMFMtKPbO</span>
-</pre></div></div>
-</div>
 <hr class="docutils" />
 <section id="Select-Region">
 <h2>Select Region<a class="headerlink" href="#Select-Region" title="Link to this heading">#</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Construct region_options as a list of tuples: (name, code)</span>
@@ -421,17 +413,11 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f78d9cda8fec4e7abac7a90427f7cce1", "version_major": 2, "version_minor": 0}</script></div>
-</div>
 </section>
 <section id="Select-Resource-type">
 <h2>Select Resource type<a class="headerlink" href="#Select-Resource-type" title="Link to this heading">#</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">resource_type_dropdown</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
@@ -442,14 +428,8 @@ document.write(`
 <br/></pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4d322516a8e24f4f91a01d40ce54d0e1", "version_major": 2, "version_minor": 0}</script></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">resource_type</span> <span class="o">=</span> <span class="n">resource_type_dropdown</span><span class="o">.</span><span class="n">value</span>
@@ -469,40 +449,12 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-intense-fg">____________________________________________________________</span>
-<span class="ansi-green-intense-fg">     Initiating RESource Builder | RES.RESources</span>
-<span class="ansi-cyan-intense-fg">____________________________________________________________</span>
-<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Region Set to &gt;&gt; Short Code : BC, Name: British Columbia).</span>
-<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Collecting regional boundary...</span>
-<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Loading GADM boundaries (Sub-provincial | level =2) for British Columbia from local file data/processed_data/regions/gadm41_Canada_L2_BC.geojson.</span>
-<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Region Set to &gt;&gt; Short Code : BC, Name: British Columbia).</span>
-<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Collecting regional boundary...</span>
-<span class="ansi-black-intense-fg">  └─&gt; RES.boundaries| Loading GADM boundaries (Sub-provincial | level =2) for British Columbia from local file data/processed_data/regions/gadm41_Canada_L2_BC.geojson.</span>
-<span class="ansi-cyan-fg"> └&gt; NREL_ATBProcessor initiated...</span>
-<span class="ansi-white-intense-fg">  └&gt; RES.atb| Processing Annual Technology Baseline (ATB) data sourced from NREL...</span>
-<span class="ansi-cyan-fg"> └&gt; RES.utility| Directory &#39;data/downloaded_data/NREL/ATB/ATBe.parquet&#39; found locally.</span>
-<span class="ansi-white-intense-fg">  └&gt; RES.atb| ATB cost datafile: ATBe.parquet loaded</span>
-<span class="ansi-white-intense-fg">  └&gt; Extracting technology baseline costs...</span>
-<span class="ansi-black-intense-fg">  └─&gt; Extracting Solar PV technology cost...</span>
-<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler|💾 Data (GeoDataFrame/DataFrame) saved to data/store/resources_BC_strict_policy_aeroway_CPCAD_buffer.h5 with key &#39;cost/atb/solar&#39;</span>
-<span class="ansi-black-intense-fg">  └─&gt; Extracting Wind Turbine technology cost...</span>
-<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler|💾 Data (GeoDataFrame/DataFrame) saved to data/store/resources_BC_strict_policy_aeroway_CPCAD_buffer.h5 with key &#39;cost/atb/wind&#39;</span>
-<span class="ansi-cyan-fg"> └&gt; Snapshot for Resources: 2023-01-01 07:00:00 to 2024-01-01 06:00:00</span>
-<span class="ansi-cyan-fg"> └&gt; RES.RESources| Saving configuration to results directory...</span>
-<span class="ansi-black-intense-fg ansi-bold">ℹ️  RES.utility| A copy of the dictionary saved to : &#39;results/RESources/BC/config_BC_strict_policy_aeroway_CPCAD_buffer.yaml&#39;</span>
-</pre></div></div>
-</div>
 </section>
 </section>
 <section id="[Exploratory]">
 <h1>[Exploratory]<a class="headerlink" href="#[Exploratory]" title="Link to this heading">#</a></h1>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the directory and search pattern</span>
@@ -530,14 +482,8 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7ffd5a9eb0a641339d092fe168182935", "version_major": 2, "version_minor": 0}</script></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RUN_ID</span><span class="o">=</span> <span class="n">run_id_dropdown</span><span class="o">.</span><span class="n">value</span>
@@ -546,43 +492,8 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-intense-fg">____________________________________________________________</span>
-<span class="ansi-green-intense-fg">     RES.hdf5_handler|🗄️ Structure of HDF5 file: data/store/resources_BC_default.h5</span>
-<span class="ansi-cyan-intense-fg">____________________________________________________________</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">boundary</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cells</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">clusters</span>
-  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">clusters/solar</span>
-  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">clusters/wind</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost</span>
-  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb</span>
-  └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb/solar</span>
-  └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">cost/atb/wind</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">dissolved_indices</span>
-  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">dissolved_indices/solar</span>
-  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">dissolved_indices/wind</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">lines</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">substations</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries</span>
-  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries/clusters</span>
-  └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries/clusters/solar</span>
-  └─   └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries/clusters/wind</span>
-  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries/solar</span>
-  └─ <span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">timeseries/wind</span>
-<span class="ansi-blue-intense-fg">[key]</span> <span class="ansi-green-intense-fg">units</span>
-
-
-<span class="ansi-yellow-fg">└&gt; To access the data : </span>
-<span class="ansi-cyan-fg"> └&gt; &lt;datahandler instance&gt;.from_store(&#39;&lt;key&gt;&#39;)</span>
-</pre></div></div>
-</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells</span><span class="o">=</span><span class="n">res_store</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;cells&#39;</span><span class="p">)</span>
@@ -600,7 +511,7 @@ document.write(`
 <li><p>Interactive Map</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># wind_clusters[wind_clusters[&#39;lcoe&#39;]&lt;=100].explore(&#39;potential_capacity&#39;)</span>
@@ -610,8 +521,8 @@ document.write(`
 </section>
 <section id="Playground-for-Top-Site-Selection">
 <h1>Playground for Top Site Selection<a class="headerlink" href="#Playground-for-Top-Site-Selection" title="Link to this heading">#</a></h1>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">resource_clusters_solar</span><span class="p">,</span><span class="n">cluster_timeseries_solar</span><span class="o">=</span><span class="n">RES_module</span><span class="o">.</span><span class="n">select_top_sites</span><span class="p">(</span><span class="n">solar_clusters</span><span class="p">,</span>
@@ -624,29 +535,8 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&gt;&gt;&gt; Selecting TOP Sites to for 10 GW Capacity Investment in BC...
-____________________________________________________________________________________________________
-Selecting the Top Ranked Sites to invest in 10 GW PV in BC
-____________________________________________________________________________________________________
-
-!! Note: The Last cluster (Okanagan-Similkameen_2) originally had 2.08 GW potential capacity.To fit the maximum capacity investment of 10 GW, it has been adjusted to 1.76 GW
-
-&gt;&gt;&gt; Selecting TOP Sites to for 20 GW Capacity Investment in BC...
-____________________________________________________________________________________________________
-Selecting the Top Ranked Sites to invest in 20 GW PV in BC
-____________________________________________________________________________________________________
-
-!! Note: The Last cluster (Thompson-Nicola_1) originally had 4.17 GW potential capacity.To fit the maximum capacity investment of 20 GW, it has been adjusted to 2.77 GW
-
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RES_module</span><span class="o">.</span><span class="n">export_results</span><span class="p">(</span><span class="s1">&#39;wind&#39;</span><span class="p">,</span>
@@ -656,16 +546,8 @@ ________________________________________________________________________________
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; wind clusters exported to :results/resource_options_wind_BC_timeseries.csv</span>
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RES_module</span><span class="o">.</span><span class="n">export_results</span><span class="p">(</span><span class="s1">&#39;solar&#39;</span><span class="p">,</span>
@@ -675,19 +557,11 @@ ________________________________________________________________________________
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; solar clusters exported to :results/resource_options_solar_BC_timeseries.csv</span>
-</pre></div></div>
-</div>
 </section>
 <section id="Visualize-Results">
 <h1>Visualize Results<a class="headerlink" href="#Visualize-Results" title="Link to this heading">#</a></h1>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -782,13 +656,6 @@ ________________________________________________________________________________
 <span class="c1"># plt.show()</span>
 <span class="c1"># plt.savefig(f&quot;../vis/{region_code}/invested_resources_{region_code}_{RUN_ID}.png&quot;, dpi=300, bbox_inches=&#39;tight&#39;)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_resources_playground_20_0.png" src="../_images/notebooks_resources_playground_20_0.png" />
 </div>
 </div>
 </section>

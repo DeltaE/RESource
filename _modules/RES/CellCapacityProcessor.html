@@ -157,7 +157,7 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Data sources</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="../../notes/config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">Best Practices and Guidelines</a></li>
@@ -537,7 +537,8 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">required_args</span> <span class="o">=</span> <span class="p">{</span> <span class="c1">#order doesn&#39;t matter</span>
                 <span class="s2">&quot;config_file_path&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_file_path</span><span class="p">,</span>  <span class="c1"># INHERITED ATTRIBUTE from AttributesParser</span>
                 <span class="s2">&quot;region_short_code&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_short_code</span><span class="p">,</span>  <span class="c1"># INHERITED ATTRIBUTE from AttributesParser</span>
-                <span class="s2">&quot;resource_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span>  <span class="c1"># INHERITED ATTRIBUTE from AttributesParser</span>
+                <span class="s2">&quot;resource_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span><span class="p">,</span>  <span class="c1"># INHERITED ATTRIBUTE from AttributesParser</span>
+                <span class="s2">&quot;weather_year&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">weather_year</span>  <span class="c1"># INHERITED ATTRIBUTE from AttributesParser</span>
             <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ERA5Cutout</span><span class="o">=</span><span class="n">ERA5Cutout</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">required_args</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">LandContainer</span><span class="o">=</span><span class="n">LandContainer</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">required_args</span><span class="p">)</span>
@@ -964,7 +965,7 @@ document.write(`
             <span class="s1">&#39;vom&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_vom</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="c1"># m$/MW</span>
             <span class="s1">&#39;grid_connection_cost_per_km&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_connection_cost_per_km</span><span class="p">,</span> <span class="c1"># m$/km</span>
             <span class="s1">&#39;tx_line_rebuild_cost&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx_line_rebuild_cost</span><span class="p">,</span>  <span class="c1"># m$/km</span>
-            <span class="s1">&#39;Operational_life&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span> <span class="o">==</span> <span class="s1">&#39;solar&#39;</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_type</span> <span class="o">==</span> <span class="s1">&#39;wind&#39;</span> <span class="k">else</span> <span class="mi">0</span>   <span class="c1"># years</span>
+            <span class="s1">&#39;Operational_life&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_disaggregation_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;operational_life&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>  <span class="c1"># years</span>
         <span class="p">}</span>
 
         <span class="c1"># Create a new dictionary with stylized keys</span>
@@ -1047,6 +1048,8 @@ document.write(`
                 
         <span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grid_cells</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">from_store</span><span class="p">(</span><span class="s1">&#39;cells&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">avail_col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_cells</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span> <span class="c1"># Replacing the residual availability column if it already exists in the grid_cells gdf to avoid confusion with the new availability analytics we are merging from the cutout.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_cells</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">avail_col</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         
         <span class="n">_avail_df</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">AvailabilityMatrix</span>
@@ -1171,21 +1174,99 @@ document.write(`
 
         <span class="c1"># return fig</span>
     
-<span class="nd">@staticmethod</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_sub_nationally_aggregated_capacity</span><span class="p">(</span><span class="n">cells_with_capacity</span><span class="p">:</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                           <span class="n">sub_national_unit_tag</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="c1"># @staticmethod</span>
+<span class="c1"># def get_sub_nationally_aggregated_capacity(cells_with_capacity:gpd.GeoDataFrame=None,</span>
+<span class="c1">#                                            sub_national_unit_tag:str=None):</span>
     
-    <span class="k">if</span> <span class="n">cells_with_capacity</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cells_with_capacity</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The input must be a valid GeoDataFrame with capacity data.&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="s1">&#39;potential_capacity_solar&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cells_with_capacity</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="s1">&#39;potential_capacity_wind&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cells_with_capacity</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The input GeoDataFrame must contain &#39;potential_capacity_actual_solar&#39; and &#39;potential_capacity_actual_wind&#39; columns.&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">sub_national_unit_tag</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">sub_national_unit_tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cells_with_capacity</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The input GeoDataFrame must contain &#39;sub_national_unit_tag&#39; column for aggregation.&quot;</span><span class="p">)</span>
+<span class="c1">#     if cells_with_capacity is None or not isinstance(cells_with_capacity, gpd.GeoDataFrame):</span>
+<span class="c1">#         raise ValueError(&quot;The input must be a valid GeoDataFrame with capacity data.&quot;)</span>
+<span class="c1">#     if &#39;potential_capacity_solar&#39; not in cells_with_capacity.columns or &#39;potential_capacity_wind&#39; not in cells_with_capacity.columns:</span>
+<span class="c1">#         raise ValueError(&quot;The input GeoDataFrame must contain &#39;potential_capacity_actual_solar&#39; and &#39;potential_capacity_actual_wind&#39; columns.&quot;)</span>
+<span class="c1">#     if sub_national_unit_tag is None or sub_national_unit_tag not in cells_with_capacity.columns:</span>
+<span class="c1">#         raise ValueError(&quot;The input GeoDataFrame must contain &#39;sub_national_unit_tag&#39; column for aggregation.&quot;)</span>
     
         
-    <span class="n">cells_aggr</span><span class="o">=</span><span class="n">cells_with_capacity</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">sub_national_unit_tag</span><span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">({</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">:</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span><span class="s1">&#39;potential_capacity_wind&#39;</span><span class="p">:</span><span class="s1">&#39;sum&#39;</span><span class="p">})</span>
+<span class="c1">#     cells_aggr=cells_with_capacity.groupby(sub_national_unit_tag).aggregate({&#39;potential_capacity_solar&#39;:&#39;sum&#39;,&#39;potential_capacity_wind&#39;:&#39;sum&#39;,&#39;geom_area_km2&#39;:&#39;sum&#39;}).reset_index()</span>
 
-    <span class="n">cells_aggr</span><span class="p">[[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">,</span> <span class="s1">&#39;potential_capacity_wind&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">cells_aggr</span><span class="p">[[</span><span class="s1">&#39;potential_capacity_solar&#39;</span><span class="p">,</span> <span class="s1">&#39;potential_capacity_wind&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="c1">#     cells_aggr[[&#39;potential_capacity_solar&#39;, &#39;potential_capacity_wind&#39;, &#39;geom_area_km2&#39;]] = cells_aggr[[&#39;potential_capacity_solar&#39;, &#39;potential_capacity_wind&#39;, &#39;geom_area_km2&#39;]].round().astype(int)</span>
+
+<span class="c1">#     return cells_aggr</span>
+<span class="nd">@staticmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_sub_nationally_aggregated_capacity</span><span class="p">(</span>
+    <span class="n">cells_with_capacity</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+    <span class="n">sub_national_unit_tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">capacity_cols</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">area_col</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;geom_area_km2&quot;</span><span class="p">,</span>
+    <span class="n">developable_col_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Developable_area_&quot;</span><span class="p">,</span>
+    <span class="n">round_digits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">dropna_group</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Aggregate capacity and area by sub-national unit.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cells_with_capacity : gpd.GeoDataFrame</span>
+<span class="sd">        Input GeoDataFrame containing sub-national tags and capacity columns.</span>
+<span class="sd">    sub_national_unit_tag : str</span>
+<span class="sd">        Column name used to group rows by sub-national unit.</span>
+<span class="sd">    capacity_cols : list[str] | None, default None</span>
+<span class="sd">        Capacity columns to aggregate. If None, defaults to:</span>
+<span class="sd">        [&#39;potential_capacity_solar&#39;, &#39;potential_capacity_wind&#39;].</span>
+<span class="sd">    area_col : str, default &#39;geom_area_km2&#39;</span>
+<span class="sd">        Area column to include in aggregation.</span>
+<span class="sd">    round_digits : int | None, default 0</span>
+<span class="sd">        Number of digits to round numeric outputs to.</span>
+<span class="sd">        Use None to skip rounding.</span>
+<span class="sd">    dropna_group : bool, default True</span>
+<span class="sd">        Whether to exclude rows where the grouping column is missing.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        Aggregated table by sub-national unit.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cells_with_capacity</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;cells_with_capacity must be a GeoDataFrame.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">sub_national_unit_tag</span> <span class="ow">or</span> <span class="n">sub_national_unit_tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cells_with_capacity</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Grouping column &#39;</span><span class="si">{</span><span class="n">sub_national_unit_tag</span><span class="si">}</span><span class="s2">&#39; not found in input GeoDataFrame.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">capacity_cols</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">capacity_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;potential_capacity_solar&quot;</span><span class="p">,</span> <span class="s2">&quot;potential_capacity_wind&quot;</span><span class="p">]</span>
+
+    <span class="n">cols_to_aggregate</span> <span class="o">=</span> <span class="n">capacity_cols</span> <span class="o">+</span> <span class="p">[</span><span class="n">area_col</span><span class="p">]</span><span class="o">+</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cells_with_capacity</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">developable_col_prefix</span><span class="p">)]</span>
+
+    <span class="n">missing_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols_to_aggregate</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cells_with_capacity</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">missing_cols</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Missing required columns: </span><span class="si">{</span><span class="n">missing_cols</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Available columns are: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">cells_with_capacity</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">cells_with_capacity</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">dropna_group</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">sub_national_unit_tag</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># Force numeric conversion safely</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols_to_aggregate</span><span class="p">:</span>
+        <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">agg_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="s2">&quot;sum&quot;</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols_to_aggregate</span><span class="p">}</span>
+
+    <span class="n">cells_aggr</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">sub_national_unit_tag</span><span class="p">,</span> <span class="n">dropna</span><span class="o">=</span><span class="ow">not</span> <span class="n">dropna_group</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">agg_dict</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">round_digits</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cells_aggr</span><span class="p">[</span><span class="n">cols_to_aggregate</span><span class="p">]</span> <span class="o">=</span> <span class="n">cells_aggr</span><span class="p">[</span><span class="n">cols_to_aggregate</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">round_digits</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">round_digits</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">cells_aggr</span><span class="p">[</span><span class="n">cols_to_aggregate</span><span class="p">]</span> <span class="o">=</span> <span class="n">cells_aggr</span><span class="p">[</span><span class="n">cols_to_aggregate</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">cells_aggr</span>
 </pre></div>

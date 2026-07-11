@@ -1,0 +1,843 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ERA5 Multi-Year Cutout Download — British Columbia &#8212; RESource 2025.07 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=e9b82cb4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/era5_multiyear_BC';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
+    <script>document.write(`<img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Data sources</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../notes/config.html">How to use the CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/learning.html">Best Practices and Guidelines</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../notes/data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/developers.html">Contributing Developers</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Store_explorer.html">Explore data store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Visuals_BC.html">Example Visuals for BC</a></li>
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notes/api.html">RES API References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/documentation_guide.html">Documentation Build Guide</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/era5_multiyear_BC.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>ERA5 Multi-Year Cutout Download — British Columbia</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Design-rationale">Design rationale</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#0-·-Configuration">0 · Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#1-·-Imports">1 · Imports</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#1b-·-tqdm-backend-fix">1b · tqdm backend fix</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#2-·-Instantiate-ERA5Cutout-(once)">2 · Instantiate ERA5Cutout (once)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#4-·-Pre-download-audit">4 · Pre-download audit</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#5-·-Multi-year-ERA5-download-loop">5 · Multi-year ERA5 download loop</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#6-·-Post-download-validation">6 · Post-download validation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#7-·-Summary-manifest">7 · Summary manifest</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Appendix-B-·-Extending-to-multiple-regions">Appendix B · Extending to multiple regions</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="ERA5-Multi-Year-Cutout-Download-—-British-Columbia">
+<h1>ERA5 Multi-Year Cutout Download — British Columbia<a class="headerlink" href="#ERA5-Multi-Year-Cutout-Download-—-British-Columbia" title="Link to this heading">#</a></h1>
+<div class="line-block">
+<div class="line"><strong>Author:</strong> Md Eliasinul Islam</div>
+<div class="line"><strong>Affiliation:</strong> Delta E+ Lab, Simon Fraser University</div>
+<div class="line"><strong>Purpose:</strong> Download ERA5 climate cutouts for BC across multiple weather years using the <code class="docutils literal notranslate"><span class="pre">ERA5Cutout</span></code> class from the RESource framework.</div>
+</div>
+<hr class="docutils" />
+<section id="Design-rationale">
+<h2>Design rationale<a class="headerlink" href="#Design-rationale" title="Link to this heading">#</a></h2>
+<div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">ERA5Cutout.get_era5_cutout()</span></code> reads its temporal horizon from <code class="docutils literal notranslate"><span class="pre">config['cutout']['snapshots']</span></code>.</div>
+<div class="line">Rather than writing one config YAML per year (brittle), this notebook:</div>
+</div>
+<ol class="arabic simple">
+<li><p>Instantiates <code class="docutils literal notranslate"><span class="pre">ERA5Cutout</span></code> once from the base BC config (loads boundaries, resolves paths).</p></li>
+<li><p>For each target year, calls <code class="docutils literal notranslate"><span class="pre">era5_bc.get_year_snapshot(year)</span></code> — which reads <code class="docutils literal notranslate"><span class="pre">region_mapping[BC]['timezone_convert']</span></code> and converts local midnight Jan 1 → UTC — then patches <code class="docutils literal notranslate"><span class="pre">cutout_config['snapshots']</span></code> in-place.</p></li>
+<li><p>Calls <code class="docutils literal notranslate"><span class="pre">get_era5_cutout()</span></code> per year with <strong>retry logic</strong> and <strong>inter-year throttling</strong> to respect CDS API queue limits.</p></li>
+<li><p>Validates coverage and file integrity after all downloads.</p></li>
+</ol>
+<div class="line-block">
+<div class="line"><strong>Timezone note:</strong></div>
+<div class="line">Snapshot UTC strings are derived automatically from <code class="docutils literal notranslate"><span class="pre">timezone_convert:</span> <span class="pre">Etc/GMT+8</span></code> in the BC region config.</div>
+<div class="line">POSIX <code class="docutils literal notranslate"><span class="pre">Etc/GMT+8</span></code> = UTC−8 (PST), so local midnight Jan 1 maps to <code class="docutils literal notranslate"><span class="pre">YYYY-01-01</span> <span class="pre">08:00:00</span> <span class="pre">UTC</span></code>.</div>
+<div class="line">End is <code class="docutils literal notranslate"><span class="pre">YYYY+1-01-01</span> <span class="pre">07:00:00</span> <span class="pre">UTC</span></code> (last local hour of the year) — no overlap between adjacent years.</div>
+</div>
+<p><strong>Prerequisite:</strong> A valid <code class="docutils literal notranslate"><span class="pre">~/.cdsapirc</span></code> with your CDS API key must exist on this machine.</p>
+</section>
+<hr class="docutils" />
+<section id="0-·-Configuration">
+<h2>0 · Configuration<a class="headerlink" href="#0-·-Configuration" title="Link to this heading">#</a></h2>
+<p>Edit <strong>only this cell</strong> before running the notebook.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">SCENARIO</span><span class="o">=</span><span class="s2">&quot;baseline&quot;</span>
+<span class="n">WEATHER_YEAR</span><span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="mi">2023</span><span class="p">)</span>
+<span class="c1"># ── Region &amp; resource ─────────────────────────────────────────────────────</span>
+<span class="n">CONFIG_FILE_PATH</span>   <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;config/CAN_baseline.yaml&quot;</span><span class="p">)</span>   <span class="c1"># adjust to your BC config location</span>
+<span class="n">REGION_SHORT_CODE</span>  <span class="o">=</span> <span class="s2">&quot;BC&quot;</span>
+<span class="n">RESOURCE_TYPE</span>      <span class="o">=</span> <span class="s2">&quot;wind&quot;</span>   <span class="c1"># &#39;wind&#39; | &#39;solar&#39;  — affects config lookups only</span>
+
+<span class="c1"># ── Weather years to download ─────────────────────────────────────────────</span>
+<span class="c1"># Each year produces an independent NetCDF cutout file.</span>
+<span class="c1"># ERA5 availability: 1940-present (CDS v2).</span>
+<span class="n">WEATHER_YEARS</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2025</span><span class="p">))</span>  <span class="c1"># adjust as needed; e.g. range(2015, 2024) for 2015-2023</span>
+
+<span class="c1"># ── Download control ─────────────────────────────────────────────────────</span>
+<span class="n">OVERWRITE_EXISTING</span>  <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># True: re-download even if .nc already exists on disk</span>
+
+<span class="c1"># ── CDS API throttling ────────────────────────────────────────────────────</span>
+<span class="c1"># CDS rejects simultaneous queued jobs from the same user.</span>
+<span class="c1"># INTER_YEAR_DELAY_S: pause between consecutive year downloads.</span>
+<span class="c1"># MAX_RETRIES: attempts per year before marking as failed.</span>
+<span class="c1"># RETRY_BACKOFF_S: base wait before first retry; doubles on each subsequent retry.</span>
+<span class="n">INTER_YEAR_DELAY_S</span>  <span class="o">=</span> <span class="mi">60</span>    <span class="c1"># seconds (set to 0 to disable; &gt;=60 recommended)</span>
+<span class="n">MAX_RETRIES</span>         <span class="o">=</span> <span class="mi">3</span>     <span class="c1"># per year</span>
+<span class="n">RETRY_BACKOFF_S</span>     <span class="o">=</span> <span class="mi">120</span>   <span class="c1"># seconds (first retry: 120 s, second: 240 s, ...)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Config   : </span><span class="si">{</span><span class="n">CONFIG_FILE_PATH</span><span class="si">}</span><span class="s2">  (exists: </span><span class="si">{</span><span class="n">CONFIG_FILE_PATH</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Region   : </span><span class="si">{</span><span class="n">REGION_SHORT_CODE</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Resource : </span><span class="si">{</span><span class="n">RESOURCE_TYPE</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Years    : </span><span class="si">{</span><span class="n">WEATHER_YEARS</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Inter-year delay  : </span><span class="si">{</span><span class="n">INTER_YEAR_DELAY_S</span><span class="si">}</span><span class="s2"> s&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retries / backoff : </span><span class="si">{</span><span class="n">MAX_RETRIES</span><span class="si">}</span><span class="s2"> x </span><span class="si">{</span><span class="n">RETRY_BACKOFF_S</span><span class="si">}</span><span class="s2"> s (doubling)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="1-·-Imports">
+<h2>1 · Imports<a class="headerlink" href="#1-·-Imports" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">RES.utility</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RES.era5_cutout</span><span class="w"> </span><span class="kn">import</span> <span class="n">ERA5Cutout</span>
+
+<span class="c1"># ── RESource package on path ───────────────────────────────────────────────</span>
+<span class="n">CODEBASE_ROOT</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;../codebase&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">CODEBASE_ROOT</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">CODEBASE_ROOT</span><span class="p">))</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RES package loaded from: </span><span class="si">{</span><span class="n">CODEBASE_ROOT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="1b-·-tqdm-backend-fix">
+<h3>1b · tqdm backend fix<a class="headerlink" href="#1b-·-tqdm-backend-fix" title="Link to this heading">#</a></h3>
+<p>Force <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> to use the <strong>standard text-based</strong> progress bar instead of the notebook ipywidgets backend.</p>
+<p><strong>Why:</strong> <code class="docutils literal notranslate"><span class="pre">atlite</span></code> internally calls <code class="docutils literal notranslate"><span class="pre">tqdm.notebook.tqdm</span></code> for download progress. In Jupyter environments where <code class="docutils literal notranslate"><span class="pre">ipywidgets</span></code> comm is not fully initialised, this fails with <code class="docutils literal notranslate"><span class="pre">LookupError:</span> <span class="pre">shell_parent</span> <span class="pre">ContextVar</span></code>. Replacing the class reference routes all progress output to plain stdout — no effect on download logic.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">tqdm.notebook</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tqdm.std</span>
+
+<span class="n">tqdm</span><span class="o">.</span><span class="n">notebook</span><span class="o">.</span><span class="n">tqdm</span> <span class="o">=</span> <span class="n">tqdm</span><span class="o">.</span><span class="n">std</span><span class="o">.</span><span class="n">tqdm</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;tqdm backend: notebook widget -&gt; text (ipywidgets comm bypass active)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="2-·-Instantiate-ERA5Cutout-(once)">
+<h2>2 · Instantiate ERA5Cutout (once)<a class="headerlink" href="#2-·-Instantiate-ERA5Cutout-(once)" title="Link to this heading">#</a></h2>
+<div class="line-block">
+<div class="line">The class constructor loads GADM boundaries and resolves config paths.</div>
+<div class="line">We do this once and reuse the instance across all years.</div>
+<div class="line">The cell below also previews what <code class="docutils literal notranslate"><span class="pre">get_year_snapshot()</span></code> produces for the first target year.</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">utils</span><span class="o">.</span><span class="n">print_module_title</span><span class="p">(</span><span class="s2">&quot;ERA5 Multi-Year Download — British Columbia&quot;</span><span class="p">)</span>
+
+<span class="n">era5_bc</span> <span class="o">=</span> <span class="n">ERA5Cutout</span><span class="p">(</span>
+    <span class="n">config_file_path</span>  <span class="o">=</span> <span class="n">CONFIG_FILE_PATH</span><span class="p">,</span>
+    <span class="n">region_short_code</span> <span class="o">=</span> <span class="n">REGION_SHORT_CODE</span><span class="p">,</span>
+    <span class="n">resource_type</span>     <span class="o">=</span> <span class="n">RESOURCE_TYPE</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Instance ready.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Country       : </span><span class="si">{</span><span class="n">era5_bc</span><span class="o">.</span><span class="n">country</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Region code   : </span><span class="si">{</span><span class="n">era5_bc</span><span class="o">.</span><span class="n">region_short_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Timezone      : </span><span class="si">{</span><span class="n">era5_bc</span><span class="o">.</span><span class="n">region_timezone</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Cutout root   : </span><span class="si">{</span><span class="n">era5_bc</span><span class="o">.</span><span class="n">cutout_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;root&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Grid (dx, dy) : (</span><span class="si">{</span><span class="n">era5_bc</span><span class="o">.</span><span class="n">cutout_config</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">deg, </span><span class="si">{</span><span class="n">era5_bc</span><span class="o">.</span><span class="n">cutout_config</span><span class="p">[</span><span class="s1">&#39;dy&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">deg)&quot;</span><span class="p">)</span>
+
+<span class="c1"># Preview snapshot strings for each target year</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Snapshot preview (derived from timezone_convert):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="s1">&#39;Year&#39;</span><span class="si">:</span><span class="s2">&lt;6</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;start (UTC)&#39;</span><span class="si">:</span><span class="s2">&lt;22</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;end (UTC)&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="s1">&#39;----&#39;</span><span class="si">:</span><span class="s2">&lt;6</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;-------------------&#39;</span><span class="si">:</span><span class="s2">&lt;22</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;-------------------&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">yr</span> <span class="ow">in</span> <span class="n">WEATHER_YEARS</span><span class="p">:</span>
+    <span class="n">s</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="n">era5_bc</span><span class="o">.</span><span class="n">get_snapshot</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">yr</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">yr</span><span class="si">:</span><span class="s2">&lt;6</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">s</span><span class="si">:</span><span class="s2">&lt;22</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="4-·-Pre-download-audit">
+<h2>4 · Pre-download audit<a class="headerlink" href="#4-·-Pre-download-audit" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Initialize an empty list to store each year&#39;s DataFrame</span>
+
+<span class="c1"># Generate the list of dataframes dynamically, filtering out warnings if needed</span>
+<span class="n">audit_dfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">era5_bc</span><span class="o">.</span><span class="n">audit_cutout</span><span class="p">(</span><span class="n">year</span><span class="p">)</span> <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">WEATHER_YEARS</span><span class="p">]</span>
+
+<span class="c1"># Combine them immediately</span>
+<span class="n">combined_audit_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">audit_dfs</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># 3. Apply style mapping and format for notebook display</span>
+<span class="n">display</span><span class="p">(</span>
+    <span class="n">combined_audit_df</span><span class="o">.</span><span class="n">style</span>
+    <span class="o">.</span><span class="n">map</span><span class="p">(</span>  <span class="c1"># Updated from .applymap to .map for Pandas 2.x compliance</span>
+        <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="s2">&quot;color: #2e7d32; font-weight: bold&quot;</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span>
+                  <span class="s2">&quot;color: #c62828; font-weight: bold&quot;</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">False</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;exists&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="c1"># Hardened to handle floats, ints, and ignore NaNs/Strings gracefully</span>
+        <span class="p">{</span><span class="s2">&quot;size_MB&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> MB&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;--&quot;</span><span class="p">}</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">WEATHER_YEARS</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">year</span> <span class="o">&lt;</span> <span class="mi">1940</span> <span class="ow">or</span> <span class="n">year</span> <span class="o">&gt;</span> <span class="mi">2024</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: Year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2"> is outside the typical ERA5 range (1940-2024). Check availability before downloading.&quot;</span><span class="p">)</span>
+    <span class="n">audit_df</span> <span class="o">=</span> <span class="n">era5_bc</span><span class="o">.</span><span class="n">audit_cutout</span><span class="p">(</span>
+                                <span class="n">year</span><span class="p">)</span>
+
+<span class="n">years_to_download</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">row</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">combined_audit_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
+    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;exists&quot;</span><span class="p">])</span> <span class="ow">or</span> <span class="n">OVERWRITE_EXISTING</span>
+<span class="p">]</span>
+<span class="n">years_skipped</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">WEATHER_YEARS</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">years_to_download</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Years to download : </span><span class="si">{</span><span class="n">years_to_download</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Years to skip     : </span><span class="si">{</span><span class="n">years_skipped</span><span class="si">}</span><span class="s2">  (already on disk; OVERWRITE_EXISTING=</span><span class="si">{</span><span class="n">OVERWRITE_EXISTING</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="5-·-Multi-year-ERA5-download-loop">
+<h2>5 · Multi-year ERA5 download loop<a class="headerlink" href="#5-·-Multi-year-ERA5-download-loop" title="Link to this heading">#</a></h2>
+<p>For each target year:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">patch_cutout_year()</span></code> calls <code class="docutils literal notranslate"><span class="pre">get_year_snapshot(year)</span></code> to compute timezone-correct UTC bounds and updates the instance in-place.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_era5_cutout()</span></code> submits monthly CDS API requests via atlite and writes to NetCDF.</p></li>
+<li><p>On <strong>CDS rate-limit rejections</strong> (<code class="docutils literal notranslate"><span class="pre">400:</span> <span class="pre">Number</span> <span class="pre">queued</span> <span class="pre">requests</span> <span class="pre">temporarily</span> <span class="pre">limited</span></code>), the loop waits with exponential backoff and retries up to <code class="docutils literal notranslate"><span class="pre">MAX_RETRIES</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">INTER_YEAR_DELAY_S</span></code> between years prevents simultaneous job queuing.</p></li>
+</ol>
+<blockquote>
+<div><p><strong>Runtime:</strong> BC at 0.25 deg is ~200-400 MB yr-1. CDS typically yields ~15-30 min per year.</p>
+</div></blockquote>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_CDS_RATE_LIMIT_PHRASES</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;temporarily limited&quot;</span><span class="p">,</span> <span class="s2">&quot;number queued&quot;</span><span class="p">,</span> <span class="s2">&quot;has been rejected&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_rate_limit_error</span><span class="p">(</span><span class="n">exc</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">phrase</span> <span class="ow">in</span> <span class="n">msg</span> <span class="k">for</span> <span class="n">phrase</span> <span class="ow">in</span> <span class="n">_CDS_RATE_LIMIT_PHRASES</span><span class="p">)</span>
+
+
+<span class="n">download_log</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">year</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">years_to_download</span><span class="p">):</span>
+
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_banner</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; Downloading ERA5 cutout -- BC -- </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span>
+
+    <span class="n">t0</span>      <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">status</span>  <span class="o">=</span> <span class="s2">&quot;failed&quot;</span>
+    <span class="n">err_msg</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">MAX_RETRIES</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">attempt</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">wait_s</span> <span class="o">=</span> <span class="n">RETRY_BACKOFF_S</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">attempt</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span>
+                <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Retry </span><span class="si">{</span><span class="n">attempt</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">MAX_RETRIES</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2"> -- waiting </span><span class="si">{</span><span class="n">wait_s</span><span class="si">}</span><span class="s2"> s...&quot;</span>
+            <span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">wait_s</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cutout</span><span class="p">,</span> <span class="n">region_boundary</span> <span class="o">=</span> <span class="n">era5_bc</span><span class="o">.</span><span class="n">get_era5_cutout</span><span class="p">(</span><span class="n">weather_year</span><span class="o">=</span><span class="n">year</span><span class="p">)</span>
+            <span class="n">status</span>  <span class="o">=</span> <span class="s2">&quot;success&quot;</span>
+            <span class="n">err_msg</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">break</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="n">err_msg</span>       <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+            <span class="n">is_rate_limit</span> <span class="o">=</span> <span class="n">_is_rate_limit_error</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span>
+                <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Attempt </span><span class="si">{</span><span class="n">attempt</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">MAX_RETRIES</span><span class="si">}</span><span class="s2"> FAILED for </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2"> &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="s1">&#39;rate-limit&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">is_rate_limit</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;other&#39;</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">err_msg</span><span class="p">[:</span><span class="mi">120</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">alert</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">is_rate_limit</span> <span class="ow">or</span> <span class="n">attempt</span> <span class="o">==</span> <span class="n">MAX_RETRIES</span><span class="p">:</span>
+                <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+                <span class="k">break</span>
+
+    <span class="n">elapsed</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">download_log</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">&quot;year&quot;</span>        <span class="p">:</span> <span class="n">year</span><span class="p">,</span>
+        <span class="s2">&quot;status&quot;</span>      <span class="p">:</span> <span class="n">status</span><span class="p">,</span>
+        <span class="s2">&quot;elapsed_min&quot;</span> <span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">elapsed</span> <span class="o">/</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="s2">&quot;cutout_path&quot;</span> <span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">era5_bc</span><span class="o">.</span><span class="n">get_cutout_path</span><span class="p">(</span><span class="n">year</span><span class="p">)),</span>
+        <span class="s2">&quot;error&quot;</span>       <span class="p">:</span> <span class="n">err_msg</span><span class="p">,</span>
+    <span class="p">})</span>
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2"> | status=</span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2"> | elapsed=</span><span class="si">{</span><span class="n">elapsed</span><span class="o">/</span><span class="mi">60</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> min&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">INTER_YEAR_DELAY_S</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">years_to_download</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Inter-year pause: </span><span class="si">{</span><span class="n">INTER_YEAR_DELAY_S</span><span class="si">}</span><span class="s2"> s...&quot;</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">INTER_YEAR_DELAY_S</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Download loop complete ---&quot;</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">download_log</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="6-·-Post-download-validation">
+<h2>6 · Post-download validation<a class="headerlink" href="#6-·-Post-download-validation" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">calendar</span>
+
+<span class="n">validation_rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">combined_audit_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">yr</span>   <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">])</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">])</span>
+    <span class="n">meta</span> <span class="o">=</span> <span class="n">era5_bc</span><span class="o">.</span><span class="n">validate_cutout_nc</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">meta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">validation_rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="n">yr</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;missing&quot;</span><span class="p">})</span>
+    <span class="k">elif</span> <span class="s2">&quot;error&quot;</span> <span class="ow">in</span> <span class="n">meta</span><span class="p">:</span>
+        <span class="n">validation_rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="n">yr</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;corrupt&quot;</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]})</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">expected</span>    <span class="o">=</span> <span class="mi">8784</span> <span class="k">if</span> <span class="n">calendar</span><span class="o">.</span><span class="n">isleap</span><span class="p">(</span><span class="n">yr</span><span class="p">)</span> <span class="k">else</span> <span class="mi">8760</span>
+        <span class="n">coverage_ok</span> <span class="o">=</span> <span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;n_timesteps&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">expected</span><span class="p">)</span>
+        <span class="n">validation_rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;year&quot;</span>        <span class="p">:</span> <span class="n">yr</span><span class="p">,</span>
+            <span class="s2">&quot;status&quot;</span>      <span class="p">:</span> <span class="s2">&quot;complete&quot;</span> <span class="k">if</span> <span class="n">coverage_ok</span> <span class="k">else</span> <span class="s2">&quot;partial&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;n_timesteps&quot;</span> <span class="p">:</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;n_timesteps&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;expected&quot;</span>    <span class="p">:</span> <span class="n">expected</span><span class="p">,</span>
+            <span class="s2">&quot;t_start&quot;</span>     <span class="p">:</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;t_start&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;t_end&quot;</span>       <span class="p">:</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;t_end&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;size_MB&quot;</span>     <span class="p">:</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;size_MB&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;variables&quot;</span>   <span class="p">:</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;variables&quot;</span><span class="p">]),</span>
+        <span class="p">})</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">validation_rows</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="7-·-Summary-manifest">
+<h2>7 · Summary manifest<a class="headerlink" href="#7-·-Summary-manifest" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">65</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  ERA5 MULTI-YEAR DOWNLOAD MANIFEST -- BC&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">65</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Timestamp  : </span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Config     : </span><span class="si">{</span><span class="n">CONFIG_FILE_PATH</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Region     : </span><span class="si">{</span><span class="n">REGION_SHORT_CODE</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Timezone   : </span><span class="si">{</span><span class="n">era5_bc</span><span class="o">.</span><span class="n">region_timezone</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Years      : </span><span class="si">{</span><span class="n">WEATHER_YEARS</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Grid       : dx=</span><span class="si">{</span><span class="n">era5_bc</span><span class="o">.</span><span class="n">cutout_config</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">deg, dy=</span><span class="si">{</span><span class="n">era5_bc</span><span class="o">.</span><span class="n">cutout_config</span><span class="p">[</span><span class="s1">&#39;dy&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">deg&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">download_log</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">download_log</span><span class="p">:</span>
+        <span class="n">flag</span> <span class="o">=</span> <span class="s2">&quot;v&quot;</span> <span class="k">if</span> <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;success&quot;</span> <span class="k">else</span> <span class="s2">&quot;x&quot;</span>
+        <span class="n">s</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="n">era5_bc</span><span class="o">.</span><span class="n">get_snapshot</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  [</span><span class="si">{</span><span class="n">flag</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">  | </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;elapsed_min&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> min&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;       error: </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;error&#39;</span><span class="p">][:</span><span class="mi">120</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  No years downloaded in this run (all already on disk).&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">years_skipped</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">yr</span> <span class="ow">in</span> <span class="n">years_skipped</span><span class="p">:</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">combined_audit_df</span><span class="p">[</span><span class="n">combined_audit_df</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">yr</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  [-] </span><span class="si">{</span><span class="n">yr</span><span class="si">}</span><span class="s2">  skipped | </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;size_MB&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> MB | </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">65</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Appendix-B-·-Extending-to-multiple-regions">
+<h2>Appendix B · Extending to multiple regions<a class="headerlink" href="#Appendix-B-·-Extending-to-multiple-regions" title="Link to this heading">#</a></h2>
+<p>Re-instantiate <code class="docutils literal notranslate"><span class="pre">ERA5Cutout</span></code> per region (boundaries differ). <code class="docutils literal notranslate"><span class="pre">patch_cutout_year()</span></code> and <code class="docutils literal notranslate"><span class="pre">get_year_snapshot()</span></code> work unchanged because they read <code class="docutils literal notranslate"><span class="pre">timezone_convert</span></code> from the instance’s own <code class="docutils literal notranslate"><span class="pre">region_short_code</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">region_code</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;BC&quot;</span><span class="p">,</span> <span class="s2">&quot;AB&quot;</span><span class="p">,</span> <span class="s2">&quot;SK&quot;</span><span class="p">]:</span>
+    <span class="n">era5_region</span> <span class="o">=</span> <span class="n">ERA5Cutout</span><span class="p">(</span>
+        <span class="n">config_file_path</span>  <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;config/config_</span><span class="si">{</span><span class="n">region_code</span><span class="si">}</span><span class="s2">.yaml&quot;</span><span class="p">),</span>
+        <span class="n">region_short_code</span> <span class="o">=</span> <span class="n">region_code</span><span class="p">,</span>
+        <span class="n">resource_type</span>     <span class="o">=</span> <span class="n">RESOURCE_TYPE</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">WEATHER_YEARS</span><span class="p">:</span>
+        <span class="n">patch_cutout_year</span><span class="p">(</span><span class="n">era5_region</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+        <span class="n">era5_region</span><span class="o">.</span><span class="n">get_era5_cutout</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Design-rationale">Design rationale</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#0-·-Configuration">0 · Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#1-·-Imports">1 · Imports</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#1b-·-tqdm-backend-fix">1b · tqdm backend fix</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#2-·-Instantiate-ERA5Cutout-(once)">2 · Instantiate ERA5Cutout (once)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#4-·-Pre-download-audit">4 · Pre-download audit</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#5-·-Multi-year-ERA5-download-loop">5 · Multi-year ERA5 download loop</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#6-·-Post-download-validation">6 · Post-download validation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#7-·-Summary-manifest">7 · Summary manifest</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Appendix-B-·-Extending-to-multiple-regions">Appendix B · Extending to multiple regions</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

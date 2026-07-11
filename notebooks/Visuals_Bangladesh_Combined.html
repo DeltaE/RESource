@@ -159,7 +159,8 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../notes/resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/case_BC.html">Data sources</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../notes/config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes/learning.html">Best Practices and Guidelines</a></li>
 
@@ -395,8 +396,8 @@ document.write(`
 </section>
 <section id="Section-1:-Import-Required-Libraries">
 <h2>Section 1: Import Required Libraries<a class="headerlink" href="#Section-1:-Import-Required-Libraries" title="Link to this heading">#</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
@@ -429,19 +430,11 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-✓ All required libraries imported successfully!
-</pre></div></div>
-</div>
 </section>
 <section id="Section-2:-Load-Configuration-and-Data">
 <h2>Section 2: Load Configuration and Data<a class="headerlink" href="#Section-2:-Load-Configuration-and-Data" title="Link to this heading">#</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load configuration file</span>
@@ -468,17 +461,8 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-✓ Configuration loaded for Bangladesh
-✓ Administrative divisions: [&#39;Barisal&#39;, &#39;Chittagong&#39;, &#39;Dhaka&#39;, &#39;Khulna&#39;, &#39;Mymensingh&#39;, &#39;Rajshahi&#39;, &#39;Rangpur&#39;, &#39;Sylhet&#39;]
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load processed data stores for all regions</span>
@@ -514,32 +498,10 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-yellow-fg">└&gt; Loading data stores for Bangladesh regions with RUN_ID: baseline</span>
-<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| ❌ Error: Key &#39;cells&#39; not found in ../data/store/resources_Bangladesh_BD-01_baseline.h5</span>
-<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| ❌ Error: Key &#39;boundary&#39; not found in ../data/store/resources_Bangladesh_BD-01_baseline.h5</span>
-<span class="ansi-white-intense-fg">  └&gt; RES.hdf5_handler| ❌ Error: Key &#39;lines&#39; not found in ../data/store/resources_Bangladesh_BD-01_baseline.h5</span>
-<span class="ansi-cyan-fg"> └&gt; ✓ Loaded data for region: BD-01 (Barisal)</span>
-  ⚠️  Store not found for region BD-02 (Chittagong): ../data/store/resources_Bangladesh_BD-02_baseline.h5
-<span class="ansi-cyan-fg"> └&gt; ✓ Loaded data for region: BD-03 (Dhaka)</span>
-  ⚠️  Store not found for region BD-04 (Khulna): ../data/store/resources_Bangladesh_BD-04_baseline.h5
-  ⚠️  Store not found for region BD-05 (Mymensingh): ../data/store/resources_Bangladesh_BD-05_baseline.h5
-  ⚠️  Store not found for region BD-06 (Rajshahi): ../data/store/resources_Bangladesh_BD-06_baseline.h5
-  ⚠️  Store not found for region BD-07 (Rangpur): ../data/store/resources_Bangladesh_BD-07_baseline.h5
-  ⚠️  Store not found for region BD-08 (Sylhet): ../data/store/resources_Bangladesh_BD-08_baseline.h5
-
-✓ Successfully loaded data for 2 out of 8 regions
-Available regions: [&#39;BD-01 (Barisal)&#39;, &#39;BD-03 (Dhaka)&#39;]
-</pre></div></div>
-</div>
 <section id="Load-Validation-Data-(if-available)">
 <h3>Load Validation Data (if available)<a class="headerlink" href="#Load-Validation-Data-(if-available)" title="Link to this heading">#</a></h3>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load existing renewable energy projects data for Bangladesh (if available)</span>
@@ -561,29 +523,20 @@ Available regions: [&#39;BD-01 (Barisal)&#39;, &#39;BD-03 (Dhaka)&#39;]
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-yellow-intense-fg ansi-bold">⚠️  ⚠️  Validation data for existing VREs not found at ../data/validation_data/existing_VREs_Bangladesh.csv</span>
-  You can create this file with columns: Project_Name, Technology, Capacity_MW, Longitude, Latitude
-</pre></div></div>
-</div>
 </section>
 </section>
 <section id="Section-3:-Create-Country-Overview-Map">
 <h2>Section 3: Create Country Overview Map<a class="headerlink" href="#Section-3:-Create-Country-Overview-Map" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">BGD_store</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;BD-03&#39;</span><span class="p">:</span> <span class="n">BGD_store</span><span class="p">[</span><span class="s1">&#39;BD-03&#39;</span><span class="p">]}</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create combined boundary for Bangladesh</span>
@@ -641,26 +594,11 @@ Available regions: [&#39;BD-01 (Barisal)&#39;, &#39;BD-03 (Dhaka)&#39;]
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_Bangladesh_Combined_10_0.png" src="../_images/notebooks_Visuals_Bangladesh_Combined_10_0.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-✓ Country overview map saved to: ../vis/Bangladesh/Bangladesh_Administrative_Divisions.png
-</pre></div></div>
-</div>
 </section>
 <section id="Section-4:-Display-Land-Use-Constraints-(GAEZ-Analysis)">
 <h2>Section 4: Display Land Use Constraints (GAEZ Analysis)<a class="headerlink" href="#Section-4:-Display-Land-Use-Constraints-(GAEZ-Analysis)" title="Link to this heading">#</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load GAEZ land cover legends and class mappings</span>
@@ -728,22 +666,11 @@ Available regions: [&#39;BD-01 (Barisal)&#39;, &#39;BD-03 (Dhaka)&#39;]
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-✓ Found GAEZ land cover configuration
-  Solar suitable classes: [2, 3, 5, 6, 8, 9]
-  Wind suitable classes: [2, 3, 5, 6, 8, 9]
-⚠️  GAEZ raster not found at: ../Rasters_in_use/faocmb_2010.tif
-</pre></div></div>
-</div>
 </section>
 <section id="Section-5:-Visualize-Solar-Resource-Distribution">
 <h2>Section 5: Visualize Solar Resource Distribution<a class="headerlink" href="#Section-5:-Visualize-Solar-Resource-Distribution" title="Link to this heading">#</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Combine all cell data for comprehensive solar analysis</span>
@@ -822,37 +749,11 @@ Available regions: [&#39;BD-01 (Barisal)&#39;, &#39;BD-03 (Dhaka)&#39;]
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-✓ Combined data from 1 regions
-  Total grid cells: 51
-  Available solar data columns: [&#39;potential_capacity_solar&#39;, &#39;capex_solar&#39;, &#39;fom_solar&#39;, &#39;vom_solar&#39;, &#39;grid_connection_cost_per_km_solar&#39;, &#39;tx_line_rebuild_cost_solar&#39;, &#39;Operational_life_solar&#39;, &#39;solar_CF_mean&#39;, &#39;lcoe_solar&#39;, &#39;lcoe_actualCap_solar&#39;]
-<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_Bangladesh_Combined_14_1.png" src="../_images/notebooks_Visuals_Bangladesh_Combined_14_1.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-✓ Solar CF map saved to: ../vis/Bangladesh/Bangladesh_Solar_CF.png
-</pre></div></div>
-</div>
 </section>
 <section id="Section-6:-Visualize-Solar-Capacity-Potential">
 <h2>Section 6: Visualize Solar Capacity Potential<a class="headerlink" href="#Section-6:-Visualize-Solar-Capacity-Potential" title="Link to this heading">#</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize solar capacity potential</span>
@@ -913,39 +814,11 @@ Available regions: [&#39;BD-01 (Barisal)&#39;, &#39;BD-03 (Dhaka)&#39;]
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_Bangladesh_Combined_16_1.png" src="../_images/notebooks_Visuals_Bangladesh_Combined_16_1.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-✓ Solar capacity map saved to: ../vis/Bangladesh/Bangladesh_Solar_Capacity.png
-
-📊 Solar Capacity Summary:
-  Total potential capacity: 2.8 GW
-  Maximum cell capacity: 820.3 MW
-  Average cell capacity: 54.5 MW
-</pre></div></div>
-</div>
 </section>
 <section id="Section-7:-Generate-LCOE-Analysis">
 <h2>Section 7: Generate LCOE Analysis<a class="headerlink" href="#Section-7:-Generate-LCOE-Analysis" title="Link to this heading">#</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># LCOE (Levelized Cost of Energy) Analysis for Solar</span>
@@ -1041,40 +914,11 @@ Available regions: [&#39;BD-01 (Barisal)&#39;, &#39;BD-03 (Dhaka)&#39;]
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_Bangladesh_Combined_18_1.png" src="../_images/notebooks_Visuals_Bangladesh_Combined_18_1.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-✓ LCOE analysis saved to: ../vis/Bangladesh/Bangladesh_Solar_LCOE_Analysis.png
-
-💰 Solar LCOE Summary:
-  Average LCOE: $60.4/MWh
-  Minimum LCOE: $58.3/MWh
-  Maximum LCOE: $64.1/MWh
-  Most economic range: $50-60 with 0.2 GW potential
-</pre></div></div>
-</div>
 </section>
 <section id="Section-8:-Show-Transmission-Infrastructure">
 <h2>Section 8: Show Transmission Infrastructure<a class="headerlink" href="#Section-8:-Show-Transmission-Infrastructure" title="Link to this heading">#</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize transmission infrastructure from OpenStreetMap data</span>
@@ -1156,28 +1000,11 @@ Available regions: [&#39;BD-01 (Barisal)&#39;, &#39;BD-03 (Dhaka)&#39;]
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_Bangladesh_Combined_20_0.png" src="../_images/notebooks_Visuals_Bangladesh_Combined_20_0.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-✓ Transmission grid map saved to: ../vis/Bangladesh/Bangladesh_Transmission_Grid.png
-  Total transmission lines: 518
-  Voltage classes found: [&#39;&lt;12 kV&#39;, &#39;≥220 kV&#39;, &#39;132–220 kV&#39;, &#39;12–25 kV&#39;]
-</pre></div></div>
-</div>
 </section>
 <section id="Section-9:-Generate-Resource-Potential-Summary-by-Divisions">
 <h2>Section 9: Generate Resource Potential Summary by Divisions<a class="headerlink" href="#Section-9:-Generate-Resource-Potential-Summary-by-Divisions" title="Link to this heading">#</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate comprehensive summary by administrative divisions</span>
@@ -1294,27 +1121,11 @@ Available regions: [&#39;BD-01 (Barisal)&#39;, &#39;BD-03 (Dhaka)&#39;]
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-🏛️  BANGLADESH RENEWABLE ENERGY POTENTIAL BY ADMINISTRATIVE DIVISIONS
-================================================================================
-Division_Code Division_Name  Grid_Cells  Total_Solar_Capacity_MW  Avg_Solar_CF  Min_Solar_LCOE  Avg_Solar_LCOE Land_Area_km2  Total_Wind_Capacity_MW
-        BD-03         Dhaka          51                   2778.7           0.2            58.3            60.4        20,594                  4783.5
-✓ Summary table saved to: ../results/Bangladesh/Bangladesh_Division_Summary.csv
-\n🇧🇩 NATIONAL SUMMARY:
-  Total Solar Potential: 2.8 GW
-  National Average CF: 0.194
-  National Average LCOE: $60.4/MWh
-</pre></div></div>
-</div>
 </section>
 <section id="Section-10:-Export-Final-Visualizations-and-Create-Report">
 <h2>Section 10: Export Final Visualizations and Create Report<a class="headerlink" href="#Section-10:-Export-Final-Visualizations-and-Create-Report" title="Link to this heading">#</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a comprehensive final summary and export high-resolution figures</span>
@@ -1486,56 +1297,6 @@ Division_Code Division_Name  Grid_Cells  Total_Solar_Capacity_MW  Avg_Solar_CF  
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;📋 Analysis completed! Check the generated files for detailed results.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-📊 FINAL BANGLADESH RENEWABLE ENERGY RESOURCE ANALYSIS SUMMARY
-======================================================================
-✅ DATA AVAILABILITY:
-   • Processed divisions: 1/8
-   • Available divisions: [&#39;BD-03 (Dhaka)&#39;]
-   • Missing divisions: [&#39;BD-01 (Barisal)&#39;, &#39;BD-02 (Chittagong)&#39;, &#39;BD-04 (Khulna)&#39;, &#39;BD-05 (Mymensingh)&#39;, &#39;BD-06 (Rajshahi)&#39;, &#39;BD-07 (Rangpur)&#39;, &#39;BD-08 (Sylhet)&#39;]
-   • Note: Run RESource analysis for missing divisions to get complete coverage
-<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
-<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
-<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
-<span class="ansi-cyan-fg"> └&gt; Please cross check with Solar CF map with GLobal Solar Atlas Data from : https://globalsolaratlas.info/download/country_name</span>
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Visuals_Bangladesh_Combined_24_1.png" src="../_images/notebooks_Visuals_Bangladesh_Combined_24_1.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-\n✅ EXPORTS COMPLETED:
-   📊 Dashboard: ../vis/Bangladesh/Bangladesh_Complete_Dashboard.png
-   📁 All visualizations (6 files):
-      • Bangladesh_Administrative_Divisions.png
-      • Bangladesh_Complete_Dashboard.png
-      • Bangladesh_Solar_Capacity.png
-      • Bangladesh_Transmission_Grid.png
-      • Bangladesh_Solar_LCOE_Analysis.png
-      • Bangladesh_Solar_CF.png
-   📈 Data exports (1 files):
-      • Bangladesh_Division_Summary.csv
-\n🎯 NEXT STEPS:
-   1. Run RESource analysis for missing divisions: [&#39;BD-01 (Barisal)&#39;, &#39;BD-02 (Chittagong)&#39;, &#39;BD-04 (Khulna)&#39;, &#39;BD-05 (Mymensingh)&#39;, &#39;BD-06 (Rajshahi)&#39;, &#39;BD-07 (Rangpur)&#39;, &#39;BD-08 (Sylhet)&#39;]
-   2. Debug wind resource processing (Global Wind Atlas issue)
-   3. Validate results with actual renewable energy projects in Bangladesh
-   4. Consider policy constraints and grid integration requirements
-\n======================================================================
-📋 Analysis completed! Check the generated files for detailed results.
-</pre></div></div>
 </div>
 </section>
 </section>
