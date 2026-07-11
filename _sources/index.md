@@ -10,9 +10,8 @@ __One of the many solutions ?__
 
 __A Modular and Transparent Open-Source Framework for Sub-National Assessment of Solar and Land-based Wind Potential.__
 
-```{admonition}
-Resource is now published ! [Mapping feasible renewable transition space: Land-use, conservation, and grid-access constraints on wind and solar in British Columbia](https://doi.org/10.1016/j.energ.2026.100077)
-```
+:sparkle:Resource is now published :  [Mapping feasible renewable transition space: Land-use, conservation, and grid-access constraints on wind and solar in British Columbia](https://doi.org/10.1016/j.energ.2026.100077)
+
 
 ```{warning}
 This library is under active development.
