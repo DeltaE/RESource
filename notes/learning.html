@@ -30,6 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=35ab0c98" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -42,6 +43,7 @@
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notes/learning';</script>
+    <script src="../_static/custom.js?v=0cd7556c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Data Sources and Supply Chain" href="data.html" />
@@ -159,9 +161,9 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Best Practices and Guidelines</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
 </ul>
@@ -341,7 +343,8 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-wind-turbines">Selecting Wind Turbines</a><ul class="nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Best Practices and Guidelines</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-wind-turbines">Selecting Wind Turbines</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#iec-class-selection">IEC Class Selection</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#iec-class-layer-mapping-to-select-turbine-technologies-for-wind-energy-estimation">IEC Class Layer Mapping to Select Turbine Technologies for Wind Energy Estimation</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a><ul class="nav section-nav flex-column">
@@ -352,12 +355,12 @@ document.write(`
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-solar-pv-panels">Selecting Solar PV Panels</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-solar-pv-panels">Selecting Solar PV Panels</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#panel-attribute-configurations">Panel Attribute Configurations:</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#land-availability-calculation-from-vector-vs-raster-data">Land Availability Calculation from Vector vs Raster Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open-street-map-osm-data">Open Street Map (OSM) Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open-street-map-osm-data">Open Street Map (OSM) Data</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#goal">Goal:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-in-resource-linking-tool">Usage in RESource (Linking Tool):</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tool">Tool :</a></li>
@@ -365,6 +368,27 @@ document.write(`
 </ul>
 </li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#why-subnational-dissolved-polygons-were-used-instead-of-a-single-country-boundary">Why subnational dissolved polygons were used instead of a single country boundary</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-issue">Core issue</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-a-single-country-boundary-was-not-sufficient">Why a single country boundary was not sufficient</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Example</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation">Interpretation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-possible-correction-methods">Two possible correction methods</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#method-a-area-proportional-scaling">Method A: Area-proportional scaling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#method-b-geometry-level-availability-breakdown">Method B: Geometry-level availability breakdown</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#method-applied-here">Method applied here</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-is-justified-with-100-m-data">Why this is justified with 100 m data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#role-of-raster-and-vector-data-in-atlite-availability-calculations">Role of raster and vector data in atlite availability calculations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-matters-even-if-capacities-are-later-aggregated">Why this matters even if capacities are later aggregated</a></li>
+</ul>
+</li>
+</ul>
+
             </nav>
         </div>
     </div>
@@ -618,6 +642,125 @@ e.g. we have used 'aeroway' vector data in this analysis.</p></li>
 </section>
 </section>
 </section>
+<section id="why-subnational-dissolved-polygons-were-used-instead-of-a-single-country-boundary">
+<h1>Why subnational dissolved polygons were used instead of a single country boundary<a class="headerlink" href="#why-subnational-dissolved-polygons-were-used-instead-of-a-single-country-boundary" title="Link to this heading">#</a></h1>
+<section id="core-issue">
+<h2>Core issue<a class="headerlink" href="#core-issue" title="Link to this heading">#</a></h2>
+<p>In the earlier workflow, boundary cells at the national edge could be unintentionally <strong>double counted or misallocated</strong> when an ERA5 cell intersected multiple geometries. This happened because the availability and capacity calculations were first performed at the <strong>country-dissolved ERA5-cell level</strong>, and only afterward the trimmed cell was overlaid with smaller internal geometries.</p>
+<p>A critical distinction is that the final “sites” in this workflow are <strong>not the ERA5 cells themselves</strong>. Rather, the sites are the <strong>geometries inside the ERA5 cells</strong>, which emerge after applying higher-resolution raster and vector constraints. These internal geometries are therefore the planning-relevant units for capacity allocation.</p>
+</section>
+<section id="why-a-single-country-boundary-was-not-sufficient">
+<h2>Why a single country boundary was not sufficient<a class="headerlink" href="#why-a-single-country-boundary-was-not-sufficient" title="Link to this heading">#</a></h2>
+<p>Using a single dissolved country boundary is adequate for <strong>national masking</strong>, but it is not adequate for <strong>intra-national attribution</strong>. It only answers whether a cell lies inside the country, not how capacity should be distributed across subnational units within that cell.</p>
+<p>To preserve intra-national spatial resolution, polygons dissolved by <strong>subnational administrative units</strong> were used instead of a single country geometry. This allows each resulting geometry to be assigned to a planning-relevant administrative region, enabling region-wise aggregation of:</p>
+<ul class="simple">
+<li><p>land availability,</p></li>
+<li><p>capacity potential,</p></li>
+<li><p>and cost metrics such as LCOE.</p></li>
+</ul>
+<p>In contrast, a single country polygon removes the internal regional structure that is needed for subnational energy planning and municipal or regional investment prioritization.</p>
+</section>
+<section id="id1">
+<h2>Example<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<table>
+  <tr>
+    <td style="width: 40%; vertical-align: top; text-align: center;">
+      <img src="../_static/NorthMacedonia_example_learning.png"
+           alt="Illustration of a trimmed ERA5 cell and internal municipality geometries"
+           width="520">
+    </td>
+    <td style="width: 60%; vertical-align: top; padding-left: 18px;">
+<section id="interpretation">
+<h3>Interpretation<a class="headerlink" href="#interpretation" title="Link to this heading">#</a></h3>
+<ul>
+<li><p>The <strong>purple polygon</strong> shows a single <strong>ERA5 cell</strong> after trimming to the country or regional boundary.</p></li>
+<li><p>The <strong>five internal polygons</strong> correspond to <strong>municipality-level geometries</strong> located inside that same trimmed ERA5 cell.</p></li>
+<li><p>Since these polygons are subdivisions of one parent ERA5 cell, they initially share the <strong>same underlying cell-level attributes</strong>.</p></li>
+<li><p>This example highlights the distinction between the <strong>meteorological grid cell</strong> and the <strong>planning-relevant administrative geometries</strong> embedded within it.</p>
+  </td>
+</tr>
+</li>
+</ul>
+</table>
+<p>The earlier workflow was:</p>
+<ol class="arabic simple">
+<li><p>pass the <strong>country-dissolved geometry</strong> into the availability matrix,</p></li>
+<li><p>calculate the <strong>capacity matrix</strong>,</p></li>
+<li><p>derive capacity at the <strong>ERA5-cell level</strong>,</p></li>
+<li><p>then overlay the trimmed ERA5 cell with municipality geometries.</p></li>
+</ol>
+<p>The problem with this sequence is that each municipality geometry could end up absorbing the <strong>same cell-level capacity</strong>, even though those geometries may differ strongly in their actual developable land. In other words, the boundary trimming created multiple internal geometries, but the capacity signal was still inherited from the undifferentiated ERA5 cell.</p>
+</section>
+</section>
+<section id="two-possible-correction-methods">
+<h2>Two possible correction methods<a class="headerlink" href="#two-possible-correction-methods" title="Link to this heading">#</a></h2>
+<section id="method-a-area-proportional-scaling">
+<h3>Method A: Area-proportional scaling<a class="headerlink" href="#method-a-area-proportional-scaling" title="Link to this heading">#</a></h3>
+<p>One correction is to assume that land availability within the ERA5 cell is <strong>uniformly distributed</strong> across all internal geometries. Under that assumption, municipal capacity can be scaled as:</p>
+<p><strong>municipal capacity = ERA5-cell availability × municipality geometry area</strong></p>
+<p>This is simple and internally consistent if no better spatial information exists. However, it assumes that developable land is spread evenly within the ERA5 cell. Where municipalities differ strongly in land cover, slope, protected areas, buffers, or other siting constraints, this can become spatially misleading. It may allocate too much capacity to municipalities with little suitable land and too little to those with more developable land.</p>
+</section>
+<section id="method-b-geometry-level-availability-breakdown">
+<h3>Method B: Geometry-level availability breakdown<a class="headerlink" href="#method-b-geometry-level-availability-breakdown" title="Link to this heading">#</a></h3>
+<p>The second correction is to calculate availability at the <strong>municipality-geometry level</strong>, rather than only at the ERA5-cell level. In this case, each internal geometry receives its own availability estimate derived from the finer-resolution spatial data. Capacity is then calculated from that geometry-specific availability.</p>
+<p>This approach preserves the true spatial heterogeneity of developable land within a single ERA5 cell and avoids the artificial assumption of uniform distribution.</p>
+</section>
+</section>
+<section id="method-applied-here">
+<h2>Method applied here<a class="headerlink" href="#method-applied-here" title="Link to this heading">#</a></h2>
+<p><strong>Method B was applied.</strong></p>
+<p>This is preferable because the workflow already uses <strong>high-resolution spatial inputs</strong>, including raster and vector constraints, to determine land availability. Since those data capture internal differences within the ERA5 cell, capacity allocation should also reflect those differences.</p>
+<p>This makes the results more spatially defensible, especially when municipalities within the same ERA5 cell differ substantially in their actual developable land.</p>
+</section>
+<section id="why-this-is-justified-with-100-m-data">
+<h2>Why this is justified with 100 m data<a class="headerlink" href="#why-this-is-justified-with-100-m-data" title="Link to this heading">#</a></h2>
+<p>The use of high-resolution data is important here. Availability was derived using <strong>100 m raster information together with vector exclusions/constraints</strong>, so the workflow is not relying on coarse cell-wide assumptions alone. If a municipality geometry contains many 100 m pixels, then its developable fraction is meaningfully estimated from actual spatial detail rather than from a uniform average.</p>
+<p>This means the geometry-level availability values are not arbitrary subdivisions of the ERA5 cell. They are grounded in the spatial pattern of:</p>
+<ul class="simple">
+<li><p>land cover,</p></li>
+<li><p>exclusion zones,</p></li>
+<li><p>protected areas,</p></li>
+<li><p>buffers,</p></li>
+<li><p>and other vector/raster siting constraints.</p></li>
+</ul>
+<p>As a result, geometry-level capacity estimates are relevant for municipal or subregional interpretation, provided the geometry is large enough to be represented meaningfully at the 100 m resolution.</p>
+</section>
+<section id="role-of-raster-and-vector-data-in-atlite-availability-calculations">
+<h2>Role of raster and vector data in atlite availability calculations<a class="headerlink" href="#role-of-raster-and-vector-data-in-atlite-availability-calculations" title="Link to this heading">#</a></h2>
+<p>In <code class="docutils literal notranslate"><span class="pre">atlite</span></code>, availability is typically computed by evaluating which parts of a grid cell remain suitable after applying exclusion layers. In this workflow, that logic is enriched by combining:</p>
+<ul class="simple">
+<li><p><strong>high-resolution raster layers</strong> (for example land cover or gridded suitability data), and</p></li>
+<li><p><strong>vector layers</strong> (for example administrative boundaries, protected areas, lakes, buffers, or other exclusion geometries).</p></li>
+</ul>
+<p>Conceptually, the process is:</p>
+<ol class="arabic simple">
+<li><p>start from the coarse ERA5 grid cell,</p></li>
+<li><p>evaluate suitability inside that cell using fine-resolution raster data,</p></li>
+<li><p>exclude or trim unsuitable portions using vector constraints,</p></li>
+<li><p>retain only the eligible land fragments,</p></li>
+<li><p>aggregate those eligible fragments into geometry-level availability values.</p></li>
+</ol>
+<p>Because of this raster–vector combination, the final “site” is better interpreted as a <strong>reality-corrected developable geometry inside an ERA5 cell</strong>, not as the ERA5 cell itself.</p>
+</section>
+<section id="why-this-matters-even-if-capacities-are-later-aggregated">
+<h2>Why this matters even if capacities are later aggregated<a class="headerlink" href="#why-this-matters-even-if-capacities-are-later-aggregated" title="Link to this heading">#</a></h2>
+<p>Even if the final model aggregates all municipal geometries into a single resource or supply option, the spatial breakdown remains valuable.</p>
+<p>It helps answer questions such as:</p>
+<ul class="simple">
+<li><p>where the aggregated capacity is actually located,</p></li>
+<li><p>which municipalities or subregions contribute most,</p></li>
+<li><p>whether investment potential is spatially concentrated or dispersed,</p></li>
+<li><p>and which areas may deserve prioritization for planning, infrastructure, or permitting.</p></li>
+</ul>
+<p>So although the optimization model may later collapse these sites into a larger resource class, the finer spatial decomposition still provides important planning intelligence. It supports interpretation, transparency, and investment prioritization in ways that a single aggregated number cannot.</p>
+<p>The key methodological shift was moving from <strong>country-level ERA5-cell capacity allocation</strong> to <strong>subnational geometry-level availability and capacity allocation</strong>. This avoided misallocation at boundaries, preserved intra-national spatial structure, and better reflected the true distribution of developable land captured by the 100 m raster and vector exclusion workflow.</p>
+<p>In short:</p>
+<ul class="simple">
+<li><p>a <strong>single country boundary</strong> is sufficient for national masking,</p></li>
+<li><p>but <strong>subnational dissolved polygons plus geometry-level availability</strong> are needed for spatially just and planning-relevant capacity allocation.</p></li>
+</ul>
+</section>
+</section>
 
 
                 </article>
@@ -664,7 +807,8 @@ e.g. we have used 'aeroway' vector data in this analysis.</p></li>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-wind-turbines">Selecting Wind Turbines</a><ul class="nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Best Practices and Guidelines</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-wind-turbines">Selecting Wind Turbines</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#iec-class-selection">IEC Class Selection</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#iec-class-layer-mapping-to-select-turbine-technologies-for-wind-energy-estimation">IEC Class Layer Mapping to Select Turbine Technologies for Wind Energy Estimation</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a><ul class="nav section-nav flex-column">
@@ -675,12 +819,12 @@ e.g. we have used 'aeroway' vector data in this analysis.</p></li>
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-solar-pv-panels">Selecting Solar PV Panels</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-solar-pv-panels">Selecting Solar PV Panels</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#panel-attribute-configurations">Panel Attribute Configurations:</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#land-availability-calculation-from-vector-vs-raster-data">Land Availability Calculation from Vector vs Raster Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open-street-map-osm-data">Open Street Map (OSM) Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open-street-map-osm-data">Open Street Map (OSM) Data</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#goal">Goal:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-in-resource-linking-tool">Usage in RESource (Linking Tool):</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tool">Tool :</a></li>
@@ -688,6 +832,27 @@ e.g. we have used 'aeroway' vector data in this analysis.</p></li>
 </ul>
 </li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#why-subnational-dissolved-polygons-were-used-instead-of-a-single-country-boundary">Why subnational dissolved polygons were used instead of a single country boundary</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-issue">Core issue</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-a-single-country-boundary-was-not-sufficient">Why a single country boundary was not sufficient</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Example</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation">Interpretation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-possible-correction-methods">Two possible correction methods</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#method-a-area-proportional-scaling">Method A: Area-proportional scaling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#method-b-geometry-level-availability-breakdown">Method B: Geometry-level availability breakdown</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#method-applied-here">Method applied here</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-is-justified-with-100-m-data">Why this is justified with 100 m data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#role-of-raster-and-vector-data-in-atlite-availability-calculations">Role of raster and vector data in atlite availability calculations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-matters-even-if-capacities-are-later-aggregated">Why this matters even if capacities are later aggregated</a></li>
+</ul>
+</li>
+</ul>
+
   </nav></div>
 
 </div></div>

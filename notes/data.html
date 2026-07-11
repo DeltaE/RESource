@@ -30,6 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=35ab0c98" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -42,6 +43,7 @@
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notes/data';</script>
+    <script src="../_static/custom.js?v=0cd7556c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Contributing Developers" href="developers.html" />
@@ -159,9 +161,9 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learning.html">Best Practices and Guidelines</a></li>
+
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
 </ul>
@@ -341,43 +343,43 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-source-categories">Data Source Categories</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#access-methods">Access Methods</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#power-system-infrastructure-data">1. Power System Infrastructure Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#power-system-infrastructure-data">1. Power System Infrastructure Data</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coders-canadian-open-data-exchange-for-renewable-energy-systems">1.1 CODERS (Canadian Open Data Exchange for Renewable Energy Systems)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#climate-and-weather-data">2. Climate and Weather Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#climate-and-weather-data">2. Climate and Weather Data</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#era5-ecmwf-reanalysis-v5">2.1 ERA5 (ECMWF Reanalysis v5)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#geospatial-and-administrative-data">3. Geospatial and Administrative Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#geospatial-and-administrative-data">3. Geospatial and Administrative Data</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gadm-global-administrative-areas">3.1 GADM (Global Administrative Areas)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cpcad-canadian-protected-and-conserved-areas-database">3.2 CPCAD (Canadian Protected and Conserved Areas Database)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#land-constraint-and-suitability-data">4. Land Constraint and Suitability Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#land-constraint-and-suitability-data">4. Land Constraint and Suitability Data</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaez-global-agro-ecological-zones">4.1 GAEZ (Global Agro-Ecological Zones)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corine-land-cover">4.2 CORINE Land Cover</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#osm-openstreetmap-infrastructure-constraints">4.3 OSM (OpenStreetMap) Infrastructure Constraints</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#renewable-energy-resource-data">5. Renewable Energy Resource Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#renewable-energy-resource-data">5. Renewable Energy Resource Data</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gwa-global-wind-atlas">5.1 GWA (Global Wind Atlas)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nrel-atb-annual-technology-baseline">5.2 NREL ATB (Annual Technology Baseline)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#oedb-open-energy-database-wind-turbine-library">5.3 OEDB (Open Energy Database) Wind Turbine Library</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demographics-and-demand-data">6. Demographics and Demand Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demographics-and-demand-data">6. Demographics and Demand Data</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ceei-community-energy-and-emissions-inventory">6.1 CEEI (Community Energy and Emissions Inventory)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#population-data">6.2 Population Data</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#worldpop">6.3 WorldPop</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#legends-and-color-coding-standardization">7. Legends and Color Coding Standardization</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#legends-and-color-coding-standardization">7. Legends and Color Coding Standardization</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-legend-files">7.1 Available Legend Files</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clc-2018-legend-csv">1. <strong>CLC_2018_legend.csv</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exclusion-2017-legend-csv">2. <strong>exclusion_2017_legend.csv</strong></a></li>
@@ -387,7 +389,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#legend-file-structure">7.2 Legend File Structure</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-and-configuration">Usage and Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-and-configuration">Usage and Configuration</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#color-map-integration">Color Map Integration</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-version-harmonization">Data Version Harmonization</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#customizing-colors">Customizing Colors</a></li>
@@ -1345,43 +1347,43 @@ RESource's <a class="reference external" href="https://github.com/DeltaE/RESourc
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-source-categories">Data Source Categories</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#access-methods">Access Methods</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#power-system-infrastructure-data">1. Power System Infrastructure Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#power-system-infrastructure-data">1. Power System Infrastructure Data</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coders-canadian-open-data-exchange-for-renewable-energy-systems">1.1 CODERS (Canadian Open Data Exchange for Renewable Energy Systems)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#climate-and-weather-data">2. Climate and Weather Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#climate-and-weather-data">2. Climate and Weather Data</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#era5-ecmwf-reanalysis-v5">2.1 ERA5 (ECMWF Reanalysis v5)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#geospatial-and-administrative-data">3. Geospatial and Administrative Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#geospatial-and-administrative-data">3. Geospatial and Administrative Data</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gadm-global-administrative-areas">3.1 GADM (Global Administrative Areas)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cpcad-canadian-protected-and-conserved-areas-database">3.2 CPCAD (Canadian Protected and Conserved Areas Database)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#land-constraint-and-suitability-data">4. Land Constraint and Suitability Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#land-constraint-and-suitability-data">4. Land Constraint and Suitability Data</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaez-global-agro-ecological-zones">4.1 GAEZ (Global Agro-Ecological Zones)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corine-land-cover">4.2 CORINE Land Cover</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#osm-openstreetmap-infrastructure-constraints">4.3 OSM (OpenStreetMap) Infrastructure Constraints</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#renewable-energy-resource-data">5. Renewable Energy Resource Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#renewable-energy-resource-data">5. Renewable Energy Resource Data</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gwa-global-wind-atlas">5.1 GWA (Global Wind Atlas)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nrel-atb-annual-technology-baseline">5.2 NREL ATB (Annual Technology Baseline)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#oedb-open-energy-database-wind-turbine-library">5.3 OEDB (Open Energy Database) Wind Turbine Library</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demographics-and-demand-data">6. Demographics and Demand Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demographics-and-demand-data">6. Demographics and Demand Data</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ceei-community-energy-and-emissions-inventory">6.1 CEEI (Community Energy and Emissions Inventory)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#population-data">6.2 Population Data</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#worldpop">6.3 WorldPop</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#legends-and-color-coding-standardization">7. Legends and Color Coding Standardization</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#legends-and-color-coding-standardization">7. Legends and Color Coding Standardization</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-legend-files">7.1 Available Legend Files</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clc-2018-legend-csv">1. <strong>CLC_2018_legend.csv</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exclusion-2017-legend-csv">2. <strong>exclusion_2017_legend.csv</strong></a></li>
@@ -1391,7 +1393,7 @@ RESource's <a class="reference external" href="https://github.com/DeltaE/RESourc
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#legend-file-structure">7.2 Legend File Structure</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-and-configuration">Usage and Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-and-configuration">Usage and Configuration</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#color-map-integration">Color Map Integration</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-version-harmonization">Data Version Harmonization</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#customizing-colors">Customizing Colors</a></li>

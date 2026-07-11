@@ -30,6 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=35ab0c98" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -42,6 +43,7 @@
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notes/New_Region_Setup_Guide';</script>
+    <script src="../_static/custom.js?v=0cd7556c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -159,9 +161,9 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learning.html">Best Practices and Guidelines</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
 </ul>
@@ -342,26 +344,26 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#critical-errors-and-solutions">Critical Errors and Solutions</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#critical-errors-and-solutions">Critical Errors and Solutions</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unicode-character-encoding-error">1. <strong>Unicode Character Encoding Error</strong> ⚠️</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gadm-region-name-mismatch">2. <strong>GADM Region Name Mismatch</strong> ❌</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-wind-atlas-gwa-file-system-error">3. <strong>Global Wind Atlas (GWA) File System Error</strong> ❌</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conservation-lands-warning">4. <strong>Conservation Lands Warning</strong> ⚠️</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#successful-components">Successful Components ✅</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#successful-components">Successful Components ✅</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#working-features">Working Features:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generated-outputs">Generated Outputs:</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-recommendations-for-new-regions">Configuration Recommendations for New Regions</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-recommendations-for-new-regions">Configuration Recommendations for New Regions</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-naming-convention">1. <strong>Regional Naming Convention</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coordinate-reference-system-crs">2. <strong>Coordinate Reference System (CRS)</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#time-zone-configuration">3. <strong>Time Zone Configuration</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resource-capacity-limits">4. <strong>Resource Capacity Limits</strong></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-level-improvements-needed">Module-Level Improvements Needed</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-level-improvements-needed">Module-Level Improvements Needed</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#high-priority">High Priority:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medium-priority">Medium Priority:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#low-priority">Low Priority:</a></li>
@@ -617,26 +619,26 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#critical-errors-and-solutions">Critical Errors and Solutions</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#critical-errors-and-solutions">Critical Errors and Solutions</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unicode-character-encoding-error">1. <strong>Unicode Character Encoding Error</strong> ⚠️</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gadm-region-name-mismatch">2. <strong>GADM Region Name Mismatch</strong> ❌</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-wind-atlas-gwa-file-system-error">3. <strong>Global Wind Atlas (GWA) File System Error</strong> ❌</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conservation-lands-warning">4. <strong>Conservation Lands Warning</strong> ⚠️</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#successful-components">Successful Components ✅</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#successful-components">Successful Components ✅</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#working-features">Working Features:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generated-outputs">Generated Outputs:</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-recommendations-for-new-regions">Configuration Recommendations for New Regions</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-recommendations-for-new-regions">Configuration Recommendations for New Regions</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-naming-convention">1. <strong>Regional Naming Convention</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coordinate-reference-system-crs">2. <strong>Coordinate Reference System (CRS)</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#time-zone-configuration">3. <strong>Time Zone Configuration</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resource-capacity-limits">4. <strong>Resource Capacity Limits</strong></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-level-improvements-needed">Module-Level Improvements Needed</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-level-improvements-needed">Module-Level Improvements Needed</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#high-priority">High Priority:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medium-priority">Medium Priority:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#low-priority">Low Priority:</a></li>

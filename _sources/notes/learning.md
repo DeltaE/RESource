@@ -142,10 +142,25 @@ In contrast, a single country polygon removes the internal regional structure th
 
 ## Example
 
+<table>
+  <tr>
+    <td style="width: 40%; vertical-align: top; text-align: center;">
+      <img src="../_static/NorthMacedonia_example_learning.png"
+           alt="Illustration of a trimmed ERA5 cell and internal municipality geometries"
+           width="520">
+    </td>
+    <td style="width: 60%; vertical-align: top; padding-left: 18px;">
 
-| Example                 | What Happened ?                              | 
-|--------------------------|----------------------------------------------|
-| <img src="../_static/NorthMacedonia_example_learning.png" alt="NorthMacedonia_example_learning" width="300"/>       | the **purple trimmed ERA5 cell**, represents a single ERA5 cell after clipping by the country or regional boundary, the **five internal shapes** represent municipality-level geometries within that same ERA5 cell, and because they originate from the same ERA5 cell, they initially inherit the same cell-level spatial context|
+### Interpretation
+
+- The **purple polygon** shows a single **ERA5 cell** after trimming to the country or regional boundary.
+- The **five internal polygons** correspond to **municipality-level geometries** located inside that same trimmed ERA5 cell.
+- Since these polygons are subdivisions of one parent ERA5 cell, they initially share the **same underlying cell-level attributes**.
+- This example highlights the distinction between the **meteorological grid cell** and the **planning-relevant administrative geometries** embedded within it.
+
+    </td>
+  </tr>
+</table>
 
 The earlier workflow was:
 

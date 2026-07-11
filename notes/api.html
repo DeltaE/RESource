@@ -30,6 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=35ab0c98" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -42,6 +43,7 @@
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notes/api';</script>
+    <script src="../_static/custom.js?v=0cd7556c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Documentation Build Guide" href="documentation_guide.html" />
@@ -158,8 +160,7 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="case_BC.html">Data sources</a></li>
-
+<li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learning.html">Best Practices and Guidelines</a></li>
 
@@ -342,7 +343,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-workflow-classes">Core Workflow Classes</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-workflow-classes">Core Workflow Classes</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resource-builder">RESource Builder</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spatial-grid-management">Spatial Grid Management</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cell-capacity-processing">Cell Capacity Processing</a></li>
@@ -351,7 +352,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#economic-evaluation">Economic Evaluation</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specialized-modules">Specialized Modules</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specialized-modules">Specialized Modules</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#annual-technology-baseline-atb">Annual Technology Baseline (ATB)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-land-cover">Global Land Cover</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-wind-atlas">Global Wind Atlas</a></li>
@@ -377,7 +378,7 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-management">Configuration Management</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-storage">Data Storage</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-assessment-workflow">Basic Assessment Workflow</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-by-step-analysis">Step-by-Step Analysis</a></li>
 </ul>
@@ -6233,7 +6234,7 @@ intelligent updates to avoid data duplication.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-workflow-classes">Core Workflow Classes</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-workflow-classes">Core Workflow Classes</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resource-builder">RESource Builder</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spatial-grid-management">Spatial Grid Management</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cell-capacity-processing">Cell Capacity Processing</a></li>
@@ -6242,7 +6243,7 @@ intelligent updates to avoid data duplication.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#economic-evaluation">Economic Evaluation</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specialized-modules">Specialized Modules</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specialized-modules">Specialized Modules</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#annual-technology-baseline-atb">Annual Technology Baseline (ATB)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-land-cover">Global Land Cover</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-wind-atlas">Global Wind Atlas</a></li>
@@ -6268,7 +6269,7 @@ intelligent updates to avoid data duplication.</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-management">Configuration Management</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-storage">Data Storage</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-assessment-workflow">Basic Assessment Workflow</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-by-step-analysis">Step-by-Step Analysis</a></li>
 </ul>

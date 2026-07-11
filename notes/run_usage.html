@@ -30,6 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=35ab0c98" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -42,6 +43,7 @@
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notes/run_usage';</script>
+    <script src="../_static/custom.js?v=0cd7556c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -159,9 +161,9 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learning.html">Best Practices and Guidelines</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
 </ul>
@@ -341,13 +343,13 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-reference">🚀 Quick Reference</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-reference">🚀 Quick Reference</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#command-syntax">Command Syntax</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">Key Features</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#command-reference-table">📋 Command Reference Table</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-configurations">🌍 Regional Configurations</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-configurations">🌍 Regional Configurations</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-region-sets">Available Region Sets</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#region-code-reference">Region Code Reference</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#canadian-provinces">Canadian Provinces</a></li>
@@ -356,7 +358,7 @@ document.write(`
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#colored-output-guide">🎨 Colored Output Guide</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#colored-output-guide">🎨 Colored Output Guide</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#color-coding-system">Color Coding System</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#terminal-output-examples">Terminal Output Examples</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#successful-configuration-load">Successful Configuration Load</a></li>
@@ -366,13 +368,13 @@ document.write(`
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-usage-patterns">🛠️ Advanced Usage Patterns</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-usage-patterns">🛠️ Advanced Usage Patterns</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partial-region-processing">Partial Region Processing</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development-workflows">Development Workflows</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-recovery">Error Recovery</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-requirements">🔧 Installation Requirements</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-requirements">🔧 Installation Requirements</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#required-dependencies">Required Dependencies</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-enhancements">Optional Enhancements</a></li>
 </ul>
@@ -746,7 +748,7 @@ python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;
 <p>This enhanced <code class="docutils literal notranslate"><span class="pre">run.py</span></code> functionality is documented across:</p>
 <ul class="simple">
 <li><p><strong><a class="reference internal" href="quickstart.html"><span class="std std-doc">Quickstart Guide</span></a></strong> - Basic usage examples</p></li>
-<li><p><strong><span class="xref myst">Setup Guide</span></strong> - Comprehensive setup and installation guide</p></li>
+<li><p><strong><a class="reference internal" href="#../../../SETUP.md"><span class="xref myst">Setup Guide</span></a></strong> - Comprehensive setup and installation guide</p></li>
 <li><p><strong><a class="reference internal" href="resource_builder.html"><span class="std std-doc">Resource Builder</span></a></strong> - Integration with analysis pipeline</p></li>
 <li><p><strong><a class="reference internal" href="#../../README.md"><span class="xref myst">README.md</span></a></strong> - Project overview and quick reference</p></li>
 </ul>
@@ -781,13 +783,13 @@ python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-reference">🚀 Quick Reference</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-reference">🚀 Quick Reference</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#command-syntax">Command Syntax</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">Key Features</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#command-reference-table">📋 Command Reference Table</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-configurations">🌍 Regional Configurations</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-configurations">🌍 Regional Configurations</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-region-sets">Available Region Sets</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#region-code-reference">Region Code Reference</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#canadian-provinces">Canadian Provinces</a></li>
@@ -796,7 +798,7 @@ python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#colored-output-guide">🎨 Colored Output Guide</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#colored-output-guide">🎨 Colored Output Guide</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#color-coding-system">Color Coding System</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#terminal-output-examples">Terminal Output Examples</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#successful-configuration-load">Successful Configuration Load</a></li>
@@ -806,13 +808,13 @@ python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-usage-patterns">🛠️ Advanced Usage Patterns</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-usage-patterns">🛠️ Advanced Usage Patterns</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partial-region-processing">Partial Region Processing</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development-workflows">Development Workflows</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-recovery">Error Recovery</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-requirements">🔧 Installation Requirements</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-requirements">🔧 Installation Requirements</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#required-dependencies">Required Dependencies</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-enhancements">Optional Enhancements</a></li>
 </ul>
