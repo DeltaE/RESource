@@ -17,6 +17,8 @@ default_coders_cfg_file_path = "credentials/coders_api.yaml"
 CODERS_CREDENTIALS_SOURCE = (
     "https://github.com/eliasinul/modeling_inventory/blob/main/PyPSA/coders_api.yaml"
 )
+DEFAULT_CONNECTION_NODE_TYPES = ("Generation", "Terminal")
+DEFAULT_EXCLUDED_NODE_SUFFIXES = ("INT", "IPT", "SWS", "JCT")
 
 
 def load_api_key(file_path=default_coders_cfg_file_path) -> tuple[str | None, str | None]:
@@ -220,9 +222,7 @@ class CODERSData(AttributesParser):
                 alert=True,
             )
         else:
-            utils.print_update(
-                level=2, message=f"CODERS API key loaded from: {credentials_path}"
-            )
+            utils.print_update(level=2, message=f"CODERS API key loaded from: {credentials_path}")
             utils.print_update(level=3, message=f"CODERS credentials loaded for user: {user}")
 
         # Load CODERS data config
@@ -394,6 +394,61 @@ class CODERSData(AttributesParser):
         # Convert the DataFrame to a GeoDataFrame
         gdf = gpd.GeoDataFrame(df, geometry="geometry", crs="EPSG:4326")
         return gdf
+
+    def filter_connection_substations(
+        self,
+        substations: gpd.GeoDataFrame,
+        transmission_lines: pd.DataFrame | None = None,
+    ) -> gpd.GeoDataFrame:
+        """Filter CODERS substations to configured generation-connection candidates."""
+        filter_config = self.coders_data_config.get("connection_filter", {})
+        if not filter_config.get("enabled", True):
+            return substations.copy()
+
+        eligible_types = filter_config.get(
+            "eligible_node_types", list(DEFAULT_CONNECTION_NODE_TYPES)
+        )
+        if "node_type" not in substations.columns:
+            raise ValueError("CODERS substations are missing the required 'node_type' column")
+        filtered = substations[substations["node_type"].isin(eligible_types)].copy()
+
+        excluded_suffixes = set(
+            filter_config.get("excluded_node_suffixes", list(DEFAULT_EXCLUDED_NODE_SUFFIXES))
+        )
+        if excluded_suffixes:
+            if "node_code" not in filtered.columns:
+                raise ValueError("CODERS substations are missing the required 'node_code' column")
+            node_suffixes = filtered["node_code"].astype("string").str.rsplit("_", n=1).str[-1]
+            filtered = filtered[~node_suffixes.isin(excluded_suffixes)].copy()
+
+        if filter_config.get("require_transmission_endpoint", True):
+            if transmission_lines is None:
+                raise ValueError("CODERS transmission lines are required by connection_filter")
+            endpoint_columns = {
+                "network_node_code_starting",
+                "network_node_code_ending",
+            }
+            missing_columns = endpoint_columns.difference(transmission_lines.columns)
+            if missing_columns:
+                raise ValueError(
+                    "CODERS transmission lines are missing endpoint columns: "
+                    + ", ".join(sorted(missing_columns))
+                )
+            endpoint_codes = pd.concat(
+                [transmission_lines[column] for column in sorted(endpoint_columns)],
+                ignore_index=True,
+            ).dropna()
+            filtered = filtered[filtered["node_code"].isin(endpoint_codes)].copy()
+
+        utils.print_update(
+            level=PRINT_LEVEL_BASE,
+            message=(
+                f"CODERS connection filter retained {len(filtered)}/{len(substations)} "
+                f"substations (node types: {', '.join(eligible_types)}; excluded suffixes: "
+                f"{', '.join(sorted(excluded_suffixes)) or 'none'})."
+            ),
+        )
+        return filtered
 
     def get_table_canada(self, table_name: str, force_update: bool = False):
         """Get generator data for all of Canada.

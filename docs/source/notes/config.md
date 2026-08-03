@@ -11,7 +11,54 @@ An __interactive user interface is under development__ to replace this config an
 
 ## Overview
 
-This document provides comprehensive documentation for the RESource tool configuration file (example provided for the Canadian config file [`config_CAN.yaml`](https://github.com/DeltaE/RESource/blob/main/config/config_CAN.yaml)).
+RESource separates stable regional contracts from decision-specific scenario
+overrides. Regional contracts live in `config/CAN/base.yaml`,
+`config/WB6/base.yaml`, and `config/BGD/base.yaml`; runnable scenarios are stored
+in each region's `scenarios/` directory.
+
+### Base and scenario inheritance
+
+A scenario declares its base with a relative `extends` path:
+
+```yaml
+extends: ../base.yaml
+
+Scenario:
+  run_id: NO_BUFFERS
+  Description: No buffers scenario
+
+capacity_disaggregation:
+  transmission:
+    proximity_filter: 50
+```
+
+Mappings merge recursively. Scalars and lists replace their base values. A list
+can explicitly append entries with `$append`:
+
+```yaml
+custom_land_layers:
+  vectors:
+    $append:
+    - name: regional_policy_layer
+      root: data/downloaded_data/custom_land_layers/policy
+      geojson: policy.geojson
+```
+
+Top-level keys not declared by the base, incompatible mapping/value types, missing
+base files, and inheritance cycles are rejected. Relative `extends` paths resolve
+from the declaring file.
+
+Inspect configuration resolution without running a workflow:
+
+```bash
+resource config/CAN/scenarios/policy_1.yaml --show-config
+resource config/CAN/scenarios/policy_1.yaml --show-overrides
+resource config/CAN/scenarios/policy_1.yaml --validate-only
+```
+
+Each workflow stores the resolved configuration and provenance containing source
+paths, SHA-256 hashes, and overridden leaf paths. Lists replace by default so
+scientific class sets and exclusion definitions cannot merge implicitly.
 
 **Version:** 1.0
 **Release Year:** 2025
@@ -84,18 +131,28 @@ snapshots_tz_BC:
 ### GADM (Global Administrative Areas)
 
 - **Root Directory:** `data/downloaded_data/GADM`
+- **Storage lifecycle:** RESource does not create this download directory for new
+  runs. Country boundaries are fetched in memory and only the selected processed
+  region is retained under the configured `processed` directory. A pre-existing
+  country GeoJSON in `root` remains readable as a legacy cache.
 - **Processed Directory:** `data/processed_data/regions`
 - **Field Mapping:**
   - `NAME_0`: Country
   - `NAME_1`: Province
   - `NAME_2`: Region
 
-### Government of Canada Data Sources
+### Government of Canada Custom Data Sources
+
+Government-provided non-spatial regional inputs are configured below
+`custom_land_layers.Gov`. Conservation lands are spatial exclusions and therefore
+use a named entry under `custom_land_layers.vectors`. Archived configurations with
+a top-level `Gov` key remain readable during migration. Durable inputs use
+dataset-specific directories beneath `data/downloaded_data/custom_land_layers/`.
 
 #### Conservation Lands
 
 - **URL:** [Canadian Protected and Conserved Areas Database](https://data-donnees.az.ec.gc.ca/api/file?path=%2Fspecies%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FDatabases%2FProtectedConservedArea_2023.zip)
-- **Root Directory:** `data/downloaded_data/Gov/Conservation_Lands`
+- **Root Directory:** `data/downloaded_data/custom_land_layers/Conservation_Lands`
 - **Data Name:** ProtectedConservedArea
 - **GDB Layer:** ProtectedConservedArea_2023
 
@@ -136,13 +193,13 @@ Canadian provinces and territories are mapped to numeric codes (1-21), including
 
 #### Population Data
 
-- **Root Directory:** `data/downloaded_data/Gov/Population`
+- **Root Directory:** `data/downloaded_data/custom_land_layers/Population`
 - **Data File:** Population_Projections.csv
 - **Skip Rows:** 6
 
 #### Community Energy and Emissions Inventory (CEEI)
 
-- **Root Directory:** `data/downloaded_data/Gov/CEEI`
+- **Root Directory:** `data/downloaded_data/custom_land_layers/CEEI`
 - **Data Files:**
   - Buildings: `bc_utilities_energy_and_emissions_data_at_the_community_level.xlsx`
   - Transportation: `bc_on_road_transportation_data_at_the_community_level.xlsx`
@@ -177,11 +234,21 @@ Canadian provinces and territories are mapped to numeric codes (1-21), including
   `credentials/coders_api.yaml`. See [`credentials/README.md`](https://github.com/DeltaE/RESource/blob/main/credentials/README.md).
 - **Security:** Do not commit the downloaded credential file or print its API key.
 - **Data Types:** network (substations and transmission lines)
+- **Connection filter:** Active Canadian scenarios screen candidate substations
+  with `CODERS.connection_filter`. The default retains `Generation` and `Terminal`
+  node types only when their node code is referenced by a CODERS transmission-line
+  endpoint, and excludes `INT`, `IPT`, `SWS`, and `JCT` node-code suffixes. This is
+  a planning proxy, not a finding of available interconnection capacity.
 
 ### GAEZ (Global Agro-Ecological Zones)
 
-- **Root Directory:** `data/downloaded_data/GAEZ`
+- **Downloaded Source Root:** `data/downloaded_data/GAEZ`
+- **Processed Regional Root:** `data/processed_data/GAEZ/<region>/`
 - **Source:** [LR.zip](https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip)
+- **Storage lifecycle:** The directly fetched archive is retained under downloaded
+  data. Selectively extracted global rasters use repository scratch storage and are
+  cleared after processing. Regional clipped GeoTIFFs persist below
+  `data/processed_data/GAEZ/<region>/` and are reused.
 
 #### Raster Types
 
@@ -225,6 +292,11 @@ Canadian provinces and territories are mapped to numeric codes (1-21), including
 - **Time Period:** 2023-01-01 07:00:00 to 2024-01-01 06:00:00
 
 ### Global Wind Atlas (GWA)
+
+Country-scale GWA rasters are downloaded into an operating-system temporary
+directory and clipped immediately. Only region-prefixed outputs, such as
+`BC_Canada_wspd_100m.tif`, are retained under the configured GWA root. Existing
+regional outputs are reused, so reruns do not download the country raster again.
 
 - **Root Directory:** `data/downloaded_data/GWA`
 - **Data Fields:**
@@ -316,17 +388,27 @@ The configuration supports custom raster and vector layers for specialized land 
 ```yaml
 custom_land_layers:
   rasters:
-    raster_1:
-      raster: {}
-      class_exclusion: {}
-      buffer: {}
-      invert: 'False'
+  - name: CanGov_LandCover_2020
+    source: https://example.org/landcover.tif
+    root: data/downloaded_data/custom_land_layers/LandCover
+    raster: landcover.tif
+    data_license: https://example.org/license
+    source_res_meters: 30
+    target_res_meters: 100
+    class_inclusion:
+      solar: [8, 10]
+      wind: [2, 5, 8]
   vectors:
-    vector_1:
+  - vector_1:
       geometry: {}
       buffer: null
       invert: 'False'
 ```
+
+Missing custom rasters are streamed from `source` into the configured `root`, then
+processed from `root/raster`. Keep these datasets under
+`data/downloaded_data/custom_land_layers/LandCover/`; temporary partial downloads use the
+ignored repository scratch directory and are never installed as final inputs.
 
 ---
 

@@ -14,7 +14,10 @@ default_CRS:
   degrees: EPSG:4326 # WGS 84; used for raw data storage and any processing steps that can be done in lat/lon without significant distortion;
   meters: EPSG:3347 # NAD83 / Statistics Canada Lambert;
 
-weather_year: 2020 # calendar year to target for ERA5 cutout and associated timeseries; should be a recent year with typical weather patterns; used by AttributesParser.weather_year() property to derive cutout snapshot aligned to local midnight; also used in scenario naming for clear documentation of weather assumptions
+weather_year: 2024 # calendar year to target for ERA5 cutout and associated timeseries; should be a recent year with typical weather patterns; used by AttributesParser.weather_year() property to derive cutout snapshot aligned to local midnight; also used in scenario naming for clear documentation of weather assumptions
+
+economic_parameters:
+  discount_rate: 0.07 # WACC; used to compute CRF for LCOE proxy
 
 region_mapping:
   BC:
@@ -29,6 +32,7 @@ region_mapping:
     sub_region_mapping: {} # optional; only needed if sub-regional results are desired
     GWA_country_code: CAN # for GWA API queries; must be ISO 3166-1 alpha-3 code harmonized with GWA conventions
     CRS_meters: EPSG:3005 # BC Albers; used for all processing and analysis steps, including cutout retrieval, to avoid reprojection-induced distortions; must be harmonized with GWA CRS_meters for direct raster comparisons
+
   AB:
     name: Alberta
     land_area_km2: 642,317
@@ -107,8 +111,6 @@ region_mapping:
     GWA_country_code: CAN
     CRS_meters: EPSG:3978
 
-
-
 GADM:
   root: data/downloaded_data/GADM
   processed: data/processed_data/regions
@@ -117,9 +119,6 @@ GADM:
     NAME_0: Country
     NAME_1: Province
     NAME_2: Region
-
-economic_parameters:
-  discount_rate: 0.07 # WACC; used to compute CRF for LCOE proxy
 
 cutout:
   root: data/downloaded_data/cutout/
@@ -131,81 +130,6 @@ cutout:
   #   - '2023-01-01 07:00:00'
   #   end:
   #   - '2024-01-01 06:00:00'
-Gov:
-  conservation_lands:
-    url: https://data-donnees.az.ec.gc.ca/api/file?path=%2Fspecies%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FDatabases%2FProtectedConservedArea_2023.zip
-    root: data/downloaded_data/Gov/Conservation_Lands
-    data_name: ProtectedConservedArea
-    gdb_layer: ProtectedConservedArea_2023
-    IUCN_CAT_mapping:
-      1: Strict Nature Reserve
-      2: Wilderness Area
-      3: National Park
-      4: Natural Monument or Feature
-      5: Habitat/Species Management Area
-      6: Protected Landscape/Seascape
-      7: Protected Area with Sustainable Use of Natural Resources
-      8: Interim Sites (unknown specifics)
-      9: OECM areas
-    LOCATION_mapping:
-      Alberta: 1
-      British Columbia: 2
-      Manitoba: 3
-      New Brunswick: 4
-      Newfoundland and Labrador: 5
-      Northwest Territories: 6
-      Nova Scotia: 7
-      Nunavut: 8
-      Ontario: 9
-      Prince Edward Island: 10
-      Quebec: 11
-      Saskatchewan: 12
-      Yukon: 13
-      Coastal Arctic Marine: 14
-      Coastal Atlantic Marine: 15
-      Coastal Pacific Marine: 16
-      Offshore Arctic Marine: 17
-      Offshore Atlantic Marine: 18
-      Offshore Pacific Marine: 19
-      Arctic Marine Coastal/Offshore: 20
-      Offshore Arctic/Atlantic Marine: 21
-    LAND_OWNER_mapping:
-      1: Federal Govt.
-      2: Provincial / territorial Govt
-      3: Municipal government
-      4: Indigenous Community/People
-      5: Communal ownership
-      6: Individual landowners
-      7: For-profit organizations
-      8: Non-profit organizations
-      9: Joint ownership
-      10: Multiple ownership
-      11: Contested Ownership
-      12: not known or reported
-    data_license: https://catalogue.ec.gc.ca/geonetwork/oilsands/api/records/6c343726-1e92-451a-876a-76e17d398a1c
-  Population:
-    root: data/downloaded_data/Gov/Population
-    datafile: Population_Projections.csv
-    skiprows: 6
-    different_name_mapping:
-      Columbia Shuswap: Columbia-Shuswap
-      Strathcona: Comox-Strathcona
-      Metro Vancouver: Greater Vancouver
-      Metro-Vancouver: Greater Vancouver
-      qathet: Powell River
-      North Coast: Skeena-Queen Charlotte
-      Stikine (Census Division): Stikine
-      Northern Rockies (Census Division): Northern Rockies
-  CEEI:
-    root: data/downloaded_data/Gov/CEEI
-    datafile:
-      buildings: bc_utilities_energy_and_emissions_data_at_the_community_level.xlsx
-      transportation: bc_on_road_transportation_data_at_the_community_level.xlsx
-      waste: bc_municipal_solid_waste_data_at_the_community_level.xlsx
-    source:
-      buildings: https://www2.gov.bc.ca/assets/gov/environment/climate-change/data/ceei/bc_utilities_energy_and_emissions_data_at_the_community_level.xlsx
-      transportation: https://www2.gov.bc.ca/assets/gov/environment/climate-change/data/ceei/bc_on_road_transportation_data_at_the_community_level.xlsx
-      waste: https://www2.gov.bc.ca/assets/gov/environment/climate-change/data/ceei/bc_municipal_solid_waste_data_at_the_community_level.xlsx
 NREL:
   ATB:
     root: data/downloaded_data/NREL/ATB
@@ -254,6 +178,11 @@ CODERS:
   api_documentation: http://api.sesit.ca
   credentials_source: https://github.com/eliasinul/modeling_inventory/blob/main/PyPSA/coders_api.yaml
   credentials_path: credentials/coders_api.yaml
+  connection_filter:
+    enabled: true
+    eligible_node_types: [Generation, Terminal]
+    excluded_node_suffixes: [INT, IPT, SWS, JCT]
+    require_transmission_endpoint: true
   data_pull:
     root: data/downloaded_data/CODERS
     substations: network
@@ -262,7 +191,7 @@ GAEZ:
   root: data/downloaded_data/GAEZ
   source: https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip
   zip_file: LR.zip
-  Rasters_in_use_direct: Rasters_in_use
+  processed_root: data/processed_data/GAEZ
   raster_types:
   - name: exclusion_areas
     raster: exclusion_2017.tif
@@ -285,7 +214,7 @@ GAEZ:
       - 6
       - 7
   - name: terrain_resources
-    raster: slpmed30s.tif
+    raster: slpmed05.tif
     zip_extract_direct: LR/ter
     color_map: terrain
     stepwise_plot_title: Excluding Terrain Slope
@@ -326,7 +255,7 @@ GWA:
 capacity_disaggregation:
 
   solar:
-    max_capacity: 5
+    # max_capacity: 10
     landuse_intensity: 1.45
     cost_data: data/processed_data/solar/utility_PV_Class7_cost_moderate_NREL_ATB2024.csv
     NREL_ATB_technology: UtilityPV
@@ -360,7 +289,7 @@ capacity_disaggregation:
           Interim Sites (unknown specifics): 500
           OECM areas: 100
   wind:
-    max_capacity: 15
+    # max_capacity: 15
     landuse_intensity: 3
     cost_data: data/processed_data/wind/land_based_wind_T3_cost_moderate_NREL_ATB2024.csv
     WCSS_tolerance: 0.03
@@ -422,15 +351,39 @@ capacity_disaggregation:
     buses: data/processed_data/buses_BC.csv
     lines: data/processed_data/lines_BC.csv
 custom_land_layers:
+  Gov:
+    Population:
+      root: data/downloaded_data/custom_land_layers/Population
+      datafile: Population_Projections.csv
+      skiprows: 6
+      different_name_mapping:
+        Columbia Shuswap: Columbia-Shuswap
+        Strathcona: Comox-Strathcona
+        Metro Vancouver: Greater Vancouver
+        Metro-Vancouver: Greater Vancouver
+        qathet: Powell River
+        North Coast: Skeena-Queen Charlotte
+        Stikine (Census Division): Stikine
+        Northern Rockies (Census Division): Northern Rockies
+    CEEI:
+      root: data/downloaded_data/custom_land_layers/CEEI
+      datafile:
+        buildings: bc_utilities_energy_and_emissions_data_at_the_community_level.xlsx
+        transportation: bc_on_road_transportation_data_at_the_community_level.xlsx
+        waste: bc_municipal_solid_waste_data_at_the_community_level.xlsx
+      source:
+        buildings: https://www2.gov.bc.ca/assets/gov/environment/climate-change/data/ceei/bc_utilities_energy_and_emissions_data_at_the_community_level.xlsx
+        transportation: https://www2.gov.bc.ca/assets/gov/environment/climate-change/data/ceei/bc_on_road_transportation_data_at_the_community_level.xlsx
+        waste: https://www2.gov.bc.ca/assets/gov/environment/climate-change/data/ceei/bc_municipal_solid_waste_data_at_the_community_level.xlsx
   rasters:
   - name: CanGov_LandCover_2020
     source: https://datacube-prod-data-public.s3.ca-central-1.amazonaws.com/store/land/landcover/landcover-2020-classification.tif
-    root: data/downloaded_data/Gov/LandCover
+    root: data/downloaded_data/custom_land_layers/LandCover
     raster: landcover-2020-classification.tif
     data_license: https://open.canada.ca/en/open-government-licence-canada
     source_res_meters: 30
     target_res_meters: 100
-    legends: data/legends/LandCover_CANgov_2020_legend.csv
+    legends: src/RESource/assets/legends/LandCover_CANgov_2020_legend.csv
     class_inclusion:
       solar:
       - 8
@@ -447,3 +400,57 @@ custom_land_layers:
       - 13
       - 15
       - 16
+
+  vectors:
+  - name: conservation_lands
+    provider: government_conservation
+    url: https://data-donnees.az.ec.gc.ca/api/file?path=%2Fspecies%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FDatabases%2FProtectedConservedArea_2023.zip
+    root: data/downloaded_data/custom_land_layers/Conservation_Lands
+    data_name: ProtectedConservedArea
+    gdb_layer: ProtectedConservedArea_2023
+    IUCN_CAT_mapping:
+      1: Strict Nature Reserve
+      2: Wilderness Area
+      3: National Park
+      4: Natural Monument or Feature
+      5: Habitat/Species Management Area
+      6: Protected Landscape/Seascape
+      7: Protected Area with Sustainable Use of Natural Resources
+      8: Interim Sites (unknown specifics)
+      9: OECM areas
+    LOCATION_mapping:
+      Alberta: 1
+      British Columbia: 2
+      Manitoba: 3
+      New Brunswick: 4
+      Newfoundland and Labrador: 5
+      Northwest Territories: 6
+      Nova Scotia: 7
+      Nunavut: 8
+      Ontario: 9
+      Prince Edward Island: 10
+      Quebec: 11
+      Saskatchewan: 12
+      Yukon: 13
+      Coastal Arctic Marine: 14
+      Coastal Atlantic Marine: 15
+      Coastal Pacific Marine: 16
+      Offshore Arctic Marine: 17
+      Offshore Atlantic Marine: 18
+      Offshore Pacific Marine: 19
+      Arctic Marine Coastal/Offshore: 20
+      Offshore Arctic/Atlantic Marine: 21
+    LAND_OWNER_mapping:
+      1: Federal Govt.
+      2: Provincial / territorial Govt
+      3: Municipal government
+      4: Indigenous Community/People
+      5: Communal ownership
+      6: Individual landowners
+      7: For-profit organizations
+      8: Non-profit organizations
+      9: Joint ownership
+      10: Multiple ownership
+      11: Contested Ownership
+      12: not known or reported
+    data_license: https://catalogue.ec.gc.ca/geonetwork/oilsands/api/records/6c343726-1e92-451a-876a-76e17d398a1c

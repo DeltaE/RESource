@@ -204,11 +204,14 @@
 <li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assumptions.html">Modeling assumptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learning.html">Best Practices and Guidelines</a></li>
 
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development_pipeline.html">Development pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wind_bias_correction.html">ERA5–GWA wind-speed bias correction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="era5_reference_climatology.html">Ten-year ERA5 reference climatology</a></li>
 <li class="toctree-l1"><a class="reference internal" href="step_cache.html">RESource Step Cache</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
@@ -424,9 +427,9 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#legends-and-color-coding-standardization">7. Legends and Color Coding Standardization</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-legend-files">7.1 Available Legend Files</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clc-2018-legend-csv">1. <strong>CLC_2018_legend.csv</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exclusion-2017-legend-csv">2. <strong>exclusion_2017_legend.csv</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaez-slpmed05-legend-csv">3. <strong>gaez_slpmed05_legend.csv</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#faocmb-2010-legend-csv">4. <strong>faocmb_2010_legend.csv</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaez-exclusion-legend-csv">2. <strong>gaez_exclusion_legend.csv</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaez-terrains-legend-csv">3. <strong>gaez_terrains_legend.csv</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaez-landcover-legend-csv">4. <strong>gaez_landcover_legend.csv</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cpcad-legends-csv">5. <strong>CPCAD_legends.csv</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#legend-file-structure">7.2 Legend File Structure</a></li>
 </ul>
@@ -559,6 +562,8 @@ Available data tables include: generators, substations, transmission_lines, hydr
 <li><p>Fetches data from CODERS API using authenticated requests</p></li>
 <li><p>Caches data locally in pickle format for improved performance</p></li>
 <li><p>Filters data by province/region as configured</p></li>
+<li><p>Filters candidate connection substations using the configured CODERS
+node types and transmission-line endpoint topology</p></li>
 <li><p>Converts tabular data to GeoDataFrames when geographic coordinates are available</p></li>
 </ul>
 </li>
@@ -581,6 +586,27 @@ Available data tables include: generators, substations, transmission_lines, hydr
 </ul>
 </li>
 </ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>For Canadian resource connection-distance analysis, the active scenarios retain
+CODERS substations whose <code class="docutils literal notranslate"><span class="pre">node_type</span></code> is <code class="docutils literal notranslate"><span class="pre">Generation</span></code> or <code class="docutils literal notranslate"><span class="pre">Terminal</span></code>
+and whose <code class="docutils literal notranslate"><span class="pre">node_code</span></code> occurs as a starting or ending node in the CODERS
+<code class="docutils literal notranslate"><span class="pre">transmission_lines</span></code> table. This follows the facility suffix and referential-closure
+findings in the <a class="reference external" href="https://github.com/DeltaE/PyPSA_BC/blob/dev/docs/QA/CODERS_transmission_lines_dataQA_2026-07-23.md">CODERS transmission-lines data QA</a>:
+GSS denotes generating-station switchyards and TSS major transmission substations.
+<code class="docutils literal notranslate"><span class="pre">INT</span></code>, <code class="docutils literal notranslate"><span class="pre">IPT</span></code>, <code class="docutils literal notranslate"><span class="pre">SWS</span></code>, and <code class="docutils literal notranslate"><span class="pre">JCT</span></code> suffixes are excluded because they represent
+cross-border ties, switching stations, or line taps rather than the candidate
+plant-connection substations assumed here. Distribution substations are treated as
+step-down/load nodes, while industrial substations are not assumed to be generally
+available.</p>
+<p>This is a screening assumption, not evidence that a retained node has spare
+capacity, compatible voltage, an approved interconnection, available land, or a
+constructible route. Those questions require project-level system and engineering
+studies. Configure the rule with <code class="docutils literal notranslate"><span class="pre">CODERS.connection_filter</span></code>; disabling it restores
+the unfiltered provincial CODERS substation table. See
+<a class="reference internal" href="assumptions.html"><span class="std std-doc">Canadian grid-connection candidates</span></a>
+for the full evidence table, implemented rule, and provenance.</p>
+</div>
 </section>
 </section>
 <section id="climate-and-weather-data">
@@ -617,7 +643,23 @@ Available data tables include: generators, substations, transmission_lines, hydr
 <div><p><U>Note</U>: From Sep 26, 2024 onwards the ERA5 dataset will only be supplied via cds-beta or ads-beta (<a class="reference external" href="https://confluence.ecmwf.int/display/CKB/Please+read%3A+CDS+and+ADS+migrating+to+new+infrastructure%3A+Common+Data+Store+%28CDS%29+Engine">source</a>)</p>
 </div></blockquote>
 <ul>
-<li><p>Before the data can be downloaded from ERA5, it has to be processed by CDS servers, this might take a while depending on the volume of data requested. This only works if you have in before</p>
+<li><p>Before the data can be downloaded from ERA5, it has to be processed by CDS servers, this might take a while depending on the volume of data requested. This only works if you have in before</p></li>
+<li><p>CDS may temporarily reject a valid monthly request when the dataset queue is
+full. For every scenario, RESource keeps monthly requests sequential and
+retries only recognized temporary capacity-limit errors with capped
+exponential backoff. The package default is six total attempts, starting at
+60 seconds and capped at 900 seconds. Advanced users can override the policy
+under <code class="docutils literal notranslate"><span class="pre">cutout</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cutout</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">cds_retry</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">max_attempts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6</span>
+<span class="w">    </span><span class="nt">base_delay_seconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
+<span class="w">    </span><span class="nt">max_delay_seconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">900</span>
+</pre></div>
+</div>
+<p>Authentication failures and invalid requests are not retried. Do not start
+parallel RESource runs for the same CDS account while the service is limiting
+queued requests.</p>
 <ul class="simple">
 <li><p>For linux users, please proceed as follows:</p></li>
 <li><p>Steps to install the Copernicus Climate Data Store cdsapi package at your <strong>local Linux/WSL</strong> (sourced from &gt; <a class="reference external" href="https://cds-beta.climate.copernicus.eu/how-to-api">Registered and setup your CDS API key as described</a>)</p></li>
@@ -657,7 +699,14 @@ step2: Install the CDS API client. <br></p>
 <li><p>📊 <strong>Data</strong>: <a class="reference external" href="https://gadm.org/download_country.html">Download GADM data (v4.1 | 16 July 2022 )</a></p></li>
 <li><p>📝 <strong>Description</strong>: <a class="reference external" href="https://gadm.org/">GADM</a>, the Database of Global Administrative Areas, is a high-resolution database of country administrative areas, with a goal of &quot;all countries, at all levels, at any time period.</p></li>
 <li><p>🎯 <strong>Use-case</strong>: This boundary has been processed for admin level 2 (i.e. sub-provincial) to extract geospatial boundaries of the Regional Districts (RD) e.g. 28 RDs inside BC, Canada. This boundary is primarily used for spatial-grid cell/point mapping, regional overlay visuals, clipping point of interests in regional level while clustering.</p></li>
-<li><p>⚙️ <strong>Supply_chain_mode</strong>: Automated via <a class="reference external" href="https://pypi.org/project/pygadm">pygadm</a> library [supports GADM data V4.1]</p></li>
+<li><p>⚙️ <strong>Supply_chain_mode</strong>: Automated via <a class="reference external" href="https://pypi.org/project/pygadm">pygadm</a> library [supports GADM data V4.1]</p>
+<ul>
+<li><p>Country boundaries are fetched in memory. New runs do not create or retain a
+<code class="docutils literal notranslate"><span class="pre">data/downloaded_data/GADM</span></code> cache; only the selected region GeoJSON is saved
+under the configured processed-data directory. Existing country cache files
+remain supported for backward compatibility.</p></li>
+</ul>
+</li>
 </ul>
 </section>
 <section id="cpcad-canadian-protected-and-conserved-areas-database">
@@ -722,10 +771,11 @@ Different constraint classes are applied for solar vs wind development based on 
 <ul>
 <li><p>📋 <strong>Instruction</strong>:</p>
 <ol class="arabic">
-<li><p>The system automatically downloads the LR.zip file from FAO's data repository</p></li>
-<li><p>Extracts required raster layers based on configuration settings</p></li>
-<li><p>Clips rasters to regional boundaries for analysis</p></li>
-<li><p>Generates visualization plots for each processed layer</p>
+<li><p>The system first reuses any existing region-prefixed clipped outputs</p></li>
+<li><p>For missing outputs, it downloads <code class="docutils literal notranslate"><span class="pre">LR.zip</span></code> to an operating-system temporary directory</p></li>
+<li><p>It extracts only the configured source layers into that temporary workspace</p></li>
+<li><p>It clips those layers to regional boundaries and retains only the clipped GeoTIFFs</p></li>
+<li><p>The archive and global extracted rasters are automatically removed when processing ends</p>
 <ul class="simple">
 <li><p><strong>Example</strong> configuration structure from <code class="docutils literal notranslate"><span class="pre">config/WB6_baseline.yaml</span></code>:</p></li>
 </ul>
@@ -733,6 +783,8 @@ Different constraint classes are applied for solar vs wind development based on 
 <span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;data/downloaded_data/GAEZ&#39;</span>
 <span class="w">  </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip&#39;</span>
 <span class="w">  </span><span class="nt">zip_file</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;LR.zip&#39;</span>
+<span class="w">  </span><span class="c1"># Relative to GAEZ.root; resolves to</span>
+<span class="w">  </span><span class="c1"># data/downloaded_data/GAEZ/Rasters_in_use</span>
 <span class="w">  </span><span class="nt">Rasters_in_use_direct</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Rasters_in_use&#39;</span>
 <span class="w">  </span><span class="nt">raster_types</span><span class="p">:</span>
 <span class="w">  </span><span class="c1"># GAEZ v4 &#39;exclusion&#39; layer of protected areas and biodiversity values</span>
@@ -900,6 +952,10 @@ RESource's <a class="reference external" href="https://github.com/DeltaE/RESourc
 <h2>5. Renewable Energy Resource Data<a class="headerlink" href="#renewable-energy-resource-data" title="Link to this heading">#</a></h2>
 <section id="gwa-global-wind-atlas">
 <h3>5.1 GWA (Global Wind Atlas)<a class="headerlink" href="#gwa-global-wind-atlas" title="Link to this heading">#</a></h3>
+<p>RESource stages each country-scale GWA raster in an operating-system temporary
+directory, clips it to the configured regional boundary, and retains only the
+region-prefixed GeoTIFF under <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/GWA</span></code>. Temporary country files
+are removed automatically, while existing regional clips are reused.</p>
 <blockquote>
 <div><p>For high-resolution wind resource analysis</p>
 </div></blockquote>
@@ -1165,13 +1221,13 @@ RESource's <a class="reference external" href="https://github.com/DeltaE/RESourc
 <hr class="docutils" />
 <section id="legends-and-color-coding-standardization">
 <h2>7. Legends and Color Coding Standardization<a class="headerlink" href="#legends-and-color-coding-standardization" title="Link to this heading">#</a></h2>
-<p>The RESource system uses standardized legend files and color coding schemes to ensure consistent visualization across different raster datasets. These legend files are stored in the <code class="docutils literal notranslate"><span class="pre">data/</span></code> directory and provide the mapping between raster class values, descriptions, and color representations.</p>
+<p>The RESource system uses standardized legend files and color coding schemes to ensure consistent visualization across different raster datasets. These small lookup tables are package assets under <code class="docutils literal notranslate"><span class="pre">src/RESource/assets/legends/</span></code>; they are tracked in Git and included when users install <code class="docutils literal notranslate"><span class="pre">deltae-resource</span></code>.</p>
 <section id="available-legend-files">
 <h3>7.1 Available Legend Files<a class="headerlink" href="#available-legend-files" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>Currently the workflow does not have dependency for it. The post processing visualization uses these for color coding standardization.</p>
+<div><p>These files support post-processing visualization and are available through Python package resources. They are not generated or downloaded workflow data.</p>
 </div></blockquote>
-<p>The following standardized legend CSV files are available in the <code class="docutils literal notranslate"><span class="pre">data/</span></code> directory:</p>
+<p>The following standardized legend CSV files are distributed with RESource:</p>
 </section>
 <section id="clc-2018-legend-csv">
 <h3>1. <strong>CLC_2018_legend.csv</strong><a class="headerlink" href="#clc-2018-legend-csv" title="Link to this heading">#</a></h3>
@@ -1187,8 +1243,8 @@ RESource's <a class="reference external" href="https://github.com/DeltaE/RESourc
 </li>
 </ul>
 </section>
-<section id="exclusion-2017-legend-csv">
-<h3>2. <strong>exclusion_2017_legend.csv</strong><a class="headerlink" href="#exclusion-2017-legend-csv" title="Link to this heading">#</a></h3>
+<section id="gaez-exclusion-legend-csv">
+<h3>2. <strong>gaez_exclusion_legend.csv</strong><a class="headerlink" href="#gaez-exclusion-legend-csv" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Purpose</strong>: GAEZ exclusion areas (protected areas and biodiversity zones)</p></li>
 <li><p><strong>Structure</strong>: 7 exclusion classes with conservation status descriptions</p></li>
@@ -1201,8 +1257,8 @@ RESource's <a class="reference external" href="https://github.com/DeltaE/RESourc
 </li>
 </ul>
 </section>
-<section id="gaez-slpmed05-legend-csv">
-<h3>3. <strong>gaez_slpmed05_legend.csv</strong><a class="headerlink" href="#gaez-slpmed05-legend-csv" title="Link to this heading">#</a></h3>
+<section id="gaez-terrains-legend-csv">
+<h3>3. <strong>gaez_terrains_legend.csv</strong><a class="headerlink" href="#gaez-terrains-legend-csv" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Purpose</strong>: GAEZ terrain slope classifications</p></li>
 <li><p><strong>Structure</strong>: 9 slope classes from flat to high slope plus water</p></li>
@@ -1215,8 +1271,8 @@ RESource's <a class="reference external" href="https://github.com/DeltaE/RESourc
 </li>
 </ul>
 </section>
-<section id="faocmb-2010-legend-csv">
-<h3>4. <strong>faocmb_2010_legend.csv</strong><a class="headerlink" href="#faocmb-2010-legend-csv" title="Link to this heading">#</a></h3>
+<section id="gaez-landcover-legend-csv">
+<h3>4. <strong>gaez_landcover_legend.csv</strong><a class="headerlink" href="#gaez-landcover-legend-csv" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Purpose</strong>: GAEZ land cover/use classifications</p></li>
 <li><p><strong>Structure</strong>: 11 dominant land cover types</p></li>
@@ -1267,8 +1323,10 @@ RESource's <a class="reference external" href="https://github.com/DeltaE/RESourc
 </div>
 </li>
 <li><p><strong>Custom legend-based colormaps</strong> (using CSV legend files):</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In visualization functions</span>
-<span class="n">legend_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/exclusion_2017_legend.csv&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In visualization functions; works from source and after pip installation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RESource.assets</span><span class="w"> </span><span class="kn">import</span> <span class="n">legend_file</span>
+
+<span class="n">legend_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">legend_file</span><span class="p">(</span><span class="s1">&#39;gaez_exclusion_legend.csv&#39;</span><span class="p">))</span>
 <span class="n">custom_cmap</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">(</span><span class="n">legend_df</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -1427,9 +1485,9 @@ RESource's <a class="reference external" href="https://github.com/DeltaE/RESourc
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#legends-and-color-coding-standardization">7. Legends and Color Coding Standardization</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-legend-files">7.1 Available Legend Files</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clc-2018-legend-csv">1. <strong>CLC_2018_legend.csv</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exclusion-2017-legend-csv">2. <strong>exclusion_2017_legend.csv</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaez-slpmed05-legend-csv">3. <strong>gaez_slpmed05_legend.csv</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#faocmb-2010-legend-csv">4. <strong>faocmb_2010_legend.csv</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaez-exclusion-legend-csv">2. <strong>gaez_exclusion_legend.csv</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaez-terrains-legend-csv">3. <strong>gaez_terrains_legend.csv</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaez-landcover-legend-csv">4. <strong>gaez_landcover_legend.csv</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cpcad-legends-csv">5. <strong>CPCAD_legends.csv</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#legend-file-structure">7.2 Legend File Structure</a></li>
 </ul>

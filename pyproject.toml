@@ -36,6 +36,7 @@ dependencies = [
   "dask>=2024.11",
   "eccodeslib>=2.44",
   "fiona>=1.10",
+  "gdown>=6.1.0",
   "geojson>=3.1",
   "geopandas>=1.0",
   "h5py>=3.12",
@@ -86,6 +87,10 @@ docs = [
   "sphinx>=8.1",
   "sphinx-book-theme>=1.1",
 ]
+google-drive = [
+    "dlt>=1.29,<2",
+    "google-api-python-client>=2.100,<3",
+]
 
 [dependency-groups]
 dev = [
@@ -109,13 +114,18 @@ Publication = "https://doi.org/10.1016/j.energ.2026.100077"
 [project.scripts]
 resource = "RESource.cli:entrypoint"
 resource-multiyear = "RESource.multiyear:entrypoint"
+resource-cutout-multiyear = "RESource.cutout_multiyear:entrypoint"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["RESource*", "RES*"]
+include = ["RESource*"]
 
 [tool.setuptools.package-data]
-RESource = ["visual_styles/*.mplstyle"]
+RESource = [
+  "assets/legends/*.csv",
+  "assets/mappings/*.csv",
+  "visual_styles/*.mplstyle",
+]
 
 [tool.ruff]
 target-version = "py311"

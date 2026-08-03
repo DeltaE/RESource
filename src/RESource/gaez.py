@@ -1,9 +1,9 @@
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from zipfile import ZipFile
 
 import matplotlib.pyplot as plt
 import rasterio
-import requests
 from rasterio.mask import mask
 
 from RESource import utility as utils
@@ -68,8 +68,10 @@ class GAEZRasterProcessor(AttributesParser):
         Root directory for GAEZ data storage and processing
     zip_file : Path
         Path to the GAEZ ZIP archive file
-    Rasters_in_use_direct : Path
-        Directory for extracted and processed raster files
+    archive_path : Path
+        Durable path to the directly downloaded GAEZ source archive
+    processed_region_path : Path
+        Directory containing region-clipped derived rasters
     raster_types : list
         List of raster type configurations to process
     region_boundary : gpd.GeoDataFrame
@@ -108,10 +110,10 @@ class GAEZRasterProcessor(AttributesParser):
 
     ```yaml
     gaez_data:
-      root: "data/downloaded_data/GAEZ"  # Storage directory
+      root: "data/downloaded_data/GAEZ"  # Directly downloaded sources
+      processed_root: "data/processed_data/GAEZ"  # Derived regional rasters
       source: "https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip"
       zip_file: "LR.zip"  # ZIP archive filename
-      Rasters_in_use_direct: "Rasters_in_use"  # Extraction directory
       raster_types:
         - name: "slope"
           raster: "slope.tif"
@@ -123,11 +125,11 @@ class GAEZRasterProcessor(AttributesParser):
     Data Processing Workflow
     ------------------------
     1. **Configuration Loading**: Extract GAEZ parameters from config file
-    2. **Download Check**: Verify ZIP archive exists or download from source
-    3. **Extraction**: Extract required raster files from ZIP archive
-    4. **Boundary Processing**: Get regional boundaries from GADM processor
-    5. **Clipping**: Clip each raster to regional boundaries
-    6. **Visualization**: Generate plots for each processed raster
+    2. **Output Check**: Reuse every existing regional clipped raster
+    3. **Source Cache**: Reuse or download the configured archive under downloaded data
+    4. **Temporary Staging**: Selectively extract inputs in repository scratch storage
+    5. **Boundary Processing**: Get regional boundaries from GADM processor
+    6. **Clipping**: Clip each raster to regional boundaries
     7. **Path Management**: Return dictionary of processed raster file paths
 
     Raster Type Configuration
@@ -199,7 +201,7 @@ class GAEZRasterProcessor(AttributesParser):
     - Processing large regions may require substantial disk space
     - Results integrate with renewable energy assessment workflows
     - Visualization outputs support decision-making and reporting
-    - ZIP archives are cached locally to avoid repeated downloads
+    - Downloaded archives persist; selectively extracted global rasters are temporary
 
     Dependencies
     ------------
@@ -266,9 +268,19 @@ class GAEZRasterProcessor(AttributesParser):
         self.gaez_root.mkdir(parents=True, exist_ok=True)
 
         self.zip_file = Path(self.gaez_config["zip_file"])
+        self.archive_path = self.gaez_root / self.zip_file.name
 
-        self.Rasters_in_use_direct = Path(self.gaez_config["Rasters_in_use_direct"])
-        self.Rasters_in_use_direct.mkdir(parents=True, exist_ok=True)
+        processed_root = self.gaez_config.get("processed_root")
+        if processed_root:
+            self.processed_region_path = Path(processed_root) / self.region_short_code
+            self._legacy_output_layout = False
+        else:
+            legacy_directory = Path(self.gaez_config.get("Rasters_in_use_direct", "Rasters_in_use"))
+            if legacy_directory.is_absolute() or ".." in legacy_directory.parts:
+                raise ValueError("GAEZ Rasters_in_use_direct must be relative to the GAEZ root")
+            self.processed_region_path = self.gaez_root / legacy_directory
+            self._legacy_output_layout = True
+        self.processed_region_path.mkdir(parents=True, exist_ok=True)
 
         self.raster_types = self.gaez_config["raster_types"]
         self.region_boundary = None
@@ -332,23 +344,61 @@ class GAEZRasterProcessor(AttributesParser):
         - Existing processed rasters are not regenerated unless missing
         - All plots are saved regardless of the show parameter setting
         """
-        if not (self.gaez_root / self.zip_file).exists():
-            self.__download_resources_zip_file__()
-        raster_paths = {}
-
-        self.__extract_rasters__()
         self.region_boundary = self.gadmBoundary.get_region_boundary()
+        raster_paths = {
+            raster_type["name"]: self._clipped_raster_path(raster_type)
+            for raster_type in self.raster_types
+        }
 
+        missing_rasters = [
+            raster_type
+            for raster_type in self.raster_types
+            if not raster_paths[raster_type["name"]].exists()
+        ]
+        if not missing_rasters:
+            utils.print_update(
+                level=print_level_base,
+                message=f"{__name__}| All required regional GAEZ rasters already exist.",
+            )
+            return raster_paths
+
+        scratch_directory = utils.repository_temp_directory("resource-gaez")
         utils.print_update(
             level=print_level_base,
-            message=f"{__name__}| Clipping Rasters to regional boundaries.. ",
+            message=(
+                f"{__name__}| Preparing {len(missing_rasters)} missing GAEZ raster(s); "
+                f"temporary files will use {scratch_directory}."
+            ),
         )
-        # Loop over raster types and process each
-        for raster_type in self.raster_types:
-            raster_path = self.__clip_to_boundary_n_plot__(
-                raster_type, self.region_boundary.geometry, show
+        with TemporaryDirectory(prefix="run-", dir=scratch_directory) as temporary_directory:
+            workspace = Path(temporary_directory)
+            extraction_root = workspace / "rasters"
+            self.__download_resources_zip_file__(self.archive_path)
+            utils.print_update(
+                level=print_level_base + 1,
+                message=f"{__name__}| Extracting {len(missing_rasters)} required raster(s)...",
             )
-            raster_paths[raster_type["name"]] = raster_path
+            self.__extract_rasters__(self.archive_path, extraction_root, missing_rasters)
+
+            for raster_type in missing_rasters:
+                utils.print_update(
+                    level=print_level_base + 1,
+                    message=(
+                        f"{__name__}| Clipping '{raster_type['name']}' "
+                        f"to {self.region_short_code} boundaries..."
+                    ),
+                )
+                raster_path = self.__clip_to_boundary_n_plot__(
+                    raster_type,
+                    self.region_boundary.geometry,
+                    show,
+                    input_root=extraction_root,
+                )
+                raster_paths[raster_type["name"]] = raster_path
+                utils.print_update(
+                    level=print_level_base + 2,
+                    message=f"{__name__}| Regional raster saved to {raster_path}.",
+                )
 
         utils.print_update(
             level=print_level_base,
@@ -356,18 +406,18 @@ class GAEZRasterProcessor(AttributesParser):
         )
         return raster_paths
 
-    def __download_resources_zip_file__(self):
+    def __download_resources_zip_file__(self, archive_path: Path):
         """
-        Download the GAEZ resources ZIP archive from remote source.
+        Download the GAEZ resources ZIP archive when it is not cached.
 
         Downloads the GAEZ raster data ZIP file from the configured source URL
-        if it doesn't already exist locally. The ZIP archive contains all the
+        into downloaded-data storage. The ZIP archive contains all the
         raster datasets needed for land constraint analysis in renewable energy
         resource assessment.
 
         The method uses the source URL from configuration with a fallback to
         the default FAO GAEZ data source. Downloaded files are saved to the
-        configured root directory for subsequent extraction and processing.
+        configured source directory for reuse across regional runs.
 
         Raises
         ------
@@ -382,29 +432,25 @@ class GAEZRasterProcessor(AttributesParser):
         -----
         - Download size is typically 100MB-1GB depending on data coverage
         - Network timeout may occur for large files on slow connections
-        - Existing ZIP files are not re-downloaded to save bandwidth
+        - A complete archive is retained and reused after successful processing
         - Progress is logged through utility print functions
         - File integrity is not explicitly verified after download
         """
         url = self.gaez_config.get(
             "source", "https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip"
         )
-        response = requests.get(url)
+        utils.fetch_file_if_missing(
+            url,
+            archive_path,
+            description="GAEZ LR source archive",
+        )
 
-        if response.status_code == 200:
-            with open(self.gaez_root / self.zip_file, "wb") as f:
-                f.write(response.content)
-            utils.print_update(
-                level=print_level_base,
-                message=f"{__name__}| GAEZ Raster Resource '.zip' file downloaded and saved to: {self.gaez_root}",
-            )
-        else:
-            utils.print_update(
-                level=print_level_base,
-                message=f"{__name__}|  ❌ Failed to download the Resources zip file from GAEZ. Status code: {response.status_code}",
-            )
-
-    def __extract_rasters__(self):
+    def __extract_rasters__(
+        self,
+        archive_path: Path,
+        extraction_root: Path,
+        raster_types: list[dict],
+    ):
         """
         Extract required raster files from the downloaded GAEZ ZIP archive.
 
@@ -413,8 +459,7 @@ class GAEZRasterProcessor(AttributesParser):
         file to extract and where to place it within the local directory structure.
 
         The method preserves the internal ZIP directory structure while extracting
-        files to organized local directories. Existing files are not re-extracted
-        to avoid unnecessary processing time and disk operations.
+        files to a temporary workspace. Only missing regional outputs are staged.
 
         The extraction process is guided by the raster_types configuration which
         specifies:
@@ -437,40 +482,44 @@ class GAEZRasterProcessor(AttributesParser):
         -----
         - Only configured raster types are extracted, not the entire archive
         - Directory structure from ZIP is preserved in local extraction
-        - Existing extracted files are skipped to save processing time
+        - Existing clipped regional outputs are skipped before download
         - Large raster files may take considerable time to extract
-        - Extraction location follows the Rasters_in_use_direct configuration
+        - Extracted global rasters are removed with the temporary workspace
         """
-        with ZipFile(self.gaez_root / self.zip_file, "r") as zip_ref:
-            for raster_type in self.raster_types:
+        with ZipFile(archive_path, "r") as zip_ref:
+            archive_members = set(zip_ref.namelist())
+            requested_members = [
+                str(Path(raster_type["zip_extract_direct"]) / raster_type["raster"])
+                for raster_type in raster_types
+            ]
+            missing_members = [
+                member for member in requested_members if member not in archive_members
+            ]
+            if missing_members:
+                raise FileNotFoundError(
+                    "GAEZ archive is missing configured raster member(s): "
+                    f"{', '.join(missing_members)}. Check GAEZ.raster_types in the active config."
+                )
+
+            for raster_type in raster_types:
                 raster_file = raster_type["raster"]
                 zip_direct = raster_type["zip_extract_direct"]
                 file_inside_zip = str(Path(zip_direct) / raster_file)  # Ensure it's a single string
 
-                target_path = self.gaez_root / self.Rasters_in_use_direct / zip_direct / raster_file
+                zip_ref.extract(file_inside_zip, path=extraction_root)
+                utils.print_update(
+                    level=print_level_base,
+                    message=f"{__name__}| Temporarily extracted '{file_inside_zip}'.",
+                )
 
-                if not target_path.exists():
-                    # Check for existence as a string in zip_ref
-                    if file_inside_zip in zip_ref.namelist():
-                        zip_ref.extract(
-                            file_inside_zip, path=self.gaez_root / self.Rasters_in_use_direct
-                        )
-                        utils.print_update(
-                            level=print_level_base,
-                            message=f"{__name__}| Raster file '{raster_file}' extracted from {file_inside_zip}",
-                        )
-                    else:
-                        utils.print_update(
-                            level=print_level_base,
-                            message=f"{__name__}| Raster file '{raster_file}' not found in the archive {file_inside_zip}",
-                        )
-                else:
-                    utils.print_update(
-                        level=print_level_base,
-                        message=f"{__name__}| Raster file '{raster_file}' found in local directory, skipping download.",
-                    )
+    def _clipped_raster_path(self, raster_type: dict) -> Path:
+        """Return the durable regional output path for a configured raster."""
+        if self._legacy_output_layout:
+            output_dir = self.processed_region_path / raster_type["zip_extract_direct"]
+            return output_dir / f"{self.region_short_code}_{raster_type['raster']}"
+        return self.processed_region_path / raster_type["raster"]
 
-    def __clip_to_boundary_n_plot__(self, raster_type, boundary_geom, show):
+    def __clip_to_boundary_n_plot__(self, raster_type, boundary_geom, show, *, input_root: Path):
         """
         Clip raster data to regional boundaries and generate visualization plot.
 
@@ -526,11 +575,11 @@ class GAEZRasterProcessor(AttributesParser):
         zip_direct = raster_type["zip_extract_direct"]
         raster_file = raster_type["raster"]
 
-        input_raster = self.gaez_root / self.Rasters_in_use_direct / zip_direct / raster_file
-        output_dir = self.gaez_root / self.Rasters_in_use_direct / zip_direct
+        input_raster = input_root / zip_direct / raster_file
+        output_dir = self._clipped_raster_path(raster_type).parent
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        clipped_raster_path = output_dir / f"{self.region_short_code}_{raster_file}"
+        clipped_raster_path = self._clipped_raster_path(raster_type)
 
         with rasterio.open(input_raster) as src:
             clipped_raster, clipped_transform = mask(

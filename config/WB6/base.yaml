@@ -8,10 +8,6 @@ description: |+
   Inside the user configuration file of the L:INKING TOOL, there are 'keys' with quantitative 'values' upon which the module results relies on.
   These  have been given as 'parameters' in the RULES
 
-Scenario:
-  run_id: vre_low_we2025
-  Description: Policy scenario; buffer zones applied around aeroway lands, restricting resource siting.
-
 country: 'Western Balkan Regions' # Western Balkan Regions
 
 multi_country_flag: True # True if the 'country' represents a multi-country region   and 'regions' are nations, False if it is a single country and 'regions' are sub-nations.
@@ -128,7 +124,7 @@ GAEZ:
   root: 'data/downloaded_data/GAEZ'
   source: 'https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip'
   zip_file: 'LR.zip'
-  Rasters_in_use_direct: 'Rasters_in_use'
+  processed_root: data/processed_data/GAEZ
   raster_types:
   # GAEZ exclusion layer
   - name: 'exclusion_areas'
@@ -146,7 +142,7 @@ GAEZ:
         wind: 0
   # GAEZ terrain slope layer
   - name: 'terrain_resources'
-    raster: "slpmed30s.tif"
+    raster: "slpmed05.tif"
     zip_extract_direct: 'LR/ter'
     color_map: 'terrain'
     dtype: uint8
@@ -254,14 +250,6 @@ cutout:
 
   dx: 0.25 # Arc Length for cutout grids cells in Degrees
   dy: 0.25 # Arc Length for cutout grids cells in Degrees
-
-  # the snapshots are given as a 'list', not 'values'.
-  snapshots:
-    start:
-    # Must be formatted as 'YYYY-MM-DD' (ERA5 returns data in UTC)
-    - '2023-01-01 07:00:00' # YYYY-MM-DD "2021-01-01 07:00:00"
-    end:
-    - '2024-01-01 06:00:00' # 6 # YYYY-MM-DD "2022-01-01 06:00:00"
 
 GWA:
   root: 'data/downloaded_data/GWA'

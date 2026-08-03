@@ -8,10 +8,6 @@ description: |+
   Configuration file for Bangladesh renewable energy resource analysis.
   Bangladesh is divided into 8 administrative divisions for regional analysis.
 
-Scenario:
-  run_id: baseline
-  Description: Baseline scenario for Bangladesh renewable energy resource assessment
-
 country: 'Bangladesh'
 
 multi_country_flag: False # Single country with sub-national divisions
@@ -142,7 +138,7 @@ GAEZ:
   root: 'data/downloaded_data/GAEZ'
   source: 'https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip'
   zip_file: 'LR.zip'
-  Rasters_in_use_direct: 'Rasters_in_use'
+  processed_root: data/processed_data/GAEZ
   raster_types:
 
   # GAEZ v4 'exclusion' layer of protected areas and land with high biodiversity values

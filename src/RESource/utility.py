@@ -21,6 +21,7 @@ Development Year: 2024-2025
 """
 
 import datetime
+import gc
 
 """
 Utility functions and helper methods for RESource renewable energy assessment framework.
@@ -44,15 +45,274 @@ Version: 1.0
 Development Year: 2024-2025
 """
 
+import hashlib
 import json
+import logging
 import os
 import pickle
+import tempfile
 import zipfile
 from pathlib import Path
 
 import geojson as gj
 import geopandas as gpd
 import numpy as np
+from tqdm.auto import tqdm
+
+_STATUS_SINK = None
+_OUTPUT_CONFIGURED = False
+_COMPACT_OUTPUT = False
+
+KNOWN_CONFIG_TOP_LEVEL_KEYS = {
+    "Affiliation",
+    "CODERS",
+    "CORINE",
+    "Developer",
+    "EU_DEM",
+    "GADM",
+    "GAEZ",
+    "GWA",
+    "NREL",
+    "OSM_data",
+    "Release_Year",
+    "Scenario",
+    "Title",
+    "WorldPop",
+    "capacity_disaggregation",
+    "country",
+    "custom_land_layers",
+    "cutout",
+    "default_CRS",
+    "description",
+    "economic_parameters",
+    "lands",
+    "multi_country_flag",
+    "region_mapping",
+    "version",
+    "weather_year",
+}
+
+
+def configure_runtime_logging(
+    log_path: str | Path,
+    *,
+    verbose: bool = False,
+    status_sink=None,
+) -> Path:
+    """Configure detailed file logging and optional compact CLI status output."""
+    global _COMPACT_OUTPUT, _OUTPUT_CONFIGURED, _STATUS_SINK
+
+    destination = Path(log_path).resolve()
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    logger = logging.getLogger("RESource")
+    logger.handlers.clear()
+    logger.setLevel(logging.DEBUG)
+    logger.propagate = False
+    formatter = logging.Formatter(
+        "%(asctime)s | %(levelname)-8s | %(module)s:%(lineno)d | %(funcName)s | %(message)s"
+    )
+    file_handler = logging.FileHandler(destination, encoding="utf-8")
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+    if verbose:
+        terminal_handler = logging.StreamHandler()
+        terminal_handler.setLevel(logging.DEBUG)
+        terminal_handler.setFormatter(formatter)
+        logger.addHandler(terminal_handler)
+
+    _STATUS_SINK = status_sink
+    _COMPACT_OUTPUT = status_sink is not None and not verbose
+    _OUTPUT_CONFIGURED = True
+    return destination
+
+
+def compact_output_enabled() -> bool:
+    """Return whether the CLI is rendering the compact live status display."""
+    return _COMPACT_OUTPUT
+
+
+def _record_status(message: str, *, level: int = logging.INFO, stacklevel: int = 2) -> None:
+    """Write a structured record and forward it to the compact status display."""
+    logging.getLogger("RESource").log(level, message, stacklevel=stacklevel + 1)
+    if _STATUS_SINK is not None:
+        _STATUS_SINK(message)
+
+
+def release_process_memory() -> dict[str, int]:
+    """Release unreachable Python objects before a memory-intensive job.
+
+    Returns:
+        Counts from a generation-2 garbage collection cycle. This helper never
+        deletes disk caches, temporary files, downloaded data, or cutouts.
+    """
+    generation_counts_before = gc.get_count()
+    unreachable_objects = gc.collect(2)
+    generation_counts_after = gc.get_count()
+    return {
+        "unreachable_objects_collected": unreachable_objects,
+        "generation_0_before": generation_counts_before[0],
+        "generation_1_before": generation_counts_before[1],
+        "generation_2_before": generation_counts_before[2],
+        "generation_0_after": generation_counts_after[0],
+        "generation_1_after": generation_counts_after[1],
+        "generation_2_after": generation_counts_after[2],
+    }
+
+
+def get_gdrive_public_file(file_id: str, output_path: str) -> None:
+    """
+    Downloads a public-file from Google Drive using its file ID.
+
+    Args:
+        file_id (str): The unique identifier of the Google Drive file.
+        output_path (str): The local path where the downloaded file will be saved.
+
+    Note: The file must be publicly accessible (ANYONE WITH THE LINK). If the file is private, this function will not work.
+
+    Returns:
+        None
+    """
+    import gdown
+
+    output_path = Path(output_path)
+    if output_path.exists():
+        print(
+            f"Skipping downloading from Google Drive. Expected file found locally at: {output_path}"
+        )
+        return
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    if not isinstance(file_id, str) or not file_id:
+        raise ValueError("Invalid file_id provided. It must be a non-empty string.")
+    url = f"https://drive.google.com/uc?id={file_id}"
+    gdown.download(url, str(output_path), quiet=False)
+
+
+def repository_temp_directory(name: str) -> Path:
+    """Return an ignored, repository-backed scratch directory.
+
+    Args:
+        name: Subdirectory name below ``data/tmp``.
+
+    Returns:
+        Absolute path to the created scratch directory.
+
+    Raises:
+        ValueError: If ``name`` could escape the repository scratch root.
+    """
+    relative_name = Path(name)
+    if relative_name.is_absolute() or ".." in relative_name.parts:
+        raise ValueError("repository temporary directory name must be relative")
+    scratch_directory = (Path("data/tmp") / relative_name).resolve()
+    scratch_directory.mkdir(parents=True, exist_ok=True)
+    return scratch_directory
+
+
+def fetch_file_if_missing(
+    source: str,
+    destination: str | Path,
+    *,
+    description: str | None = None,
+    chunk_size: int = 1024 * 1024,
+) -> Path:
+    """Stream a configured remote file into place when it is not available locally.
+
+    The response is written under repository-backed temporary storage and moved
+    atomically to the requested destination after a complete, non-empty download.
+
+    Args:
+        source: Direct HTTP(S) URL from the workflow configuration.
+        destination: Durable local file path defined by the configuration.
+        description: Human-readable dataset label for status output.
+        chunk_size: Streaming chunk size in bytes.
+
+    Returns:
+        Path to the existing or newly downloaded file.
+
+    Raises:
+        ValueError: If the source URL or chunk size is invalid.
+        IOError: If the downloaded response is empty or incomplete.
+        requests.HTTPError: If the server returns an unsuccessful response.
+    """
+    destination_path = Path(destination)
+    if destination_path.is_file() and destination_path.stat().st_size > 0:
+        return destination_path
+    if not isinstance(source, str) or not source.startswith(("https://", "http://")):
+        raise ValueError(f"A direct HTTP(S) source is required for {destination_path}")
+    if chunk_size <= 0:
+        raise ValueError("download chunk_size must be positive")
+
+    label = description or destination_path.name
+    destination_path.parent.mkdir(parents=True, exist_ok=True)
+    scratch_directory = repository_temp_directory("resource-downloads")
+    print_update(message=f"Fetching missing dataset '{label}' from configured source...")
+
+    with tempfile.TemporaryDirectory(prefix="run-", dir=scratch_directory) as workspace:
+        temporary_path = Path(workspace) / destination_path.name
+        with requests.get(source, stream=True, timeout=(30, 300)) as response:
+            response.raise_for_status()
+            total_bytes = int(response.headers.get("content-length", 0))
+            downloaded_bytes = 0
+            next_report = 5
+            with (
+                temporary_path.open("wb") as output,
+                tqdm(
+                    total=total_bytes or None,
+                    desc=label,
+                    unit="B",
+                    unit_scale=True,
+                    unit_divisor=1024,
+                    dynamic_ncols=True,
+                    disable=compact_output_enabled(),
+                ) as progress,
+            ):
+                for chunk in response.iter_content(chunk_size=chunk_size):
+                    if not chunk:
+                        continue
+                    output.write(chunk)
+                    downloaded_bytes += len(chunk)
+                    progress.update(len(chunk))
+                    if compact_output_enabled() and total_bytes:
+                        percent = int(downloaded_bytes * 100 / total_bytes)
+                        if percent >= next_report:
+                            print_update(message=f"Downloading '{label}': {percent}% complete")
+                            next_report += 5
+
+        if downloaded_bytes == 0:
+            raise OSError(f"Configured source returned an empty file for {label}")
+        if total_bytes and downloaded_bytes != total_bytes:
+            raise OSError(
+                f"Incomplete download for {label}: received {downloaded_bytes} "
+                f"of {total_bytes} bytes"
+            )
+        temporary_path.replace(destination_path)
+
+    print_update(message=f"Dataset '{label}' saved to {destination_path}")
+    return destination_path
+
+
+def configure_repository_temp(path: str | Path = "data/tmp/resource-cds") -> Path:
+    """Route temporary processing to repository-backed storage.
+
+    Args:
+        path: Scratch directory on the repository filesystem.
+
+    Returns:
+        Absolute scratch-directory path.
+
+    Notes:
+        This changes the current process and its child processes only. The scratch
+        directory is ignored by Git and is not treated as a durable workflow output.
+    """
+    scratch_directory = Path(path).resolve()
+    scratch_directory.mkdir(parents=True, exist_ok=True)
+    os.environ["TMPDIR"] = str(scratch_directory)
+    tempfile.tempdir = str(scratch_directory)
+    return scratch_directory
+
+
 import pandas as pd
 import rasterio as rio
 import requests
@@ -66,6 +326,13 @@ date_time_str = now.strftime("%Y-%m-%d %H:%M:%S")
 
 
 def print_update(level: int = None, message: str = "--", alert: bool | None = False):
+    if _OUTPUT_CONFIGURED:
+        _record_status(
+            message,
+            level=logging.ERROR if alert else logging.INFO,
+            stacklevel=2,
+        )
+        return
     if alert:
         level = level or 2
         color = Fore.RED
@@ -91,10 +358,16 @@ def print_update(level: int = None, message: str = "--", alert: bool | None = Fa
 
 
 def print_error(message):
+    if _OUTPUT_CONFIGURED:
+        _record_status(message, level=logging.ERROR, stacklevel=2)
+        return
     print(f"{Fore.RED} └ ❌ > {message}{Style.RESET_ALL}")
 
 
 def print_module_title(text, Length_Char_inLine=60):
+    if _OUTPUT_CONFIGURED:
+        _record_status(text, stacklevel=2)
+        return
     print(
         f"{Fore.LIGHTCYAN_EX}{Length_Char_inLine * '_'}{Style.RESET_ALL}\n"
         f"{Fore.LIGHTGREEN_EX}{5 * ' '}{text}{Style.RESET_ALL}\n"
@@ -103,6 +376,9 @@ def print_module_title(text, Length_Char_inLine=60):
 
 
 def print_banner(message: str):
+    if _OUTPUT_CONFIGURED:
+        _record_status(message, stacklevel=2)
+        return
     line = "*" * len(message)
     print(f"{Fore.GREEN}{Style.BRIGHT}{line}{Style.RESET_ALL}")
     print(f"{Fore.GREEN}{Style.BRIGHT}{message}{Style.RESET_ALL}")
@@ -345,13 +621,102 @@ def check_LocalCopy_and_run_function(
             )
 
 
-# Function to Load User Configuration File
-def load_config(file_path):
+def _merge_config(base: dict, override: dict, path: tuple[str, ...] = ()) -> dict:
+    """Deep-merge mappings while replacing scalar and list values."""
+    merged = dict(base)
+    for key, value in override.items():
+        if key == "extends":
+            continue
+        current_path = path + (str(key),)
+        if not path and key not in KNOWN_CONFIG_TOP_LEVEL_KEYS:
+            raise ValueError(f"Unknown top-level configuration key: {key}")
+        if key in base and isinstance(base[key], list) and isinstance(value, dict):
+            if set(value) != {"$append"} or not isinstance(value["$append"], list):
+                dotted = ".".join(current_path)
+                raise TypeError(f"List override at {dotted} must be a list or {{$append: [...]}}")
+            merged[key] = [*base[key], *value["$append"]]
+            continue
+        if key in base and isinstance(base[key], dict) and isinstance(value, dict):
+            merged[key] = _merge_config(base[key], value, current_path)
+            continue
+        if key in base and base[key] is not None and value is not None:
+            base_is_mapping = isinstance(base[key], dict)
+            value_is_mapping = isinstance(value, dict)
+            if base_is_mapping != value_is_mapping:
+                dotted = ".".join(current_path)
+                raise TypeError(f"Configuration type mismatch at {dotted}")
+        merged[key] = value
+    return merged
 
-    with open(file_path) as file:
-        data = yaml.safe_load(file)
 
-    return data
+def _override_paths(value, path: tuple[str, ...] = ()) -> list[str]:
+    """Return dotted leaf paths represented by an override document."""
+    paths = []
+    for key, child in value.items():
+        if key == "extends":
+            continue
+        child_path = path + (str(key),)
+        if isinstance(child, dict) and child:
+            paths.extend(_override_paths(child, child_path))
+        else:
+            paths.append(".".join(child_path))
+    return paths
+
+
+def resolve_config(
+    file_path: str | Path,
+    *,
+    _chain: tuple[Path, ...] = (),
+) -> tuple[dict, dict]:
+    """Resolve a YAML configuration and return its provenance.
+
+    ``extends`` paths are resolved relative to the file declaring them. Mappings
+    merge recursively; lists and scalar values replace their base values.
+    """
+    path = Path(file_path).resolve()
+    if path in _chain:
+        cycle = " -> ".join(str(item) for item in (*_chain, path))
+        raise ValueError(f"Circular configuration inheritance: {cycle}")
+    if not path.is_file():
+        raise FileNotFoundError(path)
+    raw_text = path.read_text(encoding="utf-8")
+    document = yaml.safe_load(raw_text) or {}
+    if not isinstance(document, dict):
+        raise TypeError(f"Configuration must be a YAML mapping: {path}")
+
+    source_record = {
+        "path": str(path),
+        "sha256": hashlib.sha256(raw_text.encode("utf-8")).hexdigest(),
+    }
+    parent_reference = document.get("extends")
+    if parent_reference is None:
+        resolved = dict(document)
+        sources = [source_record]
+        override_paths = []
+    else:
+        if not isinstance(parent_reference, str) or not parent_reference.strip():
+            raise ValueError(f"extends must be a non-empty relative path in {path}")
+        parent_path = (path.parent / parent_reference).resolve()
+        parent, parent_provenance = resolve_config(parent_path, _chain=(*_chain, path))
+        resolved = _merge_config(parent, document)
+        sources = [*parent_provenance["sources"], source_record]
+        override_paths = [
+            *parent_provenance.get("override_paths", []),
+            *_override_paths(document),
+        ]
+
+    provenance = {
+        "requested_config": str(path),
+        "sources": sources,
+        "override_paths": list(dict.fromkeys(override_paths)),
+    }
+    return resolved, provenance
+
+
+def load_config(file_path: str | Path) -> dict:
+    """Load a full or inherited YAML workflow configuration."""
+    config, _provenance = resolve_config(file_path)
+    return config
 
 
 def download_data(source_URL: str, file_path: str) -> str:

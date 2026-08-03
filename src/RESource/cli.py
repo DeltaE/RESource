@@ -17,11 +17,27 @@ Examples:
 """
 
 import argparse
+import logging
 import os
 import platform
+import re
 import sys
+import threading
+import time
+from collections import deque
+from contextlib import redirect_stderr, redirect_stdout
 from datetime import datetime
 from pathlib import Path
+
+import yaml
+
+# Configure repository-backed process caches before importing geospatial modules.
+_CLI_TEMP_DIRECTORY = Path("data/tmp/resource-cli").resolve()
+_MATPLOTLIB_CACHE_DIRECTORY = Path("data/tmp/matplotlib").resolve()
+_CLI_TEMP_DIRECTORY.mkdir(parents=True, exist_ok=True)
+_MATPLOTLIB_CACHE_DIRECTORY.mkdir(parents=True, exist_ok=True)
+os.environ["TMPDIR"] = str(_CLI_TEMP_DIRECTORY)
+os.environ["MPLCONFIGDIR"] = str(_MATPLOTLIB_CACHE_DIRECTORY)
 
 try:
     from colorama import Fore, Style, init
@@ -42,7 +58,7 @@ except ImportError:
     _PSUTIL = False
 
 import RESource.RESources as RES
-from RESource.utility import load_config
+from RESource import utility as utils
 
 # ── Coloured output ───────────────────────────────────────────────────────────
 
@@ -52,23 +68,23 @@ def _c(color, msg):
 
 
 def print_error(msg):
-    print(_c(Fore.RED, msg))
+    utils.print_error(msg)
 
 
 def print_success(msg):
-    print(_c(Fore.GREEN, msg))
+    utils.print_update(message=msg)
 
 
 def print_warning(msg):
-    print(_c(Fore.YELLOW, msg))
+    utils.print_update(message=msg, alert=True)
 
 
 def print_info(msg):
-    print(_c(Fore.CYAN, msg))
+    utils.print_update(message=msg)
 
 
 def print_hint(msg):
-    print(_c(Fore.MAGENTA, msg))
+    utils.print_update(message=msg)
 
 
 # ── Hardware snapshot ─────────────────────────────────────────────────────────
@@ -106,7 +122,158 @@ def hw_snapshot() -> dict:
 # ── Runtime log ───────────────────────────────────────────────────────────────
 
 LOG_FILE = Path("results/logs/runtime_log.txt")
+DETAIL_LOG_FILE = Path("results/logs/resource.log")
 W = 80  # line width
+
+
+class LiveStatus:
+    """Small in-place CLI dashboard for long-running regional jobs."""
+
+    STAGES_PER_PIPELINE = 7
+
+    def __init__(self) -> None:
+        self.total = 0
+        self.done = 0
+        self.failed = 0
+        self.running = "initializing"
+        self.current_stage = 0
+        self.recent = deque(maxlen=2)
+        self._lines_rendered = 0
+        self._stream = sys.stderr
+        self._enabled = self._stream.isatty()
+        self._last_render = 0.0
+        self._refresh_interval = 0.2
+        self._job_started_at = None
+        self._spinner_index = 0
+        self._render_lock = threading.RLock()
+        self._stop_event = threading.Event()
+        self._heartbeat_thread = None
+
+    def configure(self, total: int) -> None:
+        self.total = total
+        if self._enabled and self._heartbeat_thread is None:
+            self._heartbeat_thread = threading.Thread(
+                target=self._heartbeat,
+                name="resource-cli-status",
+                daemon=True,
+            )
+            self._heartbeat_thread.start()
+        self.render(force=True)
+
+    def update(self, message: str) -> None:
+        clean = " ".join(str(message).split())
+        stage_match = re.match(r"Step\s+(\d+)", clean)
+        if stage_match:
+            self.current_stage = min(
+                self.STAGES_PER_PIPELINE,
+                max(self.current_stage, int(stage_match.group(1))),
+            )
+        if clean and (not self.recent or clean != self.recent[-1]):
+            self.recent.append(clean)
+        self.render()
+
+    def start(self, region: str, resource: str) -> None:
+        self.running = f"{region} / {resource}"
+        self.current_stage = 0
+        self._job_started_at = time.monotonic()
+        self.update(f"Started {self.running}")
+        self.render(force=True)
+
+    def complete(self, region: str, resource: str, *, failed: bool = False) -> None:
+        self.done += 1
+        self.failed += int(failed)
+        self.current_stage = 0
+        self._job_started_at = None
+        result = "failed" if failed else "completed"
+        self.running = "waiting for next job"
+        self.update(f"{region} / {resource} {result}")
+        self.render(force=True)
+
+    def render(self, *, force: bool = False) -> None:
+        if not self._enabled:
+            return
+        with self._render_lock:
+            now = time.monotonic()
+            if not force and now - self._last_render < self._refresh_interval:
+                return
+            width = 30
+            total_stages = self.total * self.STAGES_PER_PIPELINE
+            finished_stages = min(
+                total_stages,
+                self.done * self.STAGES_PER_PIPELINE
+                + (0 if self.done >= self.total else max(0, self.current_stage - 1)),
+            )
+            fraction = finished_stages / total_stages if total_stages else 0
+            filled = min(width, int(width * fraction))
+            bar = "█" * filled + "░" * (width - filled)
+            spinner = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"[self._spinner_index % 10]
+            self._spinner_index += 1
+            elapsed = ""
+            if self._job_started_at is not None:
+                elapsed = f" | elapsed {_hms(now - self._job_started_at)}"
+            lines = [
+                (
+                    f"Overall  [{bar}] {finished_stages}/{total_stages or '?'} stages "
+                    f"| {self.done}/{self.total or '?'} pipelines"
+                ),
+                (
+                    f"Running: {spinner} {self.running}"
+                    + (
+                        f" — step {self.current_stage}/{self.STAGES_PER_PIPELINE}"
+                        if self.current_stage
+                        else ""
+                    )
+                    + elapsed
+                ),
+                *(f"Status:  {status[:100]}" for status in self.recent),
+            ]
+            if self._lines_rendered:
+                self._stream.write(f"\x1b[{self._lines_rendered}F")
+            for line in lines:
+                self._stream.write(f"\x1b[2K{line}\n")
+            self._stream.flush()
+            self._lines_rendered = len(lines)
+            self._last_render = now
+
+    def _heartbeat(self) -> None:
+        """Refresh elapsed time without producing additional terminal lines."""
+        while not self._stop_event.wait(0.5):
+            self.render(force=True)
+
+    def finish(self, status: str, log_path: Path) -> None:
+        self.running = f"finished: {status}"
+        self.update(f"Detailed log: {log_path}")
+        self._stop_event.set()
+        if self._heartbeat_thread is not None:
+            self._heartbeat_thread.join(timeout=1)
+        self.render(force=True)
+        if self._enabled:
+            self._stream.write("\n")
+        else:
+            print(f"RESource {status}: {self.done}/{self.total} jobs finished")
+            print(f"Detailed log: {log_path}")
+
+
+class LogStream:
+    """Convert otherwise-unstructured stdout/stderr writes into log records."""
+
+    def __init__(self, logger: logging.Logger, level: int) -> None:
+        self.logger = logger
+        self.level = level
+        self._buffer = ""
+
+    def write(self, text: str) -> int:
+        self._buffer += text.replace("\r", "\n")
+        while "\n" in self._buffer:
+            line, self._buffer = self._buffer.split("\n", 1)
+            if line.strip():
+                self.logger.log(self.level, "captured terminal output | %s", line.rstrip())
+        return len(text)
+
+    def flush(self) -> None:
+        if self._buffer.strip():
+            self.logger.log(self.level, "captured terminal output | %s", self._buffer.rstrip())
+        self._buffer = ""
 
 
 def _hms(seconds: float) -> str:
@@ -230,6 +397,27 @@ def build_parser() -> argparse.ArgumentParser:
         metavar="CODE",
         help="Region codes to process (default: all in config)",
     )
+    parser.add_argument(
+        "--verbose",
+        "-v",
+        action="store_true",
+        help="Show detailed module-and-line logs in the terminal",
+    )
+    parser.add_argument(
+        "--show-config",
+        action="store_true",
+        help="Print the fully resolved configuration and exit",
+    )
+    parser.add_argument(
+        "--show-overrides",
+        action="store_true",
+        help="Print inherited source files and overridden paths, then exit",
+    )
+    parser.add_argument(
+        "--validate-only",
+        action="store_true",
+        help="Resolve and validate configuration without running workflows",
+    )
     return parser
 
 
@@ -249,13 +437,24 @@ def main(start_dt: datetime | None = None) -> int:
     if start_dt is None:
         start_dt = datetime.now()
 
-    hw_start = hw_snapshot()
     args = build_parser().parse_args()
+    hw_start = hw_snapshot()
+    live_status = LiveStatus()
+    inspection_mode = args.show_config or args.show_overrides or args.validate_only
+    detail_log = utils.configure_runtime_logging(
+        DETAIL_LOG_FILE,
+        verbose=args.verbose,
+        status_sink=None if args.verbose or inspection_mode else live_status.update,
+    )
+    logger = logging.getLogger("RESource")
+    logger.info(
+        "Pipeline invocation: config=%s year=%s regions=%s", args.config, args.year, args.regions
+    )
 
     # ── Load config ───────────────────────────────────────────────────────────
     try:
-        config = load_config(args.config)
-        print_success(f"✓ Config loaded: {args.config}")
+        config, config_provenance = utils.resolve_config(args.config)
+        utils.print_update(message=f"Config loaded: {args.config}")
     except FileNotFoundError:
         print_error(f"✗ Config not found: {args.config}")
         sys.exit(1)
@@ -266,6 +465,15 @@ def main(start_dt: datetime | None = None) -> int:
     if "region_mapping" not in config:
         print_error("✗ 'region_mapping' missing from config.")
         sys.exit(1)
+
+    if args.show_config:
+        print(yaml.safe_dump(config, sort_keys=False), end="")
+    if args.show_overrides:
+        print(yaml.safe_dump(config_provenance, sort_keys=False), end="")
+    if args.validate_only:
+        print(f"Configuration valid: {Path(args.config).resolve()}")
+    if args.show_config or args.show_overrides or args.validate_only:
+        return 0
 
     available_regions = list(config["region_mapping"].keys())
 
@@ -288,41 +496,32 @@ def main(start_dt: datetime | None = None) -> int:
             sys.exit(1)
         regions = args.regions
 
-    # ── Banner ────────────────────────────────────────────────────────────────
-    print(f"\n{'=' * 65}")
-    print_info(f"  RESource  |  year={weather_year}  |  regions={regions}")
-    print_info(f"  config={args.config}")
-    if _PSUTIL:
-        vm = psutil.virtual_memory()
-        print_info(
-            f"  CPU={hw_start['cpu_logical']} logical / {hw_start['cpu_physical']} physical  "
-            f"|  RAM={hw_start['ram_total_gb']:.0f} GB total  "
-            f"|  avail={vm.available / 1e9:.1f} GB"
-        )
-    print(f"{'=' * 65}\n")
-
     # ── Pipeline loop ─────────────────────────────────────────────────────────
     resource_types = ["wind", "solar"]
     region_log = []
+    live_status.configure(len(regions) * len(resource_types))
 
     for region in regions:
         for resource_type in resource_types:
-            print_info(f"→ {region} / {resource_type}")
+            live_status.start(region, resource_type)
+            logger.info("Starting job region=%s resource=%s", region, resource_type)
             t0 = datetime.now()
+            builder = None
             try:
-                builder = RES.RESources_builder(
-                    config_file_path=args.config,
-                    region_short_code=region,
-                    resource_type=resource_type,
-                    weather_year=weather_year,
-                )
-                builder.build(
-                    select_top_sites=True,
-                    use_pypsa_buses=True,
-                    use_grid_lines=True,
-                    make_clusters=True,
-                    clean_store=False,
-                )
+                capture_context = redirect_stdout(LogStream(logger, logging.INFO))
+                error_context = redirect_stderr(LogStream(logger, logging.WARNING))
+                with capture_context, error_context:
+                    builder = RES.RESources_builder(
+                        config_file_path=args.config,
+                        region_short_code=region,
+                        resource_type=resource_type,
+                        weather_year=weather_year,
+                    )
+                    builder.build(
+                        select_top_sites=True,
+                        make_clusters=True,
+                        clean_store=False,
+                    )
                 elapsed = (datetime.now() - t0).total_seconds()
                 region_log.append(
                     {
@@ -333,7 +532,13 @@ def main(start_dt: datetime | None = None) -> int:
                         "error": None,
                     }
                 )
-                print_success(f"  ✓ {region} / {resource_type}  ({_hms(elapsed)})")
+                logger.info(
+                    "Completed job region=%s resource=%s elapsed=%s",
+                    region,
+                    resource_type,
+                    _hms(elapsed),
+                )
+                live_status.complete(region, resource_type)
 
             except Exception as exc:
                 elapsed = (datetime.now() - t0).total_seconds()
@@ -346,8 +551,17 @@ def main(start_dt: datetime | None = None) -> int:
                         "error": str(exc),
                     }
                 )
-                print_error(f"  ✗ {region} / {resource_type}: {exc}")
-                print_warning("    Continuing...")
+                logger.exception("Job failed region=%s resource=%s", region, resource_type)
+                live_status.complete(region, resource_type, failed=True)
+            finally:
+                builder = None
+                cleanup = utils.release_process_memory()
+                logger.info(
+                    "Post-job memory cleanup region=%s resource=%s collected=%s",
+                    region,
+                    resource_type,
+                    cleanup["unreachable_objects_collected"],
+                )
 
     # ── Write log ─────────────────────────────────────────────────────────────
     end_dt = datetime.now()
@@ -355,10 +569,7 @@ def main(start_dt: datetime | None = None) -> int:
     any_fail = any(e["status"] != "ok" for e in region_log)
     status = "PARTIAL" if any_fail else "SUCCESS"
 
-    print(f"\n{'=' * 65}")
-    print_success(f"  Done — {status}  ({_hms((end_dt - start_dt).total_seconds())})")
-    print_info(f"  Log → {LOG_FILE}")
-    print(f"{'=' * 65}\n")
+    live_status.finish(status, detail_log)
 
     write_runtime_log(
         config_path=args.config,

@@ -44,13 +44,13 @@ groups in `pyproject.toml`.
 ## Run an assessment
 
 ```bash
-uv run resource config/config_BC_baseline.yaml --year 2024 -r BC
+uv run resource config/CAN/scenarios/baseline.yaml --year 2024 -r BC
 ```
 
 Other examples:
 
 ```bash
-uv run resource config/CAN_baseline.yaml --year 2024
+uv run resource config/CAN/scenarios/baseline.yaml --year 2024
 uv run resource config/config_WB6_2023.yaml --year 2023 -r AL BA
 ```
 
@@ -63,7 +63,7 @@ downloaded and processed datasets are not bundled in the Python wheel.
 from RESource.RESources import RESources_builder
 
 builder = RESources_builder(
-    config_file_path="config/config_BC_baseline.yaml",
+    config_file_path="config/CAN/scenarios/baseline.yaml",
     region_short_code="BC",
     resource_type="wind",
     weather_year=2024,

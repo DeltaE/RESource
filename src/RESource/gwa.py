@@ -1,11 +1,13 @@
 from dataclasses import dataclass, field
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import geopandas as gpd
 import pandas as pd
 import requests
 import rioxarray as rxr
 import xarray as xr
+from tqdm.auto import tqdm
 
 import RESource.utility as utils
 from RESource.AttributesParser import AttributesParser
@@ -296,6 +298,10 @@ class GWACells(AttributesParser):
         self.gadmBoundaries = GADMBoundaries(**self.required_args)
 
         self.gwa_config = self.get_gwa_config()  # INHERITED METHOD from AttributesParser
+        self.gwa_datafields = self.gwa_config.get("datafields", {})
+        self.gwa_rasters = self.gwa_config.get("rasters", {})
+        self.gwa_sources = self.gwa_config.get("sources", {})
+        self.gwa_root = Path(self.gwa_config.get("root", "data/downloaded_data/GWA"))
         self.datahandler = DataHandler(self.store)  # INHERITED ATTRIBUTE from AttributesParser
 
     def prepare_GWA_data(
@@ -375,32 +381,24 @@ class GWACells(AttributesParser):
         Notes
         -----
         - Processing time depends on region size and number of data layers
-        - Downloaded files are cached locally to avoid repeated downloads
+        - Country rasters are staged temporarily; region-clipped rasters are reused
         - Memory usage scales with region size and data resolution
         - Wind speed filtering significantly reduces memory requirements
         - Multiple raster files are automatically merged into unified dataset
         - Spatial coordinates are preserved for subsequent spatial analysis
         """
-        self.gwa_data_list = []
-
-        # Load configuration parameters
-        self.gwa_datafields = self.gwa_config.get("datafields", {})
-        self.gwa_rasters = self.gwa_config.get("rasters", {})
-        self.gwa_sources = self.gwa_config.get("sources", {})
-        self.gwa_root = Path(self.gwa_config.get("root", "data/downloaded_data/GWA"))
-        self.bounding_box, _ = (
+        self.bounding_box, self.region_boundary = (
             self.gadmBoundaries.get_bounding_box()
         )  # INHERITED METHOD from GADMBoundaries
-        # Create the root directory if it doesn't exist
-        self.gwa_root.mkdir(parents=True, exist_ok=True)
 
-        # Check for existence and download if necessary
+        gwa_dfs = []
+        # Reuse regional outputs; materialize and close one raster at a time.
         for key, raster_name in self.gwa_rasters.items():
             self.gwa_country_code = self.region_mapping[self.region_short_code].get(
                 "GWA_country_code"
             )  # INHERITED ATTRIBUTES from AttributesParser
             self.raster_name = raster_name.replace("GWA_country_code", self.gwa_country_code)
-            self.raster_path = self.gwa_root / self.raster_name
+            self.raster_path = self._regional_raster_path(self.raster_name)
             if not self.raster_path.exists():
                 generic_source_url = self.gwa_sources[key]
                 self.region_source_url = generic_source_url.replace(
@@ -410,13 +408,19 @@ class GWACells(AttributesParser):
                     level=print_level_base,
                     message=f"{__name__}| Downloading {key} from {self.region_source_url}",
                 )
-                self.download_file(self.region_source_url, self.raster_path)
+                self._create_regional_raster(
+                    self.region_source_url,
+                    self.raster_name,
+                    self.raster_path,
+                    self.region_boundary,
+                )
 
+            source = None
+            data = None
             try:
-                # Process each raster using a streamlined approach
+                source = rxr.open_rasterio(self.raster_path)
                 data = (
-                    rxr.open_rasterio(self.raster_path)
-                    .rio.clip_box(**self.bounding_box)
+                    source.rio.clip_box(**self.bounding_box)
                     .rename(key)
                     .drop_vars(["band", "spatial_ref"])
                     .isel(
@@ -424,21 +428,22 @@ class GWACells(AttributesParser):
                     )  # 'IEC_Class_ExLoads' data is in band 1
                 )
 
-                # data.rio.write_crs(self.get_default_crs(), inplace=True)
-                self.gwa_data_list.append(data)
+                gwa_dfs.append(data.to_dataframe(name=key).dropna())
             except Exception as e:
                 utils.print_update(
                     level=print_level_base + 1, message=f"{__name__}| Error processing {key}: {e}"
                 )
-
-        gwa_dfs = []
-        for i, da in enumerate(self.gwa_data_list):
-            name = da.name or f"var_{i}"
-            df = da.to_dataframe(name=name).dropna()
-            gwa_dfs.append(df)
+            finally:
+                if data is not None:
+                    data.close()
+                if source is not None:
+                    source.close()
 
         # concatenate side-by-side on the same MultiIndex (y,x)
+        if not gwa_dfs:
+            raise RuntimeError("No GWA rasters could be processed")
         self.merged_df = pd.concat(gwa_dfs, axis=1)
+        gwa_dfs.clear()
 
         """ 
         self.merged_data = xr.merge(self.gwa_data_list) if self.gwa_data_list is None else xr.DataArray()
@@ -469,6 +474,67 @@ class GWACells(AttributesParser):
         # return self.merged_df_f
         return self.merged_df
 
+    def _regional_raster_path(self, raster_name: str) -> Path:
+        """Return the durable path for a region-clipped GWA raster."""
+        return self.gwa_root / f"{self.region_short_code}_{Path(raster_name).name}"
+
+    def get_regional_raster_path(self, datafield: str) -> Path:
+        """Resolve a configured GWA data field to its region-clipped output path."""
+        raster_name = self.gwa_rasters[datafield]
+        country_code = self.region_mapping[self.region_short_code]["GWA_country_code"]
+        return self._regional_raster_path(raster_name.replace("GWA_country_code", country_code))
+
+    def _create_regional_raster(
+        self,
+        url: str,
+        source_name: str,
+        destination: Path,
+        region_boundary: gpd.GeoDataFrame,
+    ) -> Path:
+        """Download a country raster temporarily and retain only its regional clip."""
+        scratch_directory = utils.repository_temp_directory("resource-gwa")
+        utils.print_update(
+            level=print_level_base,
+            message=(
+                f"{__name__}| Downloading GWA source raster to repository temporary "
+                f"storage: {scratch_directory}"
+            ),
+        )
+        with TemporaryDirectory(prefix="run-", dir=scratch_directory) as temporary_directory:
+            temporary_source = Path(temporary_directory) / Path(source_name).name
+            self.download_file(url, temporary_source)
+
+            utils.print_update(
+                level=print_level_base + 1,
+                message=f"{__name__}| Clipping GWA raster to {self.region_short_code} boundaries...",
+            )
+            source = rxr.open_rasterio(temporary_source, masked=True)
+            try:
+                regional = source.rio.clip(
+                    region_boundary.geometry,
+                    region_boundary.crs,
+                    drop=True,
+                )
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                temporary_output = destination.with_suffix(f"{destination.suffix}.partial")
+                try:
+                    regional.rio.to_raster(
+                        temporary_output,
+                        driver="GTiff",
+                        compress="deflate",
+                    )
+                    temporary_output.replace(destination)
+                finally:
+                    temporary_output.unlink(missing_ok=True)
+            finally:
+                source.close()
+
+        utils.print_update(
+            level=print_level_base,
+            message=f"{__name__}| Regional GWA raster saved to {destination}",
+        )
+        return destination
+
     def download_file(self, url: str, destination: Path) -> None:
         """
         Download a file from a remote URL to a specified local destination.
@@ -477,9 +543,7 @@ class GWACells(AttributesParser):
         available locally. The method handles HTTP requests with proper
         error checking and provides detailed logging of download operations.
 
-        Files are downloaded completely before being written to avoid
-        partial downloads. The destination directory is created automatically
-        if it doesn't exist, ensuring reliable file operations.
+        Files are streamed to a temporary destination used during regional clipping.
 
         Parameters
         ----------
@@ -488,7 +552,7 @@ class GWACells(AttributesParser):
             Should be a valid HTTP/HTTPS URL pointing to a GWA raster file.
         destination : Path
             Local file path where the downloaded file should be saved.
-            Parent directories will be created automatically if needed.
+            Temporary local file path for the country-scale raster.
 
         Returns
         -------
@@ -531,16 +595,36 @@ class GWACells(AttributesParser):
 
         destination = utils.ensure_path(destination)
 
-        try:
-            response = requests.get(url)
-            response.raise_for_status()  # Raise an error for bad responses
-            with destination.open("wb") as f:
-                f.write(response.content)
-        except requests.RequestException as e:
-            utils.print_update(
-                level=print_level_base,
-                message=f"{__name__}| Failed to download {destination} from {url}. Error: {e}",
-            )
+        with requests.get(url, stream=True, timeout=(30, 300)) as response:
+            response.raise_for_status()
+            total_bytes = int(response.headers.get("content-length", 0))
+            downloaded_bytes = 0
+            next_report = 5
+            with (
+                destination.open("wb") as raster_file,
+                tqdm(
+                    total=total_bytes or None,
+                    desc=f"GWA {destination.name}",
+                    unit="B",
+                    unit_scale=True,
+                    unit_divisor=1024,
+                    dynamic_ncols=True,
+                    disable=utils.compact_output_enabled(),
+                ) as progress,
+            ):
+                for chunk in response.iter_content(chunk_size=1024 * 1024):
+                    if chunk:
+                        raster_file.write(chunk)
+                        progress.update(len(chunk))
+                        downloaded_bytes += len(chunk)
+                        if utils.compact_output_enabled() and total_bytes:
+                            percent = int(downloaded_bytes * 100 / total_bytes)
+                            if percent >= next_report:
+                                utils.print_update(
+                                    level=print_level_base + 2,
+                                    message=f"GWA raster download: {percent}% complete",
+                                )
+                                next_report += 5
 
     def load_gwa_cells(self, memory_resource_limitation: bool | None = False):
         """

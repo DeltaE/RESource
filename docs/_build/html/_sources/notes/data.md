@@ -91,6 +91,8 @@ RESource uses the [coders](https://github.com/DeltaE/RESource/blob/main/src/RESo
            - Fetches data from CODERS API using authenticated requests
            - Caches data locally in pickle format for improved performance
            - Filters data by province/region as configured
+           - Filters candidate connection substations using the configured CODERS
+             node types and transmission-line endpoint topology
            - Converts tabular data to GeoDataFrames when geographic coordinates are available
 
         5. **Available Data Sources**:
@@ -102,6 +104,28 @@ RESource uses the [coders](https://github.com/DeltaE/RESource/blob/main/src/RESo
            - Retrieve national data: `get_table_canada('generators')`
            - Filter provincial data: `get_table_provincial('substations')`
            - Force data refresh: `force_update=True` parameter
+
+```{important}
+For Canadian resource connection-distance analysis, the active scenarios retain
+CODERS substations whose `node_type` is `Generation` or `Terminal`
+and whose `node_code` occurs as a starting or ending node in the CODERS
+`transmission_lines` table. This follows the facility suffix and referential-closure
+findings in the [CODERS transmission-lines data QA](https://github.com/DeltaE/PyPSA_BC/blob/dev/docs/QA/CODERS_transmission_lines_dataQA_2026-07-23.md):
+GSS denotes generating-station switchyards and TSS major transmission substations.
+`INT`, `IPT`, `SWS`, and `JCT` suffixes are excluded because they represent
+cross-border ties, switching stations, or line taps rather than the candidate
+plant-connection substations assumed here. Distribution substations are treated as
+step-down/load nodes, while industrial substations are not assumed to be generally
+available.
+
+This is a screening assumption, not evidence that a retained node has spare
+capacity, compatible voltage, an approved interconnection, available land, or a
+constructible route. Those questions require project-level system and engineering
+studies. Configure the rule with `CODERS.connection_filter`; disabling it restores
+the unfiltered provincial CODERS substation table. See
+[Canadian grid-connection candidates](assumptions.md)
+for the full evidence table, implemented rule, and provenance.
+```
 
 ## 2. Climate and Weather Data
 
@@ -129,6 +153,25 @@ RESource uses the [coders](https://github.com/DeltaE/RESource/blob/main/src/RESo
 
     - Before the data can be downloaded from ERA5, it has to be processed by CDS servers, this might take a while depending on the volume of data requested. This only works if you have in before
 
+    - CDS may temporarily reject a valid monthly request when the dataset queue is
+      full. For every scenario, RESource keeps monthly requests sequential and
+      retries only recognized temporary capacity-limit errors with capped
+      exponential backoff. The package default is six total attempts, starting at
+      60 seconds and capped at 900 seconds. Advanced users can override the policy
+      under `cutout`:
+
+      ```yaml
+      cutout:
+        cds_retry:
+          max_attempts: 6
+          base_delay_seconds: 60
+          max_delay_seconds: 900
+      ```
+
+      Authentication failures and invalid requests are not retried. Do not start
+      parallel RESource runs for the same CDS account while the service is limiting
+      queued requests.
+
         - For linux users, please proceed as follows:
 
         - Steps to install the Copernicus Climate Data Store cdsapi package at your __local Linux/WSL__ (sourced from > [Registered and setup your CDS API key as described](https://cds-beta.climate.copernicus.eu/how-to-api))
@@ -153,6 +196,10 @@ RESource uses the [coders](https://github.com/DeltaE/RESource/blob/main/src/RESo
 - 📝 **Description**: [GADM](https://gadm.org/), the Database of Global Administrative Areas, is a high-resolution database of country administrative areas, with a goal of "all countries, at all levels, at any time period.
 - 🎯 **Use-case**: This boundary has been processed for admin level 2 (i.e. sub-provincial) to extract geospatial boundaries of the Regional Districts (RD) e.g. 28 RDs inside BC, Canada. This boundary is primarily used for spatial-grid cell/point mapping, regional overlay visuals, clipping point of interests in regional level while clustering.
 - ⚙️ **Supply_chain_mode**: Automated via [pygadm](https://pypi.org/project/pygadm) library [supports GADM data V4.1]
+    - Country boundaries are fetched in memory. New runs do not create or retain a
+      `data/downloaded_data/GADM` cache; only the selected region GeoJSON is saved
+      under the configured processed-data directory. Existing country cache files
+      remain supported for backward compatibility.
 
 ### 3.2 CPCAD (Canadian Protected and Conserved Areas Database)
 
@@ -187,10 +234,11 @@ RESource uses the [coders](https://github.com/DeltaE/RESource/blob/main/src/RESo
     Different constraint classes are applied for solar vs wind development based on terrain and land use suitability requirements.
 - ⚙️ **Supply_chain_mode**: Automated download and processing via ZIP archive
     - 📋 **Instruction**:
-        1. The system automatically downloads the LR.zip file from FAO's data repository
-        2. Extracts required raster layers based on configuration settings
-        3. Clips rasters to regional boundaries for analysis
-        4. Generates visualization plots for each processed layer
+        1. The system first reuses any existing region-prefixed clipped outputs
+        2. For missing outputs, it downloads `LR.zip` to an operating-system temporary directory
+        3. It extracts only the configured source layers into that temporary workspace
+        4. It clips those layers to regional boundaries and retains only the clipped GeoTIFFs
+        5. The archive and global extracted rasters are automatically removed when processing ends
            - **Example** configuration structure from `config/WB6_baseline.yaml`:
 
            ```yaml
@@ -198,6 +246,8 @@ RESource uses the [coders](https://github.com/DeltaE/RESource/blob/main/src/RESo
              root: 'data/downloaded_data/GAEZ'
              source: 'https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip'
              zip_file: 'LR.zip'
+             # Relative to GAEZ.root; resolves to
+             # data/downloaded_data/GAEZ/Rasters_in_use
              Rasters_in_use_direct: 'Rasters_in_use'
              raster_types:
              # GAEZ v4 'exclusion' layer of protected areas and biodiversity values
@@ -323,6 +373,11 @@ The class inclusion layers should match the layers available at your raster.
 ## 5. Renewable Energy Resource Data
 
 ### 5.1 GWA (Global Wind Atlas)
+
+RESource stages each country-scale GWA raster in an operating-system temporary
+directory, clips it to the configured regional boundary, and retains only the
+region-prefixed GeoTIFF under `data/downloaded_data/GWA`. Temporary country files
+are removed automatically, while existing regional clips are reused.
 > For high-resolution wind resource analysis
 
 - 🏷️ **Tag**: Global
@@ -486,12 +541,12 @@ The class inclusion layers should match the layers available at your raster.
 ---
 ## 7. Legends and Color Coding Standardization
 
-The RESource system uses standardized legend files and color coding schemes to ensure consistent visualization across different raster datasets. These legend files are stored in the `data/` directory and provide the mapping between raster class values, descriptions, and color representations.
+The RESource system uses standardized legend files and color coding schemes to ensure consistent visualization across different raster datasets. These small lookup tables are package assets under `src/RESource/assets/legends/`; they are tracked in Git and included when users install `deltae-resource`.
 
 ### 7.1 Available Legend Files
-> Currently the workflow does not have dependency for it. The post processing visualization uses these for color coding standardization.
+> These files support post-processing visualization and are available through Python package resources. They are not generated or downloaded workflow data.
 
-The following standardized legend CSV files are available in the `data/` directory:
+The following standardized legend CSV files are distributed with RESource:
 
 ### 1. **CLC_2018_legend.csv**
 - **Purpose**: CORINE Land Cover 2018 class definitions and colors
@@ -501,7 +556,7 @@ The following standardized legend CSV files are available in the `data/` directo
   - Class 12: Non-irrigated arable land (#ffffa8)
   - Class 44: Salt marshes (#cccccc)
 
-### 2. **exclusion_2017_legend.csv**
+### 2. **gaez_exclusion_legend.csv**
 - **Purpose**: GAEZ exclusion areas (protected areas and biodiversity zones)
 - **Structure**: 7 exclusion classes with conservation status descriptions
 - **Example classes**:
@@ -509,7 +564,7 @@ The following standardized legend CSV files are available in the `data/` directo
   - Class 2: IUCN category in WDPA (#fcae91)
   - Class 7: water (#66c2a5)
 
-### 3. **gaez_slpmed05_legend.csv**
+### 3. **gaez_terrains_legend.csv**
 - **Purpose**: GAEZ terrain slope classifications
 - **Structure**: 9 slope classes from flat to high slope plus water
 - **Example classes**:
@@ -517,7 +572,7 @@ The following standardized legend CSV files are available in the `data/` directo
   - Class 8: high slope (>45%) (#a0092cff)
   - Class 9: Water (#66c2a5)
 
-### 4. **faocmb_2010_legend.csv**
+### 4. **gaez_landcover_legend.csv**
 - **Purpose**: GAEZ land cover/use classifications
 - **Structure**: 11 dominant land cover types
 - **Example classes**:
@@ -556,8 +611,10 @@ The system uses these legend files in two ways:
 
 2. **Custom legend-based colormaps** (using CSV legend files):
    ```python
-   # In visualization functions
-   legend_df = pd.read_csv('data/exclusion_2017_legend.csv')
+   # In visualization functions; works from source and after pip installation
+   from RESource.assets import legend_file
+
+   legend_df = pd.read_csv(legend_file('gaez_exclusion_legend.csv'))
    custom_cmap = ListedColormap(legend_df['color'].tolist())
    ```
 

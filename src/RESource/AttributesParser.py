@@ -4,8 +4,6 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 
-import yaml
-
 import RESource.utility as utils
 
 today_str = datetime.now().strftime("%Y%m%d")
@@ -45,7 +43,7 @@ class AttributesParser:
             raise ValueError("region_short_code is required and cannot be None")
 
         # Load the user configuration master file by using the method
-        self.config: dict[str, dict] = self.load_config(self.config_file_path)
+        self.config, self.config_provenance = utils.resolve_config(self.config_file_path)
 
         # Resolve weather_year: CLI-supplied field takes precedence over config key.
         if self.weather_year is None:
@@ -126,12 +124,8 @@ class AttributesParser:
         return self.crs_d, self.crs_m
 
     def load_config(self, config_file_path):
-        """
-        Loads the yaml file as dictionary and extracts the attributes to pass on child classes.
-        """
-        with open(config_file_path) as file:
-            data = yaml.safe_load(file)
-        return data
+        """Load a full or inherited YAML configuration."""
+        return utils.load_config(config_file_path)
 
     def get_results_save_to_path(self):
         """
@@ -222,6 +216,22 @@ class AttributesParser:
     def get_custom_land_layers_config(self):
         return self.config.get("custom_land_layers", {})
 
+    def get_government_custom_layers(self) -> dict:
+        """Return government layers from the current or archived config schema."""
+        nested = self.get_custom_land_layers_config().get("Gov")
+        if nested is not None:
+            return nested
+        return self.config.get("Gov", {})
+
+    def get_conservation_lands_config(self) -> dict:
+        """Return the dedicated conservation vector configuration."""
+        vectors = self.get_custom_land_layers_config().get("vectors", []) or []
+        if isinstance(vectors, list):
+            for vector in vectors:
+                if isinstance(vector, dict) and vector.get("name") == "conservation_lands":
+                    return vector
+        return self.get_government_custom_layers().get("conservation_lands", {})
+
     def is_region_code_valid(self) -> bool:
         """
         Args:
@@ -256,15 +266,13 @@ class AttributesParser:
         return f"{self.config.get('Scenario').get('run_id')}_{self.weather_year}_{today_str}"
 
     def get_conserved_lands_CAN_args(self) -> dict:
-        if self.country == "Canada":
+        if self.country == "Canada" and self.get_conservation_lands_config():
             return {
                 "config_file_path": self.config_file_path,
                 "region_short_code": self.region_short_code,
                 "resource_type": self.resource_type,
             }
-        else:
-            print("Conservation Lands data supply chain is configured for Canada only")
-            return None
+        return None
 
     @property
     def discount_rate(self):
@@ -335,7 +343,16 @@ class AttributesParser:
         return self.config.get("grid_cell_resolution", {})
 
     def get_buses_path(self):
-        return Path("data/downloaded_data/CODERS/data-pull/network/substations.csv")
+        buses_path = self.resource_disaggregation_config.get("transmission", {}).get("buses")
+        return Path(buses_path) if buses_path else None
+
+    def get_processed_substations_path(self, source_path: Path) -> Path:
+        return (
+            Path("data/processed_data")
+            / "substations"
+            / self.region_short_code
+            / f"{source_path.stem}.pkl"
+        )
 
     def get_turbines_config(self):
         return self.resource_disaggregation_config["turbines"]

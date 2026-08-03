@@ -348,13 +348,16 @@ class Timeseries(AttributesParser):
             numpy.ndarray: The loaded wind speed data from the raster file.
         """
         if not gwa_windspeed_raster_path:
-            self.gwa_windspeed_raster_path = Path(
-                "data/downloaded_data/GWA/Canada_wspd_100m.tif"
-            )  # self.gwa_cells.gwa_root/self.gwa_cells.gwa_rasters['CF_IEC3']
+            self.gwa_windspeed_raster_path = self.gwa_cells.get_regional_raster_path(
+                "windspeed_gwa"
+            )
             if not self.gwa_windspeed_raster_path.exists():
                 self.gwa_cells.prepare_GWA_data()
-            self.gwa_windspeed_data = utils.load_raster_file(self.gwa_windspeed_raster_path)
-            return self.gwa_windspeed_data
+        else:
+            self.gwa_windspeed_raster_path = Path(gwa_windspeed_raster_path)
+
+        self.gwa_windspeed_data = utils.load_raster_file(self.gwa_windspeed_raster_path)
+        return self.gwa_windspeed_data
 
     def get_windspeed_rescaling_data(self) -> tuple:
         """

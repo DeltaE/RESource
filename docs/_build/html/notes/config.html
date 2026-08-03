@@ -48,7 +48,7 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Best Practices and Guidelines" href="learning.html" />
+    <link rel="next" title="Modeling assumptions" href="assumptions.html" />
     <link rel="prev" title="Case study: VRE site selection in British Columbia" href="case_BC.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="Python"/>
@@ -204,11 +204,14 @@
 <li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">How to use the CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assumptions.html">Modeling assumptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learning.html">Best Practices and Guidelines</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development_pipeline.html">Development pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wind_bias_correction.html">ERA5–GWA wind-speed bias correction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="era5_reference_climatology.html">Ten-year ERA5 reference climatology</a></li>
 <li class="toctree-l1"><a class="reference internal" href="step_cache.html">RESource Step Cache</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
@@ -635,6 +638,10 @@ the exact configuration with each analysis for reproducibility.</p>
 <h3>GADM (Global Administrative Areas)<a class="headerlink" href="#gadm-global-administrative-areas" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/GADM</span></code></p></li>
+<li><p><strong>Storage lifecycle:</strong> RESource does not create this download directory for new
+runs. Country boundaries are fetched in memory and only the selected processed
+region is retained under the configured <code class="docutils literal notranslate"><span class="pre">processed</span></code> directory. A pre-existing
+country GeoJSON in <code class="docutils literal notranslate"><span class="pre">root</span></code> remains readable as a legacy cache.</p></li>
 <li><p><strong>Processed Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/processed_data/regions</span></code></p></li>
 <li><p><strong>Field Mapping:</strong></p>
 <ul>
@@ -814,6 +821,11 @@ from the modeling inventory and save it locally as
 <code class="docutils literal notranslate"><span class="pre">credentials/coders_api.yaml</span></code>. See <a class="reference external" href="https://github.com/DeltaE/RESource/blob/main/credentials/README.md"><code class="docutils literal notranslate"><span class="pre">credentials/README.md</span></code></a>.</p></li>
 <li><p><strong>Security:</strong> Do not commit the downloaded credential file or print its API key.</p></li>
 <li><p><strong>Data Types:</strong> network (substations and transmission lines)</p></li>
+<li><p><strong>Connection filter:</strong> Active Canadian scenarios screen candidate substations
+with <code class="docutils literal notranslate"><span class="pre">CODERS.connection_filter</span></code>. The default retains <code class="docutils literal notranslate"><span class="pre">Generation</span></code> and <code class="docutils literal notranslate"><span class="pre">Terminal</span></code>
+node types only when their node code is referenced by a CODERS transmission-line
+endpoint, and excludes <code class="docutils literal notranslate"><span class="pre">INT</span></code>, <code class="docutils literal notranslate"><span class="pre">IPT</span></code>, <code class="docutils literal notranslate"><span class="pre">SWS</span></code>, and <code class="docutils literal notranslate"><span class="pre">JCT</span></code> node-code suffixes. This is
+a planning proxy, not a finding of available interconnection capacity.</p></li>
 </ul>
 </section>
 <section id="gaez-global-agro-ecological-zones">
@@ -821,6 +833,9 @@ from the modeling inventory and save it locally as
 <ul class="simple">
 <li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/GAEZ</span></code></p></li>
 <li><p><strong>Source:</strong> <a class="reference external" href="https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip">LR.zip</a></p></li>
+<li><p><strong>Storage lifecycle:</strong> The archive and global source rasters are staged in the
+operating-system temporary directory. Only region-prefixed clipped GeoTIFFs are
+retained below <code class="docutils literal notranslate"><span class="pre">GAEZ/Rasters_in_use/</span></code>. Existing clipped outputs are reused.</p></li>
 </ul>
 <section id="raster-types">
 <h4>Raster Types<a class="headerlink" href="#raster-types" title="Link to this heading">#</a></h4>
@@ -889,6 +904,10 @@ from the modeling inventory and save it locally as
 </section>
 <section id="global-wind-atlas-gwa">
 <h3>Global Wind Atlas (GWA)<a class="headerlink" href="#global-wind-atlas-gwa" title="Link to this heading">#</a></h3>
+<p>Country-scale GWA rasters are downloaded into an operating-system temporary
+directory and clipped immediately. Only region-prefixed outputs, such as
+<code class="docutils literal notranslate"><span class="pre">BC_Canada_wspd_100m.tif</span></code>, are retained under the configured GWA root. Existing
+regional outputs are reused, so reruns do not download the country raster again.</p>
 <ul class="simple">
 <li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/GWA</span></code></p></li>
 <li><p><strong>Data Fields:</strong></p>
@@ -1063,11 +1082,11 @@ from the modeling inventory and save it locally as
       </div>
     </a>
     <a class="right-next"
-       href="learning.html"
+       href="assumptions.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Best Practices and Guidelines</p>
+        <p class="prev-next-title">Modeling assumptions</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -1,4 +1,6 @@
 import os
+import time
+from collections.abc import Callable
 from pathlib import Path
 
 import atlite
@@ -11,6 +13,70 @@ from RESource.boundaries import GADMBoundaries
 os.environ["CDSAPI_URL"] = "https://cds.climate.copernicus.eu/api"
 
 print_level_base = 3
+
+DEFAULT_CDS_MAX_ATTEMPTS = 6
+DEFAULT_CDS_BASE_DELAY_SECONDS = 60.0
+DEFAULT_CDS_MAX_DELAY_SECONDS = 900.0
+
+_TRANSIENT_CDS_MARKERS = (
+    "number queued requests for this dataset is temporarily limited",
+    "too many requests",
+    "temporarily unavailable",
+    "service unavailable",
+)
+
+
+def is_transient_cds_error(exc: Exception) -> bool:
+    """Return whether an exception represents a retryable CDS capacity limit."""
+    message = str(exc).casefold()
+    return any(marker in message for marker in _TRANSIENT_CDS_MARKERS)
+
+
+def prepare_cutout_with_retry(
+    cutout: atlite.Cutout,
+    *,
+    max_attempts: int = DEFAULT_CDS_MAX_ATTEMPTS,
+    base_delay_seconds: float = DEFAULT_CDS_BASE_DELAY_SECONDS,
+    max_delay_seconds: float = DEFAULT_CDS_MAX_DELAY_SECONDS,
+    sleep: Callable[[float], None] = time.sleep,
+) -> None:
+    """Prepare an atlite cutout with bounded retries for CDS queue limits.
+
+    Args:
+        cutout: Atlite cutout to prepare.
+        max_attempts: Total attempts, including the initial request.
+        base_delay_seconds: Delay before the first retry.
+        max_delay_seconds: Maximum delay between attempts.
+        sleep: Delay function, injectable for deterministic tests.
+
+    Raises:
+        ValueError: If retry settings are invalid.
+        Exception: The final CDS error, or any non-transient error immediately.
+    """
+    if max_attempts < 1:
+        raise ValueError("CDS max_attempts must be at least 1")
+    if base_delay_seconds < 0 or max_delay_seconds < 0:
+        raise ValueError("CDS retry delays cannot be negative")
+
+    for attempt in range(1, max_attempts + 1):
+        try:
+            cutout.prepare(
+                monthly_requests=True,
+                concurrent_requests=False,
+                show_progress=False,
+            )
+            return
+        except Exception as exc:
+            if not is_transient_cds_error(exc) or attempt == max_attempts:
+                raise
+
+            delay = min(base_delay_seconds * (2 ** (attempt - 1)), max_delay_seconds)
+            utils.print_warning(
+                "CDS temporarily limited queued ERA5 requests. "
+                f"Retrying in {delay:g} seconds "
+                f"(attempt {attempt + 1}/{max_attempts})."
+            )
+            sleep(delay)
 
 
 class ERA5Cutout(AttributesParser):
@@ -258,6 +324,14 @@ class ERA5Cutout(AttributesParser):
         )
 
         weather_year = weather_year if weather_year is not None else self.weather_year
+        self.cds_temporary_directory = utils.configure_repository_temp()
+        utils.print_update(
+            level=print_level_base + 1,
+            message=(
+                f"{__name__}| Using repository-backed CDS temporary storage: "
+                f"{self.cds_temporary_directory}"
+            ),
+        )
         MBR, region_boundary = self.gadmBoundary.get_bounding_box()
         utils.print_update(
             level=print_level_base + 2, message=f"{__name__}| ✓ MBR and regional boundary created. "
@@ -279,9 +353,26 @@ class ERA5Cutout(AttributesParser):
             time=slice(*self.get_snapshot(year=weather_year)),
         )
 
-        cutout.prepare(
-            monthly_requests=True, concurrent_requests=False, show_progress=False
-        )  # Prepare the cutout data
+        retry_config = self.cutout_config.get("cds_retry", {})
+        self.cds_memory_cleanup = utils.release_process_memory()
+        utils.print_update(
+            level=print_level_base + 1,
+            message=(
+                f"{__name__}| Released process memory before CDS preparation "
+                f"({self.cds_memory_cleanup['unreachable_objects_collected']} "
+                "unreachable objects)."
+            ),
+        )
+        prepare_cutout_with_retry(
+            cutout,
+            max_attempts=int(retry_config.get("max_attempts", DEFAULT_CDS_MAX_ATTEMPTS)),
+            base_delay_seconds=float(
+                retry_config.get("base_delay_seconds", DEFAULT_CDS_BASE_DELAY_SECONDS)
+            ),
+            max_delay_seconds=float(
+                retry_config.get("max_delay_seconds", DEFAULT_CDS_MAX_DELAY_SECONDS)
+            ),
+        )
 
         self.audit_cutout(year=weather_year)
         self.validate_cutout_nc(cutout.path)

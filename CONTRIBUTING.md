@@ -23,9 +23,11 @@ rasters, generated results, credentials, API keys, or a local virtual environmen
 
 - Put importable code in `src/RESource/` and tests in `tests/`.
 - Put every notebook under `notebooks/`; reusable logic must move into the package.
-- Put current regional configurations in `config/` and explain their data sources.
+- Put regional contracts in `config/REGION/base.yaml`, decision-specific overrides
+  in `config/REGION/scenarios/`, and explain their data sources. Scenario files
+  should contain only intentional departures from the base.
 - Put durable documentation in `docs/source/notes/` and link it from the docs index.
-- Use `RESource` for imports. `RES` is only a temporary compatibility namespace.
+- Use `RESource` for all imports. The former `RES` namespace is no longer distributed.
 
 ## Standards
 

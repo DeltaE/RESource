@@ -151,18 +151,11 @@ class GADMBoundaries(AttributesParser):
             "resource_type": self.resource_type,
         }
 
-        # Setup paths and ensure directories exist
+        # Resolve paths without creating storage during object initialization.
         self.gadm_config = super().get_gadm_config()  # INHERITED METHOD from AttributesParser
 
         self.gadm_root = Path(self.gadm_config["root"])
-        self.gadm_root.mkdir(
-            parents=True, exist_ok=True
-        )  # Creates parent directories if not exists.
-
         self.gadm_processed = Path(self.gadm_config["processed"])
-        self.gadm_processed.mkdir(
-            parents=True, exist_ok=True
-        )  # Creates parent directories if not exists.
         self.admin_level: int = self.gadm_config.get("admin_level", 1)
         self.boundary_datafields = self.gadm_config.get("datafield_mapping")
 
@@ -223,7 +216,7 @@ class GADMBoundaries(AttributesParser):
                 self.boundary_country = gpd.read_file(self.country_file)
 
             else:
-                # Fetch and save data if file does not exist or force_update is True
+                # Fetch in memory. Only region-specific processed boundaries are retained.
                 utils.print_update(
                     level=PRINT_LEVEL_BASE + 1,
                     message=f"{__name__} | Fetching GADM data for {self.country} at Administrative Level {self.admin_level}....from source: https://gadm.org/data.html",
@@ -234,11 +227,9 @@ class GADMBoundaries(AttributesParser):
                 )
                 _country_gdf_.set_crs(self.crs_d)
                 self.boundary_country = _country_gdf_
-                # save to local file
-                self.boundary_country.to_file(self.country_file, driver="GeoJSON")
                 utils.print_update(
                     level=PRINT_LEVEL_BASE + 1,
-                    message=f"{__name__} | GADM data saved to {self.country_file}.",
+                    message=f"{__name__} | GADM country data loaded in memory.",
                 )
 
             return self.boundary_country
@@ -345,6 +336,7 @@ class GADMBoundaries(AttributesParser):
                     )
                     self.boundary_region: gpd.GeoDataFrame = _boundary_region_
 
+                self.region_file.parent.mkdir(parents=True, exist_ok=True)
                 self.boundary_region.to_file(self.region_file, driver="GeoJSON")
                 utils.print_update(
                     level=PRINT_LEVEL_BASE + 1,

@@ -1,0 +1,55 @@
+extends: ../base.yaml
+
+Scenario:
+  run_id: NO_BUFFERS
+  Description: No buffers scenario with land cover and slope exclusions only
+
+capacity_disaggregation:
+  solar:
+    max_capacity: 5
+    vector_buffers:
+    - aeroway:
+        buffer_mapping_key: aeroway
+        buffer_mapping_key_buffers:
+          aerodrome: 0
+          runway: 0
+          taxiway: 0
+          helipad: 0
+          apron: 0
+          gate: 0
+    - conserved_lands:
+        buffer_mapping_key: IUCN_CAT_desc
+        buffer_mapping_key_buffers:
+          Strict Nature Reserve: 0
+          Wilderness Area: 0
+          National Park: 0
+          Natural Monument or Feature: 0
+          Habitat/Species Management Area: 0
+          Protected Landscape/Seascape: 0
+          Protected Area with Sustainable Use of Natural Resources: 0
+          Interim Sites (unknown specifics): 0
+          OECM areas: 0
+  wind:
+    max_capacity: 15
+    vector_buffers:
+    - aeroway:
+        buffer_mapping_key: aeroway
+        buffer_mapping_key_buffers:
+          aerodrome: 0
+          runway: 0
+          taxiway: 0
+          helipad: 0
+          apron: 0
+          gate: 0
+    - conserved_lands:
+        buffer_mapping_key: IUCN_CAT_desc
+        buffer_mapping_key_buffers:
+          Strict Nature Reserve: 0
+          Wilderness Area: 0
+          National Park: 0
+          Natural Monument or Feature: 0
+          Habitat/Species Management Area: 0
+          Protected Landscape/Seascape: 0
+          Protected Area with Sustainable Use of Natural Resources: 0
+          Interim Sites (unknown specifics): 0
+          OECM areas: 0

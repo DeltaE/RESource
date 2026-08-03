@@ -204,11 +204,14 @@
 <li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assumptions.html">Modeling assumptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learning.html">Best Practices and Guidelines</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development_pipeline.html">Development pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wind_bias_correction.html">ERA5–GWA wind-speed bias correction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="era5_reference_climatology.html">Ten-year ERA5 reference climatology</a></li>
 <li class="toctree-l1"><a class="reference internal" href="step_cache.html">RESource Step Cache</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
@@ -387,7 +390,10 @@
                 <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arguments">Arguments</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-year-runs">Multi-year runs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-year-runs">Multi-year runs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#era5-cutouts-only">ERA5 cutouts only</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compatibility-launcher">Compatibility launcher</a></li>
 </ul>
             </nav>
@@ -449,6 +455,26 @@ fails:</p>
 <p>Use <code class="docutils literal notranslate"><span class="pre">resource-multiyear</span> <span class="pre">--help</span></code> for the complete command reference. Outputs retain
 the normal RESource directory structure; ensure the selected configuration keeps
 different weather years distinguishable before starting a large run.</p>
+<section id="era5-cutouts-only">
+<h3>ERA5 cutouts only<a class="headerlink" href="#era5-cutouts-only" title="Link to this heading">#</a></h3>
+<p>For a fixed weather climatology, use the dedicated downloader. It does not run land,
+capacity, scoring or generation stages:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>resource-cutout-multiyear<span class="w"> </span>config/CAN_baseline.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--start<span class="w"> </span><span class="m">2016</span><span class="w"> </span>--end<span class="w"> </span><span class="m">2025</span><span class="w"> </span>--region<span class="w"> </span>BC
+</pre></div>
+</div>
+<p>The command validates and reuses complete annual cutouts, quarantines invalid files,
+continues after individual failures, and writes a JSON manifest under
+<code class="docutils literal notranslate"><span class="pre">results/manifests/</span></code>. Before each annual CDS job it releases unreachable Python
+objects from the previous iteration and records the memory-cleanup report. This
+does not delete UV, CDS, temporary-file or downloaded-data caches.</p>
+<p>The standard single-year <code class="docutils literal notranslate"><span class="pre">resource</span> <span class="pre">CONFIG</span> <span class="pre">--year</span> <span class="pre">YEAR</span></code> workflow uses the same
+memory-release task immediately before ERA5/CDS preparation.</p>
+<p>Both commands route CDS and Python temporary files to the repository filesystem at
+<code class="docutils literal notranslate"><span class="pre">data/tmp/resource-cds/</span></code>. This avoids small system <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> mounts. The scratch path is
+ignored by Git and is not a durable output; validated NetCDF cutouts remain under
+the configured cutout root.</p>
+</section>
 </section>
 <section id="compatibility-launcher">
 <h2>Compatibility launcher<a class="headerlink" href="#compatibility-launcher" title="Link to this heading">#</a></h2>
@@ -507,7 +533,10 @@ thin compatibility wrapper. Documentation and automation should use the installe
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arguments">Arguments</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-year-runs">Multi-year runs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-year-runs">Multi-year runs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#era5-cutouts-only">ERA5 cutouts only</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compatibility-launcher">Compatibility launcher</a></li>
 </ul>
   </nav></div>

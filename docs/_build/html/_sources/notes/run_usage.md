@@ -57,6 +57,30 @@ Use `resource-multiyear --help` for the complete command reference. Outputs reta
 the normal RESource directory structure; ensure the selected configuration keeps
 different weather years distinguishable before starting a large run.
 
+### ERA5 cutouts only
+
+For a fixed weather climatology, use the dedicated downloader. It does not run land,
+capacity, scoring or generation stages:
+
+```bash
+uv run resource-cutout-multiyear config/CAN_baseline.yaml \
+  --start 2016 --end 2025 --region BC
+```
+
+The command validates and reuses complete annual cutouts, quarantines invalid files,
+continues after individual failures, and writes a JSON manifest under
+`results/manifests/`. Before each annual CDS job it releases unreachable Python
+objects from the previous iteration and records the memory-cleanup report. This
+does not delete UV, CDS, temporary-file or downloaded-data caches.
+
+The standard single-year `resource CONFIG --year YEAR` workflow uses the same
+memory-release task immediately before ERA5/CDS preparation.
+
+Both commands route CDS and Python temporary files to the repository filesystem at
+`data/tmp/resource-cds/`. This avoids small system `/tmp` mounts. The scratch path is
+ignored by Git and is not a durable output; validated NetCDF cutouts remain under
+the configured cutout root.
+
 ## Compatibility launcher
 
 `python run.py ...` remains available in a repository checkout, but it is only a

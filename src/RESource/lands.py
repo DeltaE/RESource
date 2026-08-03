@@ -188,8 +188,10 @@ class ConservationLands(AttributesParser):
     The configuration must include conservation lands parameters:
 
     ```yaml
-    Gov:
-      conservation_lands:
+    custom_land_layers:
+      vectors:
+        - name: conservation_lands
+          provider: government_conservation
         url: "https://www.donneesquebec.ca/recherche/dataset/..."
         root: "data/downloaded_data/conservation"
         data_name: "CPCAD_Dec2023"
@@ -301,7 +303,7 @@ class ConservationLands(AttributesParser):
         )  # INHERITED METHOD from GADMBoundaries
 
         # Set the Class specific attributes
-        self.conserved_lands_cfg = self.config["Gov"]["conservation_lands"]
+        self.conserved_lands_cfg = self.get_conservation_lands_config()
 
         self.source_url = self.conserved_lands_cfg["url"]
         self.data_root = self.conserved_lands_cfg["root"]
@@ -622,10 +624,12 @@ class LandContainer(AttributesParser):
       root: "data/downloaded_data/OSM"
       layers: [...]
 
-    Gov:  # Conservation lands configuration
-      conservation_lands:
-        url: "..."
-        root: "data/downloaded_data/conservation"
+    custom_land_layers:
+      vectors:
+        - name: conservation_lands
+          provider: government_conservation
+          url: "..."
+          root: "data/downloaded_data/custom_land_layers/Conservation_Lands"
     ```
 
     Data Integration Workflow
@@ -770,7 +774,8 @@ class LandContainer(AttributesParser):
             )  # INHERITED METHOD from AttributesParser
         else:
             utils.print_warning(
-                f"{__name__}| 'conserved_lands_CAN' not initiated. Please check the config file for 'conserved_lands' key under 'Gov' section"
+                f"{__name__}| 'conserved_lands_CAN' not initiated. Check "
+                "custom_land_layers.vectors[name=conservation_lands] in the config."
             )
             self.conserved_lands_CAN = None
         # Initialize conservation_lands_region_gdf attribute
@@ -969,6 +974,14 @@ class LandContainer(AttributesParser):
                 message=f"{__name__}| Found {len(custom_raster_configs)} custom raster layers in config for {self.region_name}.",
             )
             for custom_raster_config_item in custom_raster_configs:
+                custom_raster_path = (
+                    Path(custom_raster_config_item["root"]) / custom_raster_config_item["raster"]
+                )
+                utils.fetch_file_if_missing(
+                    custom_raster_config_item.get("source", ""),
+                    custom_raster_path,
+                    description=custom_raster_config_item.get("name"),
+                )
                 custom_raster_config_item["filepath"] = clip_to_boundary_and_resample_raster(
                     in_raster_config=custom_raster_config_item,
                     boundary_name=self.region_short_code,
@@ -1098,6 +1111,15 @@ class LandContainer(AttributesParser):
 
             for custom_cfg in raw_custom_vector_configs:
                 name = custom_cfg.get("name", "Unnamed")
+                if custom_cfg.get("provider") == "government_conservation":
+                    utils.print_update(
+                        level=PRINT_LEVEL_BASE + 2,
+                        message=(
+                            f"{__name__}| Custom vector layer '{name}' is handled by "
+                            "the government conservation supply chain."
+                        ),
+                    )
+                    continue
                 utils.print_update(
                     level=PRINT_LEVEL_BASE + 2,
                     message=f"{__name__}| Loading custom vector layer '{name}' for {self.region_name}",
@@ -1556,7 +1578,8 @@ def ensure_uint8_raster(filepath):
             data = src.read(1).astype(np.uint8)
             meta = src.meta.copy()
             meta.update(dtype="uint8", nodata=255)
-            tmp = NamedTemporaryFile(suffix=".tif", delete=False)
+            scratch_directory = utils.repository_temp_directory("resource-rasters")
+            tmp = NamedTemporaryFile(suffix=".tif", delete=False, dir=scratch_directory)
             with rasterio.open(tmp.name, "w", **meta) as dst:
                 dst.write(data, 1)
             return tmp.name

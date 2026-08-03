@@ -84,6 +84,10 @@ snapshots_tz_BC:
 ### GADM (Global Administrative Areas)
 
 - **Root Directory:** `data/downloaded_data/GADM`
+- **Storage lifecycle:** RESource does not create this download directory for new
+  runs. Country boundaries are fetched in memory and only the selected processed
+  region is retained under the configured `processed` directory. A pre-existing
+  country GeoJSON in `root` remains readable as a legacy cache.
 - **Processed Directory:** `data/processed_data/regions`
 - **Field Mapping:**
   - `NAME_0`: Country
@@ -177,11 +181,19 @@ Canadian provinces and territories are mapped to numeric codes (1-21), including
   `credentials/coders_api.yaml`. See [`credentials/README.md`](https://github.com/DeltaE/RESource/blob/main/credentials/README.md).
 - **Security:** Do not commit the downloaded credential file or print its API key.
 - **Data Types:** network (substations and transmission lines)
+- **Connection filter:** Active Canadian scenarios screen candidate substations
+  with `CODERS.connection_filter`. The default retains `Generation` and `Terminal`
+  node types only when their node code is referenced by a CODERS transmission-line
+  endpoint, and excludes `INT`, `IPT`, `SWS`, and `JCT` node-code suffixes. This is
+  a planning proxy, not a finding of available interconnection capacity.
 
 ### GAEZ (Global Agro-Ecological Zones)
 
 - **Root Directory:** `data/downloaded_data/GAEZ`
 - **Source:** [LR.zip](https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip)
+- **Storage lifecycle:** The archive and global source rasters are staged in the
+  operating-system temporary directory. Only region-prefixed clipped GeoTIFFs are
+  retained below `GAEZ/Rasters_in_use/`. Existing clipped outputs are reused.
 
 #### Raster Types
 
@@ -225,6 +237,11 @@ Canadian provinces and territories are mapped to numeric codes (1-21), including
 - **Time Period:** 2023-01-01 07:00:00 to 2024-01-01 06:00:00
 
 ### Global Wind Atlas (GWA)
+
+Country-scale GWA rasters are downloaded into an operating-system temporary
+directory and clipped immediately. Only region-prefixed outputs, such as
+`BC_Canada_wspd_100m.tif`, are retained under the configured GWA root. Existing
+regional outputs are reused, so reruns do not download the country raster again.
 
 - **Root Directory:** `data/downloaded_data/GWA`
 - **Data Fields:**

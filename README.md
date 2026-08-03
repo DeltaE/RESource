@@ -68,10 +68,10 @@ The installed `resource` command provides flexible region selection with colored
 
 | Command | Description |
 |---------|-------------|
-| `resource config/CAN_baseline.yaml --year 2024` | Canadian analysis (all provinces) |
-| `resource config/WB6_baseline.yaml --year 2023` | Western Balkans analysis (all countries) |
-| `resource config/WB6_baseline.yaml --year 2023 -r AL BA` | Specific regions only |
-| `resource-multiyear config/CAN_baseline.yaml --start 2014 --end 2024 -r BC` | Sequential multi-year assessment |
+| `resource config/CAN/scenarios/baseline.yaml --year 2024` | Canadian analysis (all provinces) |
+| `resource config/WB6/scenarios/baseline.yaml --year 2023` | Western Balkans analysis (all countries) |
+| `resource config/WB6/scenarios/baseline.yaml --year 2023 -r AL BA` | Specific regions only |
+| `resource-multiyear config/CAN/scenarios/baseline.yaml --start 2014 --end 2024 -r BC` | Sequential multi-year assessment |
 | `resource --help` | Show all available options |
 
 **Features:** Smart region detection • Input validation • Colored error messages • Flexible region selection

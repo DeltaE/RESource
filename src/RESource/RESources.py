@@ -92,7 +92,7 @@ class RESources_builder(AttributesParser):
         Integrate Global Wind Atlas wind speed corrections (wind only).
     get_CF_timeseries(cells=None, force_update=False)
         Generate hourly capacity factor time series.
-    find_grid_nodes(cells=None, use_pypsa_buses=False, use_grid_lines=False)
+    find_grid_nodes(cells=None, use_grid_lines=False)
         Identify nearest electrical grid connection points.
     score_cells(cells=None)
         Calculate economic scores based on LCOE methodology.
@@ -100,7 +100,7 @@ class RESources_builder(AttributesParser):
         Perform spatial clustering of viable sites.
     get_cluster_timeseries(clusters=None, dissolved_indices=None, cells_timeseries=None)
         Generate representative time series for each cluster.
-    build(select_top_sites=False, use_pypsa_buses=False, use_grid_lines=False,
+    build(select_top_sites=False, use_grid_lines=False,
           get_clusters=False, clean_store=False, memory_resource_limitation=True)
         Execute the full assessment workflow.
     export_results(resource_type, region, weather_year, resource_clusters,
@@ -199,6 +199,10 @@ class RESources_builder(AttributesParser):
             self.config,
             self.results_save_to / f"config_{self.region_short_code}_{self.RUN_ID}.yaml",
         )
+        utils.save_to_yaml(
+            self.config_provenance,
+            self.results_save_to / f"config_provenance_{self.region_short_code}_{self.RUN_ID}.yaml",
+        )
 
     # ── Data-store helpers ────────────────────────────────────────────────────
 
@@ -230,10 +234,80 @@ class RESources_builder(AttributesParser):
 
     # ── Step 1b : Grid-node proximity ─────────────────────────────────────────
 
+    def _find_grid_nodes_from_osm(self) -> gpd.GeoDataFrame:
+        """Attach nearest OSM transmission-line connection points to stored cells."""
+        utils.print_update(
+            level=PRINT_LEVEL_BASE + 3,
+            message=f"{__name__} | Using OSM grid lines for connection point analysis...",
+        )
+        self.grid_lines = self.gridNodesProcessor.get_OSM_grid_lines()
+
+        if self.grid_lines is None or len(self.grid_lines) == 0:
+            utils.print_update(
+                level=PRINT_LEVEL_BASE + 3,
+                message=f"{__name__} | Warning: no OSM grid lines found for {self.region_short_code}.",
+            )
+            return self.store_grid_cells
+
+        self.store_grid_cells["centroid"] = self.store_grid_cells.apply(
+            lambda row: Point(row["x"], row["y"]), axis=1
+        )
+        connection_results = self.store_grid_cells.apply(
+            lambda row: self.gridNodesProcessor.find_nearest_connection_point(
+                row["centroid"], row["geometry"], self.store_grid_cells, self.grid_lines
+            ),
+            axis=1,
+            result_type="expand",
+        )
+        self.store_grid_cells[["nearest_connection_point", "nearest_distance"]] = connection_results
+        self.datahandler.to_store(self.store_grid_cells, "cells")
+        self.datahandler.to_store(self.grid_lines, "lines")
+        self.datahandler.refresh()
+        self.store_grid_cells = self.datahandler.from_store("cells")
+        return self.store_grid_cells
+
+    def _load_uploaded_substations(self, csv_path: Path) -> gpd.GeoDataFrame:
+        """Load an uploaded CSV and maintain its processed GeoDataFrame cache."""
+        if not csv_path.is_file():
+            raise FileNotFoundError(f"Configured substations file not found: {csv_path}")
+
+        processed_path = self.get_processed_substations_path(csv_path)
+        cache_is_current = (
+            processed_path.is_file() and processed_path.stat().st_mtime >= csv_path.stat().st_mtime
+        )
+        if cache_is_current:
+            substations = pd.read_pickle(processed_path)
+            if not isinstance(substations, gpd.GeoDataFrame):
+                raise ValueError(
+                    f"Processed substations cache is not a GeoDataFrame: {processed_path}"
+                )
+            return substations
+
+        substations_df = pd.read_csv(csv_path)
+        required_columns = {"longitude", "latitude"}
+        missing_columns = required_columns.difference(substations_df.columns)
+        if missing_columns:
+            raise ValueError(
+                "Substations data is missing required columns: "
+                + ", ".join(sorted(missing_columns))
+            )
+
+        substations = gpd.GeoDataFrame(
+            substations_df,
+            geometry=gpd.points_from_xy(substations_df["longitude"], substations_df["latitude"]),
+            crs="EPSG:4326",
+        )
+        processed_path.parent.mkdir(parents=True, exist_ok=True)
+        substations.to_pickle(processed_path)
+        utils.print_update(
+            level=PRINT_LEVEL_BASE + 2,
+            message=f"{__name__} | Processed substations saved to {processed_path}",
+        )
+        return substations
+
     def find_grid_nodes(
         self,
         cells: gpd.GeoDataFrame = None,
-        use_pypsa_buses: bool = False,
         use_grid_lines: bool = False,
     ) -> gpd.GeoDataFrame:
         """
@@ -243,10 +317,8 @@ class RESources_builder(AttributesParser):
         ----------
         cells : gpd.GeoDataFrame, optional
             Pre-loaded cells; loads from HDF5 store if None.
-        use_pypsa_buses : bool
-            Use PyPSA bus locations as connection nodes.
         use_grid_lines : bool
-            Use OSM transmission lines instead of CODERS substations (Canada).
+            Force OSM transmission lines instead of an available substation source.
 
         Returns
         -------
@@ -267,39 +339,38 @@ class RESources_builder(AttributesParser):
             level=PRINT_LEVEL_BASE + 1, message=f"{__name__} | Grid node location initiated..."
         )
 
-        if use_pypsa_buses:
-            utils.print_update(
-                level=PRINT_LEVEL_BASE + 3,
-                message=f"{__name__} | Using PyPSA nodes for resource connection.",
-            )
-            buses_data_path = self.get_buses_path()
-            grid_ss_df = pd.read_csv(buses_data_path)
-            assert "longitude" in grid_ss_df.columns and "latitude" in grid_ss_df.columns, (
-                "Buses data must contain 'longitude' and 'latitude' columns."
-            )
-
-            self.grid_ss = gpd.GeoDataFrame(
-                grid_ss_df,
-                geometry=gpd.points_from_xy(grid_ss_df["longitude"], grid_ss_df["latitude"]),
-                crs=self.crs_m,
-            )
-            self.region_grid_cells_cap_with_nodes = (
-                self.gridNodesProcessor.find_grid_nodes_ERA5_cells(
-                    self.grid_ss, self.store_grid_cells
-                )
-            )
-            self.datahandler.to_store(self.store_grid_cells, "cells")
-            self.datahandler.to_store(self.grid_ss, "buses")
-
-        elif self.country_name == "Canada" and not use_grid_lines:
+        if self.country_name == "Canada" and not use_grid_lines:
             utils.print_update(
                 level=PRINT_LEVEL_BASE + 3,
                 message=f"{__name__} | Using CODERS substations for connection point analysis...",
             )
             # CODERS credentials are required only for this connection strategy.
-            # Defer initialization so OSM/PyPSA workflows remain credential-free.
-            self.coders = CODERSData(**self.required_args)
-            self.grid_ss = self.coders.get_table_provincial("substations")
+            # Defer initialization so OSM workflows remain credential-free.
+            try:
+                self.coders = CODERSData(**self.required_args)
+                if not self.coders.api_user:
+                    raise RuntimeError("CODERS credentials are unavailable")
+                self.grid_ss = self.coders.get_table_provincial("substations")
+                if self.grid_ss is None or len(self.grid_ss) == 0:
+                    raise RuntimeError("CODERS returned no substations for the region")
+                connection_filter = self.coders.coders_data_config.get("connection_filter", {})
+                transmission_lines = None
+                if connection_filter.get("enabled", True) and connection_filter.get(
+                    "require_transmission_endpoint", True
+                ):
+                    transmission_lines = self.coders.get_table_provincial("transmission_lines")
+                self.grid_ss = self.coders.filter_connection_substations(
+                    self.grid_ss, transmission_lines
+                )
+                if self.grid_ss.empty:
+                    raise RuntimeError("CODERS connection filter returned no eligible substations")
+            except Exception as exc:
+                utils.print_update(
+                    level=PRINT_LEVEL_BASE + 2,
+                    message=f"{__name__} | CODERS unavailable ({exc}); falling back to OSM.",
+                    alert=True,
+                )
+                return self._find_grid_nodes_from_osm()
             self.region_grid_cells_cap_with_nodes = (
                 self.gridNodesProcessor.find_grid_nodes_ERA5_cells(
                     self.grid_ss, self.store_grid_cells
@@ -308,43 +379,26 @@ class RESources_builder(AttributesParser):
             self.datahandler.to_store(self.store_grid_cells, "cells")
             self.datahandler.to_store(self.grid_ss, "substations")
 
-        else:
-            utils.print_update(
-                level=PRINT_LEVEL_BASE + 3,
-                message=f"{__name__} | Using OSM grid lines for connection point analysis...",
-            )
-            self.grid_lines = self.gridNodesProcessor.get_OSM_grid_lines()
-
-            if self.grid_lines is None or len(self.grid_lines) == 0:
-                utils.print_update(
-                    level=PRINT_LEVEL_BASE + 3,
-                    message=f"{__name__} | Warning: no OSM grid lines found for {self.region_short_code}.",
+        elif not use_grid_lines and (substations_path := self.get_buses_path()) is not None:
+            try:
+                self.grid_ss = self._load_uploaded_substations(substations_path)
+                self.region_grid_cells_cap_with_nodes = (
+                    self.gridNodesProcessor.find_grid_nodes_ERA5_cells(
+                        self.grid_ss, self.store_grid_cells
+                    )
                 )
-                return self.store_grid_cells
+                self.datahandler.to_store(self.store_grid_cells, "cells")
+                self.datahandler.to_store(self.grid_ss, "substations")
+            except (FileNotFoundError, OSError, ValueError) as exc:
+                utils.print_update(
+                    level=PRINT_LEVEL_BASE + 2,
+                    message=f"{__name__} | Uploaded substations unavailable ({exc}); falling back to OSM.",
+                    alert=True,
+                )
+                return self._find_grid_nodes_from_osm()
 
-            self.store_grid_cells["centroid"] = self.store_grid_cells.apply(
-                lambda row: Point(row["x"], row["y"]), axis=1
-            )
-            utils.print_update(
-                level=PRINT_LEVEL_BASE + 3,
-                message=f"{__name__} | Calculating nearest connection points to transmission lines...",
-            )
-            connection_results = self.store_grid_cells.apply(
-                lambda row: self.gridNodesProcessor.find_nearest_connection_point(
-                    row["centroid"], row["geometry"], self.store_grid_cells, self.grid_lines
-                ),
-                axis=1,
-                result_type="expand",
-            )
-            self.store_grid_cells[["nearest_connection_point", "nearest_distance"]] = (
-                connection_results
-            )
-            utils.print_update(
-                level=PRINT_LEVEL_BASE + 3,
-                message=f"{__name__} | ✔ Connection point analysis completed.",
-            )
-            self.datahandler.to_store(self.store_grid_cells, "cells")
-            self.datahandler.to_store(self.grid_lines, "lines")
+        else:
+            return self._find_grid_nodes_from_osm()
 
         self.datahandler.refresh()
         self.store_grid_cells = self.datahandler.from_store("cells")
@@ -683,7 +737,6 @@ class RESources_builder(AttributesParser):
     def build(
         self,
         select_top_sites: bool | None = False,
-        use_pypsa_buses: bool | None = False,
         use_grid_lines: bool | None = False,
         make_clusters: bool | None = False,
         clean_store: bool | None = False,
@@ -697,10 +750,8 @@ class RESources_builder(AttributesParser):
         select_top_sites : bool
             If True, filter clusters to a capacity-budget subset (Step 7).
             Implies clustering even when get_clusters=False.
-        use_pypsa_buses : bool
-            Use PyPSA bus locations as grid connection nodes.
         use_grid_lines : bool
-            Use OSM transmission lines for connection point analysis (Canada).
+            Force OSM transmission lines for connection point analysis.
         get_clusters : bool
             Explicitly run clustering and cluster time series (Steps 6a/6b).
             Set True to inspect cluster outputs without top-site filtering.
@@ -735,7 +786,7 @@ class RESources_builder(AttributesParser):
             )
         else:
             self.get_grid_cells()
-            self.find_grid_nodes(use_pypsa_buses=use_pypsa_buses, use_grid_lines=use_grid_lines)
+            self.find_grid_nodes(use_grid_lines=use_grid_lines)
             cache.mark_done("grid_cells")
             cache.mark_done("grid_nodes")
 
@@ -786,6 +837,8 @@ class RESources_builder(AttributesParser):
 
         # ── Step 6 : Clustering (optional explicit step) ──────────────────────
         cluster_store_key = f"clusters/{self.resource_type}"
+        resource_clusters = None
+        cluster_timeseries = None
         if make_clusters:
             utils.print_banner("Step 6a : Cluster cells into representative sites")
             if cache.is_current("clustering", cluster_store_key):
@@ -796,8 +849,9 @@ class RESources_builder(AttributesParser):
             else:
                 self.get_clusters()
                 cache.mark_done("clustering")
+            resource_clusters = self.cell_cluster_gdf
             utils.print_banner("Step 6b : Build cluster representative time series")
-            self.get_cluster_timeseries()
+            cluster_timeseries = self.get_cluster_timeseries()
 
         # Units dictionary (documentation only — no calculation impact)
         self.units.create_units_dictionary()
@@ -809,18 +863,23 @@ class RESources_builder(AttributesParser):
             utils.print_banner("Step 7 : Select top sites within capacity budget")
             resource_max_capacity = self.resource_disaggregation_config.get("max_capacity", 50)
 
-            # Run clustering if not already done (or if config changed)
-            if cache.is_current("clustering", cluster_store_key) and self.clusters_nt is not None:
+            # Load or compute clustering once, then reuse it for selection/export.
+            if resource_clusters is not None:
+                utils.print_update(level=2, message="Step 7: reusing clusters prepared in Step 6.")
+            elif cache.is_current("clustering", cluster_store_key):
+                resource_clusters = self.datahandler.from_store(cluster_store_key)
                 utils.print_update(
-                    level=2, message="Step 7: cluster config unchanged — using cached clusters."
+                    level=2, message="Step 7: cluster config unchanged — loading from store."
                 )
             else:
-                self.get_clusters()
+                resource_clusters = self.get_clusters().clusters
                 cache.mark_done("clustering")
 
+            if cluster_timeseries is None:
+                cluster_timeseries = self.get_cluster_timeseries(clusters=resource_clusters)
             resource_clusters, cluster_timeseries = self.get_top_sites(
-                sites=self.get_clusters().clusters,
-                sites_timeseries=self.get_cluster_timeseries(),
+                sites=resource_clusters,
+                sites_timeseries=cluster_timeseries,
                 resource_max_capacity=resource_max_capacity,
             )
             utils.print_module_title(
@@ -829,8 +888,14 @@ class RESources_builder(AttributesParser):
 
         else:
             # Return all clusters unfiltered
-            resource_clusters = self.get_clusters().clusters
-            cluster_timeseries = self.get_cluster_timeseries()
+            if resource_clusters is None:
+                if cache.is_current("clustering", cluster_store_key):
+                    resource_clusters = self.datahandler.from_store(cluster_store_key)
+                else:
+                    resource_clusters = self.get_clusters().clusters
+                    cache.mark_done("clustering")
+            if cluster_timeseries is None:
+                cluster_timeseries = self.get_cluster_timeseries(clusters=resource_clusters)
             utils.print_module_title(
                 f"All sites (clusters) | {self.resource_type} | {self.get_region_name()}"
             )

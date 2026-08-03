@@ -29,18 +29,13 @@ docs/*.html
 # =============================================================================
 # Personal credentials (templates and README remain tracked)
 credentials/coders_api.yaml
-data/downloaded_data/CODERS/
-data/downloaded_data/CORINE/
-data/downloaded_data/cutout/
-data/downloaded_data/EU_DEM/
-data/downloaded_data/GADM/
-data/downloaded_data/GAEZ/
-data/downloaded_data/Gov/
-data/downloaded_data/GWA/
-data/downloaded_data/lands/
-data/downloaded_data/OSM/
-data/downloaded_data/NREL/ATB  # kept as example
-# data/downloaded_data/OEDB      # kept as example
+credentials/gdrive.yaml
+
+# 1. Ignore everything inside the top-level directory
+data/downloaded_data/*
+
+# 2. Un-ignore the specific directory you want to track
+!data/downloaded_data/OEDB/
 
 # =============================================================================
 # Data — processed and stored
@@ -71,6 +66,7 @@ notebooks/*.tif
 # =============================================================================
 # Temporary / scratch directories
 # =============================================================================
+data/tmp/
 archive/
 cache/
 ui/

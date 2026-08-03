@@ -55,10 +55,13 @@ notes/run_usage
 notes/citation
 notes/case_BC
 notes/config
+notes/assumptions
 notes/learning
 notes/data
 notes/developers
 notes/development_pipeline
+notes/wind_bias_correction
+notes/era5_reference_climatology
 notes/step_cache
 ```
 
