@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Workflow overview &#8212; RESource 2025.07 documentation</title>
+    <title>RESource &#8212; RESource 2025.7.0 documentation</title>
   
   
   
@@ -16,67 +16,65 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=35ab0c98" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=4418a689" />
   
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="_static/documentation_options.js?v=e9b82cb4"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="_static/documentation_options.js?v=1faeb039"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
-    <script src="_static/custom.js?v=0cd7556c"></script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="RESource Builder Module" href="notes/resource_builder.html" />
+    <link rel="next" title="RESource workflow" href="notes/resource_builder.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="Python"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -84,7 +82,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -92,15 +89,59 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -111,7 +152,8 @@
       
         
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -140,47 +182,43 @@
       
     
     
-    <img src="_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
-    <script>document.write(`<img src="_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+    <img src="_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.7.0 documentation - Home"/>
+    <img src="_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark pst-js-only" alt="RESource 2025.7.0 documentation - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/resource_builder.html">RESource workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/setup_guide.html">Installation and environment setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/run_usage.html">Command-line usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/citation.html">Citation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes/config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes/learning.html">Best Practices and Guidelines</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="notes/data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes/developers.html">Contributing Developers</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Store_explorer.html">Explore data store</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
-
-
-
-
+<li class="toctree-l1"><a class="reference internal" href="notes/development_pipeline.html">Development pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/step_cache.html">RESource Step Cache</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="notes/api.html">RES API References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notes/documentation_guide.html">Documentation Build Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/documentation_guide.html">Documentation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/deployment.html">Developer deployment guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/publishing.html">Publishing to PyPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/licensing.html">License transition assessment</a></li>
 </ul>
 
     </div>
@@ -189,9 +227,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -289,7 +332,7 @@
 
 
 <button onclick="toggleFullScreen()"
-  class="btn btn-sm btn-fullscreen-button"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
   title="Fullscreen mode"
   data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
@@ -303,25 +346,24 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
-`);
-</script>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
 </div></div>
@@ -334,7 +376,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Workflow overview</h1>
+    <h1>RESource</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -343,57 +385,12 @@ document.write(`
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Workflow overview</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">🚀 Quick Start</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#resource-quickstart-guide">RESource Quickstart Guide</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-setup">🚀 Quick Setup</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clone-navigate">1️⃣ Clone &amp; Navigate</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-command-setup">2️⃣ One-Command Setup</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#activate-test">3️⃣ Activate &amp; Test</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#download-case-study-data">4️⃣ Download Case Study Data</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-api-access-for-custom-analysis">5️⃣ Setup API Access (For Custom Analysis)</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#first-run">🔥 First Run</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-analysis-pipeline">Run Analysis Pipeline</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#command-line-options">Command Line Options</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-workflows">Example Workflows</a></li>
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-overview">Workflow overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick start</a><ul class="nav section-nav flex-column">
 </ul>
 </li>
 </ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-resource-does">📊 What RESource Does</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-output">Example Output</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-files-structure">📁 Key Files &amp; Structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-commands">🛠️ Common Commands</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-regions">🌍 Supported Regions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">📚 Next Steps</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explore-examples">Explore Examples</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#try-the-playground-notebooks">Try the playground notebooks</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-documentation">Build Documentation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#need-help">🆘 Need Help?</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-debugging">Quick Debugging</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">🔍 Troubleshooting</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#still-need-help">Still Need Help?</a><ul class="nav section-nav flex-column">
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
             </nav>
         </div>
     </div>
@@ -404,409 +401,68 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <img src="_static/Issue_msg_box.png" alt="Issue" width="600"/>
+  <section id="resource">
+<h1>RESource<a class="headerlink" href="#resource" title="Link to this heading">#</a></h1>
+<img src="_static/Issue_msg_box.png" alt="Issue" width="600"/>
 <p><strong>One of the many solutions ?</strong></p>
 <!-- <img src="_static/RESource_logo_2025.07.jpg" alt="RESource logo" width="200"/> -->
 <!-- # RESource  -->
 <img src="_static/graphic_RES_banner_common.jpg" alt="assessment_steps" width="600"/>
 <p><strong>A Modular and Transparent Open-Source Framework for Sub-National Assessment of Solar and Land-based Wind Potential.</strong></p>
-<blockquote>
-<div><p><strong>Resource is now published :  <a class="reference external" href="https://doi.org/10.1016/j.energ.2026.100077">Mapping feasible renewable transition space: Land-use, conservation, and grid-access constraints on wind and solar in British Columbia</a></strong></p>
-</div></blockquote>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>This library is under active development.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>RESource is described and applied in the peer-reviewed publication
+<a class="reference external" href="https://doi.org/10.1016/j.energ.2026.100077">Mapping feasible renewable transition space: Land-use, conservation, and grid-access constraints on wind and solar in British Columbia</a>.</p>
 </div>
 <p>RESource is developed to enable reproducible, adaptable assessments of VRE potential that are sensitive to local constraints and planning priorities. We developed a structured, modular workflow that integrates geospatial, temporal, economic, and regulatory data to evaluate site suitability for solar and wind energy development. This structured methodology ensures transparency and transferability, allowing RESource to be adapted for different regions and scaled for long-term strategic energy planning.</p>
 <img src="_static/Assessment_steps_highLevel.jpg" alt="assessment_steps" width="500"/>
 <section id="workflow-overview">
-<h1>Workflow overview<a class="headerlink" href="#workflow-overview" title="Link to this heading">#</a></h1>
+<h2>Workflow overview<a class="headerlink" href="#workflow-overview" title="Link to this heading">#</a></h2>
 <img src="_static/workflow.jpg" alt="high_level_workflow" width="1000"/>
-<hr class="docutils" />
 </section>
+<hr class="docutils" />
 <section id="quick-start">
-<h1>🚀 Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h1>
-</section>
-<section id="resource-quickstart-guide">
-<h1>RESource Quickstart Guide<a class="headerlink" href="#resource-quickstart-guide" title="Link to this heading">#</a></h1>
-<p><strong>Get up and running with RESource</strong> - A modular framework for renewable energy resource assessment.</p>
-<hr class="docutils" />
-<section id="quick-setup">
-<h2>🚀 Quick Setup<a class="headerlink" href="#quick-setup" title="Link to this heading">#</a></h2>
-<section id="prerequisites">
-<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p><strong>Linux environment</strong> (Linux, macOS, or Windows WSL2)</p></li>
-<li><p><strong>Git</strong> and <strong>Conda/Miniconda</strong> installed</p></li>
-<li><p><strong>Python 3.12+</strong> support</p></li>
-</ul>
-</section>
-<section id="clone-navigate">
-<h3>1️⃣ Clone &amp; Navigate<a class="headerlink" href="#clone-navigate" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/DeltaE/RESource.git
-<span class="nb">cd</span><span class="w"> </span>RESource
+<h2>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>deltae-resource
+resource<span class="w"> </span>--help
 </pre></div>
 </div>
-</section>
-<section id="one-command-setup">
-<h3>2️⃣ One-Command Setup<a class="headerlink" href="#one-command-setup" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create complete conda environment</span>
-make<span class="w"> </span>setupenv
-</pre></div>
-</div>
-</section>
-<section id="activate-test">
-<h3>3️⃣ Activate &amp; Test<a class="headerlink" href="#activate-test" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Activate environment</span>
-conda<span class="w"> </span>activate<span class="w"> </span>RESource
-
-<span class="c1"># Quick test</span>
-python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import RES; print(&#39;✅ RESource ready!&#39;)&quot;</span>
-</pre></div>
-</div>
-<p><strong>🎉 You're ready to go!</strong></p>
-</section>
-<section id="download-case-study-data">
-<h3>4️⃣ Download Case Study Data<a class="headerlink" href="#download-case-study-data" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download required data for Canadian analysis (~2GB)</span>
-<span class="c1"># Visit and download: https://zenodo.org/records/16658067</span>
-<span class="c1"># Extract to data/ directory</span>
-
-wget<span class="w"> </span>https://zenodo.org/record/16658067/files/RESource_data.zip
-unzip<span class="w"> </span>RESource_data.zip<span class="w"> </span>-d<span class="w"> </span>data/
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><strong>Case Study Data</strong>: Contains processed geospatial data for Canadian provinces including ERA5 weather data, exclusion zones, and land cover classifications needed for renewable energy resource assessment.</p>
-</div>
-</section>
-<section id="setup-api-access-for-custom-analysis">
-<h3>5️⃣ Setup API Access (For Custom Analysis)<a class="headerlink" href="#setup-api-access-for-custom-analysis" title="Link to this heading">#</a></h3>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p><strong>Required for Custom Regions</strong>: Skip this step if only using the provided case study data.</p>
-</div>
-<p>For running custom analyses beyond the provided case study data, some data sources require API registration:</p>
-<ul class="simple">
-<li><p><strong>ERA5 Climate Data</strong>: Requires Copernicus Climate Data Store registration for global weather data</p></li>
-<li><p><strong>CODERS API</strong>: Requires registration for Canadian-specific data sources</p></li>
-</ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><strong>Complete Setup Instructions</strong>: For detailed API registration steps, configuration files, and data source information, see <a class="reference external" href="https://deltae.github.io/RESource/notes/data.html">data.md</a>.</p>
-</div>
-</section>
-</section>
-<hr class="docutils" />
-<section id="first-run">
-<h2>🔥 First Run<a class="headerlink" href="#first-run" title="Link to this heading">#</a></h2>
-<section id="run-analysis-pipeline">
-<h3>Run Analysis Pipeline<a class="headerlink" href="#run-analysis-pipeline" title="Link to this heading">#</a></h3>
-<p><strong>Enhanced <code class="docutils literal notranslate"><span class="pre">run.py</span></code> Script</strong> - Flexible region selection with colored output:</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Command</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_CAN_baseline.yaml</span></code></p></td>
-<td><p>Run Canadian analysis (all provinces)</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_WB6.yaml</span></code></p></td>
-<td><p>Run Western Balkans analysis (all regions)</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_WB6.yaml</span> <span class="pre">-r</span> <span class="pre">AL</span> <span class="pre">BA</span> <span class="pre">XK</span></code></p></td>
-<td><p>Run specific regions only</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">--help</span></code></p></td>
-<td><p>Show all available options</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>Key Features:</strong></p>
-<ul class="simple">
-<li><p>✅ <strong>Smart Region Detection</strong>: Automatically reads available regions from config</p></li>
-<li><p>✅ <strong>Validation</strong>: Invalid regions show available options with suggestions</p></li>
-<li><p>✅ <strong>Colored Output</strong>: Error messages, warnings, and progress in colors</p></li>
-<li><p>✅ <strong>Flexible Selection</strong>: Process all regions or specify subset</p></li>
-</ul>
-<section id="command-line-options">
-<h4>Command Line Options<a class="headerlink" href="#command-line-options" title="Link to this heading">#</a></h4>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Option</p></th>
-<th class="head"><p>Short</p></th>
-<th class="head"><p>Description</p></th>
-<th class="head"><p>Example</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_FILE</span></code></p></td>
-<td><p>-</p></td>
-<td><p>Configuration file path (required)</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">config/config_WB6.yaml</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--regions</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">-r</span></code></p></td>
-<td><p>Specific regions to process</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">-r</span> <span class="pre">AL</span> <span class="pre">BA</span> <span class="pre">XK</span> <span class="pre">ME</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--help</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">-h</span></code></p></td>
-<td><p>Show help message</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">--help</span></code></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="example-workflows">
-<h4>Example Workflows<a class="headerlink" href="#example-workflows" title="Link to this heading">#</a></h4>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Canadian Analysis</span>
-python3<span class="w"> </span>run.py<span class="w"> </span>config/config_CAN_baseline.yaml<span class="w">              </span><span class="c1"># All Canadian provinces</span>
-python3<span class="w"> </span>run.py<span class="w"> </span>config/config_CAN_baseline.yaml<span class="w"> </span>-r<span class="w"> </span>BC<span class="w"> </span>QC<span class="w"> </span>AB<span class="w">  </span><span class="c1"># Specific provinces only</span>
-
-<span class="c1"># Western Balkans Analysis  </span>
-python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml<span class="w">            </span><span class="c1"># All WB6 countries</span>
-python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>-r<span class="w"> </span>AL<span class="w"> </span>BA<span class="w">   </span><span class="c1"># Albania &amp; Bosnia only</span>
-
-<span class="c1"># Error Handling Examples</span>
-python3<span class="w"> </span>run.py<span class="w"> </span>nonexistent.yaml<span class="w">                  </span><span class="c1"># Shows available configs</span>
-python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>-r<span class="w"> </span>INVALID<span class="w"> </span><span class="c1"># Shows valid regions</span>
-</pre></div>
-</div>
-<blockquote>
-<div><p>the 'RES' conda environment activated while you run this script.</p>
-</div></blockquote>
-</section>
-</section>
-</section>
-<hr class="docutils" />
-<section id="what-resource-does">
-<h2>📊 What RESource Does<a class="headerlink" href="#what-resource-does" title="Link to this heading">#</a></h2>
-<p>RESource analyzes <strong>renewable energy potential</strong> by:</p>
-<ol class="arabic simple">
-<li><p><strong>📍 Site Selection</strong>: Filters suitable land using exclusion zones, slopes, land cover</p></li>
-<li><p><strong>🌤️ Weather Processing</strong>: Converts ERA5 climate data to energy capacity factors</p></li>
-<li><p><strong>⚡ Capacity Estimation</strong>: Calculates wind/solar potential per grid cell</p></li>
-<li><p><strong>📈 Time Series Generation</strong>: Creates hourly profiles for energy system modeling</p></li>
-<li><p><strong>🎯 Optimization</strong>: Selects optimal sites based on capacity and cost criteria</p></li>
-</ol>
-<p><strong>Output Organization:</strong></p>
-<ul class="simple">
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">data/store/</span></code></strong>: Primary resource data (HDF5 format) - detailed analysis results</p></li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">results/Country/Region/Scenario/</span></code></strong>: Organized CSV files - resource clusters, timeseries, and cost-filtered sites</p></li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">vis/Country/Region/</span></code></strong>: SVG/PNG visualizations - maps, supply curves, clustering analysis, and policy scenarios</p></li>
-</ul>
-<section id="example-output">
-<h3>Example Output<a class="headerlink" href="#example-output" title="Link to this heading">#</a></h3>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>data/store/
-├── resources_Canada_BC_BASELINE.h5     # resource data store for BASELINE
-
-results/Canada/BC/BASELINE/
-├── resource_options_wind_British Columbia.csv         # Wind resource clusters with LCOE
-├── resource_options_wind_British Columbia_timeseries.csv  # Hourly capacity factors
-├── resource_options_solar_British Columbia.csv        # Solar resource clusters with LCOE  
-├── resource_options_solar_British Columbia_timeseries.csv # Hourly capacity factors
-├── cells_aggregated_by_Region_BC_BASELINE.csv         # Regional capacity summaries
-├── wind_cells_below_50_$pMWh_BC_BASELINE.csv         # Cost-filtered wind sites
-├── solar_cells_below_57_$pMWh_BC_BASELINE.csv        # Cost-filtered solar sites
-└── Resource_options_summary.txt                       # Analysis summary report
-
-vis/Canada/BC/
-├── BC_gridcells_outline.svg                      # Grid cell boundaries
-├── BC_regions.png                                # Administrative regions
-├── supply_curve_baseline_vs_policy_BC.svg        # Supply curve comparisons
-├── Resources_proximity_to_grid_BC.svg            # Grid connectivity analysis
-├── BASELINE/
-│   ├── Resources_combined_CAPACITY.svg           # Combined capacity maps
-│   ├── Resources_combined_CF.svg                 # Capacity factor maps
-│   ├── Resources_combined_SCORE.svg              # Resource quality scores
-│   ├── wind/
-│   │   ├── Regional_cluster_Elbow_Plots/         # Clustering analysis plots
-│   │   └── lands/                                # Land availability analysis
-│   └── solar/
-│       ├── Regional_cluster_Elbow_Plots/         # Clustering analysis plots
-│       └── lands/                                # Land availability analysis
-└── strict_policy_aeroway_CPCAD_buffer/           # Alternative policy scenario
-    ├── cost_map_wind.svg                         # Cost mapping visualizations
-    ├── cost_map_solar.svg
-    └── potential_capacity_lost_*.svg             # Policy impact analysis
-</pre></div>
-</div>
-</section>
-</section>
-<hr class="docutils" />
-<section id="key-files-structure">
-<h2>📁 Key Files &amp; Structure<a class="headerlink" href="#key-files-structure" title="Link to this heading">#</a></h2>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>RESource/
-├── config/                      # Configuration files
-│   ├── config_CAN.yaml         # Canadian analysis setup
-│   └── config_WB6.yaml         # Western Balkans setup
-├── RES/                        # Core analysis modules
-├── notebooks/                  # Interactive examples
-├── run.py                      # Main analysis script
-├── data/
-│   └── store/                  # Main resource data storage (HDF5)
-├── results/                    # Downstream modeling exports (CSV)
-└── vis/                        # Visualizations &amp; plots
-</pre></div>
-</div>
-</section>
-<hr class="docutils" />
-<section id="common-commands">
-<h2>🛠️ Common Commands<a class="headerlink" href="#common-commands" title="Link to this heading">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nb">help</span><span class="w">              </span><span class="c1"># Show all available commands</span>
-make<span class="w"> </span>setupenv<span class="w">          </span><span class="c1"># Create/setup conda environment  </span>
-make<span class="w"> </span>updateenv<span class="w">         </span><span class="c1"># Update existing environment</span>
-make<span class="w"> </span>run<span class="w">              </span><span class="c1"># Run main analysis</span>
-make<span class="w"> </span>jupyter<span class="w">          </span><span class="c1"># Start Jupyter Lab</span>
-make<span class="w"> </span>docs<span class="w">             </span><span class="c1"># Build documentation</span>
-make<span class="w"> </span>clean<span class="w">            </span><span class="c1"># Clean cache &amp; build files</span>
-</pre></div>
-</div>
-</section>
-<hr class="docutils" />
-<section id="supported-regions">
-<h2>🌍 Supported Regions<a class="headerlink" href="#supported-regions" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p><strong>🇨🇦 Canada</strong>: Provincial analysis (BC, AB, SK, ON, QC, NS, MB)</p></li>
-<li><p><strong>🌍 Western Balkans</strong>: Regional analysis (6 countries)</p></li>
-<li><p><strong>🔧 Custom</strong>: Configure any region with your own data</p></li>
-</ul>
-</section>
-<hr class="docutils" />
-<section id="next-steps">
-<h2>📚 Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
-<section id="explore-examples">
-<h3>Explore Examples<a class="headerlink" href="#explore-examples" title="Link to this heading">#</a></h3>
-</section>
-</section>
-</section>
-<section id="try-the-playground-notebooks">
-<h1>Try the playground notebooks<a class="headerlink" href="#try-the-playground-notebooks" title="Link to this heading">#</a></h1>
-<p>notebooks/resources_playground_CAN.ipynb</p>
-<section id="build-documentation">
-<h2>Build Documentation<a class="headerlink" href="#build-documentation" title="Link to this heading">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate full documentation</span>
-make<span class="w"> </span>docs
-
-<span class="c1"># Live development server</span>
-make<span class="w"> </span>autobuild<span class="w">  </span><span class="c1"># Visit http://127.0.0.1:8000</span>
-</pre></div>
-</div>
-</section>
-<section id="need-help">
-<h2>🆘 Need Help?<a class="headerlink" href="#need-help" title="Link to this heading">#</a></h2>
-<section id="quick-debugging">
-<h3>Quick Debugging<a class="headerlink" href="#quick-debugging" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check environment</span>
-conda<span class="w"> </span>activate<span class="w"> </span>RESource<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import RES&quot;</span>
-
-<span class="c1"># Test all dependencies  </span>
-python<span class="w"> </span>workflow/scripts/test_venv.py
-
-<span class="c1"># Check data store (look for resources_Canada_*_BASELINE.h5)</span>
-ls<span class="w"> </span>-la<span class="w"> </span>data/store/resources_Canada_*
-
-<span class="c1"># View recent outputs - organized by Country/Region/Scenario</span>
-ls<span class="w"> </span>-la<span class="w"> </span>results/Canada/BC/BASELINE/
-ls<span class="w"> </span>-la<span class="w"> </span>vis/Canada/BC/BASELINE/
-
-<span class="c1"># Check visualization files</span>
-find<span class="w"> </span>vis/Canada/BC/<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.svg&quot;</span><span class="w"> </span>-o<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.png&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-10
-</pre></div>
-</div>
-</section>
-<section id="resources">
-<h3>Resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>📖 <strong>Full Documentation</strong>: <a class="reference external" href="https://deltae.github.io/RESource/">https://deltae.github.io/RESource/</a></p></li>
-<li><p>🐛 <strong>Issues</strong>: <a class="reference external" href="https://github.com/DeltaE/RESource/issues">GitHub Issues</a></p></li>
-<li><p>💬 <strong>Discussions</strong>: <a class="reference external" href="https://github.com/DeltaE/RESource/discussions">GitHub Discussions</a></p></li>
-</ul>
-</section>
-</section>
-<hr class="docutils" />
-<section id="troubleshooting">
-<h2>🔍 Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">#</a></h2>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Problem</p></th>
-<th class="head"><p>Solution</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Environment</span> <span class="pre">'RESource'</span> <span class="pre">not</span> <span class="pre">found</span></code></p></td>
-<td><p>Run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">setupenv</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ImportError:</span> <span class="pre">No</span> <span class="pre">module</span> <span class="pre">named</span> <span class="pre">RES</span></code></p></td>
-<td><p>Run <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">RESource</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FileNotFoundError:</span> <span class="pre">data/...</span></code></p></td>
-<td><p>Download case study data from <a class="reference external" href="https://zenodo.org/records/16658067">Zenodo</a></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Permission</span> <span class="pre">denied</span></code> on WSL2</p></td>
-<td><p>Run <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">chown</span> <span class="pre">-R</span> <span class="pre">$USER:$USER</span> <span class="pre">.</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>Slow downloads</p></td>
-<td><p>Check internet connection, try different mirror</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<section id="still-need-help">
-<h3>Still Need Help?<a class="headerlink" href="#still-need-help" title="Link to this heading">#</a></h3>
-<p>If you encounter issues not covered above, you can reach out to the development team:</p>
+<p>See the <a class="reference internal" href="notes/quickstart.html"><span class="std std-doc">quick-start guide</span></a> for installation, notebook, and
+API examples. Contributors and source-checkout users use <code class="docutils literal notranslate"><span class="pre">uv</span></code> exclusively.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p><strong>Contact the Developer</strong>: For direct assistance, see contact information in <a class="reference external" href="https://deltae.github.io/RESource/notes/developers.html">developers.md</a> or open an issue on GitHub.</p>
-</div>
-<hr class="docutils" />
-<p><strong>🎯 Ready to analyze renewable energy resources? Run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">run</span></code> and explore the results!</strong></p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>For more detailed setup and development information, see the <a class="reference internal" href="#../../../SETUP.md"><span class="xref myst">Complete Setup Guide</span></a>.</p>
-</div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p><strong>Ready to dive deeper?</strong> Check out the <a class="reference internal" href="#../../SETUP.md"><span class="xref myst">Complete Setup Guide</span></a> or explore the <a class="reference internal" href="notes/case_BC.html"><span class="std std-doc">BC Case Study</span></a> for detailed examples.</p>
+<p><strong>Ready to dive deeper?</strong> Read the <a class="reference internal" href="notes/setup_guide.html"><span class="std std-doc">installation guide</span></a>,
+<a class="reference internal" href="notes/run_usage.html"><span class="std std-doc">command-line guide</span></a>, or <a class="reference internal" href="notes/case_BC.html"><span class="std std-doc">BC case study</span></a>.</p>
 </div>
 <hr class="docutils" />
 <div class="toctree-wrapper compound">
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="notes/resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/resource_builder.html">RESource workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/setup_guide.html">Installation and environment setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/run_usage.html">Command-line usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/citation.html">Citation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes/config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes/learning.html">Best Practices and Guidelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes/learning.html#why-subnational-dissolved-polygons-were-used-instead-of-a-single-country-boundary">Why subnational dissolved polygons were used instead of a single country boundary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes/data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes/developers.html">Contributing Developers</a></li>
-</ul>
-</div>
-<div class="toctree-wrapper compound">
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Store_explorer.html">Explore data store</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Visuals_BC.html#Exclusion-Layers">Exclusion Layers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Visuals_BC.html#Static-Plots">Static Plots</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Visuals_BC.html#Static-Data-Visuals-in-Interactive-Maps">Static Data Visuals in Interactive Maps</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Visuals_BC.html#Timeseries-Plots">Timeseries Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/development_pipeline.html">Development pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/step_cache.html">RESource Step Cache</a></li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="notes/api.html">RES API References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notes/documentation_guide.html">Documentation Build Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/documentation_guide.html">Documentation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/deployment.html">Developer deployment guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/publishing.html">Publishing to PyPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/licensing.html">License transition assessment</a></li>
 </ul>
 </div>
-</section>
 </section>
 </section>
 
@@ -826,7 +482,7 @@ find<span class="w"> </span>vis/Canada/BC/<span class="w"> </span>-name<span cla
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">RESource Builder Module</p>
+        <p class="prev-next-title">RESource workflow</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -837,65 +493,22 @@ find<span class="w"> </span>vis/Canada/BC/<span class="w"> </span>-name<span cla
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> Contents
   </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Workflow overview</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">🚀 Quick Start</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#resource-quickstart-guide">RESource Quickstart Guide</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-setup">🚀 Quick Setup</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clone-navigate">1️⃣ Clone &amp; Navigate</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-command-setup">2️⃣ One-Command Setup</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#activate-test">3️⃣ Activate &amp; Test</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#download-case-study-data">4️⃣ Download Case Study Data</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-api-access-for-custom-analysis">5️⃣ Setup API Access (For Custom Analysis)</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#first-run">🔥 First Run</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-analysis-pipeline">Run Analysis Pipeline</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#command-line-options">Command Line Options</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-workflows">Example Workflows</a></li>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-overview">Workflow overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick start</a><ul class="nav section-nav flex-column">
 </ul>
 </li>
 </ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-resource-does">📊 What RESource Does</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-output">Example Output</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-files-structure">📁 Key Files &amp; Structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-commands">🛠️ Common Commands</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-regions">🌍 Supported Regions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">📚 Next Steps</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explore-examples">Explore Examples</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#try-the-playground-notebooks">Try the playground notebooks</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-documentation">Build Documentation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#need-help">🆘 Need Help?</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-debugging">Quick Debugging</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">🔍 Troubleshooting</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#still-need-help">Still Need Help?</a><ul class="nav section-nav flex-column">
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
   </nav></div>
 
 </div></div>
@@ -943,8 +556,8 @@ By Md Eliasinul Islam
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
   </footer>

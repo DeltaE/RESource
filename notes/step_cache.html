@@ -1,0 +1,734 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>RESource Step Cache &#8212; RESource 2025.7.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=1faeb039"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notes/step_cache';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API reference" href="api.html" />
+    <link rel="prev" title="Development pipeline" href="development_pipeline.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.7.0 documentation - Home"/>
+    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark pst-js-only" alt="RESource 2025.7.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup_guide.html">Installation and environment setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run_usage.html">Command-line usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">Best Practices and Guidelines</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development_pipeline.html">Development pipeline</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">RESource Step Cache</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">Documentation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">Developer deployment guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publishing.html">Publishing to PyPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensing.html">License transition assessment</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notes/step_cache.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>RESource Step Cache</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-problem-it-solves">The Problem It Solves</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mechanism">Mechanism</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#config-keys-per-step">Config Keys Per Step</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-pipeline-run-automatic">Normal pipeline run (automatic)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-cache-control">Manual cache control</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#worked-examples">Worked Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scenario-1-change-discount-rate-only">Scenario 1: Change discount rate only</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scenario-2-change-turbine-specification">Scenario 2: Change turbine specification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scenario-3-change-weather-year">Scenario 3: Change weather year</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scenario-4-re-run-with-identical-config">Scenario 4: Re-run with identical config</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-a-new-step">Adding a New Step</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limitations">Limitations</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="resource-step-cache">
+<h1>RESource Step Cache<a class="headerlink" href="#resource-step-cache" title="Link to this heading">#</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">RESource.step_cache</span></code> implements a lightweight, config-hash-based cache that prevents
+pipeline steps from re-running when their configuration has not changed. It is not a
+full data version control system — it is deliberately minimal: hash a config subset,
+check for data in the store, skip or run.</p>
+<hr class="docutils" />
+<section id="the-problem-it-solves">
+<h2>The Problem It Solves<a class="headerlink" href="#the-problem-it-solves" title="Link to this heading">#</a></h2>
+<p>The RESource pipeline has eight sequential steps. Each step is computationally
+expensive. On a re-run — whether to change an economic parameter, update turbine
+specs, or test a new clustering tolerance — every step was previously re-executed
+from scratch regardless of what actually changed.</p>
+<p>The step cache breaks that coupling. Only steps whose governing configuration has
+changed (or whose output is missing) will execute. Steps whose inputs are unchanged
+and whose output is already in the HDF5 store are skipped.</p>
+</section>
+<hr class="docutils" />
+<section id="mechanism">
+<h2>Mechanism<a class="headerlink" href="#mechanism" title="Link to this heading">#</a></h2>
+<p>Before each pipeline step, <code class="docutils literal notranslate"><span class="pre">StepCache.is_current(step,</span> <span class="pre">store_key)</span></code> checks two
+conditions:</p>
+<ol class="arabic simple">
+<li><p><strong>Config hash match</strong> — SHA-256 of the config sections relevant to that step
+equals the hash stored from the previous run.</p></li>
+<li><p><strong>Data present</strong> — the HDF5 store contains the expected output dataset.</p></li>
+</ol>
+<p>Both conditions must hold to skip the step. If either fails, the step runs and its
+hash is updated on completion.</p>
+<p>Hashes are persisted to a JSON sidecar file next to the HDF5 store:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">/</span><span class="n">store</span><span class="o">/&lt;</span><span class="n">Country</span><span class="o">&gt;/&lt;</span><span class="n">RUN_ID</span><span class="o">&gt;/</span><span class="n">resources_</span><span class="o">&lt;</span><span class="n">Country</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">Region</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">RUN_ID</span><span class="o">&gt;.</span><span class="n">h5</span>
+<span class="n">data</span><span class="o">/</span><span class="n">store</span><span class="o">/&lt;</span><span class="n">Country</span><span class="o">&gt;/&lt;</span><span class="n">RUN_ID</span><span class="o">&gt;/</span><span class="n">resources_</span><span class="o">&lt;</span><span class="n">Country</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">Region</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">RUN_ID</span><span class="o">&gt;.</span><span class="n">checksums</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>Wind and solar results share the same HDF5 file but are namespaced independently
+in the sidecar (<code class="docutils literal notranslate"><span class="pre">wind::grid_cells</span></code> vs. <code class="docutils literal notranslate"><span class="pre">solar::grid_cells</span></code>), so a turbine config
+change only invalidates wind steps — solar cache entries are unaffected.</p>
+</section>
+<hr class="docutils" />
+<section id="config-keys-per-step">
+<h2>Config Keys Per Step<a class="headerlink" href="#config-keys-per-step" title="Link to this heading">#</a></h2>
+<p>Each step monitors a specific subset of config keys. Changing any key in a step's
+subset invalidates that step and all downstream steps whose inputs depend on it.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Step</p></th>
+<th class="head"><p>Config keys monitored</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">grid_cells</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">grid_cell_resolution</span></code>, <code class="docutils literal notranslate"><span class="pre">region_mapping</span></code>, <code class="docutils literal notranslate"><span class="pre">GADM</span></code>, <code class="docutils literal notranslate"><span class="pre">default_CRS</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">grid_nodes</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OSM_data</span></code>, <code class="docutils literal notranslate"><span class="pre">region_mapping</span></code>, <code class="docutils literal notranslate"><span class="pre">capacity_disaggregation</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cell_capacity</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">custom_land_layers</span></code>, <code class="docutils literal notranslate"><span class="pre">CORINE</span></code>, <code class="docutils literal notranslate"><span class="pre">GAEZ</span></code>, <code class="docutils literal notranslate"><span class="pre">capacity_disaggregation</span></code>, <code class="docutils literal notranslate"><span class="pre">region_mapping</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">weather_data</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cutout</span></code>, <code class="docutils literal notranslate"><span class="pre">weather_year</span></code>, <code class="docutils literal notranslate"><span class="pre">region_mapping</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gwa_scaling</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">GWA</span></code>, <code class="docutils literal notranslate"><span class="pre">region_mapping</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cf_timeseries</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cutout</span></code>, <code class="docutils literal notranslate"><span class="pre">capacity_disaggregation</span></code>, <code class="docutils literal notranslate"><span class="pre">weather_year</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">scoring</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">economic_parameters</span></code>, <code class="docutils literal notranslate"><span class="pre">NREL</span></code>, <code class="docutils literal notranslate"><span class="pre">capacity_disaggregation</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">clustering</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">capacity_disaggregation</span></code>, <code class="docutils literal notranslate"><span class="pre">region_mapping</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<div><p><strong>Note:</strong> Downstream invalidation is not automatic. If you change a grid parameter
+and want scoring to reflect the new geometry, either pass <code class="docutils literal notranslate"><span class="pre">clean_store=True</span></code> to
+<code class="docutils literal notranslate"><span class="pre">build()</span></code> or call <code class="docutils literal notranslate"><span class="pre">cache.invalidate_all()</span></code> before the run. The cache guards
+individual steps, not dependency chains.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
+<section id="normal-pipeline-run-automatic">
+<h3>Normal pipeline run (automatic)<a class="headerlink" href="#normal-pipeline-run-automatic" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">StepCache</span></code> is instantiated inside <code class="docutils literal notranslate"><span class="pre">RESources_builder.build()</span></code> and requires no
+direct interaction from the caller. Pass <code class="docutils literal notranslate"><span class="pre">clean_store=True</span></code> to force a full re-run:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">builder</span> <span class="o">=</span> <span class="n">RESources_builder</span><span class="p">(</span>
+    <span class="n">config_file_path</span><span class="o">=</span><span class="s2">&quot;config/config_CAN_baseline.yaml&quot;</span><span class="p">,</span>
+    <span class="n">region_short_code</span><span class="o">=</span><span class="s2">&quot;BC&quot;</span><span class="p">,</span>
+    <span class="n">resource_type</span><span class="o">=</span><span class="s2">&quot;wind&quot;</span><span class="p">,</span>
+    <span class="n">weather_year</span><span class="o">=</span><span class="mi">2024</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Skips unchanged steps automatically</span>
+<span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">select_top_sites</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_grid_lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Forces all steps to re-run</span>
+<span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">select_top_sites</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_grid_lines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">clean_store</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="manual-cache-control">
+<h3>Manual cache control<a class="headerlink" href="#manual-cache-control" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">RESource.step_cache</span><span class="w"> </span><span class="kn">import</span> <span class="n">StepCache</span>
+
+<span class="n">cache</span> <span class="o">=</span> <span class="n">StepCache</span><span class="p">(</span>
+    <span class="n">store_path</span><span class="o">=</span><span class="n">builder</span><span class="o">.</span><span class="n">store</span><span class="p">,</span>
+    <span class="n">config</span><span class="o">=</span><span class="n">builder</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
+    <span class="n">resource_type</span><span class="o">=</span><span class="s2">&quot;wind&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Check whether a step would be skipped</span>
+<span class="n">cache</span><span class="o">.</span><span class="n">is_current</span><span class="p">(</span><span class="s2">&quot;scoring&quot;</span><span class="p">,</span> <span class="s2">&quot;cells&quot;</span><span class="p">)</span>   <span class="c1"># True → skip; False → run</span>
+
+<span class="c1"># Invalidate a single step (forces it to re-run next time)</span>
+<span class="n">cache</span><span class="o">.</span><span class="n">invalidate</span><span class="p">(</span><span class="s2">&quot;scoring&quot;</span><span class="p">)</span>
+
+<span class="c1"># Invalidate all steps (equivalent to a fresh start)</span>
+<span class="n">cache</span><span class="o">.</span><span class="n">invalidate_all</span><span class="p">()</span>
+
+<span class="c1"># Manually mark a step as done after running it outside build()</span>
+<span class="n">scored_cells</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">score_cells</span><span class="p">()</span>
+<span class="n">cache</span><span class="o">.</span><span class="n">mark_done</span><span class="p">(</span><span class="s2">&quot;scoring&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="worked-examples">
+<h2>Worked Examples<a class="headerlink" href="#worked-examples" title="Link to this heading">#</a></h2>
+<section id="scenario-1-change-discount-rate-only">
+<h3>Scenario 1: Change discount rate only<a class="headerlink" href="#scenario-1-change-discount-rate-only" title="Link to this heading">#</a></h3>
+<p>Only the <code class="docutils literal notranslate"><span class="pre">scoring</span></code> step sees a changed hash. Steps 1–4 are skipped; step 5
+(scoring), step 6 (clustering), and step 7 (site selection) re-run.</p>
+</section>
+<section id="scenario-2-change-turbine-specification">
+<h3>Scenario 2: Change turbine specification<a class="headerlink" href="#scenario-2-change-turbine-specification" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">capacity_disaggregation</span></code> is monitored by <code class="docutils literal notranslate"><span class="pre">cell_capacity</span></code>, <code class="docutils literal notranslate"><span class="pre">cf_timeseries</span></code>,
+<code class="docutils literal notranslate"><span class="pre">scoring</span></code>, and <code class="docutils literal notranslate"><span class="pre">clustering</span></code>. All four re-run. Steps 1–2 (<code class="docutils literal notranslate"><span class="pre">grid_cells</span></code>, <code class="docutils literal notranslate"><span class="pre">grid_nodes</span></code>)
+are skipped because <code class="docutils literal notranslate"><span class="pre">grid_cell_resolution</span></code>, <code class="docutils literal notranslate"><span class="pre">GADM</span></code>, and <code class="docutils literal notranslate"><span class="pre">OSM_data</span></code> are unchanged.</p>
+</section>
+<section id="scenario-3-change-weather-year">
+<h3>Scenario 3: Change weather year<a class="headerlink" href="#scenario-3-change-weather-year" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">weather_year</span></code> appears in <code class="docutils literal notranslate"><span class="pre">weather_data</span></code> and <code class="docutils literal notranslate"><span class="pre">cf_timeseries</span></code>. Both re-run, along
+with all downstream steps (<code class="docutils literal notranslate"><span class="pre">scoring</span></code>, <code class="docutils literal notranslate"><span class="pre">clustering</span></code>). Grid cells and capacity
+estimates are unaffected and are skipped.</p>
+</section>
+<section id="scenario-4-re-run-with-identical-config">
+<h3>Scenario 4: Re-run with identical config<a class="headerlink" href="#scenario-4-re-run-with-identical-config" title="Link to this heading">#</a></h3>
+<p>All hashes match and all HDF5 keys exist. Every step is skipped. The run completes
+in seconds — only the export and metadata steps execute.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="adding-a-new-step">
+<h2>Adding a New Step<a class="headerlink" href="#adding-a-new-step" title="Link to this heading">#</a></h2>
+<p>To guard a new pipeline step, add its name and governing config keys to
+<code class="docutils literal notranslate"><span class="pre">STEP_CONFIG_KEYS</span></code> in <code class="docutils literal notranslate"><span class="pre">step_cache.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">STEP_CONFIG_KEYS</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="o">...</span>
+    <span class="s2">&quot;my_new_step&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;my_config_section&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;region_mapping&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Then wrap the step in <code class="docutils literal notranslate"><span class="pre">build()</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">cache</span><span class="o">.</span><span class="n">is_current</span><span class="p">(</span><span class="s2">&quot;my_new_step&quot;</span><span class="p">,</span> <span class="s2">&quot;my_hdf5_key&quot;</span><span class="p">):</span>
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;my_new_step config unchanged — skipping.&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">my_new_step_method</span><span class="p">()</span>
+    <span class="n">cache</span><span class="o">.</span><span class="n">mark_done</span><span class="p">(</span><span class="s2">&quot;my_new_step&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>No other changes are required.</p>
+</section>
+<hr class="docutils" />
+<section id="limitations">
+<h2>Limitations<a class="headerlink" href="#limitations" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>No automatic downstream propagation.</strong> If you change a grid parameter, the
+cache does not know that scoring depends on grid geometry. Either use
+<code class="docutils literal notranslate"><span class="pre">clean_store=True</span></code> for full re-runs or manually call <code class="docutils literal notranslate"><span class="pre">cache.invalidate()</span></code> on
+each affected step.</p></li>
+<li><p><strong>Config hash only.</strong> The cache detects changes to config values but not to
+changes in raw input data files (e.g., a new GWA raster or a corrected GADM
+boundary). If input files change without a config change, call
+<code class="docutils literal notranslate"><span class="pre">cache.invalidate(&quot;gwa_scaling&quot;)</span></code> or the relevant step before the run.</p></li>
+<li><p><strong>Single-process only.</strong> The JSON sidecar is not safe for concurrent writes. Do
+not run two <code class="docutils literal notranslate"><span class="pre">build()</span></code> calls for the same region and resource type simultaneously.</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="development_pipeline.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Development pipeline</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="api.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">API reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-problem-it-solves">The Problem It Solves</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mechanism">Mechanism</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#config-keys-per-step">Config Keys Per Step</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-pipeline-run-automatic">Normal pipeline run (automatic)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-cache-control">Manual cache control</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#worked-examples">Worked Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scenario-1-change-discount-rate-only">Scenario 1: Change discount rate only</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scenario-2-change-turbine-specification">Scenario 2: Change turbine specification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scenario-3-change-weather-year">Scenario 3: Change weather year</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scenario-4-re-run-with-identical-config">Scenario 4: Re-run with identical config</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-a-new-step">Adding a New Step</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limitations">Limitations</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

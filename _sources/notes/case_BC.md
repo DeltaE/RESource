@@ -1,8 +1,5 @@
 <img src="../_static/graphic_RES_banner_BC.jpg" alt="assessment_steps" width="800"/>
 
-> __Resource is now published :  [Mapping feasible renewable transition space: Land-use, conservation, and grid-access constraints on wind and solar in British Columbia](https://doi.org/10.1016/j.energ.2026.100077)__
-
-
 # Case study: VRE site selection in British Columbia
 
 To demonstrate RESource's practical utility, we apply the framework to the Canadian province of British Columbia (BC). BC presents an ideal testbed due to its varied geography—coastal areas, rugged mountains, and interior plateaus—and a favorable policy environment, including the [Clean Energy Act](https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/10022_01), [expedited permitting processes for wind projects](https://news.gov.bc.ca/releases/2025ECS0006-000100) and renewable energy targeted call for power [2024](https://www.bchydro.com/work-with-us/selling-clean-energy/2024-call-for-power.html), [2025](https://www.bchydro.com/work-with-us/selling-clean-energy/2025-call-for-power.html) by BC Hydro. These characteristics offer a rich context for testing spatial, technical, and regulatory dimensions of VRE siting.
@@ -19,7 +16,7 @@ Here is a quick overview of the data sources used in this case study:
 
 ## Coordinate Reference System (CRS)
 
-CRS is a critical choice when it comes to geospatial analysis. RESource involves area calculations as an impact of spatial filters usage on land availability for site development. 
+CRS is a critical choice when it comes to geospatial analysis. RESource involves area calculations as an impact of spatial filters usage on land availability for site development.
 
 Here is a summary of the CRS used in this tool and study.
 
@@ -31,12 +28,13 @@ Here is a summary of the CRS used in this tool and study.
 | **3035**   | ETRS89 / LAEA Europe             | Meters  | Europe      | European datasets only (default CRS for atlite's Exclusion Container, i.e. for land area calculation). **Not suitable for BC.**                               |
 
 ```{tip}
-Users of this tool (or in any other geospatial analysis!) should critically review the preferred CRS for area calculation. Check EPSG Resources for more details on regional coordinate system suitability. Meter/degree-based (default/explicit for regions) CRS is configurable in RESource. 
+Users of this tool (or in any other geospatial analysis!) should critically review the preferred CRS for area calculation. Check EPSG Resources for more details on regional coordinate system suitability. Meter/degree-based (default/explicit for regions) CRS is configurable in RESource.
 ```
 
 ---
 ```{warning}
-This library is under active development 
+This case study accompanies the peer-reviewed publication
+[Mapping feasible renewable transition space](https://doi.org/10.1016/j.energ.2026.100077).
 ```
 
 <img src="../_static/status_banners/Abstract_book_data_review.jpg" alt="Abstract_book_data_review" width="900">

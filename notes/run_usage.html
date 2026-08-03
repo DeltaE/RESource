@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Enhanced run.py Usage Guide &#8212; RESource 2025.07 documentation</title>
+    <title>Command-line usage &#8212; RESource 2025.7.0 documentation</title>
   
   
   
@@ -16,66 +16,66 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=35ab0c98" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
   
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=e9b82cb4"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/documentation_options.js?v=1faeb039"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notes/run_usage';</script>
-    <script src="../_static/custom.js?v=0cd7556c"></script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Citation" href="citation.html" />
+    <link rel="prev" title="Installation and environment setup" href="setup_guide.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="Python"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../search.html"
       method="get">
@@ -83,7 +83,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -91,15 +90,59 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -108,9 +151,8 @@
       
       
       
-        
-      
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -139,47 +181,43 @@
       
     
     
-    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
-    <script>document.write(`<img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.7.0 documentation - Home"/>
+    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark pst-js-only" alt="RESource 2025.7.0 documentation - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup_guide.html">Installation and environment setup</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Command-line usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learning.html">Best Practices and Guidelines</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/Store_explorer.html">Explore data store</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
-
-
-
-
+<li class="toctree-l1"><a class="reference internal" href="development_pipeline.html">Development pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step_cache.html">RESource Step Cache</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="api.html">RES API References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">Documentation Build Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">Documentation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">Developer deployment guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publishing.html">Publishing to PyPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensing.html">License transition assessment</a></li>
 </ul>
 
     </div>
@@ -188,9 +226,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -288,7 +331,7 @@
 
 
 <button onclick="toggleFullScreen()"
-  class="btn btn-sm btn-fullscreen-button"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
   title="Fullscreen mode"
   data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
@@ -302,25 +345,24 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
-`);
-</script>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
 </div></div>
@@ -333,7 +375,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Enhanced run.py Usage Guide</h1>
+    <h1>Command-line usage</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -342,44 +384,11 @@ document.write(`
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-reference">🚀 Quick Reference</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#command-syntax">Command Syntax</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">Key Features</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#command-reference-table">📋 Command Reference Table</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-configurations">🌍 Regional Configurations</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-region-sets">Available Region Sets</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#region-code-reference">Region Code Reference</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#canadian-provinces">Canadian Provinces</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#western-balkan-countries">Western Balkan Countries</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#colored-output-guide">🎨 Colored Output Guide</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#color-coding-system">Color Coding System</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#terminal-output-examples">Terminal Output Examples</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#successful-configuration-load">Successful Configuration Load</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#invalid-configuration-file">Invalid Configuration File</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#invalid-region-selection">Invalid Region Selection</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-usage-patterns">🛠️ Advanced Usage Patterns</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partial-region-processing">Partial Region Processing</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development-workflows">Development Workflows</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-recovery">Error Recovery</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-requirements">🔧 Installation Requirements</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#required-dependencies">Required Dependencies</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-enhancements">Optional Enhancements</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#integration-with-documentation">📖 Integration with Documentation</a></li>
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arguments">Arguments</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-year-runs">Multi-year runs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compatibility-launcher">Compatibility launcher</a></li>
 </ul>
             </nav>
         </div>
@@ -391,368 +400,61 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="enhanced-run-py-usage-guide">
-<h1>Enhanced run.py Usage Guide<a class="headerlink" href="#enhanced-run-py-usage-guide" title="Link to this heading">#</a></h1>
-<p>The enhanced <code class="docutils literal notranslate"><span class="pre">run.py</span></code> script provides a user-friendly interface for renewable energy resource assessment with smart region detection, input validation, and colored terminal output.</p>
-<section id="quick-reference">
-<h2>🚀 Quick Reference<a class="headerlink" href="#quick-reference" title="Link to this heading">#</a></h2>
-<section id="command-syntax">
-<h3>Command Syntax<a class="headerlink" href="#command-syntax" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>run.py<span class="w"> </span>CONFIG_FILE<span class="w"> </span><span class="o">[</span>--regions<span class="w"> </span>REGION1<span class="w"> </span>REGION2<span class="w"> </span>...<span class="o">]</span>
+  <section id="command-line-usage">
+<h1>Command-line usage<a class="headerlink" href="#command-line-usage" title="Link to this heading">#</a></h1>
+<p>The installed command is:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>resource CONFIG [--year YYYY] [--regions CODE ...]
 </pre></div>
 </div>
-</section>
-<section id="key-features">
-<h3>Key Features<a class="headerlink" href="#key-features" title="Link to this heading">#</a></h3>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Feature</p></th>
-<th class="head"><p>Description</p></th>
-<th class="head"><p>Benefit</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>Smart Detection</strong></p></td>
-<td><p>Reads available regions from config <code class="docutils literal notranslate"><span class="pre">region_mapping</span></code></p></td>
-<td><p>No hardcoded region lists</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>Input Validation</strong></p></td>
-<td><p>Validates regions against config file</p></td>
-<td><p>Prevents invalid runs</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>Colored Output</strong></p></td>
-<td><p>Color-coded messages and progress</p></td>
-<td><p>Better user experience</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>Error Guidance</strong></p></td>
-<td><p>Helpful suggestions when errors occur</p></td>
-<td><p>Faster troubleshooting</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>Flexible Selection</strong></p></td>
-<td><p>Process all regions or custom subset</p></td>
-<td><p>Efficient partial runs</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-</section>
-<hr class="docutils" />
-<section id="command-reference-table">
-<h2>📋 Command Reference Table<a class="headerlink" href="#command-reference-table" title="Link to this heading">#</a></h2>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Command Pattern</p></th>
-<th class="head"><p>Example</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>Canadian Config</strong></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_CAN_baseline.yaml</span></code></p></td>
-<td><p>Canadian provinces (all)</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>Western Balkans</strong></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_WB6.yaml</span></code></p></td>
-<td><p>Western Balkans (all)</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>Specific Regions</strong></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_WB6.yaml</span> <span class="pre">-r</span> <span class="pre">AL</span> <span class="pre">BA</span></code></p></td>
-<td><p>Selected regions only</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>Multiple Regions</strong></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_CAN_baseline.yaml</span> <span class="pre">-r</span> <span class="pre">BC</span> <span class="pre">QC</span> <span class="pre">AB</span></code></p></td>
-<td><p>Multiple Canadian provinces</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>Single Region</strong></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_WB6.yaml</span> <span class="pre">-r</span> <span class="pre">AL</span></code></p></td>
-<td><p>Single region analysis</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>Help</strong></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">--help</span></code></p></td>
-<td><p>Show all options</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<hr class="docutils" />
-<section id="regional-configurations">
-<h2>🌍 Regional Configurations<a class="headerlink" href="#regional-configurations" title="Link to this heading">#</a></h2>
-<section id="available-region-sets">
-<h3>Available Region Sets<a class="headerlink" href="#available-region-sets" title="Link to this heading">#</a></h3>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Config File</p></th>
-<th class="head"><p>Description</p></th>
-<th class="head"><p>Available Regions</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">config/config_CAN_baseline.yaml</span></code></p></td>
-<td><p>Canadian provinces (baseline)</p></td>
-<td><p>AB, BC, MB, NB, NL, NS, ON, PE, QC, SK</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">config/config_CAN_policy1.yaml</span></code></p></td>
-<td><p>Canadian provinces (policy scenario)</p></td>
-<td><p>AB, BC, MB, NB, NL, NS, ON, PE, QC, SK</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">config/config_WB6.yaml</span></code></p></td>
-<td><p>Western Balkan countries</p></td>
-<td><p>AL, BA, XK, ME, MK, RS</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="region-code-reference">
-<h3>Region Code Reference<a class="headerlink" href="#region-code-reference" title="Link to this heading">#</a></h3>
-<section id="canadian-provinces">
-<h4>Canadian Provinces<a class="headerlink" href="#canadian-provinces" title="Link to this heading">#</a></h4>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Code</p></th>
-<th class="head"><p>Full Name</p></th>
-<th class="head"><p>Code</p></th>
-<th class="head"><p>Full Name</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>AB</p></td>
-<td><p>Alberta</p></td>
-<td><p>NB</p></td>
-<td><p>New Brunswick</p></td>
-</tr>
-<tr class="row-odd"><td><p>BC</p></td>
-<td><p>British Columbia</p></td>
-<td><p>NL</p></td>
-<td><p>Newfoundland and Labrador</p></td>
-</tr>
-<tr class="row-even"><td><p>MB</p></td>
-<td><p>Manitoba</p></td>
-<td><p>NS</p></td>
-<td><p>Nova Scotia</p></td>
-</tr>
-<tr class="row-odd"><td><p>ON</p></td>
-<td><p>Ontario</p></td>
-<td><p>PE</p></td>
-<td><p>Prince Edward Island</p></td>
-</tr>
-<tr class="row-even"><td><p>QC</p></td>
-<td><p>Quebec</p></td>
-<td><p>SK</p></td>
-<td><p>Saskatchewan</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="western-balkan-countries">
-<h4>Western Balkan Countries<a class="headerlink" href="#western-balkan-countries" title="Link to this heading">#</a></h4>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Code</p></th>
-<th class="head"><p>Full Name</p></th>
-<th class="head"><p>Code</p></th>
-<th class="head"><p>Full Name</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>AL</p></td>
-<td><p>Albania</p></td>
-<td><p>ME</p></td>
-<td><p>Montenegro</p></td>
-</tr>
-<tr class="row-odd"><td><p>BA</p></td>
-<td><p>Bosnia and Herzegovina</p></td>
-<td><p>MK</p></td>
-<td><p>North Macedonia</p></td>
-</tr>
-<tr class="row-even"><td><p>XK</p></td>
-<td><p>Kosovo</p></td>
-<td><p>RS</p></td>
-<td><p>Serbia</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-</section>
-</section>
-<hr class="docutils" />
-<section id="colored-output-guide">
-<h2>🎨 Colored Output Guide<a class="headerlink" href="#colored-output-guide" title="Link to this heading">#</a></h2>
-<section id="color-coding-system">
-<h3>Color Coding System<a class="headerlink" href="#color-coding-system" title="Link to this heading">#</a></h3>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Color</p></th>
-<th class="head"><p>Type</p></th>
-<th class="head"><p>When Used</p></th>
-<th class="head"><p>Example</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>🔴 <strong>Red</strong></p></td>
-<td><p>Errors</p></td>
-<td><p>File not found, invalid regions</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">✗</span> <span class="pre">Configuration</span> <span class="pre">file</span> <span class="pre">not</span> <span class="pre">found</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>🟡 <strong>Yellow</strong></p></td>
-<td><p>Warnings</p></td>
-<td><p>Process issues, alerts</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">⚠️</span> <span class="pre">Available</span> <span class="pre">regions</span> <span class="pre">in</span> <span class="pre">config</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>🟢 <strong>Green</strong></p></td>
-<td><p>Success</p></td>
-<td><p>Completed operations</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">✅</span> <span class="pre">Completed</span> <span class="pre">AL</span> <span class="pre">wind</span> <span class="pre">processing</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>🔵 <strong>Cyan</strong></p></td>
-<td><p>Information</p></td>
-<td><p>Status updates, progress</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">📍</span> <span class="pre">Available</span> <span class="pre">regions</span> <span class="pre">in</span> <span class="pre">config</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>🟣 <strong>Magenta</strong></p></td>
-<td><p>Suggestions</p></td>
-<td><p>Helpful tips, examples</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">💡</span> <span class="pre">Examples</span> <span class="pre">of</span> <span class="pre">valid</span> <span class="pre">commands</span></code></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="terminal-output-examples">
-<h3>Terminal Output Examples<a class="headerlink" href="#terminal-output-examples" title="Link to this heading">#</a></h3>
-<section id="successful-configuration-load">
-<h4>Successful Configuration Load<a class="headerlink" href="#successful-configuration-load" title="Link to this heading">#</a></h4>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml
-✓<span class="w"> </span>Configuration<span class="w"> </span>file<span class="w"> </span>loaded:<span class="w"> </span>config/config_WB6.yaml
-📍<span class="w"> </span>Available<span class="w"> </span>regions<span class="w"> </span><span class="k">in</span><span class="w"> </span>config:<span class="w"> </span><span class="o">[</span><span class="s1">&#39;AL&#39;</span>,<span class="w"> </span><span class="s1">&#39;BA&#39;</span>,<span class="w"> </span><span class="s1">&#39;XK&#39;</span>,<span class="w"> </span><span class="s1">&#39;ME&#39;</span>,<span class="w"> </span><span class="s1">&#39;MK&#39;</span>,<span class="w"> </span><span class="s1">&#39;RS&#39;</span><span class="o">]</span>
-🌍<span class="w"> </span>Processing<span class="w"> </span>all<span class="w"> </span>regions<span class="w"> </span>from<span class="w"> </span>config:<span class="w"> </span><span class="o">[</span><span class="s1">&#39;AL&#39;</span>,<span class="w"> </span><span class="s1">&#39;BA&#39;</span>,<span class="w"> </span><span class="s1">&#39;XK&#39;</span>,<span class="w"> </span><span class="s1">&#39;ME&#39;</span>,<span class="w"> </span><span class="s1">&#39;MK&#39;</span>,<span class="w"> </span><span class="s1">&#39;RS&#39;</span><span class="o">]</span>
+<p>In a development checkout, prefix the command with <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>resource<span class="w"> </span>config/config_BC_baseline.yaml<span class="w"> </span>--year<span class="w"> </span><span class="m">2024</span><span class="w"> </span>-r<span class="w"> </span>BC
 </pre></div>
 </div>
+<section id="arguments">
+<h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">CONFIG</span></code>
+: Path to a YAML configuration file containing <code class="docutils literal notranslate"><span class="pre">region_mapping</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--year</span></code>, <code class="docutils literal notranslate"><span class="pre">-y</span></code>
+: Weather year. The current CLI default is 2024 and overrides the corresponding
+configuration value.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--regions</span></code>, <code class="docutils literal notranslate"><span class="pre">-r</span></code>
+: Zero or more region codes. If omitted, every region declared by the
+configuration is processed.</p>
 </section>
-<section id="invalid-configuration-file">
-<h4>Invalid Configuration File<a class="headerlink" href="#invalid-configuration-file" title="Link to this heading">#</a></h4>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python3<span class="w"> </span>run.py<span class="w"> </span>nonexistent.yaml
-✗<span class="w"> </span>Configuration<span class="w"> </span>file<span class="w"> </span><span class="s1">&#39;nonexistent.yaml&#39;</span><span class="w"> </span>not<span class="w"> </span>found.
-💡<span class="w"> </span>Available<span class="w"> </span>config<span class="w"> </span>files:
-<span class="w">   </span>•<span class="w"> </span>config/config_CAN_baseline.yaml<span class="w"> </span><span class="o">(</span>Canadian<span class="w"> </span>provinces<span class="o">)</span>
-<span class="w">   </span>•<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span><span class="o">(</span>Western<span class="w"> </span>Balkans<span class="o">)</span>
-<span class="w">   </span>•<span class="w"> </span>config/config_CAN_policy1.yaml<span class="w"> </span><span class="o">(</span>Canadian<span class="w"> </span>policy<span class="w"> </span>scenario<span class="o">)</span>
-💡<span class="w"> </span>Example:<span class="w"> </span>python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml
-</pre></div>
-</div>
-</section>
-<section id="invalid-region-selection">
-<h4>Invalid Region Selection<a class="headerlink" href="#invalid-region-selection" title="Link to this heading">#</a></h4>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>-r<span class="w"> </span>INVALID<span class="w"> </span>TEST
-✓<span class="w"> </span>Configuration<span class="w"> </span>file<span class="w"> </span>loaded:<span class="w"> </span>config/config_WB6.yaml
-📍<span class="w"> </span>Available<span class="w"> </span>regions<span class="w"> </span><span class="k">in</span><span class="w"> </span>config:<span class="w"> </span><span class="o">[</span><span class="s1">&#39;AL&#39;</span>,<span class="w"> </span><span class="s1">&#39;BA&#39;</span>,<span class="w"> </span><span class="s1">&#39;XK&#39;</span>,<span class="w"> </span><span class="s1">&#39;ME&#39;</span>,<span class="w"> </span><span class="s1">&#39;MK&#39;</span>,<span class="w"> </span><span class="s1">&#39;RS&#39;</span><span class="o">]</span><span class="w">  </span>
-✗<span class="w"> </span>Invalid<span class="w"> </span>region<span class="o">(</span>s<span class="o">)</span>:<span class="w"> </span><span class="o">[</span><span class="s1">&#39;INVALID&#39;</span>,<span class="w"> </span><span class="s1">&#39;TEST&#39;</span><span class="o">]</span>
-⚠️<span class="w"> </span>Available<span class="w"> </span>regions<span class="w"> </span><span class="k">in</span><span class="w"> </span>config:<span class="w"> </span><span class="o">[</span><span class="s1">&#39;AL&#39;</span>,<span class="w"> </span><span class="s1">&#39;BA&#39;</span>,<span class="w"> </span><span class="s1">&#39;XK&#39;</span>,<span class="w"> </span><span class="s1">&#39;ME&#39;</span>,<span class="w"> </span><span class="s1">&#39;MK&#39;</span>,<span class="w"> </span><span class="s1">&#39;RS&#39;</span><span class="o">]</span>
-💡<span class="w"> </span>Examples<span class="w"> </span>of<span class="w"> </span>valid<span class="w"> </span>commands:
-<span class="w">   </span>•<span class="w"> </span>python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>--regions<span class="w"> </span>AL<span class="w"> </span>BA<span class="w"> </span>XK
-<span class="w">   </span>•<span class="w"> </span>python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>--regions<span class="w"> </span>AL
-<span class="w">   </span>•<span class="w"> </span>python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span><span class="o">(</span>process<span class="w"> </span>all<span class="w"> </span>regions<span class="o">)</span>
-</pre></div>
-</div>
-</section>
-</section>
-</section>
-<hr class="docutils" />
-<section id="advanced-usage-patterns">
-<h2>🛠️ Advanced Usage Patterns<a class="headerlink" href="#advanced-usage-patterns" title="Link to this heading">#</a></h2>
-<section id="partial-region-processing">
-<h3>Partial Region Processing<a class="headerlink" href="#partial-region-processing" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Process first 3 Western Balkan countries</span>
-python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>-r<span class="w"> </span>AL<span class="w"> </span>BA<span class="w"> </span>XK
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># All configured regions</span>
+uv<span class="w"> </span>run<span class="w"> </span>resource<span class="w"> </span>config/CAN_baseline.yaml<span class="w"> </span>--year<span class="w"> </span><span class="m">2024</span>
 
-<span class="c1"># Process specific Canadian provinces</span>
-python3<span class="w"> </span>run.py<span class="w"> </span>config/config_CAN_baseline.yaml<span class="w"> </span>-r<span class="w"> </span>BC<span class="w"> </span>QC<span class="w"> </span>AB
+<span class="c1"># Selected regions</span>
+uv<span class="w"> </span>run<span class="w"> </span>resource<span class="w"> </span>config/config_WB6_2023.yaml<span class="w"> </span>--year<span class="w"> </span><span class="m">2023</span><span class="w"> </span>-r<span class="w"> </span>AL<span class="w"> </span>BA
 
-<span class="c1"># Single region development/testing</span>
-python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>-r<span class="w"> </span>AL
+<span class="c1"># Command reference</span>
+uv<span class="w"> </span>run<span class="w"> </span>resource<span class="w"> </span>--help
 </pre></div>
 </div>
+<p>The pipeline processes wind and solar for each selected region. A failed
+region/resource pair is recorded in <code class="docutils literal notranslate"><span class="pre">results/logs/runtime_log.txt</span></code>; remaining
+pairs continue to run. A final status of <code class="docutils literal notranslate"><span class="pre">PARTIAL</span></code> means at least one pair failed.</p>
 </section>
-<section id="development-workflows">
-<h3>Development Workflows<a class="headerlink" href="#development-workflows" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Test configuration without full run</span>
-python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>-r<span class="w"> </span>AL<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-20
-
-<span class="c1"># Check available regions in new config</span>
-python3<span class="w"> </span>run.py<span class="w"> </span>path/to/new_config.yaml<span class="w"> </span>-r<span class="w"> </span>INVALID
-
-<span class="c1"># Quick validation of region codes</span>
-python3<span class="w"> </span>run.py<span class="w"> </span>--help
+<section id="multi-year-runs">
+<h2>Multi-year runs<a class="headerlink" href="#multi-year-runs" title="Link to this heading">#</a></h2>
+<p>The packaged multi-year launcher runs each weather year as an independent
+subprocess, continues after a failed year, and returns a failure status if any year
+fails:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>resource-multiyear<span class="w"> </span>config/CAN_baseline.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--start<span class="w"> </span><span class="m">2014</span><span class="w"> </span>--end<span class="w"> </span><span class="m">2024</span><span class="w"> </span>--regions<span class="w"> </span>BC
 </pre></div>
 </div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">resource-multiyear</span> <span class="pre">--help</span></code> for the complete command reference. Outputs retain
+the normal RESource directory structure; ensure the selected configuration keeps
+different weather years distinguishable before starting a large run.</p>
 </section>
-<section id="error-recovery">
-<h3>Error Recovery<a class="headerlink" href="#error-recovery" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># If colorama is missing (fallback mode)</span>
-pip<span class="w"> </span>install<span class="w"> </span>colorama
-python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml
-
-<span class="c1"># Process interrupted - resume with specific regions</span>
-python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>-r<span class="w"> </span>ME<span class="w"> </span>MK<span class="w"> </span>RS
-</pre></div>
-</div>
-</section>
-</section>
-<hr class="docutils" />
-<section id="installation-requirements">
-<h2>🔧 Installation Requirements<a class="headerlink" href="#installation-requirements" title="Link to this heading">#</a></h2>
-<section id="required-dependencies">
-<h3>Required Dependencies<a class="headerlink" href="#required-dependencies" title="Link to this heading">#</a></h3>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Package</p></th>
-<th class="head"><p>Purpose</p></th>
-<th class="head"><p>Installation</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>colorama</strong></p></td>
-<td><p>Colored terminal output</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">colorama</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>RES modules</strong></p></td>
-<td><p>Core analysis functionality</p></td>
-<td><p>Included in environment</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>PyYAML</strong></p></td>
-<td><p>Configuration file parsing</p></td>
-<td><p>Included in environment</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="optional-enhancements">
-<h3>Optional Enhancements<a class="headerlink" href="#optional-enhancements" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install colorama for enhanced output (if missing)</span>
-pip<span class="w"> </span>install<span class="w"> </span>colorama
-
-<span class="c1"># Verify installation</span>
-python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import colorama; print(&#39;✅ Colorama available&#39;)&quot;</span>
-</pre></div>
-</div>
-</section>
-</section>
-<hr class="docutils" />
-<section id="integration-with-documentation">
-<h2>📖 Integration with Documentation<a class="headerlink" href="#integration-with-documentation" title="Link to this heading">#</a></h2>
-<p>This enhanced <code class="docutils literal notranslate"><span class="pre">run.py</span></code> functionality is documented across:</p>
-<ul class="simple">
-<li><p><strong><a class="reference internal" href="quickstart.html"><span class="std std-doc">Quickstart Guide</span></a></strong> - Basic usage examples</p></li>
-<li><p><strong><a class="reference internal" href="#../../../SETUP.md"><span class="xref myst">Setup Guide</span></a></strong> - Comprehensive setup and installation guide</p></li>
-<li><p><strong><a class="reference internal" href="resource_builder.html"><span class="std std-doc">Resource Builder</span></a></strong> - Integration with analysis pipeline</p></li>
-<li><p><strong><a class="reference internal" href="#../../README.md"><span class="xref myst">README.md</span></a></strong> - Project overview and quick reference</p></li>
-</ul>
-<p>For detailed API documentation and advanced configuration options, see the <a class="reference external" href="https://deltae.github.io/RESource/">Complete Documentation</a>.</p>
+<section id="compatibility-launcher">
+<h2>Compatibility launcher<a class="headerlink" href="#compatibility-launcher" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">run.py</span> <span class="pre">...</span></code> remains available in a repository checkout, but it is only a
+thin compatibility wrapper. Documentation and automation should use the installed
+<code class="docutils literal notranslate"><span class="pre">resource</span></code> command.</p>
 </section>
 </section>
 
@@ -767,6 +469,24 @@ python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="setup_guide.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Installation and environment setup</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="citation.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Citation</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -774,52 +494,21 @@ python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> Contents
   </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-reference">🚀 Quick Reference</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#command-syntax">Command Syntax</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">Key Features</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#command-reference-table">📋 Command Reference Table</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-configurations">🌍 Regional Configurations</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-region-sets">Available Region Sets</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#region-code-reference">Region Code Reference</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#canadian-provinces">Canadian Provinces</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#western-balkan-countries">Western Balkan Countries</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#colored-output-guide">🎨 Colored Output Guide</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#color-coding-system">Color Coding System</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#terminal-output-examples">Terminal Output Examples</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#successful-configuration-load">Successful Configuration Load</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#invalid-configuration-file">Invalid Configuration File</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#invalid-region-selection">Invalid Region Selection</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-usage-patterns">🛠️ Advanced Usage Patterns</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partial-region-processing">Partial Region Processing</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development-workflows">Development Workflows</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-recovery">Error Recovery</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-requirements">🔧 Installation Requirements</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#required-dependencies">Required Dependencies</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-enhancements">Optional Enhancements</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#integration-with-documentation">📖 Integration with Documentation</a></li>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arguments">Arguments</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-year-runs">Multi-year runs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compatibility-launcher">Compatibility launcher</a></li>
 </ul>
   </nav></div>
 
@@ -868,8 +557,8 @@ By Md Eliasinul Islam
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
   </footer>

@@ -26,7 +26,7 @@ As recommended in *[The Global Atlas for Siting Parameters (GASP) project: Extre
 | **IEC Class - Fatigue Loads**    | Mean wind speed (Class I, II, III, S); <br> Turbulence category (A+, A, B, C); <br>*Excludes wake effects* |
 | **IEC Class - Fatigue Loads incl. Wake** | Mean wind speed (Class I, II, III, S);<br> Turbulence category (A+, A, B, C); <br>*Includes wake effects* |
 | **IEC Class - Extreme Loads**    | Extreme wind speed; <br>Air density at high wind speed (Class I, II, III, T, S) |
-> Source: [IEC Classes at GWA](https://globalwindatlas.info/en/about/dataset) 
+> Source: [IEC Classes at GWA](https://globalwindatlas.info/en/about/dataset)
 
 This involves prioritizing the highest wind turbine class from the GWA's IEC Class layers prior to converting the wind resource potential to energy yield parameters. GWA includes three different IEC Class layers (under the Wind Energy Layers), mapping IEC wind turbine classes for 100m wind turbine hub height. Any wind turbine, regardless of its class, usually needs validation with the manufacturer specific to the site. GWA provides rasterized data to map wind turbine class recommendations for different load scenarios. For resource estimation studies, it is typically essential to evaluate the highest wind turbine class from the IEC Class layers in the GWA.
 
@@ -49,9 +49,9 @@ For British Columbia (BC), the map on the right displays IEC turbine classes for
 
 ## Selecting Solar PV Panels
 
-We use the *[atlite.pv](https://atlite.readthedocs.io/en/master/ref_api.html#atlite.convert.pv)* conversion functionality to translate surface solar irradiance (direct + diffuse) and ambient temperature into photovoltaic (PV) power output. Internally, this module relies on a detailed panel model that incorporates parameters such as panel efficiency and temperature-dependent performance losses. 
+We use the *[atlite.pv](https://atlite.readthedocs.io/en/master/ref_api.html#atlite.convert.pv)* conversion functionality to translate surface solar irradiance (direct + diffuse) and ambient temperature into photovoltaic (PV) power output. Internally, this module relies on a detailed panel model that incorporates parameters such as panel efficiency and temperature-dependent performance losses.
 
-- Users can specify panel orientation (e.g., fixed tilt or azimuth) or tracking configurations (e.g., single-axis tracking). The “optimal” tilt—commonly based on latitude—or active tracking improves alignment with the sun, enhancing overall energy yield. 
+- Users can specify panel orientation (e.g., fixed tilt or azimuth) or tracking configurations (e.g., single-axis tracking). The “optimal” tilt—commonly based on latitude—or active tracking improves alignment with the sun, enhancing overall energy yield.
     > For Optimal slope of the panels, atlite uses the formula documented in [solarpaneltilt: Optimum Tilt of Solar Panels](http://www.solarpaneltilt.com/#fixed)
 
 - Currently, panel configuration options are limited to crystalline silicon (c-Si), cadmium telluride (CdTe), and Kaneka (amorphous silicon) technologies. The configurations and assumptions underlying the pv panel models can be found at [atlite/resources/solarpanel](https://github.com/PyPSA/atlite/tree/master/atlite/resources/solarpanel)
@@ -89,7 +89,7 @@ Ultimately, the choice between vector and raster data depends on analysis specif
 e.g. we have used 'aeroway' vector data in this analysis.
  > [What is 'aeroway'?](https://wiki.openstreetmap.org/wiki/Aeroways)
 
-### Usage in RESource (Linking Tool): 
+### Usage in RESource (Linking Tool):
 * 1. We can filter the type of aeroway landuse that we want to disregard as a potential site.
 * 2. We will create a union geometry of all aeroway area, and later can add buffer area around surrounding this geometry. The Buffer radius can be configured via the user configuration file.
 * 3. We will exclude this final geometry [aeroway union+buffer] from our Cutout Grid Cells during land availability calculations for potential VRE sites.
@@ -98,8 +98,8 @@ e.g. we have used 'aeroway' vector data in this analysis.
 We used [pyrosm](https://pyrosm.readthedocs.io/en/latest/) to extract OSM data via python API.
  > [why pyrosm?](https://pyrosm.readthedocs.io/en/latest/#when-should-i-use-pyrosm)
 
-### Method: 
-* We created an OSM 'object' which has various attributes. One of the attributes is 'point of interests (_get_pois_)'. 
+### Method:
+* We created an OSM 'object' which has various attributes. One of the attributes is 'point of interests (_get_pois_)'.
 * Each attribute has several 'keys'. We used '_get_pois_' method to extract one of the available 'keys' (e.g. 'aeroway')
 
 * Each OSM key has several tags associated e.g.
@@ -140,7 +140,7 @@ To preserve intra-national spatial resolution, polygons dissolved by **subnation
 
 In contrast, a single country polygon removes the internal regional structure that is needed for subnational energy planning and municipal or regional investment prioritization.
 
-## Example
+## Example output
 
 <table>
   <tr>
