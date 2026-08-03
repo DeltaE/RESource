@@ -5,8 +5,10 @@ __pycache__/
 **/__pycache__/
 *.py[cod]
 *.pyo
-RES.egg-info
-RES.egg-info/SOURCES.txt
+*.egg-info/
+.venv/
+dist/
+build/
 # =============================================================================
 # IDE and tools
 # =============================================================================
@@ -25,7 +27,8 @@ docs/*.html
 # =============================================================================
 # Data — downloaded sources
 # =============================================================================
-data/downloaded_data/CODERS/coders_api.yaml
+# Personal credentials (templates and README remain tracked)
+credentials/coders_api.yaml
 data/downloaded_data/CODERS/
 data/downloaded_data/CORINE/
 data/downloaded_data/cutout/
@@ -36,7 +39,7 @@ data/downloaded_data/Gov/
 data/downloaded_data/GWA/
 data/downloaded_data/lands/
 data/downloaded_data/OSM/
-# data/downloaded_data/NREL/ATB  # kept as example
+data/downloaded_data/NREL/ATB  # kept as example
 # data/downloaded_data/OEDB      # kept as example
 
 # =============================================================================
@@ -76,12 +79,8 @@ AB_temp_analysis/
 Lines_BC.png
 
 # =============================================================================
-# ROD analysis
+# Legacy ROD analysis artifacts are quarantined under cleanup_review/.
 # =============================================================================
-ROD_2024/*.xlsm
-ROD_2024/*.pkl
-ROD_2024/*.html
-ROD_2024/ROD_2024/*.html
 cluster_temp
 runtime_log.txt
 
@@ -93,4 +92,4 @@ runtime_log.txt
 *.csv
 */*.geojson
 */*.csv
-
+cleanup_review

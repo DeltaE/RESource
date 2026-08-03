@@ -16,7 +16,7 @@ Here is a quick overview of the data sources used in this case study:
 
 ## Coordinate Reference System (CRS)
 
-CRS is a critical choice when it comes to geospatial analysis. RESource involves area calculations as an impact of spatial filters usage on land availability for site development. 
+CRS is a critical choice when it comes to geospatial analysis. RESource involves area calculations as an impact of spatial filters usage on land availability for site development.
 
 Here is a summary of the CRS used in this tool and study.
 
@@ -28,12 +28,13 @@ Here is a summary of the CRS used in this tool and study.
 | **3035**   | ETRS89 / LAEA Europe             | Meters  | Europe      | European datasets only (default CRS for atlite's Exclusion Container, i.e. for land area calculation). **Not suitable for BC.**                               |
 
 ```{tip}
-Users of this tool (or in any other geospatial analysis!) should critically review the preferred CRS for area calculation. Check EPSG Resources for more details on regional coordinate system suitability. Meter/degree-based (default/explicit for regions) CRS is configurable in RESource. 
+Users of this tool (or in any other geospatial analysis!) should critically review the preferred CRS for area calculation. Check EPSG Resources for more details on regional coordinate system suitability. Meter/degree-based (default/explicit for regions) CRS is configurable in RESource.
 ```
 
 ---
 ```{warning}
-This library is under heavy development and the publication is under review process. The detailed report is restricted as a requirement from publishers.
+This case study accompanies the peer-reviewed publication
+[Mapping feasible renewable transition space](https://doi.org/10.1016/j.energ.2026.100077).
 ```
 
 <img src="../_static/status_banners/Abstract_book_data_review.jpg" alt="Abstract_book_data_review" width="900">

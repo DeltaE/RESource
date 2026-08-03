@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>RESource Builder Module &#8212; RESource 2025.07 documentation</title>
+    <title>RESource workflow &#8212; RESource 2025.7.0 documentation</title>
   
   
   
@@ -16,66 +16,68 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
   
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=e9b82cb4"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/documentation_options.js?v=1faeb039"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notes/resource_builder';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Case study: VRE site selection in British Columbia" href="case_BC.html" />
-    <link rel="prev" title="Workflow overview" href="../index.html" />
+    <link rel="next" title="Quick start" href="quickstart.html" />
+    <link rel="prev" title="RESource" href="../index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="Python"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../search.html"
       method="get">
@@ -83,7 +85,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -91,15 +92,59 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -108,7 +153,8 @@
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -137,47 +183,43 @@
       
     
     
-    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
-    <script>document.write(`<img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.7.0 documentation - Home"/>
+    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark pst-js-only" alt="RESource 2025.7.0 documentation - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">RESource Builder Module</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">RESource workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup_guide.html">Installation and environment setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run_usage.html">Command-line usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learning.html">Best Practices and Guidelines</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/Store_explorer.html">Explore data store</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
-
-
-
-
+<li class="toctree-l1"><a class="reference internal" href="development_pipeline.html">Development pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step_cache.html">RESource Step Cache</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="api.html">RES API References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">Documentation Build Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">Documentation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">Developer deployment guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publishing.html">Publishing to PyPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensing.html">License transition assessment</a></li>
 </ul>
 
     </div>
@@ -186,9 +228,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -286,7 +333,7 @@
 
 
 <button onclick="toggleFullScreen()"
-  class="btn btn-sm btn-fullscreen-button"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
   title="Fullscreen mode"
   data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
@@ -300,25 +347,24 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
-`);
-</script>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
 </div></div>
@@ -331,7 +377,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>RESource Builder Module</h1>
+    <h1>RESource workflow</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -340,20 +386,22 @@ document.write(`
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-with-run-py">Quick Start with <code class="docutils literal notranslate"><span class="pre">run.py</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#command-overview">Command Overview</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-support">Regional Support</a></li>
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-with-the-resource-command">Quick start with the <code class="docutils literal notranslate"><span class="pre">resource</span></code> command</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#command-overview">Command overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-support">Regional support</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-usage-step-by-step-workflow">Advanced Usage: Step-by-Step Workflow</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-prepare-spatial-grid-cells">Step 1: Prepare Spatial Grid Cells</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-calculate-potential-capacity">Step 2: Calculate Potential Capacity</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-get-cf-and-windspeed-from-higher-resolution-data">Step 3: Get CF and Windspeed from Higher Resolution Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-get-timeseries">Step 4: Get Timeseries</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-5-find-grid-proximity">Step 5: Find Grid Proximity</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-6-scoring-metric-to-rank-the-sites">Step 6: Scoring Metric to Rank the Sites</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-7-clusterized-representation-of-the-sites">Step 7: Clusterized Representation of the Sites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-usage-step-by-step-workflow">Advanced usage: step-by-step workflow</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-prepare-spatial-grid-cells">Step 1: Prepare Spatial Grid Cells</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-calculate-potential-capacity">Step 2: Calculate Potential Capacity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-get-cf-and-windspeed-from-higher-resolution-data">Step 3: Get CF and Windspeed from Higher Resolution Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-get-timeseries">Step 4: Get Timeseries</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-5-find-grid-proximity">Step 5: Find Grid Proximity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-6-scoring-metric-to-rank-the-sites">Step 6: Scoring Metric to Rank the Sites</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-7-clusterized-representation-of-the-sites">Step 7: Clusterized Representation of the Sites</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -365,13 +413,14 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="resource-builder-module">
-<h1>RESource Builder Module<a class="headerlink" href="#resource-builder-module" title="Link to this heading">#</a></h1>
-<section id="quick-start-with-run-py">
-<h2>Quick Start with <code class="docutils literal notranslate"><span class="pre">run.py</span></code><a class="headerlink" href="#quick-start-with-run-py" title="Link to this heading">#</a></h2>
-<p>The enhanced <code class="docutils literal notranslate"><span class="pre">run.py</span></code> script provides the simplest way to execute complete resource assessments with flexible region selection and colored output.</p>
+  <section id="resource-workflow">
+<h1>RESource workflow<a class="headerlink" href="#resource-workflow" title="Link to this heading">#</a></h1>
+<section id="quick-start-with-the-resource-command">
+<h2>Quick start with the <code class="docutils literal notranslate"><span class="pre">resource</span></code> command<a class="headerlink" href="#quick-start-with-the-resource-command" title="Link to this heading">#</a></h2>
+<p>The installed <code class="docutils literal notranslate"><span class="pre">resource</span></code> command executes complete resource assessments with
+flexible region selection and structured runtime logging.</p>
 <section id="command-overview">
-<h3>Command Overview<a class="headerlink" href="#command-overview" title="Link to this heading">#</a></h3>
+<h3>Command overview<a class="headerlink" href="#command-overview" title="Link to this heading">#</a></h3>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Usage Pattern</p></th>
@@ -381,27 +430,27 @@ document.write(`
 </thead>
 <tbody>
 <tr class="row-even"><td><p><strong>All Regions</strong></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">config/config_WB6.yaml</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">resource</span> <span class="pre">config/config_WB6_2023.yaml</span> <span class="pre">--year</span> <span class="pre">2023</span></code></p></td>
 <td><p>Process all regions in config</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>Specific Regions</strong></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">config/config_WB6.yaml</span> <span class="pre">-r</span> <span class="pre">AL</span> <span class="pre">BA</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">resource</span> <span class="pre">config/config_WB6_2023.yaml</span> <span class="pre">--year</span> <span class="pre">2023</span> <span class="pre">-r</span> <span class="pre">AL</span> <span class="pre">BA</span></code></p></td>
 <td><p>Process selected regions only</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>Default Config</strong></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">--regions</span> <span class="pre">BC</span> <span class="pre">QC</span></code></p></td>
-<td><p>Use default Canadian config</p></td>
+<tr class="row-even"><td><p><strong>Canadian region</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">resource</span> <span class="pre">config/CAN_baseline.yaml</span> <span class="pre">--year</span> <span class="pre">2024</span> <span class="pre">-r</span> <span class="pre">BC</span></code></p></td>
+<td><p>Process British Columbia</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>Validation</strong></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">-c</span> <span class="pre">config/config_WB6.yaml</span> <span class="pre">-r</span> <span class="pre">INVALID</span></code></p></td>
-<td><p>Shows available regions</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">resource</span> <span class="pre">config/config_WB6_2023.yaml</span> <span class="pre">-r</span> <span class="pre">INVALID</span></code></p></td>
+<td><p>Show available regions</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
 <section id="regional-support">
-<h3>Regional Support<a class="headerlink" href="#regional-support" title="Link to this heading">#</a></h3>
+<h3>Regional support<a class="headerlink" href="#regional-support" title="Link to this heading">#</a></h3>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Region Set</p></th>
@@ -429,26 +478,26 @@ document.write(`
 </section>
 <hr class="docutils" />
 <section id="advanced-usage-step-by-step-workflow">
-<h2>Advanced Usage: Step-by-Step Workflow<a class="headerlink" href="#advanced-usage-step-by-step-workflow" title="Link to this heading">#</a></h2>
+<h2>Advanced usage: step-by-step workflow<a class="headerlink" href="#advanced-usage-step-by-step-workflow" title="Link to this heading">#</a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Typical Sequential Steps involves the following process as mentioned below. Note that data-source errors, configuration error may break the workflow which may necessitate additional methods to be used as intermediate steps.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Check the open-access publication on <a class="reference internal" href="#"><span class="xref myst">RESource</span></a></p>
+<p>See the open-access publication,
+<a class="reference external" href="https://doi.org/10.1016/j.energ.2026.100077">Mapping feasible renewable transition space</a>.</p>
 </div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p>For detailed API documentation of the methods, see <a class="reference internal" href="api.html"><span class="doc">RES API References</span></a> and apis under <a class="reference internal" href="api.html#resource-builder"><span class="std std-ref">RESource Builder</span></a>.</p>
+<p>For the supported module surface, see the <a class="reference internal" href="api.html"><span class="doc">API reference</span></a> reference.</p>
 </div>
 <insert flow diagram of typical resource assessment>
-</section>
 <section id="step-1-prepare-spatial-grid-cells">
-<h2>Step 1: Prepare Spatial Grid Cells<a class="headerlink" href="#step-1-prepare-spatial-grid-cells" title="Link to this heading">#</a></h2>
+<h3>Step 1: Prepare Spatial Grid Cells<a class="headerlink" href="#step-1-prepare-spatial-grid-cells" title="Link to this heading">#</a></h3>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="docutils literal notranslate"><span class="pre">get_grid_cells()</span></code> at <a class="reference internal" href="api.html#resource-builder"><span class="std std-ref">RESource Builder</span></a> of <a class="reference internal" href="api.html"><span class="doc">RES API References</span></a>.</p>
+<p>See the assessment orchestrator in the <a class="reference internal" href="api.html"><span class="doc">API reference</span></a> reference.</p>
 </div>
 <ul>
 <li><p>This method collects the sub-national administrative boundaries.</p></li>
@@ -501,10 +550,10 @@ document.write(`
 </div>
 </section>
 <section id="step-2-calculate-potential-capacity">
-<h2>Step 2: Calculate Potential Capacity<a class="headerlink" href="#step-2-calculate-potential-capacity" title="Link to this heading">#</a></h2>
+<h3>Step 2: Calculate Potential Capacity<a class="headerlink" href="#step-2-calculate-potential-capacity" title="Link to this heading">#</a></h3>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="docutils literal notranslate"><span class="pre">RES.cell_processor.get_capacity()</span></code> of <a class="reference internal" href="api.html"><span class="doc">RES API References</span></a>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">RESource.cell_processor.get_capacity()</span></code> of <a class="reference internal" href="api.html"><span class="doc">API reference</span></a>.</p>
 </div>
 <ul class="simple">
 <li><p>This method loads the cutout (atlite's cutout object), regional boundary (GeoDataFrame), loads the cost parameters and  also initiates a <strong>composite excluder</strong></p>
@@ -519,7 +568,7 @@ document.write(`
 <p class="admonition-title">Attention</p>
 <ul class="simple">
 <li><p>Current results gives a percentage of availability for each grid cell. It does not tell specifically which spatial area inside a grid cell is unavailable.</p></li>
-<li><p>The <em>potential capacity</em> translation processing involves <code class="docutils literal notranslate"><span class="pre">area</span></code> calculation. The area calculation method is integrated to <code class="docutils literal notranslate"><span class="pre">RES.cell_processor.get_capacity()</span></code>. That method is sensitive to area calculation specific coordinate-system projection of the geodataframe. It is recommended to be cautious about choosing this crs.</p></li>
+<li><p>The <em>potential capacity</em> translation processing involves <code class="docutils literal notranslate"><span class="pre">area</span></code> calculation. The area calculation method is integrated to <code class="docutils literal notranslate"><span class="pre">RESource.cell_processor.get_capacity()</span></code>. That method is sensitive to area calculation specific coordinate-system projection of the geodataframe. It is recommended to be cautious about choosing this crs.</p></li>
 </ul>
 </div>
 <ul class="simple">
@@ -575,7 +624,7 @@ document.write(`
 </div>
 </section>
 <section id="step-3-get-cf-and-windspeed-from-higher-resolution-data">
-<h2>Step 3: Get CF and Windspeed from Higher Resolution Data<a class="headerlink" href="#step-3-get-cf-and-windspeed-from-higher-resolution-data" title="Link to this heading">#</a></h2>
+<h3>Step 3: Get CF and Windspeed from Higher Resolution Data<a class="headerlink" href="#step-3-get-cf-and-windspeed-from-higher-resolution-data" title="Link to this heading">#</a></h3>
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
 <ul class="simple">
@@ -598,7 +647,8 @@ Wind resources (windspeed) are known to have significant variations across ERA5'
 </div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="docutils literal notranslate"><span class="pre">extract_weather_data()</span></code> , <code class="docutils literal notranslate"><span class="pre">update_gwa_scaled_params()</span></code> at <a class="reference internal" href="api.html#resource-builder"><span class="std std-ref">RESource Builder</span></a>.</p>
+<p>The assessment orchestrator exposes <code class="docutils literal notranslate"><span class="pre">extract_weather_data()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">update_gwa_scaled_params()</span></code>.</p>
 </div>
 <ul class="simple">
 <li><p>Extracts relevant weather data (e.g., wind speed, solar irradiance) for each grid cell. This calculation has been used for validation purposes. However, the available CF parameters (from different methods) could be used for scoring metric, energy calculations etc.</p>
@@ -610,10 +660,10 @@ Wind resources (windspeed) are known to have significant variations across ERA5'
 </ul>
 </section>
 <section id="step-4-get-timeseries">
-<h2>Step 4: Get Timeseries<a class="headerlink" href="#step-4-get-timeseries" title="Link to this heading">#</a></h2>
+<h3>Step 4: Get Timeseries<a class="headerlink" href="#step-4-get-timeseries" title="Link to this heading">#</a></h3>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="docutils literal notranslate"><span class="pre">RES.timeseries.get_timeseries()</span></code> at <a class="reference internal" href="api.html#resource-builder"><span class="std std-ref">RESource Builder</span></a>.</p>
+<p>See <code class="docutils literal notranslate"><span class="pre">RESource.timeseries.Timeseries</span></code> in the <a class="reference internal" href="api.html"><span class="doc">API reference</span></a> reference.</p>
 </div>
 <p>This method generates capacity factor (CF) time series for each grid cell using weather data and technology characteristics.</p>
 <ul class="simple">
@@ -634,14 +684,14 @@ Wind resources (windspeed) are known to have significant variations across ERA5'
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p><code class="docutils literal notranslate"><span class="pre">RES.timeseries.__fix_timezone__()</span></code> method could be leveraged to reconfigure timezone awareness, if it is critical for your use-case of the timeseries.</p>
+<p><code class="docutils literal notranslate"><span class="pre">RESource.timeseries.__fix_timezone__()</span></code> method could be leveraged to reconfigure timezone awareness, if it is critical for your use-case of the timeseries.</p>
 </div>
 <ul class="simple">
 <li></li>
 </ul>
 </section>
 <section id="step-5-find-grid-proximity">
-<h2>Step 5: Find Grid Proximity<a class="headerlink" href="#step-5-find-grid-proximity" title="Link to this heading">#</a></h2>
+<h3>Step 5: Find Grid Proximity<a class="headerlink" href="#step-5-find-grid-proximity" title="Link to this heading">#</a></h3>
 <blockquote>
 <div><p>This information is critical for downstream operational analysis with this resource options.</p>
 </div></blockquote>
@@ -666,40 +716,36 @@ Wind resources (windspeed) are known to have significant variations across ERA5'
 </div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="docutils literal notranslate"><span class="pre">find_grid_nodes()</span></code> at <a class="reference internal" href="api.html#resource-builder"><span class="std std-ref">RESource Builder</span></a>.</p>
+<p>The assessment orchestrator exposes <code class="docutils literal notranslate"><span class="pre">find_grid_nodes()</span></code>.</p>
 </div>
 </section>
 <section id="step-6-scoring-metric-to-rank-the-sites">
-<h2>Step 6: Scoring Metric to Rank the Sites<a class="headerlink" href="#step-6-scoring-metric-to-rank-the-sites" title="Link to this heading">#</a></h2>
+<h3>Step 6: Scoring Metric to Rank the Sites<a class="headerlink" href="#step-6-scoring-metric-to-rank-the-sites" title="Link to this heading">#</a></h3>
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
 <p>Currently scoring calculation is configured as simplified LCOE formula.</p>
 </div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="docutils literal notranslate"><span class="pre">RES.score.CellScorer.get_cell_score()</span></code> at <a class="reference internal" href="api.html#resource-builder"><span class="std std-ref">RESource Builder</span></a>.</p>
+<p>See <code class="docutils literal notranslate"><span class="pre">RESource.score.CellScorer</span></code> in the <a class="reference internal" href="api.html"><span class="doc">API reference</span></a> reference.</p>
 </div>
 <ul class="simple">
 <li><p>Scores each grid cell based on multiple criteria (e.g., resource quality, proximity to grid), supporting site selection.</p></li>
 </ul>
 <p><strong>relative cost scoring method</strong> (configurable)</p>
-<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>\text{CRF} = \frac{r(1+r)^N}{(1+r)^N - 1}
-</pre></div>
-</div>
+<div class="math notranslate nohighlight">
+\[\text{CRF} = \frac{r(1+r)^N}{(1+r)^N - 1}\]</div>
 <p>CRF from discount rate (r) and life (N).</p>
-<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>E_i = 8760 \times CF_i \times C_{\text{ref}}
-</pre></div>
-</div>
+<div class="math notranslate nohighlight">
+\[E_i = 8760 \times CF_i \times C_{\text{ref}}\]</div>
 <p>Annual energy at site (i).</p>
-<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>\text{Score}_i
+<div class="math notranslate nohighlight">
+\[\text{Score}_i
 = \frac{\text{CRF}\cdot C_i^{\text{cap}} + FOM_i + VOM_i \cdot E_i}{E_i}
-\quad [\$/\text{MWh}]
-</pre></div>
-</div>
+\quad [\$/\text{MWh}]\]</div>
 <p><strong>Capital cost</strong></p>
-<div class="highlight-math notranslate"><div class="highlight"><pre><span></span>C_i^{\text{cap}} = CAPEX_i \cdot C_{\text{ref}} + C_i^{\text{spur}} + C_i^{\text{upgrade}}
-</pre></div>
-</div>
+<div class="math notranslate nohighlight">
+\[C_i^{\text{cap}} = CAPEX_i \cdot C_{\text{ref}} + C_i^{\text{spur}} + C_i^{\text{upgrade}}\]</div>
 <p>Grid costs are added on top of plant CAPEX; upgrades can be modeled as linear $/MW-km.</p>
 <hr class="docutils" />
 <p><strong>Symbols (units)</strong></p>
@@ -720,15 +766,17 @@ Wind resources (windspeed) are known to have significant variations across ERA5'
 </div>
 </section>
 <section id="step-7-clusterized-representation-of-the-sites">
-<h2>Step 7: Clusterized Representation of the Sites<a class="headerlink" href="#step-7-clusterized-representation-of-the-sites" title="Link to this heading">#</a></h2>
+<h3>Step 7: Clusterized Representation of the Sites<a class="headerlink" href="#step-7-clusterized-representation-of-the-sites" title="Link to this heading">#</a></h3>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="docutils literal notranslate"><span class="pre">get_clusters()</span></code>, <code class="docutils literal notranslate"><span class="pre">get_cluster_timeseries()</span></code> at <a class="reference internal" href="api.html#resource-builder"><span class="std std-ref">RESource Builder</span></a>.</p>
+<p>The assessment orchestrator exposes <code class="docutils literal notranslate"><span class="pre">get_clusters()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">get_cluster_timeseries()</span></code>.</p>
 </div>
 <ul class="simple">
 <li><p>Groups grid cells into clusters based on spatial or resource characteristics to enable aggregated analysis.</p></li>
 <li><p>Produces time series data for each cluster, summarizing the resource and capacity factor information at the cluster level.</p></li>
 </ul>
+</section>
 </section>
 </section>
 
@@ -749,15 +797,15 @@ Wind resources (windspeed) are known to have significant variations across ERA5'
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Workflow overview</p>
+        <p class="prev-next-title">RESource</p>
       </div>
     </a>
     <a class="right-next"
-       href="case_BC.html"
+       href="quickstart.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Case study: VRE site selection in British Columbia</p>
+        <p class="prev-next-title">Quick start</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -768,28 +816,32 @@ Wind resources (windspeed) are known to have significant variations across ERA5'
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> Contents
   </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-with-run-py">Quick Start with <code class="docutils literal notranslate"><span class="pre">run.py</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#command-overview">Command Overview</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-support">Regional Support</a></li>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-with-the-resource-command">Quick start with the <code class="docutils literal notranslate"><span class="pre">resource</span></code> command</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#command-overview">Command overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-support">Regional support</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-usage-step-by-step-workflow">Advanced Usage: Step-by-Step Workflow</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-prepare-spatial-grid-cells">Step 1: Prepare Spatial Grid Cells</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-calculate-potential-capacity">Step 2: Calculate Potential Capacity</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-get-cf-and-windspeed-from-higher-resolution-data">Step 3: Get CF and Windspeed from Higher Resolution Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-get-timeseries">Step 4: Get Timeseries</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-5-find-grid-proximity">Step 5: Find Grid Proximity</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-6-scoring-metric-to-rank-the-sites">Step 6: Scoring Metric to Rank the Sites</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-7-clusterized-representation-of-the-sites">Step 7: Clusterized Representation of the Sites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-usage-step-by-step-workflow">Advanced usage: step-by-step workflow</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-prepare-spatial-grid-cells">Step 1: Prepare Spatial Grid Cells</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-calculate-potential-capacity">Step 2: Calculate Potential Capacity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-get-cf-and-windspeed-from-higher-resolution-data">Step 3: Get CF and Windspeed from Higher Resolution Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-get-timeseries">Step 4: Get Timeseries</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-5-find-grid-proximity">Step 5: Find Grid Proximity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-6-scoring-metric-to-rank-the-sites">Step 6: Scoring Metric to Rank the Sites</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-7-clusterized-representation-of-the-sites">Step 7: Clusterized Representation of the Sites</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
@@ -838,8 +890,8 @@ By Md Eliasinul Islam
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
   </footer>

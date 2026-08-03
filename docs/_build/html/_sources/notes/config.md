@@ -1,7 +1,8 @@
 # How to use the CONFIG
 
 ```{warning}
-This library is under heavy development
+Configuration examples correspond to the published RESource methodology. Record
+the exact configuration with each analysis for reproducibility.
 ```
 
 ```{hint}
@@ -12,7 +13,7 @@ An __interactive user interface is under development__ to replace this config an
 
 This document provides comprehensive documentation for the RESource tool configuration file (example provided for the Canadian config file [`config_CAN.yaml`](https://github.com/DeltaE/RESource/blob/main/config/config_CAN.yaml)).
 
-**Version:** 1.0  
+**Version:** 1.0
 **Release Year:** 2025
 
 ## Table of Contents
@@ -42,7 +43,7 @@ Scenario:
 ```
 
 ```{tip}
-A copy of the config file will be saved to 'results/RESources/Region <sub-national-unit name>' for each run of the tool. Each config files will have the 'Scenario' name as a suffix. 
+A copy of the config file will be saved to 'results/RESources/Region <sub-national-unit name>' for each run of the tool. Each config files will have the 'Scenario' name as a suffix.
 ```
 
 ---
@@ -86,7 +87,7 @@ snapshots_tz_BC:
 - **Processed Directory:** `data/processed_data/regions`
 - **Field Mapping:**
   - `NAME_0`: Country
-  - `NAME_1`: Province  
+  - `NAME_1`: Province
   - `NAME_2`: Region
 
 ### Government of Canada Data Sources
@@ -169,10 +170,12 @@ Canadian provinces and territories are mapped to numeric codes (1-21), including
 
 ### CODERS (Canadian Open Data for Electricity Research)
 
-- **URLs:**
-  - Primary: <https://sesit.dev/>
-  - Secondary: <http://206.12.95.102/>
-- **API Documentation:** <https://sesit.dev/api/docs>
+- **API endpoint:** <http://api.sesit.ca>
+- **Credential source:** Authorized users can retrieve
+  [`coders_api.yaml`](https://github.com/eliasinul/modeling_inventory/blob/main/PyPSA/coders_api.yaml)
+  from the modeling inventory and save it locally as
+  `credentials/coders_api.yaml`. See [`credentials/README.md`](https://github.com/DeltaE/RESource/blob/main/credentials/README.md).
+- **Security:** Do not commit the downloaded credential file or print its API key.
 - **Data Types:** network (substations and transmission lines)
 
 ### GAEZ (Global Agro-Ecological Zones)

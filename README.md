@@ -7,9 +7,8 @@ __One of the many solutions ?__
 
 __A Modular and Transparent Open-Source Framework for Sub-National Assessment of Solar and Land-based Wind Potential.__
 
-> ⚠️ **Note: This library is under heavy development**
-
-> **:sparkle: Resource is now published** : [Mapping feasible renewable transition space: Land-use, conservation, and grid-access constraints on wind and solar in British Columbia](https://doi.org/10.1016/j.energ.2026.100077)
+> RESource is described and applied in the peer-reviewed publication
+> [Mapping feasible renewable transition space: Land-use, conservation, and grid-access constraints on wind and solar in British Columbia](https://doi.org/10.1016/j.energ.2026.100077).
 
 RESource is developed to enable reproducible, adaptable assessments of VRE potential that are sensitive to local constraints and planning priorities. We developed a structured, modular workflow that integrates geospatial, temporal, economic, and regulatory data to evaluate site suitability for solar and wind energy development. This structured methodology ensures transparency and transferability, allowing RESource to be adapted for different regions and scaled for long-term strategic energy planning.
 
@@ -19,20 +18,61 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 
 ## 🚀 Quick Start
 
-**New to RESource?** Get started with 
+**New to RESource?** Get started with
 
-📖 **[Full Quickstart Guide](https://deltae.github.io/RESource/#quick-start))** | 📚 **[Complete Documentation](https://deltae.github.io/RESource/)**
+📖 **[Full Quickstart Guide](https://deltae.github.io/RESource/#quick-start)** | 📚 **[Complete Documentation](https://deltae.github.io/RESource/)**
+
+### Installation
+
+After the first PyPI release, install the `deltae-resource` distribution.
+The Python import name remains `RESource`:
+
+```bash
+pip install deltae-resource
+```
+
+Until that release is published, clone the repository and use the locked `uv`
+development workflow below.
+
+For local development, `uv` creates the environment from the committed lockfile
+and installs RESource in editable mode:
+
+```bash
+git clone https://github.com/DeltaE/RESource.git
+cd RESource
+uv sync --locked
+uv run pytest
+uv run resource --help
+```
+
+Notebook users can install the notebook extra:
+
+```bash
+uv sync --locked --extra notebooks
+uv run jupyter lab notebooks/
+```
+
+See the [notebook index](notebooks/README.md) for maintained workflows and the
+notebook retention policy.
+
+New code should import the package as `RESource`. The former `RES` namespace is
+temporarily retained as a compatibility layer for existing notebooks.
+
+```python
+from RESource.RESources import RESources_builder
+```
 
 ### Enhanced Analysis Pipeline
 
-The enhanced `run.py` script provides flexible region selection with colored output:
+The installed `resource` command provides flexible region selection with colored output:
 
 | Command | Description |
 |---------|-------------|
-| `python3 run.py config/config_CAN_baseline.yaml` | Canadian analysis (all provinces) |
-| `python3 run.py config/config_WB6.yaml` | Western Balkans analysis (all countries) |
-| `python3 run.py config/config_WB6.yaml -r AL BA` | Specific regions only |
-| `python3 run.py --help` | Show all available options |
+| `resource config/CAN_baseline.yaml --year 2024` | Canadian analysis (all provinces) |
+| `resource config/WB6_baseline.yaml --year 2023` | Western Balkans analysis (all countries) |
+| `resource config/WB6_baseline.yaml --year 2023 -r AL BA` | Specific regions only |
+| `resource-multiyear config/CAN_baseline.yaml --start 2014 --end 2024 -r BC` | Sequential multi-year assessment |
+| `resource --help` | Show all available options |
 
 **Features:** Smart region detection • Input validation • Colored error messages • Flexible region selection
 
@@ -48,9 +88,56 @@ The enhanced `run.py` script provides flexible region selection with colored out
 
 ------
 
+## Build the documentation
+
+Documentation is built with Sphinx through the locked uv environment:
+
+```bash
+uv sync --locked --extra docs
+uv run sphinx-build -W --keep-going -b html docs/source docs/_build/html
+```
+
+Preview the generated site locally:
+
+```bash
+uv run python -m http.server 8000 --directory docs/_build/html
+```
+
+Then open <http://localhost:8000>. For a complete clean rebuild, use:
+
+```bash
+uv run sphinx-build -E -a -W --keep-going \
+  -b html docs/source docs/_build/html
+```
+
+Documentation pages live in `docs/source/notes/`, navigation is maintained in
+`docs/source/index.md`, and images belong in `docs/source/_static/`. Add every new
+page to an appropriate `toctree` in `index.md` and resolve all strict-build warnings.
+The generated `docs/_build/` directory is ignored; commit documentation sources,
+not generated HTML.
+
+Authorized maintainers can deploy a reviewed build through the established
+`gh-pages` branch workflow:
+
+```bash
+uvx ghp-import --no-jekyll --push --force \
+  --branch gh-pages --remote origin docs/_build/html
+```
+
+This force-pushes generated documentation to the remote `gh-pages` branch. Review
+the local site and follow the [developer deployment guide](docs/source/notes/deployment.md)
+before running it.
+
+------
+
 ## 📚 Resources
 
-- **[� Complete Setup Guide](SETUP.md)** - Definitive installation & setup guide
-- **[📖 Quickstart Guide](QUICKSTART.md)** - Get running in 5 minutes
+- **[Complete Setup Guide](docs/source/notes/setup_guide.md)** - Installation and environment setup
+- **[Quickstart Guide](docs/source/notes/quickstart.md)** - Get running in 5 minutes
 - **[🏔️ BC Case Study](https://deltae.github.io/RESource/notes/case_BC.html)** - Detailed regional analysis
 - **[📘 Full Documentation](https://deltae.github.io/RESource/)** - Complete reference
+- **[📄 Peer-reviewed publication](https://doi.org/10.1016/j.energ.2026.100077)** - Methodology and British Columbia application
+- **[Contributing](CONTRIBUTING.md)** - Development setup, standards, and pull-request expectations
+- **[Developer deployment](docs/source/notes/deployment.md)** - Package and documentation release procedure
+- **[Development pipeline](docs/source/notes/development_pipeline.md)** - Active and planned methodological work
+- **[AI agent agreement](AGENTS.md)** - Safe regional-adaptation workflow for coding agents

@@ -78,7 +78,7 @@ region_mapping:
 
   'RS':
     name: "Serbia"
-    land_area_km2: 77,474 # The conflict between Serbia and Kosovo spills over into this data. The area of Serbia stated here (i.e. 88,361 km2) includes Kosovo (as Serbia does not recognise it as a sovereign state). Without Kosovo (which is what we are going for here), it is 77,474 km2. 
+    land_area_km2: 77,474 # The conflict between Serbia and Kosovo spills over into this data. The area of Serbia stated here (i.e. 88,361 km2) includes Kosovo (as Serbia does not recognise it as a sovereign state). Without Kosovo (which is what we are going for here), it is 77,474 km2.
     percentage_national_land_area: "100%"
     timezone_convert: 'Etc/GMT-2' # Central European Time (CET, GMT+1) / Central European Summer Time (CEST, GMT+2)
     GWA_country_code: 'SRB'
@@ -193,7 +193,7 @@ EU_DEM:
     # 7 : water
 
 
-    # GAEZ v4 Median slope class compiled from 3 arc-second SRTM data 
+    # GAEZ v4 Median slope class compiled from 3 arc-second SRTM data
 
     # 1 : flat (slope angle 0-0.5%)
     # 2 : flat (slope angle 0.5-2%)
@@ -217,7 +217,7 @@ EU_DEM:
     #     # 4 : forest/ tree covered areas
     #     # 5 : shrubs covered areas
     #     # 6 : herbaceous vegetation,aquatic or regularly flooded areas
-    #     # 7 : mangroves        
+    #     # 7 : mangroves
     #     # 8 : sparse vegetation
     #     # 9 : bare soil
     #     # 10: snow and glaciers
@@ -259,7 +259,7 @@ cutout:
   dx: 0.25 # Arc Length for cutout grids cells in Degrees
   dy: 0.25 # Arc Length for cutout grids cells in Degrees
 
-  # the snapshots are given as a 'list', not 'values'. 
+  # the snapshots are given as a 'list', not 'values'.
   snapshots:
     start:
     # Must be formatted as 'YYYY-MM-DD' (ERA5 returns data in UTC)
@@ -290,7 +290,7 @@ GWA:
 capacity_disaggregation:
   solar:
     max_capacity: 10 # GW
-    landuse_intensity: 1.45 # (.01*145 MW/km2) ; Source: PyPSA-EUR paper, 
+    landuse_intensity: 1.45 # (.01*145 MW/km2) ; Source: PyPSA-EUR paper,
     # capex : 1161.269 # USD/kW  ***Replaced with NREL ATB Spreadsheet (via data pipeline automation) for different wind class, different years.
     cost_data: 'data/processed_data/utility_PV_Class5_cost_moderate_NREL_ATB2024.csv'
     NREL_ATB_technology: 'UtilityPV'

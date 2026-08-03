@@ -32,18 +32,18 @@ Therefore, exclusion zones of radius ≥10H are used to maintain low turbulence
 intensity and reliable inflow conditions.
 
 ## 3. Raster Processing Workflow
-1. Mask no-data values from the SCANFI raster.  
-2. Classify pixels into tall forest (H ≥ H_forest_threshold) and low canopy (H ≤ H_inside_threshold).  
-3. Compute the Euclidean distance (m) to the nearest tall-forest pixel using a distance transform.  
-4. Apply the physical clearance condition: pixels closer than the safe distance are excluded.  
-5. For solar: d ≥ H / tan(θₘₐₓ); for wind: d ≥ 10H.  
-6. Combine distance and height conditions to form a binary suitability raster (1 = suitable, 0 = excluded).  
+1. Mask no-data values from the SCANFI raster.
+2. Classify pixels into tall forest (H ≥ H_forest_threshold) and low canopy (H ≤ H_inside_threshold).
+3. Compute the Euclidean distance (m) to the nearest tall-forest pixel using a distance transform.
+4. Apply the physical clearance condition: pixels closer than the safe distance are excluded.
+5. For solar: d ≥ H / tan(θₘₐₓ); for wind: d ≥ 10H.
+6. Combine distance and height conditions to form a binary suitability raster (1 = suitable, 0 = excluded).
 7. Clip the raster to the boundary polygon and export as GeoTIFFs for further use in energy siting models.
 
 ## 4. Interpretation of Outputs
 The process generates two rasters:
 
-- **forestmask.tif** — pixels representing tall forest exceeding H_forest_threshold.  
+- **forestmask.tif** — pixels representing tall forest exceeding H_forest_threshold.
 - **suitability.tif** — binary map where value 1 indicates acceptable vegetation height and distance from tall forest.
 
 These outputs can be integrated into **RESource**, **PyPSA**, or **CLEWs-based** workflows

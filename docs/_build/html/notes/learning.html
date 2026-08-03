@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Best Practices and Guidelines &#8212; RESource 2025.07 documentation</title>
+    <title>Best Practices and Guidelines &#8212; RESource 2025.7.0 documentation</title>
   
   
   
@@ -16,66 +16,66 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
   
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=e9b82cb4"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/documentation_options.js?v=1faeb039"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notes/learning';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Data Sources and Supply Chain" href="data.html" />
     <link rel="prev" title="How to use the CONFIG" href="config.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="Python"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../search.html"
       method="get">
@@ -83,7 +83,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -91,15 +90,59 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -108,7 +151,8 @@
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -137,47 +181,43 @@
       
     
     
-    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
-    <script>document.write(`<img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.7.0 documentation - Home"/>
+    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark pst-js-only" alt="RESource 2025.7.0 documentation - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup_guide.html">Installation and environment setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run_usage.html">Command-line usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Best Practices and Guidelines</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/Store_explorer.html">Explore data store</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
-
-
-
-
+<li class="toctree-l1"><a class="reference internal" href="development_pipeline.html">Development pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step_cache.html">RESource Step Cache</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="api.html">RES API References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">Documentation Build Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">Documentation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">Developer deployment guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publishing.html">Publishing to PyPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensing.html">License transition assessment</a></li>
 </ul>
 
     </div>
@@ -186,9 +226,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -286,7 +331,7 @@
 
 
 <button onclick="toggleFullScreen()"
-  class="btn btn-sm btn-fullscreen-button"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
   title="Fullscreen mode"
   data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
@@ -300,25 +345,24 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
-`);
-</script>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
 </div></div>
@@ -340,7 +384,8 @@ document.write(`
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Best Practices and Guidelines</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-wind-turbines">Selecting Wind Turbines</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#iec-class-selection">IEC Class Selection</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#iec-class-layer-mapping-to-select-turbine-technologies-for-wind-energy-estimation">IEC Class Layer Mapping to Select Turbine Technologies for Wind Energy Estimation</a></li>
@@ -365,6 +410,27 @@ document.write(`
 </ul>
 </li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#why-subnational-dissolved-polygons-were-used-instead-of-a-single-country-boundary">Why subnational dissolved polygons were used instead of a single country boundary</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-issue">Core issue</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-a-single-country-boundary-was-not-sufficient">Why a single country boundary was not sufficient</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-output">Example output</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation">Interpretation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-possible-correction-methods">Two possible correction methods</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#method-a-area-proportional-scaling">Method A: Area-proportional scaling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#method-b-geometry-level-availability-breakdown">Method B: Geometry-level availability breakdown</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#method-applied-here">Method applied here</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-is-justified-with-100-m-data">Why this is justified with 100 m data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#role-of-raster-and-vector-data-in-atlite-availability-calculations">Role of raster and vector data in atlite availability calculations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-matters-even-if-capacities-are-later-aggregated">Why this matters even if capacities are later aggregated</a></li>
+</ul>
+</li>
+</ul>
+
             </nav>
         </div>
     </div>
@@ -618,6 +684,125 @@ e.g. we have used 'aeroway' vector data in this analysis.</p></li>
 </section>
 </section>
 </section>
+<section id="why-subnational-dissolved-polygons-were-used-instead-of-a-single-country-boundary">
+<h1>Why subnational dissolved polygons were used instead of a single country boundary<a class="headerlink" href="#why-subnational-dissolved-polygons-were-used-instead-of-a-single-country-boundary" title="Link to this heading">#</a></h1>
+<section id="core-issue">
+<h2>Core issue<a class="headerlink" href="#core-issue" title="Link to this heading">#</a></h2>
+<p>In the earlier workflow, boundary cells at the national edge could be unintentionally <strong>double counted or misallocated</strong> when an ERA5 cell intersected multiple geometries. This happened because the availability and capacity calculations were first performed at the <strong>country-dissolved ERA5-cell level</strong>, and only afterward the trimmed cell was overlaid with smaller internal geometries.</p>
+<p>A critical distinction is that the final “sites” in this workflow are <strong>not the ERA5 cells themselves</strong>. Rather, the sites are the <strong>geometries inside the ERA5 cells</strong>, which emerge after applying higher-resolution raster and vector constraints. These internal geometries are therefore the planning-relevant units for capacity allocation.</p>
+</section>
+<section id="why-a-single-country-boundary-was-not-sufficient">
+<h2>Why a single country boundary was not sufficient<a class="headerlink" href="#why-a-single-country-boundary-was-not-sufficient" title="Link to this heading">#</a></h2>
+<p>Using a single dissolved country boundary is adequate for <strong>national masking</strong>, but it is not adequate for <strong>intra-national attribution</strong>. It only answers whether a cell lies inside the country, not how capacity should be distributed across subnational units within that cell.</p>
+<p>To preserve intra-national spatial resolution, polygons dissolved by <strong>subnational administrative units</strong> were used instead of a single country geometry. This allows each resulting geometry to be assigned to a planning-relevant administrative region, enabling region-wise aggregation of:</p>
+<ul class="simple">
+<li><p>land availability,</p></li>
+<li><p>capacity potential,</p></li>
+<li><p>and cost metrics such as LCOE.</p></li>
+</ul>
+<p>In contrast, a single country polygon removes the internal regional structure that is needed for subnational energy planning and municipal or regional investment prioritization.</p>
+</section>
+<section id="example-output">
+<h2>Example output<a class="headerlink" href="#example-output" title="Link to this heading">#</a></h2>
+<table>
+  <tr>
+    <td style="width: 40%; vertical-align: top; text-align: center;">
+      <img src="../_static/NorthMacedonia_example_learning.png"
+           alt="Illustration of a trimmed ERA5 cell and internal municipality geometries"
+           width="520">
+    </td>
+    <td style="width: 60%; vertical-align: top; padding-left: 18px;">
+<section id="interpretation">
+<h3>Interpretation<a class="headerlink" href="#interpretation" title="Link to this heading">#</a></h3>
+<ul>
+<li><p>The <strong>purple polygon</strong> shows a single <strong>ERA5 cell</strong> after trimming to the country or regional boundary.</p></li>
+<li><p>The <strong>five internal polygons</strong> correspond to <strong>municipality-level geometries</strong> located inside that same trimmed ERA5 cell.</p></li>
+<li><p>Since these polygons are subdivisions of one parent ERA5 cell, they initially share the <strong>same underlying cell-level attributes</strong>.</p></li>
+<li><p>This example highlights the distinction between the <strong>meteorological grid cell</strong> and the <strong>planning-relevant administrative geometries</strong> embedded within it.</p>
+  </td>
+</tr>
+</li>
+</ul>
+</table>
+<p>The earlier workflow was:</p>
+<ol class="arabic simple">
+<li><p>pass the <strong>country-dissolved geometry</strong> into the availability matrix,</p></li>
+<li><p>calculate the <strong>capacity matrix</strong>,</p></li>
+<li><p>derive capacity at the <strong>ERA5-cell level</strong>,</p></li>
+<li><p>then overlay the trimmed ERA5 cell with municipality geometries.</p></li>
+</ol>
+<p>The problem with this sequence is that each municipality geometry could end up absorbing the <strong>same cell-level capacity</strong>, even though those geometries may differ strongly in their actual developable land. In other words, the boundary trimming created multiple internal geometries, but the capacity signal was still inherited from the undifferentiated ERA5 cell.</p>
+</section>
+</section>
+<section id="two-possible-correction-methods">
+<h2>Two possible correction methods<a class="headerlink" href="#two-possible-correction-methods" title="Link to this heading">#</a></h2>
+<section id="method-a-area-proportional-scaling">
+<h3>Method A: Area-proportional scaling<a class="headerlink" href="#method-a-area-proportional-scaling" title="Link to this heading">#</a></h3>
+<p>One correction is to assume that land availability within the ERA5 cell is <strong>uniformly distributed</strong> across all internal geometries. Under that assumption, municipal capacity can be scaled as:</p>
+<p><strong>municipal capacity = ERA5-cell availability × municipality geometry area</strong></p>
+<p>This is simple and internally consistent if no better spatial information exists. However, it assumes that developable land is spread evenly within the ERA5 cell. Where municipalities differ strongly in land cover, slope, protected areas, buffers, or other siting constraints, this can become spatially misleading. It may allocate too much capacity to municipalities with little suitable land and too little to those with more developable land.</p>
+</section>
+<section id="method-b-geometry-level-availability-breakdown">
+<h3>Method B: Geometry-level availability breakdown<a class="headerlink" href="#method-b-geometry-level-availability-breakdown" title="Link to this heading">#</a></h3>
+<p>The second correction is to calculate availability at the <strong>municipality-geometry level</strong>, rather than only at the ERA5-cell level. In this case, each internal geometry receives its own availability estimate derived from the finer-resolution spatial data. Capacity is then calculated from that geometry-specific availability.</p>
+<p>This approach preserves the true spatial heterogeneity of developable land within a single ERA5 cell and avoids the artificial assumption of uniform distribution.</p>
+</section>
+</section>
+<section id="method-applied-here">
+<h2>Method applied here<a class="headerlink" href="#method-applied-here" title="Link to this heading">#</a></h2>
+<p><strong>Method B was applied.</strong></p>
+<p>This is preferable because the workflow already uses <strong>high-resolution spatial inputs</strong>, including raster and vector constraints, to determine land availability. Since those data capture internal differences within the ERA5 cell, capacity allocation should also reflect those differences.</p>
+<p>This makes the results more spatially defensible, especially when municipalities within the same ERA5 cell differ substantially in their actual developable land.</p>
+</section>
+<section id="why-this-is-justified-with-100-m-data">
+<h2>Why this is justified with 100 m data<a class="headerlink" href="#why-this-is-justified-with-100-m-data" title="Link to this heading">#</a></h2>
+<p>The use of high-resolution data is important here. Availability was derived using <strong>100 m raster information together with vector exclusions/constraints</strong>, so the workflow is not relying on coarse cell-wide assumptions alone. If a municipality geometry contains many 100 m pixels, then its developable fraction is meaningfully estimated from actual spatial detail rather than from a uniform average.</p>
+<p>This means the geometry-level availability values are not arbitrary subdivisions of the ERA5 cell. They are grounded in the spatial pattern of:</p>
+<ul class="simple">
+<li><p>land cover,</p></li>
+<li><p>exclusion zones,</p></li>
+<li><p>protected areas,</p></li>
+<li><p>buffers,</p></li>
+<li><p>and other vector/raster siting constraints.</p></li>
+</ul>
+<p>As a result, geometry-level capacity estimates are relevant for municipal or subregional interpretation, provided the geometry is large enough to be represented meaningfully at the 100 m resolution.</p>
+</section>
+<section id="role-of-raster-and-vector-data-in-atlite-availability-calculations">
+<h2>Role of raster and vector data in atlite availability calculations<a class="headerlink" href="#role-of-raster-and-vector-data-in-atlite-availability-calculations" title="Link to this heading">#</a></h2>
+<p>In <code class="docutils literal notranslate"><span class="pre">atlite</span></code>, availability is typically computed by evaluating which parts of a grid cell remain suitable after applying exclusion layers. In this workflow, that logic is enriched by combining:</p>
+<ul class="simple">
+<li><p><strong>high-resolution raster layers</strong> (for example land cover or gridded suitability data), and</p></li>
+<li><p><strong>vector layers</strong> (for example administrative boundaries, protected areas, lakes, buffers, or other exclusion geometries).</p></li>
+</ul>
+<p>Conceptually, the process is:</p>
+<ol class="arabic simple">
+<li><p>start from the coarse ERA5 grid cell,</p></li>
+<li><p>evaluate suitability inside that cell using fine-resolution raster data,</p></li>
+<li><p>exclude or trim unsuitable portions using vector constraints,</p></li>
+<li><p>retain only the eligible land fragments,</p></li>
+<li><p>aggregate those eligible fragments into geometry-level availability values.</p></li>
+</ol>
+<p>Because of this raster–vector combination, the final “site” is better interpreted as a <strong>reality-corrected developable geometry inside an ERA5 cell</strong>, not as the ERA5 cell itself.</p>
+</section>
+<section id="why-this-matters-even-if-capacities-are-later-aggregated">
+<h2>Why this matters even if capacities are later aggregated<a class="headerlink" href="#why-this-matters-even-if-capacities-are-later-aggregated" title="Link to this heading">#</a></h2>
+<p>Even if the final model aggregates all municipal geometries into a single resource or supply option, the spatial breakdown remains valuable.</p>
+<p>It helps answer questions such as:</p>
+<ul class="simple">
+<li><p>where the aggregated capacity is actually located,</p></li>
+<li><p>which municipalities or subregions contribute most,</p></li>
+<li><p>whether investment potential is spatially concentrated or dispersed,</p></li>
+<li><p>and which areas may deserve prioritization for planning, infrastructure, or permitting.</p></li>
+</ul>
+<p>So although the optimization model may later collapse these sites into a larger resource class, the finer spatial decomposition still provides important planning intelligence. It supports interpretation, transparency, and investment prioritization in ways that a single aggregated number cannot.</p>
+<p>The key methodological shift was moving from <strong>country-level ERA5-cell capacity allocation</strong> to <strong>subnational geometry-level availability and capacity allocation</strong>. This avoided misallocation at boundaries, preserved intra-national spatial structure, and better reflected the true distribution of developable land captured by the 100 m raster and vector exclusion workflow.</p>
+<p>In short:</p>
+<ul class="simple">
+<li><p>a <strong>single country boundary</strong> is sufficient for national masking,</p></li>
+<li><p>but <strong>subnational dissolved polygons plus geometry-level availability</strong> are needed for spatially just and planning-relevant capacity allocation.</p></li>
+</ul>
+</section>
+</section>
 
 
                 </article>
@@ -655,15 +840,18 @@ e.g. we have used 'aeroway' vector data in this analysis.</p></li>
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> Contents
   </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Best Practices and Guidelines</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-wind-turbines">Selecting Wind Turbines</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#iec-class-selection">IEC Class Selection</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#iec-class-layer-mapping-to-select-turbine-technologies-for-wind-energy-estimation">IEC Class Layer Mapping to Select Turbine Technologies for Wind Energy Estimation</a></li>
@@ -688,6 +876,27 @@ e.g. we have used 'aeroway' vector data in this analysis.</p></li>
 </ul>
 </li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#why-subnational-dissolved-polygons-were-used-instead-of-a-single-country-boundary">Why subnational dissolved polygons were used instead of a single country boundary</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-issue">Core issue</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-a-single-country-boundary-was-not-sufficient">Why a single country boundary was not sufficient</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-output">Example output</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation">Interpretation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-possible-correction-methods">Two possible correction methods</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#method-a-area-proportional-scaling">Method A: Area-proportional scaling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#method-b-geometry-level-availability-breakdown">Method B: Geometry-level availability breakdown</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#method-applied-here">Method applied here</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-is-justified-with-100-m-data">Why this is justified with 100 m data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#role-of-raster-and-vector-data-in-atlite-availability-calculations">Role of raster and vector data in atlite availability calculations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-matters-even-if-capacities-are-later-aggregated">Why this matters even if capacities are later aggregated</a></li>
+</ul>
+</li>
+</ul>
+
   </nav></div>
 
 </div></div>
@@ -735,8 +944,8 @@ By Md Eliasinul Islam
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
   </footer>

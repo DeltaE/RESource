@@ -1,19 +1,20 @@
-## RESource Builder Module
+# RESource workflow
 
-### Quick Start with `run.py`
+## Quick start with the `resource` command
 
-The enhanced `run.py` script provides the simplest way to execute complete resource assessments with flexible region selection and colored output.
+The installed `resource` command executes complete resource assessments with
+flexible region selection and structured runtime logging.
 
-#### Command Overview
+### Command overview
 
 | Usage Pattern | Example | Description |
 |---------------|---------|-------------|
-| **All Regions** | `python3 run.py -c config/config_WB6.yaml` | Process all regions in config |
-| **Specific Regions** | `python3 run.py -c config/config_WB6.yaml -r AL BA` | Process selected regions only |
-| **Default Config** | `python3 run.py --regions BC QC` | Use default Canadian config |
-| **Validation** | `python3 run.py -c config/config_WB6.yaml -r INVALID` | Shows available regions |
+| **All Regions** | `resource config/config_WB6_2023.yaml --year 2023` | Process all regions in config |
+| **Specific Regions** | `resource config/config_WB6_2023.yaml --year 2023 -r AL BA` | Process selected regions only |
+| **Canadian region** | `resource config/CAN_baseline.yaml --year 2024 -r BC` | Process British Columbia |
+| **Validation** | `resource config/config_WB6_2023.yaml -r INVALID` | Show available regions |
 
-#### Regional Support
+### Regional support
 
 | Region Set | Config File | Available Regions |
 |------------|-------------|-------------------|
@@ -23,18 +24,19 @@ The enhanced `run.py` script provides the simplest way to execute complete resou
 
 ---
 
-### Advanced Usage: Step-by-Step Workflow
+## Advanced usage: step-by-step workflow
 
 ```{warning}
 Typical Sequential Steps involves the following process as mentioned below. Note that data-source errors, configuration error may break the workflow which may necessitate additional methods to be used as intermediate steps.
 ```
 
 ```{tip}
-Check the open-access publication on [RESource]()
+See the open-access publication,
+[Mapping feasible renewable transition space](https://doi.org/10.1016/j.energ.2026.100077).
 ```
 
 ```{seealso}
-For detailed API documentation of the methods, see {doc}`api` and apis under {ref}`RESource Builder`.
+For the supported module surface, see the {doc}`api` reference.
 ```
 
 <insert flow diagram of typical resource assessment>
@@ -43,11 +45,11 @@ For detailed API documentation of the methods, see {doc}`api` and apis under {re
 ### Step 1: Prepare Spatial Grid Cells
 
 ```{seealso}
-`get_grid_cells()` at {ref}`RESource Builder` of {doc}`api`.
+See the assessment orchestrator in the {doc}`api` reference.
 ```
 
-- This method collects the sub-national administrative boundaries. 
-- Using that boundary, we calculate the Minimum Bounding Rectangle (MBR). 
+- This method collects the sub-national administrative boundaries.
+- Using that boundary, we calculate the Minimum Bounding Rectangle (MBR).
 - We use that MBR as a cutout to source weather resources data from ERA5 via CDSAPI. The ERA5's cutout is then stored as a netcdf `.nc' file.
 - We load that cutout as `atlite`'s `cutout` object.
 - We then use `atlite`'s `cutout.grid` attribute to create our test beds for the analysis i.e. the grid cells (geodataframe)
@@ -74,16 +76,16 @@ The resulting GeoDataFrame from `get_grid_cells()` includes the following column
 ### Step 2: Calculate Potential Capacity
 
 ```{seealso}
-`RES.cell_processor.get_capacity()` of {doc}`api`.
+`RESource.cell_processor.get_capacity()` of {doc}`api`.
 ```
 - This method loads the cutout (atlite's cutout object), regional boundary (GeoDataFrame), loads the cost parameters and  also initiates a __composite excluder__
   - The ([`atlite`'s exclusion container](https://atlite.readthedocs.io/en/master/ref_api.html#atlite.Cutout.availabilitymatrix)) to merge all the spatial layers.
 - the `cutout.availabilitymatrix` method calculates % of usable area within each grid cell after applying exclusion criteria (e.g., protected areas, water bodies) and returns an [`AvaliabilityMatrix`](https://atlite.readthedocs.io/en/master/ref_api.html#atlite.Cutout.availabilitymatrix)
 - We apply technology landuse intensity (e.g., MW/km² for wind or solar) to translate this to potential capacity data.
-  
+
 ```{attention}
 - Current results gives a percentage of availability for each grid cell. It does not tell specifically which spatial area inside a grid cell is unavailable.
-- The _potential capacity_ translation processing involves `area` calculation. The area calculation method is integrated to `RES.cell_processor.get_capacity()`. That method is sensitive to area calculation specific coordinate-system projection of the geodataframe. It is recommended to be cautious about choosing this crs.
+- The _potential capacity_ translation processing involves `area` calculation. The area calculation method is integrated to `RESource.cell_processor.get_capacity()`. That method is sensitive to area calculation specific coordinate-system projection of the geodataframe. It is recommended to be cautious about choosing this crs.
 ```
 - We get the maximum installable capacity for each grid cell based on available area, land use constraints, and technology-specific parameters.
 
@@ -112,14 +114,14 @@ The resulting GeoDataFrame from `get_grid_cells()` includes the following column
 ### Step 3: Get CF and Windspeed from Higher Resolution Data
 
 ```{attention}
-- Currently configured for Wind Resources only. 
+- Currently configured for Wind Resources only.
 ```
 
 - __Why wind resources' ERA5 data are rescaled ?__
 Wind resources (windspeed) are known to have significant variations across ERA5's ~30km resolution. To account for this, we rescaled the windspeed using higher resolution data from the Global Wind Atlas (GWA). This allows us to better estimate the windspeed at the grid cell level. However, GWA does not provide hourly profiles, so we source the profile from ERA5.
 
   <img src="../_static/ERA5_resolution_windspeed_distribution_ERA5vsGWA_British_Columbia.png" alt="Windspeed Distribution - ERA5 vs GWA (resampled to ERA5 Resolution) | Example from _British Columbia_ Study " width="400"/>
-    
+
   Here is a quick example from BC case study and how the rescaling looks like:
 
   <img src="../_static/Wind_CF_comparison.png" alt="Windspeed - ERA5 vs GWA | Example from _British Columbia_ Study " width="900"/>
@@ -129,11 +131,12 @@ Wind resources (windspeed) are known to have significant variations across ERA5'
 ```
 
 ```{seealso}
-`extract_weather_data()` , `update_gwa_scaled_params()` at {ref}`RESource Builder`.
+The assessment orchestrator exposes `extract_weather_data()` and
+`update_gwa_scaled_params()`.
 ```
 
 
-- Extracts relevant weather data (e.g., wind speed, solar irradiance) for each grid cell. This calculation has been used for validation purposes. However, the available CF parameters (from different methods) could be used for scoring metric, energy calculations etc. 
+- Extracts relevant weather data (e.g., wind speed, solar irradiance) for each grid cell. This calculation has been used for validation purposes. However, the available CF parameters (from different methods) could be used for scoring metric, energy calculations etc.
   - We compared CF for IEC Class 2,3 turbines sourced from GWA and compared with RESource's result CFs.
 - Updates grid cell parameters using Global Wind Atlas (GWA) data, scaling them as needed for accurate modeling.
 
@@ -141,7 +144,7 @@ Wind resources (windspeed) are known to have significant variations across ERA5'
 ### Step 4: Get Timeseries
 
 ```{seealso}
-`RES.timeseries.get_timeseries()` at {ref}`RESource Builder`.
+See `RESource.timeseries.Timeseries` in the {doc}`api` reference.
 ```
 This method generates capacity factor (CF) time series for each grid cell using weather data and technology characteristics.
 
@@ -150,35 +153,35 @@ This method generates capacity factor (CF) time series for each grid cell using 
   - The timeseries calculation method currently configured with [atlite.cutout.pv](https://atlite.readthedocs.io/en/master/ref_api.html#atlite.Cutout.pv) and [atlite.cutout.wind](https://atlite.readthedocs.io/en/master/ref_api.html#atlite.Cutout.wind) methods.
 
 ```{attention}
-- Configure the timezone conversion information carefully to ensure proper usage of the timeseries in downstream modelling. 
+- Configure the timezone conversion information carefully to ensure proper usage of the timeseries in downstream modelling.
 - ERA5 provides naive timezone index data. We use the timezone information from config file to enable the timezone shift of the timeseries.
 - However, after conversion we removed the timezone awareness from the datetime index to harmonize with pypsa supported timeseries index.
 ```
 
 ```{tip}
-`RES.timeseries.__fix_timezone__()` method could be leveraged to reconfigure timezone awareness, if it is critical for your use-case of the timeseries.
+`RESource.timeseries.__fix_timezone__()` method could be leveraged to reconfigure timezone awareness, if it is critical for your use-case of the timeseries.
 ```
 
-- 
+-
 ### Step 5: Find Grid Proximity
 > This information is critical for downstream operational analysis with this resource options.
 
 ```{attention}
 - Currently configured for Transmission Lines and/or Grid Substations.
-- We do not know the specific project point of a resource. Hence, the resource to grid-node distance has been calculated from the centroid of each grid to the grid node. 
+- We do not know the specific project point of a resource. Hence, the resource to grid-node distance has been calculated from the centroid of each grid to the grid node.
 - If you have a specific project point, you should recalculate this distance with your specific project point.
 ```
 
-- Identifies and assigns grid nodes to each cell. 
+- Identifies and assigns grid nodes to each cell.
 - Calculates distance (in km) from each grid cell to the nearest grid node (e.g., transmission line, substation) to assess connectivity and feasibility for energy transport.
 
-    
+
 ```{tip}
 If your use case of the resource options are to be plugged in to a downstream operational model (e.g. PyPSA), use harmonized nodes to populate this data.
-> harmonized nodes i.e. same data that are intended to be used as _bus_ nodes at your operational model. 
+> harmonized nodes i.e. same data that are intended to be used as _bus_ nodes at your operational model.
 ```
 ```{seealso}
-`find_grid_nodes()` at {ref}`RESource Builder`.
+The assessment orchestrator exposes `find_grid_nodes()`.
 ```
 
 ### Step 6: Scoring Metric to Rank the Sites
@@ -188,25 +191,25 @@ Currently scoring calculation is configured as simplified LCOE formula.
 ```
 
 ```{seealso}
-`RES.score.CellScorer.get_cell_score()` at {ref}`RESource Builder`.
+See `RESource.score.CellScorer` in the {doc}`api` reference.
 ```
 - Scores each grid cell based on multiple criteria (e.g., resource quality, proximity to grid), supporting site selection.
 
 **relative cost scoring method** (configurable)
 
-```math
+```{math}
 \text{CRF} = \frac{r(1+r)^N}{(1+r)^N - 1}
 ```
 
-CRF from discount rate (r) and life (N). 
+CRF from discount rate (r) and life (N).
 
-```math
+```{math}
 E_i = 8760 \times CF_i \times C_{\text{ref}}
 ```
 
-Annual energy at site (i). 
+Annual energy at site (i).
 
-```math
+```{math}
 \text{Score}_i
 = \frac{\text{CRF}\cdot C_i^{\text{cap}} + FOM_i + VOM_i \cdot E_i}{E_i}
 \quad [\$/\text{MWh}]
@@ -215,17 +218,17 @@ Annual energy at site (i).
 
 **Capital cost**
 
-```math
+```{math}
 C_i^{\text{cap}} = CAPEX_i \cdot C_{\text{ref}} + C_i^{\text{spur}} + C_i^{\text{upgrade}}
 ```
 
-Grid costs are added on top of plant CAPEX; upgrades can be modeled as linear $/MW-km.  
+Grid costs are added on top of plant CAPEX; upgrades can be modeled as linear $/MW-km.
 
 ---
 
 __Symbols (units)__
 
-* (r): discount rate; (N): project lifetime (yr). 
+* (r): discount rate; (N): project lifetime (yr).
 * (C_i_cap): total capital at site (i) using fixed (C_ref) (plant CAPEX + grid connection).
 * (FOM_i): annual fixed O&M at site (i).
 * (VOM_i): variable O&M ($/MWh).
@@ -241,7 +244,8 @@ __Symbols (units)__
 
 ### Step 7: Clusterized Representation of the Sites
 ```{seealso}
-`get_clusters()`, `get_cluster_timeseries()` at {ref}`RESource Builder`.
+The assessment orchestrator exposes `get_clusters()` and
+`get_cluster_timeseries()`.
 ```
 - Groups grid cells into clusters based on spatial or resource characteristics to enable aggregated analysis.
 - Produces time series data for each cluster, summarizing the resource and capacity factor information at the cluster level.

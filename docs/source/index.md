@@ -1,3 +1,5 @@
+# RESource
+
 <img src="_static/Issue_msg_box.png" alt="Issue" width="600"/>
 
 
@@ -10,8 +12,9 @@ __One of the many solutions ?__
 
 __A Modular and Transparent Open-Source Framework for Sub-National Assessment of Solar and Land-based Wind Potential.__
 
-```{warning}
-This library is under heavy development and the publication is under review process.
+```{note}
+RESource is described and applied in the peer-reviewed publication
+[Mapping feasible renewable transition space: Land-use, conservation, and grid-access constraints on wind and solar in British Columbia](https://doi.org/10.1016/j.energ.2026.100077).
 ```
 
 RESource is developed to enable reproducible, adaptable assessments of VRE potential that are sensitive to local constraints and planning priorities. We developed a structured, modular workflow that integrates geospatial, temporal, economic, and regulatory data to evaluate site suitability for solar and wind energy development. This structured methodology ensures transparency and transferability, allowing RESource to be adapted for different regions and scaled for long-term strategic energy planning.
@@ -23,13 +26,19 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 
 ---
 
-## 🚀 Quick Start
+## Quick start
 
-```{include} notes/quickstart.md
+```bash
+python -m pip install deltae-resource
+resource --help
 ```
 
+See the [quick-start guide](notes/quickstart.md) for installation, notebook, and
+API examples. Contributors and source-checkout users use `uv` exclusively.
+
 ```{tip}
-**Ready to dive deeper?** Check out the [Complete Setup Guide](../../SETUP.md) or explore the [BC Case Study](notes/case_BC.md) for detailed examples.
+**Ready to dive deeper?** Read the [installation guide](notes/setup_guide.md),
+[command-line guide](notes/run_usage.md), or [BC case study](notes/case_BC.md).
 ```
 
 ---
@@ -40,20 +49,17 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 :titlesonly:
 
 notes/resource_builder
+notes/quickstart
+notes/setup_guide
+notes/run_usage
+notes/citation
 notes/case_BC
 notes/config
 notes/learning
 notes/data
 notes/developers
-```
-
-```{toctree}
-:caption: 'Notebooks:'
-:maxdepth: 1
-:titlesonly:
-
-notebooks/Store_explorer
-notebooks/Visuals_BC
+notes/development_pipeline
+notes/step_cache
 ```
 
 ```{toctree}
@@ -63,3 +69,6 @@ notebooks/Visuals_BC
 
 notes/api
 notes/documentation_guide
+notes/deployment
+notes/publishing
+notes/licensing

@@ -1,0 +1,44 @@
+default_install_hook_types: [pre-commit, pre-push]
+default_stages: [pre-commit]
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-yaml
+        exclude: ^config/archived/
+      - id: end-of-file-fixer
+        exclude: ^(RES_backup|data|results|notebooks|workflow)/
+      - id: trailing-whitespace
+        exclude: ^(RES_backup|data|results|notebooks|workflow)/
+      - id: check-added-large-files
+        args: [--maxkb=2000]
+
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: ruff lint
+        entry: uv run --locked ruff check --fix
+        language: system
+        types: [python]
+        exclude: ^(RES_backup|notebooks|workflow)/
+      - id: ruff-format
+        name: ruff format
+        entry: uv run --locked ruff format
+        language: system
+        types: [python]
+        exclude: ^(RES_backup|notebooks|workflow)/
+      - id: notebook-policy
+        name: notebook structure and workflow policy
+        entry: uv run --locked pytest -q tests/test_notebooks.py
+        language: system
+        pass_filenames: false
+        files: ^(notebooks/.*\.ipynb|tests/test_notebooks\.py)$
+      - id: test-suite
+        name: test suite
+        entry: uv run --locked pytest -q
+        language: system
+        pass_filenames: false
+        stages: [pre-push]

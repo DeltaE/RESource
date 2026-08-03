@@ -2,7 +2,8 @@
 
 # Case study: VRE site selection in British Columbia
 ```{warning}
-This library is under heavy development
+This case study accompanies the peer-reviewed RESource publication:
+[https://doi.org/10.1016/j.energ.2026.100077](https://doi.org/10.1016/j.energ.2026.100077).
 ```
 
 To demonstrate RESource's practical utility, we apply the framework to the Canadian province of British Columbia (BC). BC presents an ideal testbed due to its varied geography—coastal areas, rugged mountains, and interior plateaus—and a favorable policy environment, including the [Clean Energy Act](https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/10022_01), [expedited permitting processes for wind projects](https://news.gov.bc.ca/releases/2025ECS0006-000100) and renewable energy targeted call for power [2024](https://www.bchydro.com/work-with-us/selling-clean-energy/2024-call-for-power.html), [2025](https://www.bchydro.com/work-with-us/selling-clean-energy/2025-call-for-power.html) by BC Hydro. These characteristics offer a rich context for testing spatial, technical, and regulatory dimensions of VRE siting.
@@ -19,7 +20,7 @@ Here is a quick overview of the data sources used in this case study:
 
 ## Coordinate Reference System (CRS)
 
-CRS is a critical choice when it comes to geospatial analysis. RESource involves area calculations as an impact of spatial filters usage on land availability for site development. 
+CRS is a critical choice when it comes to geospatial analysis. RESource involves area calculations as an impact of spatial filters usage on land availability for site development.
 
 Here is a summary of the CRS used in this tool and study.
 
@@ -31,13 +32,13 @@ Here is a summary of the CRS used in this tool and study.
 | **3035**   | ETRS89 / LAEA Europe             | Meters  | Europe      | European datasets only (default CRS for atlite's Exclusion Container, i.e. for land area calculation). **Not suitable for BC.**                               |
 
 ```{tip}
-Users of this tool (or in any other geospatial analysis!) should critically review the preferred CRS for area calculation. Check EPSG Resources for more details on regional coordinate system suitability. Meter/degree-based (default/explicit for regions) CRS is configurable in RESource. 
+Users of this tool (or in any other geospatial analysis!) should critically review the preferred CRS for area calculation. Check EPSG Resources for more details on regional coordinate system suitability. Meter/degree-based (default/explicit for regions) CRS is configurable in RESource.
 ```
 
 
-## From Districts to Data Grids: Unlocking Finer Detail 
+## From Districts to Data Grids: Unlocking Finer Detail
 BC was discretized into uniform grid cells using the spatial resolution of ERA5 data (~30 km × 30 km), with each cell serving as the basic unit of analysis. For each cell, RESource processed multiple geospatial layers, filtering out ineligible land based on legal (e.g., protected areas), environmental (e.g., slope, wetlands), and infrastructure-related constraints (e.g., distance to substations). Eligible cells were then evaluated for their proximity to the grid and assigned hourly profiles of solar irradiance and wind speed, allowing theoretical VRE potential to be estimated per technology.
- 
+
 <img src="../_static/Grid_Cells.jpg" alt="Extraction of Spatial Grid Cells in BC" width="900"/>
 
 __Every cell tells a story__, therefore we then plug in land-use, climatology, accessibility, etc. to analyze scenario-specific studies to answer our questions:
@@ -127,14 +128,14 @@ Spatial screening revealed that roughly 64% of BC’s land is unsuitable for VRE
 - Resource's spatial screening process for BC, showing the stepwise filtering of land availability based on terrain, land cover, and exclusion zones. These plots are in 100m resolution, illustrating the progressive reduction of eligible land as each layer of constraints is applied.
 
   - The land availability maps for BC, illustrating the __remaining eligible areas after applying each layer of spatial constraints__.From the explicit impact of each spatial layers, the map below shows that __suitable land cover selection and regionally protected lands have the biggest impact on land availability for site development__. This visual help us to quickly spot spatial impact of our land-use layer selections and no-go buffers.
-  
+
     <img src="../_static/LandAvailability_IndividualLayers_100m_BASELINE.jpg" alt="LandAvailability_IndividualLayers_100m_BASELINE" width="800"/>
 
   - The __cumulative impact of each layer__ on land availability, illustrating how terrain, land cover, and exclusion zones progressively reduce the pool of eligible sites. The following maps show the final screening result in 100m resolution (land container's default resolution. Land container helps us to account the configured logics for layer/category-wise selections and buffers). We rescale this availability numbers to ERA5 cells resolution. Finally we translate these numbers to potential capacity by using technology land-use intensity numbers.
 
 ----
 - Spatial screeing result
-    
+
     <img src="../_static/LandAvailability_100m_BASELINE.jpg" alt="Final results for BC rescaled to ERA5 Resolution" width="700"/>
 
 - __Rescaling the land availability map to the ERA5 grid resolution__.
@@ -150,7 +151,7 @@ We translated eligible land into theoretical energy capacity using technology-sp
 
 ## Capacity factor
 While the potential capacity map highlights the total installable potential based on available land and infrastructure constraints, the capacity factor (CF) map provides deeper insights into the quality and reliability of the resource by capturing temporal generation patterns driven by weather conditions. Figure 6 shows the spatial distribution of annual mean capacity factors for solar photovoltaic (left) and wind energy (right) across BC. The solar map highlights the southern interior as the most viable region for solar PV deployment, with capacity factors increasing progressively from coastal to inland zones due to clearer skies and higher irradiance. The wind energy map, derived from coarse-resolution GWA data, reveals elevated wind potential primarily in the northern and coastal regions. While the spatial granularity of the wind map captures broader regional trends, its coarse resolution may obscure finer-scale resource variability. Together, these maps support the identification of high-potential VRE zones, facilitating regionally informed renewable energy planning.
-  
+
 <img src="../_static/CF_BASELINE.jpg" alt="Final results for BC rescaled to ERA5 Resolution" width="800"/>
 
 ## Temporal profiles
@@ -169,7 +170,7 @@ Our geospatial assessment identifies strong regional variation in VRE potential 
 - Solar PV potential is highest in the southern interior, where terrain is flatter and solar irradiance is stronger and more consistent.
 - Wind energy resources are most promising along the north and west coasts, with additional pockets of viability in elevated interior plateaus.
 
-Applying regulatory and land-use buffers leads to measurable reductions in technically viable capacity. Buffer restrictions were applied more stringently to wind than to solar, so larger reductions in capacity were expected. The results confirm this, with about 10% of wind potential capacity and only 1% of solar potential capacity lost compared to the baseline. Across BC, this corresponds to approximately 368.6 GW of wind, and 6.5 GW of solar potential becomes unavailable. The following map illustrates these reductions by regional district, showing the magnitude and spatial distribution of losses for solar (left) and wind (right). 
+Applying regulatory and land-use buffers leads to measurable reductions in technically viable capacity. Buffer restrictions were applied more stringently to wind than to solar, so larger reductions in capacity were expected. The results confirm this, with about 10% of wind potential capacity and only 1% of solar potential capacity lost compared to the baseline. Across BC, this corresponds to approximately 368.6 GW of wind, and 6.5 GW of solar potential becomes unavailable. The following map illustrates these reductions by regional district, showing the magnitude and spatial distribution of losses for solar (left) and wind (right).
 
 
 ```{tip}
@@ -180,10 +181,10 @@ A planner always has to remember "Not All Potential Becomes Power"!
 
 > The largest reductions appear in Cariboo (≈73 GW wind, 0.9 GW solar), Peace River (≈46.5 GW wind, 0.4 GW solar), and Bulkley–Nechako (≈46.7 GW wind, 1.0 GW solar), with notable coastal impacts in Kitimat–Stikine (≈38.3 GW wind, 0.8 GW solar) and Skeena–Queen Charlotte (≈18.6 GW wind, 0.2 GW solar). These outcomes align with the spatial overlap between resource-rich zones and extensive protected or conservation lands shown above. Northern and interior districts host some of the best wind regimes in BC, but they also contain large areas of wilderness, national parks, and OECM designations. Applying buffers around these features excludes broad swaths of otherwise high-quality land, driving large capacity losses.
 
-> Coastal districts face similar constraints: strong wind resources coincide with marine and terrestrial protected areas, including seascapes and ecological management zones. These restrictions lead to reductions of more than 20–40 GW total VRE potential reduction in several districts. Importantly, these losses occur not because the resources are weak, but because the best wind and solar zones are heavily overlapped by protected lands and their buffers. This explains why reductions are concentrated in the very regions that appear most attractive from a purely technical perspective. 
+> Coastal districts face similar constraints: strong wind resources coincide with marine and terrestrial protected areas, including seascapes and ecological management zones. These restrictions lead to reductions of more than 20–40 GW total VRE potential reduction in several districts. Importantly, these losses occur not because the resources are weak, but because the best wind and solar zones are heavily overlapped by protected lands and their buffers. This explains why reductions are concentrated in the very regions that appear most attractive from a purely technical perspective.
 
 
-To inform planners, the following visual presents two maps of BC, illustrating the theoretical capacity potential for solar and wind energy. The map colors represent the spatial distribution of scored sites, with lighter shades indicating better economic feasibility and darker shades denoting expensive sites. The left map illustrates better feasible sites with lighter yellow areas in the southern and eastern interior regions suggesting higher potential and lower costs. The right map uses a green-to-blue gradient for wind site scoring, with lighter green areas along the coastal and northern regions indicating better economic viability. The bar chart at bottom of each map highlights the available potential across these relative cost score ranges. 
+To inform planners, the following visual presents two maps of BC, illustrating the theoretical capacity potential for solar and wind energy. The map colors represent the spatial distribution of scored sites, with lighter shades indicating better economic feasibility and darker shades denoting expensive sites. The left map illustrates better feasible sites with lighter yellow areas in the southern and eastern interior regions suggesting higher potential and lower costs. The right map uses a green-to-blue gradient for wind site scoring, with lighter green areas along the coastal and northern regions indicating better economic viability. The bar chart at bottom of each map highlights the available potential across these relative cost score ranges.
 <img src="../_static/Capacity_vs_Scores_POLICY.jpg" alt="Capacity_vs_Scores_POLICY" width="800"/>
 
 These results highlight the scale of capacity foregone when balancing renewable energy deployment with ecological and land-use safeguards. To better understand these dynamics, we next examine supply curves. Comparative supply curves reveal how policy-driven constraints reshape the accessible share of renewable energy potential.

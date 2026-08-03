@@ -11,8 +11,8 @@ Scenario:
 country: Canada
 
 default_CRS:
-  degrees: EPSG:4326 # WGS 84; used for raw data storage and any processing steps that can be done in lat/lon without significant distortion; 
-  meters: EPSG:3347 # NAD83 / Statistics Canada Lambert; 
+  degrees: EPSG:4326 # WGS 84; used for raw data storage and any processing steps that can be done in lat/lon without significant distortion;
+  meters: EPSG:3347 # NAD83 / Statistics Canada Lambert;
 
 weather_year: 2024 # calendar year to target for ERA5 cutout and associated timeseries; should be a recent year with typical weather patterns; used by AttributesParser.weather_year() property to derive cutout snapshot aligned to local midnight; also used in scenario naming for clear documentation of weather assumptions
 
@@ -249,9 +249,10 @@ OSM_data:
       - minor_distribution
       - industrial
 CODERS:
-  url_1: https://sesit.dev/
-  url_2: http://206.12.95.102/
-  api_documentation: https://sesit.dev/api/docs
+  url_1: http://api.sesit.ca
+  api_documentation: http://api.sesit.ca
+  credentials_source: https://github.com/eliasinul/modeling_inventory/blob/main/PyPSA/coders_api.yaml
+  credentials_path: credentials/coders_api.yaml
   data_pull:
     root: data/downloaded_data/CODERS
     substations: network

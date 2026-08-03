@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>RESource Setup Guide (Deprecated) &#8212; RESource 2025.07 documentation</title>
+    <title>Installation and environment setup &#8212; RESource 2025.7.0 documentation</title>
   
   
   
@@ -16,64 +16,66 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
   
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=e9b82cb4"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/documentation_options.js?v=1faeb039"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notes/setup_guide';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Command-line usage" href="run_usage.html" />
+    <link rel="prev" title="Quick start" href="quickstart.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="Python"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../search.html"
       method="get">
@@ -81,7 +83,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -89,15 +90,59 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -106,9 +151,8 @@
       
       
       
-        
-      
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -137,47 +181,43 @@
       
     
     
-    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.07 documentation - Home"/>
-    <script>document.write(`<img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark" alt="RESource 2025.07 documentation - Home"/>`);</script>
+    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.7.0 documentation - Home"/>
+    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark pst-js-only" alt="RESource 2025.7.0 documentation - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource Builder Module</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Installation and environment setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run_usage.html">Command-line usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learning.html">Best Practices and Guidelines</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks:</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/Store_explorer.html">Explore data store</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/Visuals_BC.html">Example Visuals for BC</a></li>
-
-
-
-
+<li class="toctree-l1"><a class="reference internal" href="development_pipeline.html">Development pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step_cache.html">RESource Step Cache</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="api.html">RES API References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">Documentation Build Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">Documentation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">Developer deployment guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publishing.html">Publishing to PyPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensing.html">License transition assessment</a></li>
 </ul>
 
     </div>
@@ -186,9 +226,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -286,7 +331,7 @@
 
 
 <button onclick="toggleFullScreen()"
-  class="btn btn-sm btn-fullscreen-button"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
   title="Fullscreen mode"
   data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
@@ -300,25 +345,24 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
-`);
-</script>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
 </div></div>
@@ -331,7 +375,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>RESource Setup Guide (Deprecated)</h1>
+    <h1>Installation and environment setup</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -340,74 +384,14 @@ document.write(`
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-migration-to-new-setup">Quick Migration to New Setup</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-reproducibility">� Environment Reproducibility</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducing-exact-environment">Reproducing Exact Environment</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-management">�🛠️ Environment Management</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-make-commands">Available Make Commands</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-management">Environment Setup &amp; Management</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#utilities">Utilities</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-specific-setup">🐧 Platform-Specific Setup</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#windows-users-wsl2-required">Windows Users (WSL2 Required)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linux-macos-users">Linux/macOS Users</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-details">📦 Environment Details</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-dependencies">Core Dependencies</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#daily-development-workflow">🚀 Daily Development Workflow</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#activate-environment">1. Activate Environment</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-resource">2. Run RESource</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#enhanced-analysis-pipeline-run-py">Enhanced Analysis Pipeline (<code class="docutils literal notranslate"><span class="pre">run.py</span></code>)</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#command-reference">Command Reference</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-configurations">Regional Configurations</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#error-handling-examples">Error Handling Examples</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#alternative-development-methods">Alternative Development Methods</a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-development">3. Documentation Development</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">🔧 Troubleshooting</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-issues">Environment Issues</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-environment-health">Check Environment Health</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#export-current-environment">Export Current Environment</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wsl2-specific-issues">WSL2 Specific Issues</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-checklist">📋 Development Checklist</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#new-developer-setup">New Developer Setup</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-committing-code">Before Committing Code</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-deployment">Before Deployment</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-deployment">🌐 Documentation Deployment</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-development">Local Development</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#github-pages-deployment">GitHub Pages Deployment</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-structure">Documentation Structure</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tips-best-practices">💡 Tips &amp; Best Practices</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Environment Management</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development">Development</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collaboration">Collaboration</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-help">🆘 Getting Help</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-status">Check Status</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-issues">Common Issues</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
-</ul>
-</li>
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-an-installation-method">Choosing an installation method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-features">Optional features</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#repository-layout">Repository layout</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependency-changes">Dependency changes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation">Validation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#native-geospatial-dependencies">Native geospatial dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-location">Data location</a></li>
 </ul>
             </nav>
         </div>
@@ -419,489 +403,100 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="resource-setup-guide-deprecated">
-<h1>RESource Setup Guide (Deprecated)<a class="headerlink" href="#resource-setup-guide-deprecated" title="Link to this heading">#</a></h1>
-<blockquote>
-<div><p><strong>🚨 This guide has been moved and consolidated!</strong></p>
-<p><strong>📚 Please use the new complete setup guide: <span class="xref myst">SETUP.md</span> in the repository root.</strong></p>
-<p>This page is kept for backward compatibility but will be removed in a future version.</p>
-</div></blockquote>
-<hr class="docutils" />
-<section id="quick-migration-to-new-setup">
-<h2>Quick Migration to New Setup<a class="headerlink" href="#quick-migration-to-new-setup" title="Link to this heading">#</a></h2>
-<p>The setup process is now simplified to a single command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clone repository</span>
-git<span class="w"> </span>clone<span class="w"> </span>https://github.com/DeltaE/RESource.git
-<span class="nb">cd</span><span class="w"> </span>RESource
-
-<span class="c1"># Create environment (ONE COMMAND!)</span>
-conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>env/environment.yml
-conda<span class="w"> </span>activate<span class="w"> </span>RESource
-
-<span class="c1"># Verify installation</span>
-python<span class="w"> </span>run.py<span class="w"> </span>--help
+  <section id="installation-and-environment-setup">
+<h1>Installation and environment setup<a class="headerlink" href="#installation-and-environment-setup" title="Link to this heading">#</a></h1>
+<section id="choosing-an-installation-method">
+<h2>Choosing an installation method<a class="headerlink" href="#choosing-an-installation-method" title="Link to this heading">#</a></h2>
+<p>Use <code class="docutils literal notranslate"><span class="pre">pip</span></code> when consuming a published release:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>deltae-resource
 </pre></div>
 </div>
-<p><strong>For complete instructions, troubleshooting, and all setup options, please see <span class="xref myst">SETUP.md</span>.</strong></p>
-</section>
-<hr class="docutils" />
-<section id="environment-reproducibility">
-<h2>� Environment Reproducibility<a class="headerlink" href="#environment-reproducibility" title="Link to this heading">#</a></h2>
-<p>RESource ensures reproducible research through:</p>
-<ul class="simple">
-<li><p><strong>Locked Dependencies</strong>: <code class="docutils literal notranslate"><span class="pre">env/environment.yml</span></code> contains pinned versions for all packages</p></li>
-<li><p><strong>Automated Setup</strong>: Single command (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">setupenv</span></code>) creates identical environments</p></li>
-<li><p><strong>Environment Export</strong>: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">exportenv</span></code> captures exact package versions</p></li>
-<li><p><strong>Cross-Platform Support</strong>: Tested on Linux, macOS, and Windows (WSL2)</p></li>
-</ul>
-<section id="reproducing-exact-environment">
-<h3>Reproducing Exact Environment<a class="headerlink" href="#reproducing-exact-environment" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create environment from lockfile</span>
-make<span class="w"> </span>setupenv
-
-<span class="c1"># Verify environment matches expectations</span>
-conda<span class="w"> </span>activate<span class="w"> </span>RESource
-python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import RES; print(&#39;✅ RESource is ready!&#39;)&quot;</span>
-
-<span class="c1"># Export current state for sharing</span>
-make<span class="w"> </span>exportenv
+<p>Use <code class="docutils literal notranslate"><span class="pre">uv</span></code> when developing RESource or reproducing an analysis from a repository
+checkout:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>--locked
 </pre></div>
 </div>
+<p>The package-index distribution name is <code class="docutils literal notranslate"><span class="pre">deltae-resource</span></code>; its import package
+and project name are <code class="docutils literal notranslate"><span class="pre">RESource</span></code>. Before the first PyPI release, use the locked
+source-checkout workflow instead.</p>
+<p>The project metadata lives in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>; exact development versions live
+in <code class="docutils literal notranslate"><span class="pre">uv.lock</span></code>. The legacy files under <code class="docutils literal notranslate"><span class="pre">env/</span></code> are retained only as references for
+platforms where native geospatial wheels are unavailable.</p>
 </section>
-</section>
-<hr class="docutils" />
-<section id="environment-management">
-<h2>�🛠️ Environment Management<a class="headerlink" href="#environment-management" title="Link to this heading">#</a></h2>
-<section id="available-make-commands">
-<h3>Available Make Commands<a class="headerlink" href="#available-make-commands" title="Link to this heading">#</a></h3>
-<section id="environment-setup-management">
-<h4>Environment Setup &amp; Management<a class="headerlink" href="#environment-setup-management" title="Link to this heading">#</a></h4>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>setupenv<span class="w">          </span><span class="c1"># Create conda environment from env/environment.yml</span>
-make<span class="w"> </span>updateenv<span class="w">         </span><span class="c1"># Update existing conda environment</span>
-make<span class="w"> </span>exportenv<span class="w">         </span><span class="c1"># Export current environment to env/environment.yml</span>
-make<span class="w"> </span>clean<span class="w">            </span><span class="c1"># Clean build files and cache</span>
+<section id="optional-features">
+<h2>Optional features<a class="headerlink" href="#optional-features" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>--locked<span class="w"> </span>--extra<span class="w"> </span>notebooks<span class="w">  </span><span class="c1"># JupyterLab and widgets</span>
+uv<span class="w"> </span>sync<span class="w"> </span>--locked<span class="w"> </span>--extra<span class="w"> </span>viz<span class="w">        </span><span class="c1"># Additional interactive plotting tools</span>
+uv<span class="w"> </span>sync<span class="w"> </span>--locked<span class="w"> </span>--extra<span class="w"> </span>docs<span class="w">       </span><span class="c1"># Sphinx documentation toolchain</span>
 </pre></div>
 </div>
+<p>Development tools such as pytest and Ruff are in the <code class="docutils literal notranslate"><span class="pre">dev</span></code> dependency group and
+are installed by default during <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">sync</span></code>.</p>
 </section>
-<section id="documentation">
-<h4>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h4>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>docs<span class="w">              </span><span class="c1"># Build and deploy documentation</span>
-make<span class="w"> </span>autobuild<span class="w">         </span><span class="c1"># Live rebuild documentation (port 8000)</span>
-make<span class="w"> </span>deploy<span class="w">            </span><span class="c1"># Deploy documentation to GitHub Pages</span>
+<section id="repository-layout">
+<h2>Repository layout<a class="headerlink" href="#repository-layout" title="Link to this heading">#</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>src/RESource/   Installable implementation
+src/RES/        Temporary compatibility namespace
+tests/          Fast automated tests
+config/         Example workflow configuration
+notebooks/      Exploratory and case-study notebooks
+docs/source/    Sphinx documentation sources
+data/           Local/downloaded data, mostly excluded from packages
+workflow/       Snakemake workflow assets
 </pre></div>
 </div>
+<p>Because the package uses a <code class="docutils literal notranslate"><span class="pre">src</span></code> layout, importing directly from a fresh checkout
+without installing it is intentionally unsupported. Run commands with <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span></code>
+or activate <code class="docutils literal notranslate"><span class="pre">.venv</span></code> first.</p>
 </section>
-<section id="utilities">
-<h4>Utilities<a class="headerlink" href="#utilities" title="Link to this heading">#</a></h4>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nb">help</span><span class="w">              </span><span class="c1"># Show all available commands</span>
-make<span class="w"> </span>clean<span class="w">             </span><span class="c1"># Clean build files and cache</span>
+<section id="dependency-changes">
+<h2>Dependency changes<a class="headerlink" href="#dependency-changes" title="Link to this heading">#</a></h2>
+<p>Add runtime dependencies with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>add<span class="w"> </span>PACKAGE
 </pre></div>
 </div>
-</section>
-</section>
-</section>
-<hr class="docutils" />
-<section id="platform-specific-setup">
-<h2>🐧 Platform-Specific Setup<a class="headerlink" href="#platform-specific-setup" title="Link to this heading">#</a></h2>
-<section id="windows-users-wsl2-required">
-<h3>Windows Users (WSL2 Required)<a class="headerlink" href="#windows-users-wsl2-required" title="Link to this heading">#</a></h3>
-<p>RESource is designed for Linux environments. Windows users must use WSL2:</p>
-<ol class="arabic">
-<li><p><strong>Install WSL2:</strong></p>
-<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="c"># In PowerShell (as Administrator)</span>
-<span class="n">wsl</span> <span class="p">-</span><span class="n">-install</span>
+<p>Add development-only dependencies with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>add<span class="w"> </span>--group<span class="w"> </span>dev<span class="w"> </span>PACKAGE
 </pre></div>
 </div>
-</li>
-<li><p><strong>Install Ubuntu distribution:</strong></p>
-<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="c"># Check available distributions</span>
-<span class="n">wsl</span> <span class="p">-</span><span class="n">-list</span> <span class="p">-</span><span class="n">-online</span>
-
-<span class="c"># Install Ubuntu (recommended)</span>
-<span class="n">wsl</span> <span class="p">-</span><span class="n">-install</span> <span class="n">-d</span> <span class="n">Ubuntu</span><span class="p">-</span><span class="n">22</span><span class="p">.</span><span class="n">04</span>
+<p>Add an optional feature dependency with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>add<span class="w"> </span>--optional<span class="w"> </span>notebooks<span class="w"> </span>PACKAGE
 </pre></div>
 </div>
-</li>
-<li><p><strong>Install Miniconda in WSL2:</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># In WSL2 terminal</span>
-wget<span class="w"> </span>https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash<span class="w"> </span>Miniconda3-latest-Linux-x86_64.sh
-<span class="nb">source</span><span class="w"> </span>~/.bashrc
+<p>Commit both <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> and <code class="docutils literal notranslate"><span class="pre">uv.lock</span></code> after a dependency change.</p>
+</section>
+<section id="validation">
+<h2>Validation<a class="headerlink" href="#validation" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>lock<span class="w"> </span>--check
+uv<span class="w"> </span>run<span class="w"> </span>resource<span class="w"> </span>--help
+uv<span class="w"> </span>run<span class="w"> </span>pytest
+uv<span class="w"> </span>run<span class="w"> </span>ruff<span class="w"> </span>check<span class="w"> </span>src<span class="w"> </span>tests
+uv<span class="w"> </span>run<span class="w"> </span>ruff<span class="w"> </span>format<span class="w"> </span>--check<span class="w"> </span>src<span class="w"> </span>tests
+uv<span class="w"> </span>build
 </pre></div>
 </div>
-</li>
-</ol>
+<p>The build should produce a wheel and source archive in <code class="docutils literal notranslate"><span class="pre">dist/</span></code>. Test the wheel
+before publishing to ensure the result does not depend on repository-relative
+imports.</p>
 </section>
-<section id="linux-macos-users">
-<h3>Linux/macOS Users<a class="headerlink" href="#linux-macos-users" title="Link to this heading">#</a></h3>
-<p>Install Miniconda directly:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Linux</span>
-wget<span class="w"> </span>https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash<span class="w"> </span>Miniconda3-latest-Linux-x86_64.sh
-
-<span class="c1"># macOS</span>
-wget<span class="w"> </span>https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
-bash<span class="w"> </span>Miniconda3-latest-MacOSX-x86_64.sh
+<section id="native-geospatial-dependencies">
+<h2>Native geospatial dependencies<a class="headerlink" href="#native-geospatial-dependencies" title="Link to this heading">#</a></h2>
+<p>Most supported platforms receive wheels for Rasterio, Fiona, PyProj, Shapely,
+and GeoPandas. On an HPC or unusual platform without compatible wheels, install
+the required GDAL/PROJ system libraries first or use a Conda/micromamba base
+environment, then install RESource into that environment.</p>
+</section>
+<section id="data-location">
+<h2>Data location<a class="headerlink" href="#data-location" title="Link to this heading">#</a></h2>
+<p>Large assessment data is intentionally outside the wheel. Configuration files
+normally provide data paths. The EU DEM pipeline additionally recognizes
+<code class="docutils literal notranslate"><span class="pre">RESOURCE_DATA_DIR</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">RESOURCE_DATA_DIR</span><span class="o">=</span>/path/to/resource-data
+uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>RESource.eu_dem_pipeline<span class="w"> </span>--help
 </pre></div>
 </div>
-</section>
-</section>
-<hr class="docutils" />
-<section id="environment-details">
-<h2>📦 Environment Details<a class="headerlink" href="#environment-details" title="Link to this heading">#</a></h2>
-<section id="core-dependencies">
-<h3>Core Dependencies<a class="headerlink" href="#core-dependencies" title="Link to this heading">#</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">env/environment.yml</span></code> includes:</p>
-<p><strong>Scientific Computing:</strong></p>
-<ul class="simple">
-<li><p>Python 3.11, NumPy, Pandas, SciPy, XArray</p></li>
-</ul>
-<p><strong>Geospatial:</strong></p>
-<ul class="simple">
-<li><p>GeoPandas, Rasterio, Shapely, Fiona, PyProj, Cartopy</p></li>
-</ul>
-<p><strong>Energy Modeling:</strong></p>
-<ul class="simple">
-<li><p>Atlite (wind/solar resource assessment)</p></li>
-<li><p>CDS API (climate data)</p></li>
-</ul>
-<p><strong>Visualization:</strong></p>
-<ul class="simple">
-<li><p>Matplotlib, Seaborn, Plotly, Folium</p></li>
-</ul>
-<p><strong>Development:</strong></p>
-<ul class="simple">
-<li><p>Jupyter Lab, Sphinx (documentation), pytest</p></li>
-</ul>
-<p><strong>Full list:</strong> See <code class="docutils literal notranslate"><span class="pre">env/environment.yml</span></code> for complete dependency specification.</p>
-</section>
-</section>
-<hr class="docutils" />
-<section id="daily-development-workflow">
-<h2>🚀 Daily Development Workflow<a class="headerlink" href="#daily-development-workflow" title="Link to this heading">#</a></h2>
-<section id="activate-environment">
-<h3>1. Activate Environment<a class="headerlink" href="#activate-environment" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>RESource
-<span class="c1"># Your prompt should show: (RESource) $</span>
-</pre></div>
-</div>
-</section>
-<section id="run-resource">
-<h3>2. Run RESource<a class="headerlink" href="#run-resource" title="Link to this heading">#</a></h3>
-<section id="enhanced-analysis-pipeline-run-py">
-<h4>Enhanced Analysis Pipeline (<code class="docutils literal notranslate"><span class="pre">run.py</span></code>)<a class="headerlink" href="#enhanced-analysis-pipeline-run-py" title="Link to this heading">#</a></h4>
-<p><strong>Smart Region Selection &amp; Colored Output</strong> - The enhanced <code class="docutils literal notranslate"><span class="pre">run.py</span></code> script provides flexible region selection with validation and colored terminal output.</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Feature</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>Smart Detection</strong></p></td>
-<td><p>Automatically reads available regions from config file</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>Validation</strong></p></td>
-<td><p>Invalid regions trigger helpful error messages with suggestions</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>Colored Output</strong></p></td>
-<td><p>Errors (red), warnings (yellow), success (green), info (cyan)</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>Flexible Selection</strong></p></td>
-<td><p>Process all regions or specify subset via command line</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="command-reference">
-<h4>Command Reference<a class="headerlink" href="#command-reference" title="Link to this heading">#</a></h4>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Command</p></th>
-<th class="head"><p>Description</p></th>
-<th class="head"><p>Output Colors</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_CAN_baseline.yaml</span></code></p></td>
-<td><p>Canadian analysis (all provinces)</p></td>
-<td><p>🟢 Success messages</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_WB6.yaml</span></code></p></td>
-<td><p>Western Balkans (all regions)</p></td>
-<td><p>🔵 Info messages</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_WB6.yaml</span> <span class="pre">-r</span> <span class="pre">AL</span> <span class="pre">BA</span></code></p></td>
-<td><p>Specific regions only</p></td>
-<td><p>🟡 Warnings</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">invalid.yaml</span></code></p></td>
-<td><p>Shows available configs</p></td>
-<td><p>🔴 Error messages</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">--help</span></code></p></td>
-<td><p>Display all options</p></td>
-<td><p>-</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="regional-configurations">
-<h4>Regional Configurations<a class="headerlink" href="#regional-configurations" title="Link to this heading">#</a></h4>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Config File</p></th>
-<th class="head"><p>Regions Available</p></th>
-<th class="head"><p>Example Usage</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">config_CAN_baseline.yaml</span></code></p></td>
-<td><p>AB, BC, MB, NB, NL, NS, ON, PE, QC, SK</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_CAN_baseline.yaml</span> <span class="pre">-r</span> <span class="pre">BC</span> <span class="pre">QC</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">config_CAN_policy1.yaml</span></code></p></td>
-<td><p>AB, BC, MB, NB, NL, NS, ON, PE, QC, SK</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_CAN_policy1.yaml</span> <span class="pre">-r</span> <span class="pre">BC</span> <span class="pre">ON</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">config_WB6.yaml</span></code></p></td>
-<td><p>AL, BA, XK, ME, MK, RS</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">run.py</span> <span class="pre">config/config_WB6.yaml</span> <span class="pre">-r</span> <span class="pre">AL</span> <span class="pre">BA</span></code></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="error-handling-examples">
-<h4>Error Handling Examples<a class="headerlink" href="#error-handling-examples" title="Link to this heading">#</a></h4>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Invalid config file - shows available options</span>
-python3<span class="w"> </span>run.py<span class="w"> </span>nonexistent.yaml
-<span class="c1"># Output: ✗ Configuration file &#39;nonexistent.yaml&#39; not found.</span>
-<span class="c1">#         💡 Available config files:</span>
-<span class="c1">#            • config/config_CAN_baseline.yaml (Canadian provinces - baseline)</span>
-<span class="c1">#            • config/config_CAN_policy1.yaml (Canadian provinces - policy scenario)</span>
-<span class="c1">#            • config/config_WB6.yaml (Western Balkans)</span>
-
-<span class="c1"># Invalid regions - shows valid options  </span>
-python3<span class="w"> </span>run.py<span class="w"> </span>config/config_WB6.yaml<span class="w"> </span>-r<span class="w"> </span>INVALID
-<span class="c1"># Output: ✗ Invalid region(s): [&#39;INVALID&#39;]</span>
-<span class="c1">#         ⚠️  Available regions in config: [&#39;AL&#39;, &#39;BA&#39;, &#39;XK&#39;, &#39;ME&#39;, &#39;MK&#39;, &#39;RS&#39;]</span>
-<span class="c1">#         💡 Examples of valid commands:</span>
-<span class="c1">#            • python3 run.py config/config_WB6.yaml --regions AL BA XK</span>
-</pre></div>
-</div>
-</section>
-<section id="alternative-development-methods">
-<h4>Alternative Development Methods<a class="headerlink" href="#alternative-development-methods" title="Link to this heading">#</a></h4>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Legacy make command (still supported)</span>
-make<span class="w"> </span>run
-
-<span class="c1"># Interactive development</span>
-make<span class="w"> </span>jupyter
-</pre></div>
-</div>
-</section>
-</section>
-<section id="documentation-development">
-<h3>3. Documentation Development<a class="headerlink" href="#documentation-development" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Live rebuild (recommended for doc development)</span>
-make<span class="w"> </span>autobuild
-<span class="c1"># Opens http://127.0.0.1:8000 with auto-reload</span>
-
-<span class="c1"># Build and deploy</span>
-make<span class="w"> </span>docs
-</pre></div>
-</div>
-</section>
-</section>
-<hr class="docutils" />
-<section id="troubleshooting">
-<h2>🔧 Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">#</a></h2>
-<section id="environment-issues">
-<h3>Environment Issues<a class="headerlink" href="#environment-issues" title="Link to this heading">#</a></h3>
-<p><strong>Problem:</strong> Double environment prompts <code class="docutils literal notranslate"><span class="pre">(RES)</span> <span class="pre">(base)</span> <span class="pre">$</span></code></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solution: Disable auto-activation of base</span>
-conda<span class="w"> </span>config<span class="w"> </span>--set<span class="w"> </span>auto_activate_base<span class="w"> </span><span class="nb">false</span>
-<span class="nb">source</span><span class="w"> </span>~/.bashrc
-</pre></div>
-</div>
-<p><strong>Problem:</strong> &quot;Environment 'RES' not found&quot;</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solution: Recreate environment</span>
-conda<span class="w"> </span>env<span class="w"> </span>remove<span class="w"> </span>-n<span class="w"> </span>RES<span class="w"> </span>-y
-make<span class="w"> </span>setupenv
-</pre></div>
-</div>
-<p><strong>Problem:</strong> Package conflicts or broken environment</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solution: Clean rebuild</span>
-conda<span class="w"> </span>env<span class="w"> </span>remove<span class="w"> </span>-n<span class="w"> </span>RES<span class="w"> </span>-y
-conda<span class="w"> </span>clean<span class="w"> </span>--all
-make<span class="w"> </span>setupenv
-</pre></div>
-</div>
-<p><strong>Problem:</strong> Import errors for pandas/geopandas after atlite installation</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solution: Update environment</span>
-make<span class="w"> </span>updateenv
-<span class="c1"># Or clean reinstall:</span>
-conda<span class="w"> </span>env<span class="w"> </span>remove<span class="w"> </span>-n<span class="w"> </span>RES<span class="w"> </span>-y<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>setupenv
-</pre></div>
-</div>
-<p><strong>Problem:</strong> Local package not updating after code changes</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solution: Reinstall in development mode</span>
-conda<span class="w"> </span>activate<span class="w"> </span>RESource
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-</pre></div>
-</div>
-</section>
-<section id="check-environment-health">
-<h3>Check Environment Health<a class="headerlink" href="#check-environment-health" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check if environment exists and is activated</span>
-conda<span class="w"> </span>env<span class="w"> </span>list<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>RESource
-conda<span class="w"> </span>activate<span class="w"> </span>RESource
-python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import RES; print(&#39;✅ RESource is ready!&#39;)&quot;</span>
-</pre></div>
-</div>
-</section>
-<section id="export-current-environment">
-<h3>Export Current Environment<a class="headerlink" href="#export-current-environment" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>exportenv
-<span class="c1"># Creates env/environment.yml with current versions</span>
-</pre></div>
-</div>
-</section>
-<section id="wsl2-specific-issues">
-<h3>WSL2 Specific Issues<a class="headerlink" href="#wsl2-specific-issues" title="Link to this heading">#</a></h3>
-<p><strong>Problem:</strong> Conda commands not found in WSL2</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solution: Ensure conda is in PATH</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;export PATH=&quot;$HOME/miniconda3/bin:$PATH&quot;&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc
-<span class="nb">source</span><span class="w"> </span>~/.bashrc
-</pre></div>
-</div>
-<p><strong>Problem:</strong> Permission issues in WSL2</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solution: Fix file permissions</span>
-sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span><span class="nv">$USER</span>:<span class="nv">$USER</span><span class="w"> </span>/path/to/RESource
-</pre></div>
-</div>
-</section>
-</section>
-<hr class="docutils" />
-<section id="development-checklist">
-<h2>📋 Development Checklist<a class="headerlink" href="#development-checklist" title="Link to this heading">#</a></h2>
-<section id="new-developer-setup">
-<h3>New Developer Setup<a class="headerlink" href="#new-developer-setup" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>[ ] Clone repository: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/DeltaE/RESource.git</span></code></p></li>
-<li><p>[ ] Install Conda/Miniconda</p></li>
-<li><p>[ ] Run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">setupenv</span></code></p></li>
-<li><p>[ ] Test: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-c</span> <span class="pre">&quot;import</span> <span class="pre">RES;</span> <span class="pre">print('✅</span> <span class="pre">RESource</span> <span class="pre">is</span> <span class="pre">ready!')&quot;</span></code></p></li>
-<li><p>[ ] Test Jupyter: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">jupyter</span></code></p></li>
-</ul>
-</section>
-<section id="before-committing-code">
-<h3>Before Committing Code<a class="headerlink" href="#before-committing-code" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>[ ] Environment is working: <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">RES</span> <span class="pre">&amp;&amp;</span> <span class="pre">python</span> <span class="pre">-c</span> <span class="pre">&quot;import</span> <span class="pre">RES&quot;</span></code></p></li>
-<li><p>[ ] Code runs: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">run</span></code></p></li>
-<li><p>[ ] Documentation builds: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">docs</span></code></p></li>
-<li><p>[ ] Export environment if dependencies changed: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">exportenv</span></code></p></li>
-</ul>
-</section>
-<section id="before-deployment">
-<h3>Before Deployment<a class="headerlink" href="#before-deployment" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>[ ] Documentation is current: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">docs</span></code></p></li>
-<li><p>[ ] Environment is exportable: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">exportenv</span></code></p></li>
-</ul>
-</section>
-</section>
-<hr class="docutils" />
-<section id="documentation-deployment">
-<h2>🌐 Documentation Deployment<a class="headerlink" href="#documentation-deployment" title="Link to this heading">#</a></h2>
-<section id="local-development">
-<h3>Local Development<a class="headerlink" href="#local-development" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Live reload during development</span>
-make<span class="w"> </span>autobuild
-<span class="c1"># Visit: http://localhost:8000</span>
-</pre></div>
-</div>
-</section>
-<section id="github-pages-deployment">
-<h3>GitHub Pages Deployment<a class="headerlink" href="#github-pages-deployment" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build and deploy to GitHub Pages</span>
-make<span class="w"> </span>deploy
-<span class="c1"># Visit: https://deltae.github.io/RESource/</span>
-</pre></div>
-</div>
-</section>
-<section id="documentation-structure">
-<h3>Documentation Structure<a class="headerlink" href="#documentation-structure" title="Link to this heading">#</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docs/
-├── source/           # Source files
-│   ├── index.md     # Main page
-│   ├── notes/       # Documentation pages
-│   └── notebooks/   # Jupyter notebooks
-└── build/           # Generated HTML (auto-created)
-</pre></div>
-</div>
-</section>
-</section>
-<hr class="docutils" />
-<section id="tips-best-practices">
-<h2>💡 Tips &amp; Best Practices<a class="headerlink" href="#tips-best-practices" title="Link to this heading">#</a></h2>
-<section id="id1">
-<h3>Environment Management<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Always use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">setupenv</span></code> instead of manual conda commands</p></li>
-<li><p>Keep <code class="docutils literal notranslate"><span class="pre">env/environment.yml</span></code> updated when adding dependencies</p></li>
-<li><p>Use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">exportenv</span></code> to document exact working environment</p></li>
-<li><p>Check environment health with <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">RES</span> <span class="pre">&amp;&amp;</span> <span class="pre">python</span> <span class="pre">-c</span> <span class="pre">&quot;import</span> <span class="pre">RES&quot;</span></code></p></li>
-</ul>
-</section>
-<section id="development">
-<h3>Development<a class="headerlink" href="#development" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">autobuild</span></code> for documentation development with live reload</p></li>
-</ul>
-</section>
-<section id="collaboration">
-<h3>Collaboration<a class="headerlink" href="#collaboration" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Always commit updated <code class="docutils literal notranslate"><span class="pre">env/environment.yml</span></code> when dependencies change</p></li>
-<li><p>Use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">exportenv</span></code> to share exact working environment</p></li>
-<li><p>Document any platform-specific setup requirements</p></li>
-</ul>
-</section>
-</section>
-<hr class="docutils" />
-<section id="getting-help">
-<h2>🆘 Getting Help<a class="headerlink" href="#getting-help" title="Link to this heading">#</a></h2>
-<section id="check-status">
-<h3>Check Status<a class="headerlink" href="#check-status" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>RES<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import RES&quot;</span><span class="w">  </span><span class="c1"># Environment health check</span>
-make<span class="w"> </span><span class="nb">help</span><span class="w">                                     </span><span class="c1"># Show all available commands</span>
-</pre></div>
-</div>
-</section>
-<section id="common-issues">
-<h3>Common Issues<a class="headerlink" href="#common-issues" title="Link to this heading">#</a></h3>
-<ol class="arabic simple">
-<li><p><strong>Import errors:</strong> Usually environment not activated or packages missing</p></li>
-<li><p><strong>Jupyter kernel issues:</strong> Use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">jupyter</span></code> instead of direct jupyter commands</p></li>
-<li><p><strong>Documentation build fails:</strong> Check Sphinx dependencies are installed</p></li>
-<li><p><strong>Platform issues on Windows:</strong> Ensure using WSL2, not native Windows</p></li>
-</ol>
-</section>
-<section id="resources">
-<h3>Resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p><a class="reference external" href="https://github.com/DeltaE/RESource">RESource GitHub Repository</a></p></li>
-<li><p><a class="reference external" href="https://deltae.github.io/RESource/">Documentation</a></p></li>
-<li><p><a class="reference external" href="https://github.com/DeltaE/RESource/issues">Issue Tracker</a></p></li>
-</ul>
-<hr class="docutils" />
-<p><em>This guide covers the complete setup and development workflow for RESource. All commands are tested and maintained through the project Makefile.</em></p>
-</section>
 </section>
 </section>
 
@@ -916,6 +511,24 @@ make<span class="w"> </span><span class="nb">help</span><span class="w">        
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="quickstart.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Quick start</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="run_usage.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Command-line usage</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -923,82 +536,24 @@ make<span class="w"> </span><span class="nb">help</span><span class="w">        
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> Contents
   </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-migration-to-new-setup">Quick Migration to New Setup</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-reproducibility">� Environment Reproducibility</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducing-exact-environment">Reproducing Exact Environment</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-management">�🛠️ Environment Management</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#available-make-commands">Available Make Commands</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-management">Environment Setup &amp; Management</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#utilities">Utilities</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-specific-setup">🐧 Platform-Specific Setup</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#windows-users-wsl2-required">Windows Users (WSL2 Required)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linux-macos-users">Linux/macOS Users</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-details">📦 Environment Details</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-dependencies">Core Dependencies</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#daily-development-workflow">🚀 Daily Development Workflow</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#activate-environment">1. Activate Environment</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-resource">2. Run RESource</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#enhanced-analysis-pipeline-run-py">Enhanced Analysis Pipeline (<code class="docutils literal notranslate"><span class="pre">run.py</span></code>)</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#command-reference">Command Reference</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#regional-configurations">Regional Configurations</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#error-handling-examples">Error Handling Examples</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#alternative-development-methods">Alternative Development Methods</a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-development">3. Documentation Development</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">🔧 Troubleshooting</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-issues">Environment Issues</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-environment-health">Check Environment Health</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#export-current-environment">Export Current Environment</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wsl2-specific-issues">WSL2 Specific Issues</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development-checklist">📋 Development Checklist</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#new-developer-setup">New Developer Setup</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-committing-code">Before Committing Code</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#before-deployment">Before Deployment</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-deployment">🌐 Documentation Deployment</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-development">Local Development</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#github-pages-deployment">GitHub Pages Deployment</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-structure">Documentation Structure</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tips-best-practices">💡 Tips &amp; Best Practices</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Environment Management</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development">Development</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collaboration">Collaboration</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-help">🆘 Getting Help</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-status">Check Status</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-issues">Common Issues</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
-</ul>
-</li>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-an-installation-method">Choosing an installation method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-features">Optional features</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#repository-layout">Repository layout</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependency-changes">Dependency changes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation">Validation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#native-geospatial-dependencies">Native geospatial dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-location">Data location</a></li>
 </ul>
   </nav></div>
 
@@ -1047,8 +602,8 @@ By Md Eliasinul Islam
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
   </footer>

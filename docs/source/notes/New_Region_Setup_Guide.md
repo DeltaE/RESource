@@ -28,7 +28,7 @@ SyntaxError: Non-ASCII character '\xe2' in file run.py on line 148, but no encod
 ### 2. **GADM Region Name Mismatch** ❌
 **Error:**
 ```
-RES.boundaries | @ LINE 271 | No data found for region 'Barisal Division'.
+RESource.boundaries | @ LINE 271 | No data found for region 'Barisal Division'.
 ```
 
 **Root Cause:** The region names in the configuration file don't match the actual GADM administrative boundary names.
@@ -80,7 +80,7 @@ ls -la data/downloaded_data/GWA/
 **Warning:**
 ```
 Conservation Lands data supply chain is configured for Canada only
-RES.lands| 'conserved_lands_CAN' not initiated
+RESource.lands| 'conserved_lands_CAN' not initiated
 ```
 
 **Root Cause:** The conservation lands module is hardcoded for Canadian data sources.
