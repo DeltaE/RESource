@@ -91,6 +91,9 @@ google-drive = [
     "dlt>=1.29,<2",
     "google-api-python-client>=2.100,<3",
 ]
+reporting = [
+  "jinja2>=3.1",
+]
 
 [dependency-groups]
 dev = [
@@ -115,6 +118,7 @@ Publication = "https://doi.org/10.1016/j.energ.2026.100077"
 resource = "RESource.cli:entrypoint"
 resource-multiyear = "RESource.multiyear:entrypoint"
 resource-cutout-multiyear = "RESource.cutout_multiyear:entrypoint"
+resource-report = "RESource.reporting.cli:entrypoint"
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -125,6 +129,7 @@ RESource = [
   "assets/legends/*.csv",
   "assets/mappings/*.csv",
   "visual_styles/*.mplstyle",
+  "reporting/templates/*.html.j2",
 ]
 
 [tool.ruff]

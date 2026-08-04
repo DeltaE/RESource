@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ country_name }} — Solar Resource Report</title>
+<style>
+  :root {
+    --accent: #d97706;
+    --accent-2: #1e6fa8;
+    --bg: #ffffff;
+    --bg-alt: #f7f7f5;
+    --text: #1c1c1c;
+    --muted: #6b6b6b;
+    --border: #e2e2e2;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    margin: 0;
+    line-height: 1.5;
+  }
+  header.report-header {
+    background: linear-gradient(120deg, #1c1c1c, #3a3a3a);
+    color: #fff;
+    padding: 2.5rem 2rem;
+  }
+  header.report-header h1 { margin: 0 0 0.25rem; font-size: 1.8rem; }
+  header.report-header p { margin: 0.15rem 0; color: #d7d7d7; font-size: 0.92rem; }
+  main { max-width: 1100px; margin: 0 auto; padding: 1.5rem 2rem 4rem; }
+  nav.toc {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    font-size: 0.92rem;
+  }
+  nav.toc a { color: var(--accent-2); text-decoration: none; margin-right: 1rem; }
+  nav.toc a:hover { text-decoration: underline; }
+  section { margin: 2.5rem 0; }
+  h2 {
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 0.35rem;
+    font-size: 1.35rem;
+  }
+  h3 { font-size: 1.1rem; margin-top: 2rem; }
+  h4 { font-size: 0.98rem; color: var(--accent-2); }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.88rem;
+    margin: 0.75rem 0 1.5rem;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.6rem;
+    text-align: left;
+  }
+  th { background: var(--bg-alt); }
+  tbody tr:nth-child(even) { background: #fbfbfa; }
+  .stat-row { display: flex; gap: 1rem; flex-wrap: wrap; margin: 0.75rem 0 1.25rem; }
+  .stat-tile {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    min-width: 150px;
+  }
+  .stat-tile .label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; }
+  .stat-tile .value { font-size: 1.25rem; font-weight: 600; color: var(--accent); }
+  .plot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0 2rem;
+  }
+  .plot-grid figure { margin: 0; }
+  .plot-grid img { width: 100%; border: 1px solid var(--border); border-radius: 6px; }
+  .plot-grid figcaption { font-size: 0.8rem; color: var(--muted); margin-top: 0.3rem; }
+  details.config-block {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 0.75rem 0;
+    padding: 0.6rem 1rem;
+    background: var(--bg-alt);
+  }
+  details.config-block summary { cursor: pointer; font-weight: 600; }
+  details.config-block pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 0.8rem;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.75rem;
+    max-height: 480px;
+    overflow: auto;
+  }
+  .provenance { font-size: 0.78rem; color: var(--muted); }
+  .provenance code { background: var(--bg-alt); padding: 0 0.25rem; border-radius: 3px; }
+  .region-block { border-top: 1px dashed var(--border); padding-top: 1.5rem; margin-top: 1.5rem; }
+  .note {
+    font-size: 0.82rem;
+    color: var(--muted);
+    background: var(--bg-alt);
+    border-left: 3px solid var(--accent);
+    padding: 0.5rem 0.85rem;
+    margin: 1rem 0;
+  }
+  footer {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+    padding: 2rem 0 3rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #16171a; --bg-alt: #1f2024; --text: #e7e7e5; --muted: #9a9a9a; --border: #34353a; }
+    details.config-block pre { background: #101114; }
+  }
+</style>
+</head>
+<body>
+
+<header class="report-header">
+  <h1>{{ country_name }} — Solar Resource Report</h1>
+  <p>Country code: {{ country_code }} &middot; Resource type: {{ resource_type }}</p>
+  <p>Generated {{ generated_at }} from existing pipeline results on disk (no re-run)</p>
+</header>
+
+<main>
+  <nav class="toc">
+    <a href="#config">1. Input config</a>
+    <a href="#contrast">2. Scenario contrast</a>
+    {% for region in region_reports %}
+    <a href="#region-{{ region.region_code }}">3.{{ loop.index }} {{ region.region_code }} solar plots</a>
+    {% endfor %}
+  </nav>
+
+  <section id="config">
+    <h2>1. Input configuration per scenario</h2>
+    {% for name, scenario in scenario_summaries.items() %}
+    <details class="config-block">
+      <summary>{{ scenario.run_id }} &mdash; {{ name }}</summary>
+      <p>{{ scenario.description }}</p>
+      {% if scenario.overrides %}
+      <h4>Overrides vs. {{ scenario.base_config_path }}</h4>
+      <table>
+        <thead><tr><th>Config path</th><th>Base value</th><th>Scenario value</th></tr></thead>
+        <tbody>
+        {% for o in scenario.overrides %}
+          <tr><td><code>{{ o.path }}</code></td><td>{{ o.base_value }}</td><td>{{ o.scenario_value }}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="note">No overrides recorded &mdash; identical to base config.</p>
+      {% endif %}
+      <p class="provenance">
+        Sources ({{ scenario.provenance.sources | length }}):
+        {% for s in scenario.provenance.sources %}
+          <code>{{ s.path }}</code> (sha256 {{ s.sha256[:12] }}…){% if not loop.last %}, {% endif %}
+        {% endfor %}
+      </p>
+      <details>
+        <summary>Full resolved config</summary>
+        <pre>{{ scenario.resolved_config | to_yaml }}</pre>
+      </details>
+    </details>
+    {% endfor %}
+  </section>
+
+  <section id="contrast">
+    <h2>2. Scenario contrast</h2>
+    {% if contrast_chart %}
+    <figure>
+      <img src="{{ contrast_chart }}" alt="Scenario contrast chart">
+    </figure>
+    {% endif %}
+    <table>
+      <thead><tr><th>Scenario / region</th><th>Total potential (GW)</th><th>Capacity-weighted LCOE ($/MWh)</th></tr></thead>
+      <tbody>
+      {% for row in contrast_rows %}
+        <tr><td>{{ row.label }}</td><td>{{ "%.2f"|format(row.total_gw) }}</td><td>{{ "%.2f"|format(row.weighted_lcoe) }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <section id="plots">
+    <h2>3. Solar plots by region</h2>
+    <p class="note">
+      Plots use only the attribute tables written by the pipeline
+      (cluster CSV + hourly timeseries CSV); no site geometry is available in
+      these outputs, so spatial/map views are out of scope for this report.
+    </p>
+    {% for region in region_reports %}
+    <div class="region-block" id="region-{{ region.region_code }}">
+      <h3>Region: {{ region.region_code }}</h3>
+      {% for item in region.sections %}
+      <h4>{{ item.summary.scenario_name }} (run {{ item.summary.run_id }}, weather year {{ item.summary.weather_year }})</h4>
+      <div class="stat-row">
+        <div class="stat-tile"><div class="label">Sites</div><div class="value">{{ item.summary.site_count }}</div></div>
+        <div class="stat-tile"><div class="label">Total potential</div><div class="value">{{ "%.2f"|format(item.summary.total_gw) }} GW</div></div>
+        <div class="stat-tile"><div class="label">Mean CF</div><div class="value">{{ "%.1f"|format(item.summary.mean_cf * 100) }}%</div></div>
+        <div class="stat-tile"><div class="label">Weighted LCOE</div><div class="value">${{ "%.2f"|format(item.summary.weighted_lcoe) }}/MWh</div></div>
+      </div>
+      <div class="plot-grid">
+        <figure>
+          <img src="{{ item.plots.cf_vs_lcoe }}" alt="CF vs LCOE">
+          <figcaption>Capacity factor vs. LCOE, bubble size = potential capacity</figcaption>
+        </figure>
+        <figure>
+          <img src="{{ item.plots.supply_curve }}" alt="Supply curve">
+          <figcaption>Cumulative potential capacity ordered by ascending LCOE</figcaption>
+        </figure>
+        <figure>
+          <img src="{{ item.plots.cf_distribution }}" alt="CF distribution">
+          <figcaption>Capacity-weighted distribution of site mean CF</figcaption>
+        </figure>
+        <figure>
+          <img src="{{ item.plots.cf_timeseries }}" alt="Monthly CF timeseries">
+          <figcaption>Monthly mean ± std of aggregate CF across clusters</figcaption>
+        </figure>
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </section>
+</main>
+
+<footer>
+  Generated by RESource.reporting &middot; {{ generated_at }}
+</footer>
+
+</body>
+</html>

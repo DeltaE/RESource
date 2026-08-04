@@ -121,9 +121,49 @@ def hw_snapshot() -> dict:
 
 # ── Runtime log ───────────────────────────────────────────────────────────────
 
-LOG_FILE = Path("results/logs/runtime_log.txt")
-DETAIL_LOG_FILE = Path("results/logs/resource.log")
+RUN_LOG_DIR = Path("results/logs/runs")
+LATEST_DETAIL_LOG = Path("results/logs/resource.log")
+LATEST_RUNTIME_LOG = Path("results/logs/runtime_log.txt")
 W = 80  # line width
+
+
+def _slugify(value: str) -> str:
+    """Convert text into a filesystem-safe lowercase slug."""
+    slug = re.sub(r"[^A-Za-z0-9]+", "-", str(value).strip()).strip("-").lower()
+    return slug or "na"
+
+
+def _build_run_log_paths(
+    *,
+    start_dt: datetime,
+    config_path: str,
+    weather_year: int | str,
+    regions: list[str] | None,
+) -> tuple[Path, Path]:
+    """Generate unique detail/runtime log paths for a single CLI invocation."""
+    timestamp = start_dt.strftime("%Y%m%d_%H%M%S_%f")
+    pid_tag = os.getpid()
+    config_tag = _slugify(Path(config_path).stem)
+    year_tag = _slugify(weather_year)
+    if regions is None:
+        region_tag = "all"
+    elif len(regions) == 0:
+        region_tag = "none"
+    else:
+        region_tag = "-".join(_slugify(region) for region in regions)
+    # Keep filenames manageable when many regions are requested.
+    region_tag = region_tag[:80]
+    run_base = f"{timestamp}_p{pid_tag}_{config_tag}_y{year_tag}_r{region_tag}"
+    detail_log = RUN_LOG_DIR / f"{run_base}_detail.log"
+    runtime_log = RUN_LOG_DIR / f"{run_base}_runtime.log"
+    return detail_log, runtime_log
+
+
+def _write_latest_log_pointer(pointer_file: Path, target_file: Path) -> None:
+    """Write/update a small pointer file to the latest generated run log."""
+    pointer_file.parent.mkdir(parents=True, exist_ok=True)
+    with open(pointer_file, "w", encoding="utf-8") as fh:
+        fh.write(f"Latest run log: {target_file.resolve()}\n")
 
 
 class LiveStatus:
@@ -291,6 +331,7 @@ def _na(value, fmt=str) -> str:
 
 
 def write_runtime_log(
+    log_file: Path,
     *,
     config_path: str,
     regions: list,
@@ -303,7 +344,7 @@ def write_runtime_log(
     hw_end: dict,
     region_log: list,  # list of dicts: region, resource, status, elapsed_s, error
 ):
-    LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+    log_file.parent.mkdir(parents=True, exist_ok=True)
 
     runtime_s = (end_dt - start_dt).total_seconds()
 
@@ -367,8 +408,9 @@ def write_runtime_log(
     block += _fmt("psutil", "available" if _PSUTIL else "not installed — hw metrics unavailable")
     block += sep
 
-    with open(LOG_FILE, "a", encoding="utf-8") as f:
+    with open(log_file, "a", encoding="utf-8") as f:
         f.write(block)
+    _write_latest_log_pointer(LATEST_RUNTIME_LOG, log_file)
 
 
 # ── Argument parsing ──────────────────────────────────────────────────────────
@@ -441,11 +483,19 @@ def main(start_dt: datetime | None = None) -> int:
     hw_start = hw_snapshot()
     live_status = LiveStatus()
     inspection_mode = args.show_config or args.show_overrides or args.validate_only
+    detail_log_path, runtime_log_path = _build_run_log_paths(
+        start_dt=start_dt,
+        config_path=args.config,
+        weather_year=args.year,
+        regions=args.regions,
+    )
     detail_log = utils.configure_runtime_logging(
-        DETAIL_LOG_FILE,
+        detail_log_path,
         verbose=args.verbose,
         status_sink=None if args.verbose or inspection_mode else live_status.update,
     )
+    _write_latest_log_pointer(LATEST_DETAIL_LOG, detail_log)
+    _write_latest_log_pointer(LATEST_RUNTIME_LOG, runtime_log_path)
     logger = logging.getLogger("RESource")
     logger.info(
         "Pipeline invocation: config=%s year=%s regions=%s", args.config, args.year, args.regions
@@ -570,8 +620,10 @@ def main(start_dt: datetime | None = None) -> int:
     status = "PARTIAL" if any_fail else "SUCCESS"
 
     live_status.finish(status, detail_log)
+    live_status.update(f"Runtime summary: {runtime_log_path}")
 
     write_runtime_log(
+        runtime_log_path,
         config_path=args.config,
         regions=regions,
         weather_year=weather_year,
@@ -592,6 +644,12 @@ def main(start_dt: datetime | None = None) -> int:
 def entrypoint() -> None:
     """Run the CLI with logging and consistent process exit codes."""
     _start_dt = datetime.now()
+    _, fallback_runtime_log = _build_run_log_paths(
+        start_dt=_start_dt,
+        config_path="unknown",
+        weather_year="unknown",
+        regions=[],
+    )
     try:
         exit_code = main(_start_dt)
         if exit_code:
@@ -599,6 +657,7 @@ def entrypoint() -> None:
     except KeyboardInterrupt:
         print_warning("\n  Interrupted (Ctrl+C)")
         write_runtime_log(
+            fallback_runtime_log,
             config_path="unknown",
             regions=[],
             weather_year="unknown",
@@ -614,6 +673,7 @@ def entrypoint() -> None:
     except Exception as exc:
         print_error(f"  Unexpected error: {exc}")
         write_runtime_log(
+            fallback_runtime_log,
             config_path="unknown",
             regions=[],
             weather_year="unknown",

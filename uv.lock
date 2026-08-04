@@ -1174,6 +1174,9 @@ notebooks = [
     { name = "jupyterlab" },
     { name = "notebook" },
 ]
+reporting = [
+    { name = "jinja2" },
+]
 viz = [
     { name = "bokeh" },
     { name = "contextily" },
@@ -1222,6 +1225,7 @@ requires-dist = [
     { name = "ipykernel", marker = "extra == 'docs'", specifier = ">=6.29" },
     { name = "ipykernel", marker = "extra == 'notebooks'", specifier = ">=6.29" },
     { name = "ipywidgets", marker = "extra == 'notebooks'", specifier = ">=8.1" },
+    { name = "jinja2", marker = "extra == 'reporting'", specifier = ">=3.1" },
     { name = "jupyterlab", marker = "extra == 'notebooks'", specifier = ">=4.2" },
     { name = "matplotlib", specifier = ">=3.9" },
     { name = "myst-parser", marker = "extra == 'docs'", specifier = ">=4" },
@@ -1251,7 +1255,7 @@ requires-dist = [
     { name = "xarray", specifier = ">=2024.10" },
     { name = "xyzservices", specifier = ">=2024.9" },
 ]
-provides-extras = ["viz", "notebooks", "docs", "google-drive"]
+provides-extras = ["viz", "notebooks", "docs", "google-drive", "reporting"]
 
 [package.metadata.requires-dev]
 dev = [

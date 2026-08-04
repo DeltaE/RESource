@@ -51,7 +51,6 @@ from matplotlib.axes import Axes
 from matplotlib.colors import ListedColormap
 from rasterio.enums import Resampling
 from rasterio.mask import mask
-from rasterio.plot import show
 from rasterio.vrt import WarpedVRT
 from shapely.geometry.base import BaseGeometry
 from shapely.ops import polygonize, unary_union
@@ -1236,9 +1235,11 @@ def add_and_plot_exclusion_layer(
 
     masked, transform, eligible_share = get_eligible_share(region_shape, excluder)
 
-    # Keep 1s, mask 0s
-    raster_data = masked.astype(float)  # * 100
-    masked_data = np.ma.masked_where(raster_data == 0, raster_data)
+    # Keep eligible cells (1/True) and mask unavailable cells (0/False).
+    # Rendering through imshow with explicit extents avoids rasterio boolean
+    # display quirks that can produce nearly blank/black-looking panels.
+    eligible = np.asarray(masked, dtype=np.uint8)
+    masked_data = np.ma.masked_where(eligible == 0, eligible)
 
     if disregard_other_layers:
         cmap = ListedColormap(["#0B936A"])
@@ -1252,12 +1253,18 @@ def add_and_plot_exclusion_layer(
 
     cmap.set_bad(color=(1, 1, 1, 0))  # transparent 0s
 
-    # Plot masked raster
-    show(
+    # Plot masked raster using the affine transform bounds.
+    height, width = eligible.shape
+    left, top = transform * (0, 0)
+    right, bottom = transform * (width, height)
+    ax.imshow(
         masked_data,
-        transform=transform,
-        ax=ax,
         cmap=cmap,
+        interpolation="nearest",
+        extent=[left, right, bottom, top],
+        origin="upper",
+        vmin=1,
+        vmax=1,
     )
 
     # Overlay region boundary (no cmap here)

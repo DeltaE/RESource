@@ -375,11 +375,25 @@ def find_optimal_K(
         message="Estimating optimal number of Clusters for each region based on the Score for each Cell ...",
     )
 
+    # K-means supports k=1; a single-sample region must map to one cluster.
+    n_samples = len(data_for_clustering)
+    if n_samples <= 1:
+        plt.plot([1], [0.0], marker="o", linestyle="-", label=f"lcoe_{resource_type}")
+        plt.title(f"Elbow plot of K-means Clustering with 'LCOE_{resource_type}' for Region-{region}")
+        plt.xlabel("Number of Clusters (k)")
+        plt.ylabel("Within-Cluster Sum of Squares (WCSS)")
+        plt.grid(True)
+        plt.legend()
+        plt.xticks([1])
+        print(f"Zone {region} - Optimal k for LCOE_{resource_type} based clustering: 1\n")
+        return 1
+
     # Initialize empty list to store the within-cluster sum of squares (WCSS)
     wcss_data = []
+    upper_k = min(max_k, n_samples)
 
     # Try different values of k (number of clusters)
-    for k in range(1, min(max_k, len(data_for_clustering))):
+    for k in range(1, upper_k + 1):
         # Handle NaN values by filling them with the mean of the column
 
         kmeans_data = KMeans(n_clusters=k, random_state=0, n_init=10).fit(data_for_clustering)
@@ -399,7 +413,7 @@ def find_optimal_K(
 
     # Plot and save the elbow charts
     plt.plot(
-        range(1, min(max_k, len(data_for_clustering))),
+        range(1, upper_k + 1),
         wcss_data,
         marker="o",
         linestyle="-",
@@ -420,7 +434,7 @@ def find_optimal_K(
     plt.legend()
 
     # Ensure x-axis ticks are integers
-    plt.xticks(range(1, min(max_k, len(data_for_clustering))))
+    plt.xticks(range(1, upper_k + 1))
 
     # plt.tight_layout()
 
@@ -617,11 +631,28 @@ def pre_process_cluster_mapping(
 
     # Create a DataFrame from the list
     region_optimal_k_df = pd.DataFrame(region_optimal_k_list)
-    region_optimal_k_df["Optimal_k"].fillna(0, inplace=True)
-    region_optimal_k_df["Optimal_k"] = region_optimal_k_df["Optimal_k"].astype(int)
 
-    NonZeroClustersmask = region_optimal_k_df["Optimal_k"] != 0
-    region_optimal_k_df = region_optimal_k_df[NonZeroClustersmask]
+    if region_optimal_k_df.empty:
+        raise ValueError(
+            "No valid regional clustering candidates were produced. Check filtered cell inputs."
+        )
+
+    region_optimal_k_df["Optimal_k"] = pd.to_numeric(
+        region_optimal_k_df["Optimal_k"], errors="coerce"
+    )
+
+    invalid_k_mask = (
+        region_optimal_k_df["Optimal_k"].isna() | (region_optimal_k_df["Optimal_k"] <= 0)
+    )
+    if invalid_k_mask.any():
+        invalid_regions = region_optimal_k_df.loc[invalid_k_mask, sub_national_unit_tag].tolist()
+        utils.print_warning(
+            "Skipping regions with invalid optimal-k results: "
+            + ", ".join(map(str, invalid_regions))
+        )
+
+    region_optimal_k_df = region_optimal_k_df.loc[~invalid_k_mask].copy()
+    region_optimal_k_df["Optimal_k"] = region_optimal_k_df["Optimal_k"].astype(int)
 
     _x = cells_scored.merge(region_optimal_k_df, on=sub_national_unit_tag, how="left")
     cells_scored = assign_cluster_id(_x, sub_national_unit_tag, "cell")  # .set_index('cell')
