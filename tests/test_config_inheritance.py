@@ -73,20 +73,16 @@ def test_inheritance_rejects_cycles(tmp_path: Path) -> None:
 @pytest.mark.parametrize(
     ("scenario", "expected_hash"),
     [
-        ("baseline.yaml", "6b60ac5a95a69e10c36383fcd4a88ee159229879300551fa04315d8ce5c9ca84"),
+        ("baseline.yaml", "4afb1470f918d5e47b1a50f8d8ac1781eace06c5f7d3823b888e06caf5dcd15a"),
         (
             "grid_restricted.yaml",
-            "adf4fd35d5380fae42569fd608a8d0dcfee3b9c25df10a7a9fc8e91b7807278f",
+            "310a1fed13510126022f5d7b4de218289702a4ff6c1974a67e984fd7b411bb5e",
         ),
         (
             "no_buffers.yaml",
-            "64ad6626f10ed0192c852a0440ecabd3402cb13a3a77db510456d9297433f1f0",
+            "504911d25b4a2257b9554894f14d3583250ab2b6d4cfc3d82487e9b940e6fcd6",
         ),
-        ("policy_1.yaml", "dabbdefc9af5015ed0963593893506ef113fbd69b15efa9678e9101c58236308"),
-        (
-            "bc_baseline_2020.yaml",
-            "fb820e9855eb4904ba2c524d3e0cbc43a1c5267d018c74e327d86c538aadcd88",
-        ),
+        ("policy_1.yaml", "868a1780f9f97fa2b5b0703a8184296e4a34153f4a7c9db643562e8d374b2ccc"),
     ],
 )
 def test_can_scenarios_preserve_legacy_resolved_contract(scenario: str, expected_hash: str) -> None:
@@ -102,15 +98,15 @@ def test_can_scenarios_preserve_legacy_resolved_contract(scenario: str, expected
     [
         (
             "config/WB6/scenarios/baseline.yaml",
-            "a66e5526d7ff354e251e4c552fe64c56fafb37db038cac0a79b5b90845310000",
+            "269f398a8414d0f96a6d26778bf0c66158434511cb0f203b1d7e6b8b973ca1f2",
         ),
         (
             "config/WB6/scenarios/legacy_2023.yaml",
-            "527b1e0fa569d571b75a4745695162438cc3ab902f57a46454f5e1e4be365379",
+            "5c91f882576c134bd967be1abc62ad174c5a34a6488527e0fd8f2beab498f44c",
         ),
         (
             "config/BGD/scenarios/baseline.yaml",
-            "c74b2fe6bd799c347052e8d3754adf188261d42e27c840f385f55f4e5d6b98f1",
+            "16f522144d8694d432c8ec533e982d25ba5a71ead17601f3dd7610a0b8d15643",
         ),
     ],
 )

@@ -21,10 +21,9 @@ import logging
 import os
 import platform
 import re
+import shutil
 import sys
-import threading
 import time
-from collections import deque
 from contextlib import redirect_stderr, redirect_stdout
 from datetime import datetime
 from pathlib import Path
@@ -159,6 +158,14 @@ def _build_run_log_paths(
     return detail_log, runtime_log
 
 
+def _relative_to_cwd(path: Path) -> Path:
+    """Render an absolute log path relative to the project root when possible."""
+    try:
+        return Path(path).resolve().relative_to(Path.cwd())
+    except ValueError:
+        return Path(path)
+
+
 def _write_latest_log_pointer(pointer_file: Path, target_file: Path) -> None:
     """Write/update a small pointer file to the latest generated run log."""
     pointer_file.parent.mkdir(parents=True, exist_ok=True)
@@ -166,39 +173,75 @@ def _write_latest_log_pointer(pointer_file: Path, target_file: Path) -> None:
         fh.write(f"Latest run log: {target_file.resolve()}\n")
 
 
-class LiveStatus:
-    """Small in-place CLI dashboard for long-running regional jobs."""
+_SPINNER_FRAMES = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
 
+
+class LiveStatus:
+    """Minimal print-based progress reporting for long-running regional jobs.
+
+    Writes with plain str.write()/flush() to the real stderr object captured
+    at construction time, before RESources.build() redirects sys.stdout for
+    log-capture — so status lines can't be swallowed by that redirect.
+
+    Deliberately avoids any terminal-control library (rich, curses, ...):
+    those query/alter tty state (cursor position, size, background refresh
+    threads) in ways that can raise SIGTTIN/SIGTTOU and suspend the whole
+    process under some terminal/job-control setups (observed under VS
+    Code's shell-integration wrapper). A bare "\\r"-overwritten line is safe
+    because it's only ever a write(), never an ioctl or a read().
+    """
+
+    BAR_WIDTH = 24
     STAGES_PER_PIPELINE = 7
 
     def __init__(self) -> None:
         self.total = 0
         self.done = 0
         self.failed = 0
-        self.running = "initializing"
         self.current_stage = 0
-        self.recent = deque(maxlen=2)
-        self._lines_rendered = 0
-        self._stream = sys.stderr
-        self._enabled = self._stream.isatty()
-        self._last_render = 0.0
-        self._refresh_interval = 0.2
         self._job_started_at = None
         self._spinner_index = 0
-        self._render_lock = threading.RLock()
-        self._stop_event = threading.Event()
-        self._heartbeat_thread = None
+        self._line_open = False
+        self._stream = sys.stderr
+        self._enabled = self._stream.isatty()
+
+    def _write(self, text: str, *, overwrite: bool = False) -> None:
+        prefix = "\r" if overwrite else ""
+        # "\x1b[K" erases from the cursor to the end of the (real terminal)
+        # line, so leftovers from a longer previous line never survive a
+        # shorter one — needed because "\r" alone only rewinds the current
+        # row, not any wrapped continuation rows.
+        suffix = "\x1b[K" if overwrite else "\n"
+        try:
+            self._stream.write(prefix + text + suffix)
+            self._stream.flush()
+        except Exception:
+            pass
+
+    def _terminal_width(self) -> int:
+        try:
+            return shutil.get_terminal_size(fallback=(100, 24)).columns
+        except Exception:
+            return 100
+
+    def _bar(self, completed: int, total: int) -> str:
+        total = max(total, 1)
+        filled = int(self.BAR_WIDTH * min(completed, total) / total)
+        return "█" * filled + "░" * (self.BAR_WIDTH - filled)
+
+    def _end_open_line(self) -> None:
+        if self._line_open:
+            self._write("")
+            self._line_open = False
 
     def configure(self, total: int) -> None:
         self.total = total
-        if self._enabled and self._heartbeat_thread is None:
-            self._heartbeat_thread = threading.Thread(
-                target=self._heartbeat,
-                name="resource-cli-status",
-                daemon=True,
-            )
-            self._heartbeat_thread.start()
-        self.render(force=True)
+        self._write(f"RESource: {total} pipeline job(s) to run")
+
+    def start(self, region: str, resource: str) -> None:
+        self.current_stage = 0
+        self._job_started_at = time.monotonic()
+        self._write(f"\n=== [{self.done + 1}/{self.total}] {region} / {resource} ===")
 
     def update(self, message: str) -> None:
         clean = " ".join(str(message).split())
@@ -208,90 +251,41 @@ class LiveStatus:
                 self.STAGES_PER_PIPELINE,
                 max(self.current_stage, int(stage_match.group(1))),
             )
-        if clean and (not self.recent or clean != self.recent[-1]):
-            self.recent.append(clean)
-        self.render()
 
-    def start(self, region: str, resource: str) -> None:
-        self.running = f"{region} / {resource}"
-        self.current_stage = 0
-        self._job_started_at = time.monotonic()
-        self.update(f"Started {self.running}")
-        self.render(force=True)
+        if not self._enabled:
+            if clean:
+                self._write(f"  {clean}")
+            return
+
+        self._spinner_index += 1
+        spinner = _SPINNER_FRAMES[self._spinner_index % len(_SPINNER_FRAMES)]
+        bar = self._bar(self.current_stage, self.STAGES_PER_PIPELINE)
+        elapsed = time.monotonic() - self._job_started_at if self._job_started_at else 0
+        prefix = (
+            f"  {spinner} [{bar}] {self.current_stage}/{self.STAGES_PER_PIPELINE} steps "
+            f"{_hms(elapsed)}  "
+        )
+        # Leave a 1-column margin so the line never touches the terminal's
+        # last column, which some terminals treat as an implicit wrap.
+        budget = max(0, self._terminal_width() - len(prefix) - 1)
+        line = prefix + clean[:budget]
+        self._write(line, overwrite=True)
+        self._line_open = True
 
     def complete(self, region: str, resource: str, *, failed: bool = False) -> None:
+        self._end_open_line()
         self.done += 1
         self.failed += int(failed)
-        self.current_stage = 0
+        elapsed = time.monotonic() - self._job_started_at if self._job_started_at else 0
         self._job_started_at = None
-        result = "failed" if failed else "completed"
-        self.running = "waiting for next job"
-        self.update(f"{region} / {resource} {result}")
-        self.render(force=True)
-
-    def render(self, *, force: bool = False) -> None:
-        if not self._enabled:
-            return
-        with self._render_lock:
-            now = time.monotonic()
-            if not force and now - self._last_render < self._refresh_interval:
-                return
-            width = 30
-            total_stages = self.total * self.STAGES_PER_PIPELINE
-            finished_stages = min(
-                total_stages,
-                self.done * self.STAGES_PER_PIPELINE
-                + (0 if self.done >= self.total else max(0, self.current_stage - 1)),
-            )
-            fraction = finished_stages / total_stages if total_stages else 0
-            filled = min(width, int(width * fraction))
-            bar = "█" * filled + "░" * (width - filled)
-            spinner = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"[self._spinner_index % 10]
-            self._spinner_index += 1
-            elapsed = ""
-            if self._job_started_at is not None:
-                elapsed = f" | elapsed {_hms(now - self._job_started_at)}"
-            lines = [
-                (
-                    f"Overall  [{bar}] {finished_stages}/{total_stages or '?'} stages "
-                    f"| {self.done}/{self.total or '?'} pipelines"
-                ),
-                (
-                    f"Running: {spinner} {self.running}"
-                    + (
-                        f" — step {self.current_stage}/{self.STAGES_PER_PIPELINE}"
-                        if self.current_stage
-                        else ""
-                    )
-                    + elapsed
-                ),
-                *(f"Status:  {status[:100]}" for status in self.recent),
-            ]
-            if self._lines_rendered:
-                self._stream.write(f"\x1b[{self._lines_rendered}F")
-            for line in lines:
-                self._stream.write(f"\x1b[2K{line}\n")
-            self._stream.flush()
-            self._lines_rendered = len(lines)
-            self._last_render = now
-
-    def _heartbeat(self) -> None:
-        """Refresh elapsed time without producing additional terminal lines."""
-        while not self._stop_event.wait(0.5):
-            self.render(force=True)
+        result = "FAILED" if failed else "done"
+        self._write(f"  -> {region} / {resource} {result} in {_hms(elapsed)}")
 
     def finish(self, status: str, log_path: Path) -> None:
-        self.running = f"finished: {status}"
-        self.update(f"Detailed log: {log_path}")
-        self._stop_event.set()
-        if self._heartbeat_thread is not None:
-            self._heartbeat_thread.join(timeout=1)
-        self.render(force=True)
-        if self._enabled:
-            self._stream.write("\n")
-        else:
-            print(f"RESource {status}: {self.done}/{self.total} jobs finished")
-            print(f"Detailed log: {log_path}")
+        self._end_open_line()
+        display_path = _relative_to_cwd(log_path)
+        self._write(f"RESource {status}: {self.done}/{self.total} jobs finished (failed {self.failed})")
+        self._write(f"Detailed log: {display_path}")
 
 
 class LogStream:
@@ -376,7 +370,7 @@ def write_runtime_log(
         block += f"  {'Region':<6}  {'Resource':<8}  {'Status':<8}  {'Time':>10}  Error\n"
         block += f"  {'──────':<6}  {'────────':<8}  {'──────':<8}  {'──────':>10}  ─────\n"
         for entry in region_log:
-            err = (entry.get("error") or "")[:50]
+            err = entry.get("error") or ""
             block += (
                 f"  {entry['region']:<6}  {entry['resource']:<8}  "
                 f"{entry['status']:<8}  {_hms(entry['elapsed_s']):>10}  {err}\n"
@@ -620,7 +614,7 @@ def main(start_dt: datetime | None = None) -> int:
     status = "PARTIAL" if any_fail else "SUCCESS"
 
     live_status.finish(status, detail_log)
-    live_status.update(f"Runtime summary: {runtime_log_path}")
+    live_status.update(f"Runtime summary: {_relative_to_cwd(runtime_log_path)}")
 
     write_runtime_log(
         runtime_log_path,

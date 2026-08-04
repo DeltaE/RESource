@@ -1,3 +1,4 @@
+import shutil
 from dataclasses import dataclass, field
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -593,7 +594,10 @@ class GWACells(AttributesParser):
         - Destination path is automatically converted to Path object if needed
         """
 
-        destination = utils.ensure_path(destination)
+        destination = utils.ensure_path(destination, is_file=True)
+        if destination.exists() and destination.is_dir():
+            # Recover from stale state where destination file path was created as a directory.
+            shutil.rmtree(destination)
 
         with requests.get(url, stream=True, timeout=(30, 300)) as response:
             response.raise_for_status()

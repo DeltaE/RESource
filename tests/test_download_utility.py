@@ -90,7 +90,7 @@ def test_active_canadian_configs_nest_government_custom_layers() -> None:
         conservation = [
             vector
             for vector in custom_layers.get("vectors", [])
-            if vector.get("name") == "conservation_lands"
+            if vector.get("name") == "CAN_conservation_lands"
         ]
         assert len(conservation) == 1
         assert conservation[0]["provider"] == "government_conservation"

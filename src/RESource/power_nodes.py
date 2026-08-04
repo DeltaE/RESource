@@ -363,7 +363,7 @@ class GridNodeLocator(AttributesParser):
         #     utils.print_update(level=PRINT_LEVEL_BASE,message=f"ERA5 Cells Filtered based on Proximity to Tx Nodes . Size: {len(cells_gdf_with_station_data)}\n")
         # else:
         #     utils.print_update(level=PRINT_LEVEL_BASE,message="Skipping proximity filtering, returning all cells with station data")
-        # utils.print_info("Proximity filtering can be applied by enabling 'apply_proximity_filter'=True and setting 'proximity_filter' in the configuration.")
+        # utils.print_info("Proximity filtering can be applied by enabling 'apply_proximity_filter'=True and setting 'proximity_filter_km' in the configuration.")
 
         return cells_gdf_with_station_data  # cells_within_proximity_gdf
 

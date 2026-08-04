@@ -65,30 +65,25 @@ _COMPACT_OUTPUT = False
 
 KNOWN_CONFIG_TOP_LEVEL_KEYS = {
     "Affiliation",
-    "CODERS",
-    "CORINE",
     "Developer",
-    "EU_DEM",
-    "GADM",
-    "GAEZ",
-    "GWA",
-    "NREL",
-    "OSM_data",
     "Release_Year",
     "Scenario",
     "Title",
-    "WorldPop",
-    "capacity_disaggregation",
+    "admin_boundary",  # GADM
     "country",
     "custom_land_layers",
-    "cutout",
     "default_CRS",
+    "demand_indicators",  # WorldPop, Gov (Population, CEEI)
     "description",
     "economic_parameters",
-    "lands",
+    "filters",  # per-resource siting exclusion buffers (vector_buffers)
+    "infrastructure",  # OSM, CODERS, transmission
+    "lands",  # GAEZ, CORINE, EU_DEM, and any raster-processing defaults
     "multi_country_flag",
     "region_mapping",
+    "technology",  # annual_technology_baseline (NREL ATB), resource_specs (per-resource cost/sizing model)
     "version",
+    "weather",  # cutout, GWA
     "weather_year",
 }
 
@@ -479,23 +474,25 @@ def get_available_column(dataframe: list, alternatives: list):
     return None
 
 
-def ensure_path(save_to: str | Path) -> Path:
+def ensure_path(save_to: str | Path, is_file: bool = False) -> Path:
     """
-    Ensures that the given argument is a Path object. If the user provides a string,
-    it converts it to a Path object to facilitate operations like directory creation.
+    Ensures that the given argument is a Path object and creates the required directory path.
 
     ## Args:
-    - save_to (str | Path): The path input, either as a string or a Path object.
+        - save_to (str | Path): The path input, either as a string or a Path object.
+        - is_file (bool): If True, create only the parent directory and return the file path.
+            If False, create the directory represented by save_to.
 
     ## Returns:
     - Path: The input converted (if necessary) to a Path object.
     """
     if not isinstance(save_to, Path):
-        Warning(
-            f">> Given instance for 'destination (save_to)' is of type: {type(save_to)}. Converting it to a Path"
-        )
         save_to = Path(save_to)
-    save_to.mkdir(parents=True, exist_ok=True)
+
+    if is_file:
+        save_to.parent.mkdir(parents=True, exist_ok=True)
+    else:
+        save_to.mkdir(parents=True, exist_ok=True)
 
     return save_to
 

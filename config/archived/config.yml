@@ -35,7 +35,7 @@ regional_info:
         miny : 45.25
         maxy : 60.25
     conservation_lands_provincial_id: 2 # CPACD data, col : LOC, for more info check https://data-donnees.az.ec.gc.ca/api/file?path=/species%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FProtectedConservedAreaUserManual.pdf
-    conservation_lands_datafile: data/downloaded_data/Gov/Conservation_Lands/BC/CPCAD_BC_union.pkl
+    conservation_lands_datafile: data/downloaded_data/custom_land_layers/Conservation_Lands/BC/CPCAD_BC_union.pkl
     region_mapping:
         'Northern Rockies': 1
         'Stikine': 2
@@ -86,8 +86,8 @@ Gov:
     # consideration:
     #   solar: 'yes'
     #   wind: 'yes'
-    data_root: 'data/downloaded_data/Gov/Conservation_Lands'
-    zip_expand: 'data/downloaded_data/Gov/Conservation_Lands/ProtectedConservedArea_2022'
+    data_root: 'data/downloaded_data/custom_land_layers/Conservation_Lands'
+    zip_expand: 'data/downloaded_data/custom_land_layers/Conservation_Lands/ProtectedConservedArea_2022'
     geodatabase_file: ProtectedConservedArea_2022.gdb
     IUCN_CAT: #  Source: https://data-donnees.az.ec.gc.ca/api/file?path=/species%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FProtectedConservedAreaUserManual.pdf
       1: 'Strict  Nature Reserve'
@@ -101,7 +101,7 @@ Gov:
       9 : 'OECM areas'
     data_license: https://catalogue.ec.gc.ca/geonetwork/oilsands/api/records/6c343726-1e92-451a-876a-76e17d398a1c
   Population:
-    root: 'data/downloaded_data/Gov/Population'
+    root: 'data/downloaded_data/custom_land_layers/Population'
     datafile: 'Population_Projections.csv'
     skiprows: 6 # top 6 rows are data descriptions
     different_name_mapping: # these names differs with GADM naming
@@ -114,7 +114,7 @@ Gov:
       Stikine (Census Division): Stikine
       Northern Rockies (Census Division): Northern Rockies
   CEEI: #Community Energy and Emissions Inventory
-    root: 'data/downloaded_data/Gov/CEEI'
+    root: 'data/downloaded_data/custom_land_layers/CEEI'
     datafile:
       buildings: bc_utilities_energy_and_emissions_data_at_the_community_level.xlsx
       transportation: bc_on_road_transportation_data_at_the_community_level.xlsx

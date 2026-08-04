@@ -304,11 +304,11 @@ class CellCapacityProcessor(AttributesParser):
 
     #         utils.print_update(level=PRINT_LEVEL_BASE+1,
     #                            message=f"{__name__}| Extracting cost attributes...")
-    #         self.transmission_config = self.config.get('capacity_disaggregation', {}).get('transmission', {}) # INHERITED ATTRIBUTE from AttributesParser
+    #         self.transmission_config = self.config.get('infrastructure', {}).get('transmission', {}) # INHERITED ATTRIBUTE from AttributesParser
     #         grid_connection_cost_per_km = self.transmission_config.get('grid_connection_cost_per_Km', 0)
     #         utils.print_info(f"{__name__}| @ Line: {inspect.currentframe().f_lineno-1} | `grid_connection_cost_per_km` is set to {grid_connection_cost_per_km} million $/km. If this is not set in the config, it will be set to 0.")
 
-    #         tx_line_rebuild_cost = self.disaggregation_config.get('transmission', {}).get('tx_line_rebuild_cost', 0)
+    #         tx_line_rebuild_cost = self.transmission_config.get('tx_line_rebuild_cost', 0)
     #         utils.print_info(f"{__name__}| @ Line: {inspect.currentframe().f_lineno-1} | `tx_line_rebuild_cost` is set to {tx_line_rebuild_cost} million $. If this is not set in the config, it will be set to 0.")
 
     #         if resource_atb is None:
@@ -393,9 +393,7 @@ class CellCapacityProcessor(AttributesParser):
             level=PRINT_LEVEL_BASE + 1, message=f"{__name__}| Extracting cost attributes..."
         )
 
-        self.transmission_config = self.config.get("capacity_disaggregation", {}).get(
-            "transmission", {}
-        )
+        self.transmission_config = self.config.get("infrastructure", {}).get("transmission", {})
         grid_connection_cost_per_km = float(
             self.transmission_config.get("grid_connection_cost_per_Km", 0)
         )
@@ -403,9 +401,7 @@ class CellCapacityProcessor(AttributesParser):
             f"{__name__}| `grid_connection_cost_per_km` = {grid_connection_cost_per_km} million $/km."
         )
 
-        tx_line_rebuild_cost = float(
-            self.disaggregation_config.get("transmission", {}).get("tx_line_rebuild_cost", 0)
-        )
+        tx_line_rebuild_cost = float(self.transmission_config.get("tx_line_rebuild_cost", 0))
         utils.print_info(f"{__name__}| `tx_line_rebuild_cost` = {tx_line_rebuild_cost} million $.")
 
         resource_cfg = self.resource_disaggregation_config or {}

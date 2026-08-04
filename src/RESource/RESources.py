@@ -344,8 +344,6 @@ class RESources_builder(AttributesParser):
                 level=PRINT_LEVEL_BASE + 3,
                 message=f"{__name__} | Using CODERS substations for connection point analysis...",
             )
-            # CODERS credentials are required only for this connection strategy.
-            # Defer initialization so OSM workflows remain credential-free.
             try:
                 self.coders = CODERSData(**self.required_args)
                 if not self.coders.api_user:
@@ -367,10 +365,10 @@ class RESources_builder(AttributesParser):
             except Exception as exc:
                 utils.print_update(
                     level=PRINT_LEVEL_BASE + 2,
-                    message=f"{__name__} | CODERS unavailable ({exc}); falling back to OSM.",
+                    message=f"{__name__} | CODERS unavailable ({exc}); aborting Canada workflow.",
                     alert=True,
                 )
-                return self._find_grid_nodes_from_osm()
+                raise
             self.region_grid_cells_cap_with_nodes = (
                 self.gridNodesProcessor.find_grid_nodes_ERA5_cells(
                     self.grid_ss, self.store_grid_cells

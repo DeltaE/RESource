@@ -3,44 +3,49 @@ extends: ../base.yaml
 Scenario:
   run_id: strict_policy_aeroway_CPCAD_buffer
   Description: >-
-    Policy scenario; buffer zones applied around aeroway lands and CPCAD areas,
-    restricting resource siting.
+    Policy scenario; buffer zones applied around aeroway lands and CPCAD areas, restricting resource siting.
 
 region_mapping:
   BC:
     timezone_convert: Etc/GMT+7
 
-GAEZ:
-  raster_types:
-  - name: exclusion_areas
-    raster: exclusion_2017.tif
-    zip_extract_direct: LR/excl
-    color_map: OrRd
-    stepwise_plot_title: Excluding Global Exclusion Areas
-    class_exclusion:
-      solar: [2, 3, 4, 5, 6, 7]
-      wind: [2, 3, 4, 5, 6, 7]
-      buffer:
-        solar: 0
-        wind: 0
-  - name: terrain_resources
-    raster: slpmed05.tif
-    zip_extract_direct: LR/ter
-    color_map: terrain
-    stepwise_plot_title: Excluding Terrain Slope
-    class_exclusion:
-      solar: [8, 9]
-      wind: [7, 8, 9]
+lands:
+  GAEZ:
+    raster_types:
+    - name: exclusion_areas
+      raster: exclusion_2017.tif
+      zip_extract_direct: LR/excl
+      color_map: OrRd
+      stepwise_plot_title: Excluding Global Exclusion Areas
+      class_exclusion:
+        solar: [ 2, 3, 4, 5, 6, 7 ]
+        wind: [ 2, 3, 4, 5, 6, 7 ]
+        buffer:
+          solar: 0
+          wind: 0
+    - name: terrain_resources
+      raster: slpmed05.tif
+      zip_extract_direct: LR/ter
+      color_map: terrain
+      stepwise_plot_title: Excluding Terrain Slope
+      class_exclusion:
+        solar: [ 8, 9 ]
+        wind: [ 7, 8, 9 ]
 
-cutout:
-  module: [era5]
-  snapshots:
-    start: ['2023-01-01 07:00:00']
-    end: ['2024-01-01 06:00:00']
+weather:
+  cutout:
+    module: [ era5 ]
+    snapshots:
+      start: [ '2023-01-01 07:00:00' ]
+      end: [ '2024-01-01 06:00:00' ]
 
-capacity_disaggregation:
+technology:
+  resource_specs:
+    solar:
+      cost_data: data/processed_data/solar/utility_PV_Class5_cost_moderate_NREL_ATB2024.csv
+
+filters:
   solar:
-    cost_data: data/processed_data/solar/utility_PV_Class5_cost_moderate_NREL_ATB2024.csv
     vector_buffers:
     - aeroway:
         buffer_mapping_key: aeroway
@@ -86,28 +91,3 @@ capacity_disaggregation:
           Protected Area with Sustainable Use of Natural Resources: 2000
           Interim Sites (unknown specifics): 1000
           OECM areas: 300
-
-custom_land_layers:
-  rasters:
-  - name: CanGov_LandCover_2020
-    source: https://datacube-prod-data-public.s3.ca-central-1.amazonaws.com/store/land/landcover/landcover-2020-classification.tif
-    root: data/downloaded_data/custom_land_layers/LandCover
-    raster: landcover-2020-classification.tif
-    data_license: https://open.canada.ca/en/open-government-licence-canada
-    source_res_meters: 30
-    target_res_meters: 100
-    legends: src/RESource/assets/legends/LandCover_CANgov_2020_legend.csv
-    class_inclusion:
-      solar: [8, 10, 13, 15, 16, 17]
-      wind: [2, 5, 6, 8, 10, 13, 15, 16]
-  vectors:
-    $append:
-    - name: CAN_Agricultural_Land_Reserve_ALR
-      last_updated: 2025-12
-      source: https://www.alc.gov.bc.ca/alr-maps/
-      crs: EPSG:3005
-      root: data/downloaded_data/custom_land_layers/ALC
-      alr_lines: alr_lines/ALR_Lines/ALR_Lines.shp
-      alr_polygons: alr_polygons/ALR_Polygons/ALR_Polygons.shp
-      geojson: alr_merged.geojson
-      data_license: Not_found

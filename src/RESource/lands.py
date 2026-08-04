@@ -34,6 +34,7 @@ configurable and extensible for different regions and data sources.
 """
 
 import os
+import shutil
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from zipfile import ZipFile
@@ -189,7 +190,7 @@ class ConservationLands(AttributesParser):
     ```yaml
     custom_land_layers:
       vectors:
-        - name: conservation_lands
+        - name: CAN_conservation_lands
           provider: government_conservation
         url: "https://www.donneesquebec.ca/recherche/dataset/..."
         root: "data/downloaded_data/conservation"
@@ -372,69 +373,90 @@ class ConservationLands(AttributesParser):
             )  # INHERITED METHOD from GADMBoundaries
 
             layers: list = fiona.listlayers(gdb_file_path)
+            selected_layer = gdb_layer
+            if selected_layer not in layers:
+                fallback_layers = [
+                    layer_name
+                    for layer_name in layers
+                    if layer_name.lower().startswith("protectedconservedarea_")
+                    and "comment" not in layer_name.lower()
+                    and "delisted" not in layer_name.lower()
+                ]
+                if fallback_layers:
+                    selected_layer = fallback_layers[0]
+                    utils.print_warning(
+                        f"{__name__}| Layer '{gdb_layer}' not found. Falling back to '{selected_layer}'."
+                    )
+                else:
+                    raise ValueError(
+                        "No suitable conservation layer found in the GDB. "
+                        f"Configured layer: '{gdb_layer}'. Available layers: {layers}"
+                    )
 
-            try:
-                assert gdb_layer in layers, (
-                    f"Layer '{gdb_layer}' not found in the GDB file. Please configure the valid 'gdb_layer' key in config file."
-                )
-                utils.print_update(
-                    level=PRINT_LEVEL_BASE + 2,
-                    message=f"{__name__}| Loading  {gdb_layer} Layer from the GDB file.",
-                )
+            utils.print_update(
+                level=PRINT_LEVEL_BASE + 2,
+                message=f"{__name__}| Loading {selected_layer} layer from the GDB file.",
+            )
 
-                # Load the .gdb file as a GeoDataFrame
-                gdf = gpd.read_file(
-                    gdb_file_path, mask=self.region_boundary, layer=gdb_layer
-                )  # Specifying layer and mask to load only the relevant region, faster loading
-                gdf.to_crs(self.region_boundary.crs, inplace=True)
+            # Load the .gdb file as a GeoDataFrame
+            gdf = gpd.read_file(
+                gdb_file_path, mask=self.region_boundary, layer=selected_layer
+            )  # Specifying layer and mask to load only the relevant region, faster loading
+            gdf.to_crs(self.region_boundary.crs, inplace=True)
 
-                gdf["geometry"] = gdf["geometry"].simplify(
-                    geom_simplification_tolerance
-                )  # Simplify geometries to reduce complexity that are not relevant at ERA5 resolution and faster processing
+            gdf["geometry"] = gdf["geometry"].simplify(
+                geom_simplification_tolerance
+            )  # Simplify geometries to reduce complexity that are not relevant at ERA5 resolution and faster processing
 
-                # Map IUCN categories to descriptions
-                IUCN_CAT = self.conserved_lands_cfg["IUCN_CAT_mapping"]
-                gdf["IUCN_CAT_desc"] = gdf["IUCN_CAT"].map(IUCN_CAT)
-                gdf.to_pickle(provincial_file_path)
-            except AssertionError as e:
-                utils.print_update(
-                    level=PRINT_LEVEL_BASE + 1, message=f"{__name__}| {e}", alert=True
-                )
+            # Map IUCN categories to descriptions
+            IUCN_CAT = self.conserved_lands_cfg["IUCN_CAT_mapping"]
+            gdf["IUCN_CAT_desc"] = gdf["IUCN_CAT"].map(IUCN_CAT)
+            gdf.to_pickle(provincial_file_path)
 
         return gdf
 
     def __get_conserved_lands__(self) -> Path:
         """Download the source ZIP file, extract contents, and return the .gdb file path."""
-        # Check if the extraction directory exists
+        gdb_file_path = next(self.extraction_dir.rglob("*.gdb"), None)
+        if gdb_file_path is not None:
+            utils.print_update(
+                level=PRINT_LEVEL_BASE + 1,
+                message=f"Using extracted conservation data from {self.extraction_dir}.",
+            )
+            return gdb_file_path
+
+        # No extracted GDB found. Make sure a ZIP is available.
+        if self.zip_file_path.exists():
+            utils.print_update(
+                level=PRINT_LEVEL_BASE + 1,
+                message=f"ZIP file {self.zip_file_path} already exists, skipping download.",
+            )
+        else:
+            utils.print_update(
+                level=PRINT_LEVEL_BASE + 1,
+                message="Downloading Canadian Protected and Conserved Areas Database (CPCAD)",
+            )
+            self.zip_file_path.parent.mkdir(parents=True, exist_ok=True)
+            utils.download_data(self.source_url, self.zip_file_path)
+            utils.print_update(
+                level=PRINT_LEVEL_BASE + 1,
+                message=f"Downloaded ZIP file to {self.zip_file_path}",
+            )
+
+        # Recreate extraction dir to recover from stale/partial previous extractions.
         if self.extraction_dir.exists():
             utils.print_update(
                 level=PRINT_LEVEL_BASE + 1,
-                message=f"Extraction directory {self.extraction_dir} already exists, skipping download and extraction.",
+                message=(
+                    f"Extraction directory {self.extraction_dir} exists but no .gdb was found. "
+                    "Re-extracting archive."
+                ),
             )
-        else:
-            if self.zip_file_path.exists():
-                utils.print_update(
-                    level=PRINT_LEVEL_BASE + 1,
-                    message=f"ZIP file {self.zip_file_path} already exists, skipping download.",
-                )
-            else:
-                # Download the ZIP file
-                utils.print_update(
-                    level=PRINT_LEVEL_BASE + 1,
-                    message="Downloading Canadian Protected and Conserved Areas Database (CPCAD)",
-                )
-                self.zip_file_path.parent.mkdir(parents=True, exist_ok=True)
-                utils.download_data(self.source_url, self.zip_file_path)
-                utils.print_update(
-                    level=PRINT_LEVEL_BASE + 1,
-                    message=f"Downloaded ZIP file to {self.zip_file_path}",
-                )
+            shutil.rmtree(self.extraction_dir)
 
-            # Create the extraction directory and extract ZIP contents
-            self.extraction_dir.mkdir(parents=True, exist_ok=True)
-            with ZipFile(self.zip_file_path, "r") as zip_ref:
-                zip_ref.extractall(self.extraction_dir)
-            # print(f"Extracted files to {self.extraction_dir}")
+        self.extraction_dir.mkdir(parents=True, exist_ok=True)
+        with ZipFile(self.zip_file_path, "r") as zip_ref:
+            zip_ref.extractall(self.extraction_dir)
 
         # Load the first .gdb file found in the extraction directory
         gdb_file_path = next(self.extraction_dir.rglob("*.gdb"), None)
@@ -625,7 +647,7 @@ class LandContainer(AttributesParser):
 
     custom_land_layers:
       vectors:
-        - name: conservation_lands
+        - name: CAN_conservation_lands
           provider: government_conservation
           url: "..."
           root: "data/downloaded_data/custom_land_layers/Conservation_Lands"
@@ -774,7 +796,7 @@ class LandContainer(AttributesParser):
         else:
             utils.print_warning(
                 f"{__name__}| 'conserved_lands_CAN' not initiated. Check "
-                "custom_land_layers.vectors[name=conservation_lands] in the config."
+                "custom_land_layers.vectors[name=CAN_conservation_lands] in the config."
             )
             self.conserved_lands_CAN = None
         # Initialize conservation_lands_region_gdf attribute
@@ -996,7 +1018,7 @@ class LandContainer(AttributesParser):
             message=f"{__name__}| Loading vector layers for {self.region_name}...",
         )
 
-        vector_configs: list[dict] = self.resource_disaggregation_config["vector_buffers"]
+        vector_configs: list[dict] = self.get_resource_filters_config()["vector_buffers"]
 
         for vector_config_item in vector_configs:
             # vector_config_item is a dictionary
@@ -1126,6 +1148,8 @@ class LandContainer(AttributesParser):
 
                 # loader returns an updated config dict (with 'gdf' inside)
                 custom_cfg = load_custom_vector_layer(custom_cfg)
+                if custom_cfg is None:
+                    continue
 
                 gdf = custom_cfg.get("gdf")
                 if gdf is None or gdf.empty:
@@ -1153,6 +1177,159 @@ def load_custom_vector_layer(vector_cfg: dict):
     reproject and clip to the region boundary if available.
     """
     root = Path(vector_cfg["root"])
+
+    def _prepare_alr_geojson_if_missing(cfg: dict) -> None:
+        """Build ALR merged geojson from source zips when the target datafile is missing."""
+        if cfg.get("name") != "CAN_Agricultural_Land_Reserve_ALR":
+            return
+
+        geojson_rel = cfg.get("geojson")
+        if not geojson_rel:
+            return
+
+        geojson_path = root / geojson_rel
+
+        sources = cfg.get("sources", {})
+        alr_lines_url = sources.get(
+            "alr_lines_zip",
+            "https://www.alc.gov.bc.ca/assets/alc/assets/about-the-alc/alr-and-maps/"
+            "maps-and-gis/gis-mapping-folder/alr_lines.zip",
+        )
+        alr_polygons_url = sources.get(
+            "alr_polygons_zip",
+            "https://www.alc.gov.bc.ca/assets/alc/assets/about-the-alc/alr-and-maps/"
+            "maps-and-gis/gis-mapping-folder/alr_polygons.zip",
+        )
+        alr_readme_url = sources.get(
+            "metadata_readme_pdf",
+            "https://www.alc.gov.bc.ca/app/uploads/sites/763/2023/05/ALR_Metadata_readme.pdf",
+        )
+
+        keep_ext = {
+            ".shp",
+            ".dbf",
+            ".shx",
+            ".prj",
+            ".cpg",
+            ".qix",
+            ".sbn",
+            ".sbx",
+            ".aih",
+            ".ain",
+            ".atx",
+            ".ixs",
+            ".mxs",
+            ".xml",
+        }
+
+        def _cleanup_to_required_shapefile_bundle(shp_path: Path):
+            if not shp_path.exists():
+                return
+            shp_dir = shp_path.parent
+            shp_stem = shp_path.stem
+            for item in shp_dir.iterdir():
+                if item.is_dir():
+                    shutil.rmtree(item)
+                    continue
+                if item.stem == shp_stem and item.suffix.lower() in keep_ext:
+                    continue
+                item.unlink(missing_ok=True)
+
+            # Remove macOS metadata folders/files that can appear after zip extraction.
+            macosx_dir = shp_dir.parent / "__MACOSX"
+            if macosx_dir.exists() and macosx_dir.is_dir():
+                shutil.rmtree(macosx_dir)
+
+            for meta in shp_dir.parent.glob("._*"):
+                if meta.is_file():
+                    meta.unlink(missing_ok=True)
+
+        def _cleanup_archives_and_docs(*paths: Path):
+            for artifact in paths:
+                if artifact.exists():
+                    artifact.unlink(missing_ok=True)
+
+        root.mkdir(parents=True, exist_ok=True)
+
+        lines_zip = root / "alr_lines.zip"
+        polygons_zip = root / "alr_polygons.zip"
+        readme_path = root / "ALR_Metadata_readme.pdf"
+
+        alr_lines_shp = root / cfg.get("alr_lines", "alr_lines/ALR_Lines/ALR_Lines.shp")
+        alr_polygons_shp = root / cfg.get("alr_polygons", "alr_polygons/ALR_Polygons/ALR_Polygons.shp")
+
+        # If merged file already exists, still enforce storage hygiene requested by user.
+        if geojson_path.exists():
+            _cleanup_to_required_shapefile_bundle(alr_lines_shp)
+            _cleanup_to_required_shapefile_bundle(alr_polygons_shp)
+            _cleanup_archives_and_docs(lines_zip, polygons_zip, readme_path)
+            return
+
+        readme_path = root / "ALR_Metadata_readme.pdf"
+        if not readme_path.exists():
+            utils.print_update(
+                level=PRINT_LEVEL_BASE + 1,
+                message=f"{__name__}| Downloading ALR metadata README to {readme_path}",
+            )
+            utils.download_data(alr_readme_url, readme_path)
+
+        if not alr_lines_shp.exists():
+            utils.print_update(
+                level=PRINT_LEVEL_BASE + 1,
+                message=f"{__name__}| Downloading ALR lines data to {lines_zip}",
+            )
+            utils.download_data(alr_lines_url, lines_zip)
+            extract_dir = root / "alr_lines"
+            extract_dir.mkdir(parents=True, exist_ok=True)
+            with ZipFile(lines_zip, "r") as zip_ref:
+                zip_ref.extractall(extract_dir)
+
+        if not alr_polygons_shp.exists():
+            utils.print_update(
+                level=PRINT_LEVEL_BASE + 1,
+                message=f"{__name__}| Downloading ALR polygons data to {polygons_zip}",
+            )
+            utils.download_data(alr_polygons_url, polygons_zip)
+            extract_dir = root / "alr_polygons"
+            extract_dir.mkdir(parents=True, exist_ok=True)
+            with ZipFile(polygons_zip, "r") as zip_ref:
+                zip_ref.extractall(extract_dir)
+
+        if not alr_lines_shp.exists() or not alr_polygons_shp.exists():
+            raise FileNotFoundError(
+                "ALR source shapefiles were not found after download and extraction. "
+                f"Expected: {alr_lines_shp} and {alr_polygons_shp}"
+            )
+
+        utils.print_update(
+            level=PRINT_LEVEL_BASE + 1,
+            message=f"{__name__}| Building merged ALR GeoJSON at {geojson_path}",
+        )
+        alr_lines = gpd.read_file(alr_lines_shp)
+        alr_polygons = gpd.read_file(alr_polygons_shp)
+        merged_gdf = process_vectors_to_single_polygon(alr_lines, alr_polygons)
+
+        target_crs = cfg.get("crs")
+        if target_crs:
+            merged_gdf = merged_gdf.to_crs(target_crs)
+
+        geojson_path.parent.mkdir(parents=True, exist_ok=True)
+        merged_gdf.to_file(geojson_path, driver="GeoJSON")
+
+        # Keep only the shapefile bundles needed for reproducibility.
+        _cleanup_to_required_shapefile_bundle(alr_lines_shp)
+        _cleanup_to_required_shapefile_bundle(alr_polygons_shp)
+        _cleanup_archives_and_docs(lines_zip, polygons_zip, readme_path)
+
+        utils.print_update(
+            level=PRINT_LEVEL_BASE + 1,
+            message=(
+                f"{__name__}| ALR merged GeoJSON created at {geojson_path}. "
+                "Removed ALR ZIPs and README; retained required shapefile components only."
+            ),
+        )
+
+    _prepare_alr_geojson_if_missing(vector_cfg)
 
     # Prefer Parquet if available
     gdf = None
@@ -1425,7 +1602,7 @@ def load_layers_to_excluder(
         )
 
     utils.print_info(
-        f"{__name__}| The order of loading vector layers mimics the given order in config file under keys: 'capacity_disaggregation' and then <resource_type> 'solar' or 'wind' and then 'vector_buffers'. However, the collective impact of layers on final availability is same "
+        f"{__name__}| The order of loading vector layers mimics the given order in config file under keys: 'filters' and then <resource_type> 'solar' or 'wind' and then 'vector_buffers'. However, the collective impact of layers on final availability is same "
     )
     # 4. Vector layers
     for i, v in enumerate(vector_configs):

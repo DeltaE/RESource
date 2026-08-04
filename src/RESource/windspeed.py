@@ -126,6 +126,12 @@ def rescale_cutout_windspeed(cutout: atlite.Cutout, wind_assets: pd.DataFrame):
     utils.print_info(
         f"{__name__}| @Line {inspect.currentframe().f_lineno + 1} | ⚠️ Initiating Memory intensive process and may take a while to process..."
     )
+    # `wnd` is dask-backed (cutout data is lazy by design). scale_wind() and
+    # get_XY() below call .sel(...).values once per grid cell, which — left
+    # lazy — re-triggers a fresh disk read of the underlying netCDF chunks
+    # on every single call, even for cells that share the same ERA5 pixel.
+    # Loading once here turns those into in-memory NumPy lookups.
+    wnd = wnd.load()
     scaled_wind = wind_assets.apply(lambda x: scale_wind(x, wnd), axis=1)
     xy = wind_assets.apply(lambda x: get_XY(x, wnd), axis=1)
 

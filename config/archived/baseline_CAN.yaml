@@ -133,7 +133,7 @@ cutout:
 Gov:
   conservation_lands:
     url: https://data-donnees.az.ec.gc.ca/api/file?path=%2Fspecies%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FDatabases%2FProtectedConservedArea_2023.zip
-    root: data/downloaded_data/Gov/Conservation_Lands
+    root: data/downloaded_data/custom_land_layers/Conservation_Lands
     data_name: ProtectedConservedArea
     gdb_layer: ProtectedConservedArea_2023
     IUCN_CAT_mapping:
@@ -183,7 +183,7 @@ Gov:
       12: not known or reported
     data_license: https://catalogue.ec.gc.ca/geonetwork/oilsands/api/records/6c343726-1e92-451a-876a-76e17d398a1c
   Population:
-    root: data/downloaded_data/Gov/Population
+    root: data/downloaded_data/custom_land_layers/Population
     datafile: Population_Projections.csv
     skiprows: 6
     different_name_mapping:
@@ -196,7 +196,7 @@ Gov:
       Stikine (Census Division): Stikine
       Northern Rockies (Census Division): Northern Rockies
   CEEI:
-    root: data/downloaded_data/Gov/CEEI
+    root: data/downloaded_data/custom_land_layers/CEEI
     datafile:
       buildings: bc_utilities_energy_and_emissions_data_at_the_community_level.xlsx
       transportation: bc_on_road_transportation_data_at_the_community_level.xlsx
@@ -424,7 +424,7 @@ custom_land_layers:
   rasters:
   - name: CanGov_LandCover_2020
     source: https://datacube-prod-data-public.s3.ca-central-1.amazonaws.com/store/land/landcover/landcover-2020-classification.tif
-    root: data/downloaded_data/Gov/LandCover
+    root: data/downloaded_data/custom_land_layers/LandCover
     raster: landcover-2020-classification.tif
     data_license: https://open.canada.ca/en/open-government-licence-canada
     source_res_meters: 30

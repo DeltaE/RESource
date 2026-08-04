@@ -58,7 +58,9 @@ class AttributesParser:
             self.weather_year = int(self.weather_year)
 
         ## Process the attributes that are required for the workflow and are extracted from the config file. These attributes will be used by the child classes to perform the data supply-chain steps.
-        self.disaggregation_config: dict[str, dict] = self.config.get("capacity_disaggregation", "")
+        self.disaggregation_config: dict[str, dict] = self.config.get("technology", {}).get(
+            "resource_specs", ""
+        )
         self.resource_disaggregation_config = self.get_resource_disaggregation_config()
         self.region_code_validity = self.is_region_code_valid()
         gadm_config = self.get_gadm_config().get("datafield_mapping", {})
@@ -218,6 +220,9 @@ class AttributesParser:
 
     def get_government_custom_layers(self) -> dict:
         """Return government layers from the current or archived config schema."""
+        demand_indicators_gov = self.config.get("demand_indicators", {}).get("Gov")
+        if demand_indicators_gov is not None:
+            return demand_indicators_gov
         nested = self.get_custom_land_layers_config().get("Gov")
         if nested is not None:
             return nested
@@ -228,7 +233,10 @@ class AttributesParser:
         vectors = self.get_custom_land_layers_config().get("vectors", []) or []
         if isinstance(vectors, list):
             for vector in vectors:
-                if isinstance(vector, dict) and vector.get("name") == "conservation_lands":
+                if isinstance(vector, dict) and vector.get("name") in (
+                    "CAN_conservation_lands",
+                    "conservation_lands",  # legacy name, pre-CAN_ prefix
+                ):
                     return vector
         return self.get_government_custom_layers().get("conservation_lands", {})
 
@@ -296,12 +304,18 @@ class AttributesParser:
 
     def get_resource_disaggregation_config(self) -> dict[str, dict]:
         """
-        Returns the capacity disaggregation configuration for the given resource type.
+        Returns the per-resource cost/sizing configuration for the given resource type.
         If the resource type is None or not found, returns an empty dictionary.
         """
-        # Access 'capacity_disaggregation' and then the specific resource type (e.g., 'solar' or 'wind')
+        # Access 'technology.resource_specs' and then the specific resource type (e.g., 'solar' or 'wind')
 
-        return self.config.get("capacity_disaggregation", {}).get(self.resource_type, {})
+        return self.config.get("technology", {}).get("resource_specs", {}).get(
+            self.resource_type, {}
+        )
+
+    def get_resource_filters_config(self) -> dict[str, dict]:
+        """Returns the siting-filter configuration (e.g. vector_buffers) for the given resource type."""
+        return self.config.get("filters", {}).get(self.resource_type, {})
 
     def get_vis_dir(self) -> Path:
         vis_path = Path(
@@ -313,19 +327,19 @@ class AttributesParser:
         return vis_path
 
     def get_CLC_raster_config(self) -> dict[str, dict]:
-        return self.config.get("CORINE", {})
+        return self.config.get("lands", {}).get("CORINE", {})
 
     def get_gaez_data_config(self) -> dict[str, dict]:
-        return self.config.get("GAEZ", {})
+        return self.config.get("lands", {}).get("GAEZ", {})
 
     def get_atb_config(self) -> dict[str, dict]:
-        return self.config.get("NREL", {}).get("ATB", {})
+        return self.config.get("technology", {}).get("annual_technology_baseline", {})
 
     def get_cutout_config(self) -> dict[str, dict]:
-        return self.config.get("cutout", {})
+        return self.config.get("weather", {}).get("cutout", {})
 
     def get_gadm_config(self) -> dict[str, dict]:
-        return self.config.get("GADM", {})
+        return self.config.get("admin_boundary", {}).get("GADM", {})
 
     def get_country(self) -> str:
         return self.config.get("country", None)
@@ -334,7 +348,7 @@ class AttributesParser:
         return self.config.get("custom_land_layers", {})
 
     def get_osm_config(self):
-        return self.config["OSM_data"]
+        return self.config.get("infrastructure", {}).get("OSM", {})
 
     # def get_region_timezone(self): # upgraded the method to include error handling and more informative messages.
     #     return self.config['region_mapping'][self.region_short_code]['timezone_convert']
@@ -343,7 +357,7 @@ class AttributesParser:
         return self.config.get("grid_cell_resolution", {})
 
     def get_buses_path(self):
-        buses_path = self.resource_disaggregation_config.get("transmission", {}).get("buses")
+        buses_path = self.config.get("infrastructure", {}).get("transmission", {}).get("buses")
         return Path(buses_path) if buses_path else None
 
     def get_processed_substations_path(self, source_path: Path) -> Path:
@@ -358,7 +372,7 @@ class AttributesParser:
         return self.resource_disaggregation_config["turbines"]
 
     def get_gwa_config(self):
-        return self.config.get("GWA", {})
+        return self.config.get("weather", {}).get("GWA", {})
 
     def get_resource_landuse_intensity(self):
         self.resource_disaggregation_config: dict = self.get_resource_disaggregation_config()
@@ -373,7 +387,7 @@ class AttributesParser:
         Returns the grid proximity in kilometers.
         """
         return (
-            self.config.get("capacity_disaggregation")
+            self.config.get("infrastructure", {})
             .get("transmission", {})
-            .get("grid_proximity_km", 100)
+            .get("proximity_filter_km", 100)
         )

@@ -440,6 +440,12 @@ class Timeseries(AttributesParser):
             self.OEDB_config: dict = self.wind_turbine_config[turbine_model_source]
             self.OEDB_turbines = OEDBTurbines(self.OEDB_config)
             self.OEDB_turbine_config = self.OEDB_turbines.fetch_turbine_config(model)
+            if self.OEDB_turbine_config is None:
+                raise RuntimeError(
+                    f"{__name__}| Could not obtain OEDB turbine config for model '{model}' "
+                    "(no local cache and the live OEDB fetch failed — see the "
+                    "'!! Failed to fetch OEDB data' message above for the underlying cause)."
+                )
             self.turbine_config = self.OEDB_turbine_config
 
         # Step 1.4: Set arguments for the atlite cutout's wind method

@@ -39,42 +39,41 @@ STEP_CONFIG_KEYS: dict[str, list[str]] = {
     "grid_cells": [
         "grid_cell_resolution",
         "region_mapping",
-        "GADM",
+        "admin_boundary",  # GADM
         "default_CRS",
     ],
     "grid_nodes": [
-        "OSM_data",
+        "infrastructure",  # OSM, transmission
         "region_mapping",
-        "capacity_disaggregation",  # transmission sub-key
     ],
     "cell_capacity": [
         "custom_land_layers",
-        "CORINE",
-        "GAEZ",
-        "capacity_disaggregation",
+        "lands",  # CORINE, GAEZ
+        "technology",  # resource_specs sub-key
+        "filters",  # vector_buffers sub-key
         "region_mapping",
     ],
     "weather_data": [
-        "cutout",
+        "weather",  # cutout
         "weather_year",
         "region_mapping",
     ],
     "gwa_scaling": [
-        "GWA",
+        "weather",  # GWA
         "region_mapping",
     ],
     "cf_timeseries": [
-        "cutout",
-        "capacity_disaggregation",  # turbines sub-key
+        "weather",  # cutout
+        "technology",  # resource_specs.turbines sub-key
         "weather_year",
     ],
     "scoring": [
         "economic_parameters",
-        "NREL",
-        "capacity_disaggregation",
+        "technology",  # annual_technology_baseline, resource_specs
+        "infrastructure",  # transmission
     ],
     "clustering": [
-        "capacity_disaggregation",
+        "technology",  # resource_specs sub-key
         "region_mapping",
     ],
 }

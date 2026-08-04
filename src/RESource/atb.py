@@ -215,7 +215,7 @@ class NREL_ATBProcessor:
             & (atb_cost["core_metric_case"] == "Market")
             & (
                 atb_cost["techdetail"]
-                == self.config["capacity_disaggregation"]["solar"]["NREL_ATB_type"]
+                == self.config["technology"]["resource_specs"]["solar"]["NREL_ATB_type"]
             )
             & (atb_cost["crpyears"] == "20")  # capital recovery period
             & (atb_cost["core_metric_variable"] == 2022)
@@ -223,7 +223,7 @@ class NREL_ATBProcessor:
 
         utility_pv_cost = atb_cost[pv_cost_mask].sort_values("core_metric_variable")
 
-        save_to = Path(self.config["capacity_disaggregation"]["solar"]["cost_data"])
+        save_to = Path(self.config["technology"]["resource_specs"]["solar"]["cost_data"])
         save_to.parent.mkdir(parents=True, exist_ok=True)
         utility_pv_cost.to_csv(save_to, index=False)
         self.res_data.to_store(utility_pv_cost, "cost/atb/solar", force_update=True)
@@ -250,7 +250,7 @@ class NREL_ATBProcessor:
             - Core metric variable is 2024.
         Side Effects:
             - Saves the filtered DataFrame to a CSV file at the path specified in
-              the configuration under 'capacity_disaggregation' -> 'wind' -> 'cost_data'.
+              the configuration under 'technology' -> 'resource_specs' -> 'wind' -> 'cost_data'.
             - Stores the filtered DataFrame in the data handler under the key
               'cost/atb/wind' with force update enabled.
         """
@@ -268,7 +268,7 @@ class NREL_ATBProcessor:
             & (atb_cost["core_metric_case"] == "Market")
             & (
                 atb_cost["techdetail2"]
-                == self.config["capacity_disaggregation"]["wind"]["turbines"]["NREL_ATB_type"]
+                == self.config["technology"]["resource_specs"]["wind"]["turbines"]["NREL_ATB_type"]
             )
             & (atb_cost["crpyears"] == "20")
             & (atb_cost["core_metric_variable"] == 2024)
@@ -278,7 +278,7 @@ class NREL_ATBProcessor:
             "core_metric_variable"
         )
 
-        save_to = Path(self.config["capacity_disaggregation"]["wind"]["cost_data"])
+        save_to = Path(self.config["technology"]["resource_specs"]["wind"]["cost_data"])
         save_to.parent.mkdir(parents=True, exist_ok=True)
         land_based_wind_cost.to_csv(save_to, index=False)
         self.res_data.to_store(land_based_wind_cost, "cost/atb/wind", force_update=True)
@@ -319,14 +319,14 @@ class NREL_ATBProcessor:
             & (atb_cost["core_metric_case"] == "Market")
             & (
                 atb_cost["techdetail"]
-                == self.config["capacity_disaggregation"]["bess"]["NREL_ATB_type"]
+                == self.config["technology"]["resource_specs"]["bess"]["NREL_ATB_type"]
             )
             & (atb_cost["crpyears"] == "20")
             & (atb_cost["core_metric_variable"] == 2024)
         )
 
         bess_cost = atb_cost[bess_cost_mask].sort_values("core_metric_variable")
-        save_to = Path(self.config["capacity_disaggregation"]["bess"]["cost_data"])
+        save_to = Path(self.config["technology"]["resource_specs"]["bess"]["cost_data"])
         save_to.parent.mkdir(parents=True, exist_ok=True)
         bess_cost.to_csv(save_to, index=False)
         self.res_data.to_store(bess_cost, "cost/atb/bess", force_update=True)

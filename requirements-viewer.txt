@@ -1,0 +1,16 @@
+# Minimal dependencies to open and post-process a RESource .h5 results
+# store (see explore_store.ipynb and store_viewer.py at the repo root).
+# This is NOT the full RESource pipeline environment - no atlite, cdsapi,
+# cfgrib, rioxarray, osmnx, pygadm, etc. Just enough to read the results.
+#
+# Install with:
+#   python -m venv .venv-viewer && source .venv-viewer/bin/activate
+#   pip install -r requirements-viewer.txt
+
+pandas>=2.2
+tables>=3.10        # PyTables, needed by pandas to read .h5 files
+geopandas>=1.0       # optional: decodes geometry columns
+shapely>=2           # optional: used by geopandas for geometry decoding
+matplotlib>=3.9      # optional: plotting in the example notebook
+jupyterlab>=4.2
+ipykernel>=6.29

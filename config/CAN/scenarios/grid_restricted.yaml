@@ -3,21 +3,8 @@ extends: ../base.yaml
 Scenario:
   run_id: BASELINE_GRID_RESTRICTED
   Description: >-
-    Baseline scenario with standard regulatory buffers around aeroways and
-    conservation lands and a 50 km proximity filter for transmission connections;
-    serves as a conservative reference case to evaluate the impact of grid
-    connection constraints and land use restrictions on renewable energy siting
-    potential in Canada; designed to reflect typical regulatory environments and
-    provide a realistic baseline for comparison with more optimistic scenarios that
-    relax certain constraints
+    Baseline scenario with standard regulatory buffers around aeroways and conservation lands and a 50 km proximity filter for transmission connections; serves as a conservative reference case to evaluate the impact of grid connection constraints and land use restrictions on renewable energy siting potential in Canada; designed to reflect typical regulatory environments and provide a realistic baseline for comparison with more optimistic scenarios that relax certain constraints
 
-CODERS:
-  api_tutorial: https://coders.cme-emh.ca/CODERS_API_tutorial_28October2025.pdf
-
-capacity_disaggregation:
-  solar:
-    max_capacity: 5
-  wind:
-    max_capacity: 15
+infrastructure:
   transmission:
-    proximity_filter: 50
+    proximity_filter_km: 50

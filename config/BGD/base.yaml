@@ -85,16 +85,49 @@ region_mapping:
     GWA_country_code: 'BGD'
     CRS_meters: EPSG:32646
 
-GADM:
-  root: data/downloaded_data/GADM
-  processed: data/processed_data/regions
-  admin_level: 1 # 0=country, 1=division level, 2=district level
-  datafield_mapping:
-    'NAME_0': 'Country'
-    'NAME_1': 'Division'
+admin_boundary:
+  GADM:
+    root: data/downloaded_data/GADM
+    processed: data/processed_data/regions
+    admin_level: 1 # 0=country, 1=division level, 2=district level
+    datafield_mapping:
+      'NAME_0': 'Country'
+      'NAME_1': 'Division'
 
-NREL:
-  ATB:
+weather:
+  cutout:
+    root: data/downloaded_data/cutout/
+    module:
+    - era5
+
+    dx: 0.25 # Arc Length for cutout grids cells in Degrees
+    dy: 0.25 # Arc Length for cutout grids cells in Degrees
+
+    snapshots:
+      start:
+      - '2023-01-01 00:00:00' # Bangladesh Standard Time (BST = UTC+6)
+      end:
+      - '2024-01-01 00:00:00'
+
+  GWA:
+    root: 'data/downloaded_data/GWA'
+    datafields: [ 'windspeed_gwa', 'CF_IEC3' ]
+    sources:
+      windspeed_gwa: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/wind-speed/100'
+      CF_IEC1: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/capacity-factor_IEC1/'
+      CF_IEC2: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/capacity-factor_IEC2'
+      CF_IEC3: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/capacity-factor_IEC3'
+    rasters:
+      windspeed_gwa: 'GWA_country_code_wspd_100m.tif'
+      CF_IEC1: 'GWA_country_code_capacity-factor_IEC1.tif'
+      CF_IEC2: 'GWA_country_code_capacity-factor_IEC2.tif'
+      CF_IEC3: 'GWA_country_code_capacity-factor_IEC3.tif'
+    filter:
+      windspeed_low: 3 # meter/s (lower threshold for Bangladesh coastal areas)
+      windspeed_high: 70 # meter/s
+
+technology:
+  annual_technology_baseline:
     # Annual technology Baseline (ATB) - 2024
     root: 'data/downloaded_data/NREL/ATB'
     source:
@@ -110,16 +143,144 @@ NREL:
       fom: 'Fixed O&M' # mill. $/ MW
       vom: 'None' # Not found for solar,wind,bess
 
-OSM_data:
-  # OpenStreet Map
-  root: 'data/downloaded_data/OSM'
-  data_keys:
-    aeroway:
-      tags: [ 'aerodrome', 'runway', 'taxiway', 'helipad', 'apron', 'gate' ]
-    power:
-      tags: [ 'line', 'cable', 'minor_line', 'substation', 'tower', 'pole', 'generator', 'plant', 'terminal' ]
-    substation:
-      tags: [ 'transmission', 'distribution', 'minor_distribution', 'industrial' ]
+  resource_specs:
+    solar:
+      max_capacity: 5 # GW (conservative estimate for Bangladesh)
+      landuse_intensity: 1.45 # MW/km2
+      cost_data: 'data/processed_data/utility_PV_Class5_cost_moderate_NREL_ATB2024.csv'
+      NREL_ATB_technology: 'UtilityPV'
+      NREL_ATB_type: 'Class5'
+      atlite_panel: 'CSi'
+      tracking: 'horizontal' # Fixed tracking more suitable for Bangladesh climate
+      cell_static_CF_tolerance: 0.16
+      cell_capacity_tolerance: 1 #MW
+      WCSS_tolerance: 0.08
+
+    wind:
+      max_capacity: 3 # GW (limited onshore wind potential in Bangladesh)
+      landuse_intensity: 2.5 # MW/km2 (slightly lower due to terrain)
+      cost_data: 'data/processed_data/land_based_wind_T3_cost_moderate_NREL_ATB2024.csv'
+      WCSS_tolerance: 0.1
+      CF_low: 0.15 # Lower threshold for Bangladesh wind conditions
+      CF_high: 1
+      NREL_ATB_technology: 'LandbasedWind'
+      turbines:
+        NREL_ATB_type: 'Wind Turbine Technology 3'
+        atlite:
+          1:
+            name: 'Enercon_E82_3000kW'
+            ID: {}
+            P: 3
+          2:
+            name: 'Vestas_V90_3MW'
+            ID: {}
+            P: 3
+        OEDB:
+          source: 'https://openenergy-platform.org/api/v0/schema/supply/tables/wind_turbine_library/rows'
+          models:
+            1:
+              name: 'GE2.75_120'
+              ID: 116
+              P: 2.75
+              manufacturer: 'GE Wind'
+            2:
+              name: '3.2M114_NES'
+              ID: 93
+              P: 3.2
+              manufacturer: 'Senvion/REpower'
+              config: 'data/downloaded_data/OEDB/3.2M114_NES.yaml'
+
+infrastructure:
+  OSM:
+    # OpenStreet Map
+    root: 'data/downloaded_data/OSM'
+    data_keys:
+      aeroway:
+        tags: [ 'aerodrome', 'runway', 'taxiway', 'helipad', 'apron', 'gate' ]
+      power:
+        tags: [ 'line', 'cable', 'minor_line', 'substation', 'tower', 'pole', 'generator', 'plant', 'terminal' ]
+      substation:
+        tags: [ 'transmission', 'distribution', 'minor_distribution', 'industrial' ]
+  transmission:
+    grid_connection_cost_per_Km: 2.8 # M$/km (slightly higher due to terrain and infrastructure)
+    tx_line_rebuild_cost: 0.6 #M$/km
+    proximity_filter_km: 150 # shorter due to smaller country size
+
+lands:
+  GAEZ:
+    root: 'data/downloaded_data/GAEZ'
+    source: 'https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip'
+    zip_file: 'LR.zip'
+    processed_root: data/processed_data/GAEZ
+    raster_types:
+
+    # GAEZ v4 'exclusion' layer of protected areas and land with high biodiversity values
+    - name: 'exclusion_areas'
+      raster: "exclusion_2017.tif"
+      zip_extract_direct: 'LR/excl'
+      color_map: 'OrRd'
+      stepwise_plot_title: "Excluding Global Exclusion Areas"
+      class_exclusion:
+        solar: [ 2, 3, 4, 5, 6, 7 ]
+        wind: [ 2, 3, 4, 5, 6, 7 ]
+        buffer:
+          solar: 0 #m
+          wind: 0 #m
+
+    # GAEZ v4 Median slope class compiled from 3 arc-second SRTM data
+    - name: 'terrain_resources'
+      raster: "slpmed05.tif"
+      zip_extract_direct: 'LR/ter'
+      color_map: 'terrain'
+      stepwise_plot_title: "Excluding Terrain Slope"
+      class_exclusion:
+        solar: [ 7, 8, 9 ]
+        wind: [ 7, 8, 9 ]
+        buffer:
+          solar: 0 #m
+          wind: 0 #m
+
+    # GAEZ v4 Land cover/use data
+    - name: 'land_cover'
+      raster: "faocmb_2010.tif"
+      zip_extract_direct: 'LR/lco'
+      color_map: 'YlGn'
+      stepwise_plot_title: "Including Suitable Landcovers"
+      class_inclusion:
+        solar: [ 2, 3, 5, 6, 8, 9 ]
+        wind: [ 2, 3, 5, 6, 8, 9 ]
+
+demand_indicators:
+  WorldPop:
+    root: 'data/downloaded_data/WorldPop'
+    source:
+      population_density_BGD: 'https://data.worldpop.org/GIS/Population_Density/Global_2000_2020_1km_UNadj/2020/BGD/bgd_pd_2020_1km_UNadj_ASCII_XYZ.zip'
+      population_count_BGD: 'https://data.worldpop.org/GIS/Population/Global_2000_2020_1km_UNadj/2020/BGD/bgd_ppp_2020_1km_UNadj_ASCII_XYZ.zip'
+
+filters:
+  solar:
+    vector_buffers:
+    - aeroway:
+        buffer_mapping_key: 'aeroway'
+        buffer_mapping_key_buffers:
+          aerodrome: 500 # m (larger buffer for densely populated areas)
+          runway: 500 # m
+          taxiway: 200 # m
+          helipad: 200 # m
+          apron: 200 # m
+          gate: 100 # m
+
+  wind:
+    vector_buffers:
+    - aeroway:
+        buffer_mapping_key: 'aeroway'
+        buffer_mapping_key_buffers:
+          aerodrome: 1000 # m (larger buffer due to flight paths)
+          runway: 1000 # m
+          taxiway: 500 # m
+          helipad: 500 # m
+          apron: 500 # m
+          gate: 200 # m
 
 custom_land_layers:
   rasters:
@@ -133,155 +294,3 @@ custom_land_layers:
       'geometry': {}
       'buffer':
       'invert': 'False'
-
-GAEZ:
-  root: 'data/downloaded_data/GAEZ'
-  source: 'https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip'
-  zip_file: 'LR.zip'
-  processed_root: data/processed_data/GAEZ
-  raster_types:
-
-  # GAEZ v4 'exclusion' layer of protected areas and land with high biodiversity values
-  - name: 'exclusion_areas'
-    raster: "exclusion_2017.tif"
-    zip_extract_direct: 'LR/excl'
-    color_map: 'OrRd'
-    stepwise_plot_title: "Excluding Global Exclusion Areas"
-    class_exclusion:
-      solar: [ 2, 3, 4, 5, 6, 7 ]
-      wind: [ 2, 3, 4, 5, 6, 7 ]
-      buffer:
-        solar: 0 #m
-        wind: 0 #m
-
-  # GAEZ v4 Median slope class compiled from 3 arc-second SRTM data
-  - name: 'terrain_resources'
-    raster: "slpmed05.tif"
-    zip_extract_direct: 'LR/ter'
-    color_map: 'terrain'
-    stepwise_plot_title: "Excluding Terrain Slope"
-    class_exclusion:
-      solar: [ 7, 8, 9 ]
-      wind: [ 7, 8, 9 ]
-      buffer:
-        solar: 0 #m
-        wind: 0 #m
-
-  # GAEZ v4 Land cover/use data
-  - name: 'land_cover'
-    raster: "faocmb_2010.tif"
-    zip_extract_direct: 'LR/lco'
-    color_map: 'YlGn'
-    stepwise_plot_title: "Including Suitable Landcovers"
-    class_inclusion:
-      solar: [ 2, 3, 5, 6, 8, 9 ]
-      wind: [ 2, 3, 5, 6, 8, 9 ]
-
-WorldPop:
-  root: 'data/downloaded_data/WorldPop'
-  source:
-    population_density_BGD: 'https://data.worldpop.org/GIS/Population_Density/Global_2000_2020_1km_UNadj/2020/BGD/bgd_pd_2020_1km_UNadj_ASCII_XYZ.zip'
-    population_count_BGD: 'https://data.worldpop.org/GIS/Population/Global_2000_2020_1km_UNadj/2020/BGD/bgd_ppp_2020_1km_UNadj_ASCII_XYZ.zip'
-
-cutout:
-  root: data/downloaded_data/cutout/
-  module:
-  - era5
-
-  dx: 0.25 # Arc Length for cutout grids cells in Degrees
-  dy: 0.25 # Arc Length for cutout grids cells in Degrees
-
-  snapshots:
-    start:
-    - '2023-01-01 00:00:00' # Bangladesh Standard Time (BST = UTC+6)
-    end:
-    - '2024-01-01 00:00:00'
-
-GWA:
-  root: 'data/downloaded_data/GWA'
-  datafields: [ 'windspeed_gwa', 'CF_IEC3' ]
-  sources:
-    windspeed_gwa: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/wind-speed/100'
-    CF_IEC1: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/capacity-factor_IEC1/'
-    CF_IEC2: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/capacity-factor_IEC2'
-    CF_IEC3: 'https://globalwindatlas.info/api/gis/country/GWA_country_code/capacity-factor_IEC3'
-  rasters:
-    windspeed_gwa: 'GWA_country_code_wspd_100m.tif'
-    CF_IEC1: 'GWA_country_code_capacity-factor_IEC1.tif'
-    CF_IEC2: 'GWA_country_code_capacity-factor_IEC2.tif'
-    CF_IEC3: 'GWA_country_code_capacity-factor_IEC3.tif'
-  filter:
-    windspeed_low: 3 # meter/s (lower threshold for Bangladesh coastal areas)
-    windspeed_high: 70 # meter/s
-
-capacity_disaggregation:
-  solar:
-    max_capacity: 5 # GW (conservative estimate for Bangladesh)
-    landuse_intensity: 1.45 # MW/km2
-    cost_data: 'data/processed_data/utility_PV_Class5_cost_moderate_NREL_ATB2024.csv'
-    NREL_ATB_technology: 'UtilityPV'
-    NREL_ATB_type: 'Class5'
-    atlite_panel: 'CSi'
-    tracking: 'horizontal' # Fixed tracking more suitable for Bangladesh climate
-    cell_static_CF_tolerance: 0.16
-    cell_capacity_tolerance: 1 #MW
-    WCSS_tolerance: 0.08
-    vector_buffers:
-    - aeroway:
-        buffer_mapping_key: 'aeroway'
-        buffer_mapping_key_buffers:
-          aerodrome: 500 # m (larger buffer for densely populated areas)
-          runway: 500 # m
-          taxiway: 200 # m
-          helipad: 200 # m
-          apron: 200 # m
-          gate: 100 # m
-
-  wind:
-    max_capacity: 3 # GW (limited onshore wind potential in Bangladesh)
-    landuse_intensity: 2.5 # MW/km2 (slightly lower due to terrain)
-    cost_data: 'data/processed_data/land_based_wind_T3_cost_moderate_NREL_ATB2024.csv'
-    WCSS_tolerance: 0.1
-    CF_low: 0.15 # Lower threshold for Bangladesh wind conditions
-    CF_high: 1
-    NREL_ATB_technology: 'LandbasedWind'
-    turbines:
-      NREL_ATB_type: 'Wind Turbine Technology 3'
-      atlite:
-        1:
-          name: 'Enercon_E82_3000kW'
-          ID: {}
-          P: 3
-        2:
-          name: 'Vestas_V90_3MW'
-          ID: {}
-          P: 3
-      OEDB:
-        source: 'https://openenergy-platform.org/api/v0/schema/supply/tables/wind_turbine_library/rows'
-        models:
-          1:
-            name: 'GE2.75_120'
-            ID: 116
-            P: 2.75
-            manufacturer: 'GE Wind'
-          2:
-            name: '3.2M114_NES'
-            ID: 93
-            P: 3.2
-            manufacturer: 'Senvion/REpower'
-            config: 'data/downloaded_data/OEDB/3.2M114_NES.yaml'
-    vector_buffers:
-    - aeroway:
-        buffer_mapping_key: 'aeroway'
-        buffer_mapping_key_buffers:
-          aerodrome: 1000 # m (larger buffer due to flight paths)
-          runway: 1000 # m
-          taxiway: 500 # m
-          helipad: 500 # m
-          apron: 500 # m
-          gate: 200 # m
-
-  transmission:
-    grid_connection_cost_per_Km: 2.8 # M$/km (slightly higher due to terrain and infrastructure)
-    tx_line_rebuild_cost: 0.6 #M$/km
-    proximity_filter: 150 #km (shorter due to smaller country size)

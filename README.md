@@ -58,6 +58,28 @@ notebook retention policy.
 New code should import the package as `RESource`. The former `RES` namespace is
 temporarily retained as a compatibility layer for existing notebooks.
 
+#### Just want to explore a results store?
+
+If you only care about the output of a scenario run — the `.h5` store
+under `data/store/` — you don't need to install the full RESource pipeline
+(no `atlite`, `cdsapi`, `cfgrib`, `rioxarray`, `osmnx`, `pygadm`, ...).
+Every store is a plain `pandas.HDFStore` file, so a much lighter
+environment is enough to open it and do post-processing:
+
+```bash
+python -m venv .venv-viewer
+source .venv-viewer/bin/activate   # .venv-viewer\Scripts\activate on Windows
+pip install -r requirements-viewer.txt
+jupyter lab explore_store.ipynb
+```
+
+[`explore_store.ipynb`](explore_store.ipynb) at the repo root walks through
+listing available store files, inspecting what keys/tables they contain,
+loading a table (with geometry columns auto-decoded if `geopandas` is
+installed), and a few basic post-processing/plotting examples. It's built
+on [`store_viewer.py`](store_viewer.py), a small standalone module with no
+dependency on the `RESource` package itself.
+
 ```python
 from RESource.RESources import RESources_builder
 ```

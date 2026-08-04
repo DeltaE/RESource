@@ -48,7 +48,7 @@ class WorldPop:
         self.gadm = GADMBoundaries(self.config_file_path, self.region_short_code)
 
         self.config = self.attributes_parser.config
-        self.worldpop_config = self.config["WorldPop"]
+        self.worldpop_config = self.config["demand_indicators"]["WorldPop"]
         self.root = self.worldpop_config["root"]
 
     def pull_data(self, data_name: str):

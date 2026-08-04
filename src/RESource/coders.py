@@ -210,7 +210,7 @@ class CODERSData(AttributesParser):
         # Call the parent class __post_init__ to initialize inherited attributes
         super().__post_init__()
 
-        self.coders_data_config = self.config.get("CODERS", {})
+        self.coders_data_config = self.config.get("infrastructure", {}).get("CODERS", {})
         credentials_path = self.coders_data_config.get(
             "credentials_path", default_coders_cfg_file_path
         )
