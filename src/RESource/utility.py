@@ -155,36 +155,6 @@ def release_process_memory() -> dict[str, int]:
     }
 
 
-def get_gdrive_public_file(file_id: str, output_path: str) -> None:
-    """
-    Downloads a public-file from Google Drive using its file ID.
-
-    Args:
-        file_id (str): The unique identifier of the Google Drive file.
-        output_path (str): The local path where the downloaded file will be saved.
-
-    Note: The file must be publicly accessible (ANYONE WITH THE LINK). If the file is private, this function will not work.
-
-    Returns:
-        None
-    """
-    import gdown
-
-    output_path = Path(output_path)
-    if output_path.exists():
-        print(
-            f"Skipping downloading from Google Drive. Expected file found locally at: {output_path}"
-        )
-        return
-
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-
-    if not isinstance(file_id, str) or not file_id:
-        raise ValueError("Invalid file_id provided. It must be a non-empty string.")
-    url = f"https://drive.google.com/uc?id={file_id}"
-    gdown.download(url, str(output_path), quiet=False)
-
-
 def repository_temp_directory(name: str) -> Path:
     """Return an ignored, repository-backed scratch directory.
 

@@ -67,18 +67,20 @@ Every store is a plain `pandas.HDFStore` file, so a much lighter
 environment is enough to open it and do post-processing:
 
 ```bash
-python -m venv .venv-viewer
+uv venv .venv-viewer
 source .venv-viewer/bin/activate   # .venv-viewer\Scripts\activate on Windows
-pip install -r requirements-viewer.txt
-jupyter lab explore_store.ipynb
+uv pip install -r requirements-viewer.txt
+uv pip install --no-deps -e .
+jupyter lab notebooks/
 ```
 
-[`explore_store.ipynb`](explore_store.ipynb) at the repo root walks through
+[`notebooks/explore_store.ipynb`](notebooks/explore_store.ipynb) walks through
 listing available store files, inspecting what keys/tables they contain,
 loading a table (with geometry columns auto-decoded if `geopandas` is
-installed), and a few basic post-processing/plotting examples. It's built
-on [`store_viewer.py`](store_viewer.py), a small standalone module with no
-dependency on the `RESource` package itself.
+installed), and a few basic post-processing/plotting examples. It uses the
+lightweight reader in [`src/RESource/store_viewer.py`](src/RESource/store_viewer.py)
+from the local package installation above. `--no-deps` keeps this optional
+viewer environment from installing the full assessment pipeline dependencies.
 
 ```python
 from RESource.RESources import RESources_builder

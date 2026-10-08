@@ -8,7 +8,7 @@ of WKT strings). That keeps the install for "just look at the results"
 users tiny compared to the full pipeline environment (no atlite, cdsapi,
 cfgrib, rioxarray, osmnx, pygadm, ...).
 
-See ``explore_store.ipynb`` at the repo root for a worked example, and the
+See ``notebooks/explore_store.ipynb`` for a worked example, and the
 "Just want to explore a results store?" section of README.md for the
 install instructions.
 """
