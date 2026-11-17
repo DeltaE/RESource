@@ -240,6 +240,23 @@ Canadian provinces and territories are mapped to numeric codes (1-21), including
   endpoint, and excludes `INT`, `IPT`, `SWS`, and `JCT` node-code suffixes. This is
   a planning proxy, not a finding of available interconnection capacity.
 
+### Land availability plots (`lands.plot_layer_impacts`)
+
+```yaml
+lands:
+  plot_layer_impacts: false   # code default: true
+```
+
+When `true`, availability is recomputed after each exclusion layer to draw the
+stepwise and individual-layer impact figures (`stepwise_land_availability_plot_*.png`,
+`individual_layers_impact_land_availability_plot_*.png`). This adds two extra passes
+and can take many minutes and tens of GB of RAM for large regions. When `false`,
+layers are only loaded into the exclusion container and final availability is
+computed once. The flag does not change results and does not invalidate step caches.
+
+Every run log (`*_detail.log` and the runtime summary) ends with a **TIMING REPORT**
+listing the total time and every process that took more than 5 minutes.
+
 ### GAEZ (Global Agro-Ecological Zones)
 
 - **Downloaded Source Root:** `data/downloaded_data/GAEZ`

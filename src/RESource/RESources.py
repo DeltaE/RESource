@@ -19,6 +19,7 @@ from RESource.coders import CODERSData
 from RESource.era5_cutout import ERA5Cutout
 from RESource.gwa import GWACells
 from RESource.hdf5_handler import DataHandler
+from RESource.land_analytics import land_analytics_version, run_land_analytics
 from RESource.power_nodes import GridNodeLocator
 from RESource.score import CellScorer
 
@@ -204,6 +205,20 @@ class RESources_builder(AttributesParser):
             self.results_save_to / f"config_provenance_{self.region_short_code}_{self.RUN_ID}.yaml",
         )
 
+        # Make the HDF5 store self-describing: config, provenance and the
+        # runtime/machine it was built under travel with the data itself.
+        self.datahandler.set_metadata(
+            {
+                "config": self.config,
+                "config_provenance": self.config_provenance,
+                "runtime": utils.get_runtime_info(),
+                "run_id": self.RUN_ID,
+                "resource_type": self.resource_type,
+                "region_short_code": self.region_short_code,
+                "country": self.country_name,
+            }
+        )
+
     # ── Data-store helpers ────────────────────────────────────────────────────
 
     def clean_data_store(self):
@@ -260,6 +275,9 @@ class RESources_builder(AttributesParser):
             result_type="expand",
         )
         self.store_grid_cells[["nearest_connection_point", "nearest_distance"]] = connection_results
+        self.store_grid_cells["nearest_station_distance_km"] = self.store_grid_cells[
+            "nearest_distance"
+        ]
         self.datahandler.to_store(self.store_grid_cells, "cells")
         self.datahandler.to_store(self.grid_lines, "lines")
         self.datahandler.refresh()
@@ -365,10 +383,10 @@ class RESources_builder(AttributesParser):
             except Exception as exc:
                 utils.print_update(
                     level=PRINT_LEVEL_BASE + 2,
-                    message=f"{__name__} | CODERS unavailable ({exc}); aborting Canada workflow.",
+                    message=f"{__name__} | CODERS unavailable ({exc}); falling back to OSM.",
                     alert=True,
                 )
-                raise
+                return self._find_grid_nodes_from_osm()
             self.region_grid_cells_cap_with_nodes = (
                 self.gridNodesProcessor.find_grid_nodes_ERA5_cells(
                     self.grid_ss, self.store_grid_cells
@@ -642,6 +660,7 @@ class RESources_builder(AttributesParser):
 
         self.vis_dir = self.get_vis_dir()
 
+        clustering_method = self.resource_disaggregation_config.get("clustering_method", "ranked")
         self.ERA5_cells_cluster_map, self.region_optimal_k_df = cluster.cells_to_cluster_mapping(
             scored_cells_filtered,
             self.vis_dir,
@@ -649,6 +668,7 @@ class RESources_builder(AttributesParser):
             self.sub_national_unit_tag,
             self.resource_type,
             [f"lcoe_{self.resource_type}", f"potential_capacity_{self.resource_type}"],
+            method=clustering_method,
         )
 
         self.cell_cluster_gdf, self.dissolved_indices = cluster.create_cells_Union_in_clusters(
@@ -775,6 +795,7 @@ class RESources_builder(AttributesParser):
             config=self.config,
             resource_type=self.resource_type,
         )
+        land_version = land_analytics_version(self.config, self.region_short_code)
 
         # ── Step 1 : Grid cells & grid-node proximity ─────────────────────────
         utils.print_banner("Step 1 : Prepare grid cells and locate nearest grid connection nodes")
@@ -790,13 +811,22 @@ class RESources_builder(AttributesParser):
 
         # ── Step 2 : Land availability & capacity ─────────────────────────────
         utils.print_banner("Step 2 : Calculate land availability and capacity potential")
-        if cache.is_current("cell_capacity", "cells"):
+        capacity_cached = cache.is_current("cell_capacity", "cells")
+        if capacity_cached:
             utils.print_update(
                 level=2, message="Step 2: capacity config unchanged — loading from store."
             )
         else:
             self.get_cell_capacity()
             cache.mark_done("cell_capacity")
+
+        run_land_analytics(
+            self.datahandler,
+            self.cell_processor.LandContainer,
+            self.resource_type,
+            land_version,
+            capacity_cached,
+        )
 
         # ── Step 3 : Weather data & GWA rescaling ─────────────────────────────
         utils.print_banner("Step 3 : Extract weather data and apply GWA wind-speed correction")

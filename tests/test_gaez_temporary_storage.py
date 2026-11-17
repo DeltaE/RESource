@@ -4,10 +4,15 @@ from pathlib import Path
 from types import SimpleNamespace
 from zipfile import ZipFile
 
+import geopandas as gpd
+import numpy as np
 import pytest
+import rasterio
+from rasterio.transform import from_origin
+from shapely.geometry import box
 
 from RESource import utility as utils
-from RESource.gaez import GAEZRasterProcessor
+from RESource.gaez import GAEZRasterProcessor, load_gaez_raster
 
 
 def _processor(tmp_path: Path) -> GAEZRasterProcessor:
@@ -109,6 +114,154 @@ def test_archive_members_are_validated_before_extraction(tmp_path: Path) -> None
         processor.__extract_rasters__(archive, extraction_root, raster_types)
 
     assert not extraction_root.exists()
+
+
+def test_direct_and_archive_rasters_are_clipped_at_source_resolution(
+    tmp_path: Path, monkeypatch
+) -> None:
+    processor = _processor(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    source = tmp_path / "source.tif"
+    transform = from_origin(0, 2 / 120, 1 / 120, 1 / 120)
+    with rasterio.open(
+        source,
+        "w",
+        driver="GTiff",
+        width=2,
+        height=2,
+        count=1,
+        dtype="uint8",
+        crs="EPSG:4326",
+        nodata=0,
+        transform=transform,
+    ) as dst:
+        dst.write(np.array([[1, 7], [8, 9]], dtype="uint8"), 1)
+
+    processor.raster_types = [
+        {"name": "exclusion", "raster": "exclusion.tif", "zip_extract_direct": "LR/excl"},
+        {
+            "name": "slope",
+            "raster": "slpmed30s.tif",
+            "zip_extract_direct": "LR/ter",
+            "source": "https://example.org/slpmed30s.tif",
+        },
+    ]
+    with ZipFile(processor.archive_path, "w") as archive:
+        archive.write(source, "LR/excl/exclusion.tif")
+    processor.gadmBoundary = SimpleNamespace(
+        get_region_boundary=lambda: SimpleNamespace(geometry=[box(0, 0, 2 / 120, 2 / 120)])
+    )
+    calls = []
+
+    def fetch(url, destination, *, description):
+        calls.append((url, destination))
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(source.read_bytes())
+
+    monkeypatch.setattr(utils, "fetch_file_if_missing", fetch)
+    processor.__download_resources_zip_file__ = lambda path: None
+    old_clip = processor.processed_region_path / "slpmed05.tif"
+    old_clip.touch()
+
+    outputs = processor.process_all_rasters()
+
+    assert len(calls) == 1
+    assert calls[0][1] == processor.gaez_root / "LR/ter/slpmed30s.tif"
+    assert old_clip.exists()
+    for path in outputs.values():
+        with rasterio.open(path) as clipped:
+            assert clipped.res == (1 / 120, 1 / 120)
+            np.testing.assert_array_equal(clipped.read(1), [[1, 7], [8, 9]])
+    assert processor.process_all_rasters() == outputs
+    assert len(calls) == 1
+
+
+def test_direct_only_does_not_download_archive(tmp_path: Path, monkeypatch) -> None:
+    processor = _processor(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    raster = processor.raster_types[0]
+    raster["source"] = "https://example.org/slpmed30s.tif"
+
+    def unexpected_archive(_path):
+        raise AssertionError("direct sources must not download the archive")
+
+    def fetch(_url, destination, *, description):
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.touch()
+
+    def clip(item, _geometry, _show, *, input_root):
+        assert (input_root / item["zip_extract_direct"] / item["raster"]).exists()
+        return processor._clipped_raster_path(item)
+
+    monkeypatch.setattr(utils, "fetch_file_if_missing", fetch)
+    processor.__download_resources_zip_file__ = unexpected_archive
+    processor.__clip_to_boundary_n_plot__ = clip
+    assert processor.process_all_rasters()["terrain_resources"] == processor._clipped_raster_path(
+        raster
+    )
+
+
+def test_wb6_scenarios_default_to_fao_30_second_slope() -> None:
+    for scenario in Path("config/WB6/scenarios").glob("*.yaml"):
+        config = utils.load_config(scenario)
+        slope = next(
+            item
+            for item in config["lands"]["GAEZ"]["raster_types"]
+            if item["name"] == "terrain_resources"
+        )
+        assert slope["raster"] == "slpmed30s.tif"
+        assert slope["source"].endswith("/LR/ter/slpmed30s.tif")
+        assert slope["class_exclusion"]["solar"] == [8, 9]
+        assert slope["class_exclusion"]["wind"] == [7, 8, 9]
+
+
+@pytest.mark.parametrize("nodata", [None, 99])
+def test_load_archive_raster_clips_all_boundaries_and_masks_outside(
+    tmp_path: Path, nodata: int | None
+) -> None:
+    """Source values from multiple regions survive, including a valid zero."""
+    raster = tmp_path / "source.tif"
+    values = np.array([[0, 99, 2, 3], [4, 5, 6, 7]], dtype="uint8")
+    with rasterio.open(
+        raster,
+        "w",
+        driver="GTiff",
+        width=4,
+        height=2,
+        count=1,
+        dtype="uint8",
+        crs="EPSG:4326",
+        nodata=nodata,
+        transform=from_origin(0, 2, 1, 1),
+    ) as dst:
+        dst.write(values, 1)
+    archive = tmp_path / "LR.zip"
+    with ZipFile(archive, "w") as zip_file:
+        zip_file.write(raster, "LR/excl/source.tif")
+    boundary = gpd.GeoDataFrame(
+        geometry=[box(0, 1, 2, 2), box(3, 0, 4, 1)], crs="EPSG:4326"
+    ).to_crs("EPSG:3857")
+
+    result = load_gaez_raster(archive, "LR/excl/source.tif", boundary)
+
+    np.testing.assert_equal(
+        result.values,
+        [[0, np.nan if nodata is not None else 99, np.nan, np.nan], [np.nan, np.nan, np.nan, 7]],
+    )
+    assert str(result.rio.crs) == "EPSG:4326"
+    assert result.rio.transform() == from_origin(0, 2, 1, 1)
+    assert np.isnan(result.rio.nodata)
+
+
+def test_load_archive_raster_reports_missing_member_and_boundary_crs(tmp_path: Path) -> None:
+    archive = tmp_path / "LR.zip"
+    with ZipFile(archive, "w"):
+        pass
+    boundary = gpd.GeoDataFrame(geometry=[box(0, 0, 1, 1)], crs="EPSG:4326")
+    with pytest.raises(FileNotFoundError, match="missing.tif"):
+        load_gaez_raster(archive, "LR/ter/missing.tif", boundary)
+    with pytest.raises(ValueError, match="boundary must have a CRS"):
+        load_gaez_raster(archive, "LR/ter/missing.tif", boundary.set_crs(None, allow_override=True))
 
 
 def test_active_configs_separate_gaez_source_and_processed_roots() -> None:

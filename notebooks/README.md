@@ -49,3 +49,20 @@ into documentation directories.
 Automated tests verify that notebooks are valid JSON and that none are stored
 outside this directory. Full notebook execution is intentionally separate because
 many analyses require large external datasets and service credentials.
+
+## WB6 combined analytics
+
+In the `studies_WB6` notebooks, select the same scenario, weather year and
+datestamp for all regional stores. The land notebook uses
+`data/store/WesternBalkanRegions/Combined/resources_WesternBalkanRegions_Combined_<scenario>_<year>_<date>.h5`.
+The population notebook can save its raster and map to that existing store.
+The cell notebook instead reads the regional stores directly, preferring
+`results/<country>/<region>/<run_tag>/` over the legacy `data/store/` location.
+It saves combined figures to its output directory, not into a combined store.
+
+In the cell notebook, capacity haircuts are read from each regional store's
+metadata. For stores without that metadata, it uses the previous WB6 plotting
+values (solar 0.8, wind 0.6). It records the factors, source, and explanatory
+notes in those same regional stores without replacing existing notes.
+Regional factors must agree for a combined plot. Raw capacity columns remain
+unadjusted; the factors are applied only to the haircut plot.

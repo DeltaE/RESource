@@ -35,6 +35,7 @@ configurable and extensible for different regions and data sources.
 
 import os
 import shutil
+import time
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from zipfile import ZipFile
@@ -823,12 +824,15 @@ class LandContainer(AttributesParser):
             "vector_configs": vector_configs,
             "font_family": self.default_font_family,  # INHERITED ATTRIBUTE from AttributesParser
             "plot_save_to": self.vis_root / "lands",  # INHERITED ATTRIBUTE from AttributesParser
+            "plot_layer_impacts": self.plot_layer_impacts,  # INHERITED from AttributesParser
         }
 
         # Load all layers to the excluder
         excluder_with_layers = load_layers_to_excluder(**args_add_excluder_layer)
 
-        # for plotting purposes
+        # Optional (slow) per-layer impact plots; final availability is computed once downstream
+        if not self.plot_layer_impacts:
+            return excluder_with_layers
 
         utils.print_update(
             level=PRINT_LEVEL_BASE + 1,
@@ -838,9 +842,13 @@ class LandContainer(AttributesParser):
 
         return excluder_with_layers
 
-    def get_layers(self):
+    def get_layers(self, raster_only: bool = False):
         """
         Load all raster and vector layers for the specified region.
+
+        Args:
+            raster_only: Return the prepared raster configurations without loading
+                vector layers.
 
         Returns
         -------
@@ -1011,6 +1019,9 @@ class LandContainer(AttributesParser):
 
             # Merge raster_configs and CLC_raster_config into a single list
             raster_configs = raster_configs + CLC_raster_configs + custom_raster_configs
+
+        if raster_only:
+            return raster_configs
 
         # Load Vector layers
         utils.print_update(
@@ -1375,7 +1386,7 @@ def load_custom_vector_layer(vector_cfg: dict):
 def add_and_plot_exclusion_layer(
     excluder: ExclusionContainer,
     region_shape: gpd.GeoDataFrame,
-    ax: Axes,
+    ax: Axes | None,
     geometry: BaseGeometry,
     title: str,
     invert: bool = False,
@@ -1384,6 +1395,7 @@ def add_and_plot_exclusion_layer(
     codes: list[int] | None = None,
     buffer: float = 0,
     disregard_other_layers: bool = False,
+    plot: bool = True,
 ):
     """
     Add a layer to the ExclusionContainer and plot the availability of the region shape.
@@ -1391,7 +1403,7 @@ def add_and_plot_exclusion_layer(
     Args:
         excluder (ExclusionContainer): The ExclusionContainer to add the layer to.
         region_shape (gpd.GeoDataFrame): The region shape GeoDataFrame.
-        ax (_type_): The axes to plot on.
+        ax (Axes | None): The axes to plot on. May be None when ``plot`` is False.
         geometry (_type_): The geometry to add to the ExclusionContainer.
         title (_type_): The title for the plot.
         invert (bool, optional): Whether to invert the exclusion. Defaults to False.
@@ -1399,16 +1411,22 @@ def add_and_plot_exclusion_layer(
         filepath (_type_, optional): The file path for the raster layer. Defaults to None.
         codes (_type_, optional): The codes for the raster layer. Defaults to None.
         disregard_other_layers(bool): Default to False. This param is exclusively to be used to plotting purpose. Plots to showcase the impact of each layer as a standalone.
-
+        plot (bool): Default True. When False the layer is only added to the container and the
+            (expensive) per-layer availability computation and plot are skipped.
 
     Returns:
-        _type_: _description_
+        ExclusionContainer: The container with the layer added.
     """
     if is_raster:
+        t0 = time.perf_counter()
         excluder.add_raster(filepath, codes, invert=invert)
+        utils.print_info(f"add_raster took {time.perf_counter() - t0:.1f}s ({Path(str(filepath)).name})")
     else:
         # excluder.add_geometry(geometry)
         excluder.add_geometry(geometry, buffer=buffer, invert=invert)  # patch upgrade, EL_20280802
+
+    if not plot:
+        return excluder
 
     masked, transform, eligible_share = get_eligible_share(region_shape, excluder)
 
@@ -1511,6 +1529,7 @@ def load_layers_to_excluder(
     plot_save_to: str | Path = None,
     intiate_excluder: bool = True,
     disregard_other_layers: bool = False,
+    plot_layer_impacts: bool = True,
 ) -> ExclusionContainer:
     """
     Load raster and vector layers to the ExclusionContainer and plot the availability of the region shape.
@@ -1521,6 +1540,9 @@ def load_layers_to_excluder(
         vector_configs (list[dict]): List of vector configurations.
         plot_save_to (str|Path, optional): Path to save the plot. Defaults to None.
         disregard_other_layers(bool): Default to False. This param is exclusively to be used to plotting purpose. Plots to showcase the impact of each layer as a standalone.
+        plot_layer_impacts (bool): Default True. When False, no per-layer availability is computed
+            and no stepwise plot is produced; layers are just added to the container, so final
+            availability is computed only once downstream.
     Returns:
         ExclusionContainer: The ExclusionContainer with the added layers.
     """
@@ -1544,14 +1566,18 @@ def load_layers_to_excluder(
 
     plt.rcParams["font.family"] = font_family
     plt.rcParams["font.size"] = 14
-    fig, axes = plt.subplots(
-        1,
-        total_layers,
-        figsize=(
-            9 * total_layers,
-            total_layers + 6,
-        ),  # revise this accordingly to make the plot looks nicer
-    )
+    if plot_layer_impacts:
+        fig, axes = plt.subplots(
+            1,
+            total_layers,
+            figsize=(
+                9 * total_layers,
+                total_layers + 6,
+            ),  # revise this accordingly to make the plot looks nicer
+        )
+        axes = np.atleast_1d(axes)
+    else:
+        fig, axes = None, [None] * total_layers
     utils.print_info(
         f"{__name__}| The order of loading raster layers mimics the given order in config file under keys: 'GAEZ' and then 'raster_types'"
     )
@@ -1599,6 +1625,7 @@ def load_layers_to_excluder(
             filepath=ensure_uint8_raster(r["filepath"]),
             codes=codes,
             disregard_other_layers=disregard_other_layers,
+            plot=plot_layer_impacts,
         )
 
     utils.print_info(
@@ -1630,7 +1657,11 @@ def load_layers_to_excluder(
             buffer=v.get("buffer", 0),
             is_raster=False,
             disregard_other_layers=disregard_other_layers,
+            plot=plot_layer_impacts,
         )
+
+    if not plot_layer_impacts:
+        return excluder_with_layers
 
     plt.tight_layout()
     if disregard_other_layers:
@@ -1738,7 +1769,10 @@ def get_eligible_share(region_shape, excluder: ExclusionContainer) -> tuple:
         region_shape = region_shape.set_crs(excluder.crs)
     elif region_shape.crs != excluder.crs:
         region_shape = region_shape.to_crs(excluder.crs)
+    t0 = time.perf_counter()
+    utils.print_info("Computing shape availability (can take minutes for large regions) ...")
     masked, transform = excluder.compute_shape_availability(region_shape)
+    utils.print_info(f"Shape availability computed in {time.perf_counter() - t0:.1f}s")
     region_area = region_shape.geometry.area.sum()  # item()
     eligible_area = masked.sum() * excluder.res**2
     eligible_share = eligible_area / region_area
@@ -1759,6 +1793,9 @@ def ensure_uint8_raster(filepath):
     """
     with rasterio.open(filepath) as src:
         if src.dtypes[0] != "uint8" or src.nodata not in (255, 0, None):
+            utils.print_info(
+                f"{__name__}| Converting raster '{Path(filepath).name}' ({src.dtypes[0]}, nodata={src.nodata}) to uint8; reading it fully into memory, this may take a while ..."
+            )
             data = src.read(1).astype(np.uint8)
             meta = src.meta.copy()
             meta.update(dtype="uint8", nodata=255)
@@ -1766,6 +1803,7 @@ def ensure_uint8_raster(filepath):
             tmp = NamedTemporaryFile(suffix=".tif", delete=False, dir=scratch_directory)
             with rasterio.open(tmp.name, "w", **meta) as dst:
                 dst.write(data, 1)
+            utils.print_info(f"{__name__}| Converted raster saved to {tmp.name}")
             return tmp.name
     return filepath
 
@@ -1780,8 +1818,12 @@ def clip_to_boundary_and_resample_raster(
     source_raster_path: str | Path = None,
     target_res_meters: int | None = 100,
     categorical_threshold: int = 50,
+    output_dir: str | Path | None = None,
 ):
-    """Optimized version of raster clip + resample with reprojection (GDAL-accelerated)."""
+    """Clip and resample a raster, optionally storing outputs in a separate directory.
+
+    The default output location remains the source raster's directory.
+    """
 
     # raster_name = in_raster_config.get('name')
 
@@ -1794,10 +1836,12 @@ def clip_to_boundary_and_resample_raster(
     if not in_raster.exists():
         raise FileNotFoundError(f"Input raster not found: {in_raster}")
 
-    clipped_path = in_raster.with_name(
+    output_root = Path(output_dir) if output_dir is not None else in_raster.parent
+    output_root.mkdir(parents=True, exist_ok=True)
+    clipped_path = output_root / (
         f"{in_raster.stem}_clipped_{boundary_name}{in_raster.suffix}"
     )
-    out_path = in_raster.with_name(
+    out_path = output_root / (
         f"{in_raster.stem}_clipped_{boundary_name}_{int(target_res_meters)}m{in_raster.suffix}"
     )
 

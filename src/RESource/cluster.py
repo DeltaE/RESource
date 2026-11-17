@@ -665,6 +665,23 @@ def pre_process_cluster_mapping(
     return cells_scored_cluster_mapped, region_optimal_k_df
 
 
+def _assign_cluster_no_spatial(group: pd.DataFrame, optimal_k: int) -> pd.DataFrame:
+    """Assign ``Cluster_No`` via K-means on cell (x, y) coordinates.
+
+    Groups geographically nearby cells into the same cluster, in contrast to
+    the ``"ranked"`` method's LCOE-sorted bucketing. Use this when a
+    representative site should correspond to a coherent neighborhood of
+    cells (e.g. for interconnection/siting discussions), accepting a wider
+    within-cluster LCOE/CF spread than ``"ranked"`` would produce.
+    """
+    group = group.copy()
+    coords = group[["x", "y"]].to_numpy()
+    n_clusters = max(1, min(optimal_k, len(group)))
+    labels = KMeans(n_clusters=n_clusters, random_state=0, n_init=10).fit_predict(coords)
+    group["Cluster_No"] = labels + 1
+    return group
+
+
 def cells_to_cluster_mapping(
     cells_scored: pd.DataFrame,
     vis_directory: str,
@@ -672,6 +689,7 @@ def cells_to_cluster_mapping(
     sub_national_unit_tag: str,
     resource_type: str,
     sort_columns: list,
+    method: str = "ranked",
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
     Map grid cells to clusters based on similarity metrics and optimal cluster numbers.
@@ -702,6 +720,17 @@ def cells_to_cluster_mapping(
     sort_columns : list
         Column names for sorting cells before cluster assignment
         Typically includes LCOE or other ranking metrics
+        Only used when method="ranked".
+    method : str, default "ranked"
+        Cluster assignment strategy, applied within each region's
+        already-determined optimal_k (see find_optimal_K):
+
+        - "ranked": sort cells by `sort_columns` (typically LCOE), then
+          divide into `optimal_k` equal-size buckets. Clusters share
+          similar techno-economics but may be spatially scattered.
+        - "spatial": K-means on cell (x, y) coordinates. Clusters are
+          geographically coherent neighborhoods, which may mix cells of
+          more varied LCOE/CF than "ranked" would.
 
     Returns
     -------
@@ -825,11 +854,19 @@ def cells_to_cluster_mapping(
         dataframe[sub_national_unit_tag].isin(list(optimal_k_df[sub_national_unit_tag]))
     ]
 
+    if method not in ("ranked", "spatial"):
+        raise ValueError(f"Unknown clustering method: {method!r}. Expected 'ranked' or 'spatial'.")
+
     for region, group in dataframe_filtered.groupby(sub_national_unit_tag):
+        optimal_k = optimal_k_df[optimal_k_df[sub_national_unit_tag] == region]["Optimal_k"].iloc[0]
+
+        if method == "spatial":
+            region_group = _assign_cluster_no_spatial(group, int(optimal_k))
+            clusters.append(region_group)
+            continue
+
         group = group.sort_values(by=sort_columns, ascending=True)
         region_rows = len(group)
-
-        optimal_k = optimal_k_df[optimal_k_df[sub_national_unit_tag] == region]["Optimal_k"].iloc[0]
         region_step_size = region_rows // optimal_k
 
         clusters.extend(

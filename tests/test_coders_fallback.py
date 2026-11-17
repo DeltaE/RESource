@@ -6,6 +6,7 @@ import pytest
 from shapely.geometry import LineString, Point, box
 
 from RESource.coders import CODERSData
+from RESource.power_nodes import GridNodeLocator
 from RESource.RESources import RESources_builder
 
 
@@ -54,7 +55,24 @@ def test_coders_connection_filter_uses_node_type_and_transmission_topology():
     assert filtered["node_code"].tolist() == ["BC_GEN_GSS", "BC_TERM_TSS"]
 
 
-def test_missing_coders_credentials_do_not_fall_back_to_osm(monkeypatch):
+def test_osm_connection_distance_is_reported_in_kilometers():
+    cells = gpd.GeoDataFrame(
+        geometry=[box(0, 0, 1, 1)],
+        crs="EPSG:4326",
+    )
+    lines = gpd.GeoDataFrame(
+        geometry=[LineString([(0, 0), (1, 0)])],
+        crs="EPSG:4326",
+    )
+
+    _, distance_km = GridNodeLocator.find_nearest_connection_point(
+        None, Point(0.5, 0.5), cells.geometry.iloc[0], cells, lines
+    )
+
+    assert distance_km == pytest.approx(55.66)
+
+
+def test_missing_coders_credentials_fall_back_to_osm(monkeypatch):
     class UnauthenticatedCODERS:
         def __init__(self, **_kwargs):
             self.api_user = None
@@ -63,6 +81,7 @@ def test_missing_coders_credentials_do_not_fall_back_to_osm(monkeypatch):
             raise AssertionError("CODERS should not be queried without credentials")
 
     cells = gpd.GeoDataFrame({"x": [0.5], "y": [0.5]}, geometry=[box(0, 0, 1, 1)], crs="EPSG:4326")
+    fallback_cells = cells.assign(fallback=True)
     datahandler = _DataHandler()
     builder = SimpleNamespace(
         country_name="Canada",
@@ -74,11 +93,42 @@ def test_missing_coders_credentials_do_not_fall_back_to_osm(monkeypatch):
         datahandler=datahandler,
         get_buses_path=lambda: None,
         get_processed_substations_path=lambda _source: None,
+        _find_grid_nodes_from_osm=lambda: fallback_cells,
     )
     monkeypatch.setattr("RESource.RESources.CODERSData", UnauthenticatedCODERS)
 
-    with pytest.raises(RuntimeError, match="CODERS"):
-        RESources_builder.find_grid_nodes(builder, cells=cells)
+    result = RESources_builder.find_grid_nodes(builder, cells=cells)
+
+    assert result["fallback"].tolist() == [True]
+
+
+def test_coders_api_failure_falls_back_to_osm(monkeypatch):
+    class UnavailableCODERS:
+        def __init__(self, **_kwargs):
+            self.api_user = "test-key"
+
+        def get_table_provincial(self, _table_name):
+            raise RuntimeError("CODERS API returned 503")
+
+    cells = gpd.GeoDataFrame({"x": [0.5], "y": [0.5]}, geometry=[box(0, 0, 1, 1)], crs="EPSG:4326")
+    fallback_cells = cells.assign(fallback=True)
+    builder = SimpleNamespace(
+        country_name="Canada",
+        region_short_code="BC",
+        required_args={},
+        era5_cutout=SimpleNamespace(get_era5_cutout=lambda **_kwargs: (None, None)),
+        weather_year=2024,
+        gridNodesProcessor=SimpleNamespace(),
+        datahandler=_DataHandler(),
+        get_buses_path=lambda: None,
+        get_processed_substations_path=lambda _source: None,
+        _find_grid_nodes_from_osm=lambda: fallback_cells,
+    )
+    monkeypatch.setattr("RESource.RESources.CODERSData", UnavailableCODERS)
+
+    result = RESources_builder.find_grid_nodes(builder, cells=cells)
+
+    assert result["fallback"].tolist() == [True]
 
 
 def test_general_region_uses_uploaded_substations(tmp_path):
@@ -128,7 +178,7 @@ def test_general_region_falls_back_to_osm_when_substations_are_missing(tmp_path)
         weather_year=2024,
         gridNodesProcessor=SimpleNamespace(
             get_OSM_grid_lines=lambda: grid_lines,
-            find_nearest_connection_point=lambda *_args: (Point(0, 0), 0.0),
+            find_nearest_connection_point=lambda *_args: (Point(0, 0), 11.132),
         ),
         datahandler=datahandler,
         get_buses_path=lambda: tmp_path / "missing.csv",
@@ -144,4 +194,6 @@ def test_general_region_falls_back_to_osm_when_substations_are_missing(tmp_path)
     result = RESources_builder.find_grid_nodes(builder, cells=cells)
 
     assert "nearest_connection_point" in result
+    assert result["nearest_distance"].tolist() == pytest.approx([11.132])
+    assert result["nearest_station_distance_km"].tolist() == pytest.approx([11.132])
     assert "lines" in datahandler.stored

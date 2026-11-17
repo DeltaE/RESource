@@ -51,7 +51,10 @@ import logging
 import os
 import pickle
 import tempfile
+import threading
+import time
 import zipfile
+from contextlib import contextmanager
 from pathlib import Path
 
 import geojson as gj
@@ -86,6 +89,114 @@ KNOWN_CONFIG_TOP_LEVEL_KEYS = {
     "weather",  # cutout, GWA
     "weather_year",
 }
+
+
+SLOW_PROCESS_THRESHOLD_S = 300.0
+_TIMINGS: list[tuple[str, float]] = []
+_OPEN_STEP: tuple[str, float] | None = None
+_TIMING_LOCK = threading.Lock()
+_TIMING_PREFIX = ""
+
+def get_root() -> Path:
+    ROOT = next(
+    (
+        path.resolve()
+        for path in (Path.cwd(), *Path.cwd().parents)
+        if (path / "pyproject.toml").is_file()
+        and (path / "src" / "RESource").is_dir()
+    ),
+    Path.cwd().resolve(),
+    )
+    return ROOT
+
+
+def set_timing_context(prefix: str) -> None:
+    """Prefix recorded process names (e.g. ``"BC/wind"``) to tell jobs apart."""
+    global _TIMING_PREFIX
+    _TIMING_PREFIX = f"[{prefix}] " if prefix else ""
+
+
+def reset_timings() -> None:
+    """Clear all recorded process timings (call at the start of a job)."""
+    global _OPEN_STEP
+    with _TIMING_LOCK:
+        _TIMINGS.clear()
+        _OPEN_STEP = None
+
+
+def record_timing(name: str, elapsed_s: float) -> None:
+    """Record the duration of a named process for the end-of-log report."""
+    with _TIMING_LOCK:
+        _TIMINGS.append((_TIMING_PREFIX + name, float(elapsed_s)))
+
+
+def start_step(name: str) -> None:
+    """Begin a workflow step, closing (and recording) the previous open step."""
+    global _OPEN_STEP
+    now = time.perf_counter()
+    with _TIMING_LOCK:
+        if _OPEN_STEP is not None:
+            _TIMINGS.append((_OPEN_STEP[0], now - _OPEN_STEP[1]))
+        _OPEN_STEP = (_TIMING_PREFIX + name, now)
+
+
+def end_step() -> None:
+    """Close the currently open workflow step, if any."""
+    global _OPEN_STEP
+    now = time.perf_counter()
+    with _TIMING_LOCK:
+        if _OPEN_STEP is not None:
+            _TIMINGS.append((_OPEN_STEP[0], now - _OPEN_STEP[1]))
+            _OPEN_STEP = None
+
+
+@contextmanager
+def timed(name: str):
+    """Context manager that records the duration of the wrapped block."""
+    t0 = time.perf_counter()
+    try:
+        yield
+    finally:
+        record_timing(name, time.perf_counter() - t0)
+
+
+def format_duration(seconds: float) -> str:
+    """Format seconds as ``HHh MMm SSs``."""
+    seconds = int(round(seconds))
+    h, rem = divmod(seconds, 3600)
+    m, s = divmod(rem, 60)
+    return f"{h:02d}h {m:02d}m {s:02d}s"
+
+
+def build_timing_report(
+    total_s: float | None = None,
+    threshold_s: float = SLOW_PROCESS_THRESHOLD_S,
+    timings: list[tuple[str, float]] | None = None,
+) -> str:
+    """Return a text report: total time and every process slower than ``threshold_s``."""
+    if timings is None:
+        end_step()
+        with _TIMING_LOCK:
+            timings = list(_TIMINGS)
+    slow = sorted((t for t in timings if t[1] > threshold_s), key=lambda t: -t[1])
+    if total_s is None:
+        total_s = sum(e for _, e in timings)
+    bar = "=" * 72
+    lines = [bar, "TIMING REPORT", bar, f"Total time: {format_duration(total_s)}"]
+    lines.append(f"Processes longer than {threshold_s / 60:g} min:")
+    if slow:
+        lines += [f"  {format_duration(e)}  {n}" for n, e in slow]
+    else:
+        lines.append("  none")
+    lines.append(bar)
+    return "\n".join(lines)
+
+
+def log_timing_report(total_s: float | None = None) -> str:
+    """Write the timing report to the run log and return it."""
+    report = build_timing_report(total_s)
+    logging.getLogger("RESource").info("\n%s", report)
+    return report
 
 
 def configure_runtime_logging(
@@ -341,6 +452,8 @@ def print_module_title(text, Length_Char_inLine=60):
 
 
 def print_banner(message: str):
+    if message.startswith("Step "):
+        start_step(message)
     if _OUTPUT_CONFIGURED:
         _record_status(message, stacklevel=2)
         return
@@ -684,6 +797,65 @@ def load_config(file_path: str | Path) -> dict:
     """Load a full or inherited YAML workflow configuration."""
     config, _provenance = resolve_config(file_path)
     return config
+
+
+def get_runtime_info() -> dict:
+    """Capture the runtime/machine context a store was built under.
+
+    Combines git state, package version, hostname, and the hardware snapshot
+    already used for CLI diagnostics (``RESource.cli.hw_snapshot``) so stores
+    can be self-describing without re-deriving this per call site.
+    """
+    import socket
+    import subprocess
+    import sys
+    from importlib import metadata as importlib_metadata
+
+    import RESource
+
+    def _git(*args: str) -> str | None:
+        try:
+            return subprocess.run(
+                ["git", *args],
+                cwd=Path(__file__).resolve().parent,
+                capture_output=True,
+                text=True,
+                timeout=5,
+                check=True,
+            ).stdout.strip()
+        except Exception:
+            return None
+
+    git_commit = _git("rev-parse", "HEAD")
+    git_dirty = None
+    if git_commit is not None:
+        status = _git("status", "--porcelain")
+        git_dirty = bool(status) if status is not None else None
+
+    package_versions = {}
+    for pkg in ("geopandas", "rasterio", "pandas", "numpy", "h5py", "tables"):
+        try:
+            package_versions[pkg] = importlib_metadata.version(pkg)
+        except importlib_metadata.PackageNotFoundError:
+            package_versions[pkg] = None
+
+    try:
+        from RESource.cli import hw_snapshot
+
+        hardware = hw_snapshot()
+    except Exception:
+        hardware = {}
+
+    return {
+        "created_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "RESource_version": RESource.__version__,
+        "git_commit": git_commit,
+        "git_dirty": git_dirty,
+        "hostname": socket.gethostname(),
+        "python_executable": sys.executable,
+        "package_versions": package_versions,
+        "hardware": hardware,
+    }
 
 
 def download_data(source_URL: str, file_path: str) -> str:

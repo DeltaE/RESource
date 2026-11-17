@@ -94,6 +94,9 @@ google-drive = [
 reporting = [
   "jinja2>=3.1",
 ]
+dash = [
+  "jinja2>=3.1",
+]
 
 [dependency-groups]
 dev = [
@@ -103,6 +106,7 @@ dev = [
   "pre-commit>=3.8",
   "pytest>=8.3",
   "pytest-cov>=6",
+  "py-spy>=0.4",
   "ruff>=0.9",
   "twine>=5",
 ]
@@ -119,6 +123,7 @@ resource = "RESource.cli:entrypoint"
 resource-multiyear = "RESource.multiyear:entrypoint"
 resource-cutout-multiyear = "RESource.cutout_multiyear:entrypoint"
 resource-report = "RESource.reporting.cli:entrypoint"
+resource-dash = "RESource.dash.cli:entrypoint"
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -130,6 +135,7 @@ RESource = [
   "assets/mappings/*.csv",
   "visual_styles/*.mplstyle",
   "reporting/templates/*.html.j2",
+  "dash/templates/*.html.j2",
 ]
 
 [tool.ruff]

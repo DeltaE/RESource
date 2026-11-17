@@ -105,7 +105,7 @@ RESource.lands| 'conserved_lands_CAN' not initiated
 9. **Clustering and Site Selection** - Created representative resource profiles
 
 ### Generated Outputs:
-- HDF5 data store: `data/store/resources_Bangladesh_BD-03_baseline.h5`
+- HDF5 data store: `results/Bangladesh/BD-03/baseline/resources_Bangladesh_BD-03_baseline.h5`
 - Results CSV: `results/Bangladesh/BD-03/baseline/resource_options_solar_Dhaka_timeseries.csv`
 - Visualization plots: `vis/Bangladesh/BD-03/baseline/solar/`
 

@@ -61,10 +61,16 @@ temporarily retained as a compatibility layer for existing notebooks.
 #### Just want to explore a results store?
 
 If you only care about the output of a scenario run — the `.h5` store
-under `data/store/` — you don't need to install the full RESource pipeline
+under `results/<Country>/<Region>/<RUN_ID>/` — you don't need to install the full RESource pipeline
 (no `atlite`, `cdsapi`, `cfgrib`, `rioxarray`, `osmnx`, `pygadm`, ...).
 Every store is a plain `pandas.HDFStore` file, so a much lighter
 environment is enough to open it and do post-processing:
+
+New pipeline runs write stores under `results/`. Existing stores under
+`data/store/` are not moved or reused automatically; the first run in the new
+location recomputes any missing cached steps. `find_stores()` searches both
+locations by default. The example notebook explicitly searches `data/store`;
+use `find_stores()` there to include new runs.
 
 ```bash
 uv venv .venv-viewer
@@ -81,6 +87,19 @@ installed), and a few basic post-processing/plotting examples. It uses the
 lightweight reader in [`src/RESource/store_viewer.py`](src/RESource/store_viewer.py)
 from the local package installation above. `--no-deps` keeps this optional
 viewer environment from installing the full assessment pipeline dependencies.
+
+For an interactive browser dashboard, install the `dash` extra and build it:
+
+```bash
+uv sync --locked --extra dash
+uv run resource-dash --out RESource_dash.html
+```
+
+Open the generated HTML and select a store. The **Land analytics** tab shows
+the stored land maps, class distributions and layer-impact figures; larger
+images can be loaded on demand. A combined view can be filtered by region.
+Stores without these figures show an empty state. The browser reads the stores
+locally; Pyodide is downloaded when needed.
 
 ```python
 from RESource.RESources import RESources_builder

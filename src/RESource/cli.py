@@ -58,6 +58,7 @@ except ImportError:
 
 import RESource.RESources as RES
 from RESource import utility as utils
+from RESource.CellCapacityProcessor import build_region_aggregated_capacity
 
 # ── Coloured output ───────────────────────────────────────────────────────────
 
@@ -138,12 +139,18 @@ def _build_run_log_paths(
     config_path: str,
     weather_year: int | str,
     regions: list[str] | None,
+    country: str,
 ) -> tuple[Path, Path]:
-    """Generate unique detail/runtime log paths for a single CLI invocation."""
+    """Generate unique detail/runtime log paths for a single CLI invocation.
+
+    Logs are grouped under a per-country directory (from the config's
+    'country' field) so runs for different countries don't pile up together.
+    """
     timestamp = start_dt.strftime("%Y%m%d_%H%M%S_%f")
     pid_tag = os.getpid()
     config_tag = _slugify(Path(config_path).stem)
     year_tag = _slugify(weather_year)
+    country_dir = RUN_LOG_DIR / _slugify(country)
     if regions is None:
         region_tag = "all"
     elif len(regions) == 0:
@@ -153,8 +160,8 @@ def _build_run_log_paths(
     # Keep filenames manageable when many regions are requested.
     region_tag = region_tag[:80]
     run_base = f"{timestamp}_p{pid_tag}_{config_tag}_y{year_tag}_r{region_tag}"
-    detail_log = RUN_LOG_DIR / f"{run_base}_detail.log"
-    runtime_log = RUN_LOG_DIR / f"{run_base}_runtime.log"
+    detail_log = country_dir / f"{run_base}_detail.log"
+    runtime_log = country_dir / f"{run_base}_runtime.log"
     return detail_log, runtime_log
 
 
@@ -402,6 +409,8 @@ def write_runtime_log(
     block += _fmt("psutil", "available" if _PSUTIL else "not installed — hw metrics unavailable")
     block += sep
 
+    block += utils.build_timing_report(runtime_s) + "\n"
+
     with open(log_file, "a", encoding="utf-8") as f:
         f.write(block)
     _write_latest_log_pointer(LATEST_RUNTIME_LOG, log_file)
@@ -477,11 +486,26 @@ def main(start_dt: datetime | None = None) -> int:
     hw_start = hw_snapshot()
     live_status = LiveStatus()
     inspection_mode = args.show_config or args.show_overrides or args.validate_only
+
+    # ── Load config ───────────────────────────────────────────────────────────
+    # Resolved before log setup so runs can be grouped by the config's country.
+    try:
+        config, config_provenance = utils.resolve_config(args.config)
+        utils.print_update(message=f"Config loaded: {args.config}")
+    except FileNotFoundError:
+        print_error(f"✗ Config not found: {args.config}")
+        sys.exit(1)
+    except Exception as exc:
+        print_error(f"✗ Error loading config: {exc}")
+        sys.exit(1)
+
+    country = config.get("country", "unknown")
     detail_log_path, runtime_log_path = _build_run_log_paths(
         start_dt=start_dt,
         config_path=args.config,
         weather_year=args.year,
         regions=args.regions,
+        country=country,
     )
     detail_log = utils.configure_runtime_logging(
         detail_log_path,
@@ -492,19 +516,12 @@ def main(start_dt: datetime | None = None) -> int:
     _write_latest_log_pointer(LATEST_RUNTIME_LOG, runtime_log_path)
     logger = logging.getLogger("RESource")
     logger.info(
-        "Pipeline invocation: config=%s year=%s regions=%s", args.config, args.year, args.regions
+        "Pipeline invocation: config=%s country=%s year=%s regions=%s",
+        args.config,
+        country,
+        args.year,
+        args.regions,
     )
-
-    # ── Load config ───────────────────────────────────────────────────────────
-    try:
-        config, config_provenance = utils.resolve_config(args.config)
-        utils.print_update(message=f"Config loaded: {args.config}")
-    except FileNotFoundError:
-        print_error(f"✗ Config not found: {args.config}")
-        sys.exit(1)
-    except Exception as exc:
-        print_error(f"✗ Error loading config: {exc}")
-        sys.exit(1)
 
     if "region_mapping" not in config:
         print_error("✗ 'region_mapping' missing from config.")
@@ -544,13 +561,16 @@ def main(start_dt: datetime | None = None) -> int:
     resource_types = ["wind", "solar"]
     region_log = []
     live_status.configure(len(regions) * len(resource_types))
+    utils.reset_timings()
 
     for region in regions:
+        region_store_path = None
         for resource_type in resource_types:
             live_status.start(region, resource_type)
             logger.info("Starting job region=%s resource=%s", region, resource_type)
             t0 = datetime.now()
             builder = None
+            utils.set_timing_context(f"{region}/{resource_type}")
             try:
                 capture_context = redirect_stdout(LogStream(logger, logging.INFO))
                 error_context = redirect_stderr(LogStream(logger, logging.WARNING))
@@ -566,6 +586,7 @@ def main(start_dt: datetime | None = None) -> int:
                         make_clusters=True,
                         clean_store=False,
                     )
+                region_store_path = builder.store
                 elapsed = (datetime.now() - t0).total_seconds()
                 region_log.append(
                     {
@@ -598,6 +619,11 @@ def main(start_dt: datetime | None = None) -> int:
                 logger.exception("Job failed region=%s resource=%s", region, resource_type)
                 live_status.complete(region, resource_type, failed=True)
             finally:
+                utils.end_step()
+                utils.record_timing(
+                    "Total job", (datetime.now() - t0).total_seconds()
+                )
+                utils.set_timing_context("")
                 builder = None
                 cleanup = utils.release_process_memory()
                 logger.info(
@@ -607,12 +633,28 @@ def main(start_dt: datetime | None = None) -> int:
                     cleanup["unreachable_objects_collected"],
                 )
 
+        # Sub-national capacity rollup, once per region after both resource
+        # types have built — best-effort: logs and skips regions/configs that
+        # don't resolve a usable admin-unit tag rather than failing the run.
+        if region_store_path is not None:
+            try:
+                build_region_aggregated_capacity(
+                    store_path=region_store_path,
+                    config=config,
+                    region_short_code=region,
+                )
+            except Exception:
+                logger.exception("Failed to build aggregated/capacity for region=%s", region)
+
     # ── Write log ─────────────────────────────────────────────────────────────
     end_dt = datetime.now()
     hw_end = hw_snapshot()
     any_fail = any(e["status"] != "ok" for e in region_log)
     status = "PARTIAL" if any_fail else "SUCCESS"
 
+    logger.info(
+        "\n%s", utils.build_timing_report((end_dt - start_dt).total_seconds())
+    )
     live_status.finish(status, detail_log)
     live_status.update(f"Runtime summary: {_relative_to_cwd(runtime_log_path)}")
 
@@ -643,6 +685,7 @@ def entrypoint() -> None:
         config_path="unknown",
         weather_year="unknown",
         regions=[],
+        country="unknown",
     )
     try:
         exit_code = main(_start_dt)

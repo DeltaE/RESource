@@ -229,8 +229,9 @@ lands:
           wind: 0
     # GAEZ terrain slope layer
     - name: 'terrain_resources'
-      raster: "slpmed05.tif"
+      raster: "slpmed30s.tif" # GAEZ v4 median slope class, 30 arc-seconds
       zip_extract_direct: 'LR/ter'
+      source: 'https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR/ter/slpmed30s.tif'
       color_map: 'terrain'
       dtype: uint8
       fill_value: 255

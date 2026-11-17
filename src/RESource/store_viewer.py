@@ -38,12 +38,11 @@ _WKT_PREFIXES = (
 )
 
 
-def find_stores(root: str | Path = "data/store") -> list[Path]:
-    """Recursively list ``.h5`` store files under ``root``, newest first."""
-    root = Path(root)
-    if not root.exists():
-        return []
-    return sorted(root.rglob("*.h5"), key=lambda p: p.stat().st_mtime, reverse=True)
+def find_stores(root: str | Path | None = None) -> list[Path]:
+    """List stores newest first, including legacy stores when no root is specified."""
+    roots = (Path(root),) if root is not None else (Path("results"), Path("data/store"))
+    stores = [path for directory in roots if directory.exists() for path in directory.rglob("*.h5")]
+    return sorted(stores, key=lambda p: p.stat().st_mtime, reverse=True)
 
 
 def _looks_like_wkt(series: pd.Series) -> bool:

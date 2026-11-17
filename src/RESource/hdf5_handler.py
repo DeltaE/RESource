@@ -1,10 +1,15 @@
+import json
 import warnings
+from datetime import datetime, timezone
 from pathlib import Path
 
 import geopandas as gpd
 import h5py
+import numpy as np
 import pandas as pd
+from affine import Affine
 from colorama import Fore, Style
+from rasterio.crs import CRS
 from shapely.geometry.base import BaseGeometry
 from shapely.wkt import dumps, loads
 
@@ -239,6 +244,168 @@ class DataHandler:
                 utils.print_update(level=2, message="<datahandler instance>.from_store('<key>')")
         except Exception as e:
             utils.print_update(message=f"{__name__}|  ❌ Error reading file: {e}", alert=True)
+
+    def set_metadata(self, metadata: dict, group: str = "_meta") -> None:
+        """Attach standalone metadata (config, provenance, runtime info, ...) to the store.
+
+        Each top-level key in *metadata* is written as an HDF5 attribute on
+        *group*, JSON-encoded unless it is already an HDF5-native scalar
+        string. Existing attrs under *group* are preserved and merged with
+        the new ones, so repeated calls (e.g. once per pipeline step) don't
+        clobber unrelated keys. A ``_meta_updated_at`` attr is refreshed on
+        every call.
+
+        Args:
+            metadata: Mapping of metadata keys to JSON-serialisable values.
+            group: HDF5 group under which attrs are stored (default ``_meta``).
+        """
+        with h5py.File(self.store, "a") as hdf_file:
+            meta_group = hdf_file.require_group(group)
+            for key, value in metadata.items():
+                meta_group.attrs[key] = value if isinstance(value, str) else json.dumps(value, default=str)
+            meta_group.attrs["_meta_updated_at"] = datetime.now(timezone.utc).isoformat()
+        utils.print_update(
+            level=3, message=f"{__name__}| 💾 Metadata ({list(metadata)}) written to '{group}' in {self.store}"
+        )
+
+    def get_metadata(self, key: str | None = None, group: str = "_meta") -> dict | object | None:
+        """Read metadata previously written with :meth:`set_metadata`.
+
+        Args:
+            key: Specific metadata attribute to fetch. Returns the full dict when None.
+            group: HDF5 group metadata was stored under.
+
+        Returns:
+            The decoded value for *key*, or a dict of all decoded attrs under *group*.
+        """
+        with h5py.File(self.store, "r") as hdf_file:
+            if group not in hdf_file:
+                return None if key else {}
+            attrs = dict(hdf_file[group].attrs)
+
+        def _decode(value):
+            if isinstance(value, str):
+                try:
+                    return json.loads(value)
+                except json.JSONDecodeError:
+                    return value
+            return value
+
+        if key is not None:
+            return _decode(attrs[key]) if key in attrs else None
+        return {k: _decode(v) for k, v in attrs.items()}
+
+    def save_image(
+        self,
+        image: Path | bytes,
+        key: str,
+        group: str = "LandAnalytics/images",
+        content_type: str = "image/png",
+        **attrs,
+    ) -> None:
+        """Embed a rendered figure (e.g. a ``plt.savefig`` PNG) into the store.
+
+        Complex spatial layers that aren't worth round-tripping as vector/
+        raster data (e.g. multi-layer exclusion maps) can instead be saved as
+        the already-rendered image, so a downstream dashboard can display them
+        straight from the store without re-plotting.
+
+        Args:
+            image: Path to an image file on disk, or raw image bytes.
+            key: Dataset name under *group* (e.g. ``'CLC_class_distribution'``).
+            group: HDF5 group to nest the image dataset under.
+            content_type: MIME type recorded as a dataset attr for the reader.
+            **attrs: Extra scalar attrs stored alongside the image (e.g. ``title=``, ``source=``).
+        """
+        data = Path(image).read_bytes() if isinstance(image, (str, Path)) else bytes(image)
+        full_key = f"{group}/{key}"
+        with h5py.File(self.store, "a") as hdf_file:
+            if full_key in hdf_file:
+                del hdf_file[full_key]
+            dataset = hdf_file.create_dataset(full_key, data=np.frombuffer(data, dtype="uint8"))
+            dataset.attrs["content_type"] = content_type
+            dataset.attrs["created_at"] = datetime.now(timezone.utc).isoformat()
+            for attr_key, attr_value in attrs.items():
+                dataset.attrs[attr_key] = attr_value if isinstance(attr_value, str) else json.dumps(attr_value, default=str)
+        utils.print_update(level=3, message=f"{__name__}| 🖼️ Image saved to '{full_key}' in {self.store}")
+
+    def load_image(self, key: str, group: str = "LandAnalytics/images") -> bytes | None:
+        """Retrieve image bytes previously written with :meth:`save_image`."""
+        full_key = f"{group}/{key}"
+        with h5py.File(self.store, "r") as hdf_file:
+            if full_key not in hdf_file:
+                return None
+            return hdf_file[full_key][()].tobytes()
+
+    def save_raster(
+        self,
+        data: np.ndarray,
+        key: str,
+        *,
+        crs: CRS | str,
+        transform: Affine,
+        nodata: float | None,
+        units: str,
+        provenance: dict,
+        group: str = "LandAnalytics/rasters",
+    ) -> None:
+        """Store a single-band raster and its spatial metadata without overwriting.
+
+        Args:
+            data: Two-dimensional raster values, including nodata.
+            key: Dataset name under the raster group.
+            crs: Raster coordinate reference system.
+            transform: Affine transform mapping pixel coordinates to the CRS.
+            nodata: Raster nodata value, or None when not defined.
+            units: Units of the raster values.
+            provenance: JSON-serializable source and processing details.
+            group: HDF5 group containing the raster dataset.
+
+        Raises:
+            ValueError: If the raster is not two-dimensional or lacks a CRS.
+            FileExistsError: If the raster dataset already exists.
+        """
+        if data.ndim != 2:
+            raise ValueError("Raster data must be a two-dimensional array")
+        if not crs:
+            raise ValueError("Raster CRS is required")
+        crs_wkt = CRS.from_user_input(crs).to_wkt()
+        provenance_json = json.dumps(provenance)
+        full_key = f"{group}/{key}"
+        with h5py.File(self.store, "a") as hdf_file:
+            if full_key in hdf_file:
+                raise FileExistsError(f"Raster already exists in store: {full_key}")
+            dataset = hdf_file.create_dataset(full_key, data=data, compression="gzip")
+            dataset.attrs["crs_wkt"] = crs_wkt
+            dataset.attrs["transform"] = tuple(transform)[:6]
+            dataset.attrs["units"] = units
+            dataset.attrs["provenance"] = provenance_json
+            if nodata is not None:
+                dataset.attrs["nodata"] = nodata
+
+    def load_raster(
+        self, key: str, group: str = "LandAnalytics/rasters"
+    ) -> tuple[np.ndarray, dict]:
+        """Load a raster and the CRS, transform, nodata, units and provenance."""
+        full_key = f"{group}/{key}"
+        with h5py.File(self.store, "r") as hdf_file:
+            dataset = hdf_file[full_key]
+            data = dataset[()]
+            metadata = {
+                "crs": CRS.from_wkt(dataset.attrs["crs_wkt"]),
+                "transform": Affine(*dataset.attrs["transform"]),
+                "nodata": dataset.attrs.get("nodata"),
+                "units": dataset.attrs["units"],
+                "provenance": json.loads(dataset.attrs["provenance"]),
+            }
+        return data, metadata
+
+    def list_group(self, group: str = "LandAnalytics") -> list[str]:
+        """List dataset/sub-group names nested under *group* (for dash discovery)."""
+        with h5py.File(self.store, "r") as hdf_file:
+            if group not in hdf_file:
+                return []
+            return list(hdf_file[group].keys())
 
     def clean_store(self):
         """

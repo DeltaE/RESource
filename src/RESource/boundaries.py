@@ -5,6 +5,7 @@ from pathlib import Path
 
 import geopandas as gpd
 import pygadm
+import requests
 
 import RESource.utility as utils
 
@@ -12,6 +13,21 @@ import RESource.utility as utils
 from RESource.AttributesParser import AttributesParser
 
 PRINT_LEVEL_BASE = 4
+
+# pygadm's shared `requests_cache` session has no default timeout, so a
+# stalled/unreachable GADM host (https://geodata.ucdavis.edu) hangs the
+# pipeline forever instead of failing. Pin a (connect, read) timeout once at
+# import time so a dead host raises promptly instead of blocking indefinitely.
+_GADM_REQUEST_TIMEOUT = (10, 60)
+if not getattr(pygadm.session, "_resource_timeout_patched", False):
+    _original_pygadm_request = pygadm.session.request
+
+    def _pygadm_request_with_timeout(method, url, **kwargs):
+        kwargs.setdefault("timeout", _GADM_REQUEST_TIMEOUT)
+        return _original_pygadm_request(method, url, **kwargs)
+
+    pygadm.session.request = _pygadm_request_with_timeout
+    pygadm.session._resource_timeout_patched = True
 
 
 @dataclass
@@ -222,9 +238,17 @@ class GADMBoundaries(AttributesParser):
                     message=f"{__name__} | Fetching GADM data for {self.country} at Administrative Level {self.admin_level}....from source: https://gadm.org/data.html",
                 )
 
-                _country_gdf_: gpd.GeoDataFrame = pygadm.AdmItems(
-                    name=self.country, content_level=self.admin_level
-                )
+                try:
+                    _country_gdf_: gpd.GeoDataFrame = pygadm.AdmItems(
+                        name=self.country, content_level=self.admin_level
+                    )
+                except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+                    raise RuntimeError(
+                        f"{__name__} | Could not reach the GADM boundary server "
+                        f"(https://geodata.ucdavis.edu) to fetch '{self.country}': {e}. "
+                        "Check network/firewall access to that host, or place a "
+                        f"pre-downloaded boundary file at '{self.country_file}'."
+                    ) from e
                 _country_gdf_.set_crs(self.crs_d)
                 self.boundary_country = _country_gdf_
                 utils.print_update(

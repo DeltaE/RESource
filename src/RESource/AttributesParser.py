@@ -76,8 +76,8 @@ class AttributesParser:
         self.results_save_to = self.get_results_save_to_path()
 
         # Define the store file path and filename
-        self.store = Path(
-            f"data/store/{self.country_kwd}/{self.region_short_code}/resources_{self.country_kwd}_{self.region_short_code}_{self.RUN_ID}.h5"
+        self.store = self.results_save_to / (
+            f"resources_{self.country_kwd}_{self.region_short_code}_{self.RUN_ID}.h5"
         )
         self.store.parent.mkdir(parents=True, exist_ok=True)
         self.default_crs_cfg: dict = self.config.get("default_CRS", None)
@@ -328,6 +328,14 @@ class AttributesParser:
 
     def get_CLC_raster_config(self) -> dict[str, dict]:
         return self.config.get("lands", {}).get("CORINE", {})
+
+    @property
+    def plot_layer_impacts(self) -> bool:
+        """Whether to compute/plot per-layer land availability (``lands.plot_layer_impacts``).
+
+        Defaults to True. Set False for large regions: availability is then computed once at the end.
+        """
+        return bool(self.config.get("lands", {}).get("plot_layer_impacts", True))
 
     def get_gaez_data_config(self) -> dict[str, dict]:
         return self.config.get("lands", {}).get("GAEZ", {})

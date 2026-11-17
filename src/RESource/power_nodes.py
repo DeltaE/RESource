@@ -272,7 +272,7 @@ class GridNodeLocator(AttributesParser):
                         min_dist = dist
                         nearest_point = projected
 
-            distance = cell_centroid.distance(nearest_point)
+            distance = cell_centroid.distance(nearest_point) * 111.32
             return nearest_point, distance
 
         except Exception:

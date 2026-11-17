@@ -271,6 +271,9 @@ infrastructure:
     lines: data/processed_data/lines_BC.csv
 
 lands:
+  # Per-layer stepwise/impact plots compute availability after every layer (slow, ~10 min for BC).
+  # false: availability is computed once at the end. Recommended for large regions.
+  plot_layer_impacts: false
   GAEZ:
     root: data/downloaded_data/GAEZ
     source: https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip

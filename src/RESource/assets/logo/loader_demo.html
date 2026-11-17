@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="author" content="EL">
+<title>RESource Dash loader demo</title>
+<style>
+/* ---------- RESource loader: copy this block into dash.css ---------- */
+.rd-loader{position:fixed;inset:0;z-index:5000;display:grid;place-items:center;
+  background:rgba(7,11,18,.28);
+  -webkit-backdrop-filter:blur(10px) saturate(1.15);backdrop-filter:blur(10px) saturate(1.15);
+  opacity:0;visibility:hidden;transition:opacity .18s ease,visibility 0s linear .18s}
+.rd-loader.on{opacity:1;visibility:visible;transition:opacity .18s ease}
+.rd-loader .box{display:flex;flex-direction:column;align-items:center;gap:12px;
+  transform:scale(.94);transition:transform .22s cubic-bezier(.2,.9,.3,1.2)}
+.rd-loader.on .box{transform:scale(1)}
+.rd-loader img{width:112px;height:112px;filter:drop-shadow(0 6px 18px rgba(0,16,32,.35))}
+.rd-loader .msg{font:600 12px/1 'JetBrains Mono',ui-monospace,Consolas,monospace;letter-spacing:.06em;
+  color:#fff;padding:7px 14px;border-radius:20px;background:rgba(4,18,31,.55);border:1px solid rgba(140,198,63,.45)}
+.rd-loader .msg::after{content:"";display:inline-block;width:1.4em;text-align:left;animation:rd-dots 1.2s steps(4) infinite}
+@keyframes rd-dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
+@media (prefers-reduced-motion:reduce){.rd-loader,.rd-loader .box{transition:none}.rd-loader .msg::after{animation:none}}
+/* ---------- demo page only ---------- */
+body{margin:0;font-family:Inter,-apple-system,'Segoe UI',sans-serif;background:#f3f6fa;color:#16202e}
+.hdr{display:flex;align-items:center;gap:12px;padding:10px 22px;color:#fff;background:linear-gradient(140deg,#04121f,#0a3156 48%,#0d4c81 74%,#17726c);border-bottom:2px solid #8cc63f}
+.hdr img{height:38px}.hdr b{font-size:20px}
+main{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:22px}
+.card{background:#fff;border:1px solid #d3dde8;border-radius:12px;padding:16px;min-height:150px}
+.bar{height:10px;border-radius:5px;margin:8px 0;background:linear-gradient(90deg,#0d4c81,#2c9a48)}
+button{font:inherit;padding:8px 16px;border-radius:8px;border:0;background:#0d4c81;color:#fff;cursor:pointer}
+</style></head><body>
+<header class="hdr"><img src="logo_dash_mark.svg" alt=""><b>RESource Dash</b><span style="flex:1"></span><button id="go">Show loader (1.8 s)</button></header>
+<main>
+  <div class="card"><h3>Supply curve</h3><div class="bar" style="width:90%"></div><div class="bar" style="width:70%"></div><div class="bar" style="width:45%"></div></div>
+  <div class="card"><h3>Land analytics</h3><div class="bar" style="width:60%"></div><div class="bar" style="width:85%"></div></div>
+  <div class="card"><h3>Profiles</h3><div class="bar" style="width:75%"></div><div class="bar" style="width:30%"></div><div class="bar" style="width:55%"></div></div>
+</main>
+
+<!-- ---------- RESource loader markup: place once before </body> ---------- -->
+<div class="rd-loader" id="rdLoader" role="status" aria-live="polite" aria-hidden="true">
+  <div class="box"><img src="logo_loader.svg" alt=""><div class="msg" id="rdLoaderMsg">Loading</div></div>
+</div>
+<script>
+/* ---------- RESource loader API: RDLoader.show("Reading store"); RDLoader.hide(); ---------- */
+const RDLoader=(()=>{const el=document.getElementById('rdLoader'),msg=document.getElementById('rdLoaderMsg');let n=0,t=0;
+  return{show(m='Loading'){msg.textContent=m;n++;clearTimeout(t);el.classList.add('on');el.setAttribute('aria-hidden','false')},
+         hide(force){n=force?0:Math.max(0,n-1);if(n)return;t=setTimeout(()=>{el.classList.remove('on');el.setAttribute('aria-hidden','true')},120)}}})();
+document.getElementById('go').onclick=()=>{RDLoader.show('Reading store');setTimeout(()=>RDLoader.hide(),1800)};
+</script>
+</body></html>

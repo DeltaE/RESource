@@ -620,9 +620,10 @@ class CellCapacityProcessor(AttributesParser):
 
         # self.Availability_matrix:xr = self.cutout.availabilitymatrix(self.region_shape, self.composite_excluder)
         self.shapes_for_availability = self.get_shapes_for_availability()
-        self.AvailabilityMatrix: xr = self.cutout.availabilitymatrix(
-            self.shapes_for_availability, self.composite_excluder
-        )
+        with utils.timed("Cell availability matrix"):
+            self.AvailabilityMatrix: xr = self.cutout.availabilitymatrix(
+                self.shapes_for_availability, self.composite_excluder
+            )
 
         utils.print_info(
             f"{__name__}| @ Line: {inspect.currentframe().f_lineno - 1} | We need to pass the unified `region_shape` to the cutout to calculate availability for the entire region as in one of the dimensions e.g. here 'Province'. If we pass multipolygons/geoms of each Regional district (sub-provincial) we will get availability for each regional district as a dimension; which adds additional step to produce our intended data. For this analysis, one unified shape for entire region is sufficient"
@@ -687,12 +688,29 @@ class CellCapacityProcessor(AttributesParser):
     def _add_geom_area_metrics(self, gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
         gdf = gdf.copy()
         gdf["geom_area_km2"] = gdf.geometry.area / 1e6
-        # gdf["geom_area_share"] = gdf["geom_area_km2"] / gdf["ERA5_cell_area_km2"]
+        gdf["ERA5_cell_area_km2"] = self._era5_cell_area_km2(gdf)
+        gdf["geom_area_share"] = gdf["geom_area_km2"] / gdf["ERA5_cell_area_km2"]
         return gdf
+
+    def _era5_cell_area_km2(self, gdf) -> pd.Series:
+        """Full (unclipped) cutout grid-cell area for each row, in km², matched on (x, y)."""
+        grid = self.cutout.grid[["x", "y", "geometry"]].copy()
+        grid = grid.to_crs(self.crs_m) if grid.crs is not None else grid.set_crs(self.crs_d).to_crs(self.crs_m)
+        key = lambda df: list(zip(df["x"].round(6), df["y"].round(6)))
+        area = dict(zip(key(grid), grid.geometry.area / 1e6))
+        out = pd.Series([area.get(k) for k in key(gdf)], index=gdf.index, dtype="float64")
+        if out.isna().any():
+            raise ValueError(f"{out.isna().sum()} cells have no matching cutout grid cell on (x, y).")
+        return out
 
     def _add_developable_area(self, gdf):
         gdf = gdf.copy()
-        gdf[self.developable_col] = gdf[self.landavail_col] * gdf["geom_area_km2"]
+        # LA from atlite is a share of the full ERA5 cell (see rescale_availability_to_piece)
+        share, developable = rescale_availability_to_piece(
+            gdf[self.landavail_col], gdf["geom_area_km2"], gdf["ERA5_cell_area_km2"]
+        )
+        gdf[self.developable_col] = developable
+        gdf[self.landavail_col] = share  # now: developable share of this piece
         return gdf
 
     def _add_potential_capacity(self, gdf):
@@ -789,9 +807,10 @@ class CellCapacityProcessor(AttributesParser):
         Returns:
             fig (matplotlib.figure.Figure): The figure object containing the plot.
         """
-        availability_gdf = (
-            availability_gdf if availability_gdf is not None else self.availability_gdf
-        )
+        if availability_gdf is None:
+            availability_gdf = getattr(self, "cell_capacity_gdf", None)
+            if availability_gdf is None:
+                availability_gdf = self.availability_gdf
         region_boundary = (
             self.region_boundary if region_boundary is not None else self.region_boundary
         )
@@ -905,6 +924,26 @@ class CellCapacityProcessor(AttributesParser):
 
 
 #     return cells_aggr
+def rescale_availability_to_piece(avail_of_cell, piece_area_km2, cell_area_km2):
+    """Convert atlite availability into a share of the clipped piece.
+
+    ``cutout.availabilitymatrix(shapes, excluder)`` returns, per (shape, grid cell),
+    the eligible area inside shape ∩ cell divided by the FULL grid-cell area.
+    Cells split by sub-national unit therefore need the full cell area, not the
+    piece area, to recover developable km².
+
+    Returns (share_of_piece, developable_km2). The share is clipped to [0, 1];
+    slivers can exceed 1 by raster rounding at the cut, and developable area is
+    capped at the piece area to stay consistent with the clipped share.
+    """
+    avail = pd.Series(avail_of_cell, dtype="float64").fillna(0).clip(lower=0)
+    piece = pd.Series(piece_area_km2, index=avail.index, dtype="float64")
+    cell = pd.Series(cell_area_km2, index=avail.index, dtype="float64")
+    developable = (avail * cell).clip(upper=piece)
+    share = (developable / piece.where(piece > 0)).fillna(0).clip(0, 1)
+    return share, developable
+
+
 @staticmethod
 def get_sub_nationally_aggregated_capacity(
     cells_with_capacity: gpd.GeoDataFrame,
@@ -984,4 +1023,141 @@ def get_sub_nationally_aggregated_capacity(
         if round_digits == 0:
             cells_aggr[cols_to_aggregate] = cells_aggr[cols_to_aggregate].astype(int)
 
+    return cells_aggr
+
+
+def add_land_availability_pct(
+    cells: pd.DataFrame | gpd.GeoDataFrame,
+    resource_types: tuple[str, ...] = ("solar", "wind"),
+) -> pd.DataFrame | gpd.GeoDataFrame:
+    """Add percent-scaled copies of the per-cell land-availability ratio columns.
+
+    ``get_actual_capacity`` always writes ``LandAvailability_ERA5_{resource_type}``
+    (a 0-1 ratio) to the ``cells`` store table. This adds the 0-100 display
+    version, ``LandAvailability_ERA5_{resource_type}_pct``, for whichever
+    resource types are actually present — so a solar-only or wind-only study
+    doesn't need a special case.
+
+    Use case: study notebooks that want a "land availability %" map/column
+    without re-deriving ``* 100`` ad hoc per region.
+    """
+    cells = cells.copy()
+    for resource_type in resource_types:
+        ratio_col = f"LandAvailability_ERA5_{resource_type}"
+        if ratio_col in cells.columns:
+            cells[f"{ratio_col}_pct"] = cells[ratio_col] * 100
+    return cells
+
+
+def add_aggregated_capacity_derived_metrics(
+    cells_aggr: pd.DataFrame,
+    resource_types: tuple[str, ...] = ("solar", "wind"),
+    area_col: str = "geom_area_km2",
+    developable_col_prefix: str = "Developable_area_",
+    capacity_col_prefix: str = "potential_capacity_",
+) -> pd.DataFrame:
+    """Add GW capacity and availability-% columns to a sub-nationally aggregated table.
+
+    Meant to run on the output of ``get_sub_nationally_aggregated_capacity``.
+    For each resource type whose ``{capacity_col_prefix}{resource_type}`` and/or
+    ``{developable_col_prefix}{resource_type}`` columns are present, adds:
+
+    - ``{capacity_col_prefix}{resource_type}_GW``: capacity in GW (input is MW)
+    - ``Availability_{resource_type}_pct``: developable area as a % of the
+      unit's total area
+
+    Resource types missing their source column(s) are skipped rather than
+    raising, so this is safe to call on tables covering only a subset of
+    {solar, wind}.
+    """
+    cells_aggr = cells_aggr.copy()
+    for resource_type in resource_types:
+        capacity_col = f"{capacity_col_prefix}{resource_type}"
+        developable_col = f"{developable_col_prefix}{resource_type}"
+        if capacity_col in cells_aggr.columns:
+            cells_aggr[f"{capacity_col}_GW"] = cells_aggr[capacity_col] / 1e3
+        if developable_col in cells_aggr.columns and area_col in cells_aggr.columns:
+            cells_aggr[f"Availability_{resource_type}_pct"] = (
+                cells_aggr[developable_col] / cells_aggr[area_col] * 100
+            )
+    return cells_aggr
+
+
+def build_region_aggregated_capacity(
+    store_path: Path,
+    config: dict,
+    region_short_code: str,
+    resource_types: tuple[str, ...] = ("solar", "wind"),
+) -> pd.DataFrame | None:
+    """Aggregate a region's per-cell capacity into one row per admin unit and
+    persist it to that region's store under the ``aggregated/capacity`` key.
+
+    Use case: answers "how much solar/wind potential capacity, and what share
+    of land is developable, in each admin unit (municipality, province,
+    country...)?" directly from the store — standardizing a computation that
+    was previously re-derived ad hoc in study notebooks (and inconsistently —
+    some notebooks did it, some didn't). Once it's a store key, RESource's
+    dash can show it for any region, the same way it shows ``cells``.
+
+    This is intentionally best-effort: it's called once per region after both
+    resource types have built, and many regions/configs won't satisfy its
+    requirements (no GADM admin-unit mapping configured, a solar-only study,
+    etc.). Rather than failing the pipeline run, it logs a warning and returns
+    None so the key is simply absent from that region's store — RESource.dash's
+    generic key browser already tolerates missing keys.
+    """
+    gadm_fields = config.get("admin_boundary", {}).get("GADM", {}).get("datafield_mapping", {})
+    sub_national_unit_tag = gadm_fields.get("NAME_2") or gadm_fields.get("NAME_1")
+    if not sub_national_unit_tag:
+        utils.print_warning(
+            f"{region_short_code}: no NAME_1/NAME_2 in admin_boundary.GADM.datafield_mapping — "
+            "skipping 'aggregated/capacity'."
+        )
+        return None
+
+    datahandler = DataHandler(store_path, show_structure=False)
+    try:
+        cells = datahandler.from_store("cells")
+    except Exception as exc:
+        utils.print_warning(
+            f"{region_short_code}: no 'cells' table in store yet — "
+            f"skipping 'aggregated/capacity' ({exc})."
+        )
+        return None
+
+    if sub_national_unit_tag not in cells.columns:
+        utils.print_warning(
+            f"{region_short_code}: '{sub_national_unit_tag}' not found on 'cells' — "
+            "skipping 'aggregated/capacity'."
+        )
+        return None
+
+    capacity_cols = [
+        f"potential_capacity_{resource_type}"
+        for resource_type in resource_types
+        if f"potential_capacity_{resource_type}" in cells.columns
+    ]
+    if not capacity_cols:
+        utils.print_warning(
+            f"{region_short_code}: no potential_capacity_* columns on 'cells' — "
+            "skipping 'aggregated/capacity'."
+        )
+        return None
+
+    cells_aggr = get_sub_nationally_aggregated_capacity(
+        cells_with_capacity=cells,
+        sub_national_unit_tag=sub_national_unit_tag,
+        capacity_cols=capacity_cols,
+    )
+    cells_aggr = add_aggregated_capacity_derived_metrics(
+        cells_aggr, resource_types=resource_types
+    )
+    datahandler.to_store(cells_aggr, "aggregated/capacity", force_update=True)
+    utils.print_update(
+        level=PRINT_LEVEL_BASE + 1,
+        message=(
+            f"{__name__}| wrote 'aggregated/capacity' for {region_short_code} "
+            f"({len(cells_aggr)} {sub_national_unit_tag} unit(s))."
+        ),
+    )
     return cells_aggr

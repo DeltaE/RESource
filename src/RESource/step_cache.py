@@ -171,6 +171,11 @@ class StepCache:
         """SHA-256 of the JSON-serialised config subset for *step*."""
         keys = STEP_CONFIG_KEYS[step]
         subset = {k: self.config.get(k) for k in keys}
+        # plot_layer_impacts only toggles diagnostic plots, not results.
+        if isinstance(subset.get("lands"), dict):
+            subset["lands"] = {
+                k: v for k, v in subset["lands"].items() if k != "plot_layer_impacts"
+            }
         # Include resource_type so a config change to turbines only invalidates
         # the affected resource, not both wind and solar.
         subset["__resource_type__"] = self.resource_type

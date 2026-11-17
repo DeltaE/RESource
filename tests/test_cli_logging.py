@@ -57,53 +57,6 @@ def test_status_is_logged_with_source_location(tmp_path: Path) -> None:
         utils._STATUS_SINK = None
 
 
-def test_live_status_tracks_completed_and_failed_jobs() -> None:
-    """The overall dashboard state distinguishes total, done, and failed jobs."""
-    status = LiveStatus()
-    status._enabled = False
-    status.configure(4)
-    status.start("BC", "wind")
-    status.update("Step 3 : Extract weather data")
-    assert status.current_stage == 3
-    status.complete("BC", "wind")
-    status.start("BC", "solar")
-    status.complete("BC", "solar", failed=True)
-
-    assert status.total == 4
-    assert status.done == 2
-    assert status.failed == 1
-    assert status.running == "waiting for next job"
-
-
-def test_live_status_keeps_last_two_messages() -> None:
-    """Compact dashboard should retain only the current and previous statuses."""
-    status = LiveStatus()
-    status._enabled = False
-    status.update("first")
-    status.update("second")
-    status.update("third")
-
-    assert list(status.recent) == ["second", "third"]
-
-
-def test_live_status_render_includes_current_and_previous() -> None:
-    """Rendered dashboard contains only current and previous status lines."""
-    status = LiveStatus()
-    status._enabled = False
-    status.configure(2)
-    status.start("BC", "wind")
-    status.update("Step 2 : Prepare data")
-    status.update("Step 3 : Compute capacity")
-
-    with status._console.capture() as capture:
-        status._console.print(status._render_group())
-
-    output = capture.get()
-    assert "Step 3 : Compute capacity" in output
-    assert "Step 2 : Prepare data" in output
-    assert "last update:" in output
-
-
 def test_runtime_log_keeps_full_error_message(tmp_path: Path) -> None:
     """Runtime logs should preserve the complete error text for failed jobs."""
     log_file = tmp_path / "runtime.log"

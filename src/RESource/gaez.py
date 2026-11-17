@@ -2,8 +2,12 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from zipfile import ZipFile
 
+import geopandas as gpd
 import matplotlib.pyplot as plt
+import numpy as np
 import rasterio
+import rioxarray  # noqa: F401
+import xarray as xr
 from rasterio.mask import mask
 
 from RESource import utility as utils
@@ -11,6 +15,62 @@ from RESource.AttributesParser import AttributesParser
 from RESource.boundaries import GADMBoundaries
 
 print_level_base = 4
+
+
+def load_gaez_raster(
+    archive_path: str | Path, member: str, boundary: gpd.GeoDataFrame
+) -> xr.DataArray:
+    """Read and clip a raster directly from a GAEZ ZIP archive.
+
+    The returned array uses the source CRS and resolution, with pixels outside
+    the boundary and source nodata masked as NaN. No global raster is extracted
+    to disk or resampled.
+
+    Args:
+        archive_path: Path to the local GAEZ ZIP archive.
+        member: Exact raster member path within the archive.
+        boundary: Non-empty geometries with a defined CRS.
+
+    Returns:
+        A loaded spatial DataArray, with a band dimension for multiband rasters.
+
+    Raises:
+        FileNotFoundError: If the archive or raster member is missing.
+        ValueError: If CRS, geometries, or raster orientation are unsupported.
+    """
+    archive_path = Path(archive_path).resolve()
+    if not archive_path.is_file():
+        raise FileNotFoundError(f"GAEZ archive not found: {archive_path}")
+    if boundary.crs is None:
+        raise ValueError("GAEZ clipping boundary must have a CRS")
+    if boundary.empty or boundary.geometry.isna().any() or boundary.geometry.is_empty.any():
+        raise ValueError("GAEZ clipping boundary must contain non-empty geometries")
+    if not boundary.geometry.is_valid.all():
+        raise ValueError("GAEZ clipping boundary contains invalid geometries")
+
+    with ZipFile(archive_path) as archive:
+        if member not in archive.namelist():
+            raise FileNotFoundError(f"Raster {member!r} not found in GAEZ archive {archive_path}")
+
+    with rasterio.open(f"zip://{archive_path}!{member}") as src:
+        if src.crs is None:
+            raise ValueError(f"GAEZ raster {member!r} has no CRS")
+        geometries = boundary.to_crs(src.crs).geometry
+        data, transform = mask(src, geometries, crop=True, filled=False)
+        if transform.b != 0 or transform.d != 0:
+            raise ValueError(f"GAEZ raster {member!r} has a rotated or sheared transform")
+        x = transform.c + transform.a * (np.arange(data.shape[2]) + 0.5)
+        y = transform.f + transform.e * (np.arange(data.shape[1]) + 0.5)
+        result = xr.DataArray(
+            data.astype(np.float32).filled(np.nan),
+            dims=("band", "y", "x"),
+            coords={"band": list(src.indexes), "y": y, "x": x},
+            name=Path(member).stem,
+        )
+        result = (
+            result.rio.write_crs(src.crs).rio.write_transform(transform).rio.write_nodata(np.nan)
+        )
+    return result.squeeze("band", drop=True) if result.sizes["band"] == 1 else result
 
 
 # Define the GAEZRasterProcessor class
@@ -137,7 +197,8 @@ class GAEZRasterProcessor(AttributesParser):
     Each raster type requires:
     - **name**: Identifier for the raster layer
     - **raster**: Filename of the raster file within ZIP archive
-    - **zip_extract_direct**: Directory path within ZIP archive
+    - **zip_extract_direct**: Directory path within ZIP archive or direct-source cache
+    - **source**: Optional URL for a raster not included in the archive
     - **color_map**: Matplotlib colormap for visualization
 
     Supported Raster Types
@@ -290,8 +351,8 @@ class GAEZRasterProcessor(AttributesParser):
         Main pipeline to download, extract, clip, and plot rasters based on configuration.
 
         Executes the complete GAEZ raster processing workflow including:
-        1. Downloading ZIP archive if not present locally
-        2. Extracting required raster files from archive
+        1. Downloading missing direct rasters and the ZIP archive when needed
+        2. Extracting required archive-backed raster files
         3. Loading regional boundaries for clipping operations
         4. Processing each configured raster type by clipping to boundaries
         5. Generating visualization plots for all processed rasters
@@ -370,17 +431,32 @@ class GAEZRasterProcessor(AttributesParser):
                 f"temporary files will use {scratch_directory}."
             ),
         )
+        archive_rasters = [item for item in missing_rasters if "source" not in item]
         with TemporaryDirectory(prefix="run-", dir=scratch_directory) as temporary_directory:
             workspace = Path(temporary_directory)
             extraction_root = workspace / "rasters"
-            self.__download_resources_zip_file__(self.archive_path)
-            utils.print_update(
-                level=print_level_base + 1,
-                message=f"{__name__}| Extracting {len(missing_rasters)} required raster(s)...",
-            )
-            self.__extract_rasters__(self.archive_path, extraction_root, missing_rasters)
+            if archive_rasters:
+                self.__download_resources_zip_file__(self.archive_path)
+                utils.print_update(
+                    level=print_level_base + 1,
+                    message=f"{__name__}| Extracting {len(archive_rasters)} required raster(s)...",
+                )
+                self.__extract_rasters__(self.archive_path, extraction_root, archive_rasters)
 
             for raster_type in missing_rasters:
+                input_root = extraction_root
+                if "source" in raster_type:
+                    relative_path = Path(raster_type["zip_extract_direct"]) / raster_type["raster"]
+                    if relative_path.is_absolute() or ".." in relative_path.parts:
+                        raise ValueError(
+                            "GAEZ direct raster path must be relative to the GAEZ root"
+                        )
+                    input_root = self.gaez_root
+                    utils.fetch_file_if_missing(
+                        raster_type["source"],
+                        input_root / relative_path,
+                        description=raster_type["name"],
+                    )
                 utils.print_update(
                     level=print_level_base + 1,
                     message=(
@@ -392,7 +468,7 @@ class GAEZRasterProcessor(AttributesParser):
                     raster_type,
                     self.region_boundary.geometry,
                     show,
-                    input_root=extraction_root,
+                    input_root=input_root,
                 )
                 raster_paths[raster_type["name"]] = raster_path
                 utils.print_update(
