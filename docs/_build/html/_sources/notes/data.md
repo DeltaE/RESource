@@ -75,6 +75,7 @@ RESource uses the [coders](https://github.com/DeltaE/RESource/blob/main/src/RESo
     - **Renewable Integration Studies**: Baseline power system data for evaluating renewable energy integration potential
     Available data tables include: generators, substations, transmission_lines, hydro_existing, wind_generators, forecasted_annual_demand
 - ⚙️ **Supply_chain_mode**: API-based data retrieval with local caching
+    - Grid-connection analysis uses CODERS substations when credentials and API data are available. If CODERS cannot be used, RESource falls back to transmission lines from OpenStreetMap (OSM); OSM coverage is crowd-sourced and is not equivalent to the CODERS facility-level data. OSM-derived distances use an approximate 111.32 km-per-degree conversion, so review the data source and distance assumptions when interpreting results.
     - 📋 **Instruction**:
         1. **API Key Setup**: Create `coders_api.yaml` config file with the structure below:
 
@@ -229,26 +230,32 @@ for the full evidence table, implemented rule, and provenance.
 - 📝 **Description**: Global Agro-Ecological Zones (GAEZ) is a comprehensive global land resources assessment that provides spatial data on agricultural potential, land constraints, and ecological zones. GAEZ v4.0 includes multiple thematic layers such as terrain slope, land cover/use, exclusion areas (protected areas and biodiversity hotspots), and agro-climatic resources. The dataset uses consistent methodologies for global coverage and provides essential input for land suitability analysis.
 - 🎯 **Use-case**: Used for land constraint analysis in renewable energy siting. The tool processes multiple GAEZ layers including:
     - **Exclusion Areas** (`exclusion_2017.tif`): Protected areas and biodiversity zones to exclude from development
-    - **Terrain Slope** (`slpmed05.tif`): Median slope classes for accessibility and installation feasibility analysis
+    - **Terrain Slope**: Median slope classes for accessibility and installation feasibility analysis. WB6 defaults to [`slpmed30s.tif`](https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR/ter/slpmed30s.tif) (30 arc-seconds); `slpmed05.tif` in `LR.zip` is 5 arc-minutes.
     - **Land Cover** (`faocmb_2010.tif`): Dominant land cover/use types for compatibility assessment
     Different constraint classes are applied for solar vs wind development based on terrain and land use suitability requirements.
-- ⚙️ **Supply_chain_mode**: Automated download and processing via ZIP archive
+    For combined-region plots, `RESource.gaez.load_gaez_raster(archive_path, member, boundary)`
+    reads a named layer directly from the local ZIP and clips it to the supplied
+    GeoDataFrame. It preserves the source CRS and resolution, masks source nodata
+    and pixels outside the boundary, and does not create an extracted global file.
+    Country-specific processed rasters cannot represent a larger combined boundary.
+- ⚙️ **Supply_chain_mode**: Automated download and processing via ZIP archive or direct raster source
     - 📋 **Instruction**:
-        1. The system first reuses any existing region-prefixed clipped outputs
-        2. For missing outputs, it downloads `LR.zip` to an operating-system temporary directory
-        3. It extracts only the configured source layers into that temporary workspace
-        4. It clips those layers to regional boundaries and retains only the clipped GeoTIFFs
-        5. The archive and global extracted rasters are automatically removed when processing ends
-           - **Example** configuration structure from `config/WB6_baseline.yaml`:
+        1. The system first reuses existing clipped outputs in the processed regional directory
+        2. For missing outputs, it reuses or downloads `LR.zip` under the configured source root for archive-backed layers; a raster with its own `source` is downloaded directly under that root instead
+        3. It extracts only the missing archive-backed layers into a temporary workspace
+        4. It clips those layers to regional boundaries and retains the clipped GeoTIFFs
+        5. The temporary extracted rasters are removed; downloaded archives and direct rasters are retained
+        6. Changing resolution changes the clipped raster filename. Use a fresh run ID: existing stores can retain cached downstream scoring or clustering and must not be used for a resolution comparison.
+           For WB6, `config/WB6/scenarios/baseline_30s_trial.yaml` inherits the current baseline but uses a separate run ID. Validate it with `uv run resource config/WB6/scenarios/baseline_30s_trial.yaml --validate-only` before an authorized smoke run.
+           - **Example** configuration structure from `config/WB6/base.yaml`:
 
            ```yaml
            GAEZ:
              root: 'data/downloaded_data/GAEZ'
              source: 'https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip'
              zip_file: 'LR.zip'
-             # Relative to GAEZ.root; resolves to
-             # data/downloaded_data/GAEZ/Rasters_in_use
-             Rasters_in_use_direct: 'Rasters_in_use'
+             # Regional derivatives are written below data/processed_data/GAEZ.
+             processed_root: data/processed_data/GAEZ
              raster_types:
              # GAEZ v4 'exclusion' layer of protected areas and biodiversity values
              - name: 'exclusion_areas'
@@ -262,12 +269,13 @@ for the full evidence table, implemented rule, and provenance.
 
              # GAEZ v4 Median slope class from SRTM data
              - name: 'terrain_resources'
-               raster: "slpmed05.tif"
+               raster: "slpmed30s.tif"
                zip_extract_direct: 'LR/ter'
+               source: 'https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR/ter/slpmed30s.tif'
                color_map: 'terrain'
                stepwise_plot_title: "Excluding Terrain Slope"
                class_exclusion:
-                 solar: [ 7, 8, 9 ]  # Exclude high slopes (>30%) and water
+                 solar: [ 8, 9 ]  # WB6 excludes slope >45% and water for solar
                  wind: [ 7, 8, 9 ]
            ```
 
@@ -524,6 +532,13 @@ are removed automatically, while existing regional clips are reused.
     - **Grid connection prioritization**: Population density analysis for transmission planning
     - **Environmental impact assessment**: Population exposure analysis for renewable energy projects
     - **Demand forecasting**: Population-based electricity demand projections
+- The WB6 population notebook can save its numeric density mosaic and map to a
+  selected existing results store. Read the unclassified values and their CRS,
+  affine transform, nodata, units and provenance with
+  `DataHandler(store_path).load_raster("worldpop_density")`; retrieve the map
+  with `load_image("WB6_population_density")`. The raster retains zero values
+  that the notebook masks for display. Cached clipped rasters do not record
+  their source year, so check their provenance before assigning a year.
 - ⚙️ **Supply_chain_mode**: Direct download from WorldPop data portal
     - 📋 **Instruction**:
         1. System downloads ASCII XYZ or GeoJSON files from WorldPop servers

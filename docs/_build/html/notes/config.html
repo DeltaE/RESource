@@ -181,8 +181,8 @@
       
     
     
-    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.7.0 documentation - Home"/>
-    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark pst-js-only" alt="RESource 2025.7.0 documentation - Home"/>
+    <img src="../_static/logo_full.jpg" class="logo__image only-light" alt="RESource 2025.7.0 documentation - Home"/>
+    <img src="../_static/logo_full.jpg" class="logo__image only-dark pst-js-only" alt="RESource 2025.7.0 documentation - Home"/>
   
   
 </a></div>
@@ -388,7 +388,10 @@
             </div>
             <nav aria-label="Page">
                 <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#base-and-scenario-inheritance">Base and scenario inheritance</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-information">General Information</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-configuration">Basic Configuration</a></li>
@@ -402,7 +405,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-sources">Data Sources</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gadm-global-administrative-areas">GADM (Global Administrative Areas)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#government-of-canada-data-sources">Government of Canada Data Sources</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#government-of-canada-custom-data-sources">Government of Canada Custom Data Sources</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conservation-lands">Conservation Lands</a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#iucn-category-mapping">IUCN Category Mapping</a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#location-mapping">Location Mapping</a></li>
@@ -416,6 +419,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nrel-annual-technology-baseline-atb">NREL Annual Technology Baseline (ATB)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#openstreetmap-osm-data">OpenStreetMap (OSM) Data</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coders-canadian-open-data-for-electricity-research">CODERS (Canadian Open Data for Electricity Research)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#land-availability-plots-lands-plot-layer-impacts">Land availability plots (<code class="docutils literal notranslate"><span class="pre">lands.plot_layer_impacts</span></code>)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaez-global-agro-ecological-zones">GAEZ (Global Agro-Ecological Zones)</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#raster-types">Raster Types</a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#exclusion-areas-exclusion-2017-tif">1. Exclusion Areas (<code class="docutils literal notranslate"><span class="pre">exclusion_2017.tif</span></code>)</a></li>
@@ -481,9 +485,49 @@ the exact configuration with each analysis for reproducibility.</p>
 </div>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
-<p>This document provides comprehensive documentation for the RESource tool configuration file (example provided for the Canadian config file <a class="reference external" href="https://github.com/DeltaE/RESource/blob/main/config/config_CAN.yaml"><code class="docutils literal notranslate"><span class="pre">config_CAN.yaml</span></code></a>).</p>
+<p>RESource separates stable regional contracts from decision-specific scenario
+overrides. Regional contracts live in <code class="docutils literal notranslate"><span class="pre">config/CAN/base.yaml</span></code>,
+<code class="docutils literal notranslate"><span class="pre">config/WB6/base.yaml</span></code>, and <code class="docutils literal notranslate"><span class="pre">config/BGD/base.yaml</span></code>; runnable scenarios are stored
+in each region's <code class="docutils literal notranslate"><span class="pre">scenarios/</span></code> directory.</p>
+<section id="base-and-scenario-inheritance">
+<h3>Base and scenario inheritance<a class="headerlink" href="#base-and-scenario-inheritance" title="Link to this heading">#</a></h3>
+<p>A scenario declares its base with a relative <code class="docutils literal notranslate"><span class="pre">extends</span></code> path:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">extends</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../base.yaml</span>
+
+<span class="nt">Scenario</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">run_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NO_BUFFERS</span>
+<span class="w">  </span><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">No buffers scenario</span>
+
+<span class="nt">capacity_disaggregation</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">transmission</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">proximity_filter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
+</pre></div>
+</div>
+<p>Mappings merge recursively. Scalars and lists replace their base values. A list
+can explicitly append entries with <code class="docutils literal notranslate"><span class="pre">$append</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">custom_land_layers</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">vectors</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">$append</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">regional_policy_layer</span>
+<span class="w">      </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data/downloaded_data/custom_land_layers/policy</span>
+<span class="w">      </span><span class="nt">geojson</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">policy.geojson</span>
+</pre></div>
+</div>
+<p>Top-level keys not declared by the base, incompatible mapping/value types, missing
+base files, and inheritance cycles are rejected. Relative <code class="docutils literal notranslate"><span class="pre">extends</span></code> paths resolve
+from the declaring file.</p>
+<p>Inspect configuration resolution without running a workflow:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>resource<span class="w"> </span>config/CAN/scenarios/policy_1.yaml<span class="w"> </span>--show-config
+resource<span class="w"> </span>config/CAN/scenarios/policy_1.yaml<span class="w"> </span>--show-overrides
+resource<span class="w"> </span>config/CAN/scenarios/policy_1.yaml<span class="w"> </span>--validate-only
+</pre></div>
+</div>
+<p>Each workflow stores the resolved configuration and provenance containing source
+paths, SHA-256 hashes, and overridden leaf paths. Lists replace by default so
+scientific class sets and exclusion definitions cannot merge implicitly.</p>
 <p><strong>Version:</strong> 1.0
 <strong>Release Year:</strong> 2025</p>
+</section>
 </section>
 <section id="table-of-contents">
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">#</a></h2>
@@ -652,13 +696,18 @@ country GeoJSON in <code class="docutils literal notranslate"><span class="pre">
 </li>
 </ul>
 </section>
-<section id="government-of-canada-data-sources">
-<h3>Government of Canada Data Sources<a class="headerlink" href="#government-of-canada-data-sources" title="Link to this heading">#</a></h3>
+<section id="government-of-canada-custom-data-sources">
+<h3>Government of Canada Custom Data Sources<a class="headerlink" href="#government-of-canada-custom-data-sources" title="Link to this heading">#</a></h3>
+<p>Government-provided non-spatial regional inputs are configured below
+<code class="docutils literal notranslate"><span class="pre">custom_land_layers.Gov</span></code>. Conservation lands are spatial exclusions and therefore
+use a named entry under <code class="docutils literal notranslate"><span class="pre">custom_land_layers.vectors</span></code>. Archived configurations with
+a top-level <code class="docutils literal notranslate"><span class="pre">Gov</span></code> key remain readable during migration. Durable inputs use
+dataset-specific directories beneath <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/custom_land_layers/</span></code>.</p>
 <section id="conservation-lands">
 <h4>Conservation Lands<a class="headerlink" href="#conservation-lands" title="Link to this heading">#</a></h4>
 <ul class="simple">
 <li><p><strong>URL:</strong> <a class="reference external" href="https://data-donnees.az.ec.gc.ca/api/file?path=%2Fspecies%2Fprotectrestore%2Fcanadian-protected-conserved-areas-database%2FDatabases%2FProtectedConservedArea_2023.zip">Canadian Protected and Conserved Areas Database</a></p></li>
-<li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/Gov/Conservation_Lands</span></code></p></li>
+<li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/custom_land_layers/Conservation_Lands</span></code></p></li>
 <li><p><strong>Data Name:</strong> ProtectedConservedArea</p></li>
 <li><p><strong>GDB Layer:</strong> ProtectedConservedArea_2023</p></li>
 </ul>
@@ -759,7 +808,7 @@ country GeoJSON in <code class="docutils literal notranslate"><span class="pre">
 <section id="population-data">
 <h4>Population Data<a class="headerlink" href="#population-data" title="Link to this heading">#</a></h4>
 <ul class="simple">
-<li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/Gov/Population</span></code></p></li>
+<li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/custom_land_layers/Population</span></code></p></li>
 <li><p><strong>Data File:</strong> Population_Projections.csv</p></li>
 <li><p><strong>Skip Rows:</strong> 6</p></li>
 </ul>
@@ -767,7 +816,7 @@ country GeoJSON in <code class="docutils literal notranslate"><span class="pre">
 <section id="community-energy-and-emissions-inventory-ceei">
 <h4>Community Energy and Emissions Inventory (CEEI)<a class="headerlink" href="#community-energy-and-emissions-inventory-ceei" title="Link to this heading">#</a></h4>
 <ul class="simple">
-<li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/Gov/CEEI</span></code></p></li>
+<li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/custom_land_layers/CEEI</span></code></p></li>
 <li><p><strong>Data Files:</strong></p>
 <ul>
 <li><p>Buildings: <code class="docutils literal notranslate"><span class="pre">bc_utilities_energy_and_emissions_data_at_the_community_level.xlsx</span></code></p></li>
@@ -828,14 +877,31 @@ endpoint, and excludes <code class="docutils literal notranslate"><span class="p
 a planning proxy, not a finding of available interconnection capacity.</p></li>
 </ul>
 </section>
+<section id="land-availability-plots-lands-plot-layer-impacts">
+<h3>Land availability plots (<code class="docutils literal notranslate"><span class="pre">lands.plot_layer_impacts</span></code>)<a class="headerlink" href="#land-availability-plots-lands-plot-layer-impacts" title="Link to this heading">#</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lands</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">plot_layer_impacts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">   </span><span class="c1"># code default: true</span>
+</pre></div>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">true</span></code>, availability is recomputed after each exclusion layer to draw the
+stepwise and individual-layer impact figures (<code class="docutils literal notranslate"><span class="pre">stepwise_land_availability_plot_*.png</span></code>,
+<code class="docutils literal notranslate"><span class="pre">individual_layers_impact_land_availability_plot_*.png</span></code>). This adds two extra passes
+and can take many minutes and tens of GB of RAM for large regions. When <code class="docutils literal notranslate"><span class="pre">false</span></code>,
+layers are only loaded into the exclusion container and final availability is
+computed once. The flag does not change results and does not invalidate step caches.</p>
+<p>Every run log (<code class="docutils literal notranslate"><span class="pre">*_detail.log</span></code> and the runtime summary) ends with a <strong>TIMING REPORT</strong>
+listing the total time and every process that took more than 5 minutes.</p>
+</section>
 <section id="gaez-global-agro-ecological-zones">
 <h3>GAEZ (Global Agro-Ecological Zones)<a class="headerlink" href="#gaez-global-agro-ecological-zones" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p><strong>Root Directory:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/GAEZ</span></code></p></li>
+<li><p><strong>Downloaded Source Root:</strong> <code class="docutils literal notranslate"><span class="pre">data/downloaded_data/GAEZ</span></code></p></li>
+<li><p><strong>Processed Regional Root:</strong> <code class="docutils literal notranslate"><span class="pre">data/processed_data/GAEZ/&lt;region&gt;/</span></code></p></li>
 <li><p><strong>Source:</strong> <a class="reference external" href="https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/LR.zip">LR.zip</a></p></li>
-<li><p><strong>Storage lifecycle:</strong> The archive and global source rasters are staged in the
-operating-system temporary directory. Only region-prefixed clipped GeoTIFFs are
-retained below <code class="docutils literal notranslate"><span class="pre">GAEZ/Rasters_in_use/</span></code>. Existing clipped outputs are reused.</p></li>
+<li><p><strong>Storage lifecycle:</strong> The directly fetched archive is retained under downloaded
+data. Selectively extracted global rasters use repository scratch storage and are
+cleared after processing. Regional clipped GeoTIFFs persist below
+<code class="docutils literal notranslate"><span class="pre">data/processed_data/GAEZ/&lt;region&gt;/</span></code> and are reused.</p></li>
 </ul>
 <section id="raster-types">
 <h4>Raster Types<a class="headerlink" href="#raster-types" title="Link to this heading">#</a></h4>
@@ -1022,18 +1088,27 @@ regional outputs are reused, so reruns do not download the country raster again.
 <p>The configuration supports custom raster and vector layers for specialized land use constraints:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">custom_land_layers</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">rasters</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">raster_1</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">raster</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
-<span class="w">      </span><span class="nt">class_exclusion</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
-<span class="w">      </span><span class="nt">buffer</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
-<span class="w">      </span><span class="nt">invert</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;False&#39;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CanGov_LandCover_2020</span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://example.org/landcover.tif</span>
+<span class="w">    </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data/downloaded_data/custom_land_layers/LandCover</span>
+<span class="w">    </span><span class="nt">raster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">landcover.tif</span>
+<span class="w">    </span><span class="nt">data_license</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://example.org/license</span>
+<span class="w">    </span><span class="nt">source_res_meters</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
+<span class="w">    </span><span class="nt">target_res_meters</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">    </span><span class="nt">class_inclusion</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">solar</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">8</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">10</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">wind</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">8</span><span class="p p-Indicator">]</span>
 <span class="w">  </span><span class="nt">vectors</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">vector_1</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">vector_1</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">geometry</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
 <span class="w">      </span><span class="nt">buffer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
 <span class="w">      </span><span class="nt">invert</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;False&#39;</span>
 </pre></div>
 </div>
+<p>Missing custom rasters are streamed from <code class="docutils literal notranslate"><span class="pre">source</span></code> into the configured <code class="docutils literal notranslate"><span class="pre">root</span></code>, then
+processed from <code class="docutils literal notranslate"><span class="pre">root/raster</span></code>. Keep these datasets under
+<code class="docutils literal notranslate"><span class="pre">data/downloaded_data/custom_land_layers/LandCover/</span></code>; temporary partial downloads use the
+ignored repository scratch directory and are never installed as final inputs.</p>
 </section>
 </section>
 <hr class="docutils" />
@@ -1108,7 +1183,10 @@ regional outputs are reused, so reruns do not download the country raster again.
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#base-and-scenario-inheritance">Base and scenario inheritance</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-information">General Information</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-configuration">Basic Configuration</a></li>
@@ -1122,7 +1200,7 @@ regional outputs are reused, so reruns do not download the country raster again.
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-sources">Data Sources</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gadm-global-administrative-areas">GADM (Global Administrative Areas)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#government-of-canada-data-sources">Government of Canada Data Sources</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#government-of-canada-custom-data-sources">Government of Canada Custom Data Sources</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conservation-lands">Conservation Lands</a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#iucn-category-mapping">IUCN Category Mapping</a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#location-mapping">Location Mapping</a></li>
@@ -1136,6 +1214,7 @@ regional outputs are reused, so reruns do not download the country raster again.
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nrel-annual-technology-baseline-atb">NREL Annual Technology Baseline (ATB)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#openstreetmap-osm-data">OpenStreetMap (OSM) Data</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coders-canadian-open-data-for-electricity-research">CODERS (Canadian Open Data for Electricity Research)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#land-availability-plots-lands-plot-layer-impacts">Land availability plots (<code class="docutils literal notranslate"><span class="pre">lands.plot_layer_impacts</span></code>)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaez-global-agro-ecological-zones">GAEZ (Global Agro-Ecological Zones)</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#raster-types">Raster Types</a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#exclusion-areas-exclusion-2017-tif">1. Exclusion Areas (<code class="docutils literal notranslate"><span class="pre">exclusion_2017.tif</span></code>)</a></li>

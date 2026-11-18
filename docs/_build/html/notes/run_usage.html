@@ -181,8 +181,8 @@
       
     
     
-    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.7.0 documentation - Home"/>
-    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark pst-js-only" alt="RESource 2025.7.0 documentation - Home"/>
+    <img src="../_static/logo_full.jpg" class="logo__image only-light" alt="RESource 2025.7.0 documentation - Home"/>
+    <img src="../_static/logo_full.jpg" class="logo__image only-dark pst-js-only" alt="RESource 2025.7.0 documentation - Home"/>
   
   
 </a></div>
@@ -413,7 +413,7 @@
 </pre></div>
 </div>
 <p>In a development checkout, prefix the command with <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>resource<span class="w"> </span>config/config_BC_baseline.yaml<span class="w"> </span>--year<span class="w"> </span><span class="m">2024</span><span class="w"> </span>-r<span class="w"> </span>BC
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>resource<span class="w"> </span>config/CAN/scenarios/baseline.yaml<span class="w"> </span>--year<span class="w"> </span><span class="m">2024</span><span class="w"> </span>-r<span class="w"> </span>BC
 </pre></div>
 </div>
 <section id="arguments">
@@ -430,7 +430,7 @@ configuration is processed.</p>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># All configured regions</span>
-uv<span class="w"> </span>run<span class="w"> </span>resource<span class="w"> </span>config/CAN_baseline.yaml<span class="w"> </span>--year<span class="w"> </span><span class="m">2024</span>
+uv<span class="w"> </span>run<span class="w"> </span>resource<span class="w"> </span>config/CAN/scenarios/baseline.yaml<span class="w"> </span>--year<span class="w"> </span><span class="m">2024</span>
 
 <span class="c1"># Selected regions</span>
 uv<span class="w"> </span>run<span class="w"> </span>resource<span class="w"> </span>config/config_WB6_2023.yaml<span class="w"> </span>--year<span class="w"> </span><span class="m">2023</span><span class="w"> </span>-r<span class="w"> </span>AL<span class="w"> </span>BA
@@ -448,7 +448,7 @@ pairs continue to run. A final status of <code class="docutils literal notransla
 <p>The packaged multi-year launcher runs each weather year as an independent
 subprocess, continues after a failed year, and returns a failure status if any year
 fails:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>resource-multiyear<span class="w"> </span>config/CAN_baseline.yaml<span class="w"> </span><span class="se">\</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>resource-multiyear<span class="w"> </span>config/CAN/scenarios/baseline.yaml<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--start<span class="w"> </span><span class="m">2014</span><span class="w"> </span>--end<span class="w"> </span><span class="m">2024</span><span class="w"> </span>--regions<span class="w"> </span>BC
 </pre></div>
 </div>
@@ -459,7 +459,7 @@ different weather years distinguishable before starting a large run.</p>
 <h3>ERA5 cutouts only<a class="headerlink" href="#era5-cutouts-only" title="Link to this heading">#</a></h3>
 <p>For a fixed weather climatology, use the dedicated downloader. It does not run land,
 capacity, scoring or generation stages:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>resource-cutout-multiyear<span class="w"> </span>config/CAN_baseline.yaml<span class="w"> </span><span class="se">\</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>resource-cutout-multiyear<span class="w"> </span>config/CAN/scenarios/baseline.yaml<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--start<span class="w"> </span><span class="m">2016</span><span class="w"> </span>--end<span class="w"> </span><span class="m">2025</span><span class="w"> </span>--region<span class="w"> </span>BC
 </pre></div>
 </div>

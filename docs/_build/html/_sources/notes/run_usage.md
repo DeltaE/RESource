@@ -9,7 +9,7 @@ resource CONFIG [--year YYYY] [--regions CODE ...]
 In a development checkout, prefix the command with `uv run`:
 
 ```bash
-uv run resource config/config_BC_baseline.yaml --year 2024 -r BC
+uv run resource config/CAN/scenarios/baseline.yaml --year 2024 -r BC
 ```
 
 ## Arguments
@@ -29,7 +29,7 @@ uv run resource config/config_BC_baseline.yaml --year 2024 -r BC
 
 ```bash
 # All configured regions
-uv run resource config/CAN_baseline.yaml --year 2024
+uv run resource config/CAN/scenarios/baseline.yaml --year 2024
 
 # Selected regions
 uv run resource config/config_WB6_2023.yaml --year 2023 -r AL BA
@@ -49,7 +49,7 @@ subprocess, continues after a failed year, and returns a failure status if any y
 fails:
 
 ```bash
-uv run resource-multiyear config/CAN_baseline.yaml \
+uv run resource-multiyear config/CAN/scenarios/baseline.yaml \
   --start 2014 --end 2024 --regions BC
 ```
 
@@ -63,7 +63,7 @@ For a fixed weather climatology, use the dedicated downloader. It does not run l
 capacity, scoring or generation stages:
 
 ```bash
-uv run resource-cutout-multiyear config/CAN_baseline.yaml \
+uv run resource-cutout-multiyear config/CAN/scenarios/baseline.yaml \
   --start 2016 --end 2025 --region BC
 ```
 
