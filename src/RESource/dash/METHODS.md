@@ -154,9 +154,87 @@ for a province/country, not continental scale.
 | `cluster_cells(cells, by, k, cost_weight, scope, max_lcoe, seed)` | **Main aggregation entry point.** Labels every eligible cell (capacity > 0, valid LCOE, within `max_lcoe`), groups into clusters, then aggregates each cluster: `n_cells`, capacity-weighted `cf_mean`/`lcoe`, `lcoe_min`/`max`, mean grid distance, capacity-weighted centroid. Ranks clusters cheapest-first (`C1`, `C2`, ... for `scope="store"`; `<region>_1`, `<region>_2`, ... for `scope="region"`). Also reports `lcoe_variance_kept` (within/total variance ratio) as a clustering-quality diagnostic. | Ineligible cells are kept in the output with an empty cluster id, never silently dropped (`info["n_excluded_*"]`). |
 | `cell_table(path, tech)` | Read the `cells` table columns `cluster_cells` needs (`lon, lat, lcoe_<tech>, potential_capacity_<tech>, <tech>_CF_mean, nearest_station_distance_km, region`), applying capacity haircuts. | Raises `KeyError` if the store hasn't run scoring for `tech`. |
 | `recluster_store(path, tech, **options)` | `cell_table` + `cluster_cells` in one call — the natural native entry point. | |
-| `cluster_profiles(path, tech, cells, chunk_rows=1000)` | Hourly, **capacity-weighted mean** profile per exploratory cluster, computed directly from `timeseries/<tech>` in row chunks (so it doesn't require the whole table in memory). Hours where a member has no value exclude that member from the mean for that hour only. | |
+| `cluster_profiles(path, tech, cells, chunk_rows=1000, return_std=False)` | Hourly, **capacity-weighted mean** profile per exploratory cluster, from `timeseries/<tech>` in row chunks. `path` is one store or a list of stores (combined view; `cells["source"]` indexes the list, so a cell id repeated across regions stays two cells). With `return_std=True` also returns the capacity-weighted within-cluster standard deviation per hour. | Hours where a member has no value exclude that member from that hour's sum and weight total only. Raises if stores hold different hours. |
+| `profile_summary(mean, std=None, clusters=None)` | One row per cluster: `hours`, `hours_missing`, `cf_profile_mean`, `full_load_hours`, `cf_p10`/`cf_p90`/`cf_max`, `sd_within_mean`, `cf_check`. | `cf_check` = profile time mean minus the cells-table capacity-weighted `cf_mean`. Near zero when the stored mean CF and hourly series agree. |
+| `cluster_profiles_package(path, tech, payload, context=None)` | Builds the export ZIP (see 3.1). Returns `(zip_bytes, summary)`. | Native use as well as dash. |
 | `cluster_cells_json(payload)` | Dash entry point: JSON in (`{"cells": {...}, "options": {...}}`) -> JSON out (`{"clusters", "cells", "info"}`), via `_frame_from_payload` + `cluster_cells`. | |
-| `cluster_profiles_csv(path, tech, payload)` | Dash entry point: re-run `cluster_cells` with the same options, then export `cluster_profiles` as CSV text. | |
+| `cluster_profiles_csv(path, tech, payload)` | Dash entry point: re-run `cluster_cells` with the same options, then export `cluster_profiles` as CSV text. `path` may be a JSON list of stores. | |
+| `cluster_profiles_zip(path, tech, payload, context=None)` | Dash entry point: `cluster_profiles_package` as base64 plus the summary records. | The dash warns when any cluster has abs(`cf_check`) > 0.01. |
+
+### 3.1 Exporting cluster profiles
+
+**Where, in the dash:** Cluster tab -> set grouping, k (e.g. 5), scope and LCOE limit -> the
+*Clusters, cheapest first* card -> **Hourly profiles CSV** (mean only) or
+**Profile package (.zip)**. Both work for one store and for a combined all-subregions view.
+Both rerun `cluster_cells` with the same options and seed, so the export matches the
+clusters on screen.
+
+**Aggregation (standard, energy-preserving).** For cluster *k* with member cells *i* and
+weights *w_i* = potential capacity (MW, after the capacity adjustments the dash applies):
+
+    CF_k(t) = sum_i w_i CF_i(t) / sum_i w_i
+    SD_k(t) = sqrt( sum_i w_i CF_i(t)^2 / sum_i w_i - CF_k(t)^2 )
+
+CF_k(t) times the cluster capacity equals the summed output of its cells, so annual energy
+and the coincident hourly shape of the cluster are preserved. This is the usual reduction
+of site profiles to a representative technology profile (PyPSA-Eur `p_max_pu`, GenX,
+OSeMOSYS capacity-factor inputs before time-slicing). An equal-weight mean would
+over-weight small cells and bias the energy.
+
+**What the mean does not keep.** Averaging smooths the member profiles. Ramps and extremes
+of individual sites are damped, and the cluster looks firmer than any one site. SD_k(t)
+and `sd_within_mean` show how much was averaged away. A large spread relative to
+`cf_profile_mean` says the cluster mixes dissimilar resources; raise k or cluster by
+location. If tail behaviour matters (reserve or adequacy studies), use member profiles
+or a medoid instead of the mean.
+
+**Package contents.**
+
+| File | Content |
+|---|---|
+| `cluster_profiles_mean.csv` | CF_k(t), hours x clusters, 5 decimals. Timestamps as written in the store. |
+| `cluster_profiles_sd.csv` | SD_k(t), same layout. |
+| `clusters.csv` | `cluster_cells` cluster table joined with `profile_summary`. |
+| `cluster_cells.csv` | Every cell, its cluster (empty = excluded), capacity, CF, LCOE, `source` in combined views. |
+| `metadata.json` | Schema id, UTC time stamp, technology, store file names, clustering options and `info`, method formulas, time span, units. |
+
+### 3.2 Choosing k: the k-sweep
+
+**Where, in the dash:** Cluster tab -> card *How many clusters?* -> set *k up to* (3 to 40,
+default 20) -> **Run k-sweep**. It uses the current scope, LCOE limit and cost weight.
+Each point is the clustering the tab would draw for that k (same eligibility,
+features, k-means and seed). The CSV button on either chart exports every point.
+
+| Function | Purpose |
+|---|---|
+| `cell_shapes(path, tech, keys)` | Mean CF by month x hour of day (288 values) per `(source, cell)`, read once from `timeseries/<tech>` in row chunks. |
+| `k_sweep(cells, shapes, k_max, cost_weight, scope, max_lcoe, seed)` | Clusters k = 1..k_max by cost, by location and by both; returns the scores below per k and mode. |
+| `k_sweep_json(path, tech, payload, k_max)` | Dash entry point. Caches the shapes for the current stores and technology, so a rerun only reclusters. |
+
+**Scores** (all capacity-weighted, w_i = potential capacity):
+
+    kept(x)  = 1 - sum_i w_i ||x_i - xbar_k(i)||^2 / sum_i w_i ||x_i - xbar||^2
+    RMSE(x)  = sqrt( sum_i w_i ||x_i - xbar_k(i)||^2 / (sum_i w_i * d) )
+
+with x = LCOE (`lcoe_kept`, and `lcoe_mae` = sum_i w_i |LCOE_i - LCOE_k(i)| / sum_i w_i)
+or x = the 288-value shape vector (`shape_kept`, `shape_rmse` in CF units).
+`min_cluster_MW` flags a cluster too small to matter as an OSeMOSYS technology.
+These LCOE scores are capacity-weighted. The `lcoe_variance_kept` in `cluster_cells.info`
+is unweighted, so the two can differ.
+
+**Knee.** For each curve, the k farthest from the chord between k = 1 and k_max (axes
+scaled 0 to 1). This is a heuristic marker, not an optimum. The decisive test is still
+a model run against a high-k reference (see 3.1 discussion).
+
+**Why 288 bins.** OSeMOSYS timeslices are usually seasons x day-parts, which are unions
+of month x hour bins. Averaging bins into a slice can only shrink the member-to-cluster
+differences (Jensen), so `shape_rmse` on 288 bins is, up to the unequal month lengths, an
+upper bound on the timeslice-level error. `shape_kept` is a ratio and has no such bound.
+Replace the bins with the actual timeslice map when one is supplied.
+
+**Validation.** `tests/test_dash_cluster_explorer.py` checks the weighted mean and SD
+against hand values, energy preservation, per-hour handling of gaps, two stores that share
+a cell id, the package contents, the k-sweep (a sweep point equals the `cluster_cells` result; two cost levels are fully kept at k = 2) and the month x hour shape bins.
 
 ---
 

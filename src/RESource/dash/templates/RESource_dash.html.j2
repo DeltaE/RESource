@@ -504,6 +504,26 @@ body[data-tab="story"] footer{display:none}
 .vramp span{font-size:10.5px;color:var(--ink-2);text-align:center;line-height:1.1}
 .vramp .u{color:var(--ink-3);font-size:10px}
 #v-story .cc-body svg.ch{padding-right:44px;box-sizing:border-box}
+/* floating cards: grip on the top edge moves, corner handle resizes, double-click the grip resets */
+.fc{position:relative;display:flex;flex-direction:column;min-height:0;flex:0 1 auto}
+.fc[hidden]{display:none!important}
+.fc>.ovl-card{width:100%;box-sizing:border-box;min-height:0;flex:0 1 auto;max-height:100%}
+.fc:has(>.ovl-card.cellcard){max-height:calc(100% - 210px)}
+.fc.fl{position:absolute;z-index:650}
+.fc.sized>.ovl-card{flex:1 1 auto;height:100%;max-height:none}
+.fc-grip{position:absolute;top:3px;left:50%;width:40px;height:5px;margin-left:-20px;border-radius:3px;background:var(--ink-3);opacity:.35;cursor:grab;touch-action:none;z-index:2}
+.fc-grip::before{content:"";position:absolute;inset:-6px -10px}
+.fc-rs{position:absolute;right:3px;bottom:3px;width:14px;height:14px;cursor:nwse-resize;touch-action:none;opacity:.4;z-index:2;background:linear-gradient(135deg,transparent 0 52%,var(--ink-3) 52% 60%,transparent 60% 72%,var(--ink-3) 72% 80%,transparent 80%)}
+.fc:hover>.fc-grip,.fc:hover>.fc-rs,.fc.moving>.fc-grip,.fc.moving>.fc-rs{opacity:.95}
+.fc.moving{user-select:none}.fc.moving>.fc-grip{cursor:grabbing}
+.fc.moving>.ovl-card{box-shadow:0 0 0 1px var(--accent-2),0 12px 32px rgba(0,0,0,.5)}
+/* clustering method: a readable card instead of a hover tip clipped by the control card */
+.tip.nb{padding:0}.tip.nb::after{display:none}.tip.nb.on{color:var(--accent);border-color:var(--accent)}
+.fc:has(>#cl-info){position:absolute;left:300px;top:152px;width:380px;max-height:calc(100% - 180px);z-index:650}
+#cl-info{background:var(--surface)}
+.cl-doc{margin:6px 0 0;font-size:13px;line-height:1.5;color:var(--ink)}
+.cl-doc dt{font-weight:600;color:var(--accent-2);margin-top:9px}
+.cl-doc dd{margin:2px 0 0}
 </style>
 </head>
 <body>
@@ -570,7 +590,9 @@ const cmds = {
   preview: ({ name, key }) => S.table_preview('/stores/' + name, key),
   csv: ({ name, key }) => S.table_csv('/stores/' + name, key),
   recluster: ({ payload }) => K.cluster_cells_json(payload),
-  clusterProfiles: ({ name, tech, payload }) => K.cluster_profiles_csv('/stores/' + name, tech, payload),
+  clusterProfiles: ({ names, tech, payload }) => K.cluster_profiles_csv(JSON.stringify(names.map((n) => '/stores/' + n)), tech, payload),
+  kSweep: ({ names, tech, payload, kmax }) => K.k_sweep_json(JSON.stringify(names.map((n) => '/stores/' + n)), tech, payload, kmax),
+  clusterPackage: ({ names, tech, payload, context }) => K.cluster_profiles_zip(JSON.stringify(names.map((n) => '/stores/' + n)), tech, payload, context),
   combine({ payloads, label }) {
     const d = py.toPy(payloads);
     try { return S.combine_summaries(d, label); } finally { d.destroy(); }
@@ -2182,6 +2204,60 @@ RD.ch = (function () {
   };
   const VOLT = (v) => { const c = RD.grid.cls(v); return [c.color, c.w]; };
   const TILES = { light: 'https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', dark: 'https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}' };
+  /* floating cards. A card marked data-fc gets a wrapper with a move grip and a resize corner.
+     Geometry is kept per card id, so a card stays where the user put it across renders and reloads. */
+  RD.fc = RD.fc || {
+    z: 650,
+    geo: (() => { try { return JSON.parse(localStorage.getItem('rd-fc') || '{}') || {}; } catch (e) { return {}; } })(),
+    save() { try { localStorage.setItem('rd-fc', JSON.stringify(this.geo)); } catch (e) { /* storage unavailable */ } },
+    init(stage) {
+      if (!stage) return;
+      stage.querySelectorAll('.ovl-card[data-fc]').forEach((card) => {
+        let w = card.parentElement;
+        if (!w.classList.contains('fc')) { w = document.createElement('div'); w.className = 'fc'; card.replaceWith(w); w.appendChild(card); }
+        if (!w._slot) {
+          w._slot = document.createComment('fc'); w.before(w._slot);
+          w.insertAdjacentHTML('beforeend', '<span class="fc-grip" title="Drag to move. Double-click to put back."></span><span class="fc-rs" title="Drag to resize"></span>');
+          this.bind(stage, w, card);
+        }
+        this.apply(stage, w, card);
+      });
+    },
+    apply(stage, w, card) {
+      const g = this.geo[card.id]; if (!g) return;
+      const S = stage.getBoundingClientRect(), cl = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+      if (S.width) { g.x = cl(g.x, 0, S.width - 60); g.y = cl(g.y, 0, S.height - 40); g.w = cl(g.w, 200, S.width - g.x); if (g.h) g.h = cl(g.h, 90, S.height - g.y); }
+      if (w.parentElement !== stage) stage.appendChild(w);
+      w.classList.add('fl'); w.classList.toggle('sized', !!g.h);
+      Object.assign(w.style, { left: g.x + 'px', top: g.y + 'px', width: g.w + 'px', height: g.h ? g.h + 'px' : '', maxHeight: g.h ? 'none' : (S.height ? Math.max(120, S.height - g.y - 12) + 'px' : '') });
+    },
+    start(stage, w, card) {
+      if (w.classList.contains('fl') && this.geo[card.id]) return;
+      const S = stage.getBoundingClientRect(), R = w.getBoundingClientRect();
+      this.geo[card.id] = { x: R.left - S.left, y: R.top - S.top, w: R.width };
+      this.apply(stage, w, card);
+    },
+    bind(stage, w, card) {
+      const drag = (h, move) => h.addEventListener('pointerdown', (e) => {
+        if (e.button) return; e.preventDefault(); e.stopPropagation();
+        this.start(stage, w, card); w.style.zIndex = ++this.z;
+        const g = this.geo[card.id], x0 = e.clientX, y0 = e.clientY, a = { ...g, h: g.h || w.offsetHeight };
+        h.setPointerCapture(e.pointerId); w.classList.add('moving');
+        const mv = (ev) => { move(g, a, ev.clientX - x0, ev.clientY - y0); this.apply(stage, w, card); };
+        const up = () => { h.removeEventListener('pointermove', mv); h.removeEventListener('pointerup', up); h.removeEventListener('pointercancel', up); w.classList.remove('moving'); this.save(); };
+        h.addEventListener('pointermove', mv); h.addEventListener('pointerup', up); h.addEventListener('pointercancel', up);
+      });
+      const grip = w.querySelector(':scope>.fc-grip'), rs = w.querySelector(':scope>.fc-rs');
+      drag(grip, (g, a, dx, dy) => { g.x = a.x + dx; g.y = a.y + dy; });
+      drag(rs, (g, a, dx, dy) => { g.w = a.w + dx; g.h = a.h + dy; });
+      grip.addEventListener('dblclick', () => this.reset(w, card));
+    },
+    reset(w, card) {
+      delete this.geo[card.id]; this.save();
+      const hid = w.hidden; w.classList.remove('fl', 'sized'); w.removeAttribute('style'); w.hidden = hid;
+      if (w._slot?.parentNode) w._slot.after(w);
+    },
+  };
   const M = RD.views.map = {
     map: null, groups: {}, metric: null, cellId: null, show: { cells: true, boundary: true, lines: true, nodes: true, clusters: false }, forStore: null, base: null,
     metrics(s, t) {
@@ -2194,12 +2270,13 @@ RD.ch = (function () {
       if (!this.map) {
         v.innerHTML = `<div class="stage mapstage"><div id="map"></div>
           <div class="ovl-title"><div class="eyebrow">Map</div><h1>Where the resource sits ${tip('Cells are coloured by one column of the cells table, as stored. Grid lines or grid nodes are drawn when the store holds them. Click a cell for its record and hourly profile.')}</h1><div class="sub" id="mp-sub"></div></div>
-          <div class="mp-left"><div class="ovl-card" id="mp-c"></div><div class="ovl-card" id="mp-cell"></div></div>
+          <div class="mp-left"><div class="ovl-card" id="mp-c" data-fc></div><div class="ovl-card" id="mp-cell" data-fc></div></div>
           <div class="mp-right"><div class="ovl-card" id="mp-leg"></div></div>
           <div id="mp-tech"></div></div>`;
         this.map = L.map('map', { preferCanvas: true, zoomSnap: 0.25 });
         document.addEventListener('rd-theme', () => this.tiles());
         this.tiles();
+        RD.fc.init($('#v-map .mapstage'));
       }
       const ms = this.metrics(s, t);
       if (!ms.includes(this.metric)) this.metric = ms.find((c) => c === 'lcoe_' + t) || ms.find((c) => c.includes('CF_mean')) || ms[0] || null;
@@ -2453,7 +2530,7 @@ RD.ch = (function () {
     payload() {
       const s = RD.sum(), t = RD.state.tech, c = s.cells, col = (n) => c?.cols[n] || null;
       if (!c || !col('x') || !col('y') || !col('lcoe_' + t) || !col('potential_capacity_' + t)) return null;
-      return { cells: { ids: c.ids, lon: col('x'), lat: col('y'), lcoe: col('lcoe_' + t), capacity: col('potential_capacity_' + t), cf: col(t + '_CF_mean'), grid_km: col('nearest_station_distance_km'), region: c.region },
+      return { cells: { ids: c.ids, lon: col('x'), lat: col('y'), lcoe: col('lcoe_' + t), capacity: col('potential_capacity_' + t), cf: col(t + '_CF_mean'), grid_km: col('nearest_station_distance_km'), region: c.region, src: c.src || null },
         options: { by: this.by, k: this.k, cost_weight: this.w / 100, scope: this.scope, max_lcoe: this.max === '' ? null : +this.max } };
     },
     render() {
@@ -2461,12 +2538,8 @@ RD.ch = (function () {
       const lr = me.lcoeRange(), cur = me.max === '' ? (lr ? lr[1] : 0) : +me.max;
       v.innerHTML = `<div class="stage mapstage clstage"><div id="cl-map" class="svgstage"><div class="absent">Clustering</div></div>
         <div class="ovl-title"><div class="eyebrow">Cluster</div><h1>Regroup the cells ${tip('Group the cells by cost, by location, or by a mix of both, then export the clusters. The grouping runs in Python (cluster_explorer.py). The clusters the pipeline stored are left as they are.')}</h1><div class="sub">${esc(RD.subject().join(' · '))}</div></div>
-        <div class="mp-left"><div class="ovl-card" id="cl-c">
-          <div class="ctl-step"><span class="n">1</span>Group cells by ${tip('k-means (k-means++ start, fixed seed, numpy only) on a feature matrix built per cell: ' +
-            '"Cost" uses one column, LCOE minus its mean, divided by its own spread (std. dev.) so the scale is comparable across stores. ' +
-            '"Location" uses two columns, lon/lat converted to km (longitude scaled by cos of the mean latitude) and each centred and divided by one shared spread, so north-south and east-west distances count the same; distances are planar, fine for a province or country, not a continent. ' +
-            '"Both" blends the two: 0% location weight is cost only, 100% is location only, in between each column is scaled by its share before k-means runs. ' +
-            'Clusters are then ranked cheapest-first by their capacity-weighted mean LCOE. This is an exploratory regrouping (cluster_explorer.py) - it does not change the clusters the pipeline wrote to clusters/&lt;tech&gt;.')}</div>
+        <div class="mp-left"><div class="ovl-card" id="cl-c" data-fc>
+          <div class="ctl-step"><span class="n">1</span>Group cells by <button type="button" class="tip nb${me.info ? ' on' : ''}" id="cl-ib" title="How the grouping works" aria-label="How the grouping works" aria-expanded="${!!me.info}">i</button></div>
           ${seg('cl-by', me.by, [['cost', 'Cost'], ['geo', 'Location'], ['both', 'Both']])}
           <div id="cl-wl" class="ctl-sub" style="${me.by === 'both' ? '' : 'display:none'}"><input type="range" id="cl-w" min="5" max="95" step="5" value="${me.w}"><span class="small muted">location <span class="mono" id="cl-wv">${me.w}%</span> · cost ${100 - me.w}%</span></div>
           <div class="ctl-step"><span class="n">2</span>Into how many clusters</div>
@@ -2476,11 +2549,23 @@ RD.ch = (function () {
           <div class="ctl-step"><span class="n">4</span>Ignore cells above</div>
           ${lr ? `<div class="ctl-sub"><input type="range" id="cl-maxr" min="${lr[0]}" max="${lr[1]}" step="${((lr[1] - lr[0]) / 200) || 1}" value="${cur}"><input class="in" type="number" id="cl-max" min="${Math.floor(lr[0])}" placeholder="none" value="${esc(me.max)}" title="Leave empty for no limit"></div>
           <div class="small muted" id="cl-maxv">${me.max === '' ? 'no limit · pool runs ' + F.n(lr[0], 1) + ' to ' + F.n(lr[1], 1) + ' ' + RD.LCOE_UNIT : 'cells above ' + F.n(+me.max, 1) + ' ' + RD.LCOE_UNIT + ' are left out'}</div>` : '<div class="small muted">No LCOE column for this technology.</div>'}
-        </div><div class="ovl-card" id="cl-sum"></div></div>
+        </div><div class="ovl-card" id="cl-sum" data-fc></div></div>
+        <div class="ovl-card" id="cl-info" data-fc><div class="cc-head"><h3>How the grouping works</h3><button class="iconx" id="cl-ix" title="Close" aria-label="Close">✕</button></div>
+          <dl class="cl-doc">
+            <dt>Cost</dt><dd>One feature per cell: LCOE minus its mean, divided by its own spread (std. dev.), so the scale is comparable across stores.</dd>
+            <dt>Location</dt><dd>Two features: lon and lat converted to km, with longitude scaled by the cosine of the mean latitude. Each is centred and divided by one shared spread, so north-south and east-west distances count the same. Distances are planar: fine for a province or country, not a continent.</dd>
+            <dt>Both</dt><dd>A blend of the two. 0% location weight is cost only, 100% is location only. In between, each column is scaled by its share before k-means runs.</dd>
+            <dt>Algorithm</dt><dd>k-means with a k-means++ start and a fixed seed, numpy only.</dd>
+            <dt>Ranking</dt><dd>Clusters are ranked cheapest first by their capacity-weighted mean LCOE.</dd>
+            <dt>Scope</dt><dd>An exploratory regrouping (<code>cluster_explorer.py</code>). It does not change the clusters the pipeline wrote to <code>clusters/&lt;tech&gt;</code>.</dd>
+          </dl></div>
         <div class="mp-right"><div class="ovl-card" id="cl-leg" style="display:none"></div></div>
         <div id="cl-tech"></div></div>
         <div id="cl-body"></div>`;
       $('#cl-tech').replaceWith(RD.techGlow(() => me.render(), 'cl-tech'));
+      RD.fc.init($('.clstage', v));
+      { const iw = $('#cl-info').parentElement, ib = $('#cl-ib'), show = (on) => { me.info = on; iw.hidden = !on; ib.classList.toggle('on', on); ib.setAttribute('aria-expanded', on); };
+        show(!!me.info); ib.onclick = () => show(!me.info); $('#cl-ix').onclick = () => show(false); }
       $('#cl-by').onclick = (e) => { const x = e.target.dataset?.v; if (x) { me.by = x; me.render(); } };
       $('#cl-scope').onclick = (e) => { const x = e.target.dataset?.v; if (x) { me.scope = x; me.render(); } };
       $('#cl-w').oninput = (e) => { $('#cl-wv').textContent = e.target.value + '%'; };
@@ -2541,11 +2626,12 @@ RD.ch = (function () {
     },
     draw(body, r, p) {
       const s = RD.sum(), a = RD.active(), t = RD.state.tech, I = r.info, me = this, U = RD.LCOE_UNIT;
+      const srcs = a.combined ? a.sources : [a];   // store files behind the cells; cells.src indexes this list
       const tag = `${I.by}_k${I.k}${I.by === 'both' ? '_w' + Math.round(I.cost_weight * 100) : ''}_${I.scope}_${t}`, fname = (kind) => `${kind}_${tag}_${RD.subject().join('_')}`.replace(/[^a-z0-9_.-]+/gi, '_') + '.csv';
       const left = I.n_excluded_no_value + I.n_excluded_over_limit;
       $('#cl-sum').innerHTML = `<p style="margin:0"><b>${I.n_clusters} clusters</b> from ${F.n(I.n_clustered)} of ${F.n(I.n_cells)} cells, ${F.gw(I.capacity_MW)}. ${fin(I.lcoe_variance_kept) ? `The grouping keeps <b>${F.pct(I.lcoe_variance_kept, 0)}</b> of the cell-to-cell LCOE variation.` : ''}
         ${left ? `${F.n(left)} cells are left out: ${F.n(I.n_excluded_no_value)} without capacity or a valid LCOE${I.n_excluded_over_limit ? `, ${F.n(I.n_excluded_over_limit)} above the LCOE limit` : ''}. They are drawn dashed and keep an empty cluster in the export.` : ''}</p>`;
-      body.innerHTML = `<div class="grid g2" id="cl-cards"></div><div id="cl-table" style="margin-top:16px"></div>`;
+      body.innerHTML = `<div class="grid g2" id="cl-cards"></div><div id="cl-table" style="margin-top:16px"></div><div id="cl-sweep" style="margin-top:16px"></div>`;
       const cards = $('#cl-cards');
       const stageBox = $('#cl-map'); stageBox.innerHTML = '';
       stageBox.appendChild(CH.card({ title: 'Clusters on the grid', file: 'clusters_map_' + tag, svg: me.mapSvg(r), chips: [RD.techName(t), `k = ${I.k}`, I.by === 'both' ? `cost weight ${Math.round(I.cost_weight * 100)}%` : I.by === 'cost' ? 'by cost' : 'by location'],
@@ -2569,25 +2655,79 @@ RD.ch = (function () {
         note: (clipped ? `Y axis capped at ${F.n(cap, 0)} ${U}. The most expensive cells run above the frame. ` : '') + (oldPts.length && (I.n_excluded_over_limit || oldPts[oldPts.length - 1][0] * 1000 > I.capacity_MW * 1.02 || oldPts[oldPts.length - 1][0] * 1000 < I.capacity_MW * 0.98) ? 'The stored clusters cover a different set of cells or capacity, so the curves need not end at the same point.' : ''),
         csv: () => [['series', 'cumulative_GW', 'lcoe'], ...series.flatMap((se) => se.pts.map((q) => [se.name, q[0], q[1]]))] }));
       const keys = Object.keys(r.clusters[0] || {}), num = (k, x) => x === null || x === undefined ? '' : typeof x !== 'number' ? esc(x) : k === 'cf_mean' ? F.cf(x) : (k === 'lon' || k === 'lat') ? x.toFixed(3) : Number.isInteger(x) ? F.n(x) : F.sig(x);
-      $('#cl-table').innerHTML = `<div class="card"><div class="cc-head"><h3>Clusters, cheapest first <span class="chip">${r.clusters.length}</span></h3><div class="cc-tools"><button class="btn xs" id="cl-x1">Clusters CSV</button><button class="btn xs" id="cl-x2">Cell membership CSV</button><button class="btn xs" id="cl-x3" ${a.combined ? 'disabled title="Hourly profiles are read from one store file. Open a single region to export them."' : ''}>Hourly profiles CSV</button></div></div>
+      $('#cl-table').innerHTML = `<div class="card"><div class="cc-head"><h3>Clusters, cheapest first <span class="chip">${r.clusters.length}</span></h3><div class="cc-tools"><button class="btn xs" id="cl-x1">Clusters CSV</button><button class="btn xs" id="cl-x2">Cell membership CSV</button><button class="btn xs" id="cl-x3" title="Capacity-weighted mean CF of each cluster, hours x clusters">Hourly profiles CSV</button><button class="btn xs" id="cl-x4" title="ZIP: mean and spread profiles, clusters with profile statistics, cell membership, metadata.json with method and options">Profile package (.zip)</button></div></div>
         <div class="scroll" style="max-height:460px"><table class="t"><thead><tr>${keys.map((k) => `<th class="${typeof r.clusters[0][k] === 'number' ? 'r' : ''}">${esc(HEAD[k] || k)}</th>`).join('')}</tr></thead><tbody>
         ${r.clusters.map((c) => `<tr>${keys.map((k) => `<td class="${typeof c[k] === 'number' ? 'r' : ''}" title="${esc(c[k] ?? '')}">${k === 'region' ? esc(String(c[k]).length > 34 ? String(c[k]).slice(0, 32) + '…' : c[k]) : num(k, c[k])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
         <div class="note">LCOE in ${U}. Cluster LCOE and CF are capacity-weighted means of the member cells, a summary and not a recomputed cost. The exports hold every column as returned by Python, to six significant figures.</div></div>
         <div class="card" style="margin-top:16px"><div class="cc-head"><h3>The same run in Python</h3></div>
-        <pre class="code">${esc(`from RESource.dash.cluster_explorer import recluster_store, cluster_profiles
+        <pre class="code">${esc(`from RESource.dash.cluster_explorer import recluster_store, cluster_profiles, cluster_profiles_package
 
-store = "${a.combined ? '<one region store>.h5' : a.name}"
+store = "${a.combined ? a.sources[0].name : a.name}"${a.combined ? '   # combined view: recluster the concatenated cell tables, give cluster_profiles the list of stores and a "source" column' : ''}
 res = recluster_store(store, "${t}", by="${I.by}", k=${I.k}, cost_weight=${I.cost_weight}, scope="${I.scope}", max_lcoe=${I.max_lcoe === null ? 'None' : I.max_lcoe}, seed=${I.seed})
 res["clusters"].to_csv("clusters.csv")        # one row per cluster
 res["cells"].to_csv("cells.csv")              # cluster of every cell
-cluster_profiles(store, "${t}", res["cells"]).to_csv("profiles.csv")   # hourly CF per cluster`)}</pre>
+cluster_profiles(store, "${t}", res["cells"]).to_csv("profiles.csv")   # hourly CF per cluster (capacity-weighted mean)
+data, summary = cluster_profiles_package(store, "${t}", payload)       # the ZIP the dash exports`)}</pre>
         <div class="note">Method: k-means on scaled location (km) and LCOE, fixed seed, written in numpy. Edit <code>src/RESource/dash/cluster_explorer.py</code>, then run <code>resource-dash</code> to rebuild this page with the change.${a.combined ? ' In a combined view the cells of all regions are clustered together.' : ''}</div></div>`;
       $('#cl-x1').onclick = () => CH.download(fname('clusters'), CH.toCsv(recCsv(r.clusters)), 'text/csv');
       $('#cl-x2').onclick = () => CH.download(fname('cluster_cells'), CH.toCsv(recCsv(r.cells)), 'text/csv');
       $('#cl-x3').onclick = async () => {
         RD.busy('Building hourly cluster profiles');
-        try { const x = await RD.engine.json('clusterProfiles', { name: a.mount, tech: t, payload: JSON.stringify(p) }); RD.busy(null); if (x.error) alert(x.error); else CH.download(fname('cluster_profiles'), x.csv, 'text/csv'); }
+        try { const x = await RD.engine.json('clusterProfiles', { names: srcs.map((z) => z.mount), tech: t, payload: JSON.stringify(p) }); RD.busy(null); if (x.error) alert(x.error); else CH.download(fname('cluster_profiles'), x.csv, 'text/csv'); }
         catch (e) { RD.busy(null); alert(e.message); }
+      };
+      $('#cl-x4').onclick = async () => {
+        RD.busy('Building the cluster profile package');
+        try {
+          const x = await RD.engine.json('clusterPackage', { names: srcs.map((z) => z.mount), tech: t, payload: JSON.stringify(p),
+            context: JSON.stringify({ stores: srcs.map((z) => z.name), subject: RD.subject() }) });
+          RD.busy(null);
+          if (x.error) { alert(x.error); return; }
+          const bin = atob(x.zip_b64), u = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+          CH.download(fname('cluster_profiles_package').replace(/\.csv$/, '.zip'), new Blob([u], { type: 'application/zip' }));
+          const bad = (x.summary || []).filter((r) => r.cf_check !== null && Math.abs(r.cf_check) > 0.01);
+          if (bad.length) alert(`${bad.length} cluster(s) have an hourly-profile mean that differs from the stored mean CF by more than 0.01 (see cf_check in clusters.csv). Check the weather year and gaps in timeseries/${t}.`);
+        } catch (e) { RD.busy(null); alert(e.message); }
+      };
+      me.sweepCard(p, srcs);
+    },
+    /* k-sweep: score k = 1..k_max by cost, by location and by both (cluster_explorer.k_sweep) */
+    sweepCard(p, srcs) {
+      const box = $('#cl-sweep'), t = RD.state.tech, me = this, o = p.options;
+      const kmax = me.kmax || 20, key = JSON.stringify([srcs.map((z) => z.mount), t, o.scope, o.cost_weight, o.max_lcoe, kmax]);
+      box.innerHTML = `<div class="card"><div class="cc-head"><h3>How many clusters? ${tip('Clusters every k from 1 to the limit three ways (by cost, by location, by both at your cost weight) with the same k-means and seed as above, and scores each. LCOE kept: capacity-weighted share of the cell-to-cell LCOE variance the clusters keep. Shape kept: the same for each cell\'s mean CF by month and hour of day (288 values), a stand-in for timeslice CF. Look for the k where a curve flattens: more clusters past it add little.')}</h3>
+        <div class="cc-tools"><label class="small muted">k up to <input class="in" type="number" id="cl-sk" min="3" max="40" value="${kmax}" style="width:4.2em"></label><button class="btn xs" id="cl-sr">${me.sweep?.key === key ? 'Run again' : 'Run k-sweep'}</button></div></div>
+        <div id="cl-sb" class="grid g2"><div class="small muted" style="padding:6px 2px">Runs ${3 * kmax} clusterings in the browser. The first run also reads the hourly series once.</div></div></div>`;
+      const show = (x) => {
+        const b = $('#cl-sb'), M = x.modes, cur = me.k;
+        const lab = (m) => m.by === 'cost' ? 'By cost' : m.by === 'geo' ? 'By location' : `Both (cost ${Math.round(m.cost_weight * 100)}%)`;
+        const cls = { cost: 's-accent', geo: 's-teal', both: 's-violet' }, leg = { cost: 'accent', geo: 'teal', both: 'violet' };
+        const rows = () => [['by', 'cost_weight', 'k', 'n_clusters', 'lcoe_kept', 'lcoe_mae', 'shape_kept', 'shape_rmse_cf', 'min_cluster_MW'],
+          ...M.flatMap((m) => m.k.map((k, i) => [m.by, m.cost_weight, k, m.n_clusters[i], m.lcoe_kept[i], m.lcoe_mae[i], m.shape_kept[i], m.shape_rmse[i], m.min_cluster_MW[i]]))];
+        const chart = (metric, title, info) => {
+          const series = M.map((m) => ({ name: lab(m), cls: cls[m.by], pts: m.k.map((k, i) => [k, m[metric][i]]).filter((q) => fin(q[1])).map((q) => [q[0], q[1] * 100]) }));
+          if (!series.some((z) => z.pts.length)) return CH.card({ title, empty: `No hourly series (timeseries/${t}) in the store, so the shape cannot be scored.` });
+          const marks = M.flatMap((m, j) => { const i = m.k.indexOf(cur); return i >= 0 && fin(m[metric][i]) ? [{ x: cur, y: m[metric][i] * 100, text: j === M.length - 1 ? `k = ${cur}` : '', cls: cls[m.by] }] : []; });
+          return CH.card({ title, file: `ksweep_${metric}_${t}`, svg: CH.xy({ series, marks, xLabel: 'Number of clusters k', yLabel: 'Variation kept (%)', xMin: 1, xMax: x.info.k_max, yMin: 0, yMax: 100 }),
+            legend: M.map((m) => [lab(m), leg[m.by]]), chips: [RD.techName(t), 'knee: ' + M.map((m) => `${lab(m).split(' (')[0].toLowerCase()} ${m.knee[metric] ?? '–'}`).join(' · ')], info, csv: rows });
+        };
+        b.innerHTML = '';
+        b.appendChild(chart('lcoe_kept', 'LCOE kept by k', 'Capacity-weighted. 100% means every cell sits at its cluster LCOE. This number is capacity-weighted, so it can differ from the unweighted score in the summary above. The knee is the k farthest from the straight line between k = 1 and the last k: a heuristic, not an optimum.'));
+        b.appendChild(chart('shape_kept', 'Shape kept by k', 'Share of the cell-to-cell variation in mean CF by month and hour of day that the clusters keep. A low value for small k means the cluster profiles average over sites that produce at different times. Read it with the RMSE in the CSV: when sites all produce alike, a small RMSE can still be a low percentage.'));
+        const i = (m) => m.k.indexOf(cur), f = (v, d = 0) => fin(v) ? F.n(v * 100, d) + '%' : '–';
+        b.insertAdjacentHTML('beforeend', `<div class="note" style="grid-column:1/-1">At k = ${cur}: ${M.map((m) => `${lab(m)} keeps ${f(m.lcoe_kept[i(m)])} of LCOE and ${f(m.shape_kept[i(m)])} of shape, smallest cluster ${fin(m.min_cluster_MW[i(m)]) ? F.gw(m.min_cluster_MW[i(m)]) : '–'}`).join('; ')}. ${fin(x.info.n_without_shape) && x.info.n_without_shape ? `${F.n(x.info.n_without_shape)} cells have no hourly series and are left out of the shape score.` : ''}</div>`);
+      };
+      if (me.sweep?.key === key) show(me.sweep.res);
+      $('#cl-sk').onchange = (e) => { me.kmax = Math.max(3, Math.min(40, Math.round(+e.target.value) || 20)); me.sweepCard(p, srcs); };
+      $('#cl-sr').onclick = async () => {
+        RD.busy(`Sweeping k from 1 to ${kmax}`);
+        try {
+          const x = await RD.engine.json('kSweep', { names: srcs.map((z) => z.mount), tech: t, payload: JSON.stringify(p), kmax });
+          RD.busy(null);
+          if (x.error) { alert(x.error); return; }
+          me.sweep = { key, res: x }; me.sweepCard(p, srcs);
+        } catch (e) { RD.busy(null); alert(e.message); }
       };
     },
   };
