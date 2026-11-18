@@ -101,6 +101,15 @@ images can be loaded on demand. A combined view can be filtered by region.
 Stores without these figures show an empty state. The browser reads the stores
 locally; Pyodide is downloaded when needed.
 
+When a store contains validated adjusted cell and cluster capacities, the
+dashboard uses them and displays the applied reductions. Original tables remain
+available in the Data tab. See the [notebook guide](notebooks/README.md#wb6-combined-analytics)
+for the WB6 assumptions and storage format.
+
+The **Studies** tab shows notebook images and their Markdown descriptions from
+a selected `results/Studies/` folder. See the [notebook study guide](notebooks/README.md#publishing-notebook-studies)
+for the reusable output format.
+
 ```python
 from RESource.RESources import RESources_builder
 ```

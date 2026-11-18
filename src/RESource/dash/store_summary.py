@@ -18,7 +18,7 @@ import pandas as pd
 try:  # native import; inside the dash both modules share one namespace
     from store_reader import *  # noqa: F401,F403
 except ImportError:  # pragma: no cover
-    pass
+    from .store_reader import *  # noqa: F401,F403
 
 TECHS = ("solar", "wind")
 LCOE_SENTINEL = 999_000.0  # RESource writes 999999 where a cell has no viable LCOE
@@ -89,8 +89,13 @@ def _boundary(f):
             "note": "Outlines thinned to 300 vertices per ring, 40 largest rings per region. Display only."}
 
 
-def _cells(f):
+def _cells(f, adjustments=None):
     df = read_fixed_frame(f, "cells")
+    if adjustments is not None:
+        for tech in TECHS:
+            column = f"potential_capacity_{tech}"
+            df[f"{column}_unadjusted"] = df[column]
+            df[column] = adjustments["cells"][f"{column}_adjusted"].to_numpy()
     rc = _region_col(df)
     numeric = [c for c in df.columns if pd.api.types.is_numeric_dtype(df[c])]
     sentinel = {}
@@ -169,8 +174,11 @@ def _nodes(f, key):
     return {"key": key, "points": pts, "n": int(len(df)), "types": {str(k): int(v) for k, v in types.items()}}
 
 
-def _clusters(f, tech):
+def _clusters(f, tech, adjustments=None):
     df = read_fixed_frame(f, f"clusters/{tech}")
+    if adjustments is not None:
+        df["potential_capacity_unadjusted"] = df["potential_capacity"]
+        df["potential_capacity"] = adjustments[f"clusters/{tech}"]["potential_capacity_adjusted"].to_numpy()
     rc = _region_col(df)
     numeric = [c for c in df.columns if pd.api.types.is_numeric_dtype(df[c])]
     cols = {}
@@ -530,6 +538,34 @@ def _run_meta(f):
     return out
 
 
+def _capacity_adjustments(f, run):
+    """Validate separately stored adjusted capacities against their source tables."""
+    factors = run.get("capacity_haircut_applied")
+    if factors is None:
+        return None
+    if not isinstance(factors, dict) or set(factors) != set(TECHS):
+        raise ValueError("Invalid applied haircut factors.")
+    if any(isinstance(v, bool) or not isinstance(v, (int, float)) or not np.isfinite(v) or not 0 <= v <= 1 for v in factors.values()):
+        raise ValueError("Invalid applied haircut factors.")
+    out = {}
+    for key, columns in (
+        ("cells", {tech: f"potential_capacity_{tech}" for tech in TECHS}),
+        *((f"clusters/{tech}", {tech: "potential_capacity"}) for tech in TECHS),
+    ):
+        source = read_fixed_frame(f, key)
+        adjusted = read_fixed_frame(f, f"capacity_haircuts/{key}")
+        if not source.index.equals(adjusted.index) or not source.index.is_unique:
+            raise ValueError(f"{key}: adjusted capacity indexes do not match.")
+        for tech, col in columns.items():
+            raw = source[col].to_numpy(dtype=float)
+            saved_raw = adjusted[f"{col}_original"].to_numpy(dtype=float)
+            saved_adjusted = adjusted[f"{col}_adjusted"].to_numpy(dtype=float)
+            if not np.allclose(raw, saved_raw, equal_nan=True) or not np.allclose(saved_adjusted, raw * factors[tech], equal_nan=True):
+                raise ValueError(f"{key}: adjusted capacity does not match the source and factor.")
+        out[key] = adjusted
+    return out
+
+
 # ------------------------------------------------------------------ entry points
 
 def summarize_store(path, filename=None):
@@ -554,11 +590,18 @@ def summarize_store(path, filename=None):
                 out["problems"][name] = f"{type(exc).__name__}: {exc}"
                 return None
 
+        out["run"] = block("_meta", _run_meta, f) if "_meta" in f else None
+        adjustments = block("capacity haircuts", _capacity_adjustments, f, out["run"] or {})
+        out["haircut_status"] = (
+            "adjusted" if adjustments is not None else
+            "invalid" if (out["run"] or {}).get("capacity_haircut_applied") is not None else
+            "unadjusted"
+        )
         cells_df = None
         if "boundary" in have:
             out["boundary"] = block("boundary", _boundary, f)
         if "cells" in have:
-            r = block("cells", _cells, f)
+            r = block("cells", _cells, f, adjustments)
             if r:
                 cells_df, out["cells"] = r
         if "lines" in have:
@@ -570,7 +613,7 @@ def summarize_store(path, filename=None):
         for t in TECHS:
             cl_df = None
             if f"clusters/{t}" in have:
-                r = block(f"clusters/{t}", _clusters, f, t)
+                r = block(f"clusters/{t}", _clusters, f, t, adjustments)
                 if r:
                     cl_df, out["clusters"][t] = r
             if f"timeseries/clusters/{t}" in have:
@@ -590,8 +633,6 @@ def summarize_store(path, filename=None):
                 if la:
                     out["landanalytics"].append(la)
         out["la_media"] = block("LandAnalytics images", _la_media, f, have) or {"images": [], "other": []}
-        if "_meta" in f:
-            out["run"] = block("_meta", _run_meta, f)
         if "units" in have:
             u = block("units", read_fixed_frame, f, "units")
             if u is not None:

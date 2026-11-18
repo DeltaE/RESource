@@ -37,7 +37,12 @@ def make_store(root, region, metadata, *, legacy=False):
     handler = DataHandler(path)
     handler.set_metadata(metadata)
     for key in ("cells", "boundary", "lines", "timeseries/solar", "timeseries/wind"):
-        pd.DataFrame({"value": [1]}).to_hdf(path, key=key)
+        frame = {"value": [1]}
+        if key == "cells":
+            frame.update({"potential_capacity_solar": [10.0], "potential_capacity_wind": [20.0]})
+        pd.DataFrame(frame).to_hdf(path, key=key)
+    for tech in ("solar", "wind"):
+        pd.DataFrame({"potential_capacity": [10.0]}).to_hdf(path, key=f"clusters/{tech}")
     return path
 
 
@@ -60,7 +65,7 @@ def test_notebook_records_assumptions_in_loaded_stores_only(tmp_path):
     al = make_store(
         tmp_path, "AL", {"capacity_haircut": factors, "capacity_haircut_notes": "Existing"}
     )
-    ba = make_store(tmp_path, "BA", {"old": True}, legacy=True)
+    ba = make_store(tmp_path, "BA", {"old": True})
     legacy_al = make_store(tmp_path, "AL", {"old": True}, legacy=True)
     env = environment(tmp_path, ["AL", "BA"])
     exec(cell("#All the regions should"), env)
@@ -71,6 +76,9 @@ def test_notebook_records_assumptions_in_loaded_stores_only(tmp_path):
     assert DataHandler(ba).get_metadata("capacity_haircut") == factors
     assert DataHandler(ba).get_metadata("capacity_haircut_source") == "WB6 notebook fallback"
     assert "not adjusted" in DataHandler(ba).get_metadata("capacity_haircut_notes")
+    assert pd.read_hdf(ba, "capacity_haircuts/clusters/wind")[
+        "potential_capacity_adjusted"
+    ].tolist() == [6.0]
     assert DataHandler(legacy_al).get_metadata("capacity_haircut") is None
     assert not (tmp_path / "data/store/WesternBalkanRegions/Combined").exists()
     assert pd.read_hdf(ba, "cells")["value"].tolist() == [1]

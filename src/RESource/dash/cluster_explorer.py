@@ -36,8 +36,10 @@ import pandas as pd
 
 try:  # inside the dash every module sits in one flat folder
     from store_reader import _blocks, open_store, read_fixed_frame, time_index
+    from store_summary import _capacity_adjustments, _run_meta
 except ImportError:  # native use as part of the RESource package
     from .store_reader import _blocks, open_store, read_fixed_frame, time_index
+    from .store_summary import _capacity_adjustments, _run_meta
 
 LCOE_SENTINEL = 999_000.0   # RESource writes 999999 where a cell has no viable LCOE
 KM_PER_DEG_LAT = 110.57
@@ -223,6 +225,11 @@ def cell_table(path, tech):
             "nearest_station_distance_km", "Region", "Municipality", "Province", "Country"]
     with open_store(path) as f:
         df = read_fixed_frame(f, "cells", columns=want)
+        adjustments = _capacity_adjustments(f, _run_meta(f) if "_meta" in f else {})
+        if adjustments is not None:
+            df[f"potential_capacity_{tech}"] = adjustments["cells"][
+                f"potential_capacity_{tech}_adjusted"
+            ].to_numpy()
     missing = [c for c in want[:4] if c not in df]
     if missing:
         raise KeyError(f"cells table lacks {missing}; has this store run scoring for {tech}?")
