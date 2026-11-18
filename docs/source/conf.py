@@ -121,7 +121,8 @@ suppress_warnings = ["autodoc.import_error"]
 
 # html_logo = "_static/RESource_logo_2025.07.jpg"
 # html_logo = "_static/graphic_RES_logo_202508.jpg"
-html_logo = "_static/logo_full.jpg"
+# html_logo = "_static/logo_full.jpg"
+html_logo = "_static/logo_dash_animated.svg"
 html_favicon = "_static/logo_mark.jpg"
 
 # NBSphinx configuration for Jupyter notebooks
