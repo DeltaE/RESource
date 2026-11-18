@@ -26,6 +26,16 @@ RESource is developed to enable reproducible, adaptable assessments of VRE poten
 
 ---
 
+## RESource Dash
+
+<video src="_static/videos/RESource_Dash_showcase_30s.mp4" controls width="600"></video>
+
+*30-second tour of the RESource Dash — an interactive, browser-based viewer for
+exploring assessment stores (land analytics, capacity, and country reports)
+without re-running the pipeline.*
+
+---
+
 ## Quick start
 
 ```bash
@@ -55,10 +65,13 @@ notes/run_usage
 notes/citation
 notes/case_BC
 notes/config
+notes/assumptions
 notes/learning
 notes/data
 notes/developers
 notes/development_pipeline
+notes/wind_bias_correction
+notes/era5_reference_climatology
 notes/step_cache
 ```
 

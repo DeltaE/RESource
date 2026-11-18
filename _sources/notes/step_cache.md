@@ -35,13 +35,39 @@ hash is updated on completion.
 Hashes are persisted to a JSON sidecar file next to the HDF5 store:
 
 ```
-data/store/<Country>/<RUN_ID>/resources_<Country>_<Region>_<RUN_ID>.h5
-data/store/<Country>/<RUN_ID>/resources_<Country>_<Region>_<RUN_ID>.checksums.json
+results/<Country>/<Region>/<RUN_ID>/resources_<Country>_<Region>_<RUN_ID>.h5
+results/<Country>/<Region>/<RUN_ID>/resources_<Country>_<Region>_<RUN_ID>.checksums.json
 ```
+
+Stores and sidecars previously written under `data/store/` are not moved or
+automatically reused. A run without a store and matching sidecar in its results
+directory recomputes missing steps; existing files remain available for reading.
 
 Wind and solar results share the same HDF5 file but are namespaced independently
 in the sidecar (`wind::grid_cells` vs. `solar::grid_cells`), so a turbine config
 change only invalidates wind steps — solar cache entries are unaffected.
+
+### Land analytics images
+
+After the capacity step, the regional pipeline stores PNG class-distribution
+charts and land-class overview maps under `LandAnalytics/images`. It uses the
+regional rasters already prepared for the assessment and configured legends
+where available; otherwise classes are labeled by their codes. Floating-point
+rasters and rasters with more than 256 classes are skipped with a warning.
+Distributions count valid pixel centres inside the regional
+boundary: percentages are pixel shares, not area-weighted estimates. Maps are
+downsampled for display and contain no site overlays. Only images, not these
+rasters or summary tables, are added by this component.
+
+Set `lands.plot_layer_impacts: true` to also embed the pipeline's stepwise and
+individual layer-impact figures for each technology. This option performs
+additional, potentially slow availability calculations. If capacity was cached
+but the impact images are missing, those calculations run to produce them. Image
+keys include a land-configuration fingerprint; existing images for other
+configurations are retained. The fingerprint does not detect changes to source
+files at the same path. Generating class plots reads all valid regional pixels
+and may take time for high-resolution rasters. The existing impact-plot setting
+defaults to `true` when omitted; set it to `false` to disable those calculations.
 
 ---
 

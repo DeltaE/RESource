@@ -40,7 +40,6 @@ are installed by default during `uv sync`.
 
 ```text
 src/RESource/   Installable implementation
-src/RES/        Temporary compatibility namespace
 tests/          Fast automated tests
 config/         Example workflow configuration
 notebooks/      Exploratory and case-study notebooks

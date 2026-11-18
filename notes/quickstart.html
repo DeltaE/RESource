@@ -181,8 +181,8 @@
       
     
     
-    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.7.0 documentation - Home"/>
-    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark pst-js-only" alt="RESource 2025.7.0 documentation - Home"/>
+    <img src="../_static/logo_full.jpg" class="logo__image only-light" alt="RESource 2025.7.0 documentation - Home"/>
+    <img src="../_static/logo_full.jpg" class="logo__image only-dark pst-js-only" alt="RESource 2025.7.0 documentation - Home"/>
   
   
 </a></div>
@@ -204,11 +204,14 @@
 <li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assumptions.html">Modeling assumptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learning.html">Best Practices and Guidelines</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development_pipeline.html">Development pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wind_bias_correction.html">ERA5–GWA wind-speed bias correction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="era5_reference_climatology.html">Ten-year ERA5 reference climatology</a></li>
 <li class="toctree-l1"><a class="reference internal" href="step_cache.html">RESource Step Cache</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
@@ -439,11 +442,11 @@ groups in <code class="docutils literal notranslate"><span class="pre">pyproject
 </section>
 <section id="run-an-assessment">
 <h2>Run an assessment<a class="headerlink" href="#run-an-assessment" title="Link to this heading">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>resource<span class="w"> </span>config/config_BC_baseline.yaml<span class="w"> </span>--year<span class="w"> </span><span class="m">2024</span><span class="w"> </span>-r<span class="w"> </span>BC
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>resource<span class="w"> </span>config/CAN/scenarios/baseline.yaml<span class="w"> </span>--year<span class="w"> </span><span class="m">2024</span><span class="w"> </span>-r<span class="w"> </span>BC
 </pre></div>
 </div>
 <p>Other examples:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>resource<span class="w"> </span>config/CAN_baseline.yaml<span class="w"> </span>--year<span class="w"> </span><span class="m">2024</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>resource<span class="w"> </span>config/CAN/scenarios/baseline.yaml<span class="w"> </span>--year<span class="w"> </span><span class="m">2024</span>
 uv<span class="w"> </span>run<span class="w"> </span>resource<span class="w"> </span>config/config_WB6_2023.yaml<span class="w"> </span>--year<span class="w"> </span><span class="m">2023</span><span class="w"> </span>-r<span class="w"> </span>AL<span class="w"> </span>BA
 </pre></div>
 </div>
@@ -455,7 +458,7 @@ downloaded and processed datasets are not bundled in the Python wheel.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">RESource.RESources</span><span class="w"> </span><span class="kn">import</span> <span class="n">RESources_builder</span>
 
 <span class="n">builder</span> <span class="o">=</span> <span class="n">RESources_builder</span><span class="p">(</span>
-    <span class="n">config_file_path</span><span class="o">=</span><span class="s2">&quot;config/config_BC_baseline.yaml&quot;</span><span class="p">,</span>
+    <span class="n">config_file_path</span><span class="o">=</span><span class="s2">&quot;config/CAN/scenarios/baseline.yaml&quot;</span><span class="p">,</span>
     <span class="n">region_short_code</span><span class="o">=</span><span class="s2">&quot;BC&quot;</span><span class="p">,</span>
     <span class="n">resource_type</span><span class="o">=</span><span class="s2">&quot;wind&quot;</span><span class="p">,</span>
     <span class="n">weather_year</span><span class="o">=</span><span class="mi">2024</span><span class="p">,</span>

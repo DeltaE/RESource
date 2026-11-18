@@ -1,0 +1,648 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Modeling assumptions &#8212; RESource 2025.7.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=1faeb039"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notes/assumptions';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Best Practices and Guidelines" href="learning.html" />
+    <link rel="prev" title="How to use the CONFIG" href="config.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_full.jpg" class="logo__image only-light" alt="RESource 2025.7.0 documentation - Home"/>
+    <img src="../_static/logo_full.jpg" class="logo__image only-dark pst-js-only" alt="RESource 2025.7.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup_guide.html">Installation and environment setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run_usage.html">Command-line usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Modeling assumptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">Best Practices and Guidelines</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development_pipeline.html">Development pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wind_bias_correction.html">ERA5–GWA wind-speed bias correction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="era5_reference_climatology.html">Ten-year ERA5 reference climatology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step_cache.html">RESource Step Cache</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">Documentation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">Developer deployment guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publishing.html">Publishing to PyPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensing.html">License transition assessment</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notes/assumptions.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Modeling assumptions</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#canadian-grid-connection-candidates">Canadian grid-connection candidates</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-and-provenance">Evidence and provenance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#implemented-screening-rule">Implemented screening rule</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-and-limitations">Interpretation and limitations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fallback-behavior">Fallback behavior</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="modeling-assumptions">
+<h1>Modeling assumptions<a class="headerlink" href="#modeling-assumptions" title="Link to this heading">#</a></h1>
+<p>This page records assumptions that materially affect resource eligibility,
+connection distance, or interpretation of results. They are part of the scenario
+definition and should be reviewed before transferring RESource to another region.</p>
+<section id="canadian-grid-connection-candidates">
+<h2>Canadian grid-connection candidates<a class="headerlink" href="#canadian-grid-connection-candidates" title="Link to this heading">#</a></h2>
+<section id="evidence-and-provenance">
+<h3>Evidence and provenance<a class="headerlink" href="#evidence-and-provenance" title="Link to this heading">#</a></h3>
+<p>The Canadian substation screen is based on the
+<a class="reference external" href="https://github.com/DeltaE/PyPSA_BC/blob/dev/docs/QA/CODERS_transmission_lines_dataQA_2026-07-23.md">CODERS <code class="docutils literal notranslate"><span class="pre">transmission_lines</span></code> naming convention and data-gap report</a>.
+That QA was checked on 23 July 2026 against the CODERS 2025OCT28 British
+Columbia pull. It audited 1,239 transmission-line segments and 2,478 endpoint
+references.</p>
+<p>The QA establishes a three-token endpoint code of the form
+<code class="docutils literal notranslate"><span class="pre">BC_&lt;location&gt;_&lt;facility</span> <span class="pre">type&gt;</span></code> and reports the following endpoint suffixes:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Suffix</p></th>
+<th class="head text-right"><p>QA count</p></th>
+<th class="head"><p>Meaning established by the QA</p></th>
+<th class="head"><p>RESource treatment</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GSS</span></code></p></td>
+<td class="text-right"><p>213</p></td>
+<td><p>Generating-station switchyard</p></td>
+<td><p>Candidate</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TSS</span></code></p></td>
+<td class="text-right"><p>175</p></td>
+<td><p>Major transmission terminal substation</p></td>
+<td><p>Candidate</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DSS</span></code></p></td>
+<td class="text-right"><p>987</p></td>
+<td><p>Distribution step-down/load substation</p></td>
+<td><p>Excluded</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ISS</span></code></p></td>
+<td class="text-right"><p>154</p></td>
+<td><p>Industrial substation/interconnection</p></td>
+<td><p>Excluded by node type</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SWS</span></code></p></td>
+<td class="text-right"><p>19</p></td>
+<td><p>Switching station</p></td>
+<td><p>Excluded</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">JCT</span></code></p></td>
+<td class="text-right"><p>922</p></td>
+<td><p>Junction or line tap without a station</p></td>
+<td><p>Excluded</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td class="text-right"><p>4</p></td>
+<td><p>International intertie</p></td>
+<td><p>Excluded</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IPT</span></code></p></td>
+<td class="text-right"><p>4</p></td>
+<td><p>Interprovincial tie</p></td>
+<td><p>Excluded</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Counts in this table are transmission-line endpoint references, not unique
+substations. A circuit may contain multiple segments and a node may occur more
+than once.</p>
+</section>
+<section id="implemented-screening-rule">
+<h3>Implemented screening rule<a class="headerlink" href="#implemented-screening-rule" title="Link to this heading">#</a></h3>
+<p>For Canadian scenarios, a CODERS substation is a candidate connection point only
+when all of the following are true:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">node_type</span></code> is <code class="docutils literal notranslate"><span class="pre">Generation</span></code> or <code class="docutils literal notranslate"><span class="pre">Terminal</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">node_code</span></code> appears in either <code class="docutils literal notranslate"><span class="pre">network_node_code_starting</span></code> or
+<code class="docutils literal notranslate"><span class="pre">network_node_code_ending</span></code> in the provincial CODERS <code class="docutils literal notranslate"><span class="pre">transmission_lines</span></code> table.</p></li>
+<li><p>The final <code class="docutils literal notranslate"><span class="pre">node_code</span></code> token is not <code class="docutils literal notranslate"><span class="pre">INT</span></code>, <code class="docutils literal notranslate"><span class="pre">IPT</span></code>, <code class="docutils literal notranslate"><span class="pre">SWS</span></code>, or <code class="docutils literal notranslate"><span class="pre">JCT</span></code>.</p></li>
+</ol>
+<p>The endpoint-membership check enforces referential closure with the transmission
+network. This follows the QA finding that CODERS transmission lines have no
+geometry of their own and must be resolved through a separate nodes/substations
+table.</p>
+<p>The active Canadian scenarios expose the rule explicitly:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">CODERS</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">connection_filter</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">eligible_node_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">Generation</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">Terminal</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">excluded_node_suffixes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">INT</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">IPT</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">SWS</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">JCT</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">require_transmission_endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<p>Setting <code class="docutils literal notranslate"><span class="pre">enabled:</span> <span class="pre">false</span></code> restores the unfiltered provincial CODERS substation
+table. Changing eligible types or excluded suffixes creates a different grid-access
+scenario and should be reported with the results.</p>
+</section>
+<section id="interpretation-and-limitations">
+<h3>Interpretation and limitations<a class="headerlink" href="#interpretation-and-limitations" title="Link to this heading">#</a></h3>
+<p>This screen is a planning proxy for plausible transmission-level connection
+locations. Retention does <strong>not</strong> demonstrate:</p>
+<ul class="simple">
+<li><p>spare interconnection or transformer capacity;</p></li>
+<li><p>compatible voltage or protection equipment;</p></li>
+<li><p>an approved interconnection request;</p></li>
+<li><p>ownership access, available land, or constructability;</p></li>
+<li><p>a feasible route from a candidate resource site; or</p></li>
+<li><p>that CODERS transfer capability is a substation or line thermal rating.</p></li>
+</ul>
+<p>The source QA notes that CODERS reports transfer capability rather than per-line
+MVA thermal ratings and does not provide line status or commissioning/retirement
+years. Project selection therefore still requires utility data, a system-impact
+study, and project-level engineering review.</p>
+<p>Against the CODERS BC data checked on 3 August 2026, the default screen retained
+144 of 644 provincial substations: 112 <code class="docutils literal notranslate"><span class="pre">Generation</span></code> and 32 <code class="docutils literal notranslate"><span class="pre">Terminal</span></code> nodes. This
+count is diagnostic, not a fixed expected result; it can change with CODERS data
+updates.</p>
+</section>
+<section id="fallback-behavior">
+<h3>Fallback behavior<a class="headerlink" href="#fallback-behavior" title="Link to this heading">#</a></h3>
+<p>If CODERS credentials, retrieval, schema validation, or filtering are unavailable,
+the Canadian workflow falls back to configured OpenStreetMap transmission lines.
+For non-Canadian workflows, a configured uploaded substation CSV is used first and
+OSM is the fallback. OSM and CODERS are different evidence sources and results
+should record which source was actually used.</p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="config.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">How to use the CONFIG</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="learning.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Best Practices and Guidelines</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#canadian-grid-connection-candidates">Canadian grid-connection candidates</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-and-provenance">Evidence and provenance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#implemented-screening-rule">Implemented screening rule</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-and-limitations">Interpretation and limitations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fallback-behavior">Fallback behavior</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

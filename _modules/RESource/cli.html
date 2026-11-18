@@ -176,8 +176,8 @@
       
     
     
-    <img src="../../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.7.0 documentation - Home"/>
-    <img src="../../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark pst-js-only" alt="RESource 2025.7.0 documentation - Home"/>
+    <img src="../../_static/logo_full.jpg" class="logo__image only-light" alt="RESource 2025.7.0 documentation - Home"/>
+    <img src="../../_static/logo_full.jpg" class="logo__image only-dark pst-js-only" alt="RESource 2025.7.0 documentation - Home"/>
   
   
 </a></div>
@@ -199,11 +199,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../notes/citation.html">Citation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/config.html">How to use the CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/assumptions.html">Modeling assumptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/learning.html">Best Practices and Guidelines</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="../../notes/data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/developers.html">Contributing Developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/development_pipeline.html">Development pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/wind_bias_correction.html">ERA5–GWA wind-speed bias correction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/era5_reference_climatology.html">Ten-year ERA5 reference climatology</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes/step_cache.html">RESource Step Cache</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
@@ -354,11 +357,26 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">platform</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">redirect_stderr</span><span class="p">,</span> <span class="n">redirect_stdout</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
+
+<span class="c1"># Configure repository-backed process caches before importing geospatial modules.</span>
+<span class="n">_CLI_TEMP_DIRECTORY</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;data/tmp/resource-cli&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="n">_MATPLOTLIB_CACHE_DIRECTORY</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;data/tmp/matplotlib&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="n">_CLI_TEMP_DIRECTORY</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">_MATPLOTLIB_CACHE_DIRECTORY</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;TMPDIR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">_CLI_TEMP_DIRECTORY</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;MPLCONFIGDIR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">_MATPLOTLIB_CACHE_DIRECTORY</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">colorama</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fore</span><span class="p">,</span> <span class="n">Style</span><span class="p">,</span> <span class="n">init</span>
@@ -379,7 +397,8 @@
     <span class="n">_PSUTIL</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">RESource.RESources</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">RES</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">RESource.utility</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RESource</span><span class="w"> </span><span class="kn">import</span> <span class="n">utility</span> <span class="k">as</span> <span class="n">utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RESource.CellCapacityProcessor</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_region_aggregated_capacity</span>
 
 <span class="c1"># ── Coloured output ───────────────────────────────────────────────────────────</span>
 
@@ -389,23 +408,23 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">print_error</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">_c</span><span class="p">(</span><span class="n">Fore</span><span class="o">.</span><span class="n">RED</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">print_success</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">_c</span><span class="p">(</span><span class="n">Fore</span><span class="o">.</span><span class="n">GREEN</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">print_warning</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">_c</span><span class="p">(</span><span class="n">Fore</span><span class="o">.</span><span class="n">YELLOW</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span> <span class="n">alert</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">print_info</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">_c</span><span class="p">(</span><span class="n">Fore</span><span class="o">.</span><span class="n">CYAN</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">print_hint</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">_c</span><span class="p">(</span><span class="n">Fore</span><span class="o">.</span><span class="n">MAGENTA</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
+    <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
 
 
 <span class="c1"># ── Hardware snapshot ─────────────────────────────────────────────────────────</span>
@@ -442,8 +461,200 @@
 
 <span class="c1"># ── Runtime log ───────────────────────────────────────────────────────────────</span>
 
-<span class="n">LOG_FILE</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;results/logs/runtime_log.txt&quot;</span><span class="p">)</span>
+<span class="n">RUN_LOG_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;results/logs/runs&quot;</span><span class="p">)</span>
+<span class="n">LATEST_DETAIL_LOG</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;results/logs/resource.log&quot;</span><span class="p">)</span>
+<span class="n">LATEST_RUNTIME_LOG</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;results/logs/runtime_log.txt&quot;</span><span class="p">)</span>
 <span class="n">W</span> <span class="o">=</span> <span class="mi">80</span>  <span class="c1"># line width</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_slugify</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert text into a filesystem-safe lowercase slug.&quot;&quot;&quot;</span>
+    <span class="n">slug</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^A-Za-z0-9]+&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">slug</span> <span class="ow">or</span> <span class="s2">&quot;na&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_build_run_log_paths</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">start_dt</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+    <span class="n">config_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">weather_year</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">regions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">country</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="n">Path</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate unique detail/runtime log paths for a single CLI invocation.</span>
+
+<span class="sd">    Logs are grouped under a per-country directory (from the config&#39;s</span>
+<span class="sd">    &#39;country&#39; field) so runs for different countries don&#39;t pile up together.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">start_dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">_%H%M%S_</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">pid_tag</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span>
+    <span class="n">config_tag</span> <span class="o">=</span> <span class="n">_slugify</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span><span class="p">)</span>
+    <span class="n">year_tag</span> <span class="o">=</span> <span class="n">_slugify</span><span class="p">(</span><span class="n">weather_year</span><span class="p">)</span>
+    <span class="n">country_dir</span> <span class="o">=</span> <span class="n">RUN_LOG_DIR</span> <span class="o">/</span> <span class="n">_slugify</span><span class="p">(</span><span class="n">country</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">regions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">region_tag</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">regions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">region_tag</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">region_tag</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_slugify</span><span class="p">(</span><span class="n">region</span><span class="p">)</span> <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">regions</span><span class="p">)</span>
+    <span class="c1"># Keep filenames manageable when many regions are requested.</span>
+    <span class="n">region_tag</span> <span class="o">=</span> <span class="n">region_tag</span><span class="p">[:</span><span class="mi">80</span><span class="p">]</span>
+    <span class="n">run_base</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">_p</span><span class="si">{</span><span class="n">pid_tag</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">config_tag</span><span class="si">}</span><span class="s2">_y</span><span class="si">{</span><span class="n">year_tag</span><span class="si">}</span><span class="s2">_r</span><span class="si">{</span><span class="n">region_tag</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">detail_log</span> <span class="o">=</span> <span class="n">country_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_base</span><span class="si">}</span><span class="s2">_detail.log&quot;</span>
+    <span class="n">runtime_log</span> <span class="o">=</span> <span class="n">country_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_base</span><span class="si">}</span><span class="s2">_runtime.log&quot;</span>
+    <span class="k">return</span> <span class="n">detail_log</span><span class="p">,</span> <span class="n">runtime_log</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_relative_to_cwd</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Render an absolute log path relative to the project root when possible.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">())</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_write_latest_log_pointer</span><span class="p">(</span><span class="n">pointer_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">target_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write/update a small pointer file to the latest generated run log.&quot;&quot;&quot;</span>
+    <span class="n">pointer_file</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pointer_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Latest run log: </span><span class="si">{</span><span class="n">target_file</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="n">_SPINNER_FRAMES</span> <span class="o">=</span> <span class="s2">&quot;⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏&quot;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">LiveStatus</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Minimal print-based progress reporting for long-running regional jobs.</span>
+
+<span class="sd">    Writes with plain str.write()/flush() to the real stderr object captured</span>
+<span class="sd">    at construction time, before RESources.build() redirects sys.stdout for</span>
+<span class="sd">    log-capture — so status lines can&#39;t be swallowed by that redirect.</span>
+
+<span class="sd">    Deliberately avoids any terminal-control library (rich, curses, ...):</span>
+<span class="sd">    those query/alter tty state (cursor position, size, background refresh</span>
+<span class="sd">    threads) in ways that can raise SIGTTIN/SIGTTOU and suspend the whole</span>
+<span class="sd">    process under some terminal/job-control setups (observed under VS</span>
+<span class="sd">    Code&#39;s shell-integration wrapper). A bare &quot;\\r&quot;-overwritten line is safe</span>
+<span class="sd">    because it&#39;s only ever a write(), never an ioctl or a read().</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">BAR_WIDTH</span> <span class="o">=</span> <span class="mi">24</span>
+    <span class="n">STAGES_PER_PIPELINE</span> <span class="o">=</span> <span class="mi">7</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">failed</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_stage</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_job_started_at</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_spinner_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_line_open</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span><span class="o">.</span><span class="n">isatty</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">overwrite</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1"># &quot;\x1b[K&quot; erases from the cursor to the end of the (real terminal)</span>
+        <span class="c1"># line, so leftovers from a longer previous line never survive a</span>
+        <span class="c1"># shorter one — needed because &quot;\r&quot; alone only rewinds the current</span>
+        <span class="c1"># row, not any wrapped continuation rows.</span>
+        <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x1b</span><span class="s2">[K&quot;</span> <span class="k">if</span> <span class="n">overwrite</span> <span class="k">else</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="n">text</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_terminal_width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">get_terminal_size</span><span class="p">(</span><span class="n">fallback</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">24</span><span class="p">))</span><span class="o">.</span><span class="n">columns</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">100</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_bar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">completed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">total</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">filled</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BAR_WIDTH</span> <span class="o">*</span> <span class="nb">min</span><span class="p">(</span><span class="n">completed</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span> <span class="o">/</span> <span class="n">total</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;█&quot;</span> <span class="o">*</span> <span class="n">filled</span> <span class="o">+</span> <span class="s2">&quot;░&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BAR_WIDTH</span> <span class="o">-</span> <span class="n">filled</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_end_open_line</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_line_open</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_line_open</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">total</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">=</span> <span class="n">total</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RESource: </span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2"> pipeline job(s) to run&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">resource</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_stage</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_job_started_at</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== [</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">resource</span><span class="si">}</span><span class="s2"> ===&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">clean</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+        <span class="n">stage_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Step\s+(\d+)&quot;</span><span class="p">,</span> <span class="n">clean</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">stage_match</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_stage</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">STAGES_PER_PIPELINE</span><span class="p">,</span>
+                <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_stage</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">stage_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))),</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">clean</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_spinner_index</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">spinner</span> <span class="o">=</span> <span class="n">_SPINNER_FRAMES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_spinner_index</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">_SPINNER_FRAMES</span><span class="p">)]</span>
+        <span class="n">bar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_stage</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">STAGES_PER_PIPELINE</span><span class="p">)</span>
+        <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_job_started_at</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_job_started_at</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">spinner</span><span class="si">}</span><span class="s2"> [</span><span class="si">{</span><span class="n">bar</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">current_stage</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">STAGES_PER_PIPELINE</span><span class="si">}</span><span class="s2"> steps &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_hms</span><span class="p">(</span><span class="n">elapsed</span><span class="p">)</span><span class="si">}</span><span class="s2">  &quot;</span>
+        <span class="p">)</span>
+        <span class="c1"># Leave a 1-column margin so the line never touches the terminal&#39;s</span>
+        <span class="c1"># last column, which some terminals treat as an implicit wrap.</span>
+        <span class="n">budget</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_terminal_width</span><span class="p">()</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">clean</span><span class="p">[:</span><span class="n">budget</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_line_open</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">resource</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">failed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_end_open_line</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">failed</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">failed</span><span class="p">)</span>
+        <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_job_started_at</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_job_started_at</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_job_started_at</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;FAILED&quot;</span> <span class="k">if</span> <span class="n">failed</span> <span class="k">else</span> <span class="s2">&quot;done&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  -&gt; </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">resource</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">_hms</span><span class="p">(</span><span class="n">elapsed</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">finish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">log_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_end_open_line</span><span class="p">()</span>
+        <span class="n">display_path</span> <span class="o">=</span> <span class="n">_relative_to_cwd</span><span class="p">(</span><span class="n">log_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RESource </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="si">}</span><span class="s2"> jobs finished (failed </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">failed</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Detailed log: </span><span class="si">{</span><span class="n">display_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">LogStream</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert otherwise-unstructured stdout/stderr writes into log records.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logger</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">level</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">+=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">while</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span><span class="p">:</span>
+            <span class="n">line</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">,</span> <span class="s2">&quot;captured terminal output | </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">flush</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">,</span> <span class="s2">&quot;captured terminal output | </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_hms</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -461,6 +672,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">write_runtime_log</span><span class="p">(</span>
+    <span class="n">log_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">config_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">regions</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
@@ -473,7 +685,7 @@
     <span class="n">hw_end</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
     <span class="n">region_log</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>  <span class="c1"># list of dicts: region, resource, status, elapsed_s, error</span>
 <span class="p">):</span>
-    <span class="n">LOG_FILE</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">log_file</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">runtime_s</span> <span class="o">=</span> <span class="p">(</span><span class="n">end_dt</span> <span class="o">-</span> <span class="n">start_dt</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
 
@@ -505,7 +717,7 @@
         <span class="n">block</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="s1">&#39;Region&#39;</span><span class="si">:</span><span class="s2">&lt;6</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;Resource&#39;</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;Status&#39;</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;Time&#39;</span><span class="si">:</span><span class="s2">&gt;10</span><span class="si">}</span><span class="s2">  Error</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">block</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="s1">&#39;──────&#39;</span><span class="si">:</span><span class="s2">&lt;6</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;────────&#39;</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;──────&#39;</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;──────&#39;</span><span class="si">:</span><span class="s2">&gt;10</span><span class="si">}</span><span class="s2">  ─────</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">region_log</span><span class="p">:</span>
-            <span class="n">err</span> <span class="o">=</span> <span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)[:</span><span class="mi">50</span><span class="p">]</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
             <span class="n">block</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;region&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;6</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;resource&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2">  &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">_hms</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;elapsed_s&#39;</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;10</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -537,8 +749,11 @@
     <span class="n">block</span> <span class="o">+=</span> <span class="n">_fmt</span><span class="p">(</span><span class="s2">&quot;psutil&quot;</span><span class="p">,</span> <span class="s2">&quot;available&quot;</span> <span class="k">if</span> <span class="n">_PSUTIL</span> <span class="k">else</span> <span class="s2">&quot;not installed — hw metrics unavailable&quot;</span><span class="p">)</span>
     <span class="n">block</span> <span class="o">+=</span> <span class="n">sep</span>
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">LOG_FILE</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">block</span> <span class="o">+=</span> <span class="n">utils</span><span class="o">.</span><span class="n">build_timing_report</span><span class="p">(</span><span class="n">runtime_s</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">log_file</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+    <span class="n">_write_latest_log_pointer</span><span class="p">(</span><span class="n">LATEST_RUNTIME_LOG</span><span class="p">,</span> <span class="n">log_file</span><span class="p">)</span>
 
 
 <span class="c1"># ── Argument parsing ──────────────────────────────────────────────────────────</span>
@@ -569,6 +784,27 @@
         <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;CODE&quot;</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Region codes to process (default: all in config)&quot;</span><span class="p">,</span>
     <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-v&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Show detailed module-and-line logs in the terminal&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--show-config&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Print the fully resolved configuration and exit&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--show-overrides&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Print inherited source files and overridden paths, then exit&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--validate-only&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Resolve and validate configuration without running workflows&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">parser</span></div>
 
 
@@ -591,13 +827,16 @@
     <span class="k">if</span> <span class="n">start_dt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">start_dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 
-    <span class="n">hw_start</span> <span class="o">=</span> <span class="n">hw_snapshot</span><span class="p">()</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">build_parser</span><span class="p">()</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="n">hw_start</span> <span class="o">=</span> <span class="n">hw_snapshot</span><span class="p">()</span>
+    <span class="n">live_status</span> <span class="o">=</span> <span class="n">LiveStatus</span><span class="p">()</span>
+    <span class="n">inspection_mode</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">show_config</span> <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">show_overrides</span> <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">validate_only</span>
 
     <span class="c1"># ── Load config ───────────────────────────────────────────────────────────</span>
+    <span class="c1"># Resolved before log setup so runs can be grouped by the config&#39;s country.</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">config</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
-        <span class="n">print_success</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Config loaded: </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">config</span><span class="p">,</span> <span class="n">config_provenance</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">resolve_config</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">print_update</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Config loaded: </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
         <span class="n">print_error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✗ Config not found: </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -605,9 +844,42 @@
         <span class="n">print_error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✗ Error loading config: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
+    <span class="n">country</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;country&quot;</span><span class="p">,</span> <span class="s2">&quot;unknown&quot;</span><span class="p">)</span>
+    <span class="n">detail_log_path</span><span class="p">,</span> <span class="n">runtime_log_path</span> <span class="o">=</span> <span class="n">_build_run_log_paths</span><span class="p">(</span>
+        <span class="n">start_dt</span><span class="o">=</span><span class="n">start_dt</span><span class="p">,</span>
+        <span class="n">config_path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
+        <span class="n">weather_year</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+        <span class="n">regions</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">regions</span><span class="p">,</span>
+        <span class="n">country</span><span class="o">=</span><span class="n">country</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">detail_log</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">configure_runtime_logging</span><span class="p">(</span>
+        <span class="n">detail_log_path</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="n">status_sink</span><span class="o">=</span><span class="kc">None</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="ow">or</span> <span class="n">inspection_mode</span> <span class="k">else</span> <span class="n">live_status</span><span class="o">.</span><span class="n">update</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">_write_latest_log_pointer</span><span class="p">(</span><span class="n">LATEST_DETAIL_LOG</span><span class="p">,</span> <span class="n">detail_log</span><span class="p">)</span>
+    <span class="n">_write_latest_log_pointer</span><span class="p">(</span><span class="n">LATEST_RUNTIME_LOG</span><span class="p">,</span> <span class="n">runtime_log_path</span><span class="p">)</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;RESource&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s2">&quot;Pipeline invocation: config=</span><span class="si">%s</span><span class="s2"> country=</span><span class="si">%s</span><span class="s2"> year=</span><span class="si">%s</span><span class="s2"> regions=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
+        <span class="n">country</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">regions</span><span class="p">,</span>
+    <span class="p">)</span>
+
     <span class="k">if</span> <span class="s2">&quot;region_mapping&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
         <span class="n">print_error</span><span class="p">(</span><span class="s2">&quot;✗ &#39;region_mapping&#39; missing from config.&quot;</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">show_config</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">yaml</span><span class="o">.</span><span class="n">safe_dump</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">show_overrides</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">yaml</span><span class="o">.</span><span class="n">safe_dump</span><span class="p">(</span><span class="n">config_provenance</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">validate_only</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Configuration valid: </span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">show_config</span> <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">show_overrides</span> <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">validate_only</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
 
     <span class="n">available_regions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;region_mapping&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
@@ -630,41 +902,36 @@
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">regions</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">regions</span>
 
-    <span class="c1"># ── Banner ────────────────────────────────────────────────────────────────</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">65</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  RESource  |  year=</span><span class="si">{</span><span class="n">weather_year</span><span class="si">}</span><span class="s2">  |  regions=</span><span class="si">{</span><span class="n">regions</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  config=</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">_PSUTIL</span><span class="p">:</span>
-        <span class="n">vm</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">virtual_memory</span><span class="p">()</span>
-        <span class="n">print_info</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;  CPU=</span><span class="si">{</span><span class="n">hw_start</span><span class="p">[</span><span class="s1">&#39;cpu_logical&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> logical / </span><span class="si">{</span><span class="n">hw_start</span><span class="p">[</span><span class="s1">&#39;cpu_physical&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> physical  &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;|  RAM=</span><span class="si">{</span><span class="n">hw_start</span><span class="p">[</span><span class="s1">&#39;ram_total_gb&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> GB total  &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;|  avail=</span><span class="si">{</span><span class="n">vm</span><span class="o">.</span><span class="n">available</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e9</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> GB&quot;</span>
-        <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">65</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
     <span class="c1"># ── Pipeline loop ─────────────────────────────────────────────────────────</span>
     <span class="n">resource_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;wind&quot;</span><span class="p">,</span> <span class="s2">&quot;solar&quot;</span><span class="p">]</span>
     <span class="n">region_log</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">live_status</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">regions</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">resource_types</span><span class="p">))</span>
+    <span class="n">utils</span><span class="o">.</span><span class="n">reset_timings</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">regions</span><span class="p">:</span>
+        <span class="n">region_store_path</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">resource_type</span> <span class="ow">in</span> <span class="n">resource_types</span><span class="p">:</span>
-            <span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;→ </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">live_status</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">resource_type</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting job region=</span><span class="si">%s</span><span class="s2"> resource=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">resource_type</span><span class="p">)</span>
             <span class="n">t0</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="n">builder</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">set_timing_context</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">builder</span> <span class="o">=</span> <span class="n">RES</span><span class="o">.</span><span class="n">RESources_builder</span><span class="p">(</span>
-                    <span class="n">config_file_path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
-                    <span class="n">region_short_code</span><span class="o">=</span><span class="n">region</span><span class="p">,</span>
-                    <span class="n">resource_type</span><span class="o">=</span><span class="n">resource_type</span><span class="p">,</span>
-                    <span class="n">weather_year</span><span class="o">=</span><span class="n">weather_year</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">(</span>
-                    <span class="n">select_top_sites</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                    <span class="n">use_pypsa_buses</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                    <span class="n">use_grid_lines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                    <span class="n">make_clusters</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                    <span class="n">clean_store</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="p">)</span>
+                <span class="n">capture_context</span> <span class="o">=</span> <span class="n">redirect_stdout</span><span class="p">(</span><span class="n">LogStream</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">))</span>
+                <span class="n">error_context</span> <span class="o">=</span> <span class="n">redirect_stderr</span><span class="p">(</span><span class="n">LogStream</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">))</span>
+                <span class="k">with</span> <span class="n">capture_context</span><span class="p">,</span> <span class="n">error_context</span><span class="p">:</span>
+                    <span class="n">builder</span> <span class="o">=</span> <span class="n">RES</span><span class="o">.</span><span class="n">RESources_builder</span><span class="p">(</span>
+                        <span class="n">config_file_path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
+                        <span class="n">region_short_code</span><span class="o">=</span><span class="n">region</span><span class="p">,</span>
+                        <span class="n">resource_type</span><span class="o">=</span><span class="n">resource_type</span><span class="p">,</span>
+                        <span class="n">weather_year</span><span class="o">=</span><span class="n">weather_year</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">(</span>
+                        <span class="n">select_top_sites</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">make_clusters</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">clean_store</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="n">region_store_path</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">store</span>
                 <span class="n">elapsed</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
                 <span class="n">region_log</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="p">{</span>
@@ -675,7 +942,13 @@
                         <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="p">}</span>
                 <span class="p">)</span>
-                <span class="n">print_success</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ✓ </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="n">_hms</span><span class="p">(</span><span class="n">elapsed</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;Completed job region=</span><span class="si">%s</span><span class="s2"> resource=</span><span class="si">%s</span><span class="s2"> elapsed=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">region</span><span class="p">,</span>
+                    <span class="n">resource_type</span><span class="p">,</span>
+                    <span class="n">_hms</span><span class="p">(</span><span class="n">elapsed</span><span class="p">),</span>
+                <span class="p">)</span>
+                <span class="n">live_status</span><span class="o">.</span><span class="n">complete</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">resource_type</span><span class="p">)</span>
 
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
                 <span class="n">elapsed</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
@@ -688,8 +961,35 @@
                         <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">),</span>
                     <span class="p">}</span>
                 <span class="p">)</span>
-                <span class="n">print_error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ✗ </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">print_warning</span><span class="p">(</span><span class="s2">&quot;    Continuing...&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Job failed region=</span><span class="si">%s</span><span class="s2"> resource=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">resource_type</span><span class="p">)</span>
+                <span class="n">live_status</span><span class="o">.</span><span class="n">complete</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">resource_type</span><span class="p">,</span> <span class="n">failed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">end_step</span><span class="p">()</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">record_timing</span><span class="p">(</span>
+                    <span class="s2">&quot;Total job&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+                <span class="p">)</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">set_timing_context</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">builder</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">cleanup</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">release_process_memory</span><span class="p">()</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;Post-job memory cleanup region=</span><span class="si">%s</span><span class="s2"> resource=</span><span class="si">%s</span><span class="s2"> collected=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">region</span><span class="p">,</span>
+                    <span class="n">resource_type</span><span class="p">,</span>
+                    <span class="n">cleanup</span><span class="p">[</span><span class="s2">&quot;unreachable_objects_collected&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Sub-national capacity rollup, once per region after both resource</span>
+        <span class="c1"># types have built — best-effort: logs and skips regions/configs that</span>
+        <span class="c1"># don&#39;t resolve a usable admin-unit tag rather than failing the run.</span>
+        <span class="k">if</span> <span class="n">region_store_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">build_region_aggregated_capacity</span><span class="p">(</span>
+                    <span class="n">store_path</span><span class="o">=</span><span class="n">region_store_path</span><span class="p">,</span>
+                    <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+                    <span class="n">region_short_code</span><span class="o">=</span><span class="n">region</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Failed to build aggregated/capacity for region=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">region</span><span class="p">)</span>
 
     <span class="c1"># ── Write log ─────────────────────────────────────────────────────────────</span>
     <span class="n">end_dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
@@ -697,12 +997,14 @@
     <span class="n">any_fail</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;ok&quot;</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">region_log</span><span class="p">)</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;PARTIAL&quot;</span> <span class="k">if</span> <span class="n">any_fail</span> <span class="k">else</span> <span class="s2">&quot;SUCCESS&quot;</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">65</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">print_success</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Done — </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="n">_hms</span><span class="p">((</span><span class="n">end_dt</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_dt</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">())</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
-    <span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Log → </span><span class="si">{</span><span class="n">LOG_FILE</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">65</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">build_timing_report</span><span class="p">((</span><span class="n">end_dt</span> <span class="o">-</span> <span class="n">start_dt</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">())</span>
+    <span class="p">)</span>
+    <span class="n">live_status</span><span class="o">.</span><span class="n">finish</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">detail_log</span><span class="p">)</span>
+    <span class="n">live_status</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Runtime summary: </span><span class="si">{</span><span class="n">_relative_to_cwd</span><span class="p">(</span><span class="n">runtime_log_path</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="n">write_runtime_log</span><span class="p">(</span>
+        <span class="n">runtime_log_path</span><span class="p">,</span>
         <span class="n">config_path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
         <span class="n">regions</span><span class="o">=</span><span class="n">regions</span><span class="p">,</span>
         <span class="n">weather_year</span><span class="o">=</span><span class="n">weather_year</span><span class="p">,</span>
@@ -726,6 +1028,13 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">entrypoint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the CLI with logging and consistent process exit codes.&quot;&quot;&quot;</span>
     <span class="n">_start_dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">fallback_runtime_log</span> <span class="o">=</span> <span class="n">_build_run_log_paths</span><span class="p">(</span>
+        <span class="n">start_dt</span><span class="o">=</span><span class="n">_start_dt</span><span class="p">,</span>
+        <span class="n">config_path</span><span class="o">=</span><span class="s2">&quot;unknown&quot;</span><span class="p">,</span>
+        <span class="n">weather_year</span><span class="o">=</span><span class="s2">&quot;unknown&quot;</span><span class="p">,</span>
+        <span class="n">regions</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">country</span><span class="o">=</span><span class="s2">&quot;unknown&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">exit_code</span> <span class="o">=</span> <span class="n">main</span><span class="p">(</span><span class="n">_start_dt</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">exit_code</span><span class="p">:</span>
@@ -733,6 +1042,7 @@
     <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
         <span class="n">print_warning</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  Interrupted (Ctrl+C)&quot;</span><span class="p">)</span>
         <span class="n">write_runtime_log</span><span class="p">(</span>
+            <span class="n">fallback_runtime_log</span><span class="p">,</span>
             <span class="n">config_path</span><span class="o">=</span><span class="s2">&quot;unknown&quot;</span><span class="p">,</span>
             <span class="n">regions</span><span class="o">=</span><span class="p">[],</span>
             <span class="n">weather_year</span><span class="o">=</span><span class="s2">&quot;unknown&quot;</span><span class="p">,</span>
@@ -748,6 +1058,7 @@
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
         <span class="n">print_error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Unexpected error: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">write_runtime_log</span><span class="p">(</span>
+            <span class="n">fallback_runtime_log</span><span class="p">,</span>
             <span class="n">config_path</span><span class="o">=</span><span class="s2">&quot;unknown&quot;</span><span class="p">,</span>
             <span class="n">regions</span><span class="o">=</span><span class="p">[],</span>
             <span class="n">weather_year</span><span class="o">=</span><span class="s2">&quot;unknown&quot;</span><span class="p">,</span>

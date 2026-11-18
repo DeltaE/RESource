@@ -1,0 +1,705 @@
+
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ten-year ERA5 reference climatology &#8212; RESource 2025.7.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=1faeb039"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notes/era5_reference_climatology';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="RESource Step Cache" href="step_cache.html" />
+    <link rel="prev" title="ERA5–GWA wind-speed bias correction" href="wind_bias_correction.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="Python"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_full.jpg" class="logo__image only-light" alt="RESource 2025.7.0 documentation - Home"/>
+    <img src="../_static/logo_full.jpg" class="logo__image only-dark pst-js-only" alt="RESource 2025.7.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="resource_builder.html">RESource workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup_guide.html">Installation and environment setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run_usage.html">Command-line usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assumptions.html">Modeling assumptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">Best Practices and Guidelines</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development_pipeline.html">Development pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wind_bias_correction.html">ERA5–GWA wind-speed bias correction</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Ten-year ERA5 reference climatology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step_cache.html">RESource Step Cache</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_guide.html">Documentation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">Developer deployment guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publishing.html">Publishing to PyPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensing.html">License transition assessment</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/DeltaE/RESource" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notes/era5_reference_climatology.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Ten-year ERA5 reference climatology</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#purpose">Purpose</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-period">Reference period</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scope-that-must-be-confirmed">Scope that must be confirmed</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preflight-checks">Preflight checks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiyear-command">Multiyear command</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#era5-only-pipeline">ERA5-only pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring-and-recovery">Monitoring and recovery</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-reference-climatology">Building the reference climatology</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#acceptance-checks">Acceptance checks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#related-design-note">Related design note</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#authoritative-era5-information">Authoritative ERA5 information</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="ten-year-era5-reference-climatology">
+<h1>Ten-year ERA5 reference climatology<a class="headerlink" href="#ten-year-era5-reference-climatology" title="Link to this heading">#</a></h1>
+<section id="purpose">
+<h2>Purpose<a class="headerlink" href="#purpose" title="Link to this heading">#</a></h2>
+<p>This procedure prepares the fixed ERA5 reference period required by the proposed
+ERA5–GWA wind-speed bias correction. The climatology is the denominator in:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>factor(x, y) = mean_GWA_100m(x, y) / climatology_ERA5_100m(x, y)
+</pre></div>
+</div>
+<p>It must be calculated once from a fixed multiyear window and then reused for every
+target weather year. Recalculating the denominator independently for each target
+year would suppress genuine interannual variability.</p>
+<p>This document describes data acquisition and validation. It does not mark the bias
+correction itself as production ready.</p>
+</section>
+<section id="reference-period">
+<h2>Reference period<a class="headerlink" href="#reference-period" title="Link to this heading">#</a></h2>
+<p>As of August 2026, use the ten most recent complete calendar years:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>2016-01-01 through 2025-12-31
+</pre></div>
+</div>
+<p>Do not include the incomplete 2026 calendar year. ERA5 preliminary updates are
+normally available close to real time, while final ERA5 replaces preliminary ERA5T
+after approximately two to three months. Record whether each downloaded year is
+final ERA5 or contains ERA5T before freezing a scientific reference product.</p>
+<p>If the project requires final-quality data only, confirm that December 2025 has
+been finalized in CDS before accepting the climatology. Otherwise use 2015–2024
+and record that choice explicitly.</p>
+</section>
+<section id="scope-that-must-be-confirmed">
+<h2>Scope that must be confirmed<a class="headerlink" href="#scope-that-must-be-confirmed" title="Link to this heading">#</a></h2>
+<p>Before starting, record:</p>
+<ul class="simple">
+<li><p>configuration file;</p></li>
+<li><p>region codes;</p></li>
+<li><p>years and whether final ERA5 is required;</p></li>
+<li><p>expected variables and spatial resolution;</p></li>
+<li><p>output directory and available disk space;</p></li>
+<li><p>CDS credential readiness;</p></li>
+<li><p>expected runtime and queue limitations;</p></li>
+<li><p>whether the complete RESource workflow or only weather acquisition is intended.</p></li>
+</ul>
+<p>The current <code class="docutils literal notranslate"><span class="pre">resource-multiyear</span></code> command launches the complete <code class="docutils literal notranslate"><span class="pre">resource</span></code> CLI once
+per year. It is not an ERA5-only downloader. Consequently it can repeat GADM, GWA,
+GAEZ, land, capacity, scoring and time-series stages according to step-cache state.</p>
+</section>
+<section id="preflight-checks">
+<h2>Preflight checks<a class="headerlink" href="#preflight-checks" title="Link to this heading">#</a></h2>
+<p>From the repository root:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>--locked<span class="w"> </span>--all-extras
+uv<span class="w"> </span>run<span class="w"> </span>resource-multiyear<span class="w"> </span>--help
+df<span class="w"> </span>-h<span class="w"> </span>.<span class="w"> </span>/tmp
+<span class="nb">test</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.cdsapirc&quot;</span>
+stat<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;%a %n&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.cdsapirc&quot;</span>
+</pre></div>
+</div>
+<p>The credential file should have mode <code class="docutils literal notranslate"><span class="pre">600</span></code>. Never print or commit its contents.
+Ensure the repository filesystem has sufficient free space. RESource routes CDS and
+Python staging to the ignored <code class="docutils literal notranslate"><span class="pre">data/tmp/resource-cds/</span></code> directory on that filesystem,
+rather than relying on a potentially small system <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> mount.</p>
+<p>Confirm that the configured cutout root is scenario appropriate. Canadian baseline
+outputs currently resolve below:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>data/downloaded_data/cutout/
+</pre></div>
+</div>
+</section>
+<section id="multiyear-command">
+<h2>Multiyear command<a class="headerlink" href="#multiyear-command" title="Link to this heading">#</a></h2>
+<p>For a confirmed British Columbia reference run using the existing launcher:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>resource-multiyear<span class="w"> </span>config/CAN_baseline.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--start<span class="w"> </span><span class="m">2016</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--end<span class="w"> </span><span class="m">2025</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--regions<span class="w"> </span>BC
+</pre></div>
+</div>
+<p>The launcher runs years sequentially and continues after a failed year. The CDS
+fallback submits monthly requests sequentially and retries recognized temporary
+queue-capacity failures with bounded exponential backoff.</p>
+<p>Do not launch several RESource processes with the same CDS account. CDS explicitly
+limits queued requests, and parallel runs increase rejection risk.</p>
+</section>
+<section id="era5-only-pipeline">
+<h2>ERA5-only pipeline<a class="headerlink" href="#era5-only-pipeline" title="Link to this heading">#</a></h2>
+<p>Use the dedicated cutout downloader rather than relying on step-cache side effects:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>resource-cutout-multiyear<span class="w"> </span>config/CAN_baseline.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--start<span class="w"> </span><span class="m">2016</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--end<span class="w"> </span><span class="m">2025</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--region<span class="w"> </span>BC
+</pre></div>
+</div>
+<p>This command calls only boundary preparation and <code class="docutils literal notranslate"><span class="pre">ERA5Cutout.get_era5_cutout()</span></code> for
+each year. It validates the resulting NetCDF and maintains a resumable,
+machine-readable manifest under <code class="docutils literal notranslate"><span class="pre">results/manifests/</span></code>. An internal preflight task
+runs Python garbage collection before each annual CDS job so arrays and file-backed
+objects from the previous year do not accumulate in process memory. It records the
+cleanup counts but never deletes disk caches or completed cutouts.</p>
+</section>
+<section id="monitoring-and-recovery">
+<h2>Monitoring and recovery<a class="headerlink" href="#monitoring-and-recovery" title="Link to this heading">#</a></h2>
+<p>For every year, record:</p>
+<ul class="simple">
+<li><p>command exit status;</p></li>
+<li><p>final NetCDF path and byte size;</p></li>
+<li><p>first and last timestamps;</p></li>
+<li><p>expected versus actual hourly timestep count;</p></li>
+<li><p>variables present;</p></li>
+<li><p>missing or duplicated timestamps;</p></li>
+<li><p>whether CDS returned ERA5 or ERA5T where detectable;</p></li>
+<li><p>retry count and final failure reason.</p></li>
+</ul>
+<p>Expected hourly counts are:</p>
+<ul class="simple">
+<li><p>8,760 for a normal calendar year;</p></li>
+<li><p>8,784 for leap years 2016, 2020 and 2024.</p></li>
+</ul>
+<p>Timezone-aligned cutouts may include shifted UTC boundaries. Validate against the
+configured snapshot convention rather than assuming filenames alone prove complete
+coverage.</p>
+<p>Re-run only failed years:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>resource<span class="w"> </span>config/CAN_baseline.yaml<span class="w"> </span>--year<span class="w"> </span>YEAR<span class="w"> </span>--regions<span class="w"> </span>BC
+</pre></div>
+</div>
+<p>Existing valid cutouts should be audited and reused. A partial or invalid NetCDF
+must not be treated as a cache hit.</p>
+</section>
+<section id="building-the-reference-climatology">
+<h2>Building the reference climatology<a class="headerlink" href="#building-the-reference-climatology" title="Link to this heading">#</a></h2>
+<p>After all ten annual cutouts pass validation:</p>
+<ol class="arabic simple">
+<li><p>Open only the required 100 m wind-speed field from each annual cutout.</p></li>
+<li><p>Confirm identical <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> grids, CRS, units and variable definitions.</p></li>
+<li><p>Concatenate along time without loading all values eagerly into memory.</p></li>
+<li><p>Check for duplicate and missing timestamps across year boundaries.</p></li>
+<li><p>Calculate the time mean of <code class="docutils literal notranslate"><span class="pre">wnd100m</span></code> for each unique ERA5 coordinate.</p></li>
+<li><p>Persist the climatology as a labelled NetCDF or Zarr dataset.</p></li>
+<li><p>Store provenance and a cryptographic digest for every annual input.</p></li>
+</ol>
+<p>Recommended output metadata:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">product</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RESource ERA5 100 m wind reference climatology</span>
+<span class="nt">reference_period</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">2016</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">2025</span><span class="p p-Indicator">]</span>
+<span class="nt">variable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wnd100m</span>
+<span class="nt">units</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">m s-1</span>
+<span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ERA5</span>
+<span class="nt">spatial_grid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inherited from annual RESource cutouts</span>
+<span class="nt">aggregation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">arithmetic mean over validated hourly observations</span>
+<span class="nt">created_with</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deltae-resource</span>
+<span class="nt">input_manifest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">path to checksummed annual inputs</span>
+</pre></div>
+</div>
+<p>Do not overwrite annual source cutouts after building the climatology. The manifest
+must allow the reference product to be reproduced exactly.</p>
+</section>
+<section id="acceptance-checks">
+<h2>Acceptance checks<a class="headerlink" href="#acceptance-checks" title="Link to this heading">#</a></h2>
+<p>The weather acquisition is complete only when:</p>
+<ol class="arabic simple">
+<li><p>all ten annual cutouts exist and open successfully;</p></li>
+<li><p>all expected years and timestamps are present;</p></li>
+<li><p>spatial coordinates, CRS, units and variables are consistent;</p></li>
+<li><p>no annual file is suspiciously small or partial;</p></li>
+<li><p>ERA5 versus ERA5T status is documented where relevant;</p></li>
+<li><p>retry and failure summaries are retained;</p></li>
+<li><p>the climatology contains finite values for every supported ERA5 cell; and</p></li>
+<li><p>the input manifest and climatology metadata are stored with the result.</p></li>
+</ol>
+</section>
+<section id="related-design-note">
+<h2>Related design note<a class="headerlink" href="#related-design-note" title="Link to this heading">#</a></h2>
+<p>See <a class="reference internal" href="wind_bias_correction.html"><span class="std std-doc">ERA5–GWA wind-speed bias correction</span></a> for the
+correction algorithm, quality flags, tests and production acceptance criteria.</p>
+</section>
+<section id="authoritative-era5-information">
+<h2>Authoritative ERA5 information<a class="headerlink" href="#authoritative-era5-information" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://confluence.ecmwf.int/pages/viewpage.action?pageId=388500357">ERA5 data documentation</a></p></li>
+<li><p><a class="reference external" href="https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels">ERA5 hourly data on single levels</a></p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="wind_bias_correction.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">ERA5–GWA wind-speed bias correction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="step_cache.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">RESource Step Cache</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#purpose">Purpose</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-period">Reference period</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scope-that-must-be-confirmed">Scope that must be confirmed</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preflight-checks">Preflight checks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiyear-command">Multiyear command</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#era5-only-pipeline">ERA5-only pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring-and-recovery">Monitoring and recovery</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-reference-climatology">Building the reference climatology</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#acceptance-checks">Acceptance checks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#related-design-note">Related design note</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#authoritative-era5-information">Authoritative ERA5 information</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Eliasinul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Md Eliasinul Islam.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

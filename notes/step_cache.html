@@ -49,7 +49,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="API reference" href="api.html" />
-    <link rel="prev" title="Development pipeline" href="development_pipeline.html" />
+    <link rel="prev" title="Ten-year ERA5 reference climatology" href="era5_reference_climatology.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="Python"/>
   <meta name="docsearch:version" content="" />
@@ -181,8 +181,8 @@
       
     
     
-    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-light" alt="RESource 2025.7.0 documentation - Home"/>
-    <img src="../_static/graphic_RES_logo_202508.jpg" class="logo__image only-dark pst-js-only" alt="RESource 2025.7.0 documentation - Home"/>
+    <img src="../_static/logo_full.jpg" class="logo__image only-light" alt="RESource 2025.7.0 documentation - Home"/>
+    <img src="../_static/logo_full.jpg" class="logo__image only-dark pst-js-only" alt="RESource 2025.7.0 documentation - Home"/>
   
   
 </a></div>
@@ -204,11 +204,14 @@
 <li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="case_BC.html">Case study: VRE site selection in British Columbia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">How to use the CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assumptions.html">Modeling assumptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learning.html">Best Practices and Guidelines</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="data.html">Data Sources and Supply Chain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Contributing Developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development_pipeline.html">Development pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wind_bias_correction.html">ERA5–GWA wind-speed bias correction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="era5_reference_climatology.html">Ten-year ERA5 reference climatology</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">RESource Step Cache</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">for Developers:</span></p>
@@ -386,7 +389,10 @@
             <nav aria-label="Page">
                 <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-problem-it-solves">The Problem It Solves</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mechanism">Mechanism</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mechanism">Mechanism</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#land-analytics-images">Land analytics images</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#config-keys-per-step">Config Keys Per Step</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-pipeline-run-automatic">Normal pipeline run (automatic)</a></li>
@@ -443,13 +449,37 @@ equals the hash stored from the previous run.</p></li>
 <p>Both conditions must hold to skip the step. If either fails, the step runs and its
 hash is updated on completion.</p>
 <p>Hashes are persisted to a JSON sidecar file next to the HDF5 store:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">/</span><span class="n">store</span><span class="o">/&lt;</span><span class="n">Country</span><span class="o">&gt;/&lt;</span><span class="n">RUN_ID</span><span class="o">&gt;/</span><span class="n">resources_</span><span class="o">&lt;</span><span class="n">Country</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">Region</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">RUN_ID</span><span class="o">&gt;.</span><span class="n">h5</span>
-<span class="n">data</span><span class="o">/</span><span class="n">store</span><span class="o">/&lt;</span><span class="n">Country</span><span class="o">&gt;/&lt;</span><span class="n">RUN_ID</span><span class="o">&gt;/</span><span class="n">resources_</span><span class="o">&lt;</span><span class="n">Country</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">Region</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">RUN_ID</span><span class="o">&gt;.</span><span class="n">checksums</span><span class="o">.</span><span class="n">json</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">results</span><span class="o">/&lt;</span><span class="n">Country</span><span class="o">&gt;/&lt;</span><span class="n">Region</span><span class="o">&gt;/&lt;</span><span class="n">RUN_ID</span><span class="o">&gt;/</span><span class="n">resources_</span><span class="o">&lt;</span><span class="n">Country</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">Region</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">RUN_ID</span><span class="o">&gt;.</span><span class="n">h5</span>
+<span class="n">results</span><span class="o">/&lt;</span><span class="n">Country</span><span class="o">&gt;/&lt;</span><span class="n">Region</span><span class="o">&gt;/&lt;</span><span class="n">RUN_ID</span><span class="o">&gt;/</span><span class="n">resources_</span><span class="o">&lt;</span><span class="n">Country</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">Region</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">RUN_ID</span><span class="o">&gt;.</span><span class="n">checksums</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </div>
+<p>Stores and sidecars previously written under <code class="docutils literal notranslate"><span class="pre">data/store/</span></code> are not moved or
+automatically reused. A run without a store and matching sidecar in its results
+directory recomputes missing steps; existing files remain available for reading.</p>
 <p>Wind and solar results share the same HDF5 file but are namespaced independently
 in the sidecar (<code class="docutils literal notranslate"><span class="pre">wind::grid_cells</span></code> vs. <code class="docutils literal notranslate"><span class="pre">solar::grid_cells</span></code>), so a turbine config
 change only invalidates wind steps — solar cache entries are unaffected.</p>
+<section id="land-analytics-images">
+<h3>Land analytics images<a class="headerlink" href="#land-analytics-images" title="Link to this heading">#</a></h3>
+<p>After the capacity step, the regional pipeline stores PNG class-distribution
+charts and land-class overview maps under <code class="docutils literal notranslate"><span class="pre">LandAnalytics/images</span></code>. It uses the
+regional rasters already prepared for the assessment and configured legends
+where available; otherwise classes are labeled by their codes. Floating-point
+rasters and rasters with more than 256 classes are skipped with a warning.
+Distributions count valid pixel centres inside the regional
+boundary: percentages are pixel shares, not area-weighted estimates. Maps are
+downsampled for display and contain no site overlays. Only images, not these
+rasters or summary tables, are added by this component.</p>
+<p>Set <code class="docutils literal notranslate"><span class="pre">lands.plot_layer_impacts:</span> <span class="pre">true</span></code> to also embed the pipeline's stepwise and
+individual layer-impact figures for each technology. This option performs
+additional, potentially slow availability calculations. If capacity was cached
+but the impact images are missing, those calculations run to produce them. Image
+keys include a land-configuration fingerprint; existing images for other
+configurations are retained. The fingerprint does not detect changes to source
+files at the same path. Generating class plots reads all valid regional pixels
+and may take time for high-resolution rasters. The existing impact-plot setting
+defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code> when omitted; set it to <code class="docutils literal notranslate"><span class="pre">false</span></code> to disable those calculations.</p>
+</section>
 </section>
 <hr class="docutils" />
 <section id="config-keys-per-step">
@@ -625,12 +655,12 @@ not run two <code class="docutils literal notranslate"><span class="pre">build()
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="development_pipeline.html"
+       href="era5_reference_climatology.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Development pipeline</p>
+        <p class="prev-next-title">Ten-year ERA5 reference climatology</p>
       </div>
     </a>
     <a class="right-next"
@@ -661,7 +691,10 @@ not run two <code class="docutils literal notranslate"><span class="pre">build()
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-problem-it-solves">The Problem It Solves</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mechanism">Mechanism</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mechanism">Mechanism</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#land-analytics-images">Land analytics images</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#config-keys-per-step">Config Keys Per Step</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-pipeline-run-automatic">Normal pipeline run (automatic)</a></li>
