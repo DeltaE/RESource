@@ -3,7 +3,7 @@
 
 __One of the many solutions ?__
 
-<img src="docs/source/_static/logo_full.jpg" alt="RESource logo" width="250"/>
+<img src="src/RESource/assets/logo/logo_dash_animated.svg" alt="RESource logo" width="250"/>
 
 __A Modular and Transparent Open-Source Framework for Sub-National Assessment of Solar and Land-based Wind Potential.__
 
