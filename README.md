@@ -3,7 +3,7 @@
 
 __One of the many solutions ?__
 
-<img src="docs/source/_static/graphic_RES_logo_202508.jpg" alt="RESource logo" width="250"/>
+<img src="docs/source/_static/logo_full.jpg" alt="RESource logo" width="250"/>
 
 __A Modular and Transparent Open-Source Framework for Sub-National Assessment of Solar and Land-based Wind Potential.__
 
@@ -94,6 +94,10 @@ For an interactive browser dashboard, install the `dash` extra and build it:
 uv sync --locked --extra dash
 uv run resource-dash --out RESource_dash.html
 ```
+
+<video src="https://github.com/DeltaE/RESource/raw/main/docs/source/_static/videos/RESource_Dash_showcase_30s.mp4" controls width="600"></video>
+
+*30-second tour of the RESource Dash.*
 
 Open the generated HTML and select a store. The **Land analytics** tab shows
 the stored land maps, class distributions and layer-impact figures; larger
